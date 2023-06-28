@@ -8,6 +8,9 @@ export namespace Utils {
   )
   
   
+  export const trueOrUndef = (value: any): true|undefined => value ? true : undefined
+  
+  
   /**
    * Операция получение по файлу его DataURL
    * @param file Файл для получения DataURL

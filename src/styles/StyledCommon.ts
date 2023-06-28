@@ -1,7 +1,7 @@
-import { css } from "@emotion/react"
+import { css } from "styled-components"
 
 
-export namespace EmotionCommon {
+export namespace StyledCommon {
   
   export const reset = css`
     box-sizing: border-box;

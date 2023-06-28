@@ -5,6 +5,7 @@ import { AppRoutes } from 'src/app-routes/AppRoutes';
 import LoginPage from '../Login/LoginPage';
 import UserInfo from '../UserInfo/UserInfo';
 import SignupPage from '../Signup/SignupPage';
+import React from 'react';
 
 
 function App() {

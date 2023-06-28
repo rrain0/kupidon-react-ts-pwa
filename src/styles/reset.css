@@ -1,18 +1,22 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    background: none;
-    min-width: 0;
-    min-height: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+html, body, #root {
+  min-width: 100vw;
+  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background: #f5f5f5;
 }
 
 a {
-    display: contents;
-    text-decoration: none;
-}
-
-
-body {
-    background: #f5f5f5;
+  display: contents;
+  text-decoration: none;
 }
