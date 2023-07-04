@@ -6,6 +6,7 @@ export namespace EmotionCommon {
   export const reset = css`
     box-sizing: border-box;
     background: none;
+    border: none;
     outline: none;
     box-shadow: none;
     margin: 0;

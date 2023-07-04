@@ -1,18 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import Input, {InputProps} from "./Input";
-import styled from "styled-components";
 import {useRef, useState} from "react";
 import React from "react";
 import {ReactUtils} from "src/utils/ReactUtils";
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
-import {StyledCommon} from "src/styles/StyledCommon";
-import resetButton = StyledCommon.resetButton;
-import center = StyledCommon.center;
-import centerAll = StyledCommon.centerAll;
 import {SimpleSvgIcons} from "src/components/icons/SimpleSvgIcons";
 import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc;
 import EyeIc = SimpleSvgIcons.EyeIc;
 import Ripple, {RippleRef} from "../Ripple/Ripple";
+import { useRecoilValue } from 'recoil';
+import { themeObjState } from 'src/recoil/ThemeState';
+import styled from '@emotion/styled';
+import { EmotionCommon } from 'src/styles/EmotionCommon';
+import center = EmotionCommon.center;
+import centerAll = EmotionCommon.centerAll;
+import resetButton = EmotionCommon.resetButton;
 
 
 
@@ -25,6 +27,8 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
   
   const rippleRef = useRef<RippleRef>(null)
   
+  const themeObj = useRecoilValue(themeObjState)
+  
   return <Input {...restProps} ref={forwardedRef} type={pwdHidden ? 'password' : 'text'}>
     <EyeWrap tabIndex={0}
       onClick={()=>setPwdHidden(!pwdHidden)}
@@ -33,25 +37,26 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
         rippleRef.current?.showRipple()
         //ev.currentTarget.setPointerCapture(ev.pointerId) // prevents pointer lost when outside a view
       }}
-      //onPointerUp={()=>rippleRef.current?.hideRipple()}
+      onPointerUp={()=>rippleRef.current?.hideRipple()}
       //onPointerCancel={()=>rippleRef.current?.hideRipple()}
-      // 'out' is 'leave' + 'up' + 'cancel'
-      onPointerOut={ev=>{
-        rippleRef.current?.hideRipple()
-        restProps.onPointerOut?.(ev)
-      }}
-      
+      // 'out' is 'leave' + 'cancel'
+      onPointerOut={()=>rippleRef.current?.hideRipple()}
     >
   
       <RippleFrame1>
         <RippleFrame2>
-          <Ripple ref={rippleRef} mode='center' rippleColor='#0008' rippleDuration={3000}/>
+          <Ripple
+            ref={rippleRef}
+            mode='center'
+            rippleColor={themeObj.input.ripple[0]}
+            rippleDuration={3000}
+          />
         </RippleFrame2>
       </RippleFrame1>
       
       { pwdHidden
-        ? <EyeCrossedOutIc mainColor='black' size={24}/>
-        : <EyeIc mainColor='black' size={24}/>
+        ? <EyeCrossedOutIc/>
+        : <EyeIc/>
       }
       
     </EyeWrap>
@@ -61,13 +66,17 @@ export default ReactMemoTyped(PwdInput)
 
 
 
-let EyeWrap = styled.button.attrs({ type: 'button' })`
+const EyeWrap = styled.button`
   ${resetButton};
   ${centerAll};
   height: 100%;
   padding: 0 14px 0 0;
   cursor: pointer;
+  --icon-color: ${p=>p.theme.input.text[0]};
+  --icon-size: 24px;
 `
+EyeWrap.defaultProps = { type: 'button' }
+
 
 
 const RippleFrame1 = styled.div`
@@ -82,11 +91,11 @@ const RippleFrame2 = styled.div`
   border-radius: inherit;
   position: relative;
   *:focus > * > & {
-    background: #00000011;
+    background: ${p=>p.theme.input.iconActive[0]};
   }
   @media not (hover: none) {
-    &:hover {
-      background: #00000011;
+    :hover {
+      background: ${p=>p.theme.input.iconHover[0]};
     }
   }
 `

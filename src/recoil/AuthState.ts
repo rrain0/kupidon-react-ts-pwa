@@ -34,9 +34,3 @@ export const authState = atom<AuthStateType>({
 })
 
 
-/*const sel = selector({
-  key: 'aslkdfj',
-  get: ({ get }) => {
-    return get(authState)
-  }
-})*/

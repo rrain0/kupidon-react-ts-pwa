@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom/client'
 import 'src/styles/reset.css'
 import 'src/styles/fonts.css'
 import 'src/styles/index.css'
+import 'react-toastify/dist/ReactToastify.css'
+import 'animate.css'
 import App from './pages/App/App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { RecoilRoot } from 'recoil'
 import RecoilNexus from 'recoil-nexus' // access recoil state from not react component
 import { BrowserRouter } from 'react-router-dom'
+import { StyleSheetManager } from 'styled-components';
 
 
 const root = ReactDOM.createRoot(
@@ -19,7 +22,12 @@ root.render(
     <RecoilRoot>
       <RecoilNexus />
       <BrowserRouter>
-        <App/>
+        <StyleSheetManager
+          // 'styled-components' will not render this as html attributes
+          shouldForwardProp={prop=>!['css','theme'].includes(prop)}
+        >
+          <App/>
+        </StyleSheetManager>
       </BrowserRouter>
     </RecoilRoot>
   </React.StrictMode>

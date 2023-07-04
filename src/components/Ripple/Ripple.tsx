@@ -31,7 +31,7 @@ const Ripple = React.forwardRef<RippleRef, RippleProps>(
     rippleViewRef.current!.showRipple = showRipple
     rippleViewRef.current!.hideRipple = hideRipple
     return rippleViewRef.current!
-  },[])
+  },undefined)
   
   
   const rippleFrameRef = useRef<HTMLDivElement>(null)

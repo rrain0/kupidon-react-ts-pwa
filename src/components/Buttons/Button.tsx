@@ -37,7 +37,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
       //ev.currentTarget.setPointerCapture(ev.pointerId) // prevents pointer lost when outside a view
       restProps.onPointerDown?.(ev)
     }}
-    // 'out' is 'leave' + 'up' + 'cancel'
+    onPointerUp={ev=>{
+      rippleRef.current?.hideRipple()
+      restProps.onPointerUp?.(ev)
+    }}
+    // 'out' is 'leave' + 'cancel'
     onPointerOut={ev=>{
       rippleRef.current?.hideRipple()
       restProps.onPointerOut?.(ev)

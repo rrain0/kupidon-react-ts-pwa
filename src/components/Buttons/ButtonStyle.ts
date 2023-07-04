@@ -1,7 +1,81 @@
 import { css } from '@emotion/react';
+import { Theme } from 'src/theme/Theme';
 
 
 export namespace ButtonStyle {
+  
+  
+  export const primary = (t: Theme.Theme) => css`
+    &.rrainuiButton {
+      height: 50px;
+
+      background: ${t.button.primary.bgc[0]};
+      transition: background linear 300ms;
+
+      border-radius: 15px;
+      padding: 8px 4px;
+
+      font: 500 18px/150% Roboto;
+      color: ${t.button.primary.text[0]};
+      letter-spacing: 0.05em;
+
+      --ripple-color: ${t.button.primary.ripple[0]};
+
+      :active, :focus {}
+      :focus-visible {
+        background: ${t.button.primary.active[0]};
+      }
+      @media not (hover: none) { :hover {
+          background: ${t.button.primary.hover[0]};
+      } }
+
+      :disabled {
+        background: ${t.button.primary.disabled.bgc[0]};
+        color: ${t.button.primary.disabled.text[0]};
+      }
+    }
+    &.rrainuiButton[data-error] > .rrainuiBorder {}
+  `
+  
+  
+  export const secondary = (t: Theme.Theme) => css`
+    &.rrainuiButton {
+      height: 50px;
+
+      background: ${t.button.secondary.bgc[0]};
+      transition: background linear 300ms;
+
+      border-radius: 15px;
+
+      padding: 8px 4px;
+
+      font: 500 18px/150% Roboto;
+      color: ${t.button.secondary.text[0]};
+      letter-spacing: 0.05em;
+
+      --ripple-color: ${t.button.secondary.ripple[0]};
+
+      :focus {}
+      :active, :focus-visible {
+        background: ${t.button.secondary.active[0]};
+      }
+      @media not (hover: none) { :hover {
+          background: ${t.button.secondary.hover[0]};
+      } }
+
+      :disabled {
+        background: ${t.button.secondary.disabled.bgc[0]};
+        color: ${t.button.secondary.disabled.text[0]};
+      }
+    }
+    &.rrainuiButton[data-error] > .rrainuiBorder {}
+  `
+  
+  
+  
+  
+  
+  
   
   
   export const lightCherry = css`
@@ -40,6 +114,7 @@ export namespace ButtonStyle {
       //border: 2px solid orange;
     }
   `
+  
   
   export const lightPink = css`
     &.rrainuiButton {

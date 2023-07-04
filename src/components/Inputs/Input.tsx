@@ -44,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
     { startViews }
     { childrenPosition==='start' && children }
     
-    <Input_ {...restProps} data-error={hasError} ref={inputRef}/>
+    <Input_ {...restProps} hasError={hasError} ref={inputRef}/>
     
     { childrenPosition==='end' && children }
     { endViews }
@@ -67,16 +67,17 @@ const Frame = styled.label.attrs(p=>({
 `
 
 type Input_Props = {
-  'data-error'?: boolean | empty
+  hasError?: boolean | empty
 }
 const Input_ = styled.input.attrs<Input_Props>(p=>({
   className: classNames(p.className,'rrainuiInput'),
-  'data-error': trueOrUndef(p['data-error'])
+  'data-error': trueOrUndef(p.hasError)
 }))`
   ${resetInput};
   
   flex: 1;
   height: 100%;
+  border-radius: inherit;
 
   @media not (hover: none) {
     &:hover {

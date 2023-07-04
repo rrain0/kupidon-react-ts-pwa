@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import React from 'react'
 import {ReactUtils} from "src/utils/ReactUtils";
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
@@ -19,10 +20,13 @@ import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
 import { ReactComponent as PencilWriteSvg } from 'src/res/icon/pencil-write.svg'
 import { ReactComponent as Plane1Svg } from 'src/res/icon/plane-1.svg'
 import { ReactComponent as ProfileSvg } from 'src/res/icon/profile.svg'
+import { ReactComponent as RadioActiveSvg } from 'src/res/icon/radio-active.svg'
+import { ReactComponent as RadioInactiveSvg } from 'src/res/icon/radio-inactive.svg'
 import { ReactComponent as RingingBellSvg } from 'src/res/icon/ringing-bell.svg'
 import { ReactComponent as SearchSvg } from 'src/res/icon/search.svg'
 import { ReactComponent as Spinner8LinesSvg } from 'src/res/icon/spinner-8-lines.svg'
 import styled, {keyframes} from "styled-components";
+import { css } from '@emotion/react';
 
 
 
@@ -41,15 +45,21 @@ export namespace SimpleSvgIcons {
   
   
   export type SimpleSvgIconProps = CustomIconProps & SvgProps & SvgElement
-  let SimpleSvgIcon_ = ({ mainColor = 'black', size, SvgComponent, ...props }: SimpleSvgIconProps) => {
-    const { style, ...restProps } = props
+  let SimpleSvgIcon_ = (props: SimpleSvgIconProps) => {
+    let {
+      mainColor, size,
+      SvgComponent, ...restProps
+    } = props
+    
     return <SvgComponent
-      style={{
-        width: size, height: size,
-        maxWidth: '100%', maxHeight: '100%',
-        fill: mainColor, stroke: mainColor,
-        ...style
-      }}
+      css={css`
+        width: ${size ?? 'var(--icon-size)'};
+        height: ${size ?? 'var(--icon-size)'};
+        max-width: 100%;
+        max-height: 100%;
+        fill: ${mainColor ?? 'var(--icon-color, black)'};
+        stroke: ${mainColor ?? 'var(--icon-color, black)'};
+      `}
       {...restProps}
     />
   }
@@ -115,6 +125,12 @@ export namespace SimpleSvgIcons {
   
   let Profile_ = (props: IconProps) => <SimpleSvgIcon {...props} SvgComponent={ProfileSvg} />
   export const ProfileIc = ReactMemoTyped(Profile_)
+  
+  let RadioActive_ = (props: IconProps) => <SimpleSvgIcon {...props} SvgComponent={RadioActiveSvg} />
+  export const RadioActiveIc = ReactMemoTyped(RadioActive_)
+  
+  let RadioInactive_ = (props: IconProps) => <SimpleSvgIcon {...props} SvgComponent={RadioInactiveSvg} />
+  export const RadioInactiveIc = ReactMemoTyped(RadioInactive_)
   
   let RingingBell_ = (props: IconProps) => <SimpleSvgIcon {...props} SvgComponent={RingingBellSvg} />
   export const RingingBellIc = ReactMemoTyped(RingingBell_)
