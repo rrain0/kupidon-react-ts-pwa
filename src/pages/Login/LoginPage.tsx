@@ -51,7 +51,7 @@ const LoginPage = () => {
     if (loginState.error && !loginState.errorDismissed) Toasts.Error.show(
       ()=><div css={t=>css`
         font: 400 14px/129% Roboto;
-        color: ${t.page.text};
+        color: var(--toastify-text-color-${t.type});
         white-space: break-spaces;
       `}>
         Ошибка! {JSON.stringify(loginState.error!)}

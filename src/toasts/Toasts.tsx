@@ -20,7 +20,6 @@ export namespace Toasts {
     show: ()=>toast.success('Вход выполнен', {
       toastId: successSignInId,
       autoClose: 1500,
-      closeButton: false,
       transition: slideInDownThenFadeOut,
     })
   }
@@ -31,7 +30,7 @@ export namespace Toasts {
     id: errorId,
     show: <TData = unknown>(content: ToastContent<TData>)=>toast.error(content, {
       toastId: errorId,
-      closeButton: false,
+      closeButton: true,
       transition: slideInDownThenFadeOut,
     })
   }

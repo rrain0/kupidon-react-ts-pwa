@@ -51,13 +51,14 @@ function App() {
     <ToastContainer
       position="top-center"
       autoClose={false}
-      hideProgressBar={true}
-      newestOnTop={true}
+      closeButton={false}
       closeOnClick={false}
-      rtl={false}
-      pauseOnFocusLoss
       draggable
       draggablePercent={40}
+      hideProgressBar={true}
+      newestOnTop={true}
+      rtl={false}
+      pauseOnFocusLoss
       pauseOnHover
       theme={theme.current}
       css={css`
