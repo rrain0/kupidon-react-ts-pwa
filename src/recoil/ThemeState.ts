@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil';
-import { localStorageEffect } from './RecoilPersist';
+import { localStorageEffect2 } from './RecoilPersist';
 import { Theme } from '../theme/Theme';
 
 
@@ -16,7 +16,7 @@ export const themeState = atom<ThemeStateType>({
     preferredLight: Theme.defaultLight,
     preferredDark: Theme.defaultDark,
   },
-  effects: [localStorageEffect],
+  effects: [localStorageEffect2({ removeWhen: ['reset'] })],
 })
 
 

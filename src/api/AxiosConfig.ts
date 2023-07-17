@@ -141,7 +141,7 @@ export namespace AxiosConfig {
   }
   const getAuthData = ()=>{
     // return reduxStore.getState().authReducer.access_token
-    return getRecoil(authState)?.accessToken ?? null
+    return getRecoil(authState)?.accessToken
   }
   
   
@@ -160,7 +160,7 @@ export namespace AxiosConfig {
    */
   
   const checkAccessToken = (
-    accessToken: null|string,
+    accessToken: undefined|string,
     config: InternalAxiosRequestConfig<any>
   )=>{
     const conf = config as typeof config & CustomConfig

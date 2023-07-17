@@ -2,7 +2,7 @@
 import { EmotionCommon } from 'src/styles/EmotionCommon';
 import center = EmotionCommon.center;
 import styled from '@emotion/styled';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useResetRecoilState } from 'recoil';
 import col = EmotionCommon.col;
 import { css } from '@emotion/react';
 import { authState } from 'src/recoil/AuthState';
@@ -14,10 +14,11 @@ import { UserApi } from 'src/api/requests/UserApi';
 function UserInfo(){
   
   const [auth,setAuth] = useRecoilState(authState)
+  const resetAuth = useResetRecoilState(authState)
   
   
   const logout = async () => {
-    setAuth(null)
+    resetAuth()
   }
   const update = async () => {
     try {

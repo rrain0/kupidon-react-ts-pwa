@@ -8,7 +8,24 @@ export namespace Utils {
   )
   
   
+  // Создать новый Set из элементов set, исключая элементы из exclude
+  export const SetExclude = <T>(set: Set<T>, exclude: Set<any>): Set<T> => {
+    return new Set([...set].filter(v=>!exclude.has(v)))
+  }
+  
+  
   export const trueOrUndef = (value: any): true|undefined => value ? true : undefined
+  
+  
+  export function clone<T extends object>(
+    orig: T,
+    update?: { -readonly [Prop in keyof T]?: T[Prop] }
+  ): T {
+    let newInstance = Object.assign(Object.create(Object.getPrototypeOf(orig)), orig) as T
+    Object.assign(newInstance, update)
+    return newInstance
+  }
+  
   
   
   /**
@@ -170,9 +187,6 @@ export namespace Utils {
     // @ts-ignore
     return Object.values(object)
   }
-  
-  
-  export type Entries<O extends object> = { [Prop in keyof O]: [Prop,O[Prop]] }[keyof O]
   
   
   /**

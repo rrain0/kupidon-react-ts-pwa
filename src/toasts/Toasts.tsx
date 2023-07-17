@@ -28,8 +28,8 @@ export namespace Toasts {
   const errorId = 'error'
   export const Error = {
     id: errorId,
-    show: <TData = unknown>(content: ToastContent<TData>)=>toast.error(content, {
-      toastId: errorId,
+    show: <TData = unknown>(id: string, content: ToastContent<TData>)=>toast.error(content, {
+      toastId: id,
       closeButton: true,
       transition: slideInDownThenFadeOut,
     })

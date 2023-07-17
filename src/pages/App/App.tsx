@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { authState } from 'src/recoil/AuthState';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppRoutes } from 'src/app-routes/AppRoutes';
-import LoginPage from '../Login/LoginPage';
+import LoginPage from '../LoginPage/LoginPage';
 import UserInfo from '../UserInfo/UserInfo';
 import SignupPage from '../Signup/SignupPage';
 import React from 'react';

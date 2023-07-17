@@ -10,7 +10,10 @@ export namespace InputStyle {
       height: 50px;
       border-radius: 15px;
       background: ${t.input.bgc};
-      .rrainuiInput[data-error] {
+      /*& .rrainuiInput[data-error] {
+        background: ${t.input.error.bgc};
+      }*/
+      :has(.rrainuiInput[data-error]){
         background: ${t.input.error.bgc};
       }
     }
