@@ -25,8 +25,8 @@ export namespace ValidationValidators {
     if (!value || !value.length) return Failure.of('required','Поле обязательно для заполнения')
   }
   export const pwdValidator: Validator<string|empty> = ({value}) => {
-    if (!value || value.length<3)
-      return new FailureData({ code: 'incorrect', msg: 'Минимальная длина пароля - 3 символов' })
+    if (!value || value.length<6)
+      return new FailureData({ code: 'incorrect', msg: 'Минимальная длина пароля - 6 символов' })
   }
   
   

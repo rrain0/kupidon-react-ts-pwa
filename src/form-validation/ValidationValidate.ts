@@ -19,11 +19,14 @@ export namespace ValidationValidate {
     prevFailures: FormFailures<Vs>|undefined,
     validators: Validators<Vs>,
     config?: {
+      formId?: string
       mode?: 'all-errors' |  'form-first-error'
       type?: ValidationType
       checkOnly?: undefined | string[]
     },
   ): FormFailures<Vs> => {
+    
+    console.log('values',values)
     
     config = { ...config }
     config.mode ??= 'all-errors'
@@ -85,8 +88,14 @@ export namespace ValidationValidate {
       }
     }
     
+    
     // todo form id
-    return new FormFailures('', failures as Failures<Vs>)
+    const formFailures = new FormFailures(
+      config.formId ?? prevFailures?.id,
+      failures as Failures<Vs>
+    )
+    console.log('formFailures',formFailures)
+    return formFailures
   }
   
   

@@ -1,4 +1,4 @@
-import { Utils } from '../utils/Utils';
+import { Utils } from 'src/utils/Utils';
 
 
 export namespace ValidationCore {
@@ -33,7 +33,7 @@ export namespace ValidationCore {
   
   export class FormFailures<Vs extends Values> {
     constructor(
-      readonly id: string,
+      readonly id: string | undefined,
       readonly failures: Failures<Vs>,
     ){}
     

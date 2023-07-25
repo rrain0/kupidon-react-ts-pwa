@@ -27,23 +27,20 @@ import { ValidationValidate } from 'src/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
 import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
-import { ValidationActions } from 'src/form-validation/ValidationActions'
-import { usePrevState } from 'src/utils-react/usePrevState';
-import { Utils } from 'src/utils/Utils';
-import hideNotification2 = ValidationActions.hideNotification2;
-import { useDebounce } from 'src/utils-react/useDebounce';
-import hideNotification = ValidationActions.hideNotification;
-import hideHighlight = ValidationActions.hideHighlight;
-import changeFailure = ValidationActions.changeFailure;
+import { usePrevState } from 'src/utils-react/usePrevState'
+import { Utils } from 'src/utils/Utils'
+import { useDebounce } from 'src/utils-react/useDebounce'
+import { ValidationActions } from 'src/form-validation/ValidationActions';
+import updateFailures = ValidationActions.updateFailures
 
 
 
 
-export const defaultLoginValues = {
+export const defaultLoginValues: FormValues = {
   login: '',
   pwd: '',
   form: undefined,
-} satisfies FormValues
+}
 const defaultError = validate(defaultLoginValues, undefined, validators) as FormFailures<FormValues>
 
 
@@ -65,39 +62,124 @@ const LoginPage = () => {
   
   const [loginForm, setLoginForm] = useState(defaultLoginValues)
   const setLogin = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const newLoginForm = { ...loginForm, login: ev.target.value, form: undefined}
-    let newFailures = validate(newLoginForm, loginState.error, validators, { checkOnly: ['form'] })
-    newFailures = hideNotification(newFailures, 'login')
-    newFailures = hideHighlight(newFailures, 'login')
+    const newLoginForm = { ...loginForm, login: ev.target.value, form: undefined }
+    // не исчезает ошибка от формы при изменении значения - должно исчезать уведомление и подсветка ОБОИХ полей
+    let newFailures = updateFailures(
+      loginState.error, { fields: ['login','form'] }, { highlight: false, notify: false }
+    )
     setLoginForm(newLoginForm)
-    setLoginState(s=>({ ...s, error: newFailures}))
+    setLoginState({ ...loginState, error: newFailures})
   }
   const setPwd = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    const newLoginForm = { ...loginForm, pwd: ev.target.value, form: undefined}
-    let newFailures = validate(newLoginForm, loginState.error, validators, { checkOnly: ['form'] })
-    newFailures = hideNotification(newFailures, 'pwd')
-    newFailures = hideHighlight(newFailures, 'pwd')
+    const newLoginForm = { ...loginForm, pwd: ev.target.value, form: undefined }
+    let newFailures = updateFailures(
+      loginState.error, { fields: ['pwd','form'] }, { highlight: false, notify: false }
+    )
     setLoginForm(newLoginForm)
-    setLoginState(s=>({ ...s, error: newFailures}))
+    setLoginState({ ...loginState, error: newFailures})
   }
   
+  const [loginDebounceUpdate, setLoginDebounceUpdate] = useState(false)
+  const [pwdDebounceUpdate, setPwdDebounceUpdate] = useState(false)
   useDebounce(()=>{
-    let newFailures = validate(loginForm, loginState.error, validators, { checkOnly: ['login'] })
-    newFailures = changeFailure(newFailures, 'login', { highlight: true, notify: true })
-    setLoginState(s=>({ ...s, error: newFailures}))
-  }, 3000, [loginForm.login])
+    setLoginDebounceUpdate(true)
+  },3000,[loginForm.login])
   useDebounce(()=>{
-    let newFailures = validate(loginForm, loginState.error, validators, { checkOnly: ['pwd'] })
-    newFailures = changeFailure(newFailures, 'pwd', { highlight: true, notify: true })
-    setLoginState(s=>({ ...s, error: newFailures}))
-  }, 3000, [loginForm.pwd])
+    setPwdDebounceUpdate(true)
+  },3000,[loginForm.pwd])
+  useEffect(()=>{
+    if (loginDebounceUpdate){
+      const newError = validate(loginForm, loginState.error, validators, { checkOnly: ['login'] })
+      setLoginState({ ...loginState, error: newError })
+      setLoginDebounceUpdate(false)
+    }
+  },[loginDebounceUpdate, loginForm, loginState])
+  useEffect(()=>{
+    if (pwdDebounceUpdate){
+      const newError = validate(loginForm, loginState.error, validators, { checkOnly: ['pwd'] })
+      setLoginState({ ...loginState, error: newError })
+      setPwdDebounceUpdate(false)
+    }
+  },[pwdDebounceUpdate, loginForm, loginState])
+  
+  
+  
+  
+  const [loginResponse, setLoginResponse] = useState(undefined as undefined
+    | { success: AuthApi.LoginRespS }
+    | { error: any }
+  )
+  useEffect(()=>{
+    if (loginResponse){
+      // @ts-ignore
+      const s = loginResponse?.success as undefined | AuthApi.LoginRespS
+      // @ts-ignore
+      const e = loginResponse?.error as undefined | any
+      if (s){
+        setAuth(s.data)
+        setLoginState({
+          ...loginState,
+          success: true
+        })
+      } else if (e){
+        if (e instanceof AxiosError){
+          if (e.code===AxiosError.ERR_NETWORK){
+            const newLoginForm: FormValues = { ...loginForm, form: 'connection-error' }
+            setLoginForm(newLoginForm)
+            setLoginState({
+              ...loginState,
+              success: false,
+              error: validate(
+                newLoginForm,
+                loginState.error,
+                validators,
+                { type: 'submit' }
+              )
+            })
+          } else if (e.response?.status===400){
+            const err = e.response as LoginRespE
+            const newLoginForm = { ...loginForm, form: err.data.code }
+            setLoginForm(newLoginForm)
+            setLoginState({
+              ...loginState,
+              success: false,
+              error: validate(
+                newLoginForm,
+                loginState.error,
+                validators,
+                { type: 'submit' }
+              )
+            })
+          }
+        } else {
+          const newLoginForm: FormValues = { ...loginForm, form: 'unknown' }
+          setLoginForm(newLoginForm)
+          setLoginState({
+            ...loginState,
+            success: false,
+            error: validate(
+              newLoginForm,
+              loginState.error,
+              validators,
+              { type: 'submit' }
+            )
+          })
+          console.warn('UNKNOWN ERROR',e)
+        }
+      }
+      setLoginResponse(undefined)
+    }
+  },[loginResponse, loginState, loginForm])
   
   
   
   toast.onChange(toast=>{
     const id = toast.id
     if (typeof id === 'string' && id.startsWith('failure') && toast.status==='removed'){
-      setLoginState(s=>({ ...s, error: hideNotification2(s.error, id)}))
+      setLoginState(s=>({
+        ...s,
+        error: updateFailures(s.error, { failuresId: [id] }, { notify: false })}
+      ))
     }
   })
   
@@ -122,8 +204,8 @@ const LoginPage = () => {
     const remove = Utils.SetExclude(prevFailIds, failIds)
     remove.forEach(elId=>toast.dismiss(elId))
     
-    const fail = Object.values(loginState.error?.failures ?? {})
-      .find(el=>el?.notify)
+    console.log('notifications loginState', loginState)
+    const fail = Object.values(loginState.error?.failures ?? {}).find(el=>el?.notify)
     if (fail){
       Toasts.Error.show(fail.id,
         ()=><div css={t=>css`
@@ -135,7 +217,7 @@ const LoginPage = () => {
         </div>
       )
     }
-  },[loginState])
+  },[loginState,prevLoginState])
   
   
   const onSubmit = (ev: React.FormEvent) => {
@@ -147,44 +229,24 @@ const LoginPage = () => {
       validators,
       { type: 'submit' }
     )
-    setLoginState(s=>({
-      ...s,
+    setLoginState({
+      ...loginState,
       success: false,
       error: failures
-    }))
+    })
     if (failures.hasFailure()) return
     
     void tryLogin()
   }
   
-  const tryLogin = async ()=>{
+  const tryLogin = async()=>{
     if (loginState.loading) return
     setLoginState(s=>({ ...s, loading: true }))
     try {
       const response = await AuthApi.login(loginForm)
-      setAuth(response.data)
-      setLoginState(s=>({
-        ...s,
-        success: true,
-        error: defaultError
-      }))
+      setLoginResponse({ success: response })
     } catch (e){
-      if (e instanceof AxiosError){
-        if (e.response?.status===400){
-          const err = e.response as LoginRespE
-          setLoginState(s=>({
-            ...s, success: false,
-            error: validate(
-              {...defaultLoginValues, form: err.data.code},
-              loginState.error,
-              validators,
-              { type: 'submit' }
-            )
-          }))
-        }
-        
-      }
-      
+      setLoginResponse({ error: e })
     } finally {
       setLoginState(s=>({ ...s, loading: false }))
     }

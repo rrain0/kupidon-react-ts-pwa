@@ -26,15 +26,6 @@ export namespace LoginPageValidation {
   export const validators: Validators<FormValues> = {
     
     login: [
-      ({value:v, type:t})=>{
-        const def =  defaultLoginValues.login
-        if (t!=='submit' && v===def) return 'ok-stop'
-        if (t==='submit' && v===def) return new FailureData({
-          code: 'required',
-          msg: 'Email не введён'
-        })
-      },
-      emailValidator,
       ({values:vs})=>{
         if (vs.form==='NO_USER')
           return new FailureData({
@@ -42,12 +33,28 @@ export namespace LoginPageValidation {
             msg: 'Не найдено пользователя с таким логином-паролем',
             notify: false,
           })
-      }
+      },
+      ({value:v, type:t})=>{
+        const def = defaultLoginValues.login
+        if (t!=='submit' && v===def) return 'ok-stop'
+        if (t==='submit' && v===def) return new FailureData({
+          code: 'required',
+          msg: 'Email не введён'
+        })
+      },
+      emailValidator,
     ],
     
     //notRobot: [robotValidator],
     
     pwd: [
+      ({values:vs})=>{
+        if (vs.form==='NO_USER') return new FailureData({
+          code: vs.form,
+          msg: 'Не найдено пользователя с таким логином-паролем',
+          notify: false,
+        })
+      },
       ({value:v, type:t})=>{
         const def =  defaultLoginValues.pwd
         if (t!=='submit' && v===def) return 'ok-stop'
@@ -56,14 +63,6 @@ export namespace LoginPageValidation {
           msg: 'Пароль не введён'
         })
       },
-      pwdValidator,
-      ({values:vs})=>{
-        if (vs.form==='NO_USER') return new FailureData({
-          code: vs.form,
-          msg: 'Не найдено пользователя с таким логином-паролем',
-          notify: false,
-        })
-      }
     ],
     
     form: [
