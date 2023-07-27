@@ -30,7 +30,7 @@ import validators = LoginPageValidation.validators
 import { usePrevState } from 'src/utils-react/usePrevState'
 import { Utils } from 'src/utils/Utils'
 import { useDebounce } from 'src/utils-react/useDebounce'
-import { ValidationActions } from 'src/form-validation/ValidationActions';
+import { ValidationActions } from 'src/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
 
 
@@ -63,9 +63,9 @@ const LoginPage = () => {
   const [loginForm, setLoginForm] = useState(defaultLoginValues)
   const setLogin = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newLoginForm = { ...loginForm, login: ev.target.value, form: undefined }
-    // не исчезает ошибка от формы при изменении значения - должно исчезать уведомление и подсветка ОБОИХ полей
     let newFailures = updateFailures(
-      loginState.error, { fields: ['login','form'] }, { highlight: false, notify: false }
+      loginState.error, { fields: ['login'] }, undefined,
+      { applyToSameFullCode: true, remove: true }
     )
     setLoginForm(newLoginForm)
     setLoginState({ ...loginState, error: newFailures})
@@ -73,11 +73,19 @@ const LoginPage = () => {
   const setPwd = (ev: React.ChangeEvent<HTMLInputElement>) => {
     const newLoginForm = { ...loginForm, pwd: ev.target.value, form: undefined }
     let newFailures = updateFailures(
-      loginState.error, { fields: ['pwd','form'] }, { highlight: false, notify: false }
+      loginState.error, { fields: ['pwd'] }, undefined,
+      { applyToSameFullCode: true, remove: true }
     )
     setLoginForm(newLoginForm)
     setLoginState({ ...loginState, error: newFailures})
   }
+  
+  
+  const onBlur = (fieldName: keyof FormValues) => {
+    const newError = validate(loginForm, loginState.error, validators, { checkOnly: [fieldName] })
+    setLoginState({ ...loginState, error: newError })
+  }
+  
   
   const [loginDebounceUpdate, setLoginDebounceUpdate] = useState(false)
   const [pwdDebounceUpdate, setPwdDebounceUpdate] = useState(false)
@@ -204,7 +212,7 @@ const LoginPage = () => {
     const remove = Utils.SetExclude(prevFailIds, failIds)
     remove.forEach(elId=>toast.dismiss(elId))
     
-    console.log('notifications loginState', loginState)
+    //console.log('notifications loginState', loginState)
     const fail = Object.values(loginState.error?.failures ?? {}).find(el=>el?.notify)
     if (fail){
       Toasts.Error.show(fail.id,
@@ -263,6 +271,7 @@ const LoginPage = () => {
         onChange={setLogin}
         placeholder='логин (email)'
         hasError={loginState.error?.failures.login?.highlight}
+        onBlur={()=>onBlur('login')}
       />
       <PwdInput
         css={InputStyle.input}
@@ -270,6 +279,7 @@ const LoginPage = () => {
         onChange={setPwd}
         placeholder='пароль'
         hasError={loginState.error?.failures.pwd?.highlight}
+        onBlur={()=>onBlur('pwd')}
       />
       
       <Button

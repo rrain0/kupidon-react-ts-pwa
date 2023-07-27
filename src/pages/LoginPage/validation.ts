@@ -1,19 +1,16 @@
-import { ValidationCore } from 'src/form-validation/ValidationCore';
-import { ValidationValidators } from 'src/form-validation/ValidationValidators';
-import { AuthApi } from 'src/api/requests/AuthApi';
-import { defaultLoginValues } from './LoginPage';
+import { ValidationCore } from 'src/form-validation/ValidationCore'
+import { ValidationValidators } from 'src/form-validation/ValidationValidators'
+import { AuthApi } from 'src/api/requests/AuthApi'
+import { defaultLoginValues } from './LoginPage'
 
 
 
 export namespace LoginPageValidation {
-  import Values = ValidationCore.Values;
-  import Validators = ValidationCore.Validators;
-  import emailValidator = ValidationValidators.emailValidator;
-  import Failure = ValidationCore.Failure;
-  import robotValidator = ValidationValidators.robotValidator;
-  import pwdValidator = ValidationValidators.pwdValidator;
-  import LoginRespE = AuthApi.LoginRespE;
-  import FailureData = ValidationCore.FailureData;
+  import Values = ValidationCore.Values
+  import Validators = ValidationCore.Validators
+  import isValidEmail = ValidationValidators.isValidEmail
+  import LoginRespE = AuthApi.LoginRespE
+  import FailureData = ValidationCore.FailureData
   
   
   export interface FormValues extends Values {
@@ -38,11 +35,14 @@ export namespace LoginPageValidation {
         const def = defaultLoginValues.login
         if (t!=='submit' && v===def) return 'ok-stop'
         if (t==='submit' && v===def) return new FailureData({
-          code: 'required',
+          code: 'login-required',
           msg: 'Email не введён'
         })
       },
-      emailValidator,
+      ({value}) => {
+        if (!isValidEmail({value}))
+          return new FailureData({ code: 'login-incorrect', msg: 'Некорректный формат email' })
+      }
     ],
     
     //notRobot: [robotValidator],
@@ -59,7 +59,7 @@ export namespace LoginPageValidation {
         const def =  defaultLoginValues.pwd
         if (t!=='submit' && v===def) return 'ok-stop'
         if (t==='submit' && v===def) return new FailureData({
-          code: 'required',
+          code: 'pwd-required',
           msg: 'Пароль не введён'
         })
       },

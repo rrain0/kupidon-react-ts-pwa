@@ -9,7 +9,7 @@ export namespace ValidationValidate {
   import Failures = ValidationCore.Failures
   import ValidationType = ValidationCore.ValidationType
   import FailureData = ValidationCore.FailureData
-  import Failure2 = ValidationCore.Failure2
+  import Failure = ValidationCore.Failure
   import ObjectEntries = Utils.ObjectEntries;
   
   
@@ -20,7 +20,7 @@ export namespace ValidationValidate {
     validators: Validators<Vs>,
     config?: {
       formId?: string
-      mode?: 'all-errors' |  'form-first-error'
+      mode?: 'all-errors' | 'form-first-error'
       type?: ValidationType
       checkOnly?: undefined | string[]
     },
@@ -81,7 +81,7 @@ export namespace ValidationValidate {
               if (!prev.notify) result.data.notify = false
             }
           }
-          failures[fnm] = Failure2.of(fnm,v,result)
+          failures[fnm] = Failure.of(fnm,v,result)
           if (config.mode==='form-first-error') break fieldLoop
           /*if (config.mode==='field-first-error')*/ continue fieldLoop
         }
