@@ -9,7 +9,7 @@ export namespace ValidationValidate {
   import Failures = ValidationCore.Failures
   import ValidationType = ValidationCore.ValidationType
   import FailureData = ValidationCore.FailureData
-  import Failure = ValidationCore.Failure
+  import Failure = ValidationCore.Failure0
   import ObjectEntries = Utils.ObjectEntries;
   
   

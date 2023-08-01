@@ -7,7 +7,7 @@ import { Utils } from 'src/utils/Utils'
 export namespace ValidationActions {
   import ObjectEntries = Utils.ObjectEntries
   import ObjectValues = Utils.ObjectValues
-  import Failure = ValidationCore.Failure
+  import Failure = ValidationCore.Failure0
   
   
   

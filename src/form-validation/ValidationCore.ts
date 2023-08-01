@@ -13,7 +13,7 @@ export namespace ValidationCore {
   /**
    * @returns {'ok' | undefined | void} - валидатор не обнаружил ошибок
    * @returns {'ok-stop'} - валидатор не обнаружил ошибок и говорит, что дальнейшая валидация не нужна
-   * @returns {Failure} - валидатор обнаружил ошибку и вернул этот объект с ошибкой,
+   * @returns {Failure0} - валидатор обнаружил ошибку и вернул этот объект с ошибкой,
    * последующие валидаторы для этого поля не будут запущены.
    * @returns {'later'} - валидатор сообщает, что сейчас не может провести валидацию,
    * потому что валидация текущего поля зависит от корректности данных других полей.
@@ -51,12 +51,12 @@ export namespace ValidationCore {
   // undefined - error check is not completed
   // null - errors was not found - all is of
   // Failure2 - found an error
-  export type Failures<Vs extends object> = { [Field in keyof Vs]?: Failure|undefined|null }
+  export type Failures<Vs extends object> = { [Field in keyof Vs]?: Failure0|undefined|null }
   
   
   
   
-  export class Failure {
+  export class Failure0 {
     /**
      * @param code - error main code, eg 'incorrect', 'login-already-exists'
      * @param extraCode - error extra code
@@ -77,7 +77,7 @@ export namespace ValidationCore {
     ){}
     static of(fieldName: string, value: any, data: FailureData){
       const d = data.data
-      return new Failure(fieldName, value, d.code, d.extraCode, d.msg, d.extra, d.highlight, d.notify)
+      return new Failure0(fieldName, value, d.code, d.extraCode, d.msg, d.extra, d.highlight, d.notify)
     }
     
     get fullCode(){
@@ -101,6 +101,26 @@ export namespace ValidationCore {
     
     get fullCode(){
       return `${this.data.code}${this.data.extraCode?`-${this.data.extraCode}`:''}`
+    }
+  }
+  
+  
+  
+  class Failure {
+    constructor(
+      public code: string,
+      public extraCode: string,
+      public msg: string,
+      public fields: string[],
+      public values: any[], // ???
+      public type: 'validation'|'outer',
+      public priority: number, // higher number - higher priority
+      public highlight: boolean,
+      public notify: boolean,
+    ) {}
+    
+    get fullCode(){
+      return `${this.code}${this.extraCode?`-${this.extraCode}`:''}`
     }
   }
   

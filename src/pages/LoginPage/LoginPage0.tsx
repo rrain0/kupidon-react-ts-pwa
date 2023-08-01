@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -32,8 +32,6 @@ import { Utils } from 'src/utils/Utils'
 import { useDebounce } from 'src/utils-react/useDebounce'
 import { ValidationActions } from 'src/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
-import { ValidationComponents } from '../../form-validation/ValidationComponents';
-import InputValidationWrap = ValidationComponents.InputValidationWrap;
 
 
 
@@ -63,11 +61,54 @@ const LoginPage = () => {
   })
   
   const [loginForm, setLoginForm] = useState(defaultLoginValues)
+  const setLogin = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const newLoginForm = { ...loginForm, login: ev.target.value, form: undefined }
+    let newFailures = updateFailures(
+      loginState.error, { fields: ['login'] }, undefined,
+      { applyToSameFullCode: true, remove: true }
+    )
+    setLoginForm(newLoginForm)
+    setLoginState({ ...loginState, error: newFailures})
+  }
+  const setPwd = (ev: React.ChangeEvent<HTMLInputElement>) => {
+    const newLoginForm = { ...loginForm, pwd: ev.target.value, form: undefined }
+    let newFailures = updateFailures(
+      loginState.error, { fields: ['pwd'] }, undefined,
+      { applyToSameFullCode: true, remove: true }
+    )
+    setLoginForm(newLoginForm)
+    setLoginState({ ...loginState, error: newFailures})
+  }
   
-  const setError = useCallback(
-    (err: FormFailures<FormValues>)=>setLoginState({ ...loginState, error: err }),
-    [loginState]
-  )
+  
+  const onBlur = (fieldName: keyof FormValues) => {
+    const newError = validate(loginForm, loginState.error, validators, { checkOnly: [fieldName] })
+    setLoginState({ ...loginState, error: newError })
+  }
+  
+  
+  const [loginDebounceUpdate, setLoginDebounceUpdate] = useState(false)
+  const [pwdDebounceUpdate, setPwdDebounceUpdate] = useState(false)
+  useDebounce(()=>{
+    setLoginDebounceUpdate(true)
+  },3000,[loginForm.login])
+  useDebounce(()=>{
+    setPwdDebounceUpdate(true)
+  },3000,[loginForm.pwd])
+  useEffect(()=>{
+    if (loginDebounceUpdate){
+      const newError = validate(loginForm, loginState.error, validators, { checkOnly: ['login'] })
+      setLoginState({ ...loginState, error: newError })
+      setLoginDebounceUpdate(false)
+    }
+  },[loginDebounceUpdate, loginForm, loginState])
+  useEffect(()=>{
+    if (pwdDebounceUpdate){
+      const newError = validate(loginForm, loginState.error, validators, { checkOnly: ['pwd'] })
+      setLoginState({ ...loginState, error: newError })
+      setPwdDebounceUpdate(false)
+    }
+  },[pwdDebounceUpdate, loginForm, loginState])
   
   
   
@@ -219,58 +260,27 @@ const LoginPage = () => {
     }
   }
   
-  const validationProps = {
-    values: loginForm,
-    validators: validators,
-    failures: loginState.error,
-    setError: setError,
-    setValues: setLoginForm,
-  }
-  
   return <Page>
     <Form onSubmit={onSubmit}>
       
       <h3 css={formHeader}>Вход</h3>
       
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'login'}
-        errorPropName={'hasError'} // todo
-      >
-        <Input
-          css={InputStyle.input}
-          placeholder='логин (email)'
-          onChange={()=>setLoginForm(s=>({ ...s, form: undefined }))} /// todo form ????
-        />
-      </InputValidationWrap>
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'pwd'}
-        errorPropName={'hasError'} // todo
-      >
-        <PwdInput
-          css={InputStyle.input}
-          placeholder='пароль'
-          onChange={()=>setLoginForm(s=>({ ...s, form: undefined }))} /// todo form ????
-        />
-      </InputValidationWrap>
-      
-      {/*<Input
+      <Input
         css={InputStyle.input}
         value={loginForm.login}
         onChange={setLogin}
         placeholder='логин (email)'
         hasError={loginState.error?.failures.login?.highlight}
         onBlur={()=>onBlur('login')}
-      />*/}
-      {/*<PwdInput
+      />
+      <PwdInput
         css={InputStyle.input}
         value={loginForm.pwd}
         onChange={setPwd}
         placeholder='пароль'
         hasError={loginState.error?.failures.pwd?.highlight}
         onBlur={()=>onBlur('pwd')}
-      />*/}
+      />
       
       <Button
         css={ButtonStyle.primary}
