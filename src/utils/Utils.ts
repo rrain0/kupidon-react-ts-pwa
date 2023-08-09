@@ -17,7 +17,7 @@ export namespace Utils {
   export const trueOrUndef = (value: any): true|undefined => value ? true : undefined
   
   
-  export function clone<T extends object>(
+  export function copy<T extends object>(
     orig: T,
     update?: { -readonly [Prop in keyof T]?: T[Prop] }
   ): T {
@@ -202,7 +202,8 @@ export namespace Utils {
   /**
    * Встроенная функция {@linkcode Object.entries} с улучшенной типизацией
    */
-  export function ObjectEntries<O extends object>(object: O): ObjectEntriesArrType<O> {
+  export function ObjectEntries<O extends {}|null|undefined>(object: O): ObjectEntriesArrType<O & object> {
+    if (typeof object !== 'object' || object===null) return []
     // @ts-ignore
     return Object.entries(object)
   }

@@ -4,6 +4,7 @@ import { authState } from 'src/recoil/AuthState';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppRoutes } from 'src/app-routes/AppRoutes';
 import LoginPage from '../LoginPage/LoginPage';
+import LoginPage1 from '../LoginPage/LoginPage1';
 import UserInfo from '../UserInfo/UserInfo';
 import SignupPage from '../Signup/SignupPage';
 import React from 'react';
@@ -40,7 +41,7 @@ function App() {
         <Route path={AppRoutes.profile} element={<UserInfo/>}/>
         <Route path="*" element={<Navigate to={AppRoutes.profile} replace={true}/>}/>
       </>}
-      <Route path={AppRoutes.login} element={<LoginPage/>}/>
+      <Route path={AppRoutes.login} element={<LoginPage1/>}/>
       <Route path={AppRoutes.signup} element={<SignupPage/>}/>
     </Routes>
     

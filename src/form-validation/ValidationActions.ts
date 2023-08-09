@@ -38,8 +38,8 @@ export namespace ValidationActions {
     
     let newFormFailures = formFailures
     if (filteredFails.length>0){
-      newFormFailures = Utils.clone(
-        formFailures, { failures: Utils.clone(formFailures.failures) }
+      newFormFailures = Utils.copy(
+        formFailures, { failures: Utils.copy(formFailures.failures) }
       )
     }
     
@@ -49,7 +49,7 @@ export namespace ValidationActions {
       })
     } else if (update){
       filteredFails.forEach(f=>{
-        newFormFailures.failures[f.fieldName] = Utils.clone(f, update)
+        newFormFailures.failures[f.fieldName] = Utils.copy(f, update)
       })
     }
     

@@ -117,7 +117,7 @@ export namespace ValidationCore {
       public priority: number, // higher number - higher priority
       public highlight: boolean,
       public notify: boolean,
-    ) {}
+    ){}
     
     get fullCode(){
       return `${this.code}${this.extraCode?`-${this.extraCode}`:''}`

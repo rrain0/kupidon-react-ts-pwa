@@ -9,11 +9,13 @@ export const usePrevState = <S>(initialState: S | (() => S)) => {
   )
   
   const setValue: Dispatch<S | ((state: S, prevState: S) => S)> = useCallback((value) => {
-    setContainer(v=>{
-      // @ts-ignore
-      const newValue = typeof value==='function' ? value(v.now, v.prev) : value
-      if (newValue===v.now) return v
-      return { now: newValue, prev: v.now }
+    setContainer(oldV=>{
+      const newValue: S = typeof value==='function'
+        //@ts-ignore
+        ? value(oldV.now, oldV.prev) 
+        : value
+      if (newValue===oldV.now) return oldV
+      return { now: newValue, prev: oldV.now }
     })
   },[])
   
