@@ -8,9 +8,42 @@ export namespace Utils {
   )
   
   
+  export const arrEq = (arr1: any[] | empty, arr2: any[] | empty): boolean => {
+    if (arr1===arr2) return true
+    if (!arr1 || !arr2) return false
+    if (arr1.length!==arr2.length) return false
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i]!==arr2[i]) return false
+    }
+    return true
+  }
+  
+  
   // Создать новый Set из элементов set, исключая элементы из exclude
   export const SetExclude = <T>(set: Set<T>, exclude: Set<any>): Set<T> => {
     return new Set([...set].filter(v=>!exclude.has(v)))
+  }
+  // равно ли содержимое сетов
+  export const SetEquals = (set: Set<any>, otherSet: Set<any>) => {
+    if (set.size!==otherSet.size) return false
+    for (const el of set) {
+      if (!otherSet.has(el)) return false
+    }
+    return true
+  }
+  
+  
+  export class Lazy<T> {
+    private inited = false
+    private value!: T
+    constructor( private initializer: ()=>T ) {}
+    get(){
+      if (!this.inited) {
+        this.inited = true
+        this.value = this.initializer()
+      }
+      return this.value
+    }
   }
   
   
@@ -164,7 +197,8 @@ export namespace Utils {
   /**
    * Встроенная функция {@linkcode Object.keys} с улучшенной типизацией
    */
-  export function ObjectKeys<O extends object>(object: O): ObjectKeysArrType<O> {
+  export function ObjectKeys<O extends {}|null|undefined>(object: O): ObjectKeysArrType<O & object> {
+    if (typeof object !== 'object' || object===null) return []
     // @ts-ignore
     return Object.keys(object)
   }
@@ -183,7 +217,8 @@ export namespace Utils {
   /**
    * Встроенная функция {@linkcode Object.values} с улучшенной типизацией
    */
-  export function ObjectValues<O extends object>(object: O): ObjectValuesArrType<O> {
+  export function ObjectValues<O extends {}|null|undefined>(object: O): ObjectValuesArrType<O & object> {
+    if (typeof object !== 'object' || object===null) return []
     // @ts-ignore
     return Object.values(object)
   }
@@ -277,7 +312,7 @@ export namespace Utils {
   
   /**
    * @param value - любое значение
-   * @return {bollean} - возвращает {true} если {value} не равно {null} и не равно {undefined}
+   * @return {boolean} - возвращает {true} если {value} не равно {null} и не равно {undefined}
    */
   export function isPresent<T>(value: T|null|undefined): value is T {
     return value!==null && value!==undefined

@@ -11,7 +11,7 @@ export namespace RadioInputStyle {
       --inactive-icon-color: ${t.button.primary.bgc}
       
       border-radius: 15px;
-      padding: 8px 0px;
+      padding: 8px 6px;
       gap: 8px;
 
       --ripple-color: ${t.input.ripple[0]};

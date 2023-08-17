@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { authState } from 'src/recoil/AuthState'
+import { authState } from 'src/recoil/state/AuthState'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Button from 'src/components/Buttons/Button'
 import Input from 'src/components/Inputs/Input'
@@ -19,101 +19,93 @@ import col = EmotionCommon.col
 import { Theme } from 'src/theme/Theme'
 import { toast } from 'react-toastify'
 import { Toasts } from 'src/toasts/Toasts'
-import { ValidationCore } from 'src/form-validation-1/ValidationCore'
-import { LoginPageValidation } from './validation1'
+import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
-import { ValidationValidate } from 'src/form-validation-1/ValidationValidate'
+import { ValidationValidate } from 'src/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
 import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
 import { Utils } from 'src/utils/Utils'
-import { ValidationActions } from 'src/form-validation-1/ValidationActions'
+import { ValidationActions } from 'src/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
-import { ValidationComponents } from 'src/form-validation-1/ValidationComponents'
+import { ValidationComponents } from 'src/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap
+import { useFailureDelay } from 'src/form-validation/useFailureDelay'
+import Lazy = Utils.Lazy
+import { useToastFailures } from 'src/toasts/useToastFailures'
+import RootRoutes = AppRoutes.RootRoutes;
 
 
 
+export const LoginDefaults = function(){
+  const defaultValues = new Lazy<FormValues>(()=>({
+    login: '',
+    pwd: '',
+  }))
+  const defaultFailures = new Lazy(()=>validate(
+    { values: defaultValues.get(), validators: validators }
+  ))
+  return {
+    get values() { return defaultValues.get() },
+    get failures() { return defaultFailures.get() }
+  }
+}()
 
-export const defaultLoginValues: FormValues = {
-  login: '',
-  pwd: '',
-  //form: undefined,
-}
-const defaultError = validate({ values: defaultLoginValues, validators: validators })
+
 
 
 const LoginPage = () => {
   
   const [searchParams] = useSearchParams()
-  // todo extract to routes object
-  const backPath = searchParams.get('back-path') ?? undefined
-  
+  //@ts-ignore
+  const returnPath = searchParams.get(RootRoutes.login.params.returnPath) ?? undefined
   const navigate = useNavigate()
   
   const setAuth = useSetRecoilState(authState)
   
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
-  const [loginFailure, setLoginFailure] = useState([defaultError,defaultError] as const) // [now,prev]
-  const [loginForm, setLoginForm] = useState([defaultLoginValues,defaultLoginValues] as const) // [now,prev]
+  const [loginFailure, setLoginFailure] = useState(LoginDefaults.failures)
+  const [loginForm, setLoginForm] = useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
   
   
   
   
-  const [loginResponse, setLoginResponse] = useState(undefined as undefined
-    | { success: AuthApi.LoginRespS }
-    | { error: any }
+  const [loginResponse, setLoginResponse] = useState(
+    undefined as undefined | { success?: AuthApi.LoginRespS, error?: any }
   )
   useEffect(()=>{
     if (loginResponse){
-      const s =
-        // @ts-ignore
-        loginResponse.success as undefined | AuthApi.LoginRespS
-      // @ts-ignore
-      const e =
-        // @ts-ignore
-        loginResponse.error as undefined | any
+      const { success:s, error:e } = loginResponse
       if (s){
         setAuth(s.data)
         setLoginSuccess(true)
       } else if (e){
+        setLoginSuccess(false)
         if (e instanceof AxiosError){
           if (e.code===AxiosError.ERR_NETWORK){
-            setLoginSuccess(false)
-            setLoginFailure([
-              validate({
+            setLoginFailure(validate({
                 values: loginForm[0], prevValues: loginForm[1],
                 outerValue: 'connection-error',
-                prevFailures: loginFailure[0],
+                prevFailures: loginFailure,
                 validators: validators,
-              }),
-              loginFailure[0]
-            ])
+            }))
           } else if (e.response?.status===400){
             const err = e.response as LoginRespE
-            setLoginSuccess(false)
-            setLoginFailure([
-              validate({
-                values: loginForm[0], prevValues: loginForm[1],
-                outerValue: err.data.code,
-                prevFailures: loginFailure[0],
-                validators: validators,
-              }),
-              loginFailure[0]
-            ])
+            setLoginFailure(validate({
+              values: loginForm[0], prevValues: loginForm[1],
+              outerValue: err.data.code,
+              prevFailures: loginFailure,
+              validators: validators,
+            }))
           }
         } else {
-          setLoginSuccess(false)
-          setLoginFailure([
-            validate({
-              values: loginForm[0], prevValues: loginForm[1],
-              outerValue: 'unknown',
-              prevFailures: loginFailure[0],
-              validators: validators,
-            }),
-            loginFailure[0]
-          ])
+          setLoginFailure(validate({
+            values: loginForm[0], prevValues: loginForm[1],
+            outerValue: 'unknown',
+            prevFailures: loginFailure,
+            validators: validators,
+          }))
           console.warn('UNKNOWN ERROR',e)
         }
       }
@@ -122,95 +114,46 @@ const LoginPage = () => {
   },[loginResponse, loginSuccess, loginFailure, loginForm])
   
   
-  
+  // todo extract
   toast.onChange(toast=>{
     const id = toast.id
     if (typeof id === 'string' && id.startsWith('failure') && toast.status==='removed'){
       //console.log('closed id',id)
-      setLoginFailure([
-        updateFailures(loginFailure[0], { failureIds: [id] }, { notify: false }),
-        loginFailure[1]
-      ])
+      setLoginFailure(
+        updateFailures(loginFailure, { failureIds: [id] }, { notify: false }),
+      )
     }
   })
   
   
-  const [resetDelay,setResetDelay] = useState(false)
-  useEffect(()=>{
-    const now = +new Date()
-    let next: number|undefined
-    loginFailure[0].forEach(f=>{
-      const time = +f.created+f.delay
-      if (time>now && (!next || time<next)) next = time
-    })
-    if (next !== undefined){
-      const timerId = setTimeout(
-        ()=>setResetDelay(true),
-        next-now
-      )
-      return ()=>clearTimeout(timerId)
-    }
-  },[loginFailure[0]])
-  useEffect(()=>{
-    if (resetDelay){
-      setResetDelay(false)
-      setLoginFailure([
-        loginFailure[0].map(f=>{
-          const now = +new Date()
-          const time = +f.created+f.delay
-          if (time<=now && f.delay>0) return Utils.copy(f, { delay: 0 })
-          else return f
-        }),
-        loginFailure[1]
-      ])
-    }
-  },[resetDelay,loginFailure[0],loginFailure[1]])
+  useFailureDelay(loginFailure,setLoginFailure)
+  
   
   
   useEffect(()=>{
-    if (loginLoading) Toasts.Loading.show()
+    if (loginLoading) Toasts.Loading.show('Вход...')
     else toast.dismiss(Toasts.Loading.id)
     
     if (loginSuccess) {
-      Toasts.SuccessSignIn.show()
-      navigate(backPath ?? `/${AppRoutes.profile}`)
+      Toasts.SuccessSignIn.show('Вход выполнен')
+      navigate(returnPath ?? RootRoutes.main.fullPath())
     }
-    
-    
-    
-    const prevFailIds = new Set(loginFailure[1].filter(el=>el.notifyNow).map(el=>el.id))
-    const failIds = new Set(loginFailure[0].filter(el=>el.notifyNow).map(el=>el.id))
-    
-    const remove = Utils.SetExclude(prevFailIds, failIds)
-    remove.forEach(elId=>toast.dismiss(elId))
-    
-    //console.log('notifications loginState', loginState)
-    // todo priority
-    const failToShow = loginFailure[0].find(el=>el.notifyNow)
-    if (failToShow){
-      Toasts.Error.show(failToShow.id,
-        ()=><div css={t=>css`
-        font: 400 14px/129% Roboto;
-        color: var(--toastify-text-color-${t.type satisfies 'light'|'dark'});
-        white-space: break-spaces;
-      `}>
-          Ошибка! {failToShow.msg}
-        </div>
-      )
-    }
-  },[loginLoading, loginSuccess, loginFailure])
+  },[loginLoading, loginSuccess, returnPath])
+  
+  
+  useToastFailures(loginFailure)
   
   
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
     
     const newFails = updateFailures(
-      loginFailure[0].filter(f=>f.type==='format'),
+      loginFailure.filter(f=>f.type==='format'),
       { failureIds:'all' },
       { highlight: true, notify: true }
     )
     setLoginSuccess(false)
-    setLoginFailure([newFails,loginFailure[1]])
+    setLoginFailure(newFails)
     
     if (newFails.length>0) return
     
@@ -253,6 +196,7 @@ const LoginPage = () => {
           placeholder='логин (email)'
         />
       </InputValidationWrap>
+      
       <InputValidationWrap
         {...validationProps}
         fieldName={'pwd'}
@@ -264,23 +208,6 @@ const LoginPage = () => {
         />
       </InputValidationWrap>
       
-      {/*<Input
-        css={InputStyle.input}
-        value={loginForm.login}
-        onChange={setLogin}
-        placeholder='логин (email)'
-        hasError={loginState.error?.failures.login?.highlight}
-        onBlur={()=>onBlur('login')}
-      />*/}
-      {/*<PwdInput
-        css={InputStyle.input}
-        value={loginForm.pwd}
-        onChange={setPwd}
-        placeholder='пароль'
-        hasError={loginState.error?.failures.pwd?.highlight}
-        onBlur={()=>onBlur('pwd')}
-      />*/}
-      
       <Button
         css={ButtonStyle.primary}
         type='submit'>
@@ -288,7 +215,7 @@ const LoginPage = () => {
       </Button>
       
       
-      <Link to={`/${AppRoutes.signup}`}>
+      <Link to={RootRoutes.signup.fullPath({ returnPath: returnPath })}>
         <Button
           css={ButtonStyle.secondary}>
           Зарегистрироваться

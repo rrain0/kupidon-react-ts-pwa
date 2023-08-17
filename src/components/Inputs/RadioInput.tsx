@@ -143,7 +143,6 @@ const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder')
 }))`
   ${abs};
-  inset: 0 -6px;
   pointer-events: none;
   border-radius: inherit;
 `

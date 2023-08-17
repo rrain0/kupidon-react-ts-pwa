@@ -4,6 +4,7 @@ import 'src/styles/reset.css'
 import 'src/styles/fonts.css'
 import 'src/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
+//import 'src/styles/toastify-theme-fix.scss'
 import 'animate.css'
 import App from './pages/App/App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
@@ -11,7 +12,7 @@ import reportWebVitals from './reportWebVitals'
 import { RecoilRoot } from 'recoil'
 import RecoilNexus from 'recoil-nexus' // access recoil state from not react component
 import { BrowserRouter } from 'react-router-dom'
-import { StyleSheetManager } from 'styled-components';
+import { StyleSheetManager } from 'styled-components'
 
 
 const root = ReactDOM.createRoot(

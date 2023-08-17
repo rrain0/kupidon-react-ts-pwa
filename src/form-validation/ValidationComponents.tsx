@@ -11,25 +11,26 @@ import React, {
 import Input from 'src/components/Inputs/Input'
 import { ValidationValidate } from './ValidationValidate'
 import { ValidationActions } from './ValidationActions'
-import { useDebounce } from 'src/utils-react/useDebounce'
+import { Utils } from 'src/utils/Utils'
 
 
 export namespace ValidationComponents {
   import Values = ValidationCore.Values
-  import FormFailures = ValidationCore.FormFailures
   import validate = ValidationValidate.validate
   import Validators = ValidationCore.Validators
-  import updateFailures = ValidationActions.updateFailures
+  import Failures = ValidationCore.Failures
+  import updateFailures = ValidationActions.updateFailures;
+  import empty = Utils.empty;
   
   
   export type InputValidationWrapProps<Vs extends Values> = {
-    fieldName: keyof Vs & string
-    values: Vs
+    fieldName: keyof Vs
+    values: readonly [Vs,Vs]
     validators: Validators<Vs>
-    failures: FormFailures<Vs>
+    failures: Failures<Vs>
     errorPropName: string
-    setError: (error: FormFailures<Vs>)=>void
-    setValues: (values: Vs)=>void
+    setError: (error: Failures<Vs>)=>void
+    setValues: (values: [Vs,Vs])=>void
     //children: ReactHTMLElement</*React.InputHTMLAttributes<HTMLInputElement>,*/ HTMLInputElement>
     children: ReactElement<
       React.InputHTMLAttributes<string>,
@@ -49,46 +50,85 @@ export namespace ValidationComponents {
     } = props
     
     
-    
-    
-    const [debounceUpdate, setDebounceUpdate] = useState(false)
-    useDebounce(()=>{
-      setDebounceUpdate(true)
-    },3000,[values[fieldName]])
-    useEffect(()=>{
-      if (debounceUpdate){
-        const newFailures = validate(values, failures, validators, { checkOnly: [fieldName] })
-        setError(newFailures)
-        setDebounceUpdate(false)
-      }
-    },[debounceUpdate, values, failures])
-    
-    
-    
     const PassedInput = children
-    //console.log('type', PassedInput.type)
     
     const Input = React.cloneElement(PassedInput, {
-      value: values[fieldName as keyof Vs],
-      [errorPropName]: failures?.failures[fieldName]?.highlight,
+      value: values[0][fieldName] as string,
+      [errorPropName]: failures?.find(f=>f.fields.includes(fieldName))?.highlightNow,
       onChange: ev=>{
         //console.log('ValidationWrap onChange')
-        const newValues = { ...values, [fieldName]: ev.target.value }
-        let newFailures = updateFailures(
-          failures, { fields: [fieldName] }, undefined,
-          { applyToSameFullCode: true, remove: true }
-        )
-        setValues(newValues)
+        const newValues = { ...values[0], [fieldName]: ev.target.value as any }
+        let newFailures = validate({
+          values: newValues, prevValues: values[0],
+          prevFailures: failures,
+          validators
+        })
+        setValues([newValues,values[0]])
         setError(newFailures)
         PassedInput.props.onChange?.(ev)
       },
       onBlur: ev=>{
         //console.log('ValidationWrap onBlur')
-        setDebounceUpdate(false)
-        const newFails = validate(values, failures, validators, { checkOnly: [fieldName] })
+        //setDebounceUpdate(false)
+        const newFails = updateFailures(
+          failures,
+          { fields: [fieldName] },
+          { delay: 0 }
+        )
         setError(newFails)
         PassedInput.props.onBlur?.(ev)
+      }
+    })
+    
+    //console.log('render ValidationWrap')
+    
+    return <>{Input}</>
+  }
+  
+  
+  
+  
+  export const RadioInputValidationWrap = <Vs extends Values>(props: InputValidationWrapProps<Vs>) => {
+    let {
+      fieldName,
+      values,
+      validators,
+      failures,
+      errorPropName,
+      setError,
+      setValues,
+      children,
+    } = props
+    
+    
+    const PassedInput = children
+    
+    const Input = React.cloneElement(PassedInput, {
+      checked: values[0][fieldName]===PassedInput.props.value,
+      [errorPropName]: failures?.find(f=>f.fields.includes(fieldName))?.highlightNow,
+      onChange: ev=>{
+        //console.log('ValidationWrap onChange')
+        const newValues = { ...values[0], [fieldName]: ev.target.value as any }
+        let newFailures = validate({
+          values: newValues, prevValues: values[0],
+          prevFailures: failures,
+          validators
+        })
+        setValues([newValues,values[0]])
+        setError(newFailures)
+        PassedInput.props.onChange?.(ev)
       },
+      onBlur: ev=>{
+        //console.log('ValidationWrap onBlur')
+        //setDebounceUpdate(false)
+        const newFails = updateFailures(
+          failures,
+          { fields: [fieldName] },
+          { delay: 0 }
+        )
+        setError(newFails)
+        PassedInput.props.onBlur?.(ev)
+      }
     })
     
     //console.log('render ValidationWrap')

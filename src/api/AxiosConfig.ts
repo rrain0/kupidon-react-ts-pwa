@@ -7,7 +7,7 @@ import Axios, {
 import { ApiRoutes } from 'src/api-routes/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus";
-import { authState, AuthStateType } from 'src/recoil/AuthState';
+import { authState, AuthStateType } from 'src/recoil/state/AuthState';
 import { RecoilUtils } from 'src/recoil/RecoilUtils';
 
 //import store from "src/store/store";

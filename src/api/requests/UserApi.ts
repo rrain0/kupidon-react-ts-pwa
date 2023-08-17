@@ -45,7 +45,7 @@ export namespace UserApi {
     firstName: string,
     lastName: string,
     sex: "MALE"|"FEMALE",
-    birthDate: string, // "2002-12-30"
+    birthDate: string, // "2002-12-30" "1999-12-31"
   }
   export interface CreateUserRespS extends AxiosResponse {
     status: 200,

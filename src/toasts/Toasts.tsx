@@ -7,7 +7,7 @@ export namespace Toasts {
   const loadingId = 'loading'
   export const Loading = {
     id: loadingId,
-    show: ()=>toast.loading("Вход...", {
+    show: (msg: string)=>toast.loading(msg, {
       toastId: loadingId,
       transition: slideInDownThenFadeOut,
     })
@@ -17,7 +17,7 @@ export namespace Toasts {
   const successSignInId = 'success'
   export const SuccessSignIn = {
     id: successSignInId,
-    show: ()=>toast.success('Вход выполнен', {
+    show: (msg: string)=>toast.success(msg, {
       toastId: successSignInId,
       autoClose: 1500,
       transition: slideInDownThenFadeOut,

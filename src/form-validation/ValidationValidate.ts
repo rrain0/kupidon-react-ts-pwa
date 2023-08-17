@@ -5,97 +5,103 @@ import { Utils } from 'src/utils/Utils'
 export namespace ValidationValidate {
   import Values = ValidationCore.Values
   import Validators = ValidationCore.Validators
-  import FormFailures = ValidationCore.FormFailures
+  import Failure = ValidationCore.Failure
   import Failures = ValidationCore.Failures
-  import ValidationType = ValidationCore.ValidationType
-  import FailureData = ValidationCore.FailureData
-  import Failure = ValidationCore.Failure0
-  import ObjectEntries = Utils.ObjectEntries;
+  import ObjectKeys = Utils.ObjectKeys
+  import outer = ValidationCore.outer
+  import Field = ValidationCore.Field
+  import FailureData = ValidationCore.FailureData;
   
   
   
-  export const validate = <Vs extends Values>(
-    values: Vs,
-    prevFailures: FormFailures<Vs>|undefined,
+  export const validate = <
+    Vs extends Values,
+    Outer extends unknown = unknown
+  >(data:{
+    values: Vs, prevValues?: Partial<Vs>|undefined,
+    outerValue?: Outer|undefined,
+    prevFailures?: Failures<Vs>|undefined,
     validators: Validators<Vs>,
-    config?: {
-      formId?: string
-      mode?: 'all-errors' | 'form-first-error'
-      type?: ValidationType
-      checkOnly?: undefined | string[]
-    },
-  ): FormFailures<Vs> => {
+  },
     
-    console.log('values',values)
+    config?: {
+      //formId?: string
+      //mode?: 'all-errors' | 'form-first-error'
+      //type?: ValidationType
+      //checkOnly?: undefined | (keyof Vs)[]
+    },
+  ): Failures<Vs> => {
+    
+    console.log('validate: values',data.values)
+    
+    const values = data.values
+    const valuesWithOuter = { ...values, [outer]: data.outerValue }
+    const prevValues: Partial<Vs> = data.prevValues ?? {}
+    const prevFailures = data.prevFailures ?? []
+    const validators = data.validators
     
     config = { ...config }
-    config.mode ??= 'all-errors'
-    config.type ??= 'auto'
+    //config.mode ??= 'all-errors'
+    //config.type ??= 'auto'
     
-    prevFailures ??= new FormFailures('',{})
+    const fields = ObjectKeys<Vs>(values)
+    const fieldsWithOuter = [...fields, outer] as Field<Vs>[]
     
-    const failures: Partial<Failures<Vs>> = {}
+    const changedFields = new Set(fieldsWithOuter.filter(f=>
+      f===outer && data.outerValue!==undefined
+      || f !in prevValues || values[f as keyof Vs]!==prevValues[f as keyof Vs]
+    ))
+    const newFails: Failures<Vs> = prevFailures.filter(f=>f.usedFields.every(f=>!changedFields.has(f)))
+    const fieldsWithFailures = new Set(newFails.flatMap(f=>f.fields))
     
-    // [ field-name, validator[] ][]
-    const fnmsToVds = ObjectEntries(validators)
     
-    fieldLoop: for (let i = 0; i < fnmsToVds.length; i++) {
-      const fToVds = fnmsToVds[i] // ( [ field-name, validator[] ][] )[i] => [ field-name, validator[] ]
-      const [fnm,vds] = fToVds // [ field-name, validator[] ]
-      const v = values[fnm] // ( { [field-name]: value } )[field-name] => value
-      
-      if (config.checkOnly){
-        if (!config.checkOnly.includes(fnm)){
-          failures[fnm] = prevFailures.failures[fnm]
-          continue fieldLoop
-        }
-      }
-      
-      // todo использовать кешированные значения чтобы снова не проверять (но тут валидаторы нескольких полей в пролёте)
-      //  или отправлять в value undefined который будет говорить о том, что не перепроверять это значение
-      //  Можно фиксировать через геттеры, какие поля пытался взять валидатор и проверять изменились ли они и валидатор
-      //  но опять же валидатор в первой итерации может ещё не запросить все поля, потому что ошибка
-      /*if (prevErrors && v===prevErrors.failures[fnm].value){ }*/
-      //if (!failures[fnm]) failures[fnm] = new ElementFailures(fnm,v)
-      if(vds) for (let ii = 0; ii < vds.length; ii++) {
-        const vd = vds[ii]
-        const result = vd({ value: v, values, failures, type: config.type})
-        if ('later'===result){
-          // TODO проверка на циклические зависимости
-          // помещаем текущую запись в конец
-          fnmsToVds[i] = fnmsToVds[fnmsToVds.length-1]
-          fnmsToVds[fnmsToVds.length-1] = fToVds
-          i--
-          continue fieldLoop
-        } else if (['ok',undefined].includes(result as any)){
-          failures[fnm] = null
-          continue
-        } else if ('ok-stop'===result){
-          failures[fnm] = null
-          break
-        } else if (result instanceof FailureData) {
-          {
-            const prev = prevFailures.failures[fnm]
-            if (config.type!=='submit' && prev && prev.fullCode===result.fullCode){
-              if (!prev.highlight) result.data.highlight = false
-              if (!prev.notify) result.data.notify = false
+    validators.forEach(([usedFields,vd])=>{
+      if (
+        usedFields.some(f=>changedFields.has(f))
+        && usedFields.every(f=>!fieldsWithFailures.has(f))
+      ){
+        const type = usedFields.includes(outer) ? 'outer' : 'format'
+        const usedValues = usedFields.map(f=>{
+          if (type==='outer' && f!==outer) return undefined
+          return valuesWithOuter[f]
+        })
+        let result = vd(usedValues)
+        if (result instanceof FailureData){
+          
+          result.data.type ??= type
+          result.data.fields ??= usedFields.filter(f=>f!==outer)
+          result.data.usedFields ??= [...usedFields]
+          result.data.usedValues ??= [...usedValues]
+          
+          const prevFail = prevFailures.find(
+            // @ts-ignore
+            f=>f.fullCode===result.fullCode
+          )
+          if (prevFail) {
+            // todo если нажать submit, то пустые поля подсветятся,
+            //  но при любом изменении любого поля вся подсветка исчезает
+            //  Всё таки придётся как-то приоритезировать типы валидации: 'change'|'delayed'|'submit'
+            if (prevFail.type==='format'){
+              // наследуются только false из предыдущих ошибок
+              result.data.highlight = prevFail.highlight && result.data.highlight
+              result.data.notify = prevFail.notify && result.data.notify
+            }
+            // todo ???
+            if (Utils.arrEq(prevFail.usedValues,result.data.usedValues)){
+              result.data.created = prevFail.created
+              result.data.delay = prevFail.delay
             }
           }
-          failures[fnm] = Failure.of(fnm,v,result)
-          if (config.mode==='form-first-error') break fieldLoop
-          /*if (config.mode==='field-first-error')*/ continue fieldLoop
+          
+          const newFail = Failure.ofData(result)
+          newFails.push(newFail)
+          newFail.usedFields.forEach(f=>fieldsWithFailures.add(f))
         }
       }
-    }
+    })
     
-    
-    // todo form id
-    const formFailures = new FormFailures(
-      config.formId ?? prevFailures?.id,
-      failures as Failures<Vs>
-    )
-    console.log('formFailures',formFailures)
-    return formFailures
+    console.log('validate: newFails',newFails)
+    return newFails
   }
   
   

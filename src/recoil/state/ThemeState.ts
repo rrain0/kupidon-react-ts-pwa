@@ -1,20 +1,20 @@
 import { atom, selector } from 'recoil';
-import { localStorageEffect2 } from './RecoilPersist';
-import { Theme } from '../theme/Theme';
+import { localStorageEffect2 } from '../RecoilPersist';
+import { Theme } from '../../theme/Theme';
 
 
 
 export type ThemeStateType = {
-  current: Theme.Theme['type'],
-  preferredLight: string,
-  preferredDark: string,
+  type: Theme.Theme['type'],
+  light: string,
+  dark: string,
 }
 export const themeState = atom<ThemeStateType>({
   key: 'theme',
   default: {
-    current: Theme.defaultTheme,
-    preferredLight: Theme.defaultLight,
-    preferredDark: Theme.defaultDark,
+    type: Theme.defaultTheme,
+    light: Theme.defaultLight,
+    dark: Theme.defaultDark,
   },
   effects: [localStorageEffect2({ removeWhen: ['reset'] })],
 })
@@ -27,9 +27,9 @@ export const themeObjState = selector<Theme.Theme>({
     const theme = get(themeState)
     
     let themeName = function(){
-      switch (theme.current){
-        case 'light': default: return theme.preferredLight
-        case 'dark': return theme.preferredDark
+      switch (theme.type){
+        case 'light': default: return theme.light
+        case 'dark': return theme.dark
       }
     }()
     

@@ -1,102 +1,49 @@
-import { Utils } from 'src/utils/Utils';
+
 
 
 export namespace ValidationCore {
-  import ObjectValues = Utils.ObjectValues
-  
   
   export type Value = unknown
+  export const outer: unique symbol = Symbol('outer failure')
   export type Values = object
+  export type Field<Vs extends Values> = keyof Vs | typeof outer
   
-  export type ValidationType = 'auto'|'submit'
   
   /**
    * @returns {'ok' | undefined | void} - валидатор не обнаружил ошибок
-   * @returns {'ok-stop'} - валидатор не обнаружил ошибок и говорит, что дальнейшая валидация не нужна
-   * @returns {Failure0} - валидатор обнаружил ошибку и вернул этот объект с ошибкой,
+   * @returns {Failure} - валидатор обнаружил ошибку и вернул этот объект с ошибкой,
    * последующие валидаторы для этого поля не будут запущены.
-   * @returns {'later'} - валидатор сообщает, что сейчас не может провести валидацию,
-   * потому что валидация текущего поля зависит от корректности данных других полей.
-   * Вскоре будет произведён повторный запуск этого валидатора.
    */
-  export type Validator<
-    V extends Value = Value,
-    Vs extends Values = Values,
-    Fs = Partial<Failures<Vs>>
-  > =
-    (info: { value: V, values: Vs, failures: Fs, type: ValidationType }) =>
+  export type Validator<Vs extends Values = Values> = [
+    Field<Vs>[],
+    (values: any[]) =>
       'ok' | undefined | void
-      | 'ok-stop'
-      | FailureData
-      | 'later'
+      | FailureData<Vs>
+  ]
   
-  export type Validators<Vs extends Values> = { [Field in keyof Vs]?: Validator<Vs[Field],Vs>[] }
+  export type Validators<Vs extends Values> = Validator<Vs>[]
   
-  
-  export class FormFailures<Vs extends Values> {
-    constructor(
-      readonly id: string | undefined,
-      readonly failures: Failures<Vs>,
-    ){}
-    
-    hasFailure(){
-      return ObjectValues(this.failures).some(v=>v!==null)
-    }
-    firstFailure(){
-      return ObjectValues(this.failures).find(v=>v!==null)
-    }
-  }
-  
-  
-  // undefined - error check is not completed
-  // null - errors was not found - all is of
-  // Failure2 - found an error
-  export type Failures<Vs extends object> = { [Field in keyof Vs]?: Failure0|undefined|null }
+  export type Failures<Vs extends Values> = Failure<Vs>[]
   
   
   
   
-  export class Failure0 {
-    /**
-     * @param code - error main code, eg 'incorrect', 'login-already-exists'
-     * @param extraCode - error extra code
-     * @param msg - message to display to user
-     * @param extra - some extra data of any type if needed
-     * @param highlight - highlight field with this error
-     * @param notify - show error notification
-     */
-    constructor(
-      readonly fieldName: string,
-      readonly value: any,
-      readonly code: string,
-      readonly extraCode: string|undefined = undefined,
-      readonly msg: string = '',
-      readonly extra: any = undefined,
-      readonly highlight = true,
-      readonly notify = true,
-    ){}
-    static of(fieldName: string, value: any, data: FailureData){
-      const d = data.data
-      return new Failure0(fieldName, value, d.code, d.extraCode, d.msg, d.extra, d.highlight, d.notify)
-    }
-    
-    get fullCode(){
-      return `${this.code}${this.extraCode?`-${this.extraCode}`:''}`
-    }
-    get id(){
-      return `failure-${this.fieldName}-${this.fullCode}`
-    }
-  }
   
-  
-  export class FailureData {
+  export class FailureData<Vs extends Values> {
     constructor(public data: {
-      code: string
-      extraCode?: string|undefined
-      msg: string
-      extra?: any
-      highlight?: boolean
-      notify?: boolean
+      code?: string|undefined,
+      extraCode?: string|undefined,
+      msg: string,
+      fields?: Field<Vs>[] | undefined, // какие поля выделять
+      usedFields?: Field<Vs>[] | undefined,
+      usedValues?: any[] | undefined,
+      type?: 'format'|'outer'|undefined,
+      //priority: number, // higher number - higher priority
+      highlight?: boolean|undefined,
+      notify?: boolean|undefined,
+      extra?: any,
+      created?: Date|undefined,
+      delay?: number|undefined,
     }){}
     
     get fullCode(){
@@ -106,21 +53,60 @@ export namespace ValidationCore {
   
   
   
-  class Failure {
+  export class Failure<Vs extends Values> {
+    /**
+     * @param code - error main code, eg 'incorrect', 'login-already-exists'
+     * @param extraCode - error extra code
+     * @param msg - message to display to user
+     * @param fields - failure is applied for this fields
+     * @param usedFields - fields used to validate
+     * @param usedValues - values used to validate
+     * @param type - type of failure - validation error or outer network/server error
+     * @param highlight - highlight field with this error
+     * @param notify - show error notification
+     * @param extra - some extra data of any type if needed
+     */
     constructor(
       public code: string,
-      public extraCode: string,
+      public extraCode: string|undefined,
       public msg: string,
-      public fields: string[],
-      public values: any[], // ???
-      public type: 'validation'|'outer',
-      public priority: number, // higher number - higher priority
+      public fields: Field<Vs>[], // какие поля выделять
+      public usedFields: Field<Vs>[],
+      public usedValues: any[],
+      public type: 'format'|'outer',
+      //public priority: number, // higher number - higher priority
       public highlight: boolean,
       public notify: boolean,
+      public extra: any,
+      public created: Date,
+      public delay: number,
     ){}
+    
+    static ofData<Vs extends Values>(data: FailureData<Vs>){
+      const d = data.data
+      return new Failure(
+        d.code ?? '', d.extraCode, d.msg,
+        d.fields ?? [], d.usedFields ?? [], d.usedValues ?? [],
+        d.type ?? 'format',
+        d.highlight ?? true, d.notify ?? true,
+        d.extra,
+        d.created ?? new Date(), d.delay ?? 0
+      )
+    }
     
     get fullCode(){
       return `${this.code}${this.extraCode?`-${this.extraCode}`:''}`
+    }
+    get id(){
+      //return `failure-${this.fieldName}-${this.fullCode}`
+      return `failure-${this.fullCode}`
+    }
+    
+    get highlightNow(){
+      return +new Date() >= +this.created+this.delay && this.highlight
+    }
+    get notifyNow(){
+      return +new Date() >= +this.created+this.delay && this.notify
     }
   }
   

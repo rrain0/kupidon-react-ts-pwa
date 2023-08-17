@@ -1,59 +1,48 @@
 import { ValidationCore } from './ValidationCore'
-import FormFailures = ValidationCore.FormFailures
 import Values = ValidationCore.Values
 import { Utils } from 'src/utils/Utils'
 
 
 export namespace ValidationActions {
+  import Failures = ValidationCore.Failures
+  import Field = ValidationCore.Field
   import ObjectEntries = Utils.ObjectEntries
-  import ObjectValues = Utils.ObjectValues
-  import Failure = ValidationCore.Failure0
-  
   
   
   export const updateFailures = <Vs extends Values>(
-    formFailures: FormFailures<Vs>,
-    objects: { fields?: (keyof Vs)[], failuresId?: string[], fullCode?: string[] },
-    update?: { highlight?: boolean, notify?: boolean },
-    options?: { applyToSameFullCode: boolean, remove: boolean }
-  )=>{
-    let filteredFails = ObjectValues(formFailures.failures).filter(failure=>
-      failure && (
-        objects.fields?.includes(failure.fieldName as any)
-        || objects.failuresId?.includes(failure?.id as any)
-        || objects.fullCode?.includes(failure.fullCode)
-      )
-    ) as Failure[]
-    
-    if (options?.applyToSameFullCode){
-      const ids = new Set(filteredFails.map(f=>f.id))
-      const fullCodes = new Set(filteredFails.map(f=>f.fullCode))
-      filteredFails = [
-        ...filteredFails,
-        ...ObjectValues(formFailures.failures).filter(failure=>
-          failure && !ids.has(failure.id) && fullCodes.has(failure.fullCode)
-        ) as Failure[]
-      ]
+    failures: Failures<Vs>,
+    objects: {
+      failureIds?: string[] | 'all',
+      fullCodes?: string[],
+      fields?: Field<Vs>[],
+    },
+    update?: {
+      highlight?: boolean,
+      notify?: boolean,
+      delay?: number,
     }
+  ): Failures<Vs> => {
+    let changed = 0
+    const newFails = failures.map(fail=>{
+      if (
+          (
+            objects.failureIds==='all'
+            || objects.failureIds?.some(id=>id===fail.id)
+            || objects.fullCodes?.some(fc=>fc===fail.fullCode)
+            || objects.fields?.some(f=>fail.fields.includes(f))
+          )
+          && ObjectEntries(update).some(([prop,val]) => fail[prop]!==val)
+      ) {
+        changed++
+        return Utils.copy(fail, update)
+      }
+      return fail
+    })
     
-    let newFormFailures = formFailures
-    if (filteredFails.length>0){
-      newFormFailures = Utils.copy(
-        formFailures, { failures: Utils.copy(formFailures.failures) }
-      )
-    }
+    failures = changed ? newFails : failures
+    //console.log('updated failures:', changed, failures)
     
-    if (options?.remove){
-      filteredFails.forEach(f=>{
-        newFormFailures.failures[f.fieldName] = undefined
-      })
-    } else if (update){
-      filteredFails.forEach(f=>{
-        newFormFailures.failures[f.fieldName] = Utils.copy(f, update)
-      })
-    }
-    
-    return newFormFailures
+    return failures
   }
   
   

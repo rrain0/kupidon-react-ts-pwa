@@ -1,26 +1,71 @@
 /** @jsxImportSource @emotion/react */
-import styled from '@emotion/styled';
-import { EmotionCommon } from 'src/styles/EmotionCommon';
-import center = EmotionCommon.center;
-import { css } from '@emotion/react';
-import col = EmotionCommon.col;
-import { useId, useState } from 'react';
-import { AxiosError } from 'axios';
-import { useSetRecoilState } from 'recoil';
-import { authState } from 'src/recoil/AuthState';
-import { Navigate } from 'react-router-dom';
-import { UserApi } from 'src/api/requests/UserApi';
-import { InputStyle } from 'src/components/Inputs/InputStyle';
-import Input from 'src/components/Inputs/Input';
-import { AppRoutes } from 'src/app-routes/AppRoutes';
-import { ButtonStyle } from 'src/components/Buttons/ButtonStyle';
-import Button from 'src/components/Buttons/Button';
-import PwdInput from 'src/components/Inputs/PwdInput';
-import { Theme } from 'src/theme/Theme';
-import row = EmotionCommon.row;
-import reset = EmotionCommon.reset;
-import RadioInput from 'src/components/Inputs/RadioInput';
-import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle';
+import styled from '@emotion/styled'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
+import center = EmotionCommon.center
+import { css } from '@emotion/react'
+import col = EmotionCommon.col
+import React, { useEffect, useId, useState } from 'react'
+import { AxiosError } from 'axios'
+import { useSetRecoilState } from 'recoil'
+import { authState } from 'src/recoil/state/AuthState'
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { UserApi } from 'src/api/requests/UserApi'
+import { InputStyle } from 'src/components/Inputs/InputStyle'
+import Input from 'src/components/Inputs/Input'
+import { AppRoutes } from 'src/app-routes/AppRoutes'
+import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
+import Button from 'src/components/Buttons/Button'
+import PwdInput from 'src/components/Inputs/PwdInput'
+import { Theme } from 'src/theme/Theme'
+import row = EmotionCommon.row
+import reset = EmotionCommon.reset
+import RadioInput from 'src/components/Inputs/RadioInput'
+import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle'
+import { ValidationValidate } from 'src/form-validation/ValidationValidate'
+import validate = ValidationValidate.validate
+import { SignupPageValidation } from './validation'
+import FormValues = SignupPageValidation.FormValues
+import validators = SignupPageValidation.validators
+import { toast } from 'react-toastify';
+import { ValidationActions } from 'src/form-validation/ValidationActions'
+import updateFailures = ValidationActions.updateFailures
+import CreateUserRespE = UserApi.CreateUserRespE
+import { useFailureDelay } from 'src/form-validation/useFailureDelay'
+import { Toasts } from 'src/toasts/Toasts'
+import { Utils } from 'src/utils/Utils'
+import { ValidationComponents } from 'src/form-validation/ValidationComponents'
+import InputValidationWrap = ValidationComponents.InputValidationWrap;
+import UserToCreate = UserApi.UserToCreate
+import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
+import { AuthApi } from 'src/api/requests/AuthApi'
+import Lazy = Utils.Lazy
+import { useStateAndRef } from '../../utils-react/useStateAndRef';
+import trueOrUndef = Utils.trueOrUndef;
+import { useToastFailures } from '../../toasts/useToastFailures';
+import RootRoutes = AppRoutes.RootRoutes;
+
+
+
+
+export const SignupDefaults = function(){
+  const defaultValues = new Lazy<FormValues>(()=>({
+    email: '',
+    pwd: '',
+    repeatPwd: '',
+    firstName: '',
+    lastName: '',
+    sex: '',
+    birthDate: '',
+  }))
+  const defaultFailures = new Lazy(()=>validate(
+    { values: defaultValues.get(), validators: validators }
+  ))
+  return {
+    get values() { return defaultValues.get() },
+    get failures() { return defaultFailures.get() }
+  }
+}()
+
 
 
 
@@ -28,92 +73,241 @@ const SignupPage = () => {
   
   const id = useId()
   
+  const [searchParams] = useSearchParams()
+  //@ts-ignore
+  const returnPath = searchParams.get(RootRoutes.signup.params.returnPath) ?? undefined
+  const navigate = useNavigate()
+  
   const setAuth = useSetRecoilState(authState)
   
-  const [state,setState] = useState('none' as 'none'|'loading'|'success'|'error') // loading + error?
-  const [error,setError] = useState(null as any)
   
-  const [email,setEmail] = useState('')
-  const [pwd,setPwd] = useState('')
-  const [firstName,setFirstName] = useState('')
-  const [lastName,setLastName] = useState('')
-  const [sex,setSex] = useState('')
-  const [birthDate,setBirthDate] = useState('')
+  
+  const [signupLoading, setSignupLoading] = useState(false)
+  const [signupSuccess, setSignupSuccess] = useState(false)
+  const [signupFailure, setSignupFailure] = useState(SignupDefaults.failures)
+  const [signupForm, setSignupForm] = useState([SignupDefaults.values,SignupDefaults.values] as const) // [now,prev]
+  
+  
+  
+  const [signupResponse, setSignupResponse] = useState(
+    undefined as undefined | { success?: AuthApi.LoginRespS, error?: any }
+  )
+  useEffect(()=>{
+    if (signupResponse){
+      const { success:s, error:e } = signupResponse
+      if (s){
+        setAuth(s.data)
+        setSignupSuccess(true)
+      } else if (e){
+        setSignupSuccess(false)
+        if (e instanceof AxiosError){
+          if (e.code===AxiosError.ERR_NETWORK){
+            setSignupFailure(
+              validate({
+                values: signupForm[0], prevValues: signupForm[1],
+                outerValue: 'connection-error',
+                prevFailures: signupFailure,
+                validators: validators,
+              })
+            )
+          } else if (e.response?.status===400){
+            const err = e.response as CreateUserRespE
+            setSignupFailure(
+              validate({
+                values: signupForm[0], prevValues: signupForm[1],
+                outerValue: err.data.code,
+                prevFailures: signupFailure,
+                validators: validators,
+              })
+            )
+          }
+        } else {
+          setSignupFailure(
+            validate({
+              values: signupForm[0], prevValues: signupForm[1],
+              outerValue: 'unknown',
+              prevFailures: signupFailure,
+              validators: validators,
+            })
+          )
+          console.warn('UNKNOWN ERROR',e)
+        }
+      }
+      setSignupResponse(undefined)
+    }
+  },[signupResponse, signupSuccess, signupFailure, signupForm])
+  
+  
+  // todo extract
+  toast.onChange(toast=>{
+    const id = toast.id
+    if (typeof id === 'string' && id.startsWith('failure') && toast.status==='removed'){
+      //console.log('closed id',id)
+      setSignupFailure(
+        updateFailures(signupFailure, { failureIds: [id] }, { notify: false })
+      )
+    }
+  })
+  
+  
+  useFailureDelay(signupFailure,setSignupFailure)
+  
+  useEffect(()=>{
+    if (signupLoading) Toasts.Loading.show('Регистрация...')
+    else toast.dismiss(Toasts.Loading.id)
+    
+    if (signupSuccess) {
+      Toasts.SuccessSignIn.show('Пользователь успешно зарегистрирован')
+      navigate(returnPath ?? RootRoutes.main.fullPath())
+    }
+  },[signupLoading, signupSuccess, returnPath])
+  
+  
+  useToastFailures(signupFailure)
   
   
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
+    
+    const newFails = updateFailures(
+      signupFailure.filter(f=>f.type==='format'),
+      { failureIds:'all' },
+      { highlight: true, notify: true, delay: 0 }
+    )
+    setSignupSuccess(false)
+    setSignupFailure(newFails)
+    
+    if (newFails.length>0) return
+    
     void trySignup()
   }
-  const trySignup = async ()=>{
-    if (state==='loading') return
-    setState('loading')
+  
+  const trySignup = async()=>{
+    if (signupLoading) return
+    setSignupLoading(true)
     try {
-      const response = await UserApi.create({
-        email, pwd, firstName, lastName, sex: sex as "MALE"|"FEMALE", birthDate
-      })
-      setAuth({
-        accessToken: response.data.accessToken,
-        user: response.data.user
-      })
-      setState('success')
+      const response = await UserApi.create(signupForm[0] as UserToCreate)
+      setSignupResponse({ success: response })
     } catch (e){
-      setState('error')
-      setError((e as AxiosError).response?.data)
+      setSignupResponse({ error: e })
+    } finally {
+      setSignupLoading(false)
     }
   }
   
+  const validationProps = {
+    values: signupForm,
+    validators: validators,
+    failures: signupFailure,
+    setError: setSignupFailure,
+    setValues: setSignupForm,
+  }
   
   return <Page>
     <Form onSubmit={onSubmit}>
       
       <h3 css={formHeader}>Регистрация</h3>
       
-      <Input
-        css={InputStyle.input}
-        value={email}
-        onChange={ev=>setEmail(ev.target.value)}
-        placeholder='логин (email)' />
-      <PwdInput
-        css={InputStyle.input}
-        value={pwd}
-        onChange={ev=>setPwd(ev.target.value)}
-        placeholder='пароль' />
-      <Input
-        css={InputStyle.input}
-        value={firstName}
-        onChange={ev=>setFirstName(ev.target.value)}
-        placeholder='Имя' />
-      <Input
-        css={InputStyle.input}
-        value={lastName}
-        onChange={ev=>setLastName(ev.target.value)}
-        placeholder='Фамилия' />
-      <Input
-        css={InputStyle.input}
-        value={birthDate}
-        onChange={ev=>setBirthDate(ev.target.value)}
-        placeholder='День рождения (2000-12-30)' />
+      <InputValidationWrap
+        {...validationProps}
+        fieldName={'email'}
+        errorPropName={'hasError'} // todo
+      >
+        <Input
+          css={InputStyle.input}
+          placeholder='email (логин)'
+        />
+      </InputValidationWrap>
       
-      <fieldset css={RadioGroupCss}>
-        <RadioInput
-          css={RadioInputStyle.input}
-          name={`${id}-radio-group-sex`}
-          value="MALE"
-          checked={sex==='MALE'}
-          onChange={ev=>setSex(ev.target.value)}
+      <InputValidationWrap
+        {...validationProps}
+        fieldName={'pwd'}
+        errorPropName={'hasError'} // todo
+      >
+        <PwdInput
+          css={InputStyle.input}
+          placeholder='пароль'
+        />
+      </InputValidationWrap>
+      
+      <InputValidationWrap
+        {...validationProps}
+        fieldName={'repeatPwd'}
+        errorPropName={'hasError'} // todo
+      >
+        <PwdInput
+          css={InputStyle.input}
+          placeholder='повторите пароль'
+        />
+      </InputValidationWrap>
+      
+      <InputValidationWrap
+        {...validationProps}
+        fieldName={'firstName'}
+        errorPropName={'hasError'} // todo
+      >
+        <Input
+          css={InputStyle.input}
+          placeholder='имя'
+        />
+      </InputValidationWrap>
+      
+      <InputValidationWrap
+        {...validationProps}
+        fieldName={'lastName'}
+        errorPropName={'hasError'} // todo
+      >
+        <Input
+          css={InputStyle.input}
+          placeholder='фамилия'
+        />
+      </InputValidationWrap>
+      
+      <InputValidationWrap
+        {...validationProps}
+        fieldName={'birthDate'}
+        errorPropName={'hasError'} // todo
+      >
+        <Input
+          css={InputStyle.input}
+          placeholder='день рождения (гггг-ММ-дд) (2002-01-01)'
+        />
+      </InputValidationWrap>
+      
+      
+      
+      <fieldset
+        css={radioGroupCss}
+        data-error={trueOrUndef(signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow)}>
+        
+        <RadioInputValidationWrap
+          {...validationProps}
+          fieldName={'sex'}
+          errorPropName={'hasError'} // todo
         >
-          <div>Я парень</div>
-        </RadioInput>
-        <RadioInput
-          css={RadioInputStyle.input}
-          name={`${id}-radio-group-sex`}
-          value="FEMALE"
-          checked={sex==='FEMALE'}
-          onChange={ev=>setSex(ev.target.value)}
+          <RadioInput
+            css={RadioInputStyle.input}
+            name={`${id}-radio-group-sex`}
+            value="MALE"
+          >
+            <div>Я парень</div>
+          </RadioInput>
+        </RadioInputValidationWrap>
+        
+        <RadioInputValidationWrap
+          {...validationProps}
+          fieldName={'sex'}
+          errorPropName={'hasError'} // todo
         >
-          <div>Я девушка</div>
-        </RadioInput>
+          <RadioInput
+            css={RadioInputStyle.input}
+            name={`${id}-radio-group-sex`}
+            value="FEMALE"
+          >
+            <div>Я девушка</div>
+          </RadioInput>
+        </RadioInputValidationWrap>
+        
       </fieldset>
       
       <Button
@@ -121,20 +315,6 @@ const SignupPage = () => {
         type='submit'>
         Зарегистрироваться
       </Button>
-      
-      <div
-        css={t=>css`
-        font: 500 20px/129% Roboto;
-        color: ${t.page.text};
-      `}
-      >
-        { state==='loading' && 'Загрузка...' }
-        { state==='success' && <Navigate to={`/${AppRoutes.profile}`} /> }
-        { state==='error' && <div>
-          Ошибка<br/>
-          {JSON.stringify(error)}
-        </div> }
-      </div>
       
     </Form>
     
@@ -174,7 +354,7 @@ const formHeader = (t: Theme.Theme) => css`
   align-self: center;
 `
 
-const RadioGroupCss = css`
+const radioGroupCss = (t: Theme.Theme) => css`
   ${reset};
   height: 50px;
   width: 100%;
@@ -182,4 +362,8 @@ const RadioGroupCss = css`
   gap: 32px;
   justify-content: start;
   align-items: center;
+  border-radius: 15px;
+  &[data-error]{
+    background: ${t.input.error.bgc};
+  }
 `

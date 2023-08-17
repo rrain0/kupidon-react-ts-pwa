@@ -1,7 +1,7 @@
-import { atom } from 'recoil';
-import { emptyValOrObj, localStorageEffect2 } from './RecoilPersist';
-import { UserApi } from '../api/requests/UserApi';
-import CurrentUser = UserApi.CurrentUser;
+import { atom } from 'recoil'
+import { emptyValOrObj, localStorageEffect2 } from '../RecoilPersist'
+import { UserApi } from 'src/api/requests/UserApi'
+import CurrentUser = UserApi.CurrentUser
 
 
 

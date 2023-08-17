@@ -1,7 +1,7 @@
-import { ValidationValidators } from 'src/form-validation-1/ValidationValidators'
+import { ValidationValidators } from 'src/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
-import { defaultLoginValues } from './LoginPage'
-import { ValidationCore } from 'src/form-validation-1/ValidationCore'
+import { ValidationCore } from 'src/form-validation/ValidationCore'
+import { LoginDefaults } from './LoginPage';
 
 
 
@@ -11,8 +11,9 @@ export namespace LoginPageValidation {
   import LoginRespE = AuthApi.LoginRespE
   import FailureData = ValidationCore.FailureData
   import Validators = ValidationCore.Validators
-  import Failure = ValidationCore.Failure
-  import outer = ValidationCore.outer;
+  import outer = ValidationCore.outer
+  
+  type OuterCode = LoginRespE['data']['code'] | 'connection-error' | 'unknown'
   
   
   export interface FormValues extends Values {
@@ -42,7 +43,7 @@ export namespace LoginPageValidation {
   */
   export const validators: Validators<FormValues> = [
     [['login'], ([v])=>{
-      const d = defaultLoginValues.login
+      const d = LoginDefaults.values.login
       if (v===d) return new FailureData({
         code: 'login-required',
         msg: 'Email не введён',
@@ -60,7 +61,7 @@ export namespace LoginPageValidation {
     
     
     [['pwd'], ([v])=>{
-      const d = defaultLoginValues.login
+      const d = LoginDefaults.values.login
       if (v===d) return new FailureData({
         code: 'pwd-required',
         msg: 'Пароль не введён',
@@ -69,15 +70,15 @@ export namespace LoginPageValidation {
       })
     }],
     
-    //[['pwd','repeatPwd'], ([pwd,repeatPwd])=>{}],
     
-    [[outer,'login','pwd'],([v])=>{
+    [[outer,'login','pwd'],([v]: [OuterCode?,...any])=>{
       if (v==='NO_USER') return new FailureData({
         code: v,
         msg: 'Не найдено пользователя с таким логином-паролем',
       })
     }],
-    [[outer],([v])=>{
+    
+    [[outer],([v]: [OuterCode?,...any])=>{
       if (v==='connection-error') return new FailureData({
         code: v,
         extraCode: undefined,
@@ -86,12 +87,14 @@ export namespace LoginPageValidation {
         notify: true,
       })
     }],
-    [[outer],([v])=>{
-      if (v==='unknown') return new FailureData({
+    
+    [[outer],([v]: [OuterCode?,...any])=>{
+      return new FailureData({
         code: v,
         msg: 'Неизвестная ошибка',
       })
     }],
+    
   ]
   
   

@@ -1,34 +1,16 @@
-import { ValidationCore } from './ValidationCore';
-import { Utils } from 'src/utils/Utils';
+import { Utils } from 'src/utils/Utils'
 
 
 
 export namespace ValidationValidators {
   import empty = Utils.empty
-  import Validator = ValidationCore.Validator
-  import FailureData = ValidationCore.FailureData
   
   
   const emailPattern = /^[^\s@]+@[^\s@]+$/
-  export const isValidEmail = ({value}: {value: string|empty}) => value && emailPattern.test(value)
-  export const emailValidator: Validator<string|empty> = ({value}) => {
-    if (!isValidEmail({value}))
-      return new FailureData({ code: 'incorrect', msg: 'Некорректный формат email' })
-  }
+  export const isValidEmail = (email: string|empty) => email && emailPattern.test(email)
   
   
-  export const robotValidator = ({value}: {value: boolean|empty}): FailureData|undefined => {
-    if (!value) return new FailureData({ code: 'required', msg: 'Подтвердите, что вы не робот' })
-  }
-  export const requiredValidator = ({value}: {value: string|empty}): FailureData|undefined => {
-    if (!value || !value.length) return new FailureData({ code: 'required', msg: 'Поле обязательно для заполнения' })
-  }
-  export const pwdValidator: Validator<string|empty> = ({value}) => {
-    if (!value || value.length<6)
-      return new FailureData({ code: 'incorrect', msg: 'Минимальная длина пароля - 6 символов' })
-  }
-  
-  
+  export const isValidPwd = (pwd: string|empty) => pwd && pwd.length>=6
   
   
   const isPositiveInteger = (i: number) => {
@@ -38,18 +20,5 @@ export namespace ValidationValidators {
     return Number.isSafeInteger(i) && i>=0
   }
   
-  export const required = (value: string, message: string) =>
-    value.length<=0 ? new FailureData({ code: 'required', msg: message }) : undefined
-  
-  export const repeatPwdValidator = (pwd: string|undefined, repeatedPwd: string|undefined): FailureData|undefined|'later' => {
-    if (!pwd && !repeatedPwd) return 'later'
-    if (pwd!==repeatedPwd)
-      return new FailureData({ code: 'incorrect', msg: 'Пароли должны совпадать' })
-  }
-  
-  export const checkPositiveInteger = (value: string, message: string) => {
-    const v = +value
-    return !(Number.isSafeInteger(+v) && v>0) ? new FailureData({ code: 'incorrect',  msg: message }) : undefined
-  }
 
 }
