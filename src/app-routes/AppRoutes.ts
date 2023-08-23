@@ -5,6 +5,11 @@ export namespace AppRoutes {
   import RouteDescription = RoutesBuilder.RouteDescription
   
   
+  const testRoutes = {
+    path: 'test'
+  }
+  
+  
   // todo - это заглушка для дальнейшего развития приложения
   const mainRoutes = {
     path: 'main'
@@ -45,6 +50,7 @@ export namespace AppRoutes {
   const rootRoutes = {
     path: '/',
     paths: {
+      test: testRoutes,
       main: mainRoutes, // todo - это заглушка для дальнейшего развития приложения
       login: loginRoutes,
       signup: signupRoutes,

@@ -2,6 +2,7 @@ import { ValidationCore } from './ValidationCore'
 import { Utils } from 'src/utils/Utils'
 
 
+
 export namespace ValidationValidate {
   import Values = ValidationCore.Values
   import Validators = ValidationCore.Validators
@@ -10,7 +11,7 @@ export namespace ValidationValidate {
   import ObjectKeys = Utils.ObjectKeys
   import outer = ValidationCore.outer
   import Field = ValidationCore.Field
-  import FailureData = ValidationCore.FailureData;
+  import FailureData = ValidationCore.FailureData
   
   
   

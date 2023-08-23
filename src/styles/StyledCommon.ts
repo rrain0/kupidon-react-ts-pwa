@@ -11,8 +11,8 @@ export namespace StyledCommon {
     box-shadow: none;
     margin: 0;
     padding: 0;
-    min-width: 0;
-    min-height: 0;
+    //min-width: 0;
+    //min-height: 0;
   `
   export const allDefault = css`
     all: unset;

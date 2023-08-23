@@ -109,7 +109,7 @@ export class GetDimensions {
     
     
 
-    // Ширина / высота левой / верхней прокрученной части контента
+    // Ширина / высота  левой / верхней  прокрученной части контента
     // width of horizontal-paddings + part of full content located behind the border-left inner boundary
     get scrollLeft(){ return this.domElement.scrollLeft }
     // height of vertical-paddings + part of full content located behind the border-top inner boundary
@@ -118,12 +118,14 @@ export class GetDimensions {
 
 
     // max width of horizontal-paddings + content located behind the border-left inner boundary
+    // максимальная ширина невидимого контента
     // !!! non-standard
     get scrollLeftMax(){
         // @ts-ignore
         return this.domElement.scrollLeftMax as number
     }
     // max height of vertical-paddings + content located behind the border-top inner boundary
+    // максимальная высота невидимого контента
     // !!! non-standard
     get scrollTopMax(){
         // @ts-ignore

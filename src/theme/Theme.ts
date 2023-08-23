@@ -33,7 +33,7 @@ export namespace Theme {
           text: string[]
         }
       }
-    },
+    }
     input: {
       bgc: string[]
       text: string[]
@@ -45,6 +45,10 @@ export namespace Theme {
       error: {
         bgc: string[]
       }
+    }
+    scrollbar: {
+      track: string[]
+      thumb: string[]
     }
   }
   
@@ -94,6 +98,11 @@ export namespace Theme {
       error: {
         bgc: ['#ffced2']
       }
+    },
+    
+    scrollbar: {
+      track: ['#25283659'],
+      thumb: ['#2528367F'],
     }
   }
   
@@ -101,10 +110,12 @@ export namespace Theme {
   export const Dark: Theme = {
     type: 'dark',
     name: 'Dark',
+    
     page: {
       bgc: ['#992c46','#282c34'],
       text: ['#bdbdbd'],
     },
+    
     button: {
       primary: {
         bgc: ['#971f3b'],
@@ -129,6 +140,7 @@ export namespace Theme {
         }
       }
     },
+    
     input: {
       bgc: ['#282c34'],
       text: ['#bdbdbd'],
@@ -140,6 +152,11 @@ export namespace Theme {
       error: {
         bgc: ['#5e252c']
       }
+    },
+    
+    scrollbar: {
+      track: ['F8F8F859'],
+      thumb: ['F8F8F87F'],
     }
   }
   

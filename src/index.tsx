@@ -25,7 +25,11 @@ root.render(
       <BrowserRouter>
         <StyleSheetManager
           // 'styled-components' will not render this as html attributes
-          shouldForwardProp={prop=>!['css','theme','hasError'].includes(prop)}
+          shouldForwardProp={(prop)=>{
+            return ![
+              'css','theme','hasError','direction'
+            ].includes(prop)
+          }}
         >
           <App/>
         </StyleSheetManager>
