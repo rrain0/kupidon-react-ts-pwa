@@ -3,18 +3,13 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import center = EmotionCommon.center
 import col = EmotionCommon.col
-import hideScrollbar = EmotionCommon.hideScrollbar
 import { SheetSnapPoints, SheetState, useBottomSheet } from './useBottomSheet'
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { useScrollbar } from '../Scrollbar/useScrollbar'
-import Scrollbar from '../Scrollbar/Scrollbar'
-import { ScrollbarStyle } from '../Scrollbar/ScrollbarStyle'
-import centerAll = EmotionCommon.centerAll
 import stretchAll = EmotionCommon.stretchAll
-import row = EmotionCommon.row
 import cmcss from 'src/styles/common.module.scss'
-import ScrollbarOverlay from '../ScrollbarOverlay/ScrollbarOverlay';
-import { ScrollbarOverlayStyle } from '../ScrollbarOverlay/ScrollbarOverlayStyle';
+import ScrollbarOverlay from '../ScrollbarOverlay/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from '../ScrollbarOverlay/ScrollbarOverlayStyle'
+import row = EmotionCommon.row;
 
 
 
@@ -41,72 +36,28 @@ const BottomSheet = (props: BottomSheetProps) => {
     setSelectedItem,
   } = props
   
-  /*const actionHandler = useCallback<SheetActionEventHandler>(
-    ev=>{
-      if (ev.completed && !ev.success){
-        switch (ev.action){
-          case 'open': setAction('close'); break
-          case 'close': setAction('open'); break
-        }
-      }
-    },
-    [state]
-  )*/
   
   
   const bottomSheetFrameRef = useRef<HTMLDivElement>(null)
   const bottomSheetRef = useRef<HTMLDivElement>(null)
   const bottomSheetHeaderRef = useRef<HTMLDivElement>(null)
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
+  const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
-  /*
-  useLayoutEffect(()=>{
-    const el = bottomSheetHeaderRef.current!
-    if (el){
-      
-      const onWheel = (ev: WheelEvent)=>{
-        // @ts-ignore
-        ev.needPrventDefault = true
-        console.log('Header onWheel',ev)
-      }
-      
-      el.addEventListener('wheel', onWheel, { passive: false })
-      
-      return ()=>{
-        el.removeEventListener('wheel', onWheel)
-      }
-    }
-  },[bottomSheetHeaderRef.current])
-  */
   
   const { sheetProps, receivedSheetState, snapPointsPx } = useBottomSheet(
     bottomSheetFrameRef,
     bottomSheetRef,
     bottomSheetHeaderRef,
-    contentRef,
+    bottomSheetContentRef,
     {
       state: state,
       setState: setState,
-      //eventHandler: actionHandler,
       animationDuration,
       snapPoints: snapPoints,
       snapIdx: snapIdx,
       setSnapIdx: setSnapIdx,
     }
   )
-  /*useEffect(()=>{
-    console.log('sheet style',sheetProps.style)
-  },[sheetProps.style])*/
-  
-  
-  const {
-    //containerProps,
-    scrollbarProps,
-    canScrollHorizontal,
-    canScrollVertical,
-  } = useScrollbar(scrollContainerRef, contentRef)
-  
   
   
   
@@ -162,7 +113,6 @@ const BottomSheet = (props: BottomSheetProps) => {
       ${stretchAll};
     `}
     ref={mainFrameRef}
-    /*{ ...(state!=='closed' ? stopMoveEvents : {}) }*/
   >
     
     
@@ -171,13 +121,13 @@ const BottomSheet = (props: BottomSheetProps) => {
     <div // Frame
       css={css`
         ${state !== 'closed'
-                ? css`
-                  pointer-events: auto;
-                  background: #000000${bgcDimHex};
-                `
-                : css`
-                  pointer-events: none;
-                `
+          ? css`
+            pointer-events: auto;
+            background: #000000${bgcDimHex};
+          `
+          : css`
+            pointer-events: none;
+          `
         }
         display: grid;
         place-items: end center;
@@ -187,7 +137,10 @@ const BottomSheet = (props: BottomSheetProps) => {
         //touch-action: none;
       `}
       ref={bottomSheetFrameRef}
-      onPointerUp={() => setState('closing')}
+      onPointerUp={(ev)=>{
+        // todo
+        setState('closing')
+      }}
     >
       <div
         css={css`
@@ -199,6 +152,8 @@ const BottomSheet = (props: BottomSheetProps) => {
           css={css`
             display: grid;
             grid-template-rows: auto 1fr;
+            //grid: '.' auto '.' 1fr / stretch;
+            justify-items: stretch;
             width: 100%;
             border-radius: 16px 16px 0 0;
             overflow: hidden;
@@ -213,7 +168,7 @@ const BottomSheet = (props: BottomSheetProps) => {
           
           
           <div // Some Header Component
-            css={t => css`
+            css={t=>css`
               background: ${t.page.bgc3[0]};
               color: ${t.page.text[0]};
               padding: 10px;
@@ -236,120 +191,72 @@ const BottomSheet = (props: BottomSheetProps) => {
             <div>Header</div>
           </div>
           
+          
           <div // Pointer events consumer  // todo Must be
-            css={css`
-              display: contents;
-            `}
-            onPointerDown={ev => ev.stopPropagation()}
-            onPointerMove={ev => ev.stopPropagation()}
-            onPointerUp={ev => ev.stopPropagation()}
-            onPointerCancel={ev => ev.stopPropagation()}
+            css={css`display: contents;`}
+            onPointerDown={ev=>ev.stopPropagation()}
+            onPointerMove={ev=>ev.stopPropagation()}
+            onPointerUp={ev=>ev.stopPropagation()}
+            onPointerCancel={ev=>ev.stopPropagation()}
           >
-            <div
-              css={css`
-                width: 100%;
-                min-height: 0;
-                ${centerAll};
+          
+            
+            <div // Some Body Component, Scroll Container
+              css={t=>css`
+                display: flex;
+                place-items: center;
+                overflow: hidden;
+                background: ${t.page.bgc3[0]};
+                color: ${t.page.text[0]};
+                // todo must be without margins & paddings!!!
               `}
             >
               
-              <div // Some Body Component, Scroll Container
-                css={t=>css`
-                  place-self: stretch;
-                  
-                  ${hideScrollbar};
-                  overflow-y: auto;
-                  ${col};
-
-                  background: ${t.page.bgc3[0]};
-                  color: ${t.page.text[0]};
-
-                  //overscroll-behavior: contain; // todo Must be
-                  // todo must be without margins & paddings!!!
-                `}
-                ref={scrollContainerRef}
-                //{...containerProps}
-                /*onScroll={ev=>{
-                 ev.stopPropagation()
-                 ev.preventDefault()
-                 }}*/
-              >
-                
-                
-                {/*<ScrollbarOverlay
-                  css={ScrollbarOverlayStyle.page}
-                >*/}
-                
-                  <div // scrollable content
-                    css={css`
-                      padding: 10px;
-                      ${col};
-                      gap: 10px;
-                      height: auto;
-                      min-height: auto;
-                      // todo must be without margins!!!
-                    `}
-                    ref={contentRef}
-                  >
-                    
-                    {/*<option value=''>Не выбрано</option>
-                    <option value='hetero'>Натурал</option>
-                    <option value='pervert'>Извращуга</option>*/}
-                    {
-                      [...Array(4).keys()]
-                        .map(i=>
-                          <div
-                            css={css`
-                              cursor: pointer;
-                            `}
-                            key={i}
-                            onClick={()=>{
-                              setSelectedItem(`Item ${i+1}`)
-                              setState('closing')
-                            }}
-                          >
-                            Item {i+1}
-                          </div>
-                        )
-                    }
-                  </div>
-                
-                
-                {/*</ScrollbarOverlay>*/}
-                
-                
-              </div>
               
-              <div
-                css={css`
-                  place-self: stretch;
-                  display: grid;
-                  pointer-events: none;
-                  grid: '.. vs' 1fr
-                      'hs ..' auto
-                     / 1fr auto;
-                `}
+              <ScrollbarOverlay
+                css={ScrollbarOverlayStyle.page}
+                showVertical={!['opening','closing','close','open','closed'].includes(state)}
               >
-                {canScrollVertical
-                  && !['opening', 'closing', 'close', 'open', 'closed'].includes(state)
-                  && <Scrollbar css={[
-                    ScrollbarStyle.scrollbar, css`
-                            &.rrainuiScrollbarTrack {
-                              grid-area: vs;
-                              place-self: start end;
-
-                              &[data-direction=vertical] {
-                                width: 20px;
-                              }
-
-                              pointer-events: auto;
-                            }`]}
-                    {...scrollbarProps}
-                    direction="vertical"
-                  />}
-              </div>
-            
+              
+                <div // scrollable content
+                  css={css`
+                    width: 100%;
+                    padding: 10px;
+                    ${col};
+                    gap: 10px;
+                    height: fit-content;
+                    min-height: fit-content;
+                    // todo must be without margins!!!
+                  `}
+                  ref={bottomSheetContentRef}
+                >
+                  
+                  {
+                    [...Array(16).keys()]
+                      .map(i=>
+                        <div
+                          css={css`
+                            cursor: pointer;
+                          `}
+                          key={i}
+                          onClick={()=>{
+                            setSelectedItem(`Item ${i+1}`)
+                            setState('closing')
+                          }}
+                        >
+                          Item {i+1}
+                        </div>
+                      )
+                  }
+                </div>
+              
+              
+              </ScrollbarOverlay>
+              
+              
             </div>
+            
+            
           </div>
         
         </div>
@@ -357,7 +264,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     </div>
     
     
-    {/*
+    
     <div
       css={css`
         pointer-events: auto;
@@ -490,7 +397,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     
     
     </div>
-    */}
+    
     
     
   </div>

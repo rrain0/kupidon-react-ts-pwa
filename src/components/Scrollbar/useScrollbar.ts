@@ -68,7 +68,7 @@ export const useScrollbar = (
     const content = contentRef.current!
     if (container || content){
       const resizeObserver = new ResizeObserver(()=>{
-        console.log('resize')
+        //console.log('resize')
         updateScrollProps()
       })
       container && resizeObserver.observe(container)

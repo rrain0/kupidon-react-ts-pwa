@@ -33,17 +33,8 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   const scrollContentRef = useRef<HTMLDivElement>(null)
   
   
-  /*const ScrollContainerClone = ScrollContainer && React.cloneElement(
-    ScrollContainer,
-    {
-      ref: el=> {
-        if (ScrollContainer?.props.ref) ScrollContainer.props.ref.current = el
-        scrollContainerRef.current = el
-      }
-    }
-  )*/
   
-  
+  /*
   useEffect(()=>{
     const content = scrollContentRef.current
     if (content){
@@ -53,11 +44,10 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       )
     }
   },[])
-  
+  */
   
   
   const {
-    //containerProps,
     scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
@@ -135,11 +125,9 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       className={'rrainuiScrollContainer'}
     >
       <div // Scrollable Content Wrapper
-        // todo must be without margins & paddings - just content wrap!!!
+        // must be without margins & paddings - just content wrapper!!!
         css={css`
           display: flex;
-          /*${col};*/
-          //overflow: visible;
           min-width: fit-content; min-height: fit-content;
           width: fit-content; height: fit-content;
         `}

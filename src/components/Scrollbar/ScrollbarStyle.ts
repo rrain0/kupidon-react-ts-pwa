@@ -15,10 +15,10 @@ export namespace ScrollbarStyle {
       &[data-direction=vertical]{ width: 16px; height: 100%; }
       &[data-direction=horizontal]{ width: 100%; height: 16px; }
       
-      .rrainuiScrollbarThumbBox {
+      >.rrainuiScrollbarThumbBox {
         //padding: 1px 2px;
         
-        .rrainuiScrollbarThumb {
+        >.rrainuiScrollbarThumb {
           border-radius: 27px;
           background: ${t.scrollbar.thumb};
           //opacity: 0.5;

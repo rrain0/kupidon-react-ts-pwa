@@ -112,8 +112,8 @@ export namespace Theme {
     },
     
     scrollbar: {
-      track: ['#25283659'],
-      thumb: ['#2528367F'],
+      track: ['#25283622'],
+      thumb: ['#25283644'],
     }
   }
   
@@ -172,7 +172,7 @@ export namespace Theme {
         hover: ['#ee7894'],
         disabled: {
           bgc: ['#DCDCDC'],
-          text: ['#000']
+          text: ['#000'],
         }
       }
     },
@@ -191,8 +191,8 @@ export namespace Theme {
     },
     
     scrollbar: {
-      track: ['F8F8F859'],
-      thumb: ['F8F8F87F'],
+      track: ['#F8F8F822'],
+      thumb: ['#F8F8F844'],
     }
   }
   
