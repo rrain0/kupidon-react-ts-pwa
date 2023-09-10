@@ -26,6 +26,8 @@ export type BottomSheetProps = {
   animationDuration: number
   snapPoints: SheetSnapPoints
   setAnimationDuration: (value: number)=>void
+  
+  setSelectedItem: (value: string)=>void
 }
 const BottomSheet = (props: BottomSheetProps) => {
   let {
@@ -36,6 +38,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     snapIdx,
     setSnapIdx,
     setAnimationDuration,
+    setSelectedItem,
   } = props
   
   /*const actionHandler = useCallback<SheetActionEventHandler>(
@@ -129,18 +132,26 @@ const BottomSheet = (props: BottomSheetProps) => {
   useLayoutEffect(()=>{
     const el = mainFrameRef.current
     if (el && state!=='closed'){
-      const ups: Element[] = []
+      const x: Element[] = []
+      const y: Element[] = []
       let up = el.parentElement
       while (up) {
-        ups.push(up)
+        if (['auto','scroll'].includes(
+          up.computedStyleMap().get('overflow-x') as any
+        )) x.push(up)
+        if (['auto','scroll'].includes(
+          up.computedStyleMap().get('overflow-y') as any
+        )) y.push(up)
         up = up.parentElement
       }
-      ups.forEach(el=>el.classList.add(cmcss.noScroll))
-      return ()=>ups.forEach(el=>el.classList.remove(cmcss.noScroll))
+      x.forEach(el=>el.classList.add(cmcss.noScrollX))
+      y.forEach(el=>el.classList.add(cmcss.noScrollY))
+      return ()=>{
+        x.forEach(el=>el.classList.remove(cmcss.noScrollX))
+        y.forEach(el=>el.classList.remove(cmcss.noScrollY))
+      }
     }
   },[mainFrameRef.current, state])
-  
-  
   
   
   return <div
@@ -149,7 +160,6 @@ const BottomSheet = (props: BottomSheetProps) => {
       inset: 0;
       pointer-events: none;
       ${stretchAll};
-      
     `}
     ref={mainFrameRef}
     /*{ ...(state!=='closed' ? stopMoveEvents : {}) }*/
@@ -172,7 +182,7 @@ const BottomSheet = (props: BottomSheetProps) => {
         display: grid;
         place-items: end center;
         // padding from frame to sheet
-        padding: 10px 10px 0 10px; // todo Must be
+        padding: 4px 4px 0 4px; // todo Must be
 
         //touch-action: none;
       `}
@@ -274,6 +284,7 @@ const BottomSheet = (props: BottomSheetProps) => {
                     css={css`
                       padding: 10px;
                       ${col};
+                      gap: 10px;
                       height: auto;
                       min-height: auto;
                       // todo must be without margins!!!
@@ -281,12 +292,25 @@ const BottomSheet = (props: BottomSheetProps) => {
                     ref={contentRef}
                   >
                     
-                    <option value=''>Не выбрано</option>
+                    {/*<option value=''>Не выбрано</option>
                     <option value='hetero'>Натурал</option>
-                    <option value='pervert'>Извращуга</option>
+                    <option value='pervert'>Извращуга</option>*/}
                     {
-                      [...Array(16).keys()]
-                        .map(i => <div key={i}>Item {i+1}</div>)
+                      [...Array(4).keys()]
+                        .map(i=>
+                          <div
+                            css={css`
+                              cursor: pointer;
+                            `}
+                            key={i}
+                            onClick={()=>{
+                              setSelectedItem(`Item ${i+1}`)
+                              setState('closing')
+                            }}
+                          >
+                            Item {i+1}
+                          </div>
+                        )
                     }
                   </div>
                 
@@ -333,6 +357,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     </div>
     
     
+    {/*
     <div
       css={css`
         pointer-events: auto;
@@ -465,6 +490,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     
     
     </div>
+    */}
     
     
   </div>

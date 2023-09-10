@@ -6,6 +6,13 @@
 .noScroll {
   overflow: hidden;
 }
+.noScrollX {
+  overflow-x: hidden;
+}
+.noScrollY {
+  overflow-y: hidden;
+}
+
 .noSelect {
   user-select: none;
 }

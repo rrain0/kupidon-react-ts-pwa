@@ -63,7 +63,7 @@ function ProfilePage(){
   }
   
   
-  
+  const [selectedItem, setSelectedItem] = useState('Выберите')
   
   
   const [images, setImages] = useState(ProfileMockData.userImages)
@@ -135,14 +135,37 @@ function ProfilePage(){
             ) }
           </div>
           
-          <label>
+          <div
+            css={t=>css`
+              width: 200px;
+              height: 50px;
+              border-radius: 16px;
+              border: 2px solid ${t.page.text[0]};
+              ${row};
+              padding: 0 10px;
+              align-items: center;
+              cursor: pointer;
+            `}
+            onClick={ev=>{
+              //ev.preventDefault()
+              setBottomSheetState('opening')
+              let openIdx = bottomSheetSnapPoints
+                .findIndex(it => it === 'fit-content')
+              if (openIdx === -1) openIdx = bottomSheetSnapPoints.length-1
+              setSnapIdx(openIdx)
+            }}
+          >
+            {selectedItem}
+          </div>
+          
+          {/*<label>
             <div>Сесуальная ориентация</div>
             <select>
               <option value=''>Не выбрано</option>
               <option value='hetero'>Натурал</option>
               <option value='pervert'>Извращуга</option>
             </select>
-          </label>
+          </label>*/}
           
           <InfoItem>id: {auth.user.id}</InfoItem>
           <InfoItem>email: {auth.user.email}</InfoItem>
@@ -186,7 +209,10 @@ function ProfilePage(){
           snapIdx={snapIdx}
           setSnapIdx={setSnapIdx}
           setAnimationDuration={setAnimationDuration}
+          setSelectedItem={setSelectedItem}
         />
+        
+        
       </PageContent>
     </ScrollbarOverlay>
   </Page>
@@ -201,6 +227,7 @@ export default ProfilePage
 const Page = styled.main`
   position: fixed;
   inset: 0;
+  //overflow: auto;
   //overflow: hidden;
 `
 const PageContent = styled.div`

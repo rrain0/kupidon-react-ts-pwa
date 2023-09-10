@@ -7,11 +7,13 @@ import hideScrollbar = EmotionCommon.hideScrollbar
 import { useScrollbar } from 'src/components/Scrollbar/useScrollbar'
 import Scrollbar from 'src/components/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/components/Scrollbar/ScrollbarStyle'
-import React, { HTMLAttributes, useRef } from 'react'
+import React, { HTMLAttributes, useEffect, useRef } from 'react'
 import centerAll = EmotionCommon.centerAll
 import { Utils } from 'src/utils/Utils'
 import empty = Utils.empty
 import classNames from 'classnames'
+import { ReactUtils } from '../../utils/ReactUtils';
+import ReactMemoTyped = ReactUtils.ReactMemoTyped;
 
 
 
@@ -42,13 +44,24 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   )*/
   
   
+  useEffect(()=>{
+    const content = scrollContentRef.current
+    if (content){
+      console.log(
+        'computed style',
+        content.computedStyleMap().get('overflow-y')
+      )
+    }
+  },[])
+  
+  
+  
   const {
     //containerProps,
     scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
   } = useScrollbar(scrollContainerRef, scrollContentRef)
-  
   
   
   return <div
@@ -106,6 +119,10 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
     
     </div>
     
+    
+    
+    
+    
     <div // Scroll Container
       // must be without margins & paddings!!!
       css={css`
@@ -121,6 +138,9 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
         // todo must be without margins & paddings - just content wrap!!!
         css={css`
           display: flex;
+          /*${col};*/
+          //overflow: visible;
+          min-width: fit-content; min-height: fit-content;
           width: fit-content; height: fit-content;
         `}
         ref={scrollContentRef}
@@ -140,4 +160,4 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   </div>
   
 }
-export default ScrollbarOverlay
+export default ReactMemoTyped(ScrollbarOverlay)
