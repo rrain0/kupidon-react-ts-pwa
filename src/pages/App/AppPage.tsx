@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useRecoilState } from 'recoil'
-import { themeState } from 'src/recoil/state/ThemeState'
+import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import React from 'react'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -10,7 +10,7 @@ import row = EmotionCommon.row
 
 
 function AppPage(){
-  const [theme, setTheme] = useRecoilState(themeState)
+  const [theme, setTheme] = useRecoilState(ThemeRecoil)
   
   const changeTheme = ()=>{
     switch (theme.type){

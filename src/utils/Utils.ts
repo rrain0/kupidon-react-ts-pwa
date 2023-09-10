@@ -150,6 +150,14 @@ export namespace Utils {
     curr<=min ? max : curr>=max ? max-1 : curr-1
   
   
+  
+  export function ifNumberToPx(value: string|number): string {
+    if (typeof value === 'number') return value+'px'
+    return value
+  }
+  
+  
+  
   /**
    * Проверка является ли переданное значение массивом
    * @param obj any

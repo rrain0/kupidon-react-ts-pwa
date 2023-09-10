@@ -6,7 +6,12 @@ export namespace AppRoutes {
   
   
   const testRoutes = {
-    path: 'test'
+    path: 'test',
+    paths: {
+      scrollbar: 'scrollbar',
+      bottomSheet: 'bottom-sheet',
+      resizeObserver: 'resize-observer',
+    }
   }
   
   

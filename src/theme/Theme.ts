@@ -2,12 +2,16 @@
 
 export namespace Theme {
   
+  export type ThemeType = 'light'|'dark'
   export interface Theme {
-    type: 'light'|'dark'
+    type: ThemeType
     name: string
     
     page: {
       bgc: string[]
+      bgc2: string[]
+      bgc3: string[]
+      bgcPinkGradients: string[]
       text: string[]
     }
     button: {
@@ -59,6 +63,13 @@ export namespace Theme {
     
     page: {
       bgc: ['#ffb6c1',/*whitesmoke*/'#f5f5f5'],
+      bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
+      bgc3: ['#fff','#8b8b8b'],
+      bgcPinkGradients: [
+        '#f39aba','#dfc0d2','#e3d8f6',
+        '#dfa4b8','#ee4723','#dd8499',
+        '#e35d4d','#e5bed3','#ed4d2b'
+      ],
       text: ['#000'],
     },
     
@@ -113,6 +124,31 @@ export namespace Theme {
     
     page: {
       bgc: ['#992c46','#282c34'],
+      bgc2: ['#992c46','#282c34','#994500'],
+      bgc3: ['#121212','#8b8b8b'],
+      bgcPinkGradients: [
+        '#f39aba','#dfc0d2','#e3d8f6',
+        '#dfa4b8','#ee4723','#dd8499',
+        '#e35d4d','#e5bed3','#ed4d2b'
+      ],
+      //@ts-ignore
+      bgcPinkGradients: [
+        '#992c46','#bc8245','#992c46',
+        '#bb8396','#992c46','#975492',
+        '#992c46','#3e5175','#992c46'
+      ],
+      //@ts-ignore
+      bgcPinkGradients: [
+        '#992c46','#282c34','#992c46',
+        '#282c34','#992c46','#282c34',
+        '#992c46','#282c34','#992c46'
+      ],
+      //@ts-ignore
+      bgcPinkGradients: [
+        '#992c46','#bc8245','#992c46',
+        '#282c34','#992c46','#282c34',
+        '#992c46','#282c34','#992c46'
+      ],
       text: ['#bdbdbd'],
     },
     
@@ -162,15 +198,63 @@ export namespace Theme {
   
   
   
-  export const themeFromName = {
-    'Light Pink': LightPink,
-    'Dark': Dark,
+  export const LightPink2: Theme = {
+    ...LightPink,
+    type: 'light',
+    name: 'Light Pink 2',
+    
+    input: {
+      ...LightPink.input,
+      border: ['#00a8f3', '#ef7b7d', '#fb3570'],
+    },
+    
+    button: {
+      ...LightPink.button,
+      primary: {
+        ...LightPink.button.primary,
+        bgc: ['#f95c67'],
+      }
+    }
+    
   }
   
   
-  export const defaultLight = 'Light Pink'
-  export const defaultDark = 'Dark'
-  export const defaultTheme: Theme['type'] = 'light'
+  
+  
+  export const Dark2: Theme = {
+    ...Dark,
+    type: 'dark',
+    name: 'Dark 2',
+    
+    input: {
+      ...Dark.input,
+      border: ['#00a8f3', '#ef7b7d', '#fb3570'],
+    },
+    
+    button: {
+      ...Dark.button,
+      primary: {
+        ...Dark.button.primary,
+        bgc: ['#d9816f'],
+      },
+    },
+  }
+  
+  
+  
+  
+  export const allThemes = [
+    LightPink, Dark,
+    LightPink2, Dark2,
+  ] as const
+  export const themeByName = (themeName: string)=>{
+    return allThemes.find(t=>t.name===themeName)
+  }
+  
+  
+  export const defaultLight = LightPink.name
+  export const defaultDark = Dark.name
+  export const defaultTheme: ThemeType = 'light'
   
 }
 

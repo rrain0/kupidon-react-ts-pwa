@@ -1,22 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { useRecoilState, useRecoilValue } from 'recoil'
-import React, { useLayoutEffect } from 'react'
+import React from 'react'
 import { css, ThemeProvider } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { themeObjState, themeState } from 'src/recoil/state/ThemeState'
+import { ThemeObjRecoil, ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
 import center = EmotionCommon.center
 import AppRouting from './AppRouting'
-import AppPage from './AppPage';
+import AppPage from './AppPage'
 
 
 
 
 
 function App() {
-  //const auth = useRecoilValue(authState)
-  const [theme, setTheme] = useRecoilState(themeState)
-  const themeObj = useRecoilValue(themeObjState)
+  //const auth = useRecoilValue(authRecoil)
+  const [theme, setTheme] = useRecoilState(ThemeRecoil)
+  const themeObj = useRecoilValue(ThemeObjRecoil)
   
   
   /*useLayoutEffect(()=>{
@@ -25,9 +25,12 @@ function App() {
   },[theme.type])*/
   
   
+  
+  
+  
   return <ThemeProvider theme={themeObj}>
     
-    <AppRouting />
+    <AppRouting/>
     
     <AppPage />
     

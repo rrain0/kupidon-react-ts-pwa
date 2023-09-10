@@ -7,7 +7,7 @@ import Axios, {
 import { ApiRoutes } from 'src/api-routes/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus";
-import { authState, AuthStateType } from 'src/recoil/state/AuthState';
+import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil';
 import { RecoilUtils } from 'src/recoil/RecoilUtils';
 
 //import store from "src/store/store";
@@ -132,16 +132,16 @@ export namespace AxiosConfig {
     //localStorage.removeItem('token')
     //reduxStore.dispatch(authSlice.actions.logout())
     //reduxStore.dispatch(userActions.setUser(null))
-    resetRecoil(authState)
+    resetRecoil(AuthRecoil)
   }
   const setAuthData = (valOrUpdater: ValOrUpdater<AuthStateType>) => {
     //localStorage.setItem('token', authData.accessJwt)
     //reduxStore.dispatch(refreshAccessToken({ access_token: accessToken }))
-    setRecoil(authState, valOrUpdater)
+    setRecoil(AuthRecoil, valOrUpdater)
   }
   const getAuthData = ()=>{
     // return reduxStore.getState().authReducer.access_token
-    return getRecoil(authState)?.accessToken
+    return getRecoil(AuthRecoil)?.accessToken
   }
   
   

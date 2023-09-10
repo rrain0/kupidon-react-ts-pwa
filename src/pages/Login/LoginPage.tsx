@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useRecoilState, useSetRecoilState } from 'recoil'
-import { authState } from 'src/recoil/state/AuthState'
+import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import Button from 'src/components/Buttons/Button'
 import Input from 'src/components/Inputs/Input'
@@ -61,7 +61,7 @@ const LoginPage = () => {
   const returnPath = searchParams.get(RootRoutes.login.params.returnPath) ?? undefined
   const navigate = useNavigate()
   
-  const setAuth = useSetRecoilState(authState)
+  const setAuth = useSetRecoilState(AuthRecoil)
   
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
@@ -232,8 +232,10 @@ export default LoginPage
 
 
 const Page = styled.main`
-  min-width: 100%;
+  width: 100%;
+  min-width: 200px;
   min-height: 100%;
+  height: fit-content;
   ${center};
   padding: 32px;
   background: linear-gradient(
@@ -249,6 +251,7 @@ const Form = styled.form`
   width: 100%;
   ${col};
   gap: 16px;
+  justify-items: stretch;
 `
 
 const formHeader = (theme: Theme.Theme) => css`

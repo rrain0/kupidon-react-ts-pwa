@@ -7,7 +7,6 @@ export namespace InputStyle {
   
   export const input = (t: Theme.Theme) => css`
     &.rrainuiFrame {
-      height: 50px;
       border-radius: 15px;
       background: ${t.input.bgc};
       /*& .rrainuiInput[data-error] {
@@ -18,6 +17,8 @@ export namespace InputStyle {
       }
     }
     .rrainuiInput {
+      width: 100%;
+      height: 50px;
       padding-right: 16px;
       padding-left: 16px;
       font: 500 18px/150% Roboto;
@@ -34,7 +35,12 @@ export namespace InputStyle {
     
     .rrainuiBorder {
       border: 2px solid transparent;
-      background-image: linear-gradient(to right, ${t.input.border[0]}, ${t.input.border[1]}, ${t.input.border[2]});
+      background-image: linear-gradient(
+        to right,
+        ${t.input.border[0]},
+        ${t.input.border[1]},
+        ${t.input.border[2]}
+      );
       background-origin: border-box;
       background-size: 200% 100%;
       background-position: 100% 0;

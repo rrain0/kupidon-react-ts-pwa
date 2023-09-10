@@ -56,6 +56,18 @@ export namespace EmotionCommon {
   `
   export const centerStart = centerV
   
+  export const stretch = css`
+    display: grid;
+    place-items: stretch;
+  `
+  
+  export const stretchAll = css`
+    display: grid;
+    place-items: stretch;
+    grid: 'c';
+    & > * { grid-area: c }
+  `
+  
   
   
   export const mobileFullWidth = css`

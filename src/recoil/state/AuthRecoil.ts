@@ -18,7 +18,7 @@ export type AuthStateType = undefined|{
   accessToken: string,
   user: CurrentUser,
 }
-export const authState = atom<AuthStateType>({
+export const AuthRecoil = atom<AuthStateType>({
   key: 'auth',
   default: undefined,
   effects: [localStorageEffect2({ removeWhen: ['reset',emptyValOrObj] })],

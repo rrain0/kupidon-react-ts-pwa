@@ -5,11 +5,11 @@ import { Theme } from '../../theme/Theme';
 
 
 export type ThemeStateType = {
-  type: Theme.Theme['type'],
+  type: Theme.ThemeType,
   light: string,
   dark: string,
 }
-export const themeState = atom<ThemeStateType>({
+export const ThemeRecoil = atom<ThemeStateType>({
   key: 'theme',
   default: {
     type: Theme.defaultTheme,
@@ -21,24 +21,25 @@ export const themeState = atom<ThemeStateType>({
 
 
 
-export const themeObjState = selector<Theme.Theme>({
+export const ThemeObjRecoil = selector<Theme.Theme>({
   key: 'themeObj',
   get: ({get})=>{
-    const theme = get(themeState)
+    const theme = get(ThemeRecoil)
     
-    let themeName = function(){
-      switch (theme.type){
-        case 'light': default: return theme.light
-        case 'dark': return theme.dark
-      }
-    }()
+    let themeName = themeNameFromState(theme)
     
-    const themeObj = Theme.themeFromName[themeName]
+    const themeObj = Theme.themeByName(themeName)!
     return themeObj
   }
 })
 
 
+export const themeNameFromState = (themeState: ThemeStateType)=>{
+  switch (themeState.type){
+    case 'light': default: return themeState.light
+    case 'dark': return themeState.dark
+  }
+}
 
 
 

@@ -1,24 +1,29 @@
-import { css } from '@emotion/react';
-import { Theme } from 'src/theme/Theme';
+import { css } from '@emotion/react'
+import { Theme } from 'src/theme/Theme'
 
 
 export namespace ButtonStyle {
   
-  
-  export const primary = (t: Theme.Theme) => css`
+  const common = css`
     &.rrainuiButton {
-      height: 50px;
+      min-height: 50px;
+      word-break: break-word;
 
-      background: ${t.button.primary.bgc[0]};
       transition: background linear 300ms;
 
       border-radius: 15px;
       padding: 8px 4px;
 
       font: 500 18px/150% Roboto;
-      color: ${t.button.primary.text[0]};
       letter-spacing: 0.05em;
-
+    }
+  `
+  
+  export const primary = (t: Theme.Theme) => css`
+    ${common};
+    &.rrainuiButton {
+      background: ${t.button.primary.bgc[0]};
+      color: ${t.button.primary.text[0]};
       --ripple-color: ${t.button.primary.ripple[0]};
 
       :active, :focus {}
@@ -39,20 +44,10 @@ export namespace ButtonStyle {
   
   
   export const secondary = (t: Theme.Theme) => css`
+    ${common};
     &.rrainuiButton {
-      height: 50px;
-
       background: ${t.button.secondary.bgc[0]};
-      transition: background linear 300ms;
-
-      border-radius: 15px;
-
-      padding: 8px 4px;
-
-      font: 500 18px/150% Roboto;
       color: ${t.button.secondary.text[0]};
-      letter-spacing: 0.05em;
-
       --ripple-color: ${t.button.secondary.ripple[0]};
 
       :focus {}

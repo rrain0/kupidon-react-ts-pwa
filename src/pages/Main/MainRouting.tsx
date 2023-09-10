@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import { authState } from 'src/recoil/state/AuthState'
+import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
@@ -7,7 +7,7 @@ import MainPage from './MainPage'
 
 
 function MainRouting(){
-  const auth = useRecoilValue(authState)
+  const auth = useRecoilValue(AuthRecoil)
   const [searchParams] = useSearchParams()
   
   return <Routes>

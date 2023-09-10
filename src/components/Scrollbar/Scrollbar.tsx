@@ -4,9 +4,9 @@ import React, {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from 'react'
-import mcss from './Scrollbar.module.scss'
+import cmcss from 'src/styles/common.module.scss'
 import classNames from "classnames"
 import {GetDimensions} from "src/utils/GetDimensions"
 import {Utils} from "src/utils/Utils"
@@ -170,7 +170,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
     ]
   )
   
-  // Using mcss touch-action: none; to prevent browser gesture handling on mobile devices
+  // Using css touch-action: none; to prevent browser gesture handling on mobile devices
   const onPointerMove = useCallback((ev: React.PointerEvent)=>{
     if (dragStart && ev.buttons===1){
       const p = function(){
@@ -197,12 +197,13 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
     setDragStart(undefined)
   },[])
   
+  
   // forbid content selection for all elements while dragging scrollbar
   useLayoutEffect(()=>{
     if (dragStart){
-      document.querySelector('*')!.classList.add(mcss.noSelect)
-      return ()=>document.querySelector('*')!.classList.remove(mcss.noSelect)
-    } else document.querySelector('*')!.classList.remove(mcss.noSelect)
+      document.querySelector('*')!.classList.add(cmcss.noSelect)
+      return ()=>document.querySelector('*')!.classList.remove(cmcss.noSelect)
+    } else document.querySelector('*')!.classList.remove(cmcss.noSelect)
   },[dragStart,scrollProps,trackProps])
   
   /*const onTrackClick = (ev: React.MouseEvent<HTMLDivElement>) => {
@@ -282,8 +283,14 @@ const ScrollbarThumbBox = ReactMemoTyped(
     className: classNames(p.className,'rrainuiScrollbarThumbBox')
   }))`
     position: absolute;
-    [data-direction=vertical]>&{ left: 0; right: 0; top: 0; height: 0; }
-    [data-direction=horizontal]>&{ top: 0; bottom: 0; left: 0; width: 0; }
+    [data-direction=vertical]>&{
+      will-change: top, height;
+      left: 0; right: 0; top: 0; height: 0;
+    }
+    [data-direction=horizontal]>&{
+      will-change: left, width;
+      top: 0; bottom: 0; left: 0; width: 0;
+    }
   `
 )
 

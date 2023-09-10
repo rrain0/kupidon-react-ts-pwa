@@ -2,12 +2,12 @@
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import center = EmotionCommon.center
-import { css } from '@emotion/react'
+import { css, ThemeProvider } from '@emotion/react'
 import col = EmotionCommon.col
-import React, { useEffect, useId, useState } from 'react'
+import React, { useEffect, useId, useLayoutEffect, useMemo, useState } from 'react'
 import { AxiosError } from 'axios'
-import { useSetRecoilState } from 'recoil'
-import { authState } from 'src/recoil/state/AuthState'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
 import { InputStyle } from 'src/components/Inputs/InputStyle'
@@ -43,6 +43,9 @@ import { useStateAndRef } from '../../utils-react/useStateAndRef';
 import trueOrUndef = Utils.trueOrUndef;
 import { useToastFailures } from '../../toasts/useToastFailures';
 import RootRoutes = AppRoutes.RootRoutes;
+import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
+import { PinkGrainyGradientBgc } from '../../styles/bgc/PinkGrainyGradientBgc';
+import { themeNameFromState, ThemeRecoil } from '../../recoil/state/ThemeRecoil';
 
 
 
@@ -71,6 +74,14 @@ export const SignupDefaults = function(){
 
 const SignupPage = () => {
   
+  const [theme, setTheme] = useRecoilState(ThemeRecoil)
+  let themeName = themeNameFromState(theme)
+  if (themeName==='Light Pink') themeName = 'Light Pink 2'
+  if (themeName==='Dark') themeName = 'Dark 2'
+  const themeObj = Theme.themeByName(themeName)!
+  
+  
+  
   const id = useId()
   
   const [searchParams] = useSearchParams()
@@ -78,7 +89,7 @@ const SignupPage = () => {
   const returnPath = searchParams.get(RootRoutes.signup.params.returnPath) ?? undefined
   const navigate = useNavigate()
   
-  const setAuth = useSetRecoilState(authState)
+  const setAuth = useSetRecoilState(AuthRecoil)
   
   
   
@@ -202,8 +213,34 @@ const SignupPage = () => {
     setError: setSignupFailure,
     setValues: setSignupForm,
   }
+  const [enableCard, setEnableCard] = useState(true)
   
-  return <Page>
+  return <ThemeProvider theme={themeObj}><Page>
+    <div
+      css={css`
+        position: fixed;
+        top: 0; left: 0;
+        padding: 10px;
+        gap: 10px;
+        ${row};
+        place-items: start;
+        z-index: 1;
+      `}
+    >
+      <button onClick={()=>setEnableCard(!enableCard)}>Включить карточку</button>
+    </div>
+    <div
+      css={t=>css`
+        ${ enableCard
+          ? center
+          : css`display: contents;`
+        }
+        background: ${t.page.bgc[1]}77;
+        padding: 20px;
+        border-radius: 16px;
+        margin: -20px;
+      `}
+    >
     <Form onSubmit={onSubmit}>
       
       <h3 css={formHeader}>Регистрация</h3>
@@ -317,8 +354,9 @@ const SignupPage = () => {
       </Button>
       
     </Form>
+    </div>
     
-  </Page>
+  </Page></ThemeProvider>
 }
 
 export default SignupPage
@@ -327,16 +365,11 @@ export default SignupPage
 
 
 const Page = styled.main`
-  min-width: 100%;
-  min-height: 100%;
+  width: 100%;
+  min-height: 100%; height: fit-content;
   ${center};
   padding: 32px;
-  background: linear-gradient(
-          to bottom right,
-          ${p=>p.theme.page.bgc[0]} 0%,
-          ${p=>p.theme.page.bgc[1]} 40% 60%,
-          ${p=>p.theme.page.bgc[0]} 100%
-  );
+  ${p=>PinkGrainyGradientBgc(p.theme)};
 `
 
 

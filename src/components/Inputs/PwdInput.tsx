@@ -9,7 +9,7 @@ import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc;
 import EyeIc = SimpleSvgIcons.EyeIc;
 import Ripple, {RippleRef} from "../Ripple/Ripple";
 import { useRecoilValue } from 'recoil';
-import { themeObjState } from 'src/recoil/state/ThemeState';
+import { ThemeObjRecoil } from 'src/recoil/state/ThemeRecoil';
 import styled from '@emotion/styled';
 import { EmotionCommon } from 'src/styles/EmotionCommon';
 import center = EmotionCommon.center;
@@ -27,7 +27,7 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
   
   const rippleRef = useRef<RippleRef>(null)
   
-  const themeObj = useRecoilValue(themeObjState)
+  const themeObj = useRecoilValue(ThemeObjRecoil)
   
   return <Input {...restProps} ref={forwardedRef} type={pwdHidden ? 'password' : 'text'}>
     <EyeWrap tabIndex={0}

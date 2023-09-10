@@ -14,7 +14,7 @@ export const useGalleryScrollbar = (
   
   const {
     scrollbarProps: { scrollProps, setContainerScroll },
-    containerProps: { onScroll: onContainerScroll },
+    //containerProps: { onScroll: onContainerScroll }, // todo
   } = useScrollbar(containerRef,contentRef,options)
   
   const galleryScrollProps = useMemo(()=>{
@@ -41,7 +41,7 @@ export const useGalleryScrollbar = (
   
   return {
     galleryScrollProps,
-    onContainerScroll,
+    //onContainerScroll,
     setContainerScroll,
     scrollToElementByIndex,
     canScroll,

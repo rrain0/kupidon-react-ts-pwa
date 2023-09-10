@@ -1,15 +1,15 @@
-import styled from "styled-components";
-import React, {useImperativeHandle, useRef} from "react";
-import {ReactUtils} from "src/utils/ReactUtils";
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
-import classNames from "classnames";
-import {Utils} from "src/utils/Utils";
-import empty = Utils.empty;
-import {StyledCommon} from "src/styles/StyledCommon";
-import resetInput = StyledCommon.resetInput;
-import abs = StyledCommon.abs;
-import row = StyledCommon.row;
-import trueOrUndef = Utils.trueOrUndef;
+import styled from "styled-components"
+import React, {useImperativeHandle, useRef} from "react"
+import {ReactUtils} from "src/utils/ReactUtils"
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import classNames from "classnames"
+import {Utils} from "src/utils/Utils"
+import empty = Utils.empty
+import {StyledCommon} from "src/styles/StyledCommon"
+import resetInput = StyledCommon.resetInput
+import abs = StyledCommon.abs
+import row = StyledCommon.row
+import trueOrUndef = Utils.trueOrUndef
 
 
 
@@ -25,7 +25,7 @@ export type InputProps = JSX.IntrinsicElements['input'] & {
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((
-  { ...props}, forwardedRef
+  props, forwardedRef
 ) => {
   let {
     hasError,
