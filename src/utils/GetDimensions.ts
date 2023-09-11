@@ -122,14 +122,16 @@ export class GetDimensions {
     // !!! non-standard
     get scrollLeftMax(){
         // @ts-ignore
-        return this.domElement.scrollLeftMax as number
+        return this.domElement.scrollLeftMax as number|undefined
+          ?? this.scrollWidth-this.contentWidthRounded
     }
     // max height of vertical-paddings + content located behind the border-top inner boundary
     // максимальная высота невидимого контента
     // !!! non-standard
     get scrollTopMax(){
         // @ts-ignore
-        return this.domElement.scrollTopMax as number
+        return this.domElement.scrollTopMax as number|undefined
+          ?? this.scrollHeight-this.contentHeightRounded
     }
 
     // width / height includes paddings + full content (not only visible part)

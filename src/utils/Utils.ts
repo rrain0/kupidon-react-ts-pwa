@@ -180,7 +180,7 @@ export namespace Utils {
   
   
   let id = 1
-  export const nextId = () => ''+id++
+  export const nextId = ()=>''+id++
   
   
   export type empty = null|undefined

@@ -6,11 +6,11 @@ import {GetDimensions} from "src/utils/GetDimensions"
 export type ScrollProps = {
   clientWidth: number // container width
   scrollLeft: number // ширина проскроленного контента, который слева за границей контейнера
-  //scrollLeftMax: number // макс ширина проскроленного контента, который слева за границей контейнера
+  scrollLeftMax: number // макс ширина проскроленного контента, который слева за границей контейнера
   scrollWidth: number // content width
   clientHeight: number // container height
   scrollTop: number // высота проскроленного контента, который сверху за границей контейнера
-  //scrollTopMax: number // макс высота проскроленного контента, который сверху за границей контейнера
+  scrollTopMax: number // макс высота проскроленного контента, который сверху за границей контейнера
   scrollHeight: number // content height
 }
 
@@ -27,11 +27,11 @@ export const useScrollbar = (
   const [scrollProps, _setScrollProps] = useState<ScrollProps>({
     clientWidth: 0,
     scrollLeft: 0,
-    //scrollLeftMax: 0,
+    scrollLeftMax: 0,
     scrollWidth: 0,
     clientHeight: 0,
     scrollTop: 0,
-    //scrollTopMax: 0,
+    scrollTopMax: 0,
     scrollHeight: 0,
   })
   const updateScrollProps = useCallback(() => {
@@ -42,11 +42,11 @@ export const useScrollbar = (
       _setScrollProps({
         clientWidth: d.contentWidthRounded,
         scrollLeft: d.scrollLeft,
-        //scrollLeftMax: d.scrollLeftMax,
+        scrollLeftMax: d.scrollLeftMax,
         scrollWidth: d.scrollWidth,
         clientHeight: d.contentHeightRounded,
         scrollTop: d.scrollTop,
-        //scrollTopMax: d.scrollTopMax,
+        scrollTopMax: d.scrollTopMax,
         scrollHeight: d.scrollHeight,
       })
     }

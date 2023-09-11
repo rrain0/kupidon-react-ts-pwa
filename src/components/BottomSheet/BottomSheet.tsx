@@ -86,7 +86,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     css={css`
       position: fixed;
       inset: 0;
-      ${state !== 'closed'
+      ${!['closing','closed'].includes(state)
         ? css`
           pointer-events: auto;
           background: #000000${bgcDimHex};

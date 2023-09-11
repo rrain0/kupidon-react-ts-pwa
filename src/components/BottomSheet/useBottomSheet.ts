@@ -3,8 +3,8 @@ import React, {
   useCallback,
   useEffect,
   useLayoutEffect,
-  useMemo,
-  useState
+  useMemo, useRef,
+  useState,
 } from 'react'
 import { GetDimensions } from 'src/utils/GetDimensions'
 import { Utils } from 'src/utils/Utils'
@@ -54,6 +54,7 @@ export const useBottomSheet = (
 ) => {
   
   const [animation, setAnimation] = useState<Animation|undefined>(undefined)
+  const [lastSpeed, setLastSpeed] = useState(undefined as undefined|number)
   const [dragStart, setDragStart] = useState(undefined as
     undefined|{ pointerId: number, clientY: number, height: number, timestamp: number }
   )
@@ -173,25 +174,35 @@ export const useBottomSheet = (
   
   const runAnimation = useCallback(
     (startH: number, endH: number, endState: SheetState)=>{
-      const sheet = bottomSheetRef.current!
-      const animation = sheet.animate([
-        { height: startH+'px' },
-        { height: endH+'px' },
-      ], {
-        duration: animationDuration,
-        fill: 'forwards',
-        easing: "cubic-bezier(0.17,0.84,0.44,1)",
-      })
-      setAnimation(animation)
-      animation.onfinish = ev=>{
-        animation.commitStyles()
-        animation.cancel()
-        setAnimation(undefined)
-        setState(endState)
-        setNewSheetStyle({ height: endH })
+      const sheet = bottomSheetRef.current
+      if (sheet){
+        const duration = function(){
+          if (!lastSpeed) return animationDuration
+          const path = Math.abs(endH-startH)/window.innerHeight*100
+          return path/Math.abs(lastSpeed*1.2)*1000
+        }()
+        const animation = sheet.animate([
+          { height: startH+'px' },
+          { height: endH+'px' },
+        ], {
+          duration: duration,
+          fill: 'forwards',
+          easing: "cubic-bezier(0.17,0.84,0.44,1)",
+        })
+        setAnimation(animation)
+        animation.onfinish = ev=>{
+          animation.commitStyles()
+          animation.cancel()
+          setAnimation(undefined)
+          setState(endState)
+          setNewSheetStyle({ height: endH })
+        }
+        animation.oncancel = ev=>{
+          setLastSpeed(undefined)
+        }
       }
   },
-    [bottomSheetRef.current, animationDuration, setState]
+    [bottomSheetRef.current, animationDuration, setState, lastSpeed]
   )
   
   
@@ -285,7 +296,29 @@ export const useBottomSheet = (
   useLayoutEffect(reactOnState,[state,snapIdx])
   
   
-
+  const movementTime = 200
+  const movementRef = useRef([] as Array<{ clientY: number, timestamp: number }>)
+  const resetAndAddMovement = useCallback(
+    (ev: { clientY: number, timeStamp: number })=>{
+      movementRef.current = [{
+        clientY: ev.clientY,
+        timestamp: ev.timeStamp
+      }]
+    },
+    []
+  )
+  const checkAndAddMovement = useCallback(
+    (ev: { clientY: number, timeStamp: number })=>{
+      movementRef.current = movementRef.current
+        .filter(it=>(it.timestamp+movementTime)>=(document.timeline.currentTime as number|null??0))
+      movementRef.current.push({
+        clientY: ev.clientY,
+        timestamp: ev.timeStamp
+      })
+    },
+    []
+  )
+  
   
   const onPointerDown = useCallback(
     function(this: HTMLElement, ev: PointerEvent){
@@ -301,6 +334,7 @@ export const useBottomSheet = (
             height: sheetH,
             timestamp: ev.timeStamp,
           })
+          resetAndAddMovement(ev)
           const currentTarget = this ?? ev.currentTarget
           currentTarget.setPointerCapture(ev.pointerId)
         }
@@ -318,6 +352,7 @@ export const useBottomSheet = (
         const addHeight = -(ev.clientY-dragStart.clientY)
         const newHeight = dragStart.height + addHeight
         setNewSheetStyle({ height: newHeight })
+        checkAndAddMovement(ev)
       }
     },
     [dragStart]
@@ -332,30 +367,55 @@ export const useBottomSheet = (
         const newHeight = dragStart.height + addHeight
         setNewSheetStyle({ height: newHeight })
         setDragStart(undefined)
+        checkAndAddMovement(ev)
         
-        const speed = (newHeight-dragStart.height)*1000/(ev.timeStamp-dragStart.timestamp)
-        //console.log('speed',speed)
-        // todo Учитывать перемещения в течение последних 200мс
-        //   и только после последней смены направления
-        if (Math.abs(speed)>700){
-          if (speed>0){
-            setState('snapping')
-            setSnapIdx(snapPointsPx.length)
-          } else {
-            setState('closing')
-          }
-        } else {
-          let newSnapIdx = snapPointsPx.length-1
-          for (let i = 0; i < snapPointsPx.length-1; i++) {
-            const threshold = Math.round((snapPointsPx[i]+snapPointsPx[i+1])/2)
-            if (newHeight<threshold) {
-              newSnapIdx = i
-              break
+        {
+          let speed = 0 // % высоты экрана в секунду
+          const mvs = movementRef.current
+          console.log('mvs',mvs)
+          if (mvs.length>=2){
+            let i = mvs.length-2
+            const direction = function(){
+              for(; i>=0; i--){
+                const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
+                if (d!==0) return d
+              }
+              return 0
+            }()
+            if (direction){
+              for(; i>=0; i--){
+                const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
+                if (d!==0 && d!==direction) break
+              }
+              i++
+              speed = -(mvs[mvs.length-1].clientY - mvs[i].clientY)/window.innerHeight*100/movementTime*1000
             }
           }
-          setState('snapping')
-          setSnapIdx(newSnapIdx)
+          movementRef.current = []
+          console.log('speed',speed)
+          
+          if (Math.abs(speed)>60){
+            setLastSpeed(speed)
+            if (speed>0){
+              setState('snapping')
+              setSnapIdx(snapPointsPx.length)
+            } else {
+              setState('closing')
+            }
+          } else {
+            let newSnapIdx = snapPointsPx.length-1
+            for (let i = 0; i < snapPointsPx.length-1; i++) {
+              const threshold = Math.round((snapPointsPx[i]+snapPointsPx[i+1])/2)
+              if (newHeight<threshold) {
+                newSnapIdx = i
+                break
+              }
+            }
+            setState('snapping')
+            setSnapIdx(newSnapIdx)
+          }
         }
+        
       }
     },
     [dragStart, setState, setSnapIdx, snapPointsPx]

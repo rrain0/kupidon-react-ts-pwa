@@ -130,8 +130,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
               scroll: scrollProps.scrollTop,
               size: thumbBoxProps.height!,
               trackStart: trackD.top,
-              clientSize: scrollProps.clientHeight,
-              scrollSize: scrollProps.scrollHeight,
+              scrollMax: scrollProps.scrollTopMax,
             }
             case 'horizontal': return {
               start: thumbBoxD.left,
@@ -140,8 +139,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
               scroll: scrollProps.scrollLeft,
               size: thumbBoxProps.width!,
               trackStart: trackD.left,
-              clientSize: scrollProps.clientWidth,
-              scrollSize: scrollProps.scrollWidth,
+              scrollMax: scrollProps.scrollLeftMax,
             }
           }
         }()
@@ -149,7 +147,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
           return { client: p.client, scroll: p.scroll }
         else {
           let newScroll = toScrollScale(p.client - p.size/2 - p.trackStart)
-          newScroll = fitRange(0, newScroll, p.scrollSize-p.clientSize)
+          newScroll = fitRange(0, newScroll, p.scrollMax)
           switch (direction){
             case 'vertical': setContainerScroll({ top: newScroll }); break
             case 'horizontal': setContainerScroll({ left: newScroll }); break
