@@ -4,6 +4,7 @@ import RootRoutes = AppRoutes.RootRoutes
 import TestPage from './TestPage'
 import ScrollbarTestPage from './ScrollbarTestPage'
 import ResizeObserverTestPage from './ResizeObserverTestPage';
+import BottomSheetTestPage from './BottomSheetTestPage';
 
 
 
@@ -19,6 +20,9 @@ function TestRouting(){
     />
     <Route path={RootRoutes.test.resizeObserver.path}
       element={<ResizeObserverTestPage/>}
+    />
+    <Route path={RootRoutes.test.bottomSheet.path}
+      element={<BottomSheetTestPage/>}
     />
     <Route path='*'
       element={<Navigate to={RootRoutes.test.fullPath3({

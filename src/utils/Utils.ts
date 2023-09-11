@@ -185,6 +185,14 @@ export namespace Utils {
   
   export type empty = null|undefined
   export type WithId<E extends object> = E & { id: string }
+  export type Setter<T> = (value: T)=>void
+  export type NonEmptyArr<A extends Array<E>, E = any> = A extends Array<infer E>
+    ? Array<Exclude<E, null|undefined>>
+    : never
+  
+  
+  export type PointerEventListener<E extends HTMLElement = HTMLElement> =
+    (this:E, ev: PointerEvent) => any
   
   
   // Получить тип, в котором ко всем именам свойств переданного объекта добавляется суффикс

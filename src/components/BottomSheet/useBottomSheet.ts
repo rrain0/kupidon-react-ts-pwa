@@ -1,10 +1,20 @@
-import React, { CSSProperties, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import React, {
+  CSSProperties,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState
+} from 'react'
 import { GetDimensions } from 'src/utils/GetDimensions'
 import { Utils } from 'src/utils/Utils'
 import fitRange = Utils.fitRange
 import cmcss from 'src/styles/common.module.scss'
 import empty = Utils.empty
 import inRange = Utils.inRange
+import PointerEventListener = Utils.PointerEventListener;
+import { useNoSelect } from '../../utils-react/useNoSelect';
+import { flushSync } from 'react-dom';
 
 
 
@@ -39,7 +49,8 @@ export const useBottomSheet = (
   bottomSheetRef: React.RefObject<HTMLElement>,
   bottomSheetHeaderRef: React.RefObject<HTMLElement>,
   bottomSheetContentRef: React.RefObject<HTMLElement>,
-  options: UseBottomSheetOptions
+  draggableElements: React.RefObject<HTMLElement>[],
+  options: UseBottomSheetOptions,
 ) => {
   
   const [animation, setAnimation] = useState<Animation|undefined>(undefined)
@@ -155,7 +166,7 @@ export const useBottomSheet = (
   },[receivedSheetState])*/
   
   
-  const [newSheetStyle, setNewSheetStyle] = useState<CSSProperties>({
+  const [newSheetStyle, setNewSheetStyle] = useState({
     height: 0
   })
   
@@ -277,22 +288,23 @@ export const useBottomSheet = (
 
   
   const onPointerDown = useCallback(
-    (ev: React.PointerEvent) => {
-      console.log('onPointerDown',ev)
-      if (ev.buttons===1){
-        stopCurrentAction()
-        setState('dragging')
-        const sheetH = receivedSheetState.sheetH
-        setNewSheetStyle({ height: sheetH, willChange: 'height' })
-        setDragStart({
-          pointerId: ev.pointerId,
-          clientY: ev.clientY,
-          height: sheetH,
-          timestamp: ev.timeStamp,
-        })
-        ev.currentTarget.setPointerCapture(ev.pointerId)
-      }
-    },
+    function(this: HTMLElement, ev: PointerEvent){
+        //console.log('onPointerDown',ev)
+        if (ev.buttons===1){
+          stopCurrentAction()
+          setState('dragging')
+          const sheetH = receivedSheetState.sheetH
+          setNewSheetStyle({ height: sheetH })
+          setDragStart({
+            pointerId: ev.pointerId,
+            clientY: ev.clientY,
+            height: sheetH,
+            timestamp: ev.timeStamp,
+          })
+          const currentTarget = this ?? ev.currentTarget
+          currentTarget.setPointerCapture(ev.pointerId)
+        }
+      },
     [receivedSheetState, stopCurrentAction]
   )
   
@@ -300,72 +312,103 @@ export const useBottomSheet = (
   // You MUST use css 'touch-state: none;' while dragging
   // to prevent browser gesture handling on mobile devices
   const onPointerMove = useCallback(
-    (ev: React.PointerEvent)=>{
+    function(this: HTMLElement, ev: PointerEvent){
       if (dragStart?.pointerId===ev.pointerId){
         //console.log('onPointerMove',ev)
         const addHeight = -(ev.clientY-dragStart.clientY)
         const newHeight = dragStart.height + addHeight
-        setNewSheetStyle({ height: newHeight, willChange: 'height' })
+        setNewSheetStyle({ height: newHeight })
       }
     },
     [dragStart]
   )
   
   
-  const onPointerEnd = useCallback((ev: React.PointerEvent)=>{
-    //console.log('onPointerEnd',ev)
-    if (dragStart?.pointerId===ev.pointerId){
-      const addHeight = -(ev.clientY-dragStart.clientY)
-      const newHeight = dragStart.height + addHeight
-      setNewSheetStyle({ height: newHeight })
-      setDragStart(undefined)
-      
-      const speed = (newHeight-dragStart.height)*1000/(ev.timeStamp-dragStart.timestamp)
-      //console.log('speed',speed)
-      // todo Учитывать перемещения в течение последних 200мс
-      //   и только после последней смены направления
-      if (Math.abs(speed)>700){
-        if (speed>0){
-          setState('snapping')
-          setSnapIdx(snapPointsPx.length)
-        } else {
-          setState('closing')
-        }
-      } else {
-        let newSnapIdx = snapPointsPx.length-1
-        for (let i = 0; i < snapPointsPx.length-1; i++) {
-          const threshold = Math.round((snapPointsPx[i]+snapPointsPx[i+1])/2)
-          if (newHeight<threshold) {
-            newSnapIdx = i
-            break
+  const onPointerEnd = useCallback(
+    function(this: HTMLElement, ev: PointerEvent){
+      //console.log('onPointerEnd',ev)
+      if (dragStart?.pointerId===ev.pointerId){
+        const addHeight = -(ev.clientY-dragStart.clientY)
+        const newHeight = dragStart.height + addHeight
+        setNewSheetStyle({ height: newHeight })
+        setDragStart(undefined)
+        
+        const speed = (newHeight-dragStart.height)*1000/(ev.timeStamp-dragStart.timestamp)
+        //console.log('speed',speed)
+        // todo Учитывать перемещения в течение последних 200мс
+        //   и только после последней смены направления
+        if (Math.abs(speed)>700){
+          if (speed>0){
+            setState('snapping')
+            setSnapIdx(snapPointsPx.length)
+          } else {
+            setState('closing')
           }
+        } else {
+          let newSnapIdx = snapPointsPx.length-1
+          for (let i = 0; i < snapPointsPx.length-1; i++) {
+            const threshold = Math.round((snapPointsPx[i]+snapPointsPx[i+1])/2)
+            if (newHeight<threshold) {
+              newSnapIdx = i
+              break
+            }
+          }
+          setState('snapping')
+          setSnapIdx(newSnapIdx)
         }
-        setState('snapping')
-        setSnapIdx(newSnapIdx)
       }
-    }
-  },[dragStart, setState, setSnapIdx, snapPointsPx])
+    },
+    [dragStart, setState, setSnapIdx, snapPointsPx]
+  )
   
+  
+  
+  
+  useLayoutEffect(
+    ()=>{
+      const draggables = draggableElements
+        .map(it=>it.current)
+        .filter(it=>it) as HTMLElement[]
+      draggables.forEach(it=>{
+        it.addEventListener('pointerdown',onPointerDown)
+        it.addEventListener('pointermove',onPointerMove)
+        it.addEventListener('pointerup',onPointerEnd)
+        it.addEventListener('pointercancel',onPointerEnd)
+      })
+      return ()=>draggables.forEach(it=>{
+        it.removeEventListener('pointerdown',onPointerDown)
+        it.removeEventListener('pointermove',onPointerMove)
+        it.removeEventListener('pointerup',onPointerEnd)
+        it.removeEventListener('pointercancel',onPointerEnd)
+      })
+    },
+    [
+      ...draggableElements.map(it=>it.current),
+      onPointerDown, onPointerMove, onPointerEnd,
+    ]
+  )
+  
+  useLayoutEffect(()=>{
+    const sheet = bottomSheetRef.current
+    if (sheet){
+      sheet.style.height = newSheetStyle.height+'px'
+    }
+  },[bottomSheetRef.current,newSheetStyle])
   
   
   // forbid content selection for all elements while dragging
-  useLayoutEffect(()=>{
-    if (dragStart){
-      document.querySelector(':root')!.classList.add(cmcss.noSelect)
-      return ()=>document.querySelector(':root')!.classList.remove(cmcss.noSelect)
-    } else document.querySelector(':root')!.classList.remove(cmcss.noSelect)
-  },[dragStart])
+  useNoSelect(!!dragStart)
   
   
   
   return {
-    sheetProps: {
+    /*sheetProps: {
       onPointerDown,
       onPointerMove,
       onPointerUp: onPointerEnd,
       onPointerCancel: onPointerEnd,
-      style: newSheetStyle
-    },
+      style: newSheetStyle,
+    },*/
     receivedSheetState,
     snapPointsPx,
   } as const

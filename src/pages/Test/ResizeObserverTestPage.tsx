@@ -1,14 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
-import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
-import Button from '../../components/Buttons/Button';
-import { ButtonStyle } from '../../components/Buttons/ButtonStyle';
+import Button from 'src/components/Buttons/Button'
+import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
 
 
 
@@ -16,15 +15,18 @@ import { ButtonStyle } from '../../components/Buttons/ButtonStyle';
 
 const ResizeObserverTestPage = ()=>{
   
+  const [resizeCnt1, setResizeCnt1] = useState(0)
   const [items1, setItems1] = useState([...Array(6).keys()])
   const container1Ref = useRef<HTMLDivElement>(null)
+  
   
   useLayoutEffect(()=>{
     const container = container1Ref.current
     if (container){
       const resizeObserver = new ResizeObserver(()=>{
-        // works only when scrollbar appears
+        // works when observer was created & when scrollbar appears
         console.log('element 1 was resized')
+        setResizeCnt1(s=>s+1)
       })
       resizeObserver.observe(container)
       return ()=>resizeObserver.disconnect()
@@ -38,6 +40,8 @@ const ResizeObserverTestPage = ()=>{
   
   
   
+  
+  const [resizeCnt2, setResizeCnt2] = useState(0)
   const [items2, setItems2] = useState([...Array(6).keys()])
   const container2Ref = useRef<HTMLDivElement>(null)
   
@@ -45,8 +49,9 @@ const ResizeObserverTestPage = ()=>{
     const container = container2Ref.current
     if (container){
       const resizeObserver = new ResizeObserver(()=>{
-        // works after adding something
+        // works when observer was created & after adding something
         console.log('element 2 was resized')
+        setResizeCnt2(s=>s+1)
       })
       resizeObserver.observe(container)
       return ()=>resizeObserver.disconnect()
@@ -68,6 +73,8 @@ const ResizeObserverTestPage = ()=>{
       >
         +1
       </Button>
+      
+      <div>Count of container resizes: {resizeCnt1}</div>
       
       <div
         css={t=>css`
@@ -101,6 +108,8 @@ const ResizeObserverTestPage = ()=>{
       >
         +1
       </Button>
+      
+      <div>Count of container resizes: {resizeCnt2}</div>
       
       <div
         css={t=>css`
