@@ -17,6 +17,7 @@ import { useNoSelect } from 'src/utils-react/useNoSelect'
 
 
 const movementTime = 200
+const speedThreshold = 50 // % высоты viewport в секунду
 
 // only 'open' & 'close' are stable states, others are intermediate
 export type SheetState =
@@ -415,7 +416,7 @@ export const useBottomSheet = (
           movementRef.current = []
           //console.log('speed',speed)
           
-          if (Math.abs(speed)>60){
+          if (Math.abs(speed)>speedThreshold){
             setLastSpeed(speed)
             if (speed>0){
               setState('snapping')

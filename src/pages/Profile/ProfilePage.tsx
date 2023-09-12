@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import center = EmotionCommon.center
 import styled from '@emotion/styled'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import col = EmotionCommon.col
@@ -11,22 +10,19 @@ import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
 import { Theme } from 'src/theme/Theme'
-import React, { useEffect, useRef, useState } from 'react'
-import rowWrap = EmotionCommon.rowWrap
+import React, { useEffect, useState } from 'react'
 import { ProfileMockData } from './MockData'
-import BottomSheet from 'src/components/BottomSheet/BottomSheet'
 import { SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
-import { PinkGrainyGradientBgc } from 'src/styles/bgc/PinkGrainyGradientBgc'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import BottomSheetBasic from '../../components/BottomSheet/BottomSheetBasic';
-import { ReactUtils } from '../../utils/ReactUtils';
+import BottomSheetBasic from 'src/components/BottomSheet/BottomSheetBasic'
+import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
-import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
-import { FormPage } from '../../components/Page/FormPage';
-import Page = FormPage.Page;
-import PageContent = FormPage.PageContent;
+import { FormPage } from 'src/components/Page/FormPage'
+import Page = FormPage.Page
+import PageContent = FormPage.PageContent
+import ProfileImages from './ProfileImages'
 
 
 
@@ -71,9 +67,9 @@ function ProfilePage(){
   
   
   const [selectedItem, setSelectedItem] = useState('Select Item')
-  const [peopleIPrefer, setPeopleIPrefer] = useState('Не выбрано')
+  const [preferredGenders, setPreferredGenders] = useState('Не выбрано')
   const [selecting, setSelecting] = useState(
-    undefined as undefined|'items'|'people-i-prefer'
+    undefined as undefined|'items'|'preferred-genders'
   )
   useEffect(()=>{
     if (selecting){
@@ -117,54 +113,10 @@ function ProfilePage(){
           <h3 css={formHeader}>Профиль</h3>
           
           
-          <div css={t=>css`
-            ${rowWrap};
-            gap: 6px;
-            padding: 16px;
-            border-radius: 16px;
-            background: ${t.page.bgc[1]}77;
-          `}>
-            { images.map(im=><div
-                
-                draggable
-                onDragStart={ev=>{
-                  ev.dataTransfer.setData('text/plain',im)
-                }}
-                
-                onDragOver={ev=>{
-                  ev.preventDefault()
-                  ev.dataTransfer.dropEffect = 'move'
-                }}
-                onDrop={ev=>{
-                  ev.preventDefault()
-                  const data = ev.dataTransfer.getData('text/plain')
-                  const thisImIdx = images.findIndex(val=>val===im)
-                  const droppedImIdx = images.findIndex(val=>val===data)
-                  const newImages = [...images]
-                  newImages[thisImIdx] = data
-                  newImages[droppedImIdx] = im
-                  setImages(newImages)
-                }}
-                
-                key={im}
-                css={css`
-                width: 100px; height: 100px;
-                ${center};
-                border-radius: 6px;
-                overflow: hidden;
-              `}
-              >
-                <img
-                  src={im}
-                  css={css`
-                  width: 100%; height: 100%;
-                  object-position: center;
-                  object-fit: cover;
-                `}
-                />
-              </div>
-            ) }
-          </div>
+          <ProfileImages
+            images={images}
+            setImages={setImages}
+          />
           
           
           
@@ -248,13 +200,13 @@ function ProfilePage(){
                   cursor: pointer;
                 `}
                 onClick={ev => {
-                  setSelecting('people-i-prefer')
+                  setSelecting('preferred-genders')
                 }}
               >
-                {peopleIPrefer}
+                {preferredGenders}
               </div>
               
-              {selecting==='people-i-prefer' && <BottomSheetBasic
+              {selecting==='preferred-genders' && <BottomSheetBasic
                 {...bottomSheetProps}
                 header={'Я ищу'}
               >
@@ -272,7 +224,7 @@ function ProfilePage(){
                         `}
                         key={v}
                         onClick={() => {
-                          setPeopleIPrefer(v)
+                          setPreferredGenders(v)
                           setBottomSheetState('closing')
                         }}
                       >
@@ -284,15 +236,6 @@ function ProfilePage(){
             </div>
           </div>
           
-          
-          {/*<label>
-            <div>Сесуальная ориентация</div>
-            <select>
-              <option value=''>Не выбрано</option>
-              <option value='hetero'>Натурал</option>
-              <option value='pervert'>Извращуга</option>
-            </select>
-          </label>*/}
           
           <InfoItem>id: {auth.user.id}</InfoItem>
           <InfoItem>email: {auth.user.email}</InfoItem>

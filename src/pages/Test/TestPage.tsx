@@ -1,12 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { EmotionCommon } from 'src/styles/EmotionCommon'
-import col = EmotionCommon.col
 import React from 'react'
-import styled from '@emotion/styled'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
-import { css } from '@emotion/react'
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
