@@ -23,6 +23,8 @@ import { FormPage } from 'src/components/Page/FormPage'
 import Page = FormPage.Page
 import PageContent = FormPage.PageContent
 import ProfileImages from './ProfileImages'
+import DataField from '../../components/DataField/DataField';
+import { DataFieldStyle } from '../../components/DataField/DataFieldStyle';
 
 
 
@@ -188,23 +190,12 @@ function ProfilePage(){
                 Я ищу
               </div>
               
-              <div
-                css={t => css`
-                  width: 200px;
-                  height: 50px;
-                  border-radius: 16px;
-                  border: 2px solid ${t.page.text[0]};
-                  ${row};
-                  padding: 0 10px;
-                  align-items: center;
-                  cursor: pointer;
-                `}
-                onClick={ev => {
-                  setSelecting('preferred-genders')
-                }}
+              <DataField
+                css={DataFieldStyle.dataField}
+                onClick={ev=>setSelecting('preferred-genders')}
               >
                 {preferredGenders}
-              </div>
+              </DataField>
               
               {selecting==='preferred-genders' && <BottomSheetBasic
                 {...bottomSheetProps}

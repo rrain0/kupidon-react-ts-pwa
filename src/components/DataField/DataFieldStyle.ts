@@ -3,21 +3,15 @@ import { Theme } from 'src/theme/Theme'
 
 
 
-export namespace InputStyle {
+export namespace DataFieldStyle {
   
-  export const input = (t: Theme.Theme) => css`
+  export const dataField = (t: Theme.Theme) => css`
     &.rrainuiFrame {
       border-radius: 15px;
       background: ${t.input.bgc};
-      /*& .rrainuiInput[data-error] {
-        background: ${t.input.error.bgc};
-      }*/
-      // todo not supported by firefox
-      :has(.rrainuiInput[data-error]){
+      &[data-error]{
         background: ${t.input.error.bgc};
       }
-    }
-    >.rrainuiInput {
       width: 100%;
       height: 50px;
       padding-right: 16px;
@@ -25,13 +19,6 @@ export namespace InputStyle {
       font: 500 18px/150% Roboto;
       letter-spacing: 0.05em;
       color: ${t.input.text};
-
-      ::placeholder {
-        color: ${t.input.placeholder};
-      }
-      @media not (hover: none) { :hover {} }
-      :active, :focus-visible, :focus {}
-      &[data-error]{}
     }
     
     >.rrainuiBorder {
@@ -56,17 +43,17 @@ export namespace InputStyle {
       -webkit-mask-composite: xor;
       mask-composite: exclude;
     }
-    @media not (hover: none) { >.rrainuiInput:hover ~ .rrainuiBorder {
+    @media not (hover: none) { :hover>.rrainuiBorder {
         background-position: 0 0;
     } }
-    >.rrainuiInput:active ~ .rrainuiBorder {}
-    >.rrainuiInput:focus-visible ~ .rrainuiBorder {
+    :active>.rrainuiBorder {}
+    :focus-visible>.rrainuiBorder {
       background-position: 0 0;
     }
-    >.rrainuiInput:focus ~ .rrainuiBorder {
+    :focus>.rrainuiBorder {
       background-position: 0 0;
     }
-    >.rrainuiInput[data-error] ~ .rrainuiBorder{}
+    &[data-error]>.rrainuiBorder{}
   `
   
   
