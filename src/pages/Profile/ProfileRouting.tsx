@@ -1,10 +1,12 @@
-import { Navigate, Route, Routes, useMatch, useSearchParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import React from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
 import ProfilePage from './ProfilePage'
+import { ReactUtils } from 'src/utils/ReactUtils'
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
@@ -13,11 +15,11 @@ function ProfileRouting(){
   
   return <ProfileIdRouting/>
 }
-export default ProfileRouting
+export default ReactMemoTyped(ProfileRouting)
 
 
 
-function ProfileIdRouting(){
+const ProfileIdRouting = ReactMemoTyped(()=>{
   //console.log('profile id')
   const [searchParams] = useSearchParams()
   
@@ -33,11 +35,11 @@ function ProfileIdRouting(){
       />}
     />
   </Routes>
-}
+})
 
 
 
-function ProfileIdUserIdRouting(){
+const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
   //console.log('profile id userId')
   //console.log('RootRoutes.profile',RootRoutes.profile)
   //console.log('RootRoutes.profile.id.userId.fullPath()',RootRoutes.profile.id.userId.fullPath())
@@ -75,4 +77,4 @@ function ProfileIdUserIdRouting(){
       />}
     /> }
   </Routes>
-}
+})

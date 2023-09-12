@@ -140,6 +140,14 @@ export namespace Utils {
     curr >= min && curr <= max;
   
   
+  export const nonNegIntOrDefault =
+    (value: any, defolt: number): number => {
+      value = +value
+      if (isNaN(value) || value < 0) value = defolt
+      return value
+    }
+  
+  
   // +1 in range inclusive
   export const nextLooped = (min: number, curr: number, max: number) =>
     curr<=min ? min+1 : curr>=max ? min : curr+1

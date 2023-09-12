@@ -1,5 +1,4 @@
 import React, {
-  CSSProperties,
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -9,16 +8,15 @@ import React, {
 import { GetDimensions } from 'src/utils/GetDimensions'
 import { Utils } from 'src/utils/Utils'
 import fitRange = Utils.fitRange
-import cmcss from 'src/styles/common.module.scss'
 import empty = Utils.empty
 import inRange = Utils.inRange
-import PointerEventListener = Utils.PointerEventListener;
-import { useNoSelect } from '../../utils-react/useNoSelect';
-import { flushSync } from 'react-dom';
+import { useNoSelect } from 'src/utils-react/useNoSelect'
 
 
 
 
+
+const movementTime = 200
 
 // only 'open' & 'close' are stable states, others are intermediate
 export type SheetState =
@@ -58,7 +56,7 @@ export const useBottomSheet = (
   const [dragStart, setDragStart] = useState(undefined as
     undefined|{ pointerId: number, clientY: number, height: number, timestamp: number }
   )
-  const [receivedSheetState, _setReceivedSheetState] = useState({
+  const [receivedSheetState, setReceivedSheetState] = useState({
     frameH: 0,
     sheetH: 0,
     headerH: 0,
@@ -67,32 +65,57 @@ export const useBottomSheet = (
   })
   
   
-  const updateReceivedSheetState = useCallback(()=>{
-    const frameD = new GetDimensions(bottomSheetFrameRef.current!)
-    const headerD = new GetDimensions(bottomSheetHeaderRef.current!)
-    const sheetD = new GetDimensions(bottomSheetRef.current!)
-    const contentD = new GetDimensions(bottomSheetContentRef.current!)
-    _setReceivedSheetState({
-      frameH: frameD.heightRounded,
-      sheetH: sheetD.heightRounded,
-      headerH: headerD.heightRounded,
-      contentH: contentD.heightRounded,
-      headerAndContentH: headerD.heightRounded+contentD.heightRounded,
-    })
-  },[bottomSheetFrameRef.current, bottomSheetRef.current])
+  const updateReceivedSheetState = useCallback(
+    ()=>{
+      const frame = bottomSheetFrameRef.current
+      const sheet = bottomSheetRef.current
+      const header = bottomSheetHeaderRef.current
+      const content = bottomSheetContentRef.current
+      if (frame && sheet && header && content){
+        const frameD = new GetDimensions(frame)
+        const sheetD = new GetDimensions(sheet)
+        const headerD = new GetDimensions(header)
+        const contentD = new GetDimensions(content)
+        setReceivedSheetState({
+          frameH: frameD.heightRounded,
+          sheetH: sheetD.heightRounded,
+          headerH: headerD.heightRounded,
+          contentH: contentD.heightRounded,
+          headerAndContentH: headerD.heightRounded+contentD.heightRounded,
+        })
+      }
+    },[
+      bottomSheetFrameRef.current,
+      bottomSheetRef.current,
+      bottomSheetHeaderRef.current,
+      bottomSheetContentRef.current,
+    ]
+  )
   
   
-  useLayoutEffect(()=>{
-    const container = bottomSheetFrameRef.current!
-    const header = bottomSheetHeaderRef.current!
-    const sheet = bottomSheetRef.current!
-    const resizeObserver = new ResizeObserver(()=>updateReceivedSheetState())
-    resizeObserver.observe(container)
-    resizeObserver.observe(sheet)
-    resizeObserver.observe(header)
-    updateReceivedSheetState()
-    return ()=>resizeObserver.disconnect()
-  },[bottomSheetFrameRef.current, bottomSheetRef.current, updateReceivedSheetState])
+  useLayoutEffect(
+    ()=>{
+      updateReceivedSheetState()
+      const frame = bottomSheetFrameRef.current
+      const sheet = bottomSheetRef.current
+      const header = bottomSheetHeaderRef.current
+      const content = bottomSheetContentRef.current
+      if (frame || sheet || header || content){
+        const resizeObserver = new ResizeObserver(()=>updateReceivedSheetState())
+        frame && resizeObserver.observe(frame)
+        sheet && resizeObserver.observe(sheet)
+        header && resizeObserver.observe(header)
+        content && resizeObserver.observe(content)
+        return ()=>resizeObserver.disconnect()
+      }
+    },[
+      bottomSheetFrameRef.current,
+      bottomSheetRef.current,
+      bottomSheetHeaderRef.current,
+      bottomSheetContentRef.current,
+      updateReceivedSheetState,
+    ]
+  )
   
   
   const stopCurrentAction = useCallback(()=>{
@@ -201,7 +224,7 @@ export const useBottomSheet = (
           setLastSpeed(undefined)
         }
       }
-  },
+    },
     [bottomSheetRef.current, animationDuration, setState, lastSpeed]
   )
   
@@ -296,7 +319,6 @@ export const useBottomSheet = (
   useLayoutEffect(reactOnState,[state,snapIdx])
   
   
-  const movementTime = 200
   const movementRef = useRef([] as Array<{ clientY: number, timestamp: number }>)
   const resetAndAddMovement = useCallback(
     (ev: { clientY: number, timeStamp: number })=>{
@@ -370,18 +392,17 @@ export const useBottomSheet = (
         checkAndAddMovement(ev)
         
         {
-          let speed = 0 // % высоты экрана в секунду
+          let speed = 0 // % высоты viewport в секунду
           const mvs = movementRef.current
-          console.log('mvs',mvs)
+          //console.log('mvs',mvs)
           if (mvs.length>=2){
             let i = mvs.length-2
-            const direction = function(){
-              for(; i>=0; i--){
-                const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
-                if (d!==0) return d
-              }
-              return 0
-            }()
+            let direction = 0
+            for(; i>=0; i--){
+              const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
+              if (!direction && d) direction = d
+              else if (direction && d && d!==direction) break
+            }
             if (direction){
               for(; i>=0; i--){
                 const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
@@ -392,7 +413,7 @@ export const useBottomSheet = (
             }
           }
           movementRef.current = []
-          console.log('speed',speed)
+          //console.log('speed',speed)
           
           if (Math.abs(speed)>60){
             setLastSpeed(speed)
@@ -453,7 +474,7 @@ export const useBottomSheet = (
     if (sheet){
       sheet.style.height = newSheetStyle.height+'px'
     }
-  },[bottomSheetRef.current,newSheetStyle])
+  },[bottomSheetRef.current, newSheetStyle])
   
   
   // forbid content selection for all elements while dragging

@@ -3,6 +3,8 @@
   margin: 0;
   padding: 0;
   background: none;
+  /* disable highlight when tapping on mobile devices */
+  -webkit-tap-highlight-color: transparent;
 }
 
 

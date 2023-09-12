@@ -34,6 +34,12 @@ import { useFailureDelay } from 'src/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import RootRoutes = AppRoutes.RootRoutes;
+import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
+import { FormPage } from '../../components/Page/FormPage';
+import PageContent = FormPage.PageContent;
+import { ScrollbarOverlayStyle } from '../../components/ScrollbarOverlay/ScrollbarOverlayStyle';
+import ScrollbarOverlay from '../../components/ScrollbarOverlay/ScrollbarOverlay';
+import Page = FormPage.Page;
 
 
 
@@ -182,69 +188,57 @@ const LoginPage = () => {
   }
   
   return <Page>
-    <Form onSubmit={onSubmit}>
-      
-      <h3 css={formHeader}>Вход</h3>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'login'}
-        errorPropName={'hasError'} // todo
-      >
-        <Input
-          css={InputStyle.input}
-          placeholder='логин (email)'
-        />
-      </InputValidationWrap>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'pwd'}
-        errorPropName={'hasError'} // todo
-      >
-        <PwdInput
-          css={InputStyle.input}
-          placeholder='пароль'
-        />
-      </InputValidationWrap>
-      
-      <Button
-        css={ButtonStyle.primary}
-        type='submit'>
-        Войти
-      </Button>
-      
-      
-      <Link to={RootRoutes.signup.fullPath({ returnPath: returnPath })}>
-        <Button
-          css={ButtonStyle.secondary}>
-          Зарегистрироваться
-        </Button>
-      </Link>
-      
-    </Form>
+    <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+      <PageContent>
+        <Form onSubmit={onSubmit}>
+          
+          <h3 css={formHeader}>Вход</h3>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'login'}
+            errorPropName={'hasError'} // todo
+          >
+            <Input
+              css={InputStyle.input}
+              placeholder='логин (email)'
+            />
+          </InputValidationWrap>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'pwd'}
+            errorPropName={'hasError'} // todo
+          >
+            <PwdInput
+              css={InputStyle.input}
+              placeholder='пароль'
+            />
+          </InputValidationWrap>
+          
+          <Button
+            css={ButtonStyle.primary}
+            type='submit'>
+            Войти
+          </Button>
+          
+          
+          <Link to={RootRoutes.signup.fullPath({ returnPath: returnPath })}>
+            <Button
+              css={ButtonStyle.secondary}>
+              Зарегистрироваться
+            </Button>
+          </Link>
+          
+        </Form>
+      </PageContent>
+    </ScrollbarOverlay>
   </Page>
 }
 
 export default LoginPage
 
 
-
-
-const Page = styled.main`
-  width: 100%;
-  min-width: 200px;
-  min-height: 100%;
-  height: fit-content;
-  ${center};
-  padding: 32px;
-  background: linear-gradient(
-          to bottom right,
-          ${p=>p.theme.page.bgc[0]} 0%,
-          ${p=>p.theme.page.bgc[1]} 40% 60%,
-          ${p=>p.theme.page.bgc[0]} 100%
-  );
-`
 
 const Form = styled.form`
   max-width: 500px;

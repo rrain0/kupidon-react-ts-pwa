@@ -8,6 +8,8 @@ import { ToastContainer } from 'react-toastify'
 import center = EmotionCommon.center
 import AppRouting from './AppRouting'
 import AppPage from './AppPage'
+import { ReactUtils } from '../../utils/ReactUtils';
+import ReactMemoTyped = ReactUtils.ReactMemoTyped;
 
 
 
@@ -64,7 +66,7 @@ function App() {
     
   </ThemeProvider>
 }
-export default App
+export default ReactMemoTyped(App)
 
 
 

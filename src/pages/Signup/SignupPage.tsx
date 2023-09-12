@@ -46,6 +46,11 @@ import RootRoutes = AppRoutes.RootRoutes;
 import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
 import { PinkGrainyGradientBgc } from '../../styles/bgc/PinkGrainyGradientBgc';
 import { themeNameFromState, ThemeRecoil } from '../../recoil/state/ThemeRecoil';
+import { FormPage } from '../../components/Page/FormPage';
+import Page = FormPage.Page;
+import ScrollbarOverlay from '../../components/ScrollbarOverlay/ScrollbarOverlay';
+import { ScrollbarOverlayStyle } from '../../components/ScrollbarOverlay/ScrollbarOverlayStyle';
+import PageContent = FormPage.PageContent;
 
 
 
@@ -73,14 +78,6 @@ export const SignupDefaults = function(){
 
 
 const SignupPage = () => {
-  
-  const [theme, setTheme] = useRecoilState(ThemeRecoil)
-  let themeName = themeNameFromState(theme)
-  if (themeName==='Light Pink') themeName = 'Light Pink 2'
-  if (themeName==='Dark') themeName = 'Dark 2'
-  const themeObj = Theme.themeByName(themeName)!
-  
-  
   
   const id = useId()
   
@@ -213,150 +210,127 @@ const SignupPage = () => {
     setError: setSignupFailure,
     setValues: setSignupForm,
   }
-  const [enableCard, setEnableCard] = useState(true)
   
-  return <ThemeProvider theme={themeObj}><Page>
-    <div
-      css={css`
-        position: fixed;
-        top: 0; left: 0;
-        padding: 10px;
-        gap: 10px;
-        ${row};
-        place-items: start;
-        z-index: 1;
-      `}
-    >
-      <button onClick={()=>setEnableCard(!enableCard)}>Включить карточку</button>
-    </div>
-    <div
-      css={t=>css`
-        ${ enableCard
-          ? center
-          : css`display: contents;`
-        }
-        background: ${t.page.bgc[1]}77;
-        padding: 20px;
-        border-radius: 16px;
-        margin: -20px;
-      `}
-    >
-    <Form onSubmit={onSubmit}>
-      
-      <h3 css={formHeader}>Регистрация</h3>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'email'}
-        errorPropName={'hasError'} // todo
-      >
-        <Input
-          css={InputStyle.input}
-          placeholder='email (логин)'
-        />
-      </InputValidationWrap>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'pwd'}
-        errorPropName={'hasError'} // todo
-      >
-        <PwdInput
-          css={InputStyle.input}
-          placeholder='пароль'
-        />
-      </InputValidationWrap>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'repeatPwd'}
-        errorPropName={'hasError'} // todo
-      >
-        <PwdInput
-          css={InputStyle.input}
-          placeholder='повторите пароль'
-        />
-      </InputValidationWrap>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'firstName'}
-        errorPropName={'hasError'} // todo
-      >
-        <Input
-          css={InputStyle.input}
-          placeholder='имя'
-        />
-      </InputValidationWrap>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'lastName'}
-        errorPropName={'hasError'} // todo
-      >
-        <Input
-          css={InputStyle.input}
-          placeholder='фамилия'
-        />
-      </InputValidationWrap>
-      
-      <InputValidationWrap
-        {...validationProps}
-        fieldName={'birthDate'}
-        errorPropName={'hasError'} // todo
-      >
-        <Input
-          css={InputStyle.input}
-          placeholder='день рождения (гггг-ММ-дд) (2002-01-01)'
-        />
-      </InputValidationWrap>
-      
-      
-      
-      <fieldset
-        css={radioGroupCss}
-        data-error={trueOrUndef(signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow)}>
-        
-        <RadioInputValidationWrap
-          {...validationProps}
-          fieldName={'sex'}
-          errorPropName={'hasError'} // todo
-        >
-          <RadioInput
-            css={RadioInputStyle.input}
-            name={`${id}-radio-group-sex`}
-            value="MALE"
+  
+  return <Page>
+    <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+      <PageContent>
+        <Form onSubmit={onSubmit}>
+          
+          <h3 css={formHeader}>Регистрация</h3>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'email'}
+            errorPropName={'hasError'} // todo
           >
-            <div>Я парень</div>
-          </RadioInput>
-        </RadioInputValidationWrap>
-        
-        <RadioInputValidationWrap
-          {...validationProps}
-          fieldName={'sex'}
-          errorPropName={'hasError'} // todo
-        >
-          <RadioInput
-            css={RadioInputStyle.input}
-            name={`${id}-radio-group-sex`}
-            value="FEMALE"
+            <Input
+              css={InputStyle.input}
+              placeholder='email (логин)'
+            />
+          </InputValidationWrap>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'pwd'}
+            errorPropName={'hasError'} // todo
           >
-            <div>Я девушка</div>
-          </RadioInput>
-        </RadioInputValidationWrap>
-        
-      </fieldset>
-      
-      <Button
-        css={ButtonStyle.primary}
-        type='submit'>
-        Зарегистрироваться
-      </Button>
-      
-    </Form>
-    </div>
-    
-  </Page></ThemeProvider>
+            <PwdInput
+              css={InputStyle.input}
+              placeholder='пароль'
+            />
+          </InputValidationWrap>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'repeatPwd'}
+            errorPropName={'hasError'} // todo
+          >
+            <PwdInput
+              css={InputStyle.input}
+              placeholder='повторите пароль'
+            />
+          </InputValidationWrap>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'firstName'}
+            errorPropName={'hasError'} // todo
+          >
+            <Input
+              css={InputStyle.input}
+              placeholder='имя'
+            />
+          </InputValidationWrap>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'lastName'}
+            errorPropName={'hasError'} // todo
+          >
+            <Input
+              css={InputStyle.input}
+              placeholder='фамилия'
+            />
+          </InputValidationWrap>
+          
+          <InputValidationWrap
+            {...validationProps}
+            fieldName={'birthDate'}
+            errorPropName={'hasError'} // todo
+          >
+            <Input
+              css={InputStyle.input}
+              placeholder='день рождения (гггг-ММ-дд) (2002-01-01)'
+            />
+          </InputValidationWrap>
+          
+          
+          
+          <fieldset
+            css={radioGroupCss}
+            data-error={trueOrUndef(signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow)}>
+            
+            <RadioInputValidationWrap
+              {...validationProps}
+              fieldName={'sex'}
+              errorPropName={'hasError'} // todo
+            >
+              <RadioInput
+                css={RadioInputStyle.input}
+                name={`${id}-radio-group-sex`}
+                value="MALE"
+              >
+                <div>Я парень</div>
+              </RadioInput>
+            </RadioInputValidationWrap>
+            
+            <RadioInputValidationWrap
+              {...validationProps}
+              fieldName={'sex'}
+              errorPropName={'hasError'} // todo
+            >
+              <RadioInput
+                css={RadioInputStyle.input}
+                name={`${id}-radio-group-sex`}
+                value="FEMALE"
+              >
+                <div>Я девушка</div>
+              </RadioInput>
+            </RadioInputValidationWrap>
+            
+          </fieldset>
+          
+          <Button
+            css={ButtonStyle.primary}
+            type='submit'>
+            Зарегистрироваться
+          </Button>
+          
+        </Form>
+      </PageContent>
+    </ScrollbarOverlay>
+  </Page>
 }
 
 export default SignupPage
@@ -364,13 +338,6 @@ export default SignupPage
 
 
 
-const Page = styled.main`
-  width: 100%;
-  min-height: 100%; height: fit-content;
-  ${center};
-  padding: 32px;
-  ${p=>PinkGrainyGradientBgc(p.theme)};
-`
 
 
 const Form = styled.form`

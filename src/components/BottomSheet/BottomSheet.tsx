@@ -1,30 +1,43 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import col = EmotionCommon.col
 import { SheetSnapPoints, SheetState, useBottomSheet } from './useBottomSheet'
 import React, {
   useEffect,
   useMemo,
-  useRef,
-  useState
+  useState,
 } from 'react'
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import { ReactUtils } from 'src/utils/ReactUtils'
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import { Utils } from '../../utils/Utils';
+import empty = Utils.empty;
 
 
+/*
+  todo
+   1) 'fit-header'
+   2) sort of 'fit-content' / 'fit-header'
+   3) free height between two snap points
+*/
 
-export type BottomSheetProps = {
+
+export type BottomSheetRefsProps = {
+  bottomSheetFrameRef: React.RefObject<HTMLElement>
+  bottomSheetRef: React.RefObject<HTMLElement>
+  bottomSheetHeaderRef: React.RefObject<HTMLElement>
+  bottomSheetContentRef: React.RefObject<HTMLElement>
+  draggableElements: React.RefObject<HTMLElement>[]
+}
+export type BottomSheetOptionsProps = {
   state: SheetState
   snapIdx: number
   setState: (action: SheetState)=>void
   setSnapIdx: (snapIdx: number)=>void
-  animationDuration: number
+  animationDuration?: number|empty
   snapPoints: SheetSnapPoints
-  setAnimationDuration: (value: number)=>void
-  
-  setSelectedItem: (value: string)=>void
+  children?: React.ReactNode
 }
+export type BottomSheetProps = BottomSheetRefsProps & BottomSheetOptionsProps
 const BottomSheet = (props: BottomSheetProps) => {
   let {
     state,
@@ -33,16 +46,13 @@ const BottomSheet = (props: BottomSheetProps) => {
     snapPoints,
     snapIdx,
     setSnapIdx,
-    setAnimationDuration,
-    setSelectedItem,
+    bottomSheetFrameRef,
+    bottomSheetRef,
+    bottomSheetHeaderRef,
+    bottomSheetContentRef,
+    draggableElements,
   } = props
   
-  
-  
-  const bottomSheetFrameRef = useRef<HTMLDivElement>(null)
-  const bottomSheetRef = useRef<HTMLDivElement>(null)
-  const bottomSheetHeaderRef = useRef<HTMLDivElement>(null)
-  const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
   
   const { receivedSheetState, snapPointsPx } = useBottomSheet(
@@ -50,11 +60,11 @@ const BottomSheet = (props: BottomSheetProps) => {
     bottomSheetRef,
     bottomSheetHeaderRef,
     bottomSheetContentRef,
-    [bottomSheetHeaderRef],
+    draggableElements,
     {
       state: state,
       setState: setState,
-      animationDuration,
+      animationDuration: animationDuration,
       snapPoints: snapPoints,
       snapIdx: snapIdx,
       setSnapIdx: setSnapIdx,
@@ -80,13 +90,37 @@ const BottomSheet = (props: BottomSheetProps) => {
   },[snapPointsPx,openSnapIdx])
   
   
+  /*
+  // Frame Pointer Events processing
+  const [framePointer, setFramePointer] = useState(
+    undefined as undefined|{ pointerId: number }
+  )
+  const onFramePointerDown = useCallback(
+    (ev: React.PointerEvent)=>{
+      if (ev.buttons===1){
+        setFramePointer({ pointerId: ev.pointerId })
+      }
+    },
+    []
+  )
+  const onFramePointerEnd = useCallback(
+    (ev: React.PointerEvent)=>{
+      if (framePointer?.pointerId===ev.pointerId){
+        setFramePointer(undefined)
+        setState('closing')
+      }
+    },
+    [framePointer]
+  )
+  */
+  
   
   
   return <div // Frame
     css={css`
       position: fixed;
       inset: 0;
-      ${!['closing','closed'].includes(state)
+      ${!['closed'].includes(state)
         ? css`
           pointer-events: auto;
           background: #000000${bgcDimHex};
@@ -104,15 +138,20 @@ const BottomSheet = (props: BottomSheetProps) => {
 
       //touch-action: none;
     `}
-    ref={bottomSheetFrameRef}
-    onPointerUp={(ev)=>{
-      // todo
-      setState('closing')
-    }}
+    ref={bottomSheetFrameRef as any}
+    onClick={ev=>setState('closing')}
+    /*onPointerDown={onFramePointerDown}
+    onPointerUp={onFramePointerEnd}
+    onPointerCancel={onFramePointerEnd}*/
   >
-    <div
+    <div // Pointer & Wheel events consumer
       css={css`display: contents;`}
-      onPointerUp={ev => ev.stopPropagation()}
+      onPointerDown={ev=>ev.stopPropagation()}
+      onPointerMove={ev=>ev.stopPropagation()}
+      onPointerUp={ev=>ev.stopPropagation()}
+      onPointerCancel={ev=>ev.stopPropagation()}
+      onClick={ev=>ev.stopPropagation()}
+      onWheel={ev=>ev.stopPropagation()}
     >
       <div // Bottom Sheet
         css={css`
@@ -120,104 +159,20 @@ const BottomSheet = (props: BottomSheetProps) => {
           grid-template-rows: auto 1fr;
           justify-items: stretch;
           width: 100%;
-          border-radius: 16px 16px 0 0;
-          overflow: hidden;
+          //overflow: hidden;
 
           will-change: height; // Must be
-          touch-action: none; // Must be
+          // Must be to prevent browser gesture handling on mobile devices
+          touch-action: none;
           max-height: 100%; // Must be
         `}
-        ref={bottomSheetRef} // Must be
+        ref={bottomSheetRef as any} // Must be
       >
         
+        { props.children }
         
-        <div // Header Component
-          // Must be without margins!!!
-          css={t=>css`
-            background: ${t.page.bgc3[0]};
-            color: ${t.page.text[0]};
-            padding: 10px;
-            ${col};
-            align-items: center;
-            gap: 6px;
-          `}
-          ref={bottomSheetHeaderRef}
-        >
-          <div
-            css={t=>css`
-              width: 60px;
-              height: 4px;
-              border-radius: 2px;
-              background: ${t.page.bgc3[1]};
-              ${state==='dragging' && css`background: ${t.page.text[0]};`}
-            `}
-          />
-          <div>Header</div>
-        </div>
-        
-        
-        
-        
-        
-        <div // Body Component
-          // Must be without margins & paddings!!!
-          css={t=>css`
-            display: flex;
-            place-items: center;
-            overflow: hidden;
-            background: ${t.page.bgc3[0]};
-            color: ${t.page.text[0]};
-          `}
-        >
-          
-          
-          <ScrollbarOverlay
-            css={ScrollbarOverlayStyle.page}
-            showVertical={
-              !['opening','closing','open','close','closed'].includes(state)
-            }
-          >
-          
-            <div // scrollable content
-              // Must be without margins!!!
-              css={css`
-                width: 100%;
-                padding: 10px;
-                ${col};
-                gap: 10px;
-                height: fit-content;
-                min-height: fit-content;
-              `}
-              ref={bottomSheetContentRef}
-            >
-              
-              {
-                [...Array(16).keys()]
-                  .map(i=>
-                    <div
-                      css={css`
-                        cursor: pointer;
-                      `}
-                      key={i}
-                      onClick={()=>{
-                        setSelectedItem(`Item ${i+1}`)
-                        setState('closing')
-                      }}
-                    >
-                      Item {i+1}
-                    </div>
-                  )
-              }
-            </div>
-          
-          
-          </ScrollbarOverlay>
-          
-          
-        </div>
-      
       </div>
     </div>
   </div>
 }
-export default BottomSheet
+export default ReactMemoTyped(BottomSheet)

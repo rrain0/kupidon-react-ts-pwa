@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
@@ -12,6 +12,9 @@ import { Utils } from 'src/utils/Utils'
 import Setter = Utils.Setter
 import styled from '@emotion/styled'
 import BottomSheet from 'src/components/BottomSheet/BottomSheet'
+import intOrDefault = Utils.nonNegIntOrDefault;
+import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 
 
 
@@ -20,6 +23,10 @@ import BottomSheet from 'src/components/BottomSheet/BottomSheet'
 const BottomSheetTestPage = ()=>{
   
   
+  const bottomSheetFrameRef = useRef<HTMLDivElement>(null)
+  const bottomSheetRef = useRef<HTMLDivElement>(null)
+  const bottomSheetHeaderRef = useRef<HTMLDivElement>(null)
+  const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
   const [state, setState] =
     useState<SheetState>('closed')
@@ -28,7 +35,7 @@ const BottomSheetTestPage = ()=>{
   const [snapIdx,setSnapIdx] =
     useState(2)
   const [animationDuration, setAnimationDuration] =
-    useState(300)
+    useState(400)
   const openSnapIdx = useMemo(()=>{
     let openIdx = snapPoints.findIndex(it=>it==='fit-content')
     if (openIdx===-1) openIdx = snapPoints.length-1
@@ -36,6 +43,7 @@ const BottomSheetTestPage = ()=>{
   },[snapPoints])
   
   
+  const [itemsCnt, setItemsCnt] = useState(12)
   
   const [selectedItem, setSelectedItem] = useState('Выберите')
   
@@ -47,6 +55,21 @@ const BottomSheetTestPage = ()=>{
       <div css={css`height: 200px;`}/>
       
       <div>Bottom Sheet Test Page</div>
+      
+      <div
+        css={css`
+          ${row};
+          gap: 10px;
+        `}
+      >
+        <div>Number of items:</div>
+        <OverlayInput
+          value={itemsCnt}
+          onChange={ev=>{
+            setItemsCnt(intOrDefault(ev.target.value,12))
+          }}
+        />
+      </div>
       
       
       <div
@@ -68,6 +91,22 @@ const BottomSheetTestPage = ()=>{
         {selectedItem}
       </div>
       
+      {
+        [...Array(itemsCnt).keys()]
+          .map(i=><div
+            css={css`
+                      cursor: pointer;
+                    `}
+            key={i}
+            onClick={()=>{
+              setSelectedItem(`Item ${i+1}`)
+              setState('closing')
+            }}
+          >
+            Item {i+1}
+          </div>)
+      }
+      
       
       
       <div css={css`height: 1000px;`}/>
@@ -75,15 +114,90 @@ const BottomSheetTestPage = ()=>{
       
       
       <BottomSheet
+        bottomSheetFrameRef={bottomSheetFrameRef}
+        bottomSheetRef={bottomSheetRef}
+        bottomSheetHeaderRef={bottomSheetHeaderRef}
+        bottomSheetContentRef={bottomSheetContentRef}
+        draggableElements={[bottomSheetHeaderRef]}
         state={state}
         setState={setState}
         animationDuration={animationDuration}
         snapPoints={snapPoints}
         snapIdx={snapIdx}
         setSnapIdx={setSnapIdx}
-        setAnimationDuration={setAnimationDuration}
-        setSelectedItem={setSelectedItem}
-      />
+      >
+        <div // Header Component
+          // Must be without margins!!!
+          css={t=>css`
+            background: ${t.page.bgc3[0]};
+            border-radius: 16px 16px 0 0;
+            color: ${t.page.text[0]};
+            padding: 10px;
+            ${col};
+            align-items: center;
+            gap: 6px;
+          `}
+          ref={bottomSheetHeaderRef as any}
+        >
+          <div
+            css={t=>css`
+              width: 60px;
+              height: 4px;
+              border-radius: 2px;
+              background: ${t.page.bgc3[1]};
+              ${state==='dragging' && css`background: ${t.page.text[0]};`}
+            `}
+          />
+          <div>Header</div>
+        </div>
+        
+        <div // Body Component
+          // Must be without margins & paddings!!!
+          css={t=>css`
+            display: flex;
+            place-items: center;
+            overflow: hidden;
+            background: ${t.page.bgc3[0]};
+            color: ${t.page.text[0]};
+          `}
+        >
+          <ScrollbarOverlay
+            css={ScrollbarOverlayStyle.page}
+            showVertical={
+              !['opening','closing','open','close','closed'].includes(state)
+            }
+          >
+            <div // scrollable content
+              // Must be without margins!!!
+              css={css`
+                width: 100%;
+                padding: 10px;
+                ${col};
+                gap: 10px;
+                height: fit-content;
+                min-height: fit-content;
+              `}
+              ref={bottomSheetContentRef as any}
+            >
+              {
+                [...Array(itemsCnt).keys()]
+                  .map(i=><div
+                    css={css`
+                      cursor: pointer;
+                    `}
+                    key={i}
+                    onClick={()=>{
+                      setSelectedItem(`Item ${i+1}`)
+                      setState('closing')
+                    }}
+                  >
+                    Item {i+1}
+                  </div>)
+              }
+            </div>
+          </ScrollbarOverlay>
+        </div>
+      </BottomSheet>
       
       
       <BottomSheetControlOverlay
@@ -94,6 +208,8 @@ const BottomSheetTestPage = ()=>{
         setSnapIdx={setSnapIdx}
         animationDuration={animationDuration}
         setAnimationDuration={setAnimationDuration}
+        itemsCnt={itemsCnt}
+        setItemsCnt={setItemsCnt}
       />
       
     </PageContent>
@@ -112,6 +228,8 @@ const BottomSheetControlOverlay = (props:{
   setSnapIdx: Setter<number>
   animationDuration: number
   setAnimationDuration: Setter<number>
+  itemsCnt: number
+  setItemsCnt: Setter<number>
 })=>{
   return <div
     css={t=>css`
@@ -162,7 +280,8 @@ const BottomSheetControlOverlay = (props:{
           gap: 10px;
         `}
     >
-      { props.snapPoints.map((sp, i) => <OverlayButton
+      { props.snapPoints.map((sp, i)=><OverlayButton
+        key={sp}
         onClick={() => {
           props.setState('snap')
           props.setSnapIdx(i)
@@ -179,7 +298,8 @@ const BottomSheetControlOverlay = (props:{
         gap: 10px;
       `}
     >
-      { props.snapPoints.map((sp, i) => <OverlayButton
+      { props.snapPoints.map((sp, i)=><OverlayButton
+        key={sp}
         onClick={() => {
           props.setState('snapping')
           props.setSnapIdx(i)
@@ -192,17 +312,35 @@ const BottomSheetControlOverlay = (props:{
     
     <div
       css={css`
-          ${row};
-          gap: 10px;
-        `}
+        ${row};
+        gap: 10px;
+      `}
     >
       <div>Animation duration ms:</div>
       <OverlayInput
         value={props.animationDuration}
         onChange={ev=>{
-          let value = +ev.target.value
-          if (isNaN(value) || value < 0) value = 3000
-          props.setAnimationDuration(value)
+          props.setAnimationDuration(
+            intOrDefault(ev.target.value,400)
+          )
+        }}
+      />
+    </div>
+    
+    
+    <div
+      css={css`
+        ${row};
+        gap: 10px;
+      `}
+    >
+      <div>Number of items:</div>
+      <OverlayInput
+        value={props.itemsCnt}
+        onChange={ev=>{
+          props.setItemsCnt(
+            intOrDefault(ev.target.value,12)
+          )
         }}
       />
     </div>

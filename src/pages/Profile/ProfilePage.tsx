@@ -11,17 +11,22 @@ import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
 import { Theme } from 'src/theme/Theme'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import rowWrap = EmotionCommon.rowWrap
 import { ProfileMockData } from './MockData'
 import BottomSheet from 'src/components/BottomSheet/BottomSheet'
-import pinkGradientGrainyBgc from 'src/res/img/bgc/beautiful pink gradient with grainy effect DOUBLED.png'
 import { SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
-import noise from 'src/res/img/effect/noise.svg'
-import { PinkGrainyGradientBgc } from '../../styles/bgc/PinkGrainyGradientBgc';
-import { ScrollbarOverlayStyle } from '../../components/ScrollbarOverlay/ScrollbarOverlayStyle';
-import ScrollbarOverlay from '../../components/ScrollbarOverlay/ScrollbarOverlay';
+import { PinkGrainyGradientBgc } from 'src/styles/bgc/PinkGrainyGradientBgc'
+import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
+import BottomSheetBasic from '../../components/BottomSheet/BottomSheetBasic';
+import { ReactUtils } from '../../utils/ReactUtils';
+import ReactMemoTyped = ReactUtils.ReactMemoTyped;
+import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
+import { FormPage } from '../../components/Page/FormPage';
+import Page = FormPage.Page;
+import PageContent = FormPage.PageContent;
 
 
 
@@ -49,27 +54,55 @@ function ProfilePage(){
     }
   }
   
-  const [bottomSheetState, setBottomSheetState] =
-    useState<SheetState>('closed')
-  const [bottomSheetSnapPoints, setBottomSheetSnapPoints] =
-    useState<SheetSnapPoints>([0,200,'fit-content','50%','80%'])
-  const [snapIdx,setSnapIdx] =
-    useState(2)
-  const [animationDuration, setAnimationDuration] =
-    useState(300)
   
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
   }
   
   
-  const [selectedItem, setSelectedItem] = useState('Выберите')
+  
+  const [bottomSheetState, setBottomSheetState] =
+    useState<SheetState>('closed')
+  const [bottomSheetSnapPoints, setBottomSheetSnapPoints] =
+    useState<SheetSnapPoints>([0,200,'fit-content','50%','80%'])
+  const [snapIdx,setSnapIdx] =
+    useState(2)
+  const openIdx = 2
+  
+  
+  const [selectedItem, setSelectedItem] = useState('Select Item')
+  const [peopleIPrefer, setPeopleIPrefer] = useState('Не выбрано')
+  const [selecting, setSelecting] = useState(
+    undefined as undefined|'items'|'people-i-prefer'
+  )
+  useEffect(()=>{
+    if (selecting){
+      setBottomSheetState('opening')
+      setSnapIdx(openIdx)
+    }
+  },[selecting])
+  useEffect(()=>{
+    if (bottomSheetState==='closed'){
+      setSelecting(undefined)
+    }
+  },[bottomSheetState])
+  
+  
+  const bottomSheetProps = {
+    state: bottomSheetState,
+    setState: setBottomSheetState,
+    snapPoints: bottomSheetSnapPoints,
+    snapIdx: snapIdx,
+    setSnapIdx: setSnapIdx,
+    setSelectedItem: setSelectedItem,
+  }
+  
+  
   
   
   const [images, setImages] = useState(ProfileMockData.userImages)
   
-  
-  
+  // todo вынести в ProfileRouting
   if (!auth || auth.user.id!==urlUserId) return <Navigate to={
     RootRoutes.login.fullPath({
       returnPath: RootRoutes.profile.fullPath3({ urlSearchParams: searchParams })
@@ -77,9 +110,7 @@ function ProfilePage(){
   }/>
   
   return <Page>
-    <ScrollbarOverlay
-      css={ScrollbarOverlayStyle.page}
-    >
+    <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
       <PageContent>
         <Form onSubmit={onSubmit}>
           
@@ -135,8 +166,14 @@ function ProfilePage(){
             ) }
           </div>
           
+          
+          
           <div
-            css={t=>css`
+            css={css`display: contents;`}
+          >
+            
+            <div
+              css={t=>css`
               width: 200px;
               height: 50px;
               border-radius: 16px;
@@ -146,17 +183,107 @@ function ProfilePage(){
               align-items: center;
               cursor: pointer;
             `}
-            onClick={ev=>{
-              //ev.preventDefault()
-              setBottomSheetState('opening')
-              let openIdx = bottomSheetSnapPoints
-                .findIndex(it => it === 'fit-content')
-              if (openIdx === -1) openIdx = bottomSheetSnapPoints.length-1
-              setSnapIdx(openIdx)
-            }}
-          >
-            {selectedItem}
+              onClick={ev=>{
+                setSelecting('items')
+              }}
+            >
+              {selectedItem}
+            </div>
+            
+            { selecting==='items' && <BottomSheetBasic
+              {...bottomSheetProps}
+              header={'Select Item'}
+            >
+              <div
+                css={css`
+                  ${col};
+                  gap: 10px;
+                `}
+              >
+                {
+                  [...Array(12).keys()]
+                    .map(i => <div
+                      css={css`
+                        cursor: pointer;
+                      `}
+                      key={i}
+                      onClick={() => {
+                        setSelectedItem(`Item ${i + 1}`)
+                        setBottomSheetState('closing')
+                      }}
+                    >
+                      Item {i + 1}
+                    </div>)
+                }
+              </div>
+            </BottomSheetBasic>}
+            
           </div>
+          
+          
+          
+          <div
+            css={css`display: contents;`}
+          >
+            
+            <div
+              css={css`
+                ${col};
+                gap: 10px;
+              `}
+            >
+              <div>
+                Я ищу
+              </div>
+              
+              <div
+                css={t => css`
+                  width: 200px;
+                  height: 50px;
+                  border-radius: 16px;
+                  border: 2px solid ${t.page.text[0]};
+                  ${row};
+                  padding: 0 10px;
+                  align-items: center;
+                  cursor: pointer;
+                `}
+                onClick={ev => {
+                  setSelecting('people-i-prefer')
+                }}
+              >
+                {peopleIPrefer}
+              </div>
+              
+              {selecting==='people-i-prefer' && <BottomSheetBasic
+                {...bottomSheetProps}
+                header={'Я ищу'}
+              >
+                <div
+                  css={css`
+                    ${col};
+                    gap: 10px;
+                  `}
+                >
+                  {
+                    ['Не выбрано','Парней','Девушек','Парней и девушек']
+                      .map(v => <div
+                        css={css`
+                          cursor: pointer;
+                        `}
+                        key={v}
+                        onClick={() => {
+                          setPeopleIPrefer(v)
+                          setBottomSheetState('closing')
+                        }}
+                      >
+                        {v}
+                      </div>)
+                  }
+                </div>
+              </BottomSheetBasic>}
+            </div>
+          </div>
+          
           
           {/*<label>
             <div>Сесуальная ориентация</div>
@@ -200,50 +327,15 @@ function ProfilePage(){
           </button>
         </Form>
         
-        
-        <BottomSheet
-          state={bottomSheetState}
-          setState={setBottomSheetState}
-          animationDuration={animationDuration}
-          snapPoints={bottomSheetSnapPoints}
-          snapIdx={snapIdx}
-          setSnapIdx={setSnapIdx}
-          setAnimationDuration={setAnimationDuration}
-          setSelectedItem={setSelectedItem}
-        />
-        
-        
       </PageContent>
     </ScrollbarOverlay>
   </Page>
 }
 
-export default ProfilePage
+export default ReactMemoTyped(ProfilePage)
 
 
 
-
-
-const Page = styled.main`
-  position: fixed;
-  inset: 0;
-  //overflow: auto;
-  //overflow: hidden;
-`
-const PageContent = styled.div`
-  min-width: 200px; width: 100%;
-  min-height: 100%; height: fit-content;
-  ${center};
-  padding: 32px;
-
-  ${p=>PinkGrainyGradientBgc(p.theme)};
-
-    /*
-  background-image: url('${pinkGradientGrainyBgc}');
-  background-repeat: repeat-y;
-  background-size: 100% auto;
-  */
-`
 
 const Form = styled.form`
   max-width: 500px;

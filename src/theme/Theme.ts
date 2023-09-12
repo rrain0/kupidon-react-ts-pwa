@@ -62,7 +62,7 @@ export namespace Theme {
     name: 'Light Pink',
     
     page: {
-      bgc: ['#ffb6c1',/*whitesmoke*/'#f5f5f5'],
+      bgc: ['#ffaeba','#f0f0f0'],
       bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
       bgc3: ['#fff','#8b8b8b'],
       bgcPinkGradients: [
