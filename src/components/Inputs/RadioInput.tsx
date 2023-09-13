@@ -1,20 +1,20 @@
-import styled from "styled-components";
-import React, {useImperativeHandle, useRef} from "react";
-import {ReactUtils} from "src/utils/ReactUtils";
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
-import classNames from "classnames";
-import {Utils} from "src/utils/Utils";
-import empty = Utils.empty;
-import {StyledCommon} from "src/styles/StyledCommon";
-import resetInput = StyledCommon.resetInput;
-import abs = StyledCommon.abs;
-import row = StyledCommon.row;
-import trueOrUndef = Utils.trueOrUndef;
-import resetButton = StyledCommon.resetButton;
-import { SimpleSvgIcons } from '../icons/SimpleSvgIcons';
-import RadioActiveIc = SimpleSvgIcons.RadioActiveIc;
-import RadioInactiveIc = SimpleSvgIcons.RadioInactiveIc;
-import Ripple, { RippleProps, RippleRef } from '../Ripple/Ripple';
+import styled from "styled-components"
+import React, {useImperativeHandle, useRef} from "react"
+import {ReactUtils} from "src/utils/ReactUtils"
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import classNames from "classnames"
+import {Utils} from "src/utils/Utils"
+import empty = Utils.empty
+import {StyledCommon} from "src/styles/StyledCommon"
+import resetInput = StyledCommon.resetInput
+import abs = StyledCommon.abs
+import row = StyledCommon.row
+import trueOrUndef = Utils.trueOrUndef
+import resetButton = StyledCommon.resetButton
+import { SimpleSvgIcons } from 'src/components/icons/SimpleSvgIcons'
+import RadioActiveIc = SimpleSvgIcons.RadioActiveIc
+import Ripple, { RippleProps } from 'src/components/Ripple/Ripple'
+import RadioInactiveIc = SimpleSvgIcons.RadioInactiveIc
 
 
 
@@ -48,7 +48,6 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
   const inputRef = useRef<HTMLInputElement>(null)
   useImperativeHandle(forwardedRef, ()=>inputRef.current!,[])
   
-  const rippleRef = useRef<RippleRef>(null)
   
   
   return <Frame className={className} style={style}>
@@ -57,20 +56,6 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
       {...restProps}
       hasError={hasError}
       ref={inputRef}
-      onPointerDown={ev=>{
-        rippleRef.current?.showRipple(ev)
-        //ev.currentTarget.setPointerCapture(ev.pointerId) // prevents pointer lost when outside a view
-        restProps.onPointerDown?.(ev)
-      }}
-      onPointerUp={ev=>{
-        rippleRef.current?.hideRipple()
-        restProps.onPointerUp?.(ev)
-      }}
-      // 'out' is 'leave' + 'cancel'
-      onPointerOut={ev=>{
-        rippleRef.current?.hideRipple()
-        restProps.onPointerOut?.(ev)
-      }}
     />
     
     { startViews }
@@ -84,7 +69,7 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     
     <Border>
       <Ripple
-        ref={rippleRef}
+        targetElement={inputRef}
         mode={rippleMode}
         rippleDuration={rippleDuration}
       />

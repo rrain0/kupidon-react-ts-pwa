@@ -120,6 +120,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     css={css`
       position: fixed;
       inset: 0;
+      z-index: 2;
       ${!['closed'].includes(state)
         ? css`
           pointer-events: auto;

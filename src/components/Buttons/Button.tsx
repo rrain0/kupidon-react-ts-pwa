@@ -3,7 +3,7 @@ import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import {StyledCommon} from "src/styles/StyledCommon"
 import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
-import Ripple, { RippleProps, RippleRef } from 'src/components/Ripple/Ripple'
+import Ripple, { RippleProps } from 'src/components/Ripple/Ripple'
 import resetButton = StyledCommon.resetButton
 import centerAll = StyledCommon.centerAll
 import abs = StyledCommon.abs
@@ -12,6 +12,7 @@ import { Utils } from 'src/utils/Utils'
 import trueOrUndef = Utils.trueOrUndef
 import empty = Utils.empty
 import center = StyledCommon.center
+import row = StyledCommon.row;
 
 
 export type ButtonLightCherryProps = JSX.IntrinsicElements['button'] & {
@@ -29,33 +30,21 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
   const buttonRef = useRef<HTMLButtonElement>(null)
   useImperativeHandle(forwardedRef, ()=>buttonRef.current!,[])
   
-  const rippleRef = useRef<RippleRef>(null)
   
   
-  return <Button_ { ...restProps } ref={buttonRef} data-error={hasError}
-    onPointerDown={ev=>{
-      rippleRef.current?.showRipple(ev)
-      //ev.currentTarget.setPointerCapture(ev.pointerId) // prevents pointer lost when outside a view
-      restProps.onPointerDown?.(ev)
-    }}
-    onPointerUp={ev=>{
-      rippleRef.current?.hideRipple()
-      restProps.onPointerUp?.(ev)
-    }}
-    // 'out' is 'leave' + 'cancel'
-    onPointerOut={ev=>{
-      rippleRef.current?.hideRipple()
-      restProps.onPointerOut?.(ev)
-    }}
+  return <Button_
+    { ...restProps }
+    ref={buttonRef}
+    data-error={hasError}
   >
+    { children }
     <Border>
       <Ripple
-        ref={rippleRef}
+        targetElement={buttonRef}
         mode={rippleMode}
         rippleDuration={rippleDuration}
       />
     </Border>
-    { children }
   </Button_>
 })
 export default ReactMemoTyped(Button)
@@ -73,7 +62,9 @@ const Button_ = styled.button.attrs<Button_Props>(p=>({
   ${resetButton};
   width: 100%;
   position: relative;
-  ${center};
+  ${row};
+  place-content: center;
+  place-items: center;
   
   &:active, &:focus-visible {
     cursor: pointer;
@@ -91,7 +82,7 @@ const Button_ = styled.button.attrs<Button_Props>(p=>({
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder'),
 }))<{ 'data-error'?: boolean|undefined }>`
-  /*${abs};*/
+  ${abs};
   place-self: stretch;
   pointer-events: none;
   border-radius: inherit;

@@ -235,6 +235,7 @@ const BottomSheetControlOverlay = (props:{
     css={t=>css`
       position: fixed;
       top: 0; left: 0;
+      z-index: 2;
       ${col};
       background: ${t.page.bgc[0]}88;
     `}
