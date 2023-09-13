@@ -222,7 +222,7 @@ function ProfilePage(){
                           checked={v===preferredGenders}
                           value={v}
                           key={v}
-                          onClick={() => {
+                          onChange={ev=>{
                             setPreferredGenders(v)
                             setBottomSheetState('closing')
                           }}

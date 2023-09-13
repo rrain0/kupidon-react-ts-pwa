@@ -11,6 +11,9 @@ import fitRange = Utils.fitRange
 import empty = Utils.empty
 import inRange = Utils.inRange
 import { useNoSelect } from 'src/utils-react/useNoSelect'
+import { CssUtils } from '../../utils/CssUtils'
+import parseCssValue = CssUtils.parseCssStringValue
+import CssValue = CssUtils.CssValue
 
 
 
@@ -136,36 +139,33 @@ export const useBottomSheet = (
   },[options.snapPoints])
   const snapPointsPx = useMemo<number[]>(()=>{
     const snapPointsPx = snapPoints.map(it=>{
-      function parsingError(parsed: CSSStyleValue): never {
+      function parsingError(raw: string|number, parsed: CssValue|undefined): never {
         throw new Error(
-          "Supported units: 'px', '%', numbers (will be 'px'). " +
-          "Supported keywords: 'fit-content'. " +
-          `And your value: ${parsed.toString()}`
+          `Supported units: 'px', '%', numbers (will be 'px'), '' (will be 'px'). ` +
+          `Supported keywords: 'fit-content'. ` +
+          `And your input: raw: ${raw}, parsed: ${JSON.stringify(parsed)}`
         )
       }
-      const strValue = function(){
-        if (typeof it === 'number') return it+'px'
-        return it
-      }()
-      // todo - there will be exception if parsing failed
-      const parsed = CSSStyleValue.parse('height',strValue)
       
-      if (parsed instanceof CSSKeywordValue){
-        if (parsed.value==='fit-content') {
-          return receivedSheetState.headerAndContentH
+      const cssValue = parseCssValue(it+'')
+      if (cssValue && 'keyword' in cssValue){
+        switch (cssValue.keyword){
+          case 'fit-content': return receivedSheetState.headerAndContentH
+          default: parsingError(it,cssValue)
         }
-        parsingError(parsed)
       }
-      else if (parsed instanceof CSSUnitValue){
-        if (parsed.unit==='px') return parsed.value
-        if (parsed.unit==='percent') return fitRange(
-          0,
-          Math.round(parsed.value/100*receivedSheetState.frameH),
-          receivedSheetState.frameH
-        )
-        parsingError(parsed)
+      if (cssValue && 'value' in cssValue){
+        switch (cssValue.unit){
+          case 'px': case undefined: return +cssValue.value
+          case '%': return fitRange(
+            0,
+            Math.round(+cssValue.value/100*receivedSheetState.frameH),
+            receivedSheetState.frameH
+          )
+          default: parsingError(it,cssValue)
+        }
       }
-      else parsingError(parsed)
+      parsingError(it,cssValue)
     })
     snapPoints.forEach((it,i)=>{
       if (inRange(1,i,snapPoints.length-2) && it==='fit-content')
