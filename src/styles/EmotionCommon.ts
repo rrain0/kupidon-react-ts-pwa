@@ -1,4 +1,4 @@
-import { css } from "@emotion/react"
+import { css, SerializedStyles } from '@emotion/react'
 
 
 export namespace EmotionCommon {
@@ -77,6 +77,11 @@ export namespace EmotionCommon {
   `
   
   
+  export const onHover = (cssStyle: SerializedStyles)=>css`
+    @media not (hover: none) { :hover {
+      ${cssStyle};
+    } }
+  `
   
   
   

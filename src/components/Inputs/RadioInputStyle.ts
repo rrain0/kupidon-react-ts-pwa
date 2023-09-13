@@ -5,7 +5,7 @@ import { Theme } from 'src/theme/Theme';
 
 export namespace RadioInputStyle {
   
-  export const input = (t: Theme.Theme) => css`
+  export const radio = (t: Theme.Theme) => css`
     &.rrainuiFrame {
       --active-icon-color: ${t.button.primary.bgc}
       --inactive-icon-color: ${t.button.primary.bgc}

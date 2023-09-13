@@ -1,10 +1,10 @@
-import React, { useImperativeHandle, useRef } from "react";
-import {GetDimensions} from "src/utils/GetDimensions";
+import React, { useImperativeHandle, useRef } from "react"
+import {GetDimensions} from "src/utils/GetDimensions"
 import css from './Ripple.module.scss'
-import {Utils} from "src/utils/Utils";
-import empty = Utils.empty;
-import {ReactUtils} from "src/utils/ReactUtils";
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
+import {Utils} from "src/utils/Utils"
+import empty = Utils.empty
+import {ReactUtils} from "src/utils/ReactUtils"
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 

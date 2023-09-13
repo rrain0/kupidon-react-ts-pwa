@@ -1,8 +1,11 @@
 import { css } from '@emotion/react'
 import { Theme } from 'src/theme/Theme'
+import { EmotionCommon } from '../../styles/EmotionCommon';
 
 
 export namespace ButtonStyle {
+  import onHover = EmotionCommon.onHover
+  
   
   const common = css`
     &.rrainuiButton {
@@ -30,9 +33,9 @@ export namespace ButtonStyle {
       :focus-visible {
         background: ${t.button.primary.active[0]};
       }
-      @media not (hover: none) { :hover {
-          background: ${t.button.primary.hover[0]};
-      } }
+      ${onHover(css`
+        background: ${t.button.primary.hover[0]};
+      `)};
 
       :disabled {
         background: ${t.button.primary.disabled.bgc[0]};

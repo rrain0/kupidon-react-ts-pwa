@@ -25,6 +25,11 @@ import PageContent = FormPage.PageContent
 import ProfileImages from './ProfileImages'
 import DataField from '../../components/DataField/DataField';
 import { DataFieldStyle } from '../../components/DataField/DataFieldStyle';
+import RadioInput from '../../components/Inputs/RadioInput';
+import { RadioInputStyle } from '../../components/Inputs/RadioInputStyle';
+import Card from '../../components/Card';
+import Button from '../../components/Buttons/Button';
+import { ButtonStyle } from '../../components/Buttons/ButtonStyle';
 
 
 
@@ -121,85 +126,32 @@ function ProfilePage(){
           />
           
           
-          
-          <div
-            css={css`display: contents;`}
-          >
-            
-            <div
-              css={t=>css`
-              width: 200px;
-              height: 50px;
-              border-radius: 16px;
-              border: 2px solid ${t.page.text[0]};
-              ${row};
-              padding: 0 10px;
-              align-items: center;
-              cursor: pointer;
-            `}
-              onClick={ev=>{
-                setSelecting('items')
-              }}
+          <Card>
+            <fieldset
+              css={css`display: contents;`}
             >
-              {selectedItem}
-            </div>
-            
-            { selecting==='items' && <BottomSheetBasic
-              {...bottomSheetProps}
-              header={'Select Item'}
-            >
+              
               <div
-                css={css`
-                  ${col};
-                  gap: 10px;
+                css={t => css`
+                  width: 200px;
+                  height: 50px;
+                  border-radius: 16px;
+                  border: 2px solid ${t.page.text[0]};
+                  ${row};
+                  padding: 0 10px;
+                  align-items: center;
+                  cursor: pointer;
                 `}
+                onClick={ev => {
+                  setSelecting('items')
+                }}
               >
-                {
-                  [...Array(12).keys()]
-                    .map(i => <div
-                      css={css`
-                        cursor: pointer;
-                      `}
-                      key={i}
-                      onClick={() => {
-                        setSelectedItem(`Item ${i + 1}`)
-                        setBottomSheetState('closing')
-                      }}
-                    >
-                      Item {i + 1}
-                    </div>)
-                }
-              </div>
-            </BottomSheetBasic>}
-            
-          </div>
-          
-          
-          
-          <div
-            css={css`display: contents;`}
-          >
-            
-            <div
-              css={css`
-                ${col};
-                gap: 10px;
-              `}
-            >
-              <div>
-                Я ищу
+                {selectedItem}
               </div>
               
-              <DataField
-                css={DataFieldStyle.dataField}
-                onClick={ev=>setSelecting('preferred-genders')}
-              >
-                {preferredGenders}
-              </DataField>
-              
-              {selecting==='preferred-genders' && <BottomSheetBasic
+              {selecting === 'items' && <BottomSheetBasic
                 {...bottomSheetProps}
-                header={'Я ищу'}
+                header={'Select Item'}
               >
                 <div
                   css={css`
@@ -208,57 +160,110 @@ function ProfilePage(){
                   `}
                 >
                   {
-                    ['Не выбрано','Парней','Девушек','Парней и девушек']
-                      .map(v => <div
+                    [...Array(12).keys()]
+                      .map(i => <div
                         css={css`
                           cursor: pointer;
                         `}
-                        key={v}
+                        key={i}
                         onClick={() => {
-                          setPreferredGenders(v)
+                          setSelectedItem(`Item ${i + 1}`)
                           setBottomSheetState('closing')
                         }}
                       >
-                        {v}
+                        Item {i + 1}
                       </div>)
                   }
                 </div>
               </BottomSheetBasic>}
-            </div>
-          </div>
+            
+            </fieldset>
           
+            
+            <fieldset
+              css={css`display: contents;`}
+            >
+              
+              <div
+                css={css`
+                  ${col};
+                  gap: 10px;
+                `}
+              >
+                <div>
+                  Я ищу
+                </div>
+                
+                <DataField
+                  css={DataFieldStyle.dataField}
+                  onClick={ev=>setSelecting('preferred-genders')}
+                  role='listbox'
+                >
+                  {preferredGenders}
+                </DataField>
+                
+                {selecting==='preferred-genders' && <BottomSheetBasic
+                  {...bottomSheetProps}
+                  header={'Я ищу'}
+                >
+                  <div
+                    css={css`
+                      ${col};
+                      padding-bottom: 20px;
+                    `}
+                  >
+                    {
+                      ['Не выбрано','Парней','Девушек','Парней и девушек']
+                        .map(v=><RadioInput
+                          css={RadioInputStyle.radio}
+                          childrenPosition='start'
+                          role='option'
+                          aria-selected={v===preferredGenders}
+                          checked={v===preferredGenders}
+                          value={v}
+                          key={v}
+                          onClick={() => {
+                            setPreferredGenders(v)
+                            setBottomSheetState('closing')
+                          }}
+                        >
+                          <div
+                            css={css`
+                              flex: 1;
+                              padding-top: 4px;
+                              padding-bottom: 4px;
+                            `}
+                          >{v}</div>
+                        </RadioInput>)
+                    }
+                    
+                  </div>
+                </BottomSheetBasic>}
+              </div>
+            </fieldset>
+            
+            
+            <InfoItem>id: {auth.user.id}</InfoItem>
+            <InfoItem>email: {auth.user.email}</InfoItem>
+            <InfoItem>email верифицирован: {auth.user.emailVerified+''}</InfoItem>
+            <InfoItem>создан: {new Date(auth.user.created)+''}</InfoItem>
+            <InfoItem>обновлён: {new Date(auth.user.updated)+''}</InfoItem>
+            <InfoItem>Имя: {auth.user.firstName}</InfoItem>
+            <InfoItem>Фамилия: {auth.user.lastName}</InfoItem>
+            <InfoItem>Дата рождения: {auth.user.birthDate}</InfoItem>
+            <InfoItem>Пол: {auth.user.sex==='MALE' ? 'М' : 'Ж'}</InfoItem>
+          </Card>
           
-          <InfoItem>id: {auth.user.id}</InfoItem>
-          <InfoItem>email: {auth.user.email}</InfoItem>
-          <InfoItem>email верифицирован: {auth.user.emailVerified+''}</InfoItem>
-          <InfoItem>создан: {new Date(auth.user.created)+''}</InfoItem>
-          <InfoItem>обновлён: {new Date(auth.user.updated)+''}</InfoItem>
-          <InfoItem>Имя: {auth.user.firstName}</InfoItem>
-          <InfoItem>Фамилия: {auth.user.lastName}</InfoItem>
-          <InfoItem>Дата рождения: {auth.user.birthDate}</InfoItem>
-          <InfoItem>Пол: {auth.user.sex==='MALE' ? 'М' : 'Ж'}</InfoItem>
-          <button
+          <Button css={ButtonStyle.primary}
             onClick={update}
-            css={css`
-              width: 100%;
-              height: 40px;
-              font: 500 10px/129% Roboto;
-              color: white;
-            `}
           >
             Обновить
-          </button>
-          <button
+          </Button>
+          <Button css={ButtonStyle.primary}
             onClick={logout}
-            css={css`
-              width: 100%;
-              height: 40px;
-              font: 500 10px/129% Roboto;
-              color: white;
-            `}
           >
             Выйти
-          </button>
+          </Button>
         </Form>
         
       </PageContent>

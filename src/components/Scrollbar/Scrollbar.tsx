@@ -268,7 +268,7 @@ const ScrollbarTrack = ReactMemoTyped(
     &[data-direction=vertical]{ width: 10px; height: 100%; }
     &[data-direction=horizontal]{ width: 100%; height: 10px; }
     background: rgba(248,248,248,0.35);
-    border-radius: 15px;
+    border-radius: 50%;
   `
 )
 

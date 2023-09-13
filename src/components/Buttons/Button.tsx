@@ -1,16 +1,17 @@
-import {ReactUtils} from "src/utils/ReactUtils";
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
+import {ReactUtils} from "src/utils/ReactUtils"
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import {StyledCommon} from "src/styles/StyledCommon"
-import React, { useImperativeHandle, useRef } from "react";
-import classNames from "classnames";
-import Ripple, { RippleProps, RippleRef } from 'src/components/Ripple/Ripple';
-import resetButton = StyledCommon.resetButton;
-import center = StyledCommon.center;
-import abs = StyledCommon.abs;
-import styled from 'styled-components';
-import { Utils } from 'src/utils/Utils';
-import trueOrUndef = Utils.trueOrUndef;
-import empty = Utils.empty;
+import React, { useImperativeHandle, useRef } from "react"
+import classNames from "classnames"
+import Ripple, { RippleProps, RippleRef } from 'src/components/Ripple/Ripple'
+import resetButton = StyledCommon.resetButton
+import centerAll = StyledCommon.centerAll
+import abs = StyledCommon.abs
+import styled from 'styled-components'
+import { Utils } from 'src/utils/Utils'
+import trueOrUndef = Utils.trueOrUndef
+import empty = Utils.empty
+import center = StyledCommon.center
 
 
 export type ButtonLightCherryProps = JSX.IntrinsicElements['button'] & {
@@ -64,10 +65,10 @@ export default ReactMemoTyped(Button)
 type Button_Props = {
   'data-error'?: boolean|empty
 }
-export const Button_ = styled.button.attrs<Button_Props>(p=>({
+const Button_ = styled.button.attrs<Button_Props>(p=>({
   className:    classNames(p.className,'rrainuiButton'),
   'data-error': trueOrUndef(p['data-error']),
-  type:         p.type ||= 'button',
+  type:         p.type || 'button',
 }))`
   ${resetButton};
   width: 100%;
@@ -77,11 +78,9 @@ export const Button_ = styled.button.attrs<Button_Props>(p=>({
   &:active, &:focus-visible {
     cursor: pointer;
   }
-  @media not (hover: none) {
-    &:hover {
-      cursor: pointer;
-    }
-  }
+  @media not (hover: none) {  &:hover {
+    cursor: pointer;
+  } }
   &:disabled {
     cursor: auto;
   }
@@ -92,7 +91,8 @@ export const Button_ = styled.button.attrs<Button_Props>(p=>({
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder'),
 }))<{ 'data-error'?: boolean|undefined }>`
-  ${abs};
+  /*${abs};*/
+  place-self: stretch;
   pointer-events: none;
   border-radius: inherit;
 `

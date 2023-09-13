@@ -297,7 +297,7 @@ const SignupPage = () => {
               errorPropName={'hasError'} // todo
             >
               <RadioInput
-                css={RadioInputStyle.input}
+                css={RadioInputStyle.radio}
                 name={`${id}-radio-group-sex`}
                 value="MALE"
               >
@@ -311,7 +311,7 @@ const SignupPage = () => {
               errorPropName={'hasError'} // todo
             >
               <RadioInput
-                css={RadioInputStyle.input}
+                css={RadioInputStyle.radio}
                 name={`${id}-radio-group-sex`}
                 value="FEMALE"
               >

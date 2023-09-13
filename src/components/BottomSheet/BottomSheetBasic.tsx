@@ -84,7 +84,7 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
       `}
     >
       <ScrollbarOverlay
-        css={ScrollbarOverlayStyle.page}
+        css={ScrollbarOverlayStyle.list}
         showVertical={
           !['opening','closing','open','close','closed'].includes(state)
         }

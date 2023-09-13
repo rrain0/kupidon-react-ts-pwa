@@ -65,6 +65,9 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
     
     <div
       css={css`
+        // todo remove - conflicts with relative button with absolute positioned ripple
+        position: relative; z-index: 1;
+        
         place-self: stretch;
         display: grid;
         pointer-events: none;
