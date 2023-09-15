@@ -147,6 +147,24 @@ export namespace EmotionCommon {
       display: none;
     }
   `
+  
+  
+  
+  
+  
+  export const textNormal1 = css`
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 129%;
+  `
+  
+  export const textSmall1 = css`
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 129%;
+  `
+  
+  
 }
 
 

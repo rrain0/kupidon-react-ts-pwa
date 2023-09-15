@@ -15,12 +15,12 @@ import trueOrUndef = Utils.trueOrUndef
 
 
 
-export type DataFieldProps = JSX.IntrinsicElements['label'] & {
+export type DataFieldProps = JSX.IntrinsicElements['div'] & {
   hasError?: boolean|empty
   children?: React.ReactNode
 }
 
-const DataField = React.forwardRef<HTMLLabelElement, DataFieldProps>((
+const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   props, forwardedRef
 ) => {
   let {
@@ -30,7 +30,7 @@ const DataField = React.forwardRef<HTMLLabelElement, DataFieldProps>((
   } = props
   
   
-  const labelRef = useRef<HTMLLabelElement>(null)
+  const labelRef = useRef<HTMLDivElement>(null)
   useImperativeHandle(forwardedRef, ()=>labelRef.current!,[])
   
   
@@ -53,7 +53,7 @@ export default ReactMemoTyped(DataField)
 type FrameProps = {
   hasError?: boolean | empty
 }
-const Frame = styled.label.attrs<FrameProps>(p=>({
+const Frame = styled.div.attrs<FrameProps>(p=>({
   className: classNames(p.className,'rrainuiFrame'),
   'data-error': trueOrUndef(p.hasError),
 }))`
@@ -61,7 +61,6 @@ const Frame = styled.label.attrs<FrameProps>(p=>({
   align-items: center;
   width: 100%;
   position: relative;
-  cursor: pointer;
 `
 
 

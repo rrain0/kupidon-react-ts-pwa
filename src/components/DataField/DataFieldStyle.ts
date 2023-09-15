@@ -5,18 +5,20 @@ import { Theme } from 'src/theme/Theme'
 
 export namespace DataFieldStyle {
   
-  export const dataField = (t: Theme.Theme) => css`
+  export const interactive = (t: Theme.Theme) => css`
     &.rrainuiFrame {
+      cursor: pointer;
       border-radius: 15px;
       background: ${t.input.bgc};
       &[data-error]{
         background: ${t.input.error.bgc};
       }
       width: 100%;
-      height: 50px;
-      padding-right: 16px;
-      padding-left: 16px;
-      font: 500 18px/150% Roboto;
+      min-height: 50px;
+      padding: 4px 16px;
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 150%;
       letter-spacing: 0.05em;
       color: ${t.input.text};
     }
@@ -54,6 +56,20 @@ export namespace DataFieldStyle {
       background-position: 0 0;
     }
     &[data-error]>.rrainuiBorder{}
+  `
+  
+  
+  
+  export const statik = (t: Theme.Theme) => css`
+    ${interactive(t)};
+    &.rrainuiFrame {
+      cursor: auto;
+      color: ${t.input.text};
+    }
+    
+    >.rrainuiBorder {
+      border: 2px solid ${t.page.text[0]};
+    }
   `
   
   

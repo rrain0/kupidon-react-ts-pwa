@@ -23,13 +23,19 @@ import { FormPage } from 'src/components/Page/FormPage'
 import Page = FormPage.Page
 import PageContent = FormPage.PageContent
 import ProfileImages from './ProfileImages'
-import DataField from '../../components/DataField/DataField';
-import { DataFieldStyle } from '../../components/DataField/DataFieldStyle';
-import RadioInput from '../../components/Inputs/RadioInput';
-import { RadioInputStyle } from '../../components/Inputs/RadioInputStyle';
-import Card from '../../components/Card';
-import Button from '../../components/Buttons/Button';
-import { ButtonStyle } from '../../components/Buttons/ButtonStyle';
+import DataField from 'src/components/DataField/DataField'
+import { DataFieldStyle } from 'src/components/DataField/DataFieldStyle'
+import RadioInput from 'src/components/Inputs/RadioInput'
+import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle'
+import Card from 'src/components/Card'
+import Button from 'src/components/Buttons/Button'
+import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
+import textNormal = EmotionCommon.textNormal1
+import textSmall1 = EmotionCommon.textSmall1
+import { SimpleSvgIcons } from '../../components/icons/SimpleSvgIcons'
+import FloppyDiskIc = SimpleSvgIcons.FloppyDiskIc
+import center = EmotionCommon.center
+import FloppyDisk2Ic = SimpleSvgIcons.FloppyDisk2Ic
 
 
 
@@ -64,40 +70,37 @@ function ProfilePage(){
   
   
   
-  const [bottomSheetState, setBottomSheetState] =
-    useState<SheetState>('closed')
-  const [bottomSheetSnapPoints, setBottomSheetSnapPoints] =
-    useState<SheetSnapPoints>([0,200,'fit-content','50%','80%'])
-  const [snapIdx,setSnapIdx] =
-    useState(2)
+  const [sheetState, setSheetState] = useState<SheetState>('closed')
+  const [sheetSnaps, setSheetSnaps] = useState<SheetSnapPoints>(
+    [0,200,'fit-content','50%','80%']
+  )
+  const [snapIdx,setSnapIdx] = useState(2)
   const openIdx = 2
   
   
-  const [selectedItem, setSelectedItem] = useState('Select Item')
   const [preferredGenders, setPreferredGenders] = useState('Не выбрано')
   const [selecting, setSelecting] = useState(
     undefined as undefined|'items'|'preferred-genders'
   )
   useEffect(()=>{
     if (selecting){
-      setBottomSheetState('opening')
+      setSheetState('opening')
       setSnapIdx(openIdx)
     }
   },[selecting])
   useEffect(()=>{
-    if (bottomSheetState==='closed'){
+    if (sheetState==='closed'){
       setSelecting(undefined)
     }
-  },[bottomSheetState])
+  },[sheetState])
   
   
   const bottomSheetProps = {
-    state: bottomSheetState,
-    setState: setBottomSheetState,
-    snapPoints: bottomSheetSnapPoints,
+    state: sheetState,
+    setState: setSheetState,
+    snapPoints: sheetSnaps,
     snapIdx: snapIdx,
     setSnapIdx: setSnapIdx,
-    setSelectedItem: setSelectedItem,
   }
   
   
@@ -127,143 +130,175 @@ function ProfilePage(){
           
           
           <Card>
-            <fieldset
-              css={css`display: contents;`}
-            >
+            
               
-              <div
-                css={t => css`
-                  width: 200px;
-                  height: 50px;
-                  border-radius: 16px;
-                  border: 2px solid ${t.page.text[0]};
-                  ${row};
-                  padding: 0 10px;
-                  align-items: center;
-                  cursor: pointer;
-                `}
-                onClick={ev => {
-                  setSelecting('items')
-                }}
+            <ItemContainer>
+              <ItemLabel>id</ItemLabel>
+              <DataField css={[
+                DataFieldStyle.statik,
+                css`&.rrainuiFrame{
+                  ${textSmall1};
+                }`
+              ]}
               >
-                {selectedItem}
+                {auth.user.id}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Email</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {auth.user.email}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Email верифицирован</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {auth.user.emailVerified ? 'да' : 'нет'}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Пользователь создан</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {new Date(auth.user.created)+''}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Пользователь обновлён</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {new Date(auth.user.updated)+''}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Имя</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {auth.user.firstName}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Фамилия</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {auth.user.lastName}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Дата рождения</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {auth.user.birthDate}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Пол</ItemLabel>
+              <DataField css={DataFieldStyle.statik}>
+                {auth.user.sex==='MALE' ? 'Мужской' : 'Женский'}
+              </DataField>
+            </ItemContainer>
+            
+            <ItemContainer>
+              <ItemLabel>Обо мне</ItemLabel>
+              <div>{'<'}добавить textarea для ввода{'>'}</div>
+            </ItemContainer>
+            
+            
+            <ItemContainer>
+              <div
+                css={css`
+                  ${row};
+                  gap: 6px;
+                `}
+              >
+                <ItemLabel>Я ищу</ItemLabel>
+                { preferredGenders!=='Не выбрано' && <div
+                  css={t => css`
+                    ${center};
+                    border-radius: 50%;
+                    height: 1.5em;
+                    padding: 0.27em;
+                    aspect-ratio: 1;
+                    background: ${t.icon.warning.bgc[0]};
+                  `}
+                >
+                  <FloppyDisk2Ic
+                    css={t => css`svg&{ --icon-color: ${t.icon.warning.color[0]} }`}
+                  />
+                </div>}
               </div>
               
-              {selecting === 'items' && <BottomSheetBasic
+              <DataField
+                css={DataFieldStyle.interactive}
+                onClick={ev=>setSelecting('preferred-genders')}
+                role='listbox'
+              >
+                {preferredGenders}
+              </DataField>
+              
+              {selecting==='preferred-genders' && <BottomSheetBasic
                 {...bottomSheetProps}
-                header={'Select Item'}
+                header={'Я ищу'}
               >
                 <div
                   css={css`
                     ${col};
-                    gap: 10px;
+                    padding-bottom: 20px;
                   `}
                 >
                   {
-                    [...Array(12).keys()]
-                      .map(i => <div
-                        css={css`
-                          cursor: pointer;
-                        `}
-                        key={i}
-                        onClick={() => {
-                          setSelectedItem(`Item ${i + 1}`)
-                          setBottomSheetState('closing')
+                    ['Не выбрано','Парней','Девушек','Парней и девушек']
+                      .map(v=><RadioInput
+                        css={RadioInputStyle.radio}
+                        childrenPosition='start'
+                        role='option'
+                        aria-selected={v===preferredGenders}
+                        checked={v===preferredGenders}
+                        value={v}
+                        key={v}
+                        onChange={ev=>{
+                          setPreferredGenders(v)
+                          setSheetState('closing')
                         }}
                       >
-                        Item {i + 1}
-                      </div>)
+                        <div
+                          css={css`
+                            flex: 1;
+                            padding-top: 4px;
+                            padding-bottom: 4px;
+                          `}
+                        >{v}</div>
+                      </RadioInput>)
                   }
+                  
                 </div>
               </BottomSheetBasic>}
+            </ItemContainer>
             
-            </fieldset>
-          
-            
-            <fieldset
-              css={css`display: contents;`}
-            >
-              
-              <div
-                css={css`
-                  ${col};
-                  gap: 10px;
-                `}
-              >
-                <div>
-                  Я ищу
-                </div>
-                
-                <DataField
-                  css={DataFieldStyle.dataField}
-                  onClick={ev=>setSelecting('preferred-genders')}
-                  role='listbox'
-                >
-                  {preferredGenders}
-                </DataField>
-                
-                {selecting==='preferred-genders' && <BottomSheetBasic
-                  {...bottomSheetProps}
-                  header={'Я ищу'}
-                >
-                  <div
-                    css={css`
-                      ${col};
-                      padding-bottom: 20px;
-                    `}
-                  >
-                    {
-                      ['Не выбрано','Парней','Девушек','Парней и девушек']
-                        .map(v=><RadioInput
-                          css={RadioInputStyle.radio}
-                          childrenPosition='start'
-                          role='option'
-                          aria-selected={v===preferredGenders}
-                          checked={v===preferredGenders}
-                          value={v}
-                          key={v}
-                          onChange={ev=>{
-                            setPreferredGenders(v)
-                            setBottomSheetState('closing')
-                          }}
-                        >
-                          <div
-                            css={css`
-                              flex: 1;
-                              padding-top: 4px;
-                              padding-bottom: 4px;
-                            `}
-                          >{v}</div>
-                        </RadioInput>)
-                    }
-                    
-                  </div>
-                </BottomSheetBasic>}
-              </div>
-            </fieldset>
-            
-            
-            <InfoItem>id: {auth.user.id}</InfoItem>
-            <InfoItem>email: {auth.user.email}</InfoItem>
-            <InfoItem>email верифицирован: {auth.user.emailVerified+''}</InfoItem>
-            <InfoItem>создан: {new Date(auth.user.created)+''}</InfoItem>
-            <InfoItem>обновлён: {new Date(auth.user.updated)+''}</InfoItem>
-            <InfoItem>Имя: {auth.user.firstName}</InfoItem>
-            <InfoItem>Фамилия: {auth.user.lastName}</InfoItem>
-            <InfoItem>Дата рождения: {auth.user.birthDate}</InfoItem>
-            <InfoItem>Пол: {auth.user.sex==='MALE' ? 'М' : 'Ж'}</InfoItem>
           </Card>
           
-          <Button css={ButtonStyle.primary}
-            onClick={update}
+          <div
+            css={css`
+              ${col};
+              gap: inherit;
+              padding: 0 12px;
+            `}
           >
-            Обновить
-          </Button>
-          <Button css={ButtonStyle.primary}
-            onClick={logout}
-          >
-            Выйти
-          </Button>
+            <Button css={ButtonStyle.primary}
+              onClick={update}
+            >
+              Обновить
+            </Button>
+            <Button css={ButtonStyle.primary}
+              onClick={logout}
+            >
+              Выйти
+            </Button>
+          </div>
+          
         </Form>
         
       </PageContent>
@@ -284,11 +319,23 @@ const Form = styled.form`
 `
 
 const formHeader = (theme: Theme.Theme) => css`
-  font: 500 28px/150% Roboto;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 150%;
   letter-spacing: 0.05em;
   color: ${theme.page.text[0]};
   align-self: center;
 `
+const ItemContainer = styled.div`
+  ${col};
+  gap: 10px;
+`
+const ItemLabel = styled.label`
+  padding-left: 16px;
+  ${textNormal};
+  color: ${p=>p.theme.page.text[0]}
+`
+
 
 
 const InfoItem = styled.div`

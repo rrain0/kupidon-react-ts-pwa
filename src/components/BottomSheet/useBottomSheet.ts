@@ -153,7 +153,7 @@ export const useBottomSheet = (
     if (!options.snapPoints || !options.snapPoints.length)
       return [0,'fit-content','50%']
     return options.snapPoints
-  },[options.snapPoints])
+  },[...(options.snapPoints??[])])
   
   const snapPointsPx = useMemo<number[]>(()=>{
     const allowedUnits = ['px','',undefined,'%']

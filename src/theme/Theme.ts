@@ -54,6 +54,12 @@ export namespace Theme {
       track: string[]
       thumb: string[]
     }
+    icon: {
+      warning: {
+        bgc: string[]
+        color: string[]
+      }
+    }
   }
   
   
@@ -114,7 +120,14 @@ export namespace Theme {
     scrollbar: {
       track: ['#25283622'],
       thumb: ['#25283644'],
-    }
+    },
+    
+    icon: {
+      warning: {
+        bgc: ['#000000'],
+        color: ['#fff200'],
+      }
+    },
   }
   
   
@@ -193,7 +206,14 @@ export namespace Theme {
     scrollbar: {
       track: ['#F8F8F822'],
       thumb: ['#F8F8F844'],
-    }
+    },
+    
+    icon: {
+      warning: {
+        bgc: ['#d0cb5d'],
+        color: ['#000000'],
+      }
+    },
   }
   
   

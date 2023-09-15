@@ -7,8 +7,8 @@ import React, { useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import center = EmotionCommon.center
-import { ReactUtils } from '../../utils/ReactUtils';
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
+import { ReactUtils } from 'src/utils/ReactUtils'
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
@@ -93,9 +93,8 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
           // Must be without margins!!!
           css={css`
             width: 100%;
-            padding: 10px;
+            padding: 0 10px 10px;
             ${col};
-            //gap: 10px;
             height: fit-content;
             min-height: fit-content;
           `}

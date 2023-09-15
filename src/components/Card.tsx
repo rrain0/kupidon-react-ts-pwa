@@ -13,7 +13,7 @@ const Card = React.forwardRef<HTMLDivElement,CardProps>(
     css={t=>css`
       ${col};
       gap: inherit;
-      padding: 16px;
+      padding: 12px;
       border-radius: 16px;
       background: ${t.page.bgc[1]}77;
     `}

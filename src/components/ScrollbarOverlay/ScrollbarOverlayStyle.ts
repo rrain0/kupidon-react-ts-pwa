@@ -19,13 +19,13 @@ export namespace ScrollbarOverlayStyle {
       }
       
       >.rrainuiScrollbarsContainer{
-        padding: 6px;
-        
-        /*
+        padding: 3px;
         >.rrainuiScrollbarTrack[data-direction=vertical]{
-        
+          width: 10px;
         }
-        */
+        >.rrainuiScrollbarTrack[data-direction=horizontal]{
+          height: 10px;
+        }
       }
     }
   `
