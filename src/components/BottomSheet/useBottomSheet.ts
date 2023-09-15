@@ -13,8 +13,14 @@ import { useNoSelect } from 'src/utils-react/useNoSelect'
 import { CssUtils } from 'src/utils/CssUtils'
 import parseCssValue = CssUtils.parseCssStringValue
 import CssValue = CssUtils.CssValue
+import inRangeExclusive = Utils.inRangeExclusive
 
 
+
+
+/*
+ maybe it’s worth adding the ability to go to a specific height, not just to snap point
+*/
 
 
 
@@ -151,7 +157,7 @@ export const useBottomSheet = (
   
   const snapPointsPx = useMemo<number[]>(()=>{
     const allowedUnits = ['px','',undefined,'%']
-    const allowedKeywords = ['fit-content','fit-header']
+    const allowedKeywords = ['fit-content','fit-header','free']
     const snapPointsCssValues = snapPoints.map(it=>{
       const cssValue = parseCssValue(it+'')
       if (
@@ -164,7 +170,7 @@ export const useBottomSheet = (
     
     const snapPointsPx: Array<number|undefined> = [...Array(snapPoints.length).keys()].map(it=>undefined)
     
-    ;[['px','',undefined],['%'],['fit-content','fit-header']].forEach(units=>{
+    ;[['px','',undefined],['%'],['fit-content','fit-header'],['free']].forEach(units=>{
       snapPointsCssValues.forEach((cssValue,cssValueI)=>{
         
         if (
@@ -179,6 +185,8 @@ export const useBottomSheet = (
                 return computedSheetDimens.headerAndContentH
               case 'fit-header':
                 return computedSheetDimens.headerH
+              case 'free':
+                return 0 // will be adjusted
               default:
                 cssValueParsingError(snapPoints[cssValueI], cssValue)
             }
@@ -458,22 +466,27 @@ export const useBottomSheet = (
               setState('closing')
             }
           } else {
-            let newSnapIdx = snapPointsPx.length-1
+            let snapStart: undefined|number = undefined
             for (let i = 0; i < snapPointsPx.length-1; i++) {
-              const threshold = Math.round((snapPointsPx[i]+snapPointsPx[i+1])/2)
-              if (newHeight<threshold) {
-                newSnapIdx = i
+              if (inRangeExclusive(snapPointsPx[i],newHeight,snapPointsPx[i+1])){
+                snapStart = i
                 break
               }
             }
-            setState('snapping')
-            setSnapIdx(newSnapIdx)
+            if (snapStart!==undefined && snapPoints[snapStart]!=='free'){
+              let snap = snapStart
+              const threshold = Math.round((snapPointsPx[snapStart]+snapPointsPx[snapStart+1])/2)
+              if (newHeight>threshold) snap = snapStart+1
+              setState('snapping')
+              setSnapIdx(snap)
+            } else {
+              setState('opened')
+            }
           }
         }
-        
       }
     },
-    [dragStart, setState, setSnapIdx, snapPointsPx]
+    [dragStart, setState, setSnapIdx, snapPoints, snapPointsPx]
   )
   
   
@@ -531,12 +544,14 @@ function cssValueParsingError(raw: string|number, parsed: CssValue|undefined): n
   throw new Error(
     `Supported units:
     ● 'px' - just raw pixels
-    ● '%' - % of height of element in frameRef
     ● numbers - will be 'px' - just raw pixels typeof number
     ● '' - empty string - will be 'px'
+    ● '%' - % of height of element in frameRef
     Supported keywords:
     ● 'fit-header' - height of element in headerRef
     ● 'fit-content' - height of element in headerRef + height of element in contentRef
+    ●  'free' - indicates that between prev & next snap point
+      bottom sheet won't be automatically snapped to nearest snap point after dragging
     And your input: {
       raw: ${raw},
       parsed: ${JSON.stringify(parsed)}

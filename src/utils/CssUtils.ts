@@ -4,7 +4,7 @@
 export namespace CssUtils {
   
   
-  const keywords = ['fit-header','fit-content']
+  const keywords = ['fit-header','fit-content','free']
   const units = ['%','px']
   const keywordPattern = `(?<keyword>${keywords.map(it=>`(${it})`).join('|')})`
   const numberPattern = `(?<number>(\\+|-)?((\\d)*\\.)?\\d+(e(\\+|-)?\\d+)?)`

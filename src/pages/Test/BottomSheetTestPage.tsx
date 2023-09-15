@@ -32,7 +32,7 @@ const BottomSheetTestPage = ()=>{
   const [state, setState] =
     useState<SheetState>('closed')
   const [snapPoints, setSnapPoints] = useState<SheetSnapPoints>(
-    ['0px','fit-header',200,'fit-content','50%','80%']
+    ['0px','fit-header',200,'fit-content','50%','free','80%']
   )
   const [snapIdx,setSnapIdx] =
     useState(2)
@@ -277,25 +277,13 @@ const BottomSheetControlOverlay = (props:{
       background: ${t.page.bgc[0]}88;
     `}
   >
+    
     <div
       css={css`
-        ${row};
-        gap: 10px;
+        ${rowWrap};
+        column-gap: 6px;
       `}
     >
-      <OverlayButton
-        onClick={()=>{
-          props.setState('opening')
-          props.setSnapIdx(props.openSnapIdx)
-        }}
-      >
-        Anim Open
-      </OverlayButton>
-      <OverlayButton
-        onClick={()=>props.setState('closing')}
-      >
-        Anim Close
-      </OverlayButton>
       <OverlayButton
         onClick={()=>{
           props.setState('open')
@@ -304,6 +292,15 @@ const BottomSheetControlOverlay = (props:{
       >
         Open
       </OverlayButton>
+      { props.snapPoints.map((sp, i)=><OverlayButton
+        key={sp}
+        onClick={() => {
+          props.setState('snap')
+          props.setSnapIdx(i)
+        }}
+      >
+        Snap to {sp}
+      </OverlayButton> )}
       <OverlayButton
         onClick={()=>props.setState('close')}
       >
@@ -314,28 +311,18 @@ const BottomSheetControlOverlay = (props:{
     
     <div
       css={css`
-          ${row};
-          gap: 10px;
-        `}
-    >
-      { props.snapPoints.map((sp, i)=><OverlayButton
-        key={sp}
-        onClick={() => {
-          props.setState('snap')
-          props.setSnapIdx(i)
-        }}
-      >
-        Snap to {sp}
-      </OverlayButton> )}
-    </div>
-    
-    
-    <div
-      css={css`
-        ${row};
-        gap: 10px;
+        ${rowWrap};
+        column-gap: 6px;
       `}
     >
+      <OverlayButton
+        onClick={()=>{
+          props.setState('opening')
+          props.setSnapIdx(props.openSnapIdx)
+        }}
+      >
+        Anim Open
+      </OverlayButton>
       { props.snapPoints.map((sp, i)=><OverlayButton
         key={sp}
         onClick={() => {
@@ -345,6 +332,11 @@ const BottomSheetControlOverlay = (props:{
       >
         Anim Snap to {sp}
       </OverlayButton> )}
+      <OverlayButton
+        onClick={()=>props.setState('closing')}
+      >
+        Anim Close
+      </OverlayButton>
     </div>
     
     
@@ -407,8 +399,9 @@ const BottomSheetControlOverlay = (props:{
 }
 
 const OverlayButton = styled.button`
-  width: 100%;
-  min-height: 30px;
+  flex: 1;
+  min-width: 60px;
+  height: 30px;
   font: 500 10px/129% Roboto;
   color: ${p=>p.theme.page.text[0]};
 `

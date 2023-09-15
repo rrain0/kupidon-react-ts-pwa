@@ -15,7 +15,7 @@ import Setter = Utils.Setter
 
 /*
   todo
-   1) free height between two snap points
+   1) free height between two snap points - 'free' snap point
 */
 
 

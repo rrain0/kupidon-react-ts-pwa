@@ -140,6 +140,10 @@ export namespace Utils {
     curr >= min && curr <= max;
   
   
+  export const inRangeExclusive = (min: number, curr: number, max: number) =>
+    curr > min && curr < max;
+  
+  
   export const nonNegIntOrDefault =
     (value: any, defolt: number): number => {
       value = +value
