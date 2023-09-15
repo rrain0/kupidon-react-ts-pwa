@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
-import { SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
+import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import row = EmotionCommon.row
@@ -15,6 +15,7 @@ import BottomSheet from 'src/components/BottomSheet/BottomSheet'
 import intOrDefault = Utils.nonNegIntOrDefault;
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import rowWrap = EmotionCommon.rowWrap
 
 
 
@@ -30,8 +31,9 @@ const BottomSheetTestPage = ()=>{
   
   const [state, setState] =
     useState<SheetState>('closed')
-  const [snapPoints, setSnapPoints] =
-    useState<SheetSnapPoints>([0,200,'fit-content','50%','80%'])
+  const [snapPoints, setSnapPoints] = useState<SheetSnapPoints>(
+    ['0px','fit-header',200,'fit-content','50%','80%']
+  )
   const [snapIdx,setSnapIdx] =
     useState(2)
   const [animationDuration, setAnimationDuration] =
@@ -42,6 +44,17 @@ const BottomSheetTestPage = ()=>{
     return openIdx
   },[snapPoints])
   
+  const [computedSheetDimens, setComputedSheetDimens] =
+    useState<ComputedBottomSheetDimens>({
+      frameH: 0,
+      sheetH: 0,
+      headerH: 0,
+      contentH: 0,
+      headerAndContentH: 0,
+    })
+  const [snapPointsPx, setSnapPointsPx] = useState(
+    undefined as number[] | undefined
+  )
   
   const [itemsCnt, setItemsCnt] = useState(12)
   
@@ -69,6 +82,26 @@ const BottomSheetTestPage = ()=>{
             setItemsCnt(intOrDefault(ev.target.value,12))
           }}
         />
+      </div>
+      
+      <div
+        css={css`
+        ${row};
+        gap: 10px;
+      `}
+      >
+        <div>Snap points:</div>
+        <div>{JSON.stringify(snapPoints)}</div>
+      </div>
+      
+      <div
+        css={css`
+          ${row};
+          gap: 10px;
+        `}
+      >
+        <div>Snap points px:</div>
+        <div>{JSON.stringify(snapPointsPx)}</div>
       </div>
       
       
@@ -125,6 +158,8 @@ const BottomSheetTestPage = ()=>{
         snapPoints={snapPoints}
         snapIdx={snapIdx}
         setSnapIdx={setSnapIdx}
+        setSnapPointsPx={setSnapPointsPx}
+        setComputedDimens={setComputedSheetDimens}
       >
         <div // Header Component
           // Must be without margins!!!
@@ -204,6 +239,7 @@ const BottomSheetTestPage = ()=>{
         state={state}
         setState={setState}
         snapPoints={snapPoints}
+        snapPointsPx={snapPointsPx}
         openSnapIdx={openSnapIdx}
         setSnapIdx={setSnapIdx}
         animationDuration={animationDuration}
@@ -224,6 +260,7 @@ const BottomSheetControlOverlay = (props:{
   state: SheetState
   setState: Setter<SheetState>
   snapPoints: SheetSnapPoints
+  snapPointsPx: number[] | undefined
   openSnapIdx: number
   setSnapIdx: Setter<number>
   animationDuration: number
@@ -313,37 +350,56 @@ const BottomSheetControlOverlay = (props:{
     
     <div
       css={css`
-        ${row};
+        ${rowWrap};
         gap: 10px;
       `}
     >
-      <div>Animation duration ms:</div>
-      <OverlayInput
-        value={props.animationDuration}
-        onChange={ev=>{
-          props.setAnimationDuration(
-            intOrDefault(ev.target.value,400)
-          )
-        }}
-      />
+      
+      <div
+        css={css`
+          ${row};
+          gap: 10px;
+        `}
+      >
+        <div>Animation duration ms:</div>
+        <OverlayInput
+          value={props.animationDuration}
+          onChange={ev=>{
+            props.setAnimationDuration(
+              intOrDefault(ev.target.value,400)
+            )
+          }}
+        />
+      </div>
+      
+      <div
+        css={css`
+          ${row};
+          gap: 10px;
+        `}
+      >
+        <div>Number of items:</div>
+        <OverlayInput
+          value={props.itemsCnt}
+          onChange={ev=>{
+            props.setItemsCnt(
+              intOrDefault(ev.target.value,12)
+            )
+          }}
+        />
+      </div>
     </div>
     
     
+      
     <div
       css={css`
         ${row};
         gap: 10px;
       `}
     >
-      <div>Number of items:</div>
-      <OverlayInput
-        value={props.itemsCnt}
-        onChange={ev=>{
-          props.setItemsCnt(
-            intOrDefault(ev.target.value,12)
-          )
-        }}
-      />
+      <div>State:</div>
+      <div>{props.state}</div>
     </div>
   
   
@@ -352,7 +408,7 @@ const BottomSheetControlOverlay = (props:{
 
 const OverlayButton = styled.button`
   width: 100%;
-  height: 30px;
+  min-height: 30px;
   font: 500 10px/129% Roboto;
   color: ${p=>p.theme.page.text[0]};
 `

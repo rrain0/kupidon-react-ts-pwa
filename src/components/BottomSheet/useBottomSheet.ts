@@ -9,9 +9,8 @@ import { GetDimensions } from 'src/utils/GetDimensions'
 import { Utils } from 'src/utils/Utils'
 import fitRange = Utils.fitRange
 import empty = Utils.empty
-import inRange = Utils.inRange
 import { useNoSelect } from 'src/utils-react/useNoSelect'
-import { CssUtils } from '../../utils/CssUtils'
+import { CssUtils } from 'src/utils/CssUtils'
 import parseCssValue = CssUtils.parseCssStringValue
 import CssValue = CssUtils.CssValue
 
@@ -21,6 +20,9 @@ import CssValue = CssUtils.CssValue
 
 const movementTime = 200
 const speedThreshold = 50 // % высоты viewport в секунду
+const defaultAutoAnimationDuration = 400
+
+
 
 // only 'open' & 'close' are stable states, others are intermediate
 export type SheetState =
@@ -37,6 +39,13 @@ export type SheetState =
   
   |'dragging' // user is dragging the sheet
 export type SheetSnapPoints = Array<number|string>
+export type ComputedBottomSheetDimens = {
+  frameH: number,
+  sheetH: number,
+  headerH: number,
+  contentH: number,
+  headerAndContentH: number,
+}
 
 export type UseBottomSheetOptions = {
   state: SheetState
@@ -60,16 +69,17 @@ export const useBottomSheet = (
   const [dragStart, setDragStart] = useState(undefined as
     undefined|{ pointerId: number, clientY: number, height: number, timestamp: number }
   )
-  const [receivedSheetState, setReceivedSheetState] = useState({
-    frameH: 0,
-    sheetH: 0,
-    headerH: 0,
-    contentH: 0,
-    headerAndContentH: 0,
-  })
+  const [computedSheetDimens, setComputedSheetDimens] =
+    useState<ComputedBottomSheetDimens>({
+      frameH: 0,
+      sheetH: 0,
+      headerH: 0,
+      contentH: 0,
+      headerAndContentH: 0,
+    })
   
   
-  const updateReceivedSheetState = useCallback(
+  const updateComputedSheetDimens = useCallback(
     ()=>{
       const frame = bottomSheetFrameRef.current
       const sheet = bottomSheetRef.current
@@ -80,7 +90,7 @@ export const useBottomSheet = (
         const sheetD = new GetDimensions(sheet)
         const headerD = new GetDimensions(header)
         const contentD = new GetDimensions(content)
-        setReceivedSheetState({
+        setComputedSheetDimens({
           frameH: frameD.heightRounded,
           sheetH: sheetD.heightRounded,
           headerH: headerD.heightRounded,
@@ -99,13 +109,13 @@ export const useBottomSheet = (
   
   useLayoutEffect(
     ()=>{
-      updateReceivedSheetState()
+      updateComputedSheetDimens()
       const frame = bottomSheetFrameRef.current
       const sheet = bottomSheetRef.current
       const header = bottomSheetHeaderRef.current
       const content = bottomSheetContentRef.current
       if (frame || sheet || header || content){
-        const resizeObserver = new ResizeObserver(()=>updateReceivedSheetState())
+        const resizeObserver = new ResizeObserver(()=>updateComputedSheetDimens())
         frame && resizeObserver.observe(frame)
         sheet && resizeObserver.observe(sheet)
         header && resizeObserver.observe(header)
@@ -117,7 +127,7 @@ export const useBottomSheet = (
       bottomSheetRef.current,
       bottomSheetHeaderRef.current,
       bottomSheetContentRef.current,
-      updateReceivedSheetState,
+      updateComputedSheetDimens,
     ]
   )
   
@@ -131,64 +141,87 @@ export const useBottomSheet = (
   
   
   const state = options.state
-  const animationDuration = options.animationDuration ?? 400
+  const animationDuration = options.animationDuration ?? defaultAutoAnimationDuration
+  
   const snapPoints = useMemo(function(){
     if (!options.snapPoints || !options.snapPoints.length)
       return [0,'fit-content','50%']
     return options.snapPoints
   },[options.snapPoints])
+  
   const snapPointsPx = useMemo<number[]>(()=>{
-    const snapPointsPx = snapPoints.map(it=>{
-      function parsingError(raw: string|number, parsed: CssValue|undefined): never {
-        throw new Error(
-          `Supported units: 'px', '%', numbers (will be 'px'), '' (will be 'px'). ` +
-          `Supported keywords: 'fit-content'. ` +
-          `And your input: raw: ${raw}, parsed: ${JSON.stringify(parsed)}`
-        )
-      }
-      
+    const allowedUnits = ['px','',undefined,'%']
+    const allowedKeywords = ['fit-content','fit-header']
+    const snapPointsCssValues = snapPoints.map(it=>{
       const cssValue = parseCssValue(it+'')
-      if (cssValue && 'keyword' in cssValue){
-        switch (cssValue.keyword){
-          case 'fit-content': return receivedSheetState.headerAndContentH
-          default: parsingError(it,cssValue)
-        }
-      }
-      if (cssValue && 'value' in cssValue){
-        switch (cssValue.unit){
-          case 'px': case undefined: return +cssValue.value
-          case '%': return fitRange(
-            0,
-            Math.round(+cssValue.value/100*receivedSheetState.frameH),
-            receivedSheetState.frameH
-          )
-          default: parsingError(it,cssValue)
-        }
-      }
-      parsingError(it,cssValue)
+      if (
+        !cssValue
+        || (cssValue.type==='keyword' && !allowedKeywords.includes(cssValue.value))
+        || (cssValue.type==='numeric' && !allowedUnits.includes(cssValue.unit))
+      ) cssValueParsingError(it, cssValue)
+      return cssValue
     })
-    snapPoints.forEach((it,i)=>{
-      if (inRange(1,i,snapPoints.length-2) && it==='fit-content')
-        snapPointsPx[i] = fitRange(
-          snapPointsPx[i-1],snapPointsPx[i],snapPointsPx[i+1]
-        )
+    
+    const snapPointsPx: Array<number|undefined> = [...Array(snapPoints.length).keys()].map(it=>undefined)
+    
+    ;[['px','',undefined],['%'],['fit-content','fit-header']].forEach(units=>{
+      snapPointsCssValues.forEach((cssValue,cssValueI)=>{
+        
+        if (
+          (cssValue.type==='keyword' && !units.includes(cssValue.value))
+          || (cssValue.type==='numeric' && !units.includes(cssValue.unit))
+        ) return
+        
+        let computed = function(){
+          if (cssValue.type==='keyword') {
+            switch (cssValue.value) {
+              case 'fit-content':
+                return computedSheetDimens.headerAndContentH
+              case 'fit-header':
+                return computedSheetDimens.headerH
+              default:
+                cssValueParsingError(snapPoints[cssValueI], cssValue)
+            }
+          }
+          if (cssValue.type==='numeric') {
+            switch (cssValue.unit) {
+              case 'px':
+              case undefined:
+                return +cssValue.value
+              case '%':
+                return fitRange(
+                  0,
+                  Math.round(+cssValue.value / 100 * computedSheetDimens.frameH),
+                  computedSheetDimens.frameH,
+                )
+              default:
+                cssValueParsingError(snapPoints[cssValueI], cssValue)
+            }
+          }
+          cssValueParsingError(snapPoints[cssValueI], cssValue)
+        }()
+        
+        const left = function(){
+          for (let i = cssValueI-1; i>=0; i--) {
+            if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
+          }
+        }() ?? Number.NEGATIVE_INFINITY
+        const right = function(){
+          for (let i = cssValueI+1; i<snapPointsPx.length; i++) {
+            if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
+          }
+        }() ?? Number.POSITIVE_INFINITY
+        computed = fitRange(left,computed,right)
+        
+        snapPointsPx[cssValueI] = computed
+      })
     })
-    return snapPointsPx
-  },[snapPoints, receivedSheetState])
+    return snapPointsPx as number[]
+  },[snapPoints, computedSheetDimens])
+  
   const snapIdx = fitRange(0,options.snapIdx??0,snapPoints.length-1)
   const setState = options.setState
   const setSnapIdx = options.setSnapIdx
-  
-  
-  /*useEffect(()=>{
-    console.log('state,snapIdx:',state,snapIdx)
-  },[state,snapIdx])*/
-  /*useEffect(()=>{
-    console.log('snapPointsPx',snapPointsPx)
-  },[snapPointsPx])*/
-  /*useEffect(()=>{
-    console.log('receivedSheetState',receivedSheetState)
-  },[receivedSheetState])*/
   
   
   const [newSheetStyle, setNewSheetStyle] = useState({
@@ -234,7 +267,7 @@ export const useBottomSheet = (
     ()=>{
       const s = state
       const i = snapIdx
-      const h = receivedSheetState.sheetH
+      const h = computedSheetDimens.sheetH
       
       // open instantly
       if (s==='open'){
@@ -311,7 +344,7 @@ export const useBottomSheet = (
     [
       state, setState, setSnapIdx, snapIdx,
       stopCurrentAction,
-      receivedSheetState,
+      computedSheetDimens,
       snapPointsPx, runAnimation
     ]
   )
@@ -349,7 +382,7 @@ export const useBottomSheet = (
         if (ev.buttons===1){
           stopCurrentAction()
           setState('dragging')
-          const sheetH = receivedSheetState.sheetH
+          const sheetH = computedSheetDimens.sheetH
           setNewSheetStyle({ height: sheetH })
           setDragStart({
             pointerId: ev.pointerId,
@@ -362,7 +395,7 @@ export const useBottomSheet = (
           currentTarget.setPointerCapture(ev.pointerId)
         }
       },
-    [receivedSheetState, stopCurrentAction]
+    [computedSheetDimens, stopCurrentAction]
   )
   
   
@@ -484,16 +517,29 @@ export const useBottomSheet = (
   
   
   return {
-    /*sheetProps: {
-      onPointerDown,
-      onPointerMove,
-      onPointerUp: onPointerEnd,
-      onPointerCancel: onPointerEnd,
-      style: newSheetStyle,
-    },*/
-    receivedSheetState,
+    computedSheetDimens,
     snapPointsPx,
   } as const
 }
 
 
+
+
+
+
+function cssValueParsingError(raw: string|number, parsed: CssValue|undefined): never {
+  throw new Error(
+    `Supported units:
+    ● 'px' - just raw pixels
+    ● '%' - % of height of element in frameRef
+    ● numbers - will be 'px' - just raw pixels typeof number
+    ● '' - empty string - will be 'px'
+    Supported keywords:
+    ● 'fit-header' - height of element in headerRef
+    ● 'fit-content' - height of element in headerRef + height of element in contentRef
+    And your input: {
+      raw: ${raw},
+      parsed: ${JSON.stringify(parsed)}
+    }`
+  )
+}

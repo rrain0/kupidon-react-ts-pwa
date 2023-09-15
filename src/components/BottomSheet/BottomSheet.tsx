@@ -1,23 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { SheetSnapPoints, SheetState, useBottomSheet } from './useBottomSheet'
+import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from './useBottomSheet'
 import React, {
-  useEffect,
+  useEffect, useLayoutEffect,
   useMemo,
   useState,
 } from 'react'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import { Utils } from '../../utils/Utils';
+import { Utils } from 'src/utils/Utils'
 import empty = Utils.empty;
+import Setter = Utils.Setter
 
 
 /*
   todo
-   1) 'fit-header'
-   2) sort of 'fit-content' / 'fit-header'
-   3) free height between two snap points
+   1) free height between two snap points
 */
 
 
@@ -36,6 +34,8 @@ export type BottomSheetOptionsProps = {
   animationDuration?: number|empty
   snapPoints: SheetSnapPoints
   children?: React.ReactNode
+  setComputedDimens?: Setter<ComputedBottomSheetDimens> | empty
+  setSnapPointsPx?: Setter<number[]> | empty
 }
 export type BottomSheetProps = BottomSheetRefsProps & BottomSheetOptionsProps
 const BottomSheet = (props: BottomSheetProps) => {
@@ -51,11 +51,13 @@ const BottomSheet = (props: BottomSheetProps) => {
     bottomSheetHeaderRef,
     bottomSheetContentRef,
     draggableElements,
+    setComputedDimens,
+    setSnapPointsPx,
   } = props
   
   
   
-  const { receivedSheetState, snapPointsPx } = useBottomSheet(
+  const { computedSheetDimens, snapPointsPx } = useBottomSheet(
     bottomSheetFrameRef,
     bottomSheetRef,
     bottomSheetHeaderRef,
@@ -70,7 +72,14 @@ const BottomSheet = (props: BottomSheetProps) => {
       setSnapIdx: setSnapIdx,
     }
   )
-  
+  useLayoutEffect(
+    ()=>setComputedDimens?.(computedSheetDimens),
+    [setComputedDimens, computedSheetDimens]
+  )
+  useLayoutEffect(
+    ()=>setSnapPointsPx?.(snapPointsPx),
+    [setSnapPointsPx, snapPointsPx]
+  )
   
   
   const [openSnapIdx, setOpenSnapIdx] = useState(0)
@@ -82,7 +91,7 @@ const BottomSheet = (props: BottomSheetProps) => {
   const bgcDimHex = useMemo(()=>{
     return Math.trunc(
       Math.min(
-        receivedSheetState.sheetH,
+        computedSheetDimens.sheetH,
         snapPointsPx[openSnapIdx]
       ) / snapPointsPx[openSnapIdx]
       * 256 * 0.6
