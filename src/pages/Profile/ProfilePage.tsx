@@ -104,6 +104,13 @@ function ProfilePage(){
   }
   
   
+  useEffect(()=>{
+    console.log('sheetState',sheetState)
+  },[sheetState])
+  useEffect(()=>{
+    console.log('selecting',selecting)
+  },[selecting])
+  
   
   
   const [images, setImages] = useState(ProfileMockData.userImages)
@@ -260,6 +267,10 @@ function ProfilePage(){
                         value={v}
                         key={v}
                         onChange={ev=>{
+                          setPreferredGenders(v)
+                          setSheetState('closing')
+                        }}
+                        onClick={ev=>{
                           setPreferredGenders(v)
                           setSheetState('closing')
                         }}

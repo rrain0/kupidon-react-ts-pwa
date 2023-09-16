@@ -130,16 +130,15 @@ const BottomSheet = (props: BottomSheetProps) => {
       position: fixed;
       inset: 0;
       z-index: 2;
-      ${!['closed'].includes(state)
-        ? css`
-          pointer-events: auto;
-          background: #000000${bgcDimHex};
-          will-change: background;
-        `
-        : css`
-          pointer-events: none;
-        `
-      }
+      background: none;
+      pointer-events: none;
+      ${!['closed'].includes(state) && css`
+        background: #000000${bgcDimHex};
+        will-change: background;
+      `}
+      ${!['closed','closing'].includes(state) && css`
+        pointer-events: auto;
+      `}
       display: grid;
       place-items: end center;
       

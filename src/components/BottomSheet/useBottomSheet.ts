@@ -14,6 +14,7 @@ import { CssUtils } from 'src/utils/CssUtils'
 import parseCssValue = CssUtils.parseCssStringValue
 import CssValue = CssUtils.CssValue
 import inRangeExclusive = Utils.inRangeExclusive
+import inRange = Utils.inRange
 
 
 
@@ -467,21 +468,37 @@ export const useBottomSheet = (
             }
           } else {
             let snapStart: undefined|number = undefined
-            for (let i = 0; i < snapPointsPx.length-1; i++) {
+            
+            if (newHeight<snapPointsPx[0])
+              snapStart=-1
+            else if (newHeight>snapPointsPx[snapPointsPx.length-1])
+              snapStart=snapPointsPx.length
+            else for (let i = 0; i < snapPointsPx.length-1; i++) {
               if (inRangeExclusive(snapPointsPx[i],newHeight,snapPointsPx[i+1])){
                 snapStart = i
                 break
               }
             }
-            if (snapStart!==undefined && snapPoints[snapStart]!=='free'){
-              let snap = snapStart
-              const threshold = Math.round((snapPointsPx[snapStart]+snapPointsPx[snapStart+1])/2)
-              if (newHeight>threshold) snap = snapStart+1
+            
+            const notAdjust = snapStart===undefined || (
+              inRange(0,snapStart,snapPointsPx.length-2)
+              && snapPoints[snapStart]==='free'
+            )
+            
+            if (notAdjust){
+              setState('opened')
+            } else {
+              let snap = snapStart!
+              if (snap<=-1) snap=0
+              else if (snap>=snapPoints.length-1) snap=snapPoints.length-1
+              else {
+                const threshold = Math.round((snapPointsPx[snap]+snapPointsPx[snap+1])/2)
+                if (newHeight>threshold) snap++
+              }
               setState('snapping')
               setSnapIdx(snap)
-            } else {
-              setState('opened')
             }
+            
           }
         }
       }
