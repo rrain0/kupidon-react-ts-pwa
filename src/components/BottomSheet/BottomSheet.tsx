@@ -8,9 +8,9 @@ import React, {
 } from 'react'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import { Utils } from 'src/utils/Utils'
-import empty = Utils.empty;
-import Setter = Utils.Setter
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
+import Setter = TypeUtils.Setter
 
 
 /*
@@ -129,7 +129,7 @@ const BottomSheet = (props: BottomSheetProps) => {
     css={css`
       position: fixed;
       inset: 0;
-      z-index: 2;
+      z-index: 30;
       background: none;
       pointer-events: none;
       ${!['closed'].includes(state) && css`

@@ -1,13 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { Utils } from 'src/utils/Utils'
-import Setter = Utils.Setter
 import { css } from '@emotion/react'
 import React from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import rowWrap = EmotionCommon.rowWrap
 import center = EmotionCommon.center
 import Card from 'src/components/Card'
-
+import { TypeUtils } from 'src/utils/TypeUtils'
+import Setter = TypeUtils.Setter
 
 
 
@@ -17,6 +16,7 @@ export type ProfileImagesProps = {
   setImages: Setter<string[]>
 }
 const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
+  
   
   return <Card>
     <div css={t => css`

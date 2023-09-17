@@ -1,3 +1,4 @@
+import { ObjectUtils } from 'src/utils/ObjectUtils'
 import { ValidationCore } from './ValidationCore'
 import Values = ValidationCore.Values
 import Failures = ValidationCore.Failures
@@ -36,7 +37,7 @@ export function useFailureDelay<Vs extends Values>(
         failures.map(f=>{
           const now = +new Date()
           const time = +f.created+f.delay
-          if (time<=now && f.delay>0) return Utils.copy(f, { delay: 0 })
+          if (time<=now && f.delay>0) return ObjectUtils.copy(f, { delay: 0 })
           else return f
         })
       )

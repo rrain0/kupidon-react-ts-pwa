@@ -11,7 +11,7 @@ import React, {
 import Input from 'src/components/Inputs/Input'
 import { ValidationValidate } from './ValidationValidate'
 import { ValidationActions } from './ValidationActions'
-import { Utils } from 'src/utils/Utils'
+import { TypeUtils } from 'src/utils/TypeUtils'
 
 
 export namespace ValidationComponents {
@@ -19,8 +19,8 @@ export namespace ValidationComponents {
   import validate = ValidationValidate.validate
   import Validators = ValidationCore.Validators
   import Failures = ValidationCore.Failures
-  import updateFailures = ValidationActions.updateFailures;
-  import empty = Utils.empty;
+  import updateFailures = ValidationActions.updateFailures
+  import empty = TypeUtils.empty
   
   
   export type InputValidationWrapProps<Vs extends Values> = {

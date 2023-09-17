@@ -22,6 +22,7 @@ import reset = EmotionCommon.reset
 import RadioInput from 'src/components/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle'
 import { ValidationValidate } from 'src/form-validation/ValidationValidate'
+import { CastUtils } from 'src/utils/CastUtils'
 import validate = ValidationValidate.validate
 import { SignupPageValidation } from './validation'
 import FormValues = SignupPageValidation.FormValues
@@ -39,18 +40,14 @@ import UserToCreate = UserApi.UserToCreate
 import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
 import { AuthApi } from 'src/api/requests/AuthApi'
 import Lazy = Utils.Lazy
-import { useStateAndRef } from '../../utils-react/useStateAndRef';
-import trueOrUndef = Utils.trueOrUndef;
-import { useToastFailures } from '../../toasts/useToastFailures';
-import RootRoutes = AppRoutes.RootRoutes;
-import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
-import { PinkGrainyGradientBgc } from '../../styles/bgc/PinkGrainyGradientBgc';
-import { themeNameFromState, ThemeRecoil } from '../../recoil/state/ThemeRecoil';
-import { FormPage } from '../../components/Page/FormPage';
+import { useToastFailures } from 'src/toasts/useToastFailures'
+import RootRoutes = AppRoutes.RootRoutes
+import { FormPage } from 'src/components/Page/FormPage'
 import Page = FormPage.Page;
-import ScrollbarOverlay from '../../components/ScrollbarOverlay/ScrollbarOverlay';
-import { ScrollbarOverlayStyle } from '../../components/ScrollbarOverlay/ScrollbarOverlayStyle';
-import PageContent = FormPage.PageContent;
+import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import PageContent = FormPage.PageContent
+import trueOrUndef = CastUtils.trueOrUndef
 
 
 
@@ -289,7 +286,9 @@ const SignupPage = () => {
           
           <fieldset
             css={radioGroupCss}
-            data-error={trueOrUndef(signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow)}>
+            data-error={trueOrUndef(
+              signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow
+            )}>
             
             <RadioInputValidationWrap
               {...validationProps}

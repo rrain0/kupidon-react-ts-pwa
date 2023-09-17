@@ -1,5 +1,6 @@
+import { ArrayUtils } from 'src/utils/ArrayUtils'
+import { ObjectUtils } from 'src/utils/ObjectUtils'
 import { ValidationCore } from './ValidationCore'
-import { Utils } from 'src/utils/Utils'
 
 
 
@@ -8,10 +9,10 @@ export namespace ValidationValidate {
   import Validators = ValidationCore.Validators
   import Failure = ValidationCore.Failure
   import Failures = ValidationCore.Failures
-  import ObjectKeys = Utils.ObjectKeys
   import outer = ValidationCore.outer
   import Field = ValidationCore.Field
   import FailureData = ValidationCore.FailureData
+  import ObjectKeys = ObjectUtils.ObjectKeys
   
   
   
@@ -88,7 +89,7 @@ export namespace ValidationValidate {
               result.data.notify = prevFail.notify && result.data.notify
             }
             // todo ???
-            if (Utils.arrEq(prevFail.usedValues,result.data.usedValues)){
+            if (ArrayUtils.eq(prevFail.usedValues,result.data.usedValues)){
               result.data.created = prevFail.created
               result.data.delay = prevFail.delay
             }

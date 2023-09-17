@@ -4,13 +4,12 @@ import { useScrollbar } from 'src/components/Scrollbar/useScrollbar'
 import { css } from '@emotion/react'
 import Scrollbar from 'src/components/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/components/Scrollbar/ScrollbarStyle'
-import { Utils } from 'src/utils/Utils'
-import empty = Utils.empty
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import centerAll = EmotionCommon.centerAll
 import hideScrollbar = EmotionCommon.hideScrollbar
-import styled from '@emotion/styled'
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent

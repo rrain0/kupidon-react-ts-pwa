@@ -14,7 +14,6 @@ import { InputStyle } from 'src/components/Inputs/InputStyle'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import center = EmotionCommon.center
 import col = EmotionCommon.col
 import { Theme } from 'src/theme/Theme'
 import { toast } from 'react-toastify'
@@ -34,12 +33,11 @@ import { useFailureDelay } from 'src/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import RootRoutes = AppRoutes.RootRoutes;
-import { SimpleGradientBgc } from '../../styles/bgc/SimpleGradientBgc';
-import { FormPage } from '../../components/Page/FormPage';
+import { FormPage } from 'src/components/Page/FormPage'
 import PageContent = FormPage.PageContent;
-import { ScrollbarOverlayStyle } from '../../components/ScrollbarOverlay/ScrollbarOverlayStyle';
-import ScrollbarOverlay from '../../components/ScrollbarOverlay/ScrollbarOverlay';
-import Page = FormPage.Page;
+import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
+import Page = FormPage.Page
 
 
 

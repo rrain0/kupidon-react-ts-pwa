@@ -8,8 +8,8 @@ import Scrollbar from 'src/components/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/components/Scrollbar/ScrollbarStyle'
 import React, { HTMLAttributes, useRef } from 'react'
 import centerAll = EmotionCommon.centerAll
-import { Utils } from 'src/utils/Utils'
-import empty = Utils.empty
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 import classNames from 'classnames'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
@@ -53,7 +53,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
     <div
       css={css`
         position: relative;
-        z-index: 1;
+        z-index: 10;
         place-self: stretch;
         display: grid;
         pointer-events: none;

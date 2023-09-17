@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import classNames from 'classnames'
 import React from 'react'
 import {ReactUtils} from "src/utils/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
@@ -7,6 +8,7 @@ import { ReactComponent as Arrow2ForwardSvg } from 'src/res/icon/arrow-2-forward
 import { ReactComponent as Arrow3UpRightSvg } from 'src/res/icon/arrow-3-up-right.svg'
 import { ReactComponent as Arrow4DownSvg } from 'src/res/icon/arrow-4-down.svg'
 import { ReactComponent as Arrow5FwdSvg } from 'src/res/icon/arrow-5-fwd.svg'
+import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
 import { ReactComponent as CheckmarkSvg } from 'src/res/icon/checkmark.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
@@ -14,8 +16,9 @@ import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
 import { ReactComponent as DoubleCheckmarkSvg } from 'src/res/icon/double-checkmark.svg'
 import { ReactComponent as EyeSvg } from 'src/res/icon/eye.svg'
 import { ReactComponent as EyeCrossedOutSvg } from 'src/res/icon/eye-crossed-out.svg'
-import { ReactComponent as FloppyDiskSvg } from 'src/res/icon/floppy-disk.svg'
+import { ReactComponent as FloppyDisk1Svg } from 'src/res/icon/floppy-disk-1.svg'
 import { ReactComponent as FloppyDisk2Svg } from 'src/res/icon/floppy-disk-2.svg'
+import { ReactComponent as FloppyDisk3Svg } from 'src/res/icon/floppy-disk-3.svg'
 import { ReactComponent as HeartSvg } from 'src/res/icon/heart.svg'
 import { ReactComponent as HomeSvg } from 'src/res/icon/home.svg'
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
@@ -49,8 +52,10 @@ export namespace SimpleSvgIcons {
   export type SimpleSvgIconProps = CustomIconProps & SvgProps & SvgElement
   let SimpleSvgIcon_ = (props: SimpleSvgIconProps) => {
     let {
+      className,
       mainColor, size,
-      SvgComponent, ...restProps
+      SvgComponent,
+      ...restProps
     } = props
     
     return <SvgComponent
@@ -62,6 +67,7 @@ export namespace SimpleSvgIcons {
         fill: ${mainColor ?? 'var(--icon-color, black)'};
         stroke: ${mainColor ?? 'var(--icon-color, black)'};
       `}
+      className={classNames(className,'rrainuiIcon')}
       {...restProps}
     />
   }
@@ -99,6 +105,11 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={Arrow5FwdSvg} />
   )
   
+  export const ArrowReload = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={ArrowReloadSvg} />
+  )
+  
   export const CautionIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CautionSvg} />
@@ -134,14 +145,19 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={EyeCrossedOutSvg} />
   )
   
-  export const FloppyDiskIc = ReactMemoTyped(
+  export const FloppyDisk1Ic = ReactMemoTyped(
     (props: IconProps) =>
-      <SimpleSvgIcon {...props} SvgComponent={FloppyDiskSvg} />
+      <SimpleSvgIcon {...props} SvgComponent={FloppyDisk1Svg} />
   )
   
   export const FloppyDisk2Ic = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={FloppyDisk2Svg} />
+  )
+  
+  export const FloppyDisk3Ic = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={FloppyDisk3Svg} />
   )
   
   export const HeartIc = ReactMemoTyped(

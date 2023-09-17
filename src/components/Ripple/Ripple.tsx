@@ -1,8 +1,10 @@
+/** @jsxImportSource @emotion/react */
+import classNames from 'classnames'
 import React, { useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react'
-import {GetDimensions} from "src/utils/GetDimensions"
+import { ElementProps, GetDimensions } from 'src/utils/GetDimensions'
 import css from './Ripple.module.scss'
-import {Utils} from "src/utils/Utils"
-import empty = Utils.empty
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 import {ReactUtils} from "src/utils/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
@@ -22,6 +24,14 @@ type CursorInfo = {
 const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
   (props, forwardedRef) => {
     
+    let {
+      rippleDuration,
+      mode,
+      rippleColor,
+      targetElement,
+      className,
+      ...restProps
+    } = props
     
     const rippleFrameRef = useRef<HTMLDivElement>(null)
     const rippleViewRef = useRef<HTMLDivElement>(null)
@@ -30,14 +40,22 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
     
     const showRipple = useCallback(
       (ev?: CursorInfo) => {
-        let mode = props.mode ?? 'center'
-        if (!ev) mode = 'center'
         const rippleFrame = rippleFrameRef.current
         const rippleView = rippleViewRef.current
         if (rippleFrame && rippleView){
           rippleView.classList.remove(css.rippleHide, css.rippleShow)
           
-          const dimens = new GetDimensions(rippleFrame)
+          const mode = function(){
+            const modes = ['center','cursor']
+            let mode: any = ElementProps(rippleFrame)
+              .cssPropValue('--ripple-mode')
+            if (!modes.includes(mode)) mode = props.mode
+            if (!ev) mode = 'center'
+            if (!modes.includes(mode)) mode = 'center'
+            return mode as 'center'|'cursor'
+          }()
+          
+          const dimens = ElementProps(rippleFrame)
           const el = {
             clientX: dimens.left,
             clientY: dimens.top,
@@ -89,14 +107,20 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
           
           const dur = props.rippleDuration ?? 500
           
-          const st = rippleView.style
-          props.rippleColor && st.setProperty('--ripple-color', props.rippleColor)
-          st.setProperty('--ripple-top', ripple.top+'px')
-          st.setProperty('--ripple-left', ripple.left+'px')
-          st.setProperty('--ripple-w', ripple.radius*2+'px')
-          st.setProperty('--ripple-h', ripple.radius*2+'px')
-          st.setProperty('--ripple-animation-duration', dur * ripple.radius/200  + 'ms')
-          st.setProperty('--dissolve-animation-duration', (dur+100) * ripple.radius/200  + 'ms')
+          const style = rippleFrame.style
+          props.rippleColor && style.setProperty('--ripple-color', props.rippleColor)
+          style.setProperty(
+            '--ripple-animation-duration',
+            Math.max(400, dur * ripple.radius/200) + 'ms'
+          )
+          style.setProperty(
+            '--dissolve-animation-duration',
+            Math.max(500, (dur+100) * ripple.radius/200) + 'ms'
+          )
+          style.setProperty('--ripple-top', ripple.top+'px')
+          style.setProperty('--ripple-left', ripple.left+'px')
+          style.setProperty('--ripple-w', ripple.radius*2+'px')
+          style.setProperty('--ripple-h', ripple.radius*2+'px')
           
           rippleView.classList.add(css.rippleShow)
         }
@@ -139,8 +163,15 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
     
     
     
-    return <div className={css.rippleFrame} ref={rippleFrameRef}>
-      <div ref={rippleViewRef} className={css.rippleView}/>
+    return <div
+      {...restProps}
+      ref={rippleFrameRef}
+      className={classNames(css.rippleFrame, className, 'rrainuiRippleFrame')}
+    >
+      <div
+        ref={rippleViewRef}
+        className={classNames(css.rippleView, 'rrainuiRippleView')}
+      />
     </div>
   })
 export default ReactMemoTyped(Ripple)

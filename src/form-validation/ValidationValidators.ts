@@ -1,9 +1,10 @@
-import { Utils } from 'src/utils/Utils'
+
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 
 
 
 export namespace ValidationValidators {
-  import empty = Utils.empty
   
   
   const emailPattern = /^[^\s@]+@[^\s@]+$/

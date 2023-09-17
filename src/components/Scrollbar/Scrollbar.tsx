@@ -9,15 +9,16 @@ import React, {
 import cmcss from 'src/styles/common.module.scss'
 import classNames from "classnames"
 import {GetDimensions} from "src/utils/GetDimensions"
-import {Utils} from "src/utils/Utils"
-import inRange = Utils.inRange
-import fitRange = Utils.fitRange
+import { MathUtils } from 'src/utils/MathUtils'
+import inRange = MathUtils.inRange
+import fitRange = MathUtils.fitRange
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { StyledCommon } from 'src/styles/StyledCommon'
 import reset = StyledCommon.reset
-import empty = Utils.empty
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 import { ScrollProps } from './useScrollbar'
 
 

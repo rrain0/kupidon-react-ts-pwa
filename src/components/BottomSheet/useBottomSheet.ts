@@ -6,15 +6,16 @@ import React, {
   useState,
 } from 'react'
 import { GetDimensions } from 'src/utils/GetDimensions'
-import { Utils } from 'src/utils/Utils'
-import fitRange = Utils.fitRange
-import empty = Utils.empty
+import { MathUtils } from 'src/utils/MathUtils'
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
+import fitRange = MathUtils.fitRange
 import { useNoSelect } from 'src/utils-react/useNoSelect'
 import { CssUtils } from 'src/utils/CssUtils'
 import parseCssValue = CssUtils.parseCssStringValue
 import CssValue = CssUtils.CssValue
-import inRangeExclusive = Utils.inRangeExclusive
-import inRange = Utils.inRange
+import inRangeExclusive = MathUtils.inRangeExclusive
+import inRange = MathUtils.inRange
 
 
 

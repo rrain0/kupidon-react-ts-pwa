@@ -1,13 +1,16 @@
+import { CastUtils } from 'src/utils/CastUtils'
+import { ObjectUtils } from 'src/utils/ObjectUtils'
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 import { Utils } from 'src/utils/Utils'
 
 
 
 export namespace RoutesBuilder {
-  import empty = Utils.empty
-  import isPresent = Utils.isPresent;
-  import ObjectEntries = Utils.ObjectEntries;
-  import ObjectKeys = Utils.ObjectKeys;
-  import ObjectValues = Utils.ObjectValues;
+  import isPresent = CastUtils.isPresent
+  import ObjectEntries = ObjectUtils.ObjectEntries
+  import ObjectKeys = ObjectUtils.ObjectKeys
+  import ObjectValues = ObjectUtils.ObjectValues
   
   
   

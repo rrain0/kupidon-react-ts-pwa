@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from 'react'
-import { Utils } from 'src/utils/Utils'
-import empty = Utils.empty
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 import cmcss from 'src/styles/common.module.scss'
 
 

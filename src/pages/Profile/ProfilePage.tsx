@@ -32,10 +32,11 @@ import Button from 'src/components/Buttons/Button'
 import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
 import textNormal = EmotionCommon.textNormal1
 import textSmall1 = EmotionCommon.textSmall1
-import { SimpleSvgIcons } from '../../components/icons/SimpleSvgIcons'
-import FloppyDiskIc = SimpleSvgIcons.FloppyDiskIc
+import { SimpleSvgIcons } from 'src/components/icons/SimpleSvgIcons'
 import center = EmotionCommon.center
-import FloppyDisk2Ic = SimpleSvgIcons.FloppyDisk2Ic
+import rowWrap = EmotionCommon.rowWrap
+import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
+import ArrowReload = SimpleSvgIcons.ArrowReload
 
 
 
@@ -103,14 +104,14 @@ function ProfilePage(){
     setSnapIdx: setSnapIdx,
   }
   
-  
+  /*
   useEffect(()=>{
     console.log('sheetState',sheetState)
   },[sheetState])
   useEffect(()=>{
     console.log('selecting',selecting)
   },[selecting])
-  
+  */
   
   
   const [images, setImages] = useState(ProfileMockData.userImages)
@@ -210,7 +211,7 @@ function ProfilePage(){
             
             <ItemContainer>
               <ItemLabel>Обо мне</ItemLabel>
-              <div>{'<'}добавить textarea для ввода{'>'}</div>
+              <textarea></textarea>
             </ItemContainer>
             
             
@@ -223,7 +224,7 @@ function ProfilePage(){
               >
                 <ItemLabel>Я ищу</ItemLabel>
                 { preferredGenders!=='Не выбрано' && <div
-                  css={t => css`
+                  css={t=>css`
                     ${center};
                     border-radius: 50%;
                     height: 1.5em;
@@ -232,8 +233,8 @@ function ProfilePage(){
                     background: ${t.icon.warning.bgc[0]};
                   `}
                 >
-                  <FloppyDisk2Ic
-                    css={t => css`svg&{ --icon-color: ${t.icon.warning.color[0]} }`}
+                  <FloppyDisk1Ic
+                    css={t=>css`svg&{ --icon-color: ${t.icon.warning.color[0]} }`}
                   />
                 </div>}
               </div>
@@ -299,11 +300,6 @@ function ProfilePage(){
             `}
           >
             <Button css={ButtonStyle.primary}
-              onClick={update}
-            >
-              Обновить
-            </Button>
-            <Button css={ButtonStyle.primary}
               onClick={logout}
             >
               Выйти
@@ -312,8 +308,35 @@ function ProfilePage(){
           
         </Form>
         
+        <div css={css`height: 68px`}/>
+        
       </PageContent>
     </ScrollbarOverlay>
+    
+    
+    
+    <BottomButtonBar>
+      <BottomButtonsContainer>
+        
+        <Button css={ButtonStyle.icon}
+          onClick={update}
+          disabled={false}
+        >
+          <ArrowReload />
+        </Button>
+        
+        <Button css={ButtonStyle.icon}
+          onClick={undefined}
+          disabled={preferredGenders==='Не выбрано'}
+        >
+          <FloppyDisk1Ic />
+        </Button>
+        
+      </BottomButtonsContainer>
+    </BottomButtonBar>
+    
+    
+    
   </Page>
 }
 
@@ -344,14 +367,25 @@ const ItemContainer = styled.div`
 const ItemLabel = styled.label`
   padding-left: 16px;
   ${textNormal};
+  line-height: 1.5em; // for icon
   color: ${p=>p.theme.page.text[0]}
 `
 
 
-
-const InfoItem = styled.div`
-  font: 500 10px/129% Roboto;
-  color: ${p=>p.theme.page.text};
+const BottomButtonBar = styled.section`
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: end stretch;
+  pointer-events: none;
+`
+const BottomButtonsContainer = styled.div`
+  ${rowWrap};
+  place-content: center;
+  padding: 10px;
+  gap: 10px;
+  pointer-events: auto;
 `
 
 

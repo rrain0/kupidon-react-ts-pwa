@@ -1,7 +1,7 @@
 import { useSearchParams } from 'react-router-dom'
-import { Utils } from 'src/utils/Utils'
-import ObjectEntries = Utils.ObjectEntries
 import { useMemo } from 'react'
+import { ObjectUtils } from 'src/utils/ObjectUtils'
+import ObjectEntries = ObjectUtils.ObjectEntries
 
 
 // todo remove

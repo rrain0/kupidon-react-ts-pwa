@@ -1,12 +1,12 @@
+import { ObjectUtils } from 'src/utils/ObjectUtils'
 import { ValidationCore } from './ValidationCore'
 import Values = ValidationCore.Values
-import { Utils } from 'src/utils/Utils'
 
 
 export namespace ValidationActions {
   import Failures = ValidationCore.Failures
   import Field = ValidationCore.Field
-  import ObjectEntries = Utils.ObjectEntries
+  import ObjectEntries = ObjectUtils.ObjectEntries
   
   
   export const updateFailures = <Vs extends Values>(
@@ -34,7 +34,7 @@ export namespace ValidationActions {
           && ObjectEntries(update).some(([prop,val]) => fail[prop]!==val)
       ) {
         changed++
-        return Utils.copy(fail, update)
+        return ObjectUtils.copy(fail, update)
       }
       return fail
     })

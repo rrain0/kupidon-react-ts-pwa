@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { CastUtils } from 'src/utils/CastUtils'
 import {ReactUtils} from "src/utils/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import {StyledCommon} from "src/styles/StyledCommon"
@@ -5,14 +8,14 @@ import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
 import Ripple, { RippleProps } from 'src/components/Ripple/Ripple'
 import resetButton = StyledCommon.resetButton
-import centerAll = StyledCommon.centerAll
 import abs = StyledCommon.abs
 import styled from 'styled-components'
-import { Utils } from 'src/utils/Utils'
-import trueOrUndef = Utils.trueOrUndef
-import empty = Utils.empty
-import center = StyledCommon.center
-import row = StyledCommon.row;
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
+import row = StyledCommon.row
+import trueOrUndef = CastUtils.trueOrUndef
+
+
 
 
 export type ButtonLightCherryProps = JSX.IntrinsicElements['button'] & {
@@ -43,6 +46,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
         targetElement={buttonRef}
         mode={rippleMode}
         rippleDuration={rippleDuration}
+        css={css`
+          .rrainuiButton:disabled>*>&.rrainuiRippleFrame {
+            display: none;
+          }
+        `}
       />
     </Border>
   </Button_>

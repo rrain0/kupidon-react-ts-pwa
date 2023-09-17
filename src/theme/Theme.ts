@@ -88,7 +88,7 @@ export namespace Theme {
         hover: ['#d93b5f'],
         disabled: {
           bgc: ['#DCDCDC'],
-          text: ['#000']
+          text: ['#555']
         }
       },
       secondary: {
@@ -99,7 +99,7 @@ export namespace Theme {
         hover: ['#ff6086'],
         disabled: {
           bgc: ['#DCDCDC'],
-          text: ['#000']
+          text: ['#555']
         }
       }
     },
@@ -174,7 +174,7 @@ export namespace Theme {
         hover: ['#c6294e'],
         disabled: {
           bgc: ['#DCDCDC'],
-          text: ['#000']
+          text: ['#555']
         }
       },
       secondary: {
@@ -185,7 +185,7 @@ export namespace Theme {
         hover: ['#ee7894'],
         disabled: {
           bgc: ['#DCDCDC'],
-          text: ['#000'],
+          text: ['#555'],
         }
       }
     },

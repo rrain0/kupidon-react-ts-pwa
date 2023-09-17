@@ -3,13 +3,15 @@
 
 
 
-$color: var(--ripple-color,white);
-$top: var(--ripple-top,0);
-$left: var(--ripple-left,0);
-$w: var(--ripple-w,0);
-$h: var(--ripple-h,0);
-$ripple-anim-duration: var(--ripple-animation-duration,500ms);
+$ripple-mode: var(--ripple-mode);
+$color: var(--ripple-color, white);
+$ripple-anim-duration: var(--ripple-animation-duration, 500ms);
 $dissolve-anim-duration: calc($ripple-anim-duration * 1.2);
+
+$top: var(--ripple-top, 0);
+$left: var(--ripple-left, 0);
+$w: var(--ripple-w, 0);
+$h: var(--ripple-h, 0);
 
 
 

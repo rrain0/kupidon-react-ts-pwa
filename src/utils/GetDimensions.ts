@@ -25,6 +25,15 @@
 
 export class GetDimensions {
     constructor(public domElement: HTMLElement) { }
+    
+    
+    get computedStyle(){
+        return window.getComputedStyle(this.domElement)
+    }
+    cssPropValue(propName: string){
+      return this.computedStyle.getPropertyValue(propName)
+    }
+    
 
     private _rect: DOMRect|undefined
     get rect(){ return this._rect ??= this.domElement.getBoundingClientRect() }
@@ -138,3 +147,7 @@ export class GetDimensions {
     get scrollWidth(){ return this.domElement.scrollWidth }
     get scrollHeight(){ return this.domElement.scrollHeight }
 }
+
+
+
+export const ElementProps = (element: HTMLElement) => new GetDimensions(element)
