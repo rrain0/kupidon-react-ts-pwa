@@ -42,6 +42,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   
   return <div
     css={css`
+      min-width: 100%; min-height: 100%;
       width: 100%; height: 100%;
       max-width: 100%; max-height: 100%;
       ${centerAll};
@@ -51,10 +52,48 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   >
     
     
-    <div
+    
+    <div // Scrollable Content Container
+      // must be without margins & paddings!!!
       css={css`
-        position: relative;
-        z-index: 10;
+        ${col};
+        //place-self: stretch;
+        min-width: 100%; min-height: 100%;
+        width: 100%; height: 100%;
+        max-width: 100%; max-height: 100%;
+        overflow: auto;
+        ${hideScrollbar};
+      `}
+      ref={scrollContainerRef}
+      className={'rrainuiScrollContainer'}
+    >
+      <div // Scrollable Content Wrapper
+        // must be without margins & paddings - just content wrapper!!!
+        css={css`
+          display: flex;
+          flex-flow: column nowrap;
+          //min-width: fit-content; min-height: fit-content;
+          width: fit-content; height: fit-content;
+          //max-width: fit-content; max-height: fit-content;
+          //overflow: visible;
+        `}
+        ref={scrollContentRef}
+        className={'rrainuiScrollContentWrap'}
+      >
+        
+        { props.children }
+      
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    <div // Scrollbars
+      css={css`
+        //position: relative;
+        //z-index: 10;
         
         place-self: stretch;
         display: grid;
@@ -83,54 +122,21 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       
       { showHorizontal && canScrollHorizontal && <Scrollbar
         css={[ScrollbarStyle.scrollbar, css`
-            &.rrainuiScrollbarTrack {
-              grid-area: hs;
-              place-self: end stretch;
-              &[data-direction=horizontal]{
-                height: 20px;
-                width: auto;
-              }
-              pointer-events: auto;
-            }`
+          &.rrainuiScrollbarTrack {
+            grid-area: hs;
+            place-self: end stretch;
+            &[data-direction=horizontal]{
+              height: 20px;
+              width: auto;
+            }
+            pointer-events: auto;
+          }`
         ]}
         {...scrollbarProps}
         direction='horizontal'
       /> }
     
     </div>
-    
-    
-    
-    
-    
-    <div // Scroll Container
-      // must be without margins & paddings!!!
-      css={css`
-        ${col};
-        place-self: stretch;
-        overflow: auto;
-        ${hideScrollbar};
-      `}
-      ref={scrollContainerRef}
-      className={'rrainuiScrollContainer'}
-    >
-      <div // Scrollable Content Wrapper
-        // must be without margins & paddings - just content wrapper!!!
-        css={css`
-          display: flex;
-          min-width: fit-content; min-height: fit-content;
-          width: fit-content; height: fit-content;
-        `}
-        ref={scrollContentRef}
-        className={'rrainuiScrollContentWrap'}
-      >
-        
-        { props.children }
-        
-      </div>
-    </div>
-    
-    
     
     
     

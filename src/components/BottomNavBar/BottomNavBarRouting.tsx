@@ -13,7 +13,9 @@ const BottomNavBarRouting = ()=>{
         RootRoutes.profile.path
       ]
         .map(path=>path+'/*')
-        .map(path=><Route path={path}
+        .map(path=><Route
+          key={path}
+          path={path}
           element={<BottomNavBar/>}
         />)
     }

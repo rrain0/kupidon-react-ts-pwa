@@ -375,7 +375,7 @@ const ItemLabel = styled.label`
 
 const BottomButtonBar = styled.section`
   ${abs};
-  z-index: 20;
+  //z-index: 20;
   display: grid;
   place-items: end stretch;
   pointer-events: none;

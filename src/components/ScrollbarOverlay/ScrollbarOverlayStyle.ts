@@ -7,14 +7,18 @@ export namespace ScrollbarOverlayStyle {
   
   export const page = css`
     &.rrainuiScrollOverlay{
-      width: 100%; height: 100%;
       
       >.rrainuiScrollContainer {
-        width: 100%; height: 100%;
+        //place-content: stretch;
+        //place-items: stretch;
         
         >.rrainuiScrollContentWrap{
-          min-height: 100%; min-width: 100%;
-          height: fit-content; width: fit-content;
+          min-width: fit-content;
+          width: 100%;
+          
+          min-height: fit-content;
+          height: fit-content;
+          flex: 1;
         }
       }
       
@@ -35,14 +39,13 @@ export namespace ScrollbarOverlayStyle {
   
   export const list = css`
     &.rrainuiScrollOverlay{
-      width: 100%; height: 100%;
       
       >.rrainuiScrollContainer {
-        width: 100%; height: 100%;
         
         >.rrainuiScrollContentWrap{
-          min-height: 100%; min-width: 100%;
-          height: fit-content; width: fit-content;
+          min-width: 100%; min-height: 100%;
+          width: fit-content; height: fit-content;
+          //max-width: 100%; max-height: 100%;
         }
       }
       

@@ -94,16 +94,8 @@ export namespace DataFieldStyle {
   `
   
   export const statikSmall = (t: Theme) => css`
-    ${interactive(t)};
+    ${statik(t)};
     ${small(t)};
-    &.rrainuiFrame {
-      cursor: auto;
-      color: ${t.input.text};
-    }
-    
-    >.rrainuiBorder {
-      border: 2px solid ${t.page.text[0]};
-    }
   `
   
   

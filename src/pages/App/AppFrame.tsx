@@ -5,32 +5,22 @@ import React from 'react'
 import BottomNavBarRouting from 'src/components/BottomNavBar/BottomNavBarRouting'
 import AppRouting from 'src/pages/App/AppRouting'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/ReactUtils'
 import col = EmotionCommon.col
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 const AppFrame = ()=>{
   
   return <Frame>
     
-    <PageFrame>
-      <AppRouting/>
-    </PageFrame>
-    
-    {/*<AppRouting/>*/}
-    
-    {/*<div
-      css={css`
-        background: #61dafb;
-      `}
-    ></div>*/}
-    
-    
+    <AppRouting/>
     
     <BottomNavBarRouting/>
     
   </Frame>
 }
-export default AppFrame
+export default ReactMemoTyped(AppFrame)
 
 
 const Frame = styled.div`
@@ -40,18 +30,4 @@ const Frame = styled.div`
   display: grid;
   grid-template-rows: 1fr auto;
   justify-items: stretch;
-  
-  /*
-  ${col};
-  >:first-child {
-    flex: 1;
-  }
-  >:last-child {
-  }
-  align-items: stretch;
-  justify-content: end;
-  */
-`
-const PageFrame = styled.div`
-  overflow: auto;
 `
