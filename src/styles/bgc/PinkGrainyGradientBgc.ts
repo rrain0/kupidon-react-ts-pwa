@@ -1,9 +1,9 @@
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 import { css } from '@emotion/react'
 import noise from 'src/res/img/effect/noise.svg'
 
 
-export const PinkGrainyGradientBgc = (t: Theme.Theme) => css`
+export const PinkGrainyGradientBgc = (t: Themes.Theme) => css`
   background-color: ${t.page.bgc[1]};
   
   background-image: url(${noise}),

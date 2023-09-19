@@ -9,7 +9,7 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 import React, { useEffect, useState } from 'react'
 import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
@@ -37,6 +37,7 @@ import center = EmotionCommon.center
 import rowWrap = EmotionCommon.rowWrap
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
 import ArrowReload = SimpleSvgIcons.ArrowReload
+import abs = EmotionCommon.abs
 
 
 
@@ -143,7 +144,7 @@ function ProfilePage(){
             <ItemContainer>
               <ItemLabel>id</ItemLabel>
               <DataField css={[
-                DataFieldStyle.statik,
+                DataFieldStyle.statikSmall,
                 css`&.rrainuiFrame{
                   ${textSmall1};
                 }`
@@ -155,56 +156,56 @@ function ProfilePage(){
             
             <ItemContainer>
               <ItemLabel>Email</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {auth.user.email}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Email верифицирован</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {auth.user.emailVerified ? 'да' : 'нет'}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Пользователь создан</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {new Date(auth.user.created)+''}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Пользователь обновлён</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {new Date(auth.user.updated)+''}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Имя</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {auth.user.firstName}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Фамилия</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {auth.user.lastName}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Дата рождения</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {auth.user.birthDate}
               </DataField>
             </ItemContainer>
             
             <ItemContainer>
               <ItemLabel>Пол</ItemLabel>
-              <DataField css={DataFieldStyle.statik}>
+              <DataField css={DataFieldStyle.statikSmall}>
                 {auth.user.sex==='MALE' ? 'Мужской' : 'Женский'}
               </DataField>
             </ItemContainer>
@@ -240,7 +241,7 @@ function ProfilePage(){
               </div>
               
               <DataField
-                css={DataFieldStyle.interactive}
+                css={DataFieldStyle.interactiveSmall}
                 onClick={ev=>setSelecting('preferred-genders')}
                 role='listbox'
               >
@@ -349,10 +350,10 @@ const Form = styled.form`
   max-width: 500px;
   width: 100%;
   ${col};
-  gap: 16px;
+  gap: 10px;
 `
 
-const formHeader = (theme: Theme.Theme) => css`
+const formHeader = (theme: Themes.Theme) => css`
   font-weight: 500;
   font-size: 28px;
   line-height: 150%;
@@ -362,10 +363,10 @@ const formHeader = (theme: Theme.Theme) => css`
 `
 const ItemContainer = styled.div`
   ${col};
-  gap: 10px;
+  gap: 4px;
 `
 const ItemLabel = styled.label`
-  padding-left: 16px;
+  padding-left: 12px;
   ${textNormal};
   line-height: 1.5em; // for icon
   color: ${p=>p.theme.page.text[0]}
@@ -373,8 +374,7 @@ const ItemLabel = styled.label`
 
 
 const BottomButtonBar = styled.section`
-  position: fixed;
-  inset: 0;
+  ${abs};
   z-index: 20;
   display: grid;
   place-items: end stretch;
@@ -385,7 +385,9 @@ const BottomButtonsContainer = styled.div`
   place-content: center;
   padding: 10px;
   gap: 10px;
-  pointer-events: auto;
+  &>*{
+    pointer-events: auto;
+  }
 `
 
 

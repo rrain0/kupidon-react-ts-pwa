@@ -1,11 +1,12 @@
 import { css } from '@emotion/react'
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
+import Theme = Themes.Theme
 
 
 
 export namespace DataFieldStyle {
   
-  export const interactive = (t: Theme.Theme) => css`
+  export const interactive = (t: Theme) => css`
     &.rrainuiFrame {
       cursor: pointer;
       border-radius: 15px;
@@ -58,10 +59,43 @@ export namespace DataFieldStyle {
     &[data-error]>.rrainuiBorder{}
   `
   
+  const small = (t: Theme) => css`
+    &.rrainuiFrame {
+      width: 100%;
+      min-height: 40px;
+      padding: 4px 12px;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 129%;
+      letter-spacing: 0.05em;
+      
+      >.rrainuiBorder {
+        border-width: 1px;
+      }
+    }
+  `
   
-  
-  export const statik = (t: Theme.Theme) => css`
+  export const interactiveSmall = (t: Theme) => css`
     ${interactive(t)};
+    ${small(t)};
+  `
+  
+  
+  export const statik = (t: Theme) => css`
+    ${interactive(t)};
+    &.rrainuiFrame {
+      cursor: auto;
+      color: ${t.input.text};
+    }
+    
+    >.rrainuiBorder {
+      border: 2px solid ${t.page.text[0]};
+    }
+  `
+  
+  export const statikSmall = (t: Theme) => css`
+    ${interactive(t)};
+    ${small(t)};
     &.rrainuiFrame {
       cursor: auto;
       color: ${t.input.text};

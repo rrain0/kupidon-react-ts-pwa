@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
-import { Theme } from 'src/theme/Theme';
+import { Themes } from 'src/theme/Themes';
 
 
 
 export namespace RadioInputStyle {
   
-  export const radio = (t: Theme.Theme) => css`
+  export const radio = (t: Themes.Theme) => css`
     &.rrainuiFrame {
       --active-icon-color: ${t.button.primary.bgc}
       --inactive-icon-color: ${t.button.primary.bgc}

@@ -15,7 +15,7 @@ import { AppRoutes } from 'src/app-routes/AppRoutes'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 import { toast } from 'react-toastify'
 import { Toasts } from 'src/toasts/Toasts'
 import { LoginPageValidation } from './validation'
@@ -247,7 +247,7 @@ const Form = styled.form`
   justify-items: stretch;
 `
 
-const formHeader = (theme: Theme.Theme) => css`
+const formHeader = (theme: Themes.Theme) => css`
   font: 500 28px/150% Roboto;
   letter-spacing: 0.05em;
   color: ${theme.page.text[0]};

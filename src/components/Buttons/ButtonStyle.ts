@@ -1,11 +1,10 @@
 import { css } from '@emotion/react'
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 
 
 export namespace ButtonStyle {
   import onHover = EmotionCommon.onHover
-  import stretch = EmotionCommon.stretch
   
   
   const common = css`
@@ -24,7 +23,7 @@ export namespace ButtonStyle {
     }
   `
   
-  export const primary = (t: Theme.Theme) => css`
+  export const primary = (t: Themes.Theme) => css`
     ${common};
     &.rrainuiButton {
       background: ${t.button.primary.bgc[0]};
@@ -51,7 +50,7 @@ export namespace ButtonStyle {
   `
   
   
-  export const secondary = (t: Theme.Theme) => css`
+  export const secondary = (t: Themes.Theme) => css`
     ${common};
     &.rrainuiButton {
       background: ${t.button.secondary.bgc[0]};
@@ -65,9 +64,9 @@ export namespace ButtonStyle {
       :active, :focus-visible {
         background: ${t.button.secondary.active[0]};
       }
-      @media not (hover: none) { :hover {
+      ${onHover(css`
           background: ${t.button.secondary.hover[0]};
-      } }
+      `)};
 
       :disabled {
         background: ${t.button.secondary.disabled.bgc[0]};
@@ -78,15 +77,15 @@ export namespace ButtonStyle {
   `
   
   
-  export const icon = (t: Theme.Theme) => css`
+  export const icon = (t: Themes.Theme) => css`
     ${common};
     &.rrainuiButton {
-      min-height: 60px;
-      min-width: 60px;
-      height: 60px;
-      width: 60px;
+      min-height: 50px;
+      min-width: 50px;
+      height: 50px;
+      width: 50px;
       border-radius: 50%;
-      padding: 16px;
+      padding: 14px;
       
       background: ${t.button.primary.bgc[0]};
       color: ${t.button.primary.text[0]};
@@ -120,6 +119,10 @@ export namespace ButtonStyle {
     }
     &.rrainuiButton[data-error] > .rrainuiBorder {}
   `
+  
+  
+  
+  
   
   
   

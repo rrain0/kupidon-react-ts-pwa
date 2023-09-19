@@ -1,6 +1,6 @@
 
 
-export namespace Theme {
+export namespace Themes {
   
   export type ThemeType = 'light'|'dark'
   export interface Theme {
@@ -13,6 +13,9 @@ export namespace Theme {
       bgc3: string[]
       bgcPinkGradients: string[]
       text: string[]
+    }
+    nav: {
+      bgc: string[]
     }
     button: {
       primary: {
@@ -77,6 +80,10 @@ export namespace Theme {
         '#e35d4d','#e5bed3','#ed4d2b'
       ],
       text: ['#000'],
+    },
+    
+    nav: {
+      bgc: ['#f6d6db'] //#e8809a
     },
     
     button: {
@@ -163,6 +170,10 @@ export namespace Theme {
         '#992c46','#282c34','#992c46'
       ],
       text: ['#bdbdbd'],
+    },
+    
+    nav: {
+      bgc: ['#872c43'] // #b06772
     },
     
     button: {

@@ -16,7 +16,7 @@ import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
 import Button from 'src/components/Buttons/Button'
 import PwdInput from 'src/components/Inputs/PwdInput'
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 import row = EmotionCommon.row
 import reset = EmotionCommon.reset
 import RadioInput from 'src/components/Inputs/RadioInput'
@@ -346,14 +346,14 @@ const Form = styled.form`
   gap: 16px;
 `
 
-const formHeader = (t: Theme.Theme) => css`
+const formHeader = (t: Themes.Theme) => css`
   font: 500 28px/150% Roboto;
   letter-spacing: 0.05em;
   color: ${t.page.text[0]};
   align-self: center;
 `
 
-const radioGroupCss = (t: Theme.Theme) => css`
+const radioGroupCss = (t: Themes.Theme) => css`
   ${reset};
   height: 50px;
   width: 100%;

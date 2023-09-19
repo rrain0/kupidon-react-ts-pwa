@@ -43,6 +43,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   return <div
     css={css`
       width: 100%; height: 100%;
+      max-width: 100%; max-height: 100%;
       ${centerAll};
     `}
     className={classNames(props.className, 'rrainuiScrollOverlay')}
@@ -54,6 +55,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       css={css`
         position: relative;
         z-index: 10;
+        
         place-self: stretch;
         display: grid;
         pointer-events: none;

@@ -65,7 +65,7 @@ export namespace EmotionCommon {
     display: grid;
     place-items: stretch;
     grid: 'c';
-    & > * { grid-area: c }
+    & > * { grid-area: c; }
   `
   
   

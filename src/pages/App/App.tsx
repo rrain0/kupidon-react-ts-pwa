@@ -2,12 +2,11 @@
 import { useRecoilValue } from 'recoil'
 import React from 'react'
 import { css, ThemeProvider } from '@emotion/react'
+import AppFrame from 'src/pages/App/AppFrame'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ThemeObjRecoil, ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
 import center = EmotionCommon.center
-import AppRouting from './AppRouting'
-import AppPage from './AppPage'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import mobileWidth = EmotionCommon.mobileWidth
@@ -27,37 +26,49 @@ function App() {
   
   return <ThemeProvider theme={themeObj}>
     
-    <AppRouting/>
+    <AppFrame/>
     
-    <AppPage />
-    
-    <ToastContainer
-      position="top-center"
-      autoClose={false}
-      closeButton={false}
-      closeOnClick={false}
-      draggable
-      draggablePercent={40}
-      hideProgressBar={true}
-      newestOnTop={true}
-      rtl={false}
-      pauseOnFocusLoss
-      pauseOnHover
-      theme={theme.type}
+    <div
       css={css`
-        .Toastify__toast {
-          border-radius: 15px;
-          ${mobileWidth(css`
-            margin: 6px;
-            border-radius: 15px;
-          `)}
-          .Toastify__close-button {
-            flex-shrink: 0;
-            ${center};
+        display: contents;
+        
+        .Toastify {
+          display: block;
+          
+          .Toastify__toast-container {
+            display: block;
+
+            .Toastify__toast {
+              border-radius: 15px;
+              ${mobileWidth(css`
+                margin: 6px;
+                border-radius: 15px;
+              `)}
+
+              .Toastify__close-button {
+                flex-shrink: 0;
+                ${center};
+              }
+            }
           }
         }
       `}
-    />
+    >
+      <ToastContainer
+        position="top-center"
+        autoClose={false}
+        closeButton={false}
+        closeOnClick={false}
+        draggable
+        draggablePercent={40}
+        hideProgressBar={true}
+        newestOnTop={true}
+        rtl={false}
+        pauseOnFocusLoss
+        pauseOnHover
+        theme={theme.type}
+      />
+    </div>
     
   </ThemeProvider>
 }

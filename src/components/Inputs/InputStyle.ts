@@ -1,11 +1,11 @@
 import { css } from '@emotion/react'
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 
 
 
 export namespace InputStyle {
   
-  export const input = (t: Theme.Theme) => css`
+  export const input = (t: Themes.Theme) => css`
     &.rrainuiFrame {
       border-radius: 15px;
       background: ${t.input.bgc};

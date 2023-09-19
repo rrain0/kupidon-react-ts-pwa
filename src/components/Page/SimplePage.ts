@@ -7,8 +7,8 @@ export namespace SimplePage {
   
   
   export const Page = styled.main`
-    position: fixed;
-    inset: 0;
+    width: 100%;
+    height: 100%;
     overflow: auto;
     background: ${p=>p.theme.page.bgc2[1]};
     color: ${p=>p.theme.page.text[0]};

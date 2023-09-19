@@ -1,12 +1,12 @@
 import { css } from '@emotion/react'
-import { Theme } from 'src/theme/Theme'
+import { Themes } from 'src/theme/Themes'
 
 
 
 export namespace ScrollbarStyle {
   
   
-  export const scrollbar = (t: Theme.Theme) => css`
+  export const scrollbar = (t: Themes.Theme) => css`
     &.rrainuiScrollbarTrack {
       border-radius: 15px;
       background: ${t.scrollbar.track};
