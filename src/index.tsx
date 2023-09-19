@@ -4,7 +4,6 @@ import 'src/styles/reset.css'
 import 'src/styles/fonts.css'
 import 'src/styles/index.css'
 import 'react-toastify/dist/ReactToastify.css'
-//import 'src/styles/toastify-theme-fix.scss'
 import 'animate.css'
 import App from './pages/App/App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
@@ -13,6 +12,7 @@ import { RecoilRoot } from 'recoil'
 import RecoilNexus from 'recoil-nexus' // access recoil state from not react component
 import { BrowserRouter } from 'react-router-dom'
 import { StyleSheetManager } from 'styled-components'
+
 
 
 const root = ReactDOM.createRoot(
@@ -38,10 +38,13 @@ root.render(
   </React.StrictMode>
 )
 
+
+
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.register()
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

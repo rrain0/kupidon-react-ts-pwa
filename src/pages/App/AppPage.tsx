@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useRecoilState } from 'recoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import row = EmotionCommon.row
@@ -12,12 +12,20 @@ import row = EmotionCommon.row
 function AppPage(){
   const [theme, setTheme] = useRecoilState(ThemeRecoil)
   
-  const changeTheme = ()=>{
-    switch (theme.type){
-      case 'light': setTheme(v=>({ ...v, type: 'dark' })); break
-      case 'dark': default: setTheme(v=>({ ...v, type: 'light' })); break
-    }
-  }
+  
+  const changeTheme = useCallback(
+    ()=>setTheme({
+      ...theme,
+      type: function(){
+        switch (theme.type){
+          case 'light': return 'dark'
+          case 'dark': default: return 'light'
+        }
+      }()
+    }),
+    [theme]
+  )
+  
   
   return <>
     <SomeSettings>

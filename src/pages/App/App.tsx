@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import React from 'react'
 import { css, ThemeProvider } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -8,8 +8,9 @@ import { ToastContainer } from 'react-toastify'
 import center = EmotionCommon.center
 import AppRouting from './AppRouting'
 import AppPage from './AppPage'
-import { ReactUtils } from '../../utils/ReactUtils';
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
+import { ReactUtils } from 'src/utils/ReactUtils'
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import mobileWidth = EmotionCommon.mobileWidth
 
 
 
@@ -17,14 +18,8 @@ import ReactMemoTyped = ReactUtils.ReactMemoTyped;
 
 function App() {
   //const auth = useRecoilValue(authRecoil)
-  const [theme, setTheme] = useRecoilState(ThemeRecoil)
+  const theme = useRecoilValue(ThemeRecoil)
   const themeObj = useRecoilValue(ThemeObjRecoil)
-  
-  
-  /*useLayoutEffect(()=>{
-    const html = document.querySelector('html') as HTMLElement
-    html.setAttribute('data-theme', theme.type)
-  },[theme.type])*/
   
   
   
@@ -52,10 +47,10 @@ function App() {
       css={css`
         .Toastify__toast {
           border-radius: 15px;
-          @media only screen and (max-width: 480px) {
+          ${mobileWidth(css`
             margin: 6px;
             border-radius: 15px;
-          }
+          `)}
           .Toastify__close-button {
             flex-shrink: 0;
             ${center};

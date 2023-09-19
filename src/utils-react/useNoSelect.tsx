@@ -10,7 +10,7 @@ export const useNoSelect = (
   lock?: boolean|empty,
 )=>{
   useLayoutEffect(()=>{
-    const root = document.querySelector(':root')!
+    const root = document.querySelector('html')!
     if (lock){
       root.classList.add(cmcss.noSelect)
       return ()=>root.classList.remove(cmcss.noSelect)

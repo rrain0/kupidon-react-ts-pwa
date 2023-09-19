@@ -1,4 +1,4 @@
-import {RoutesBuilder} from './RoutesBuilder';
+import {RoutesBuilder} from 'src/utils-react/routes-builder/RoutesBuilder';
 import RouteDescription = RoutesBuilder.RouteDescription;
 import buildRoutes = RoutesBuilder.buildRoutes;
 

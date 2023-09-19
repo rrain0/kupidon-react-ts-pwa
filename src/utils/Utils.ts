@@ -5,10 +5,6 @@ export namespace Utils {
   
   
   
-  
-  
-  
-  
   export class Lazy<T> {
     private inited = false
     private value!: T
@@ -24,30 +20,6 @@ export namespace Utils {
   
   
   
-  
-  
-  
-  /**
-   * Операция получение по файлу его DataURL
-   * @param file Файл для получения DataURL
-   * @returns {Promise<string>}
-   */
-  export const readAsUrl = async (file: Blob) =>
-    new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => resolve(ev?.target?.result as string);
-      reader.onerror = (ev) => reject(ev);
-      
-      //reader.readAsArrayBuffer(file)
-      
-      reader.readAsDataURL(file);
-    });
-  
-  
-  
-  
-  
-  
   export const nonNegIntOrDefault =
     (value: any, defolt: number): number => {
       value = +value
@@ -57,13 +29,14 @@ export namespace Utils {
     
     
   
-  
-  
   let id = 1
   export const nextId = ()=>''+id++
   
   
+  
   export type WithId<E extends object> = E & { id: string }
+  
+  
   export type NonEmptyArr<A extends Array<E>, E = any> = A extends Array<infer E>
     ? Array<Exclude<E, null|undefined>>
     : never
@@ -74,7 +47,7 @@ export namespace Utils {
   
   
   // Получить тип, в котором ко всем именам свойств переданного объекта добавляется суффикс
-  export type Suffix<O extends object,Suff extends string> =
+  export type Suffix<O extends object, Suff extends string> =
     { [Prop in keyof O as Prop extends string ? `${Prop}${Suff}` : never]: O[Prop] }
   
   

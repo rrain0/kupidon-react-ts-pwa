@@ -1,6 +1,6 @@
-import { ValidationValidators } from 'src/form-validation/ValidationValidators'
+import { ValidationValidators } from 'src/utils-react/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
-import { ValidationCore } from 'src/form-validation/ValidationCore'
+import { ValidationCore } from 'src/utils-react/form-validation/ValidationCore'
 import { LoginDefaults } from './LoginPage';
 
 

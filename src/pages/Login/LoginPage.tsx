@@ -20,16 +20,16 @@ import { toast } from 'react-toastify'
 import { Toasts } from 'src/toasts/Toasts'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
-import { ValidationValidate } from 'src/form-validation/ValidationValidate'
+import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
 import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
 import { Utils } from 'src/utils/Utils'
-import { ValidationActions } from 'src/form-validation/ValidationActions'
+import { ValidationActions } from 'src/utils-react/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
-import { ValidationComponents } from 'src/form-validation/ValidationComponents'
+import { ValidationComponents } from 'src/utils-react/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap
-import { useFailureDelay } from 'src/form-validation/useFailureDelay'
+import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import RootRoutes = AppRoutes.RootRoutes;
@@ -216,7 +216,8 @@ const LoginPage = () => {
           
           <Button
             css={ButtonStyle.primary}
-            type='submit'>
+            type='submit'
+          >
             Войти
           </Button>
           

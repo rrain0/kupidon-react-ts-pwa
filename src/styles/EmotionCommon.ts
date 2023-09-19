@@ -71,7 +71,7 @@ export namespace EmotionCommon {
   
   
   export const mobileFullWidth = css`
-    @media (max-width: 550px) {
+    @media (max-width: 480px) {
       width: 100%;
     }
   `
@@ -82,6 +82,14 @@ export namespace EmotionCommon {
       ${cssStyle};
     } }
   `
+  
+  export const mobileWidth = (cssStyle: SerializedStyles)=>css`
+    @media only screen and (max-width: 480px) {
+      ${cssStyle};
+    }
+  `
+  
+  
   
   
   

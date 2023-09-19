@@ -1,5 +1,5 @@
-import { ValidationValidators } from 'src/form-validation/ValidationValidators'
-import { ValidationCore } from 'src/form-validation/ValidationCore'
+import { ValidationValidators } from 'src/utils-react/form-validation/ValidationValidators'
+import { ValidationCore } from 'src/utils-react/form-validation/ValidationCore'
 import { SignupDefaults } from './SignupPage';
 
 

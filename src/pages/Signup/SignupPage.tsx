@@ -21,20 +21,20 @@ import row = EmotionCommon.row
 import reset = EmotionCommon.reset
 import RadioInput from 'src/components/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle'
-import { ValidationValidate } from 'src/form-validation/ValidationValidate'
+import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
 import { CastUtils } from 'src/utils/CastUtils'
 import validate = ValidationValidate.validate
 import { SignupPageValidation } from './validation'
 import FormValues = SignupPageValidation.FormValues
 import validators = SignupPageValidation.validators
 import { toast } from 'react-toastify';
-import { ValidationActions } from 'src/form-validation/ValidationActions'
+import { ValidationActions } from 'src/utils-react/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
 import CreateUserRespE = UserApi.CreateUserRespE
-import { useFailureDelay } from 'src/form-validation/useFailureDelay'
+import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay'
 import { Toasts } from 'src/toasts/Toasts'
 import { Utils } from 'src/utils/Utils'
-import { ValidationComponents } from 'src/form-validation/ValidationComponents'
+import { ValidationComponents } from 'src/utils-react/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap;
 import UserToCreate = UserApi.UserToCreate
 import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap

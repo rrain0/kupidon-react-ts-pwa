@@ -1,4 +1,4 @@
-import { ValidationCore } from './ValidationCore'
+import { ValidationCore } from 'src/utils-react/form-validation/ValidationCore'
 import React, {
   DetailedReactHTMLElement,
   JSX,
@@ -9,8 +9,8 @@ import React, {
   useState,
 } from 'react'
 import Input from 'src/components/Inputs/Input'
-import { ValidationValidate } from './ValidationValidate'
-import { ValidationActions } from './ValidationActions'
+import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
+import { ValidationActions } from 'src/utils-react/form-validation/ValidationActions'
 import { TypeUtils } from 'src/utils/TypeUtils'
 
 

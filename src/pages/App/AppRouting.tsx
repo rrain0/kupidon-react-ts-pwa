@@ -7,8 +7,8 @@ import React from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import RootRoutes = AppRoutes.RootRoutes
 import TestRouting from 'src/pages/Test/TestRouting'
-import { ReactUtils } from '../../utils/ReactUtils';
-import ReactMemoTyped = ReactUtils.ReactMemoTyped;
+import { ReactUtils } from 'src/utils/ReactUtils'
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 

@@ -127,12 +127,12 @@ export namespace RoutesBuilder {
       const newParams: { [Param in Params]?: string } = {}
       if (this.params) ObjectEntries(this.params).forEach(([paramName,paramPath])=>{
         if (isPresent(params[paramName])){
-          // @ts-ignore
-          newParams[paramPath] = params[paramName]
+          newParams[paramPath as any] = params[paramName]
         }
       })
-      // @ts-ignore
-      const stringParams = new URLSearchParams(newParams).toString()
+      const stringParams = new URLSearchParams(
+        newParams as Record<string, string>
+      ).toString()
       if (stringParams) fullPath += '?'+stringParams
     }
     return fullPath

@@ -1,4 +1,4 @@
-import { RoutesBuilder } from './utils/RoutesBuilder'
+import { RoutesBuilder } from '../utils-react/routes-builder/RoutesBuilder'
 
 
 export namespace AppRoutes {
