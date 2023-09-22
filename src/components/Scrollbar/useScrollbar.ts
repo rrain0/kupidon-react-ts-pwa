@@ -24,7 +24,7 @@ export const useScrollbar = (
 )=>{
   
   
-  const [scrollProps, _setScrollProps] = useState<ScrollProps>({
+  const [scrollProps, setScrollProps] = useState<ScrollProps>({
     clientWidth: 0,
     scrollLeft: 0,
     scrollLeftMax: 0,
@@ -39,7 +39,7 @@ export const useScrollbar = (
     if (container){
       const d = new GetDimensions(container)
       //console.log('container.scrollWidth',container.scrollWidth)
-      _setScrollProps({
+      setScrollProps({
         clientWidth: d.contentWidthRounded,
         scrollLeft: d.scrollLeft,
         scrollLeftMax: d.scrollLeftMax,
@@ -80,7 +80,7 @@ export const useScrollbar = (
   
   const setContainerScroll = useCallback(
     (scroll: ScrollToOptions) => {
-      containerRef.current!.scrollTo(scroll)
+      containerRef.current?.scrollTo(scroll)
     },
     [containerRef.current]
   )
@@ -103,9 +103,6 @@ export const useScrollbar = (
   
   
   return {
-    /*containerProps: { // for container
-      onScroll: onContainerScroll,
-    },*/
     scrollbarProps: { // for scrollbar
       scrollProps,
       setContainerScroll,

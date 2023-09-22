@@ -16,6 +16,10 @@ export namespace Themes {
     }
     nav: {
       bgc: string[]
+      text: string[]
+      selected: {
+        text: string[]
+      }
     }
     button: {
       primary: {
@@ -83,7 +87,11 @@ export namespace Themes {
     },
     
     nav: {
-      bgc: ['#f6d6db'] //#e8809a
+      bgc: ['#f6d6db'], //#e8809a
+      text: ['#333'],
+      selected: {
+        text: ['#BB2649'],
+      }
     },
     
     button: {
@@ -173,7 +181,11 @@ export namespace Themes {
     },
     
     nav: {
-      bgc: ['#872c43'] // #b06772
+      bgc: ['#282c34'], // #b06772
+      text: ['#bdbdbd'],
+      selected: {
+        text: ['#d92a54'],
+      }
     },
     
     button: {

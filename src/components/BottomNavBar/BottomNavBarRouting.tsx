@@ -4,13 +4,14 @@ import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
 import RootRoutes = AppRoutes.RootRoutes
 
 
+
 const BottomNavBarRouting = ()=>{
   
   return <Routes>
     {
       [
-        RootRoutes.main.path,
-        RootRoutes.profile.path
+        RootRoutes.main.fullPath(),
+        RootRoutes.profile.fullPath(),
       ]
         .map(path=>path+'/*')
         .map(path=><Route

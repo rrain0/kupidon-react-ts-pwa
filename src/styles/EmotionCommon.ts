@@ -11,6 +11,7 @@ export namespace EmotionCommon {
     box-shadow: none;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
     //min-width: 0;
     //min-height: 0;
   `

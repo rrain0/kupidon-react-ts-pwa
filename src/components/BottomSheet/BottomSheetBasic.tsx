@@ -58,7 +58,7 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
     >
       <div
         css={t=>css`
-          width: 60px;
+          width: 50px;
           height: 4px;
           border-radius: 2px;
           background: ${t.page.bgc3[1]};

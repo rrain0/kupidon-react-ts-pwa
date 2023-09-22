@@ -52,6 +52,13 @@ export namespace AppRoutes {
   
   
   
+  /*
+  const settingsRoutes = {
+    path: 'settings'
+  } satisfies RouteDescription
+  */
+  
+  
   const rootRoutes = {
     path: '/',
     paths: {
@@ -60,8 +67,10 @@ export namespace AppRoutes {
       login: loginRoutes,
       signup: signupRoutes,
       profile: profileIdRoutes,
+      //settings: settingsRoutes,
     }
   } satisfies RouteDescription
+  
   export const RootRoutes = RoutesBuilder.buildRoutes(rootRoutes)
   
   

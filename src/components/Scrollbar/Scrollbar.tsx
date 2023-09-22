@@ -8,7 +8,7 @@ import React, {
 } from 'react'
 import cmcss from 'src/styles/common.module.scss'
 import classNames from "classnames"
-import {GetDimensions} from "src/utils/GetDimensions"
+import { ElementProps } from 'src/utils/GetDimensions'
 import { MathUtils } from 'src/utils/MathUtils'
 import inRange = MathUtils.inRange
 import fitRange = MathUtils.fitRange
@@ -23,7 +23,7 @@ import { ScrollProps } from './useScrollbar'
 
 
 
-// todo min scrollbar width
+// maybe it is worth to do min scrollbar width
 
 export type ScrollDirection = 'horizontal'|'vertical'
 
@@ -60,7 +60,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   const updateTrackProps = useCallback(() => {
     const track = trackRef.current
     if (track){
-      const d = new GetDimensions(track)
+      const d = ElementProps(track)
       setTrackProps({
         width: d.contentWidthRounded,
         height: d.contentHeightRounded,
@@ -105,118 +105,132 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   
   // Track Resize Observer
   useLayoutEffect(()=>{
-    const track = trackRef.current!
-    const trackResizeObserver = new ResizeObserver(()=>updateTrackProps())
     updateTrackProps()
-    trackResizeObserver.observe(track)
-    return ()=>trackResizeObserver.disconnect()
-  },[trackRef.current])
+    const track = trackRef.current
+    if (track){
+      const trackResizeObserver = new ResizeObserver(()=>updateTrackProps())
+      track && trackResizeObserver.observe(track)
+      return ()=>trackResizeObserver.disconnect()
+    }
+  },[trackRef.current, updateTrackProps])
   
   
   const [dragStart, setDragStart] = useState(
     undefined as undefined|{ client: number, scroll: number }
   )
-  const onPointerDown = useCallback((ev: React.PointerEvent) => {
-    if (ev.buttons===1){
-      const trackD = new GetDimensions(trackRef.current!)
-      const thumbBoxD = new GetDimensions(thumbBoxRef.current!)
-      const drag = function(){
-        //if (ev.target===thumbBoxRef.current!)
-        const p = function(){
-          switch (direction) {
-            case 'vertical': return {
-              start: thumbBoxD.top,
-              client: ev.clientY,
-              end: thumbBoxD.bottom,
-              scroll: scrollProps.scrollTop,
-              size: thumbBoxProps.height!,
-              trackStart: trackD.top,
-              scrollMax: scrollProps.scrollTopMax,
+  const onPointerDown = useCallback(
+    function (this: HTMLElement, ev: PointerEvent){
+      if (ev.buttons===1){
+        const trackD = ElementProps(trackRef.current!)
+        const thumbBoxD = ElementProps(thumbBoxRef.current!)
+        const drag = function(){
+          const p = function(){
+            switch (direction) {
+              case 'vertical': return {
+                start: thumbBoxD.top,
+                client: ev.clientY,
+                end: thumbBoxD.bottom,
+                scroll: scrollProps.scrollTop,
+                size: thumbBoxProps.height!,
+                trackStart: trackD.top,
+                scrollMax: scrollProps.scrollTopMax,
+              }
+              case 'horizontal': return {
+                start: thumbBoxD.left,
+                client: ev.clientX,
+                end: thumbBoxD.right,
+                scroll: scrollProps.scrollLeft,
+                size: thumbBoxProps.width!,
+                trackStart: trackD.left,
+                scrollMax: scrollProps.scrollLeftMax,
+              }
             }
-            case 'horizontal': return {
-              start: thumbBoxD.left,
-              client: ev.clientX,
-              end: thumbBoxD.right,
-              scroll: scrollProps.scrollLeft,
-              size: thumbBoxProps.width!,
-              trackStart: trackD.left,
-              scrollMax: scrollProps.scrollLeftMax,
+          }()
+          if (inRange(p.start, p.client, p.end))
+            return { client: p.client, scroll: p.scroll }
+          else {
+            let newScroll = toScrollScale(p.client - p.size/2 - p.trackStart)
+            newScroll = fitRange(0, newScroll, p.scrollMax)
+            switch (direction){
+              case 'vertical': setContainerScroll({ top: newScroll }); break
+              case 'horizontal': setContainerScroll({ left: newScroll }); break
             }
+            return { client: p.client, scroll: newScroll }
           }
         }()
-        if (inRange(p.start, p.client, p.end))
-          return { client: p.client, scroll: p.scroll }
-        else {
-          let newScroll = toScrollScale(p.client - p.size/2 - p.trackStart)
-          newScroll = fitRange(0, newScroll, p.scrollMax)
-          switch (direction){
-            case 'vertical': setContainerScroll({ top: newScroll }); break
-            case 'horizontal': setContainerScroll({ left: newScroll }); break
-          }
-          return { client: p.client, scroll: newScroll }
-        }
-      }()
-      
-      setDragStart(drag)
-      ev.currentTarget.setPointerCapture(ev.pointerId)
-    }
-  },
+        
+        setDragStart(drag)
+        this.setPointerCapture(ev.pointerId)
+      }
+    },
     [
-      direction,thumbBoxRef.current,trackRef.current,scrollProps,
-      thumbBoxProps,setContainerScroll,toScrollScale
+      direction, thumbBoxRef.current, trackRef.current, scrollProps,
+      thumbBoxProps, setContainerScroll, toScrollScale
     ]
   )
   
-  // Using css touch-action: none; to prevent browser gesture handling on mobile devices
-  const onPointerMove = useCallback((ev: React.PointerEvent)=>{
-    if (dragStart && ev.buttons===1){
-      const p = function(){
-        switch (direction) {
-          case 'vertical': return {
-            client: ev.clientY,
+  // Using css 'touch-action: none;' to prevent browser gesture handling on mobile devices
+  const onPointerMove = useCallback(
+    (ev: PointerEvent)=>{
+      if (dragStart && ev.buttons===1){
+        const p = function(){
+          switch (direction) {
+            case 'vertical': return {
+              client: ev.clientY,
+            }
+            case 'horizontal': return {
+              client: ev.clientX,
+            }
           }
-          case 'horizontal': return {
-            client: ev.clientX,
-          }
+        }()
+        const addTrack = p.client-dragStart.client
+        const newScroll = dragStart.scroll + toScrollScale(addTrack)
+        
+        switch (direction){
+          case 'vertical': setContainerScroll({ top: newScroll }); break
+          case 'horizontal': setContainerScroll({ left: newScroll }); break
         }
-      }()
-      const addTrack = p.client-dragStart.client
-      const newScroll = dragStart.scroll + toScrollScale(addTrack)
-      
-      switch (direction){
-        case 'vertical': setContainerScroll({ top: newScroll }); break
-        case 'horizontal': setContainerScroll({ left: newScroll }); break
       }
-    }
-  },[direction,dragStart,toScrollScale,setContainerScroll])
+    },
+    [direction, dragStart, toScrollScale, setContainerScroll]
+  )
   
-  const onPointerEnd = useCallback((ev: React.PointerEvent)=>{
-    setDragStart(undefined)
-  },[])
+  const onPointerEnd = useCallback(
+    (ev: PointerEvent)=>{
+      setDragStart(undefined)
+    },
+    []
+  )
   
   
   // forbid content selection for all elements while dragging scrollbar
   useLayoutEffect(()=>{
     if (dragStart){
-      document.querySelector('*')!.classList.add(cmcss.noSelect)
-      return ()=>document.querySelector('*')!.classList.remove(cmcss.noSelect)
-    } else document.querySelector('*')!.classList.remove(cmcss.noSelect)
+      document.querySelector('html')!.classList.add(cmcss.noSelect)
+      return ()=>document.querySelector('html')!.classList.remove(cmcss.noSelect)
+    } else document.querySelector('html')!.classList.remove(cmcss.noSelect)
   },[dragStart,scrollProps,trackProps])
   
-  /*const onTrackClick = (ev: React.MouseEvent<HTMLDivElement>) => {
-    const evX = ev.clientX
-    const thumbD = new GetDimensions(thumbBoxRef.current!)
-    if (!inRange(thumbD.left, evX, thumbD.right)){
-      const trackD = new GetDimensions(trackRef.current!)
-      const newScrollLeft = fitRange(
-        0,
-        toScrollScale(evX - thumbBoxProps.width/2 - trackD.left),
-        scrollProps.scrollLeftMax
-      )
-      setContainerScroll(newScrollLeft)
-    }
-  }*/
   
+  useLayoutEffect(
+    ()=>{
+      const track = trackRef.current!
+      if (track){
+        track.addEventListener('pointerdown',onPointerDown)
+        track.addEventListener('pointermove',onPointerMove)
+        track.addEventListener('pointerup',onPointerEnd)
+        track.addEventListener('pointercancel',onPointerEnd)
+        
+        return ()=>{
+          track.removeEventListener('pointerdown',onPointerDown)
+          track.removeEventListener('pointermove',onPointerMove)
+          track.removeEventListener('pointerup',onPointerEnd)
+          track.removeEventListener('pointercancel',onPointerEnd)
+        }
+      }
+    },
+    [trackRef.current, onPointerDown, onPointerMove, onPointerEnd]
+  )
   
   
   
@@ -224,23 +238,6 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
     {...restProps}
     direction={direction}
     ref={trackRef}
-    onPointerDown={useCallback(
-      ev=>{onPointerDown(ev); props.onPointerDown?.(ev)},
-      [onPointerDown,props.onPointerDown]
-    )}
-    onPointerMove={useCallback(
-      ev=>{onPointerMove(ev); props.onPointerMove?.(ev)},
-      [onPointerMove,props.onPointerMove]
-    )}
-    onPointerUp={useCallback(
-      ev=>{onPointerEnd(ev); props.onPointerUp?.(ev)},
-      [onPointerEnd,props.onPointerUp]
-    )}
-    onPointerCancel={useCallback(
-      ev=>{onPointerEnd(ev); props.onPointerCancel?.(ev)},
-      [onPointerEnd,props.onPointerCancel]
-    )}
-    //onClick={ev=>{onTrackClick(ev); props.onClick?.(ev)}}
   >
     <ScrollbarThumbBox
       ref={thumbBoxRef}

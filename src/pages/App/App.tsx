@@ -4,7 +4,7 @@ import React from 'react'
 import { css, ThemeProvider } from '@emotion/react'
 import AppFrame from 'src/pages/App/AppFrame'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ThemeObjRecoil, ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeObjRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
 import center = EmotionCommon.center
 import { ReactUtils } from 'src/utils/ReactUtils'
@@ -16,11 +16,7 @@ import mobileWidth = EmotionCommon.mobileWidth
 
 
 function App() {
-  //const auth = useRecoilValue(authRecoil)
-  const theme = useRecoilValue(ThemeRecoil)
   const themeObj = useRecoilValue(ThemeObjRecoil)
-  
-  
   
   
   
@@ -66,7 +62,7 @@ function App() {
         rtl={false}
         pauseOnFocusLoss
         pauseOnHover
-        theme={theme.type}
+        theme={themeObj.type}
       />
     </div>
     

@@ -35,8 +35,7 @@ export class GetDimensions {
     }
     
 
-    private _rect: DOMRect|undefined
-    get rect(){ return this._rect ??= this.domElement.getBoundingClientRect() }
+    get rect(){ return this.domElement.getBoundingClientRect() }
     
     
     
