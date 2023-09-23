@@ -16,9 +16,15 @@ export namespace Themes {
     }
     nav: {
       bgc: string[]
-      text: string[]
-      selected: {
+      button: {
+        bgc: string[]
         text: string[]
+        ripple: string[]
+        active: string[]
+        hover: string[]
+        selected: {
+          text: string[]
+        }
       }
     }
     button: {
@@ -88,10 +94,16 @@ export namespace Themes {
     
     nav: {
       bgc: ['#f6d6db'], //#e8809a
-      text: ['#333'],
-      selected: {
-        text: ['#BB2649'],
-      }
+      button: {
+        bgc: ['#BB2649'],
+        text: ['#333'],
+        ripple: ['#fff'],
+        active: ['#fabfc9'],
+        hover: ['#fabfc9'],
+        selected: {
+          text: ['#BB2649'],
+        },
+      },
     },
     
     button: {
@@ -182,9 +194,15 @@ export namespace Themes {
     
     nav: {
       bgc: ['#282c34'], // #b06772
-      text: ['#bdbdbd'],
-      selected: {
-        text: ['#d92a54'],
+      button: {
+        bgc: ['#971f3b'],
+        text: ['#bdbdbd'],
+        ripple: ['#000'],
+        active: ['#2e3440'],
+        hover: ['#2e3440'],
+        selected: {
+          text: ['#d92a54'],
+        }
       }
     },
     

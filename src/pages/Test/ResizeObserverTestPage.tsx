@@ -6,8 +6,8 @@ import { css } from '@emotion/react'
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
-import Button from 'src/components/Buttons/Button'
-import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
+import Button from 'src/views/Buttons/Button'
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 
 
 
@@ -68,7 +68,7 @@ const ResizeObserverTestPage = ()=>{
       
       <div>Resize Observer Test Page</div>
       
-      <Button css={ButtonStyle.primary}
+      <Button css={ButtonStyle.buttonPrimary}
         onClick={()=>addItem1()}
       >
         +1
@@ -103,7 +103,7 @@ const ResizeObserverTestPage = ()=>{
       </div>
       
       
-      <Button css={ButtonStyle.primary}
+      <Button css={ButtonStyle.buttonPrimary}
         onClick={()=>addItem2()}
       >
         +1

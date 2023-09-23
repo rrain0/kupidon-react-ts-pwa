@@ -3,9 +3,9 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import hideScrollbar = EmotionCommon.hideScrollbar
-import { useScrollbar } from 'src/components/Scrollbar/useScrollbar'
-import Scrollbar from 'src/components/Scrollbar/Scrollbar'
-import { ScrollbarStyle } from 'src/components/Scrollbar/ScrollbarStyle'
+import { useScrollbar } from 'src/views/Scrollbar/useScrollbar'
+import Scrollbar from 'src/views/Scrollbar/Scrollbar'
+import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import React, { HTMLAttributes, useRef } from 'react'
 import centerAll = EmotionCommon.centerAll
 import { TypeUtils } from 'src/utils/TypeUtils'

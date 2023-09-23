@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import Input from 'src/components/Inputs/Input'
+import Input from 'src/views/Inputs/Input'
 import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
 import { ValidationActions } from 'src/utils-react/form-validation/ValidationActions'
 import { TypeUtils } from 'src/utils/TypeUtils'

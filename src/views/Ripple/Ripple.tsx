@@ -2,7 +2,7 @@
 import classNames from 'classnames'
 import React, { useCallback, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 import { ElementProps, GetDimensions } from 'src/utils/GetDimensions'
-import css from './Ripple.module.scss'
+import css from 'src/views/Ripple/Ripple.module.scss'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
 import {ReactUtils} from "src/utils/ReactUtils"

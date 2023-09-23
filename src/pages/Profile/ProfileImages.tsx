@@ -4,7 +4,7 @@ import React from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import rowWrap = EmotionCommon.rowWrap
 import center = EmotionCommon.center
-import Card from 'src/components/Card'
+import Card from 'src/views/Card'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import Setter = TypeUtils.Setter
 

@@ -4,13 +4,16 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useRecoilState, useSetRecoilState } from 'recoil'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import Button from 'src/components/Buttons/Button'
-import Input from 'src/components/Inputs/Input'
-import PwdInput from 'src/components/Inputs/PwdInput'
-import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
-import { InputStyle } from 'src/components/Inputs/InputStyle'
+import Button from 'src/views/Buttons/Button'
+import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import Input from 'src/views/Inputs/Input'
+import PwdInput from 'src/views/Inputs/PwdInput'
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
+import { InputStyle } from 'src/views/Inputs/InputStyle'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -38,6 +41,7 @@ import PageContent = FormPage.PageContent;
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import Page = FormPage.Page
+import GearIc = SimpleSvgIcons.GearIc
 
 
 
@@ -185,54 +189,73 @@ const LoginPage = () => {
     setValues: setLoginForm,
   }
   
-  return <Page>
-    <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
-      <PageContent>
-        <Form onSubmit={onSubmit}>
-          
-          <h3 css={formHeader}>Вход</h3>
-          
-          <InputValidationWrap
-            {...validationProps}
-            fieldName={'login'}
-            errorPropName={'hasError'} // todo
-          >
-            <Input
-              css={InputStyle.input}
-              placeholder='логин (email)'
-            />
-          </InputValidationWrap>
-          
-          <InputValidationWrap
-            {...validationProps}
-            fieldName={'pwd'}
-            errorPropName={'hasError'} // todo
-          >
-            <PwdInput
-              css={InputStyle.input}
-              placeholder='пароль'
-            />
-          </InputValidationWrap>
-          
-          <Button
-            css={ButtonStyle.primary}
-            type='submit'
-          >
-            Войти
-          </Button>
-          
-          
-          <Link to={RootRoutes.signup.fullPath({ returnPath: returnPath })}>
+  
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  
+  
+  return <>
+    <Page>
+      
+      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+        <PageContent>
+          <Form onSubmit={onSubmit}>
+            
+            <h3 css={formHeader}>Вход</h3>
+            
+            <InputValidationWrap
+              {...validationProps}
+              fieldName={'login'}
+              errorPropName={'hasError'} // todo
+            >
+              <Input
+                css={InputStyle.input}
+                placeholder="логин (email)"
+              />
+            </InputValidationWrap>
+            
+            <InputValidationWrap
+              {...validationProps}
+              fieldName={'pwd'}
+              errorPropName={'hasError'} // todo
+            >
+              <PwdInput
+                css={InputStyle.input}
+                placeholder="пароль"
+              />
+            </InputValidationWrap>
+            
             <Button
-              css={ButtonStyle.secondary}>
-              Зарегистрироваться
+              css={ButtonStyle.buttonPrimary}
+              type="submit"
+            >
+              Войти
             </Button>
-          </Link>
+            
+            
+            <Link to={RootRoutes.signup.fullPath({ returnPath: returnPath })}>
+              <Button
+                css={ButtonStyle.buttonSecondary}>
+                Зарегистрироваться
+              </Button>
+            </Link>
           
-        </Form>
-      </PageContent>
-    </ScrollbarOverlay>
-  </Page>
+          </Form>
+        </PageContent>
+      </ScrollbarOverlay>
+      
+      <BottomButtonBar>
+        <Button css={ButtonStyle.iconTransparent}
+          onClick={() => setSettingsOpen(true)}
+        >
+          <GearIc/>
+        </Button>
+      </BottomButtonBar>
+    
+    </Page>
+    
+    <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
+  
+  </>
 }
 
 export default LoginPage

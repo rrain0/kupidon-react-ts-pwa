@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import React, { useRef } from 'react'
-import { useScrollbar } from 'src/components/Scrollbar/useScrollbar'
+import { useScrollbar } from 'src/views/Scrollbar/useScrollbar'
 import { css } from '@emotion/react'
-import Scrollbar from 'src/components/Scrollbar/Scrollbar'
-import { ScrollbarStyle } from 'src/components/Scrollbar/ScrollbarStyle'
+import Scrollbar from 'src/views/Scrollbar/Scrollbar'
+import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
 import { EmotionCommon } from 'src/styles/EmotionCommon'

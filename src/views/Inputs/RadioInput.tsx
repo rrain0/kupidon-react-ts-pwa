@@ -11,9 +11,9 @@ import resetInput = StyledCommon.resetInput
 import abs = StyledCommon.abs
 import row = StyledCommon.row
 import resetButton = StyledCommon.resetButton
-import { SimpleSvgIcons } from 'src/components/icons/SimpleSvgIcons'
+import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioActiveIc = SimpleSvgIcons.RadioActiveIc
-import Ripple, { RippleProps } from 'src/components/Ripple/Ripple'
+import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
 import RadioInactiveIc = SimpleSvgIcons.RadioInactiveIc
 import trueOrUndef = CastUtils.trueOrUndef
 

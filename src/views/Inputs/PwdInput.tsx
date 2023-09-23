@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import Input, {InputProps} from "./Input"
+import Input, {InputProps} from "src/views/Inputs/Input"
 import { useRef, useState } from 'react'
 import React from "react"
 import {ReactUtils} from "src/utils/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import {SimpleSvgIcons} from "src/components/icons/SimpleSvgIcons"
+import {SimpleSvgIcons} from "src/views/icons/SimpleSvgIcons"
 import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc
 import EyeIc = SimpleSvgIcons.EyeIc
-import Ripple from "../Ripple/Ripple"
+import Ripple from "src/views/Ripple/Ripple"
 import { useRecoilValue } from 'recoil'
 import { ThemeObjRecoil } from 'src/recoil/state/ThemeRecoil'
 import styled from '@emotion/styled'

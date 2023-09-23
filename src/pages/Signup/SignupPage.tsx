@@ -10,17 +10,17 @@ import { useRecoilState, useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
-import { InputStyle } from 'src/components/Inputs/InputStyle'
-import Input from 'src/components/Inputs/Input'
+import { InputStyle } from 'src/views/Inputs/InputStyle'
+import Input from 'src/views/Inputs/Input'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
-import Button from 'src/components/Buttons/Button'
-import PwdInput from 'src/components/Inputs/PwdInput'
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
+import Button from 'src/views/Buttons/Button'
+import PwdInput from 'src/views/Inputs/PwdInput'
 import { Themes } from 'src/theme/Themes'
 import row = EmotionCommon.row
 import reset = EmotionCommon.reset
-import RadioInput from 'src/components/Inputs/RadioInput'
-import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle'
+import RadioInput from 'src/views/Inputs/RadioInput'
+import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
 import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
 import { CastUtils } from 'src/utils/CastUtils'
 import validate = ValidationValidate.validate
@@ -321,7 +321,7 @@ const SignupPage = () => {
           </fieldset>
           
           <Button
-            css={ButtonStyle.primary}
+            css={ButtonStyle.buttonPrimary}
             type='submit'>
             Зарегистрироваться
           </Button>

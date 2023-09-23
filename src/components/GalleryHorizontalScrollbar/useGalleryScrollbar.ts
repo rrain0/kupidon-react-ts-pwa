@@ -1,5 +1,5 @@
 import React, {useCallback, useLayoutEffect, useMemo, useState} from "react"
-import {useScrollbar} from "../Scrollbar/useScrollbar"
+import {useScrollbar} from "../../views/Scrollbar/useScrollbar"
 
 
 export type UseGalleryScrollbarOptions = {

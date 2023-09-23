@@ -6,8 +6,8 @@ import RootRoutes = AppRoutes.RootRoutes
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
-import Button from 'src/components/Buttons/Button'
-import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
+import Button from 'src/views/Buttons/Button'
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 
 
 
@@ -22,13 +22,13 @@ const TestPage = () => {
     <div>Test Page</div>
   
     <Link to={RootRoutes.test.scrollbar.fullPath3({ urlSearchParams: searchParams })}>
-      <Button css={ButtonStyle.primary}>Scrollbar test</Button>
+      <Button css={ButtonStyle.buttonPrimary}>Scrollbar test</Button>
     </Link>
     <Link to={RootRoutes.test.bottomSheet.fullPath3({ urlSearchParams: searchParams })}>
-      <Button css={ButtonStyle.primary}>Bottom Sheet test</Button>
+      <Button css={ButtonStyle.buttonPrimary}>Bottom Sheet test</Button>
     </Link>
     <Link to={RootRoutes.test.resizeObserver.fullPath3({ urlSearchParams: searchParams })}>
-      <Button css={ButtonStyle.primary}>Resize Observer test</Button>
+      <Button css={ButtonStyle.buttonPrimary}>Resize Observer test</Button>
     </Link>
     
     </PageContent>

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import BottomSheet, { BottomSheetOptionsProps } from './BottomSheet'
+import BottomSheet, { BottomSheetOptionsProps } from 'src/views/BottomSheet/BottomSheet'
 import { css } from '@emotion/react'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
@@ -58,7 +58,7 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
     >
       <div
         css={t=>css`
-          width: 50px;
+          width: 44px;
           height: 4px;
           border-radius: 2px;
           background: ${t.page.bgc3[1]};

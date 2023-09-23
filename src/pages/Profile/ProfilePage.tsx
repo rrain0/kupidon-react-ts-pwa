@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import styled from '@emotion/styled'
 import { useRecoilState, useResetRecoilState } from 'recoil'
@@ -12,27 +13,27 @@ import RootRoutes = AppRoutes.RootRoutes
 import { Themes } from 'src/theme/Themes'
 import React, { useEffect, useState } from 'react'
 import { ProfileMockData } from './MockData'
-import { SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
+import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import BottomSheetBasic from 'src/components/BottomSheet/BottomSheetBasic'
+import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
 import { FormPage } from 'src/components/Page/FormPage'
 import Page = FormPage.Page
 import PageContent = FormPage.PageContent
 import ProfileImages from './ProfileImages'
-import DataField from 'src/components/DataField/DataField'
-import { DataFieldStyle } from 'src/components/DataField/DataFieldStyle'
-import RadioInput from 'src/components/Inputs/RadioInput'
-import { RadioInputStyle } from 'src/components/Inputs/RadioInputStyle'
-import Card from 'src/components/Card'
-import Button from 'src/components/Buttons/Button'
-import { ButtonStyle } from 'src/components/Buttons/ButtonStyle'
+import DataField from 'src/views/DataField/DataField'
+import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
+import RadioInput from 'src/views/Inputs/RadioInput'
+import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
+import Card from 'src/views/Card'
+import Button from 'src/views/Buttons/Button'
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import textNormal = EmotionCommon.textNormal1
 import textSmall1 = EmotionCommon.textSmall1
-import { SimpleSvgIcons } from 'src/components/icons/SimpleSvgIcons'
+import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import center = EmotionCommon.center
 import rowWrap = EmotionCommon.rowWrap
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
@@ -300,7 +301,7 @@ function ProfilePage(){
               padding: 0 12px;
             `}
           >
-            <Button css={ButtonStyle.primary}
+            <Button css={ButtonStyle.buttonPrimary}
               onClick={logout}
             >
               Выйти
@@ -317,23 +318,21 @@ function ProfilePage(){
     
     
     <BottomButtonBar>
-      <BottomButtonsContainer>
-        
-        <Button css={ButtonStyle.icon}
-          onClick={update}
-          disabled={false}
-        >
-          <ArrowReload />
-        </Button>
-        
-        <Button css={ButtonStyle.icon}
-          onClick={undefined}
-          disabled={preferredGenders==='Не выбрано'}
-        >
-          <FloppyDisk1Ic />
-        </Button>
-        
-      </BottomButtonsContainer>
+      
+      <Button css={ButtonStyle.icon}
+        onClick={update}
+        disabled={false}
+      >
+        <ArrowReload />
+      </Button>
+      
+      <Button css={ButtonStyle.icon}
+        onClick={undefined}
+        disabled={preferredGenders==='Не выбрано'}
+      >
+        <FloppyDisk1Ic />
+      </Button>
+      
     </BottomButtonBar>
     
     
@@ -372,22 +371,5 @@ const ItemLabel = styled.label`
   color: ${p=>p.theme.page.text[0]}
 `
 
-
-const BottomButtonBar = styled.section`
-  ${abs};
-  //z-index: 20;
-  display: grid;
-  place-items: end stretch;
-  pointer-events: none;
-`
-const BottomButtonsContainer = styled.div`
-  ${rowWrap};
-  place-content: center;
-  padding: 10px;
-  gap: 10px;
-  &>*{
-    pointer-events: auto;
-  }
-`
 
 

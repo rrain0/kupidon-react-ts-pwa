@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from './useBottomSheet'
+import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
   useEffect, useLayoutEffect,
   useMemo,

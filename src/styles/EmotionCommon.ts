@@ -116,11 +116,11 @@ export namespace EmotionCommon {
       outline: inherit;
       box-shadow: inherit;
       border: inherit;
-      -webkit-tap-highlight-color: transparent;
     }
     &::placeholder {
       opacity: 1;
     }
+    -webkit-tap-highlight-color: transparent;
   `
   export const resetButton = css`
     ${reset}
@@ -128,8 +128,8 @@ export namespace EmotionCommon {
       outline: inherit;
       box-shadow: inherit;
       border: inherit;
-      -webkit-tap-highlight-color: transparent;
     }
+    -webkit-tap-highlight-color: transparent;
   `
   export const resetUl = css`
     ${reset};

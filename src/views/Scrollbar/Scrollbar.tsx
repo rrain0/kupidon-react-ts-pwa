@@ -19,7 +19,7 @@ import { StyledCommon } from 'src/styles/StyledCommon'
 import reset = StyledCommon.reset
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
-import { ScrollProps } from './useScrollbar'
+import { ScrollProps } from 'src/views/Scrollbar/useScrollbar'
 
 
 

@@ -5,10 +5,13 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 
 export namespace ButtonStyle {
   import onHover = EmotionCommon.onHover
+  import Theme = Themes.Theme
+  import col = EmotionCommon.col
   
   
-  const common = css`
+  const buttonCommon = css`
     &.rrainuiButton {
+      width: 100%;
       min-height: 50px;
       border-radius: 15px;
       padding: 8px 4px;
@@ -23,8 +26,8 @@ export namespace ButtonStyle {
     }
   `
   
-  export const primary = (t: Themes.Theme) => css`
-    ${common};
+  export const buttonPrimary = (t:Theme) => css`
+    ${buttonCommon};
     &.rrainuiButton {
       background: ${t.button.primary.bgc[0]};
       color: ${t.button.primary.text[0]};
@@ -50,8 +53,8 @@ export namespace ButtonStyle {
   `
   
   
-  export const secondary = (t: Themes.Theme) => css`
-    ${common};
+  export const buttonSecondary = (t:Theme) => css`
+    ${buttonCommon};
     &.rrainuiButton {
       background: ${t.button.secondary.bgc[0]};
       color: ${t.button.secondary.text[0]};
@@ -77,8 +80,11 @@ export namespace ButtonStyle {
   `
   
   
-  export const icon = (t: Themes.Theme) => css`
-    ${common};
+  
+  
+  
+  
+  export const icon = (t:Theme) => css`
     &.rrainuiButton {
       min-height: 50px;
       min-width: 50px;
@@ -86,6 +92,8 @@ export namespace ButtonStyle {
       width: 50px;
       border-radius: 50%;
       padding: 14px;
+
+      transition: background linear 300ms;
       
       background: ${t.button.primary.bgc[0]};
       color: ${t.button.primary.text[0]};
@@ -121,150 +129,83 @@ export namespace ButtonStyle {
   `
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  export const lightCherry = css`
+  // todo separate theme subobject for icon transparent
+  export const iconTransparent = (t:Theme) => css`
+    ${icon(t)};
     &.rrainuiButton {
-      height: 50px;
+      
+      background: none;
+      color: ${t.button.secondary.bgc[0]};
 
-      background: #BB2649;
+      .rrainuiIcon {
+        --icon-color: ${t.button.secondary.bgc[0]};
+      }
+      
+      .rrainuiRippleFrame {
+        --ripple-color: ${t.input.ripple[0]};
+        --ripple-mode: center;
+      }
+
+      :focus-visible {
+        background: ${t.input.iconActive[0]};
+      }
+      ${onHover(css`
+        background: ${t.input.iconHover[0]};
+      `)};
+    }
+  `
+  
+  
+  
+  
+  
+  
+  export const nav = (t:Theme)=>css`
+    &.rrainuiButton {
+      height: 100%;
+      flex: 1;
+      ${col};
+      align-items: center;
+      gap: 2px;
+      padding: 6px 0 2px;
+
       transition: background linear 300ms;
 
-      border-radius: 15px;
-
-      padding: 8px 4px;
-
-      font: 500 18px/150% Roboto;
-      color: #F8F8F8;
-      letter-spacing: 0.05em;
-
-      --ripple-color: white;
-
-      :focus {}
-      :active, :focus-visible {
-        background: #d93b5f;
+      color: ${t.nav.button.text[0]};
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 129%;
+      a.active & {
+        color: ${t.nav.button.selected.text[0]};
       }
-      @media not (hover: none) {
-        :hover {
-          background: #d93b5f;
-        }
+      
+      .rrainuiIcon {
+        --icon-size: 100%;
+        --icon-color: ${t.nav.button.text[0]};
+      }
+      a.active & .rrainuiIcon {
+        --icon-color: ${t.nav.button.selected.text[0]};
+      }
+      
+      .rrainuiRippleFrame {
+        --ripple-color: ${t.nav.button.ripple[0]};
+        --ripple-mode: center;
       }
 
-      :disabled {
-        background: #DCDCDC;
-        color: black;
+      :active, :focus {}
+      :focus-visible {
+        background: ${t.nav.button.active[0]};
       }
+      ${onHover(css`
+        background: ${t.nav.button.hover[0]};
+      `)};
+
+      :disabled {}
     }
-    &.rrainuiButton[data-error] > .rrainuiBorder {
-      //border: 2px solid orange;
-    }
-  `
+    &.rrainuiButton[data-error] > .rrainuiBorder {}
+  }`
   
   
-  export const lightPink = css`
-    &.rrainuiButton {
-      height: 50px;
-
-      background: #f37190;
-      transition: background linear 300ms;
-
-      border-radius: 15px;
-
-      padding: 8px 4px;
-
-      font: 500 18px/150% Roboto;
-      color: #F8F8F8;
-      letter-spacing: 0.05em;
-
-      --ripple-color: white;
-
-      :focus {}
-      :active, :focus-visible {
-        background: #ff6086;
-      }
-      @media not (hover: none) {
-        :hover {
-          background: #ff6086;
-        }
-      }
-
-      :disabled {
-        background: #DCDCDC;
-        color: black;
-      }
-    }
-  `
   
-  export const grey = css`
-    ${lightCherry};
-    &.rrainuiButton {
-      background: #DCDCDC;
-      color: black;
-
-      --ripple-color: black;
-
-      :active, :focus-visible {
-        background: #eee;
-      }
-      @media not (hover: none) {
-        :hover {
-          background: #eee;
-        }
-      }
-    }
-  `
-  
-  export const simpleWhite = css`
-    ${lightCherry};
-    &.rrainuiButton {
-      background: rgba(252, 252, 252, 0.24);
-      border-radius: 0;
-      color: black;
-
-      --ripple-color: black;
-
-      :active, :focus-visible {
-        background: #eee;
-      }
-      @media not (hover: none) {
-        :hover {
-          background: #eee;
-        }
-      }
-    }
-    .rrainuiBorder {
-      border: none;
-    }
-  `
-  
-  export const white = css`
-    ${lightCherry};
-    &.rrainuiButton {
-      background: #F8F8F8;
-      color: #8B8B8B;
-
-      --ripple-color: black;
-
-      :active, :focus-visible {
-        background: #eee;
-      }
-      @media not (hover: none) {
-        :hover {
-          background: #eee;
-        }
-      }
-    }
-    .rrainuiBorder {
-      border: 1px solid #424041;
-    }
-  `
   
 }

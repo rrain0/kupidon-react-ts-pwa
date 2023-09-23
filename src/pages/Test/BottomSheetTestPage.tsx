@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { SimplePage } from 'src/components/Page/SimplePage'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
-import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/components/BottomSheet/useBottomSheet'
+import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/TypeUtils'
@@ -11,7 +11,7 @@ import row = EmotionCommon.row
 import col = EmotionCommon.col
 import { Utils } from 'src/utils/Utils'
 import styled from '@emotion/styled'
-import BottomSheet from 'src/components/BottomSheet/BottomSheet'
+import BottomSheet from 'src/views/BottomSheet/BottomSheet'
 import intOrDefault = Utils.nonNegIntOrDefault;
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
