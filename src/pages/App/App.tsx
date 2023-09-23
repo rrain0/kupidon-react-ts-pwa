@@ -1,11 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { useRecoilValue } from 'recoil'
-import React from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import { css, ThemeProvider } from '@emotion/react'
 import AppFrame from 'src/pages/App/AppFrame'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ThemeObjRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeObjectRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
+import { useDeriveThemeObject } from 'src/utils-react/useDeriveThemeObject'
 import center = EmotionCommon.center
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
@@ -16,11 +17,19 @@ import mobileWidth = EmotionCommon.mobileWidth
 
 
 function App() {
-  const themeObj = useRecoilValue(ThemeObjRecoil)
+  useDeriveThemeObject()
+  const themeObject = useRecoilValue(ThemeObjectRecoil)
   
   
+  const [readyToRender, setReadyToRender] = useState(false)
+  useLayoutEffect(()=>{
+    if (themeObject) setReadyToRender(true)
+    else setReadyToRender(false)
+  },[themeObject])
   
-  return <ThemeProvider theme={themeObj}>
+  
+  if (!readyToRender) return <></>
+  return <ThemeProvider theme={themeObject}>
     
     <AppFrame/>
     
@@ -62,7 +71,7 @@ function App() {
         rtl={false}
         pauseOnFocusLoss
         pauseOnHover
-        theme={themeObj.type}
+        theme={themeObject.type}
       />
     </div>
     

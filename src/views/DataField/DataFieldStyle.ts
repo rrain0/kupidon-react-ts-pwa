@@ -6,7 +6,7 @@ import Theme = Themes.Theme
 
 export namespace DataFieldStyle {
   
-  export const interactive = (t: Theme) => css`
+  export const interactive = (t:Theme) => css`
     &.rrainuiFrame {
       cursor: pointer;
       border-radius: 15px;
@@ -59,7 +59,7 @@ export namespace DataFieldStyle {
     &[data-error]>.rrainuiBorder{}
   `
   
-  const small = (t: Theme) => css`
+  const small = (t:Theme) => css`
     &.rrainuiFrame {
       width: 100%;
       min-height: 40px;
@@ -75,13 +75,13 @@ export namespace DataFieldStyle {
     }
   `
   
-  export const interactiveSmall = (t: Theme) => css`
+  export const interactiveSmall = (t:Theme) => css`
     ${interactive(t)};
     ${small(t)};
   `
   
   
-  export const statik = (t: Theme) => css`
+  export const statik = (t:Theme) => css`
     ${interactive(t)};
     &.rrainuiFrame {
       cursor: auto;
@@ -93,7 +93,7 @@ export namespace DataFieldStyle {
     }
   `
   
-  export const statikSmall = (t: Theme) => css`
+  export const statikSmall = (t:Theme) => css`
     ${statik(t)};
     ${small(t)};
   `

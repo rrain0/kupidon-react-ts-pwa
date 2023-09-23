@@ -1,5 +1,7 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import React, {
-  useCallback, useEffect,
+  useCallback,
   useImperativeHandle,
   useLayoutEffect,
   useMemo,
@@ -8,6 +10,7 @@ import React, {
 } from 'react'
 import cmcss from 'src/styles/common.module.scss'
 import classNames from "classnames"
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ElementProps } from 'src/utils/GetDimensions'
 import { MathUtils } from 'src/utils/MathUtils'
 import inRange = MathUtils.inRange
@@ -15,11 +18,10 @@ import fitRange = MathUtils.fitRange
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import styled from 'styled-components'
-import { StyledCommon } from 'src/styles/StyledCommon'
-import reset = StyledCommon.reset
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
 import { ScrollProps } from 'src/views/Scrollbar/useScrollbar'
+import reset = EmotionCommon.reset
 
 
 
@@ -236,14 +238,16 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   
   return <ScrollbarTrack
     {...restProps}
+    css={ScrollbarTrackStyle}
     direction={direction}
     ref={trackRef}
   >
     <ScrollbarThumbBox
+      css={ScrollbarThumbBoxStyle}
       ref={thumbBoxRef}
       style={thumbBoxProps}
     >
-      <ScrollbarThumb />
+      <ScrollbarThumb css={ScrollbarThumbStyle}/>
     </ScrollbarThumbBox>
   </ScrollbarTrack>
 })
@@ -258,46 +262,49 @@ const ScrollbarTrack = ReactMemoTyped(
   styled.div.attrs<ScrollbarTrackProps>(p=>({
     className: classNames(p.className,'rrainuiScrollbarTrack'),
     'data-direction': p.direction,
-  }))`
-    ${reset};
-    position: relative;
-    touch-action: none; // To prevent browser gesture handling on mobile devices
-    
-    &[data-direction=vertical]{ width: 10px; height: 100%; }
-    &[data-direction=horizontal]{ width: 100%; height: 10px; }
-    background: rgba(248,248,248,0.35);
-    border-radius: 50%;
-  `
+  }))``
 )
+const ScrollbarTrackStyle = css`
+  ${reset};
+  position: relative;
+  touch-action: none; // To prevent browser gesture handling on mobile devices
+
+  &[data-direction=vertical]{ width: 10px; height: 100%; }
+  &[data-direction=horizontal]{ width: 100%; height: 10px; }
+  background: rgba(248,248,248,0.35);
+  border-radius: 50%;
+`
 
 
 
 const ScrollbarThumbBox = ReactMemoTyped(
   styled.div.attrs(p=>({
     className: classNames(p.className,'rrainuiScrollbarThumbBox')
-  }))`
-    position: absolute;
-    [data-direction=vertical]>&{
-      will-change: top, height;
-      left: 0; right: 0; top: 0; height: 0;
-    }
-    [data-direction=horizontal]>&{
-      will-change: left, width;
-      top: 0; bottom: 0; left: 0; width: 0;
-    }
-  `
+  }))``
 )
+const ScrollbarThumbBoxStyle = css`
+  position: absolute;
+  [data-direction=vertical]>&{
+    will-change: top, height;
+    left: 0; right: 0; top: 0; height: 0;
+  }
+  [data-direction=horizontal]>&{
+    will-change: left, width;
+    top: 0; bottom: 0; left: 0; width: 0;
+  }
+`
 
 
 
 const ScrollbarThumb = ReactMemoTyped(
   styled.div.attrs(p=>({
     className: classNames(p.className,'rrainuiScrollbarThumb')
-  }))`
-    width: 100%; height: 100%;
-    //pointer-events: none;
-    
-    background: rgba(248,248,248,0.5);
-    border-radius: 27px;
-  `
+  }))``
 )
+const ScrollbarThumbStyle = css`
+  width: 100%; height: 100%;
+  //pointer-events: none;
+
+  background: rgba(248,248,248,0.5);
+  border-radius: 27px;
+`

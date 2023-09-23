@@ -9,7 +9,7 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/theme/Themes'
 import row = EmotionCommon.row
@@ -26,7 +26,7 @@ import GearIc = SimpleSvgIcons.GearIc
 
 
 const BottomNavBar = ()=>{
-  const [theme, setTheme] = useRecoilState(ThemeRecoil)
+  const [theme, setTheme] = useRecoilState(ThemeSettingsRecoil)
   
   /*
   const changeTheme = useCallback(

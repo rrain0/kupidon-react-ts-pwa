@@ -8,7 +8,7 @@ import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomShee
 import RadioInput from 'src/views/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
 import { LangRecoil } from 'src/recoil/state/LangRecoil'
-import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import Setter = TypeUtils.Setter
@@ -29,7 +29,7 @@ const QuickSettings = (props: SettingsProps)=>{
   const openIdx = 2
   
   
-  const [theme, setTheme] = useRecoilState(ThemeRecoil)
+  const [theme, setTheme] = useRecoilState(ThemeSettingsRecoil)
   const [lang, setLang] = useRecoilState(LangRecoil)
   
   const themeOptions = useMemo(

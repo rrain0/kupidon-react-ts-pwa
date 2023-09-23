@@ -249,6 +249,7 @@ function ProfilePage(){
                 {preferredGenders}
               </DataField>
               
+              
               {selecting==='preferred-genders' && <BottomSheetBasic
                 {...bottomSheetProps}
                 header={'Я ищу'}
@@ -290,17 +291,13 @@ function ProfilePage(){
                   
                 </div>
               </BottomSheetBasic>}
+              
+              
             </ItemContainer>
             
           </Card>
           
-          <div
-            css={css`
-              ${col};
-              gap: inherit;
-              padding: 0 12px;
-            `}
-          >
+          <div css={notInCard}>
             <Button css={ButtonStyle.buttonPrimary}
               onClick={logout}
             >
@@ -309,8 +306,6 @@ function ProfilePage(){
           </div>
           
         </Form>
-        
-        <div css={css`height: 68px`}/>
         
       </PageContent>
     </ScrollbarOverlay>
@@ -371,5 +366,10 @@ const ItemLabel = styled.label`
   color: ${p=>p.theme.page.text[0]}
 `
 
+const notInCard = css`
+  ${col};
+  gap: inherit;
+  padding: 0 12px;
+`
 
 

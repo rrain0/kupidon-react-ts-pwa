@@ -1,8 +1,9 @@
 
 
 export namespace Themes {
-  
   export type ThemeType = 'light'|'dark'
+  
+  
   export interface Theme {
     type: ThemeType
     name: string

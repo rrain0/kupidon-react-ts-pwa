@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/CastUtils'
 import styled from "styled-components"
 import React, { useImperativeHandle, useRef } from 'react'
@@ -6,11 +9,9 @@ import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
-import {StyledCommon} from "src/styles/StyledCommon"
-import abs = StyledCommon.abs
-import row = StyledCommon.row
 import trueOrUndef = CastUtils.trueOrUndef
-
+import row = EmotionCommon.row
+import abs = EmotionCommon.abs
 
 
 
@@ -35,7 +36,7 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   useImperativeHandle(forwardedRef, ()=>labelRef.current!,[])
   
   
-  return <Frame
+  return <Frame css={FrameStyle}
     hasError={hasError}
     {...restProps}
     ref={labelRef}
@@ -43,7 +44,7 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
     
     { children }
     
-    <Border/>
+    <Border css={BorderStyle}/>
     
   </Frame>
 })
@@ -57,7 +58,8 @@ type FrameProps = {
 const Frame = styled.div.attrs<FrameProps>(p=>({
   className: classNames(p.className,'rrainuiFrame'),
   'data-error': trueOrUndef(p.hasError),
-}))`
+}))``
+const FrameStyle = css`
   ${row};
   align-items: center;
   width: 100%;
@@ -69,7 +71,8 @@ const Frame = styled.div.attrs<FrameProps>(p=>({
 
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder'),
-}))`
+}))``
+const BorderStyle = css`
   ${abs};
   pointer-events: none;
   border-radius: inherit;

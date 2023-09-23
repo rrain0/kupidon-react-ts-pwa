@@ -1,11 +1,12 @@
-import { Themes } from 'src/theme/Themes'
+import { ThemeSettingType } from 'src/recoil/state/ThemeRecoil'
 import { UiOption } from 'src/utils/UiOption'
+
 
 
 export namespace QuickSettingsUiOptions {
   
-  import ThemeType = Themes.ThemeType
-  export const theme: UiOption<ThemeType>[] = [
+  
+  export const theme: UiOption<ThemeSettingType>[] = [
     {
       value: 'light',
       lang: 'en',
@@ -27,8 +28,18 @@ export namespace QuickSettingsUiOptions {
       lang: 'ru',
       text: 'Тёмная тема',
     },
+    
+    {
+      value: 'system',
+      lang: 'en',
+      text: 'System theme',
+    },
+    {
+      value: 'system',
+      lang: 'ru',
+      text: 'Тема системы',
+    },
   ]
-  
   
   
   

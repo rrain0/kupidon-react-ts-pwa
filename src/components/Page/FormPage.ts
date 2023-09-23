@@ -27,7 +27,7 @@ export namespace FormPage {
       min-width: 200px; width: 100%;
       min-height: 100%; height: fit-content;
       ${center};
-      padding: 12px;
+      padding: 70px 12px;
       ${p=>SimpleGradientBgc(p.theme)};
     `
   )

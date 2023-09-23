@@ -13,6 +13,7 @@ import empty = TypeUtils.empty
 import classNames from 'classnames'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import abs = EmotionCommon.abs
 
 
 
@@ -46,6 +47,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       width: 100%; height: 100%;
       max-width: 100%; max-height: 100%;
       ${centerAll};
+      position: relative;
     `}
     className={classNames(props.className, 'rrainuiScrollOverlay')}
     style={props.style}
@@ -92,10 +94,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
     
     <div // Scrollbars
       css={css`
-        //position: relative;
-        //z-index: 10;
-        
-        place-self: stretch;
+        ${abs};
         display: grid;
         pointer-events: none;
         grid: '.. vs' 1fr
@@ -144,4 +143,4 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   </div>
   
 }
-export default ReactMemoTyped(ScrollbarOverlay)
+export default ScrollbarOverlay

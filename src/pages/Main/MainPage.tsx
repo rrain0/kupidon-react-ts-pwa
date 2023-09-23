@@ -12,6 +12,8 @@ import Page = SimplePage.Page
 
 function MainPage(){
   
+  
+  
   return <Page>
     <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
       <PageContent>

@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/CastUtils'
-import {ReactUtils} from "src/utils/ReactUtils"
+import { ReactUtils } from "src/utils/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
