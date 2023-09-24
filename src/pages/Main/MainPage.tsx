@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Link } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
@@ -28,6 +29,10 @@ function MainPage(){
         </Link>
         <div>Какая-то главная страница.</div>
         <div>Здесь будут карточки людей.</div>
+        
+        <div
+          css={css`height: 2000px;`}
+        ></div>
       
       </PageContent>
     </ScrollbarOverlay>

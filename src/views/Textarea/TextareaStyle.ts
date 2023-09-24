@@ -2,13 +2,14 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/theme/Themes'
 import Theme = Themes.Theme
+import onHover = EmotionCommon.onHover
 
 
 
-export namespace InputStyle {
+export namespace TextareaStyle {
   
-  import onHover = EmotionCommon.onHover
-  export const input = (t:Theme) => css`
+  
+  export const textarea = (t:Theme) => css`
     &.rrainuiFrame {
       border-radius: 15px;
       background: ${t.input.bgc};
@@ -16,15 +17,14 @@ export namespace InputStyle {
         background: ${t.input.error.bgc};
       }*/
       // todo not supported by firefox
-      :has(.rrainuiInput[data-error]){
+      :has(.rrainuiTextarea[data-error]){
         background: ${t.input.error.bgc};
       }
     }
-    >.rrainuiInput {
+    >.rrainuiTextarea {
       width: 100%;
-      height: 50px;
-      padding-right: 16px;
-      padding-left: 16px;
+      min-height: 150px;
+      padding: 8px 16px;
       font-weight: 500;
       font-size: 18px;
       line-height: 150%;
@@ -61,21 +61,42 @@ export namespace InputStyle {
       -webkit-mask-composite: xor;
       mask-composite: exclude;
     }
-
     ${onHover(css`
-      >.rrainuiInput:hover ~ .rrainuiBorder {
+      >.rrainuiTextarea:hover ~ .rrainuiBorder {
         background-position: 0 0;
       }
     `)}
-    >.rrainuiInput:active ~ .rrainuiBorder {}
-    >.rrainuiInput:focus-visible ~ .rrainuiBorder {
+    >.rrainuiTextarea:active ~ .rrainuiBorder {}
+    >.rrainuiTextarea:focus-visible ~ .rrainuiBorder {
       background-position: 0 0;
     }
-    >.rrainuiInput:focus ~ .rrainuiBorder {
+    >.rrainuiTextarea:focus ~ .rrainuiBorder {
       background-position: 0 0;
     }
-    >.rrainuiInput[data-error] ~ .rrainuiBorder{}
+    >.rrainuiTextarea[data-error] ~ .rrainuiBorder{}
   `
   
   
+  const small = (t:Theme) => css`
+    &.rrainuiFrame {
+      
+      >.rrainuiTextarea {
+        width: 100%;
+        padding: 8px 12px;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 129%;
+        letter-spacing: 0.05em;
+      }
+      >.rrainuiBorder {
+        border-width: 1px;
+      }
+    }
+  `
+  
+  
+  export const textareaSmall = (t:Theme) => css`
+    ${textarea(t)};
+    ${small(t)};
+  `
 }

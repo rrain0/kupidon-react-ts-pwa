@@ -11,27 +11,40 @@ import { ReactComponent as Arrow3UpRightSvg } from 'src/res/icon/arrow-3-up-righ
 import { ReactComponent as Arrow4DownSvg } from 'src/res/icon/arrow-4-down.svg'
 import { ReactComponent as Arrow5FwdSvg } from 'src/res/icon/arrow-5-fwd.svg'
 import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
+
 import { ReactComponent as CardsHeartSvg } from 'src/res/icon/cards-heart.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
+import { ReactComponent as ChatRoundSvg } from 'src/res/icon/chat-round.svg'
 import { ReactComponent as CheckmarkSvg } from 'src/res/icon/checkmark.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
 import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
+
 import { ReactComponent as DoubleCheckmarkSvg } from 'src/res/icon/double-checkmark.svg'
+
 import { ReactComponent as EyeSvg } from 'src/res/icon/eye.svg'
 import { ReactComponent as EyeCrossedOutSvg } from 'src/res/icon/eye-crossed-out.svg'
+
 import { ReactComponent as FloppyDisk1Svg } from 'src/res/icon/floppy-disk-1.svg'
 import { ReactComponent as FloppyDisk2Svg } from 'src/res/icon/floppy-disk-2.svg'
 import { ReactComponent as FloppyDisk3Svg } from 'src/res/icon/floppy-disk-3.svg'
+
 import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
+import { ReactComponent as Gear2Svg } from 'src/res/icon/gear-2.svg'
+
 import { ReactComponent as HeartSvg } from 'src/res/icon/heart.svg'
+import { ReactComponent as HelpSvg } from 'src/res/icon/help.svg'
 import { ReactComponent as HomeSvg } from 'src/res/icon/home.svg'
+
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
+
 import { ReactComponent as PencilWriteSvg } from 'src/res/icon/pencil-write.svg'
 import { ReactComponent as Plane1Svg } from 'src/res/icon/plane-1.svg'
 import { ReactComponent as ProfileSvg } from 'src/res/icon/profile.svg'
+
 import { ReactComponent as RadioActiveSvg } from 'src/res/icon/radio-active.svg'
 import { ReactComponent as RadioInactiveSvg } from 'src/res/icon/radio-inactive.svg'
 import { ReactComponent as RingingBellSvg } from 'src/res/icon/ringing-bell.svg'
+
 import { ReactComponent as SearchSvg } from 'src/res/icon/search.svg'
 import { ReactComponent as Spinner8LinesSvg } from 'src/res/icon/spinner-8-lines.svg'
 
@@ -123,6 +136,11 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={CautionSvg} />
   )
   
+  export const ChatRoundIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={ChatRoundSvg} />
+  )
+  
   export const CheckmarkIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CheckmarkSvg} />
@@ -173,9 +191,19 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={GearSvg} />
   )
   
+  export const Gear2Ic = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={Gear2Svg} />
+  )
+  
   export const HeartIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={HeartSvg} />
+  )
+  
+  export const HelpIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={HelpSvg} />
   )
   
   export const HomeIc = ReactMemoTyped(

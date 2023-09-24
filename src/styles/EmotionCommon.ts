@@ -131,6 +131,19 @@ export namespace EmotionCommon {
     }
     -webkit-tap-highlight-color: transparent;
   `
+  // todo reset Textarea - resize, autoheight, scrollbars
+  export const resetTextarea = css`
+    ${reset}
+    &, &:hover, &:active, &:focus-visible, &:focus {
+      outline: inherit;
+      box-shadow: inherit;
+      border: inherit;
+    }
+    &::placeholder {
+      opacity: 1;
+    }
+    -webkit-tap-highlight-color: transparent;
+  `
   export const resetUl = css`
     ${reset};
     ${col};

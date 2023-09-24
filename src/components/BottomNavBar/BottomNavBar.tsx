@@ -13,9 +13,11 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import row = EmotionCommon.row
 import CardsHeartIc = SimpleSvgIcons.CardsHeartIc
 import ProfileIc = SimpleSvgIcons.ProfileIc
-import GearIc = SimpleSvgIcons.GearIc
+import Gear2Ic = SimpleSvgIcons.Gear2Ic
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
+import ChatRoundIc = SimpleSvgIcons.ChatRoundIc
+import HelpIc = SimpleSvgIcons.HelpIc
 
 
 
@@ -46,13 +48,6 @@ const BottomNavBar = ()=>{
     
     <Frame>
       
-      <NavLink to={RootRoute.main[full]()}>
-        <Button css={ButtonStyle.nav}>
-          <CardsHeartIc/>
-          <div>Найти пары</div>
-        </Button>
-      </NavLink>
-      
       <NavLink to={RootRoute.profile[full]()}>
         <Button css={ButtonStyle.nav}>
           <ProfileIc/>
@@ -60,10 +55,27 @@ const BottomNavBar = ()=>{
         </Button>
       </NavLink>
       
+      <Button css={ButtonStyle.nav}>
+        <ChatRoundIc/>
+        <div>Чат</div>
+      </Button>
+      
+      <NavLink to={RootRoute.main[full]()}>
+        <Button css={ButtonStyle.nav}>
+          <CardsHeartIc/>
+          <div>Найти пары</div>
+        </Button>
+      </NavLink>
+      
+      <Button css={ButtonStyle.nav}>
+        <HelpIc/>
+        <div>Советы</div>
+      </Button>
+      
       <Button css={ButtonStyle.nav}
         onClick={()=>setSettingsOpen(true)}
       >
-        <GearIc/>
+        <Gear2Ic/>
         <div>Настройки</div>
       </Button>
     

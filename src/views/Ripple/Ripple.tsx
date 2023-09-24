@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import React, {
   useCallback, useEffect,
   useImperativeHandle,
-  useLayoutEffect,
   useRef,
 } from 'react'
 import { ElementProps } from 'src/utils/GetDimensions'

@@ -12,6 +12,8 @@ import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
 import { Themes } from 'src/theme/Themes'
 import React, { useEffect, useState } from 'react'
 import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import Textarea from 'src/views/Textarea/Textarea'
+import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
@@ -217,7 +219,7 @@ function ProfilePage(){
             
             <ItemContainer>
               <ItemLabel>Обо мне</ItemLabel>
-              <textarea></textarea>
+              <Textarea css={TextareaStyle.textareaSmall}/>
             </ItemContainer>
             
             

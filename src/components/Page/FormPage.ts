@@ -4,8 +4,6 @@ import center = EmotionCommon.center
 import { SimpleGradientBgc } from 'src/styles/bgc/SimpleGradientBgc'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import centerAll = EmotionCommon.centerAll
-import stretchAll = EmotionCommon.stretchAll
 
 
 
