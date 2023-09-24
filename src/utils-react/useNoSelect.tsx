@@ -8,6 +8,7 @@ import cmcss from 'src/styles/common.module.scss'
 
 export const useNoSelect = (
   lock?: boolean|empty,
+  deps?: any[]|empty
 )=>{
   useLayoutEffect(()=>{
     const root = document.querySelector('html')!
@@ -15,5 +16,5 @@ export const useNoSelect = (
       root.classList.add(cmcss.noSelect)
       return ()=>root.classList.remove(cmcss.noSelect)
     } else root.classList.remove(cmcss.noSelect)
-  },[lock])
+  },[lock, ...(deps??[])])
 }

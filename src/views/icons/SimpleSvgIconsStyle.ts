@@ -5,7 +5,7 @@ import { Themes } from 'src/theme/Themes'
 export namespace SimpleSvgIconsStyle {
   
   export const defolt = (t: Themes.Theme) => css`
-    svg& {
+    &.rrainuiIcon {
       --icon-size: auto;
       //width: auto; height: auto;
       --icon-color: 'black';

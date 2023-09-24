@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo, useRef,
   useState,
 } from 'react'
@@ -115,7 +114,7 @@ export const useBottomSheet = (
   )
   
   
-  useLayoutEffect(
+  useEffect(
     ()=>{
       updateComputedSheetDimens()
       const frame = bottomSheetFrameRef.current
@@ -360,7 +359,7 @@ export const useBottomSheet = (
   )
   // 'reactOnState' will always be updated when calling
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useLayoutEffect(reactOnState,[state,snapIdx])
+  useEffect(reactOnState,[state,snapIdx])
   
   
   const movementRef = useRef([] as Array<{ clientY: number, timestamp: number }>)
@@ -510,7 +509,7 @@ export const useBottomSheet = (
   
   
   
-  useLayoutEffect(
+  useEffect(
     ()=>{
       const draggables = draggableElements
         .map(it=>it.current)
@@ -534,7 +533,7 @@ export const useBottomSheet = (
     ]
   )
   
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     const sheet = bottomSheetRef.current
     if (sheet){
       sheet.style.height = newSheetStyle.height+'px'

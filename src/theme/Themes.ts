@@ -316,7 +316,6 @@ export namespace Themes {
   
   export const defaultLight = LightPink.name
   export const defaultDark = Dark.name
-  export const defaultTheme: ThemeType = 'light'
   
 }
 

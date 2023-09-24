@@ -5,10 +5,13 @@ import SignupPage from 'src/pages/Signup/SignupPage'
 import ProfileRouting from 'src/pages/Profile/ProfileRouting'
 import React from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import RootRoutes = AppRoutes.RootRoutes
 import TestRouting from 'src/pages/Test/TestRouting'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import RootRoute = AppRoutes.RootRoute
+import path = RouteBuilder.path
+import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 
@@ -16,27 +19,28 @@ function AppRouting(){
   const [searchParams] = useSearchParams()
   
   return <Routes>
-    <Route path={RootRoutes.test.path+'/*'}
+    <Route path={RootRoute.test[path]+'/*'}
       element={<TestRouting/>}
     />
-    <Route path={RootRoutes.main.path+'/*'}
+    <Route path={RootRoute.main[path]+'/*'}
       element={<MainRouting/>}
     />
-    <Route path={RootRoutes.login.path+'/*'}
+    <Route path={RootRoute.login[path]+'/*'}
       element={<LoginRouting/>}
     />
-    <Route path={RootRoutes.signup.path+'/*'}
+    <Route path={RootRoute.signup[path]+'/*'}
       element={<SignupPage/>}
     />
-    <Route path={RootRoutes.profile.path+'/*'}
+    <Route path={RootRoute.profile[path]+'/*'}
       element={<ProfileRouting/>}
     />
     <Route path="*"
-      element={<Navigate to={RootRoutes.main.fullPath3({
-        urlSearchParams: searchParams
-      })}
-        replace={true}
-      />}
+      element={
+        <Navigate
+          to={RootRoute.main[fullAnySearchParams](searchParams)}
+          replace={true}
+        />
+      }
     />
   </Routes>
 }

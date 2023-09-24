@@ -5,10 +5,9 @@ import React from 'react'
 import BottomNavBarRouting from 'src/components/BottomNavBar/BottomNavBarRouting'
 import AppRouting from 'src/pages/App/AppRouting'
 import { SimpleGradientBgc } from 'src/styles/bgc/SimpleGradientBgc'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/ReactUtils'
-import col = EmotionCommon.col
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+
 
 
 const AppFrame = ()=>{

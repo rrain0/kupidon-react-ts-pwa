@@ -1,10 +1,13 @@
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import RootRoutes = AppRoutes.RootRoutes
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import TestPage from './TestPage'
 import ScrollbarTestPage from './ScrollbarTestPage'
-import ResizeObserverTestPage from './ResizeObserverTestPage';
-import BottomSheetTestPage from './BottomSheetTestPage';
+import ResizeObserverTestPage from './ResizeObserverTestPage'
+import BottomSheetTestPage from './BottomSheetTestPage'
+import RootRoute = AppRoutes.RootRoute
+import path = RouteBuilder.path
+import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 
@@ -15,21 +18,22 @@ function TestRouting(){
     <Route path=''
       element={<TestPage/>}
     />
-    <Route path={RootRoutes.test.scrollbar.path}
+    <Route path={RootRoute.test.scrollbar[path]}
       element={<ScrollbarTestPage/>}
     />
-    <Route path={RootRoutes.test.resizeObserver.path}
+    <Route path={RootRoute.test.resizeObserver[path]}
       element={<ResizeObserverTestPage/>}
     />
-    <Route path={RootRoutes.test.bottomSheet.path}
+    <Route path={RootRoute.test.bottomSheet[path]}
       element={<BottomSheetTestPage/>}
     />
     <Route path='*'
-      element={<Navigate to={RootRoutes.test.fullPath3({
-          urlSearchParams: searchParams
-        })}
-        replace={true}
-      />}
+      element={
+        <Navigate
+          to={RootRoute.test[fullAnySearchParams](searchParams)}
+          replace={true}
+        />
+      }
     />
   </Routes>
 }

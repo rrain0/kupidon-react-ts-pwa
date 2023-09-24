@@ -44,7 +44,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
   
   
   return <Frame
-    css={FrameStyle}
+    css={frameStyle}
     className={className}
     style={style}
   >
@@ -53,7 +53,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
     { childrenPosition==='start' && children }
     
     <Input_
-      css={Input_Style}
+      css={input_Style}
       {...restProps}
       hasError={hasError}
       ref={inputRef}
@@ -62,7 +62,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
     { childrenPosition==='end' && children }
     { endViews }
     
-    <Border css={BorderStyle}/>
+    <Border css={borderStyle}/>
     
   </Frame>
 })
@@ -73,7 +73,7 @@ export default ReactMemoTyped(Input)
 const Frame = styled.label.attrs(p=>({
   className: classNames(p.className,'rrainuiFrame')
 }))``
-const FrameStyle = css`
+const frameStyle = css`
   ${row};
   align-items: center;
   width: 100%;
@@ -87,7 +87,7 @@ const Input_ = styled.input.attrs<Input_Props>(p=>({
   className: classNames(p.className,'rrainuiInput'),
   'data-error': trueOrUndef(p.hasError)
 }))``
-const Input_Style = css`
+const input_Style = css`
   ${resetInput};
 
   flex: 1;
@@ -103,7 +103,7 @@ const Input_Style = css`
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder')
 }))``
-const BorderStyle = css`
+const borderStyle = css`
   ${abs};
   pointer-events: none;
   border-radius: inherit;

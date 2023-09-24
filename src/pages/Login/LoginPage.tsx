@@ -1,20 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
+import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import Input from 'src/views/Inputs/Input'
 import PwdInput from 'src/views/Inputs/PwdInput'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { InputStyle } from 'src/views/Inputs/InputStyle'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
@@ -35,13 +36,17 @@ import InputValidationWrap = ValidationComponents.InputValidationWrap
 import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
-import RootRoutes = AppRoutes.RootRoutes;
 import { FormPage } from 'src/components/Page/FormPage'
 import PageContent = FormPage.PageContent;
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import Page = FormPage.Page
 import GearIc = SimpleSvgIcons.GearIc
+import full = RouteBuilder.full
+import RootRoute = AppRoutes.RootRoute
+import fullParams = RouteBuilder.fullParams
+import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
+import params = RouteBuilder.params
 
 
 
@@ -65,8 +70,7 @@ export const LoginDefaults = function(){
 const LoginPage = () => {
   
   const [searchParams] = useSearchParams()
-  //@ts-ignore
-  const returnPath = searchParams.get(RootRoutes.login.params.returnPath) ?? undefined
+  const returnPath = searchParams.get(RootRoute.login[params].returnPath) ?? undefined
   const navigate = useNavigate()
   
   const setAuth = useSetRecoilState(AuthRecoil)
@@ -144,7 +148,7 @@ const LoginPage = () => {
     
     if (loginSuccess) {
       Toasts.SuccessSignIn.show('Вход выполнен')
-      navigate(returnPath ?? RootRoutes.main.fullPath())
+      navigate(returnPath ?? RootRoute.main[full]())
     }
   },[loginLoading, loginSuccess, returnPath])
   
@@ -232,7 +236,7 @@ const LoginPage = () => {
             </Button>
             
             
-            <Link to={RootRoutes.signup.fullPath({ returnPath: returnPath })}>
+            <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
               <Button
                 css={ButtonStyle.buttonSecondary}>
                 Зарегистрироваться

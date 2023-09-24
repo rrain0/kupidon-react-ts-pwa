@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import styled from '@emotion/styled'
@@ -8,10 +9,9 @@ import { css } from '@emotion/react'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
-import RootRoutes = AppRoutes.RootRoutes
 import { Themes } from 'src/theme/Themes'
 import React, { useEffect, useState } from 'react'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
@@ -39,6 +39,11 @@ import rowWrap = EmotionCommon.rowWrap
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
 import ArrowReload = SimpleSvgIcons.ArrowReload
 import abs = EmotionCommon.abs
+import RootRoute = AppRoutes.RootRoute
+import full = RouteBuilder.full
+import path = RouteBuilder.path
+import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
+import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 
@@ -50,9 +55,8 @@ function ProfilePage(){
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
   
-  // @ts-ignore
-  const urlUserId = useMatch(RootRoutes.profile.id.userId.fullPath())
-    .params[RootRoutes.profile.id.userId.path.slice(1)]
+  const urlUserId = useMatch(RootRoute.profile.id.userId[full]())!
+    .params[RootRoute.profile.id.userId[path].slice(1)]
   
   const logout = async() => {
     resetAuth()
@@ -120,8 +124,8 @@ function ProfilePage(){
   
   // todo вынести в ProfileRouting
   if (!auth || auth.user.id!==urlUserId) return <Navigate to={
-    RootRoutes.login.fullPath({
-      returnPath: RootRoutes.profile.fullPath3({ urlSearchParams: searchParams })
+    RootRoute.login[fullAllowedNameParams]({
+      returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
     })
   }/>
   

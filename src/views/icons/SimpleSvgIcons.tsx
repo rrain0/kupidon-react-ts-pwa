@@ -63,13 +63,13 @@ export namespace SimpleSvgIcons {
       
       return <SvgComponent
         css={css`
-        width: ${size ?? 'var(--icon-size)'};
-        height: ${size ?? 'var(--icon-size)'};
-        max-width: 100%;
-        max-height: 100%;
-        fill: ${mainColor ?? 'var(--icon-color, black)'};
-        stroke: ${mainColor ?? 'var(--icon-color, black)'};
-      `}
+          width: ${size ?? 'var(--icon-size)'};
+          height: ${size ?? 'var(--icon-size)'};
+          max-width: 100%;
+          max-height: 100%;
+          fill: ${mainColor ?? 'var(--icon-color, black)'};
+          stroke: ${mainColor ?? 'var(--icon-color, black)'};
+        `}
         className={classNames(className,'rrainuiIcon')}
         {...restProps}
       />

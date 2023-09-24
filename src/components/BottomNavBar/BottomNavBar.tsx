@@ -1,34 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { useRecoilState } from 'recoil'
+import React, { useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import { ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Themes } from 'src/theme/Themes'
 import row = EmotionCommon.row
-import centerAll = EmotionCommon.centerAll
-import col = EmotionCommon.col
-import resetButton = EmotionCommon.resetButton
 import CardsHeartIc = SimpleSvgIcons.CardsHeartIc
-import onHover = EmotionCommon.onHover
-import RootRoutes = AppRoutes.RootRoutes
-import Theme = Themes.Theme
 import ProfileIc = SimpleSvgIcons.ProfileIc
 import GearIc = SimpleSvgIcons.GearIc
+import RootRoute = AppRoutes.RootRoute
+import full = RouteBuilder.full
 
 
 
 const BottomNavBar = ()=>{
-  const [theme, setTheme] = useRecoilState(ThemeSettingsRecoil)
   
   /*
+   const [theme, setTheme] = useRecoilState(ThemeSettingsRecoil)
+   
   const changeTheme = useCallback(
     ()=>setTheme({
       ...theme,
@@ -47,19 +42,18 @@ const BottomNavBar = ()=>{
   
   
   
-  
   return <>
     
     <Frame>
       
-      <NavLink to={RootRoutes.main.fullPath()}>
+      <NavLink to={RootRoute.main[full]()}>
         <Button css={ButtonStyle.nav}>
           <CardsHeartIc/>
           <div>Найти пары</div>
         </Button>
       </NavLink>
       
-      <NavLink to={RootRoutes.profile.fullPath()}>
+      <NavLink to={RootRoute.profile[full]()}>
         <Button css={ButtonStyle.nav}>
           <ProfileIc/>
           <div>Профиль</div>

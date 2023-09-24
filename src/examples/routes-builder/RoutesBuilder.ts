@@ -2,15 +2,41 @@ import { CastUtils } from 'src/utils/CastUtils'
 import { ObjectUtils } from 'src/utils/ObjectUtils'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
-import { Utils } from 'src/utils/Utils'
+import isPresent = CastUtils.isPresent
+import ObjectEntries = ObjectUtils.ObjectEntries
+import ObjectKeys = ObjectUtils.ObjectKeys
+import ObjectValues = ObjectUtils.ObjectValues
 
 
+
+
+
+
+
+
+
+/*
+  todo
+    Transform into
+    {
+      path: '',
+      next: {
+        login: build('login'),
+        profile: build({ path: 'profile', next: {...} }),
+      },
+      params: {
+        someParam: 'some-param',
+      }
+    }
+    use(newPathSegment)
+    next() instead of descent
+    path
+    full(searchParams)
+    root path: '' or null ???
+
+*/
 
 export namespace RoutesBuilder {
-  import isPresent = CastUtils.isPresent
-  import ObjectEntries = ObjectUtils.ObjectEntries
-  import ObjectKeys = ObjectUtils.ObjectKeys
-  import ObjectValues = ObjectUtils.ObjectValues
   
   
   
@@ -252,32 +278,32 @@ export namespace RoutesBuilder {
     const newRoute: Partial<RouteObject<Paths,Params>> = {}
     newRoute.up = undefined
     newRoute.path = rootRoutes.path ?? ''
-    // @ts-ignore
-    newRoute.params = rootRoutes.params
+    newRoute.params = rootRoutes.params as empty | { [Param in Params]: string }
     newRoute.fullPath = fullPath
     newRoute.fullPath2 = fullPath2
     newRoute.fullPath3 = fullPath3
     newRoute.descend = descend
   
     if (rootRoutes.paths) Object.entries(rootRoutes.paths).forEach(([routeName,routePath])=>{
-      // @ts-ignore
       if (excludedPathsNames.includes(routeName) || excludedPathsNames.includes(`${routeName}With`))
-        throw new Error(`You can't use path name ${routeName} because it is reserved path object property`)
+        throw new Error(
+          `You can't use path name ${routeName} because it is reserved path object property`
+        )
       if (usedPathNames.includes(routeName) || usedPathNames.includes(`${routeName}With`))
-        throw new Error(`Duplicate path name ${routeName}`)
+        throw new Error(
+          `Duplicate path name ${routeName}`
+        )
       usedPathNames.push(routeName,`${routeName}With`)
     
       let subroute: RouteDescription
     
       if (typeof routePath === 'string') subroute = { path: routePath }
-      // @ts-ignore
-      else subroute = routePath
+      else subroute = routePath as RouteDescription<never, never>
     
       const newSubroute = buildRoutes(subroute)
     
       newRoute[routeName] = newSubroute
-      // @ts-ignore
-      newSubroute.up = newRoute
+      newSubroute.up = newRoute as RouteObjectFromRouteDescription<RouteDescription<never, never>>
     
       newRoute[`${routeName}With`] = function(pathSegment: string){
         const routeObj = {...this[routeName]}

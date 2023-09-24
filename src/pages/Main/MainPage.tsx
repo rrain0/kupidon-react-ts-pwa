@@ -1,12 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { Link } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import RootRoutes = AppRoutes.RootRoutes
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import { SimplePage } from 'src/components/Page/SimplePage'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import PageContent = SimplePage.PageContent
 import Page = SimplePage.Page
+import RootRoute = AppRoutes.RootRoute
+import full = RouteBuilder.full
 
 
 
@@ -18,10 +20,10 @@ function MainPage(){
     <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
       <PageContent>
         
-        <Link to={RootRoutes.profile.fullPath()}>
+        <Link to={RootRoute.profile[full]()}>
           <button>Профиль</button>
         </Link>
-        <Link to={RootRoutes.test.fullPath()}>
+        <Link to={RootRoute.test[full]()}>
           <button>Test Page</button>
         </Link>
         <div>Какая-то главная страница.</div>

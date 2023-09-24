@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import {GetDimensions} from "src/utils/GetDimensions"
 
 
@@ -56,13 +56,13 @@ export const useScrollbar = (
   
   const [canScrollHorizontal,setCanScrollHorizontal] = useState(false)
   const [canScrollVertical,setCanScrollVertical] = useState(false)
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     setCanScrollHorizontal(scrollProps.clientWidth!==scrollProps.scrollWidth)
     setCanScrollVertical(scrollProps.clientHeight!==scrollProps.scrollHeight)
   },[scrollProps])
   
   
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     updateScrollProps()
     const container = containerRef.current!
     const content = contentRef.current!
@@ -93,7 +93,7 @@ export const useScrollbar = (
   )
   
   // add onScroll handler to container
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     const container = containerRef.current
     if (container){
       container.addEventListener('scroll', onContainerScroll)

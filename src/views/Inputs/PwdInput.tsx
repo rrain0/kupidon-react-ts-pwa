@@ -29,7 +29,11 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
   
   const themeObj = useRecoilValue(ThemeObjectRecoil)
   
-  return <Input {...restProps} ref={forwardedRef} type={pwdHidden ? 'password' : 'text'}>
+  return <Input
+    {...restProps}
+    ref={forwardedRef}
+    type={pwdHidden ? 'password' : 'text'}
+  >
     <EyeWrap
       ref={eyeRef}
       tabIndex={0}
@@ -45,7 +49,6 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
             targetElement={eyeRef}
             mode='center'
             rippleColor={themeObj.input.ripple[0]}
-            rippleDuration={3000}
           />
         </RippleFrame2>
       </RippleFrame1>

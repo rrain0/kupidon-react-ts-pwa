@@ -1,3 +1,6 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/CastUtils'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
@@ -6,16 +9,15 @@ import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
-import {StyledCommon} from "src/styles/StyledCommon"
-import resetInput = StyledCommon.resetInput
-import abs = StyledCommon.abs
-import row = StyledCommon.row
-import resetButton = StyledCommon.resetButton
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioActiveIc = SimpleSvgIcons.RadioActiveIc
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
 import RadioInactiveIc = SimpleSvgIcons.RadioInactiveIc
 import trueOrUndef = CastUtils.trueOrUndef
+import resetInput = EmotionCommon.resetInput
+import abs = EmotionCommon.abs
+import resetButton = EmotionCommon.resetButton
+import row = EmotionCommon.row
 
 
 
@@ -29,7 +31,6 @@ export type RadioInputProps = JSX.IntrinsicElements['input'] & {
   children?: React.ReactNode
   childrenPosition?: 'start'|'end'|empty
   rippleMode?: RippleProps['mode']
-  rippleDuration?: RippleProps['rippleDuration']
 }
 
 const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
@@ -38,12 +39,11 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
   let {
     hasError,
     startViews, endViews, children, childrenPosition,
-    rippleMode, rippleDuration,
+    rippleMode,
     className, style, ...restProps
   } = props
   childrenPosition ??= 'end'
   rippleMode ??= 'cursor'
-  rippleDuration ??= 1000
   
   
   const inputRef = useRef<HTMLInputElement>(null)
@@ -51,9 +51,14 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
   
   
   
-  return <Frame className={className} style={style}>
+  return <Frame
+    css={frameStyle}
+    className={className}
+    style={style}
+  >
     
     <Input_
+      css={input_Style}
       {...restProps}
       hasError={hasError}
       ref={inputRef}
@@ -62,17 +67,20 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     { startViews }
     { childrenPosition==='start' && children }
     
-    <ActiveIcWrap><RadioActiveIc/></ActiveIcWrap>
-    <InactiveIcWrap><RadioInactiveIc/></InactiveIcWrap>
+    <ActiveIcWrap css={activeIcWrapStyle}>
+      <RadioActiveIc/>
+    </ActiveIcWrap>
+    <InactiveIcWrap css={inactiveIcWrapStyle}>
+      <RadioInactiveIc/>
+    </InactiveIcWrap>
     
     { childrenPosition==='end' && children }
     { endViews }
     
-    <Border>
+    <Border css={borderStyle}>
       <Ripple
         targetElement={inputRef}
         mode={rippleMode}
-        rippleDuration={rippleDuration}
       />
     </Border>
     
@@ -84,7 +92,8 @@ export default ReactMemoTyped(RadioInput)
 
 const Frame = styled.label.attrs(p=>({
   className: classNames(p.className,'rrainuiFrame')
-}))`
+}))``
+const frameStyle = css`
   ${resetButton};
   position: relative;
   ${row};
@@ -101,7 +110,8 @@ const Input_ = styled.input.attrs<Input_Props>(p=>({
   className: classNames(p.className,'rrainuiInput'),
   type: 'radio',
   'data-error': trueOrUndef(p.hasError)
-}))`
+}))``
+const input_Style = css`
   ${resetInput};
   ${abs};
   opacity: 0;
@@ -111,23 +121,31 @@ const Input_ = styled.input.attrs<Input_Props>(p=>({
 
 const ActiveIcWrap = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiIconWrap')
-}))`
+}))``
+const activeIcWrapStyle = css`
   display: none;
-  input:checked ~ & { display: flex }
-  --icon-color: var(--active-icon-color)
+  input:checked ~ & { display: flex; }
+  .rrainuiIcon {
+    --icon-color: var(--active-icon-color)
+  }
 `
+
 const InactiveIcWrap = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiIconWrap')
-}))`
+}))``
+const inactiveIcWrapStyle = css`
   display: flex;
   input:checked ~ & { display: none }
-  --icon-color: var(--inactive-icon-color)
+  .rrainuiIcon {
+    --icon-color: var(--inactive-icon-color)
+  }
 `
 
 
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder')
-}))`
+}))``
+const borderStyle = css`
   ${abs};
   pointer-events: none;
   border-radius: inherit;

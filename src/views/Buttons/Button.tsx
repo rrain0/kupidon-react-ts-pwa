@@ -36,13 +36,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
   
   
   
-  return <Button_ css={Button_Style}
+  return <Button_ css={button_Style}
     { ...restProps }
     ref={buttonRef}
     data-error={hasError}
   >
     { children }
-    <Border css={BorderStyle}>
+    <Border css={borderStyle}>
       <Ripple
         targetElement={buttonRef}
         mode={rippleMode}
@@ -68,7 +68,7 @@ const Button_ = styled.button.attrs<Button_Props>(p=>({
   'data-error': trueOrUndef(p['data-error']),
   type:         p.type || 'button',
 }))``
-const Button_Style = css`
+const button_Style = css`
   ${resetButton};
   position: relative;
   ${row};
@@ -91,7 +91,7 @@ const Button_Style = css`
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder'),
 }))<{ 'data-error'?: boolean|undefined }>``
-const BorderStyle = css`
+const borderStyle = css`
   ${abs};
   place-self: stretch;
   pointer-events: none;

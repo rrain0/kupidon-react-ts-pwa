@@ -1,9 +1,12 @@
 import { useRecoilValue } from 'recoil'
+import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
-import RootRoutes = AppRoutes.RootRoutes
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import MainPage from './MainPage'
+import RootRoute = AppRoutes.RootRoute
+import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
+import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 function MainRouting(){
@@ -15,19 +18,22 @@ function MainRouting(){
       element={<MainPage/>}
     /> }
     { !auth && <Route path=''
-      element={<Navigate
-        to={RootRoutes.login.fullPath3({ nameParams: {
-          returnPath: RootRoutes.main.fullPath3({ urlSearchParams: searchParams })}
-        })}
-        replace={true}
-      />}
+      element={
+        <Navigate
+          to={RootRoute.login[fullAllowedNameParams]({
+            returnPath: RootRoute.main[fullAnySearchParams](searchParams)}
+          )}
+          replace={true}
+        />
+      }
     /> }
     <Route path='*'
-      element={<Navigate to={RootRoutes.main.fullPath3({
-        urlSearchParams: searchParams
-      })}
-        replace={true}
-      />}
+      element={
+        <Navigate
+          to={RootRoute.main[fullAnySearchParams](searchParams)}
+          replace={true}
+        />
+      }
     />
   </Routes>
 }

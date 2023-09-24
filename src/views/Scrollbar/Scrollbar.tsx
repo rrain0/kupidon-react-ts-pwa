@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import React, {
-  useCallback,
+  useCallback, useEffect,
   useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react'
-import cmcss from 'src/styles/common.module.scss'
 import classNames from "classnames"
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { useNoSelect } from 'src/utils-react/useNoSelect'
 import { ElementProps } from 'src/utils/GetDimensions'
 import { MathUtils } from 'src/utils/MathUtils'
 import inRange = MathUtils.inRange
@@ -106,7 +106,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   
   
   // Track Resize Observer
-  useLayoutEffect(()=>{
+  useEffect(()=>{
     updateTrackProps()
     const track = trackRef.current
     if (track){
@@ -122,9 +122,11 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   )
   const onPointerDown = useCallback(
     function (this: HTMLElement, ev: PointerEvent){
-      if (ev.buttons===1){
-        const trackD = ElementProps(trackRef.current!)
-        const thumbBoxD = ElementProps(thumbBoxRef.current!)
+      const track = trackRef.current
+      const thumbBox = thumbBoxRef.current
+      if (track && thumbBox && ev.buttons===1){
+        const trackD = ElementProps(track)
+        const thumbBoxD = ElementProps(thumbBox)
         const drag = function(){
           const p = function(){
             switch (direction) {
@@ -206,17 +208,12 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   
   
   // forbid content selection for all elements while dragging scrollbar
-  useLayoutEffect(()=>{
-    if (dragStart){
-      document.querySelector('html')!.classList.add(cmcss.noSelect)
-      return ()=>document.querySelector('html')!.classList.remove(cmcss.noSelect)
-    } else document.querySelector('html')!.classList.remove(cmcss.noSelect)
-  },[dragStart,scrollProps,trackProps])
+  useNoSelect(!!dragStart,[dragStart])
   
   
-  useLayoutEffect(
+  useEffect(
     ()=>{
-      const track = trackRef.current!
+      const track = trackRef.current
       if (track){
         track.addEventListener('pointerdown',onPointerDown)
         track.addEventListener('pointermove',onPointerMove)
@@ -243,11 +240,11 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
     ref={trackRef}
   >
     <ScrollbarThumbBox
-      css={ScrollbarThumbBoxStyle}
+      css={scrollbarThumbBoxStyle}
       ref={thumbBoxRef}
       style={thumbBoxProps}
     >
-      <ScrollbarThumb css={ScrollbarThumbStyle}/>
+      <ScrollbarThumb css={scrollbarThumbStyle}/>
     </ScrollbarThumbBox>
   </ScrollbarTrack>
 })
@@ -282,7 +279,7 @@ const ScrollbarThumbBox = ReactMemoTyped(
     className: classNames(p.className,'rrainuiScrollbarThumbBox')
   }))``
 )
-const ScrollbarThumbBoxStyle = css`
+const scrollbarThumbBoxStyle = css`
   position: absolute;
   [data-direction=vertical]>&{
     will-change: top, height;
@@ -301,7 +298,7 @@ const ScrollbarThumb = ReactMemoTyped(
     className: classNames(p.className,'rrainuiScrollbarThumb')
   }))``
 )
-const ScrollbarThumbStyle = css`
+const scrollbarThumbStyle = css`
   width: 100%; height: 100%;
   //pointer-events: none;
 

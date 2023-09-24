@@ -3,19 +3,19 @@ import styled from '@emotion/styled'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import center = EmotionCommon.center
-import { css, ThemeProvider } from '@emotion/react'
+import { css } from '@emotion/react'
 import col = EmotionCommon.col
-import React, { useEffect, useId, useLayoutEffect, useMemo, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 import { AxiosError } from 'axios'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import { InputStyle } from 'src/views/Inputs/InputStyle'
 import Input from 'src/views/Inputs/Input'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
+import { AppRoutes, AppRoutes0 } from 'src/app-routes/AppRoutes'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Button from 'src/views/Buttons/Button'
 import PwdInput from 'src/views/Inputs/PwdInput'
@@ -44,14 +44,16 @@ import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
 import { AuthApi } from 'src/api/requests/AuthApi'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
-import RootRoutes = AppRoutes.RootRoutes
 import { FormPage } from 'src/components/Page/FormPage'
-import Page = FormPage.Page;
+import Page = FormPage.Page
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import PageContent = FormPage.PageContent
 import trueOrUndef = CastUtils.trueOrUndef
 import GearIc = SimpleSvgIcons.GearIc
+import RootRoute = AppRoutes.RootRoute
+import params = RouteBuilder.params
+import full = RouteBuilder.full
 
 
 
@@ -83,8 +85,7 @@ const SignupPage = () => {
   const id = useId()
   
   const [searchParams] = useSearchParams()
-  //@ts-ignore
-  const returnPath = searchParams.get(RootRoutes.signup.params.returnPath) ?? undefined
+  const returnPath = searchParams.get(RootRoute.signup[params].returnPath) ?? undefined
   const navigate = useNavigate()
   
   const setAuth = useSetRecoilState(AuthRecoil)
@@ -167,7 +168,7 @@ const SignupPage = () => {
     
     if (signupSuccess) {
       Toasts.SuccessSignIn.show('Пользователь успешно зарегистрирован')
-      navigate(returnPath ?? RootRoutes.main.fullPath())
+      navigate(returnPath ?? RootRoute.main[full]())
     }
   },[signupLoading, signupSuccess, returnPath])
   

@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import classNames from 'classnames'
 import React, {
-  useCallback,
+  useCallback, useEffect,
   useImperativeHandle,
   useLayoutEffect,
-  useRef
+  useRef,
 } from 'react'
 import { ElementProps } from 'src/utils/GetDimensions'
 import css from 'src/views/Ripple/Ripple.module.scss'
@@ -19,7 +19,7 @@ export type RippleProps = JSX.IntrinsicElements['div'] & {
   rippleDuration?: number|empty // ripple animation duration per 200px
   mode?: 'center'|'cursor'|empty
   rippleColor?: string|empty
-  targetElement: React.RefObject<HTMLElement>
+  targetElement?: React.RefObject<HTMLElement>|empty
 }
 type CursorInfo = {
   clientX: number
@@ -131,7 +131,7 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
         }
         
       },
-      [rippleFrameRef.current, rippleViewRef.current]
+      [props.mode, props.rippleColor, props.rippleDuration]
     )
     
     const hideRipple = useCallback(
@@ -142,13 +142,15 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
           rippleView.classList.add(css.rippleHide)
         }
       },
-      [rippleViewRef.current]
+      []
     )
     
     
-    useLayoutEffect(
+    // must NOT be useLayoutEffect
+    useEffect(
       ()=>{
-        const target = props.targetElement.current
+        const target = props.targetElement?.current
+          ?? rippleFrameRef.current?.parentElement
         if (target){
           target.addEventListener('pointerdown',showRipple)
           target.addEventListener('pointerup',hideRipple)
@@ -161,7 +163,7 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
         }
       },
       [
-        props.targetElement,
+        props.targetElement?.current, rippleFrameRef.current,
         showRipple, hideRipple,
       ]
     )

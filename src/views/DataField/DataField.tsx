@@ -36,7 +36,7 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   useImperativeHandle(forwardedRef, ()=>labelRef.current!,[])
   
   
-  return <Frame css={FrameStyle}
+  return <Frame css={frameStyle}
     hasError={hasError}
     {...restProps}
     ref={labelRef}
@@ -44,7 +44,7 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
     
     { children }
     
-    <Border css={BorderStyle}/>
+    <Border css={borderStyle}/>
     
   </Frame>
 })
@@ -59,7 +59,7 @@ const Frame = styled.div.attrs<FrameProps>(p=>({
   className: classNames(p.className,'rrainuiFrame'),
   'data-error': trueOrUndef(p.hasError),
 }))``
-const FrameStyle = css`
+const frameStyle = css`
   ${row};
   align-items: center;
   width: 100%;
@@ -72,7 +72,7 @@ const FrameStyle = css`
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder'),
 }))``
-const BorderStyle = css`
+const borderStyle = css`
   ${abs};
   pointer-events: none;
   border-radius: inherit;

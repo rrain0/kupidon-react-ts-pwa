@@ -13,10 +13,6 @@ import empty = TypeUtils.empty
 import Setter = TypeUtils.Setter
 
 
-/*
-  todo
-   1) free height between two snap points - 'free' snap point
-*/
 
 
 export type BottomSheetRefsProps = {

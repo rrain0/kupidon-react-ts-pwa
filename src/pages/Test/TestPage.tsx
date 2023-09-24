@@ -3,15 +3,17 @@ import React, { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
-import RootRoutes = AppRoutes.RootRoutes
 import { SimplePage } from 'src/components/Page/SimplePage'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import Page = SimplePage.Page
 import PageContent = SimplePage.PageContent
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import GearIc = SimpleSvgIcons.GearIc
+import RootRoute = AppRoutes.RootRoute
+import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 
@@ -27,13 +29,13 @@ const TestPage = () => {
       
       <div>Test Page</div>
     
-      <Link to={RootRoutes.test.scrollbar.fullPath3({ urlSearchParams: searchParams })}>
+      <Link to={RootRoute.test.scrollbar[fullAnySearchParams](searchParams)}>
         <Button css={ButtonStyle.buttonPrimary}>Scrollbar test</Button>
       </Link>
-      <Link to={RootRoutes.test.bottomSheet.fullPath3({ urlSearchParams: searchParams })}>
+      <Link to={RootRoute.test.bottomSheet[fullAnySearchParams](searchParams)}>
         <Button css={ButtonStyle.buttonPrimary}>Bottom Sheet test</Button>
       </Link>
-      <Link to={RootRoutes.test.resizeObserver.fullPath3({ urlSearchParams: searchParams })}>
+      <Link to={RootRoute.test.resizeObserver[fullAnySearchParams](searchParams)}>
         <Button css={ButtonStyle.buttonPrimary}>Resize Observer test</Button>
       </Link>
       
