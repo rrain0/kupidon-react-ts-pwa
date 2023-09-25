@@ -72,11 +72,14 @@ const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
       }
     /> }
     { !authId && <Route path=''
-      element={<Navigate to={RootRoute.login[fullAllowedNameParams]({
-        returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
-      })}
-        replace={true}
-      />}
+      element={
+        <Navigate
+          to={RootRoute.login[fullAllowedNameParams]({
+            returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
+          })}
+          replace={true}
+        />
+      }
     /> }
   </Routes>
 })

@@ -56,7 +56,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
     <Textarea_
       css={textarea_Style}
       {...restProps}
-      hasError={hasError}
+      data-error={hasError}
       ref={textareaRef}
     />
     
@@ -81,13 +81,14 @@ const frameStyle = css`
   position: relative;
 `
 
+
 type Textarea_Props = {
-  hasError?: boolean | empty
+  'data-error'?: boolean | empty
 }
 const Textarea_ = styled.textarea.attrs<Textarea_Props>(p=>({
   className: classNames(p.className,'rrainuiTextarea'),
-  'data-error': trueOrUndef(p.hasError)
-}))``
+  'data-error': trueOrUndef(p['data-error'])
+}))<Textarea_Props>``
 const textarea_Style = css`
   ${resetTextarea};
 

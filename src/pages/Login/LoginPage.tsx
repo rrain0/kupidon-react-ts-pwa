@@ -242,6 +242,8 @@ const LoginPage = () => {
                 Зарегистрироваться
               </Button>
             </Link>
+            
+            <div css={css`height: calc(-50px + 70px);`}/>
           
           </Form>
           

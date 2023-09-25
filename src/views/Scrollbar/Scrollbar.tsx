@@ -3,7 +3,6 @@ import { css } from '@emotion/react'
 import React, {
   useCallback, useEffect,
   useImperativeHandle,
-  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -20,7 +19,7 @@ import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import styled from 'styled-components'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
-import { ScrollProps } from 'src/views/Scrollbar/useScrollbar'
+import { ScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import reset = EmotionCommon.reset
 
 
@@ -64,8 +63,8 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
     if (track){
       const d = ElementProps(track)
       setTrackProps({
-        width: d.contentWidthRounded,
-        height: d.contentHeightRounded,
+        width: d.contentWidth,
+        height: d.contentHeight,
       })
     }
   },[trackRef.current])
@@ -131,21 +130,21 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
           const p = function(){
             switch (direction) {
               case 'vertical': return {
-                start: thumbBoxD.top,
+                start: thumbBoxD.clientYFloat,
                 client: ev.clientY,
-                end: thumbBoxD.bottom,
+                end: thumbBoxD.clientBottomFloat,
                 scroll: scrollProps.scrollTop,
                 size: thumbBoxProps.height!,
-                trackStart: trackD.top,
+                trackStart: trackD.clientYFloat,
                 scrollMax: scrollProps.scrollTopMax,
               }
               case 'horizontal': return {
-                start: thumbBoxD.left,
+                start: thumbBoxD.clientXFloat,
                 client: ev.clientX,
-                end: thumbBoxD.right,
+                end: thumbBoxD.clientRightFloat,
                 scroll: scrollProps.scrollLeft,
                 size: thumbBoxProps.width!,
-                trackStart: trackD.left,
+                trackStart: trackD.clientXFloat,
                 scrollMax: scrollProps.scrollLeftMax,
               }
             }
@@ -236,7 +235,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   return <ScrollbarTrack
     {...restProps}
     css={ScrollbarTrackStyle}
-    direction={direction}
+    data-direction={direction}
     ref={trackRef}
   >
     <ScrollbarThumbBox
@@ -253,13 +252,13 @@ export default ReactMemoTyped(Scrollbar)
 
 
 type ScrollbarTrackProps = {
-  direction: ScrollDirection
+  'data-direction': ScrollDirection
 }
 const ScrollbarTrack = ReactMemoTyped(
   styled.div.attrs<ScrollbarTrackProps>(p=>({
     className: classNames(p.className,'rrainuiScrollbarTrack'),
-    'data-direction': p.direction,
-  }))``
+    'data-direction': p['data-direction'],
+  }))<ScrollbarTrackProps>``
 )
 const ScrollbarTrackStyle = css`
   ${reset};

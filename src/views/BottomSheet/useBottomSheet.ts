@@ -98,11 +98,11 @@ export const useBottomSheet = (
         const headerD = new GetDimensions(header)
         const contentD = new GetDimensions(content)
         setComputedSheetDimens({
-          frameH: frameD.heightRounded,
-          sheetH: sheetD.heightRounded,
-          headerH: headerD.heightRounded,
-          contentH: contentD.heightRounded,
-          headerAndContentH: headerD.heightRounded+contentD.heightRounded,
+          frameH: frameD.height,
+          sheetH: sheetD.height,
+          headerH: headerD.height,
+          contentH: contentD.height,
+          headerAndContentH: headerD.height+contentD.height,
         })
       }
     },[

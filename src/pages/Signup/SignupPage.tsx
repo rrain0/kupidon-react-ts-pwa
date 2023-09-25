@@ -237,6 +237,61 @@ const SignupPage = () => {
             
             <InputValidationWrap
               {...validationProps}
+              fieldName={'email'}
+              errorPropName={'hasError'} // todo
+            >
+              <Input
+                css={InputStyle.input}
+                placeholder='email (логин)'
+              />
+            </InputValidationWrap>
+            
+            <InputValidationWrap
+              {...validationProps}
+              fieldName={'email'}
+              errorPropName={'hasError'} // todo
+            >
+              <Input
+                css={InputStyle.input}
+                placeholder='email (логин)'
+              />
+            </InputValidationWrap>
+            
+            <InputValidationWrap
+              {...validationProps}
+              fieldName={'email'}
+              errorPropName={'hasError'} // todo
+            >
+              <Input
+                css={InputStyle.input}
+                placeholder='email (логин)'
+              />
+            </InputValidationWrap>
+            
+            <InputValidationWrap
+              {...validationProps}
+              fieldName={'email'}
+              errorPropName={'hasError'} // todo
+            >
+              <Input
+                css={InputStyle.input}
+                placeholder='email (логин)'
+              />
+            </InputValidationWrap>
+            
+            <InputValidationWrap
+              {...validationProps}
+              fieldName={'email'}
+              errorPropName={'hasError'} // todo
+            >
+              <Input
+                css={InputStyle.input}
+                placeholder='email (логин)'
+              />
+            </InputValidationWrap>
+            
+            <InputValidationWrap
+              {...validationProps}
               fieldName={'pwd'}
               errorPropName={'hasError'} // todo
             >
@@ -334,7 +389,10 @@ const SignupPage = () => {
               Зарегистрироваться
             </Button>
             
+            <div css={css`height: calc(-50px + 70px);`}/>
+            
           </Form>
+          
         </PageContent>
       </ScrollbarOverlay>
       

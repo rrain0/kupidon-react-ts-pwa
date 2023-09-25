@@ -1,5 +1,5 @@
 import React, {useCallback, useLayoutEffect, useMemo, useState} from "react"
-import {useScrollbar} from "../../views/Scrollbar/useScrollbar"
+import {useContainerScrollState} from "src/views/Scrollbar/useContainerScrollState"
 
 
 export type UseGalleryScrollbarOptions = {
@@ -15,7 +15,7 @@ export const useGalleryScrollbar = (
   const {
     scrollbarProps: { scrollProps, setContainerScroll },
     //containerProps: { onScroll: onContainerScroll }, // todo
-  } = useScrollbar(containerRef,contentRef,options)
+  } = useContainerScrollState(containerRef,contentRef,options)
   
   const galleryScrollProps = useMemo(()=>{
     const elementW = scrollProps.scrollWidth / elementsCount

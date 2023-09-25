@@ -37,7 +37,7 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   
   
   return <Frame css={frameStyle}
-    hasError={hasError}
+    data-error={hasError}
     {...restProps}
     ref={labelRef}
   >
@@ -53,12 +53,12 @@ export default ReactMemoTyped(DataField)
 
 
 type FrameProps = {
-  hasError?: boolean | empty
+  'data-error'?: boolean | empty
 }
 const Frame = styled.div.attrs<FrameProps>(p=>({
   className: classNames(p.className,'rrainuiFrame'),
-  'data-error': trueOrUndef(p.hasError),
-}))``
+  'data-error': trueOrUndef(p['data-error']),
+}))<FrameProps>``
 const frameStyle = css`
   ${row};
   align-items: center;

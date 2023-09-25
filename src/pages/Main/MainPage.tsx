@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { Link } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
+import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
 import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
 import { SimplePage } from 'src/components/Page/SimplePage'
@@ -17,26 +18,27 @@ function MainPage(){
   
   
   
-  return <Page>
-    <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
-      <PageContent>
+  return <>
+    <Page>
+      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+        <PageContent>
+          
+          <Link to={RootRoute.profile[full]()}>
+            <button>Профиль</button>
+          </Link>
+          <Link to={RootRoute.test[full]()}>
+            <button>Test Page</button>
+          </Link>
+          <div>Какая-то главная страница.</div>
+          <div>Здесь будут карточки людей.</div>
         
-        <Link to={RootRoute.profile[full]()}>
-          <button>Профиль</button>
-        </Link>
-        <Link to={RootRoute.test[full]()}>
-          <button>Test Page</button>
-        </Link>
-        <div>Какая-то главная страница.</div>
-        <div>Здесь будут карточки людей.</div>
-        
-        <div
-          css={css`height: 2000px;`}
-        ></div>
-      
-      </PageContent>
-    </ScrollbarOverlay>
-  </Page>
+        </PageContent>
+      </ScrollbarOverlay>
+    </Page>
+    
+    
+    
+  </>
 }
 export default MainPage
 

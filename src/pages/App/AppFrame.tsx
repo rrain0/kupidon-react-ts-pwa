@@ -2,21 +2,20 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
-import BottomNavBarRouting from 'src/components/BottomNavBar/BottomNavBarRouting'
 import AppRouting from 'src/pages/App/AppRouting'
 import { SimpleGradientBgc } from 'src/styles/bgc/SimpleGradientBgc'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import full = EmotionCommon.full
 
 
 
 const AppFrame = ()=>{
   
-  return <Frame>
+  return <Frame id='app-frame'>
     
     <AppRouting/>
-    
-    <BottomNavBarRouting/>
     
   </Frame>
 }
@@ -24,16 +23,13 @@ export default ReactMemoTyped(AppFrame)
 
 
 const Frame = styled.div`
-  position: fixed;
-  inset: 0;
+  display: contents;
+  
+  /*width: 100dvw;
+  height: 100dvh;
   
   display: grid;
-  grid-template-rows: 1fr auto;
-  justify-items: stretch;
-  
-  >:last-child {
-    align-self: end;
-  }
+  place-items: stretch;
 
-  ${p=>SimpleGradientBgc(p.theme)};
+  ${p=>SimpleGradientBgc(p.theme)};*/
 `

@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
+import { FormPageStyle } from 'src/components/Page/FormPageStyle'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import styled from '@emotion/styled'
 import { useRecoilState, useResetRecoilState } from 'recoil'
@@ -131,214 +133,225 @@ function ProfilePage(){
     })
   }/>
   
-  return <Page>
-    <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
-      <PageContent>
-        <Form onSubmit={onSubmit}>
-          
-          <h3 css={formHeader}>Профиль</h3>
-          
-          
-          <ProfileImages
-            images={images}
-            setImages={setImages}
-          />
-          
-          
-          <Card>
+  return <>
+    <Page>
+      {/*<ScrollbarOverlay css={ScrollbarOverlayStyle.page}>*/}
+        <PageContent>
+          <Form onSubmit={onSubmit}>
             
+            <h3 css={formHeader}>Профиль</h3>
+            
+            
+            <ProfileImages
+              images={images}
+              setImages={setImages}
+            />
+            
+            
+            <Card>
               
-            <ItemContainer>
-              <ItemLabel>id</ItemLabel>
-              <DataField css={[
-                DataFieldStyle.statikSmall,
-                css`&.rrainuiFrame{
-                  ${textSmall1};
-                }`
-              ]}
-              >
-                {auth.user.id}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Email</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {auth.user.email}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Email верифицирован</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {auth.user.emailVerified ? 'да' : 'нет'}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Пользователь создан</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {new Date(auth.user.created)+''}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Пользователь обновлён</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {new Date(auth.user.updated)+''}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Имя</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {auth.user.firstName}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Фамилия</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {auth.user.lastName}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Дата рождения</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {auth.user.birthDate}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Пол</ItemLabel>
-              <DataField css={DataFieldStyle.statikSmall}>
-                {auth.user.sex==='MALE' ? 'Мужской' : 'Женский'}
-              </DataField>
-            </ItemContainer>
-            
-            <ItemContainer>
-              <ItemLabel>Обо мне</ItemLabel>
-              <Textarea css={TextareaStyle.textareaSmall}/>
-            </ItemContainer>
-            
-            
-            <ItemContainer>
-              <div
-                css={css`
-                  ${row};
-                  gap: 6px;
-                `}
-              >
-                <ItemLabel>Я ищу</ItemLabel>
-                { preferredGenders!=='Не выбрано' && <div
-                  css={t=>css`
-                    ${center};
-                    border-radius: 50%;
-                    height: 1.5em;
-                    padding: 0.27em;
-                    aspect-ratio: 1;
-                    background: ${t.icon.warning.bgc[0]};
-                  `}
+              
+              <ItemContainer>
+                <ItemLabel>id</ItemLabel>
+                <DataField css={[
+                  DataFieldStyle.statikSmall,
+                  css`&.rrainuiFrame{
+                    ${textSmall1};
+                  }`
+                ]}
                 >
-                  <FloppyDisk1Ic
-                    css={t=>css`svg&{ --icon-color: ${t.icon.warning.color[0]} }`}
-                  />
-                </div>}
-              </div>
+                  {auth.user.id}
+                </DataField>
+              </ItemContainer>
               
-              <DataField
-                css={DataFieldStyle.interactiveSmall}
-                onClick={ev=>setSelecting('preferred-genders')}
-                role='listbox'
-              >
-                {preferredGenders}
-              </DataField>
+              <ItemContainer>
+                <ItemLabel>Email</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {auth.user.email}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Email верифицирован</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {auth.user.emailVerified ? 'да' : 'нет'}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Пользователь создан</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {new Date(auth.user.created)+''}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Пользователь обновлён</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {new Date(auth.user.updated)+''}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Имя</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {auth.user.firstName}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Фамилия</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {auth.user.lastName}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Дата рождения</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {auth.user.birthDate}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Пол</ItemLabel>
+                <DataField css={DataFieldStyle.statikSmall}>
+                  {auth.user.sex==='MALE' ? 'Мужской' : 'Женский'}
+                </DataField>
+              </ItemContainer>
+              
+              <ItemContainer>
+                <ItemLabel>Обо мне</ItemLabel>
+                <Textarea css={TextareaStyle.textareaSmall}/>
+              </ItemContainer>
               
               
-              {selecting==='preferred-genders' && <BottomSheetBasic
-                {...bottomSheetProps}
-                header={'Я ищу'}
-              >
+              <ItemContainer>
                 <div
                   css={css`
-                    ${col};
-                    padding-bottom: 20px;
+                    ${row};
+                    gap: 6px;
                   `}
                 >
-                  {
-                    ['Не выбрано','Парней','Девушек','Парней и девушек']
-                      .map(v=><RadioInput
-                        css={RadioInputStyle.radio}
-                        childrenPosition='start'
-                        role='option'
-                        aria-selected={v===preferredGenders}
-                        checked={v===preferredGenders}
-                        value={v}
-                        key={v}
-                        onChange={ev=>{
-                          setPreferredGenders(v)
-                          setSheetState('closing')
-                        }}
-                        onClick={ev=>{
-                          setPreferredGenders(v)
-                          setSheetState('closing')
-                        }}
-                      >
-                        <div
-                          css={css`
-                            flex: 1;
-                            padding-top: 4px;
-                            padding-bottom: 4px;
-                          `}
-                        >{v}</div>
-                      </RadioInput>)
-                  }
-                  
+                  <ItemLabel>Я ищу</ItemLabel>
+                  { preferredGenders!=='Не выбрано' && <div
+                    css={t=>css`
+                      ${center};
+                      border-radius: 50%;
+                      height: 1.5em;
+                      padding: 0.27em;
+                      aspect-ratio: 1;
+                      background: ${t.icon.warning.bgc[0]};
+                    `}
+                  >
+                    <FloppyDisk1Ic
+                      css={t=>css`svg&{ --icon-color: ${t.icon.warning.color[0]} }`}
+                    />
+                  </div>}
                 </div>
-              </BottomSheetBasic>}
+                
+                <DataField
+                  css={DataFieldStyle.interactiveSmall}
+                  onClick={ev=>setSelecting('preferred-genders')}
+                  role='listbox'
+                >
+                  {preferredGenders}
+                </DataField>
+                
+                
+                {selecting==='preferred-genders' && <BottomSheetBasic
+                  {...bottomSheetProps}
+                  header={'Я ищу'}
+                >
+                  <div
+                    css={css`
+                      ${col};
+                      padding-bottom: 20px;
+                    `}
+                  >
+                    {
+                      ['Не выбрано','Парней','Девушек','Парней и девушек']
+                        .map(v=><RadioInput
+                          css={RadioInputStyle.radio}
+                          childrenPosition='start'
+                          role='option'
+                          aria-selected={v===preferredGenders}
+                          checked={v===preferredGenders}
+                          value={v}
+                          key={v}
+                          onChange={ev=>{
+                            setPreferredGenders(v)
+                            setSheetState('closing')
+                          }}
+                          onClick={ev=>{
+                            setPreferredGenders(v)
+                            setSheetState('closing')
+                          }}
+                        >
+                          <div
+                            css={css`
+                              flex: 1;
+                              padding-top: 4px;
+                              padding-bottom: 4px;
+                            `}
+                          >{v}</div>
+                        </RadioInput>)
+                    }
+                    
+                  </div>
+                </BottomSheetBasic>}
+                
+                
+              </ItemContainer>
               
-              
-            </ItemContainer>
+            </Card>
             
-          </Card>
+            <div css={notInCard}>
+              <Button css={ButtonStyle.buttonPrimary}
+                onClick={logout}
+              >
+                Выйти
+              </Button>
+            </div>
+            
+            
+            <div css={css`height: calc(-50px - 10px + 70px);`}/>
+            
+          </Form>
           
-          <div css={notInCard}>
-            <Button css={ButtonStyle.buttonPrimary}
-              onClick={logout}
-            >
-              Выйти
-            </Button>
-          </div>
-          
-        </Form>
+        </PageContent>
+      {/*</ScrollbarOverlay>*/}
+      
+      
+      
+      <BottomButtonBar
+        css={css`
+          padding-bottom: 50px;
+        `}
+      >
         
-      </PageContent>
-    </ScrollbarOverlay>
-    
-    
-    
-    <BottomButtonBar>
+        <Button css={ButtonStyle.icon}
+          onClick={update}
+          disabled={false}
+        >
+          <ArrowReload />
+        </Button>
+        
+        <Button css={ButtonStyle.icon}
+          onClick={undefined}
+          disabled={preferredGenders==='Не выбрано'}
+        >
+          <FloppyDisk1Ic />
+        </Button>
+        
+      </BottomButtonBar>
       
-      <Button css={ButtonStyle.icon}
-        onClick={update}
-        disabled={false}
-      >
-        <ArrowReload />
-      </Button>
       
-      <Button css={ButtonStyle.icon}
-        onClick={undefined}
-        disabled={preferredGenders==='Не выбрано'}
-      >
-        <FloppyDisk1Ic />
-      </Button>
       
-    </BottomButtonBar>
+    </Page>
     
-    
-    
-  </Page>
+  
+  </>
 }
 
 export default ReactMemoTyped(ProfilePage)

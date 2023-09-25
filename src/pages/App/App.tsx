@@ -23,9 +23,25 @@ function App() {
   
   const [readyToRender, setReadyToRender] = useState(false)
   useLayoutEffect(()=>{
-    if (themeObject) setReadyToRender(true)
-    else setReadyToRender(false)
+    setReadyToRender(!!(themeObject))
   },[themeObject])
+  
+  
+  /*useLayoutEffect(()=>{
+    const onScroll = function(this: HTMLElement, ev: Event){
+      console.log('onScroll ev',ev)
+    }
+    window.addEventListener('scroll',onScroll)
+    return ()=>window.removeEventListener('scroll',onScroll)
+  },[])*/
+  
+  /*useLayoutEffect(()=>{
+    const onResize = function(this: Window, ev: UIEvent){
+      console.log('onResize ev',ev)
+    }
+    window.addEventListener('resize',onResize)
+    return ()=>window.removeEventListener('resize',onResize)
+  },[])*/
   
   
   if (!readyToRender) return <></>
@@ -42,6 +58,10 @@ function App() {
           
           .Toastify__toast-container {
             display: block;
+            * {
+              display: flex;
+              flex-flow: row nowrap;
+            }
 
             .Toastify__toast {
               border-radius: 15px;

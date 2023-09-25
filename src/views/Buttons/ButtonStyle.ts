@@ -133,6 +133,7 @@ export namespace ButtonStyle {
   export const iconTransparent = (t:Theme) => css`
     ${icon(t)};
     &.rrainuiButton {
+      padding: 11px;
       
       background: none;
       color: ${t.button.secondary.bgc[0]};

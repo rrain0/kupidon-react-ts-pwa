@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useRef } from 'react'
-import { useScrollbar } from 'src/views/Scrollbar/useScrollbar'
+import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { css } from '@emotion/react'
 import Scrollbar from 'src/views/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
@@ -48,7 +48,7 @@ const ScrollbarTest = (
     scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
-  } = useScrollbar(containerRef, contentRef)
+  } = useContainerScrollState(containerRef, contentRef)
   
   return <div
     css={css`

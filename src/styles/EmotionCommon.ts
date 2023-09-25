@@ -26,6 +26,11 @@ export namespace EmotionCommon {
     inset: 0; // top: 0; right: 0; bottom: 0; left: 0;
   `
   
+  export const fixedBottom = css`
+    position: fixed;
+   right: 0; bottom: 0; left: 0;
+  `
+  
   export const row = css`
     display: flex;
     flex-flow: row nowrap;
@@ -49,25 +54,35 @@ export namespace EmotionCommon {
     display: grid;
     place-items: center;
     grid: 'c';
-    & > * { grid-area: c }
+    & > * { grid-area: c; }
   `
   export const centerV = css`
     display: grid;
     place-items: center start;
   `
   export const centerStart = centerV
-  
   export const stretch = css`
     display: grid;
     place-items: stretch;
   `
-  
   export const stretchAll = css`
     display: grid;
     place-items: stretch;
     grid: 'c';
     & > * { grid-area: c; }
   `
+  export const wrapper = css`
+    display: grid;
+    min-width: fit-content; min-height: fit-content;
+    width: fit-content; height: fit-content;
+    max-width: fit-content; max-height: fit-content;
+  `
+  export const full = css`
+    min-width: 100%; min-height: 100%;
+    width: 100%; height: 100%;
+    max-width: 100%; max-height: 100%;
+  `
+  
   
   
   
@@ -94,20 +109,6 @@ export namespace EmotionCommon {
   
   
   
-  export const page = css`
-    width: 100%;
-    background: #F8F8F8;
-    ${col};
-    align-items: center;
-  `
-  
-  export const pageElement = css`
-    width: clamp(200px, 100%, 1920px);
-    padding: 0 64px 0 64px;
-    @media (max-width: 900px) {
-      padding: 0 16px 0 16px;
-    }
-  `
   
   
   export const resetInput = css`

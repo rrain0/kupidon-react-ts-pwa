@@ -67,7 +67,7 @@ const Button_ = styled.button.attrs<Button_Props>(p=>({
   className:    classNames(p.className,'rrainuiButton'),
   'data-error': trueOrUndef(p['data-error']),
   type:         p.type || 'button',
-}))``
+}))<Button_Props>``
 const button_Style = css`
   ${resetButton};
   position: relative;
@@ -90,7 +90,7 @@ const button_Style = css`
 
 const Border = styled.div.attrs(p=>({
   className: classNames(p.className,'rrainuiBorder'),
-}))<{ 'data-error'?: boolean|undefined }>``
+}))``
 const borderStyle = css`
   ${abs};
   place-self: stretch;

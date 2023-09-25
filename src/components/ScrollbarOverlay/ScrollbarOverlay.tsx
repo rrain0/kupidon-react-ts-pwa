@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import hideScrollbar = EmotionCommon.hideScrollbar
-import { useScrollbar } from 'src/views/Scrollbar/useScrollbar'
+import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import Scrollbar from 'src/views/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import React, { HTMLAttributes, useRef } from 'react'
@@ -12,8 +12,8 @@ import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
 import classNames from 'classnames'
 import { ReactUtils } from 'src/utils/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import abs = EmotionCommon.abs
+import wrapper = EmotionCommon.wrapper
 
 
 
@@ -38,7 +38,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
     scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
-  } = useScrollbar(scrollContainerRef, scrollContentRef)
+  } = useContainerScrollState(scrollContainerRef, scrollContentRef)
   
   
   return <div
@@ -60,9 +60,11 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       css={css`
         ${col};
         //place-self: stretch;
+        
         min-width: 100%; min-height: 100%;
         width: 100%; height: 100%;
         max-width: 100%; max-height: 100%;
+        
         overflow: auto;
         ${hideScrollbar};
       `}

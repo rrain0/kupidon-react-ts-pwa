@@ -17,7 +17,7 @@ export type ScrollProps = {
 export type UseScrollbarOptions = {
 
 }
-export const useScrollbar = (
+export const useContainerScrollState = (
   containerRef: React.RefObject<HTMLElement>,
   contentRef: React.RefObject<HTMLElement>,
   options: UseScrollbarOptions = { }
@@ -40,14 +40,14 @@ export const useScrollbar = (
       const d = new GetDimensions(container)
       //console.log('container.scrollWidth',container.scrollWidth)
       setScrollProps({
-        clientWidth: d.contentWidthRounded,
-        scrollLeft: d.scrollLeft,
-        scrollLeftMax: d.scrollLeftMax,
-        scrollWidth: d.scrollWidth,
-        clientHeight: d.contentHeightRounded,
-        scrollTop: d.scrollTop,
-        scrollTopMax: d.scrollTopMax,
-        scrollHeight: d.scrollHeight,
+        clientWidth: d.contentWidth, // window.innerWidth
+        scrollLeft: d.scrollLeft, // window.scrollX
+        scrollLeftMax: d.scrollLeftMax, // get from html
+        scrollWidth: d.scrollWidth, // get from html
+        clientHeight: d.contentHeight, // window.innerHeight
+        scrollTop: d.scrollTop, // window.scrollY
+        scrollTopMax: d.scrollTopMax, // get from html
+        scrollHeight: d.scrollHeight, // get from html
       })
     }
   },[containerRef.current])

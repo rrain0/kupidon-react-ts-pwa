@@ -60,7 +60,7 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     <Input_
       css={input_Style}
       {...restProps}
-      hasError={hasError}
+      data-error={hasError}
       ref={inputRef}
     />
     
@@ -104,13 +104,13 @@ const frameStyle = css`
 
 
 type Input_Props = {
-  hasError?: boolean | empty
+  'data-error'?: boolean | empty
 }
 const Input_ = styled.input.attrs<Input_Props>(p=>({
   className: classNames(p.className,'rrainuiInput'),
   type: 'radio',
-  'data-error': trueOrUndef(p.hasError)
-}))``
+  'data-error': trueOrUndef(p['data-error'])
+}))<Input_Props>``
 const input_Style = css`
   ${resetInput};
   ${abs};

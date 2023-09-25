@@ -1,4 +1,7 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
+import BottomNavBarRouting from 'src/components/BottomNavBar/BottomNavBarRouting'
 import MainRouting from 'src/pages/Main/MainRouting'
 import LoginRouting from 'src/pages/Login/LoginRouting'
 import SignupPage from 'src/pages/Signup/SignupPage'
@@ -16,9 +19,23 @@ import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 function AppRouting(){
+  
+  return <>
+    <PageRouting/>
+    <BottomNavBarRouting/>
+  </>
+}
+export default ReactMemoTyped(AppRouting)
+
+
+
+
+function PageRouting(){
   const [searchParams] = useSearchParams()
   
+  
   return <Routes>
+    
     <Route path={RootRoute.test[path]+'/*'}
       element={<TestRouting/>}
     />
@@ -34,6 +51,7 @@ function AppRouting(){
     <Route path={RootRoute.profile[path]+'/*'}
       element={<ProfileRouting/>}
     />
+    
     <Route path="*"
       element={
         <Navigate
@@ -42,6 +60,6 @@ function AppRouting(){
         />
       }
     />
+    
   </Routes>
 }
-export default ReactMemoTyped(AppRouting)

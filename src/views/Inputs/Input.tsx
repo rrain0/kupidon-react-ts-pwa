@@ -55,7 +55,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
     <Input_
       css={input_Style}
       {...restProps}
-      hasError={hasError}
+      data-error={hasError}
       ref={inputRef}
     />
     
@@ -80,13 +80,14 @@ const frameStyle = css`
   position: relative;
 `
 
+
 type Input_Props = {
-  hasError?: boolean | empty
+  'data-error'?: boolean | empty
 }
 const Input_ = styled.input.attrs<Input_Props>(p=>({
   className: classNames(p.className,'rrainuiInput'),
-  'data-error': trueOrUndef(p.hasError)
-}))``
+  'data-error': trueOrUndef(p['data-error'])
+}))<Input_Props>``
 const input_Style = css`
   ${resetInput};
 

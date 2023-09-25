@@ -61,10 +61,10 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
           
           const dimens = ElementProps(rippleFrame)
           const el = {
-            clientX: dimens.left,
-            clientY: dimens.top,
-            w: dimens.widthRounded,
-            h: dimens.heightRounded,
+            clientX: dimens.clientXFloat,
+            clientY: dimens.clientYFloat,
+            w: dimens.width,
+            h: dimens.height,
           }
           const d = function(){
             switch (mode){

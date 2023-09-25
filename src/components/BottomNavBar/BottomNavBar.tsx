@@ -18,27 +18,11 @@ import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import ChatRoundIc = SimpleSvgIcons.ChatRoundIc
 import HelpIc = SimpleSvgIcons.HelpIc
+import fixedBottom = EmotionCommon.fixedBottom
 
 
 
 const BottomNavBar = ()=>{
-  
-  /*
-   const [theme, setTheme] = useRecoilState(ThemeSettingsRecoil)
-   
-  const changeTheme = useCallback(
-    ()=>setTheme({
-      ...theme,
-      type: function(){
-        switch (theme.type){
-          case 'light': return 'dark'
-          case 'dark': default: return 'light'
-        }
-      }()
-    }),
-    [theme]
-  )
-  */
   
   const [settingsOpen, setSettingsOpen] = useState(false)
   
@@ -90,7 +74,7 @@ export default BottomNavBar
 
 
 const Frame = styled.nav`
-  width: 100%;
+  ${fixedBottom};
   height: 50px;
   min-height: 50px;
   ${row};
