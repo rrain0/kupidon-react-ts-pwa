@@ -48,7 +48,9 @@ const ScrollbarTest = (
     scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
-  } = useContainerScrollState(containerRef, contentRef)
+  } = useContainerScrollState({
+    containerRef, contentRef
+  })
   
   return <div
     css={css`

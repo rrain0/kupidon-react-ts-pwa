@@ -46,8 +46,8 @@ import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import { FormPage } from 'src/components/Page/FormPage'
 import Page = FormPage.Page
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import PageContent = FormPage.PageContent
 import trueOrUndef = CastUtils.trueOrUndef
 import GearIc = SimpleSvgIcons.GearIc
@@ -218,7 +218,7 @@ const SignupPage = () => {
   return <>
     <Page>
       
-      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+      <OverflowWrapper css={OverflowWrapperStyle.page}>
         <PageContent>
           <Form onSubmit={onSubmit}>
             
@@ -394,7 +394,7 @@ const SignupPage = () => {
           </Form>
           
         </PageContent>
-      </ScrollbarOverlay>
+      </OverflowWrapper>
       
       <BottomButtonBar>
         <Button css={ButtonStyle.iconTransparent}

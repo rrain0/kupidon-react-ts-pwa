@@ -5,6 +5,9 @@ import {useContainerScrollState} from "src/views/Scrollbar/useContainerScrollSta
 export type UseGalleryScrollbarOptions = {
 
 }
+
+/*
+
 export const useGalleryScrollbar = (
   containerRef: React.RefObject<HTMLElement>,
   contentRef: React.RefObject<HTMLElement>,
@@ -47,3 +50,4 @@ export const useGalleryScrollbar = (
     canScroll,
   }
 }
+*/

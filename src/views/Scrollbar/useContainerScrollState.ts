@@ -1,5 +1,7 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {GetDimensions} from "src/utils/GetDimensions"
+import { TypeUtils } from 'src/utils/TypeUtils'
+import empty = TypeUtils.empty
 
 
 
@@ -14,14 +16,20 @@ export type ScrollProps = {
   scrollHeight: number // content height
 }
 
-export type UseScrollbarOptions = {
-
+export type ContainerScrollStateOptions = (
+  {
+    containerIsWindow: true
+    containerRef?: never | empty
+  } | {
+    containerIsWindow?: false | empty
+    containerRef: React.RefObject<HTMLElement>
+  }
+) & {
+  contentRef: React.RefObject<HTMLElement>
 }
-export const useContainerScrollState = (
-  containerRef: React.RefObject<HTMLElement>,
-  contentRef: React.RefObject<HTMLElement>,
-  options: UseScrollbarOptions = { }
-)=>{
+export const useContainerScrollState = ({
+  containerIsWindow, containerRef, contentRef
+}: ContainerScrollStateOptions)=>{
   
   
   const [scrollProps, setScrollProps] = useState<ScrollProps>({
@@ -35,22 +43,23 @@ export const useContainerScrollState = (
     scrollHeight: 0,
   })
   const updateScrollProps = useCallback(() => {
-    const container = containerRef.current
-    if (container){
-      const d = new GetDimensions(container)
+    const container = containerRef?.current
+    const view = containerIsWindow ? window : container
+    if (view){
+      const d = new GetDimensions(view)
       //console.log('container.scrollWidth',container.scrollWidth)
       setScrollProps({
-        clientWidth: d.contentWidth, // window.innerWidth
-        scrollLeft: d.scrollLeft, // window.scrollX
-        scrollLeftMax: d.scrollLeftMax, // get from html
-        scrollWidth: d.scrollWidth, // get from html
-        clientHeight: d.contentHeight, // window.innerHeight
-        scrollTop: d.scrollTop, // window.scrollY
-        scrollTopMax: d.scrollTopMax, // get from html
-        scrollHeight: d.scrollHeight, // get from html
+        clientWidth: d.contentWidth,
+        scrollLeft: d.scrollLeft,
+        scrollLeftMax: d.scrollLeftMax,
+        scrollWidth: d.scrollWidth,
+        clientHeight: d.contentHeight,
+        scrollTop: d.scrollTop,
+        scrollTopMax: d.scrollTopMax,
+        scrollHeight: d.scrollHeight,
       })
     }
-  },[containerRef.current])
+  },[containerIsWindow, containerRef?.current])
   
   
   
@@ -64,42 +73,47 @@ export const useContainerScrollState = (
   
   useEffect(()=>{
     updateScrollProps()
-    const container = containerRef.current!
-    const content = contentRef.current!
-    if (container || content){
+    const container = containerRef?.current
+    const content = contentRef.current
+    let clearActions = [] as Array<()=>void>
+    if (container && !containerIsWindow || content){
       const resizeObserver = new ResizeObserver(()=>{
-        //console.log('resize')
         updateScrollProps()
       })
-      container && resizeObserver.observe(container)
+      container && !containerIsWindow && resizeObserver.observe(container)
       content && resizeObserver.observe(content)
-      return ()=>resizeObserver.disconnect()
+      clearActions.push(()=>resizeObserver.disconnect())
     }
-  },[containerRef.current, contentRef.current, updateScrollProps])
+    if (containerIsWindow){
+      const onResize = function(this: Window, ev: UIEvent){
+        updateScrollProps()
+      }
+      window.addEventListener('resize',onResize)
+      clearActions.push(()=>window.removeEventListener('resize',onResize))
+    }
+    if (clearActions.length) return ()=>clearActions.forEach(it=>it())
+  },[containerIsWindow, containerRef?.current, contentRef.current, updateScrollProps])
   
   
   const setContainerScroll = useCallback(
     (scroll: ScrollToOptions) => {
-      containerRef.current?.scrollTo(scroll)
+      const container = containerRef?.current
+      const view = containerIsWindow ? window : container
+      view?.scrollTo(scroll)
     },
-    [containerRef.current]
+    [containerIsWindow, containerRef?.current]
   )
   
-  const onContainerScroll = useCallback(
-    (ev: Event) => {
-      updateScrollProps()
-    },
-    [updateScrollProps]
-  )
   
-  // add onScroll handler to container
+  // adds onScroll handler to container
   useEffect(()=>{
-    const container = containerRef.current
-    if (container){
-      container.addEventListener('scroll', onContainerScroll)
-      return ()=>container.removeEventListener('scroll', onContainerScroll)
+    const container = containerRef?.current
+    const view = containerIsWindow ? window : container
+    if (view){
+      view.addEventListener('scroll', updateScrollProps)
+      return ()=>view.removeEventListener('scroll', updateScrollProps)
     }
-  },[containerRef.current, onContainerScroll])
+  },[containerIsWindow, containerRef?.current, updateScrollProps])
   
   
   return {

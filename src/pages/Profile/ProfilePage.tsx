@@ -19,8 +19,8 @@ import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
@@ -135,7 +135,7 @@ function ProfilePage(){
   
   return <>
     <Page>
-      {/*<ScrollbarOverlay css={ScrollbarOverlayStyle.page}>*/}
+      {/*<OverflowWrapper css={ScrollbarOverlayStyle.page}>*/}
         <PageContent>
           <Form onSubmit={onSubmit}>
             
@@ -320,7 +320,7 @@ function ProfilePage(){
           </Form>
           
         </PageContent>
-      {/*</ScrollbarOverlay>*/}
+      {/*</OverflowWrapper>*/}
       
       
       

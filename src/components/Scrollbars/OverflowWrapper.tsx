@@ -17,14 +17,15 @@ import wrapper = EmotionCommon.wrapper
 
 
 
-export type ScrollbarOverlayProps = {
+
+export type OverflowWrapperProps = {
   showVertical?: boolean|empty
   showHorizontal?: boolean|empty
   children?: React.ReactNode
   className?: HTMLAttributes<any>['className']
   style?: HTMLAttributes<any>['style']
 }
-const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
+const OverflowWrapper = (props: OverflowWrapperProps)=>{
   const showVertical = props.showVertical ?? true
   const showHorizontal = props.showHorizontal ?? true
   
@@ -38,7 +39,10 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
     scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
-  } = useContainerScrollState(scrollContainerRef, scrollContentRef)
+  } = useContainerScrollState({
+      containerRef: scrollContainerRef,
+      contentRef: scrollContentRef,
+    })
   
   
   return <div
@@ -49,7 +53,7 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
       ${centerAll};
       position: relative;
     `}
-    className={classNames(props.className, 'rrainuiScrollOverlay')}
+    className={classNames(props.className, 'rrainuiOverflowWrapper')}
     style={props.style}
   >
     
@@ -145,4 +149,4 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   </div>
   
 }
-export default ScrollbarOverlay
+export default OverflowWrapper

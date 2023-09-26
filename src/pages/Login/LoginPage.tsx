@@ -38,8 +38,8 @@ import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import { FormPage } from 'src/components/Page/FormPage'
 import PageContent = FormPage.PageContent;
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import Page = FormPage.Page
 import GearIc = SimpleSvgIcons.GearIc
 import full = RouteBuilder.full
@@ -200,7 +200,7 @@ const LoginPage = () => {
   return <>
     <Page>
       
-      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+      <OverflowWrapper css={OverflowWrapperStyle.page}>
         <PageContent>
           <Form onSubmit={onSubmit}>
             
@@ -248,7 +248,7 @@ const LoginPage = () => {
           </Form>
           
         </PageContent>
-      </ScrollbarOverlay>
+      </OverflowWrapper>
       
       <BottomButtonBar>
         <Button css={ButtonStyle.iconTransparent}

@@ -13,8 +13,8 @@ import { Utils } from 'src/utils/Utils'
 import styled from '@emotion/styled'
 import BottomSheet from 'src/views/BottomSheet/BottomSheet'
 import intOrDefault = Utils.nonNegIntOrDefault;
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import rowWrap = EmotionCommon.rowWrap
 import Setter = TypeUtils.Setter
 
@@ -197,8 +197,8 @@ const BottomSheetTestPage = ()=>{
             color: ${t.page.text[0]};
           `}
         >
-          <ScrollbarOverlay
-            css={ScrollbarOverlayStyle.page}
+          <OverflowWrapper
+            css={OverflowWrapperStyle.page}
             showVertical={
               !['opening','closing','open','close','closed'].includes(state)
             }
@@ -231,7 +231,7 @@ const BottomSheetTestPage = ()=>{
                   </div>)
               }
             </div>
-          </ScrollbarOverlay>
+          </OverflowWrapper>
         </div>
       </BottomSheet>
       

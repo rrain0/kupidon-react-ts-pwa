@@ -22,24 +22,45 @@
 
   WINDOW / VIEWPORT
   ● Get window (viewport):
-  const windowObject = window
-  const windowObject = document.defaultView
+  const window = window
+  const window = document.defaultView
+  const window = element.ownerDocument.documentElement.defaultView
   
-  ● Check window:
-  windowObject instanceof Window
+  DOCUMENT
+  ● Get document
+  const document = window.document
+  const document = document
+  const document = element.ownerDocument
   
-  ● Check any element (html, body, div, ...):
-  someHtmlElement instanceof Element
-  
-  HTML / DOCUMENT
+  HTML Element
   ● Get document (html):
-  const htmlElement = document.documentElement
-  const htmlElement = document.querySelector('html')
+  const html = window.document.documentElement
+  const html = document.documentElement
+  const html = element.ownerDocument.documentElement
+  const html = document.querySelector('html')
   
-  BODY
+  BODY Element
   ● Get document body:
-  const bodyElement = document.body
-  const bodyElement = document.querySelector('body')
+  const body = window.document.body
+  const body = document.body
+  const html = element.ownerDocument.body
+  const body = document.querySelector('body')
+ 
+  ● Check if view is window:
+  view instanceof Window
+  
+  ● Check if view is document:
+  view instanceof Document
+  
+  ● Check if view is element (html, body, div, ...):
+  view instanceof Element
+  
+  
+  
+  изучить:
+  https://learn.javascript.ru/cross-window-communication
+  iframe.contentWindow ссылка на объект window внутри <iframe>.
+  iframe.contentDocument – ссылка на объект document внутри <iframe>, короткая запись для iframe.contentWindow.document.
 */
 
 
@@ -47,7 +68,6 @@ function isWindow<T extends {}|null|undefined>(view: T): view is T & Window {
   return view instanceof Window
 }
 
-function html(){ return document.documentElement }
 
 export const ElementProps = (element: HTMLElement) => new GetDimensions(element)
 
@@ -55,10 +75,14 @@ export const ElementProps = (element: HTMLElement) => new GetDimensions(element)
 
 export class GetDimensions {
   constructor(public view: HTMLElement | Window) { }
+  get html(): HTMLElement {
+    if (isWindow(this.view)) return this.view.document.documentElement
+    return this.view.ownerDocument.documentElement
+  }
   
   // computed style values after applying all classes and styles
   get computedStyle(): CSSStyleDeclaration {
-    if (isWindow(this.view)) return window.getComputedStyle(html())
+    if (isWindow(this.view)) return window.getComputedStyle(this.html)
     return window.getComputedStyle(this.view)
   }
   // css custom property (variable) value
@@ -68,7 +92,7 @@ export class GetDimensions {
   
   // get element bounding rect
   get rect(): DOMRect {
-    if (isWindow(this.view)) return html().getBoundingClientRect()
+    if (isWindow(this.view)) return this.html.getBoundingClientRect()
     return this.view.getBoundingClientRect()
   }
   
@@ -152,11 +176,11 @@ export class GetDimensions {
   // rounded int value
   // Если масштаб страницы не 100%, значения остаются правильными.
   get contentWidth(){
-    if (isWindow(this.view)) return html().clientWidth
+    if (isWindow(this.view)) return this.html.clientWidth
     return this.view.clientWidth
   }
   get contentHeight(){
-    if (isWindow(this.view)) return html().clientHeight
+    if (isWindow(this.view)) return this.html.clientHeight
     return this.view.clientHeight
   }
   
@@ -197,11 +221,11 @@ export class GetDimensions {
   
   // width / height includes paddings + full content (not only visible part)
   get scrollWidth(): number {
-    if (isWindow(this.view)) return html().scrollWidth
+    if (isWindow(this.view)) return this.html.scrollWidth
     return this.view.scrollWidth
   }
   get scrollHeight(): number {
-    if (isWindow(this.view)) return html().scrollHeight
+    if (isWindow(this.view)) return this.html.scrollHeight
     return this.view.scrollHeight
   }
   

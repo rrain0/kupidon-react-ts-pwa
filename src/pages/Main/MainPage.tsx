@@ -3,8 +3,8 @@ import { css } from '@emotion/react'
 import { Link } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import { SimplePage } from 'src/components/Page/SimplePage'
 import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import PageContent = SimplePage.PageContent
@@ -20,7 +20,7 @@ function MainPage(){
   
   return <>
     <Page>
-      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}>
+      <OverflowWrapper css={OverflowWrapperStyle.page}>
         <PageContent>
           
           <Link to={RootRoute.profile[full]()}>
@@ -33,7 +33,7 @@ function MainPage(){
           <div>Здесь будут карточки людей.</div>
         
         </PageContent>
-      </ScrollbarOverlay>
+      </OverflowWrapper>
     </Page>
     
     

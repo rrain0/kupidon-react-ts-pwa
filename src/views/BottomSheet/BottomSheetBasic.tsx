@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import BottomSheet, { BottomSheetOptionsProps } from 'src/views/BottomSheet/BottomSheet'
 import { css } from '@emotion/react'
-import ScrollbarOverlay from 'src/components/ScrollbarOverlay/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/ScrollbarOverlay/ScrollbarOverlayStyle'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import React, { useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
@@ -83,8 +83,8 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
         color: ${t.page.text[0]};
       `}
     >
-      <ScrollbarOverlay
-        css={ScrollbarOverlayStyle.list}
+      <OverflowWrapper
+        css={OverflowWrapperStyle.list}
         showVertical={
           !['opening','closing','open','close','closed'].includes(state)
         }
@@ -102,7 +102,7 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
         >
           { children }
         </div>
-      </ScrollbarOverlay>
+      </OverflowWrapper>
     </div>
   </BottomSheet>
 }
