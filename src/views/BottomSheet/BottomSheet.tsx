@@ -1,5 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { useWindowScrollLock } from 'src/utils-react/useWindowScrollLock'
+import { useUpNodesScrollLock } from 'src/utils-react/useUpNodesScrollLock'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
   useEffect, useLayoutEffect,
@@ -93,6 +95,10 @@ const BottomSheet = (props: BottomSheetProps) => {
       * 256 * 0.6
     ).toString(16).padStart(2,'0')
   },[snapPointsPx,openSnapIdx])
+  
+  
+  useWindowScrollLock(state!=='closed')
+  useUpNodesScrollLock(bottomSheetFrameRef, state!=='closed')
   
   
   /*

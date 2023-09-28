@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import {GetDimensions} from "src/utils/GetDimensions"
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
+import Setter = TypeUtils.Setter
 
 
 
@@ -15,6 +16,7 @@ export type ScrollProps = {
   scrollTopMax: number // макс высота проскроленного контента, который сверху за границей контейнера
   scrollHeight: number // content height
 }
+export type SetScrollProps = Setter<ScrollToOptions>
 
 export type ContainerScrollStateOptions = (
   {
@@ -117,11 +119,9 @@ export const useContainerScrollState = ({
   
   
   return {
-    scrollbarProps: { // for scrollbar
-      scrollProps,
-      setContainerScroll,
-    },
-    canScrollHorizontal, // for scrollbar
-    canScrollVertical, // for scrollbar
+    scrollProps,
+    setContainerScroll,
+    canScrollHorizontal,
+    canScrollVertical,
   }
 }

@@ -1,19 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import hideScrollbar = EmotionCommon.hideScrollbar
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
-import Scrollbar from 'src/views/Scrollbar/Scrollbar'
-import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import React, { HTMLAttributes, useRef } from 'react'
 import centerAll = EmotionCommon.centerAll
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
 import classNames from 'classnames'
-import { ReactUtils } from 'src/utils/ReactUtils'
-import abs = EmotionCommon.abs
-import wrapper = EmotionCommon.wrapper
 
 
 
@@ -36,13 +32,13 @@ const OverflowWrapper = (props: OverflowWrapperProps)=>{
   
   
   const {
-    scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
+    ...scrollbarProps
   } = useContainerScrollState({
-      containerRef: scrollContainerRef,
-      contentRef: scrollContentRef,
-    })
+    containerRef: scrollContainerRef,
+    contentRef: scrollContentRef,
+  })
   
   
   return <div
@@ -95,55 +91,11 @@ const OverflowWrapper = (props: OverflowWrapperProps)=>{
     </div>
     
     
-    
-    
-    
-    <div // Scrollbars
-      css={css`
-        ${abs};
-        display: grid;
-        pointer-events: none;
-        grid: '.. vs' 1fr
-              'hs ..' auto
-            / 1fr auto;
-      `}
-      className={'rrainuiScrollbarsContainer'}
-    >
-      
-      { showVertical && canScrollVertical && <Scrollbar
-        css={[ScrollbarStyle.scrollbar, css`
-          &.rrainuiScrollbarTrack {
-            grid-area: vs;
-            place-self: stretch end;
-            &[data-direction=vertical] {
-              height: auto;
-              width: 20px;
-            }
-            pointer-events: auto;
-        }`]}
-        {...scrollbarProps}
-        direction="vertical"
-      /> }
-      
-      { showHorizontal && canScrollHorizontal && <Scrollbar
-        css={[ScrollbarStyle.scrollbar, css`
-          &.rrainuiScrollbarTrack {
-            grid-area: hs;
-            place-self: end stretch;
-            &[data-direction=horizontal]{
-              height: 20px;
-              width: auto;
-            }
-            pointer-events: auto;
-          }`
-        ]}
-        {...scrollbarProps}
-        direction='horizontal'
-      /> }
-    
-    </div>
-    
-    
+    <ScrollbarOverlay
+      {...scrollbarProps}
+      showVertical={showVertical && canScrollVertical}
+      showHorizontal={showHorizontal && canScrollHorizontal}
+    />
     
   
   </div>

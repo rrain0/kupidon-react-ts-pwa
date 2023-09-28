@@ -37,14 +37,12 @@ import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import { FormPage } from 'src/components/Page/FormPage'
-import PageContent = FormPage.PageContent;
 import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import Page = FormPage.Page
 import GearIc = SimpleSvgIcons.GearIc
 import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
-import fullParams = RouteBuilder.fullParams
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import params = RouteBuilder.params
 
@@ -199,56 +197,52 @@ const LoginPage = () => {
   
   return <>
     <Page>
+  
+      <Form onSubmit={onSubmit}>
+        
+        <h3 css={formHeader}>Вход</h3>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'login'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder="логин (email)"
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'pwd'}
+          errorPropName={'hasError'} // todo
+        >
+          <PwdInput
+            css={InputStyle.input}
+            placeholder="пароль"
+          />
+        </InputValidationWrap>
+        
+        <Button
+          css={ButtonStyle.buttonPrimary}
+          type="submit"
+        >
+          Войти
+        </Button>
+        
+        
+        <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
+          <Button
+            css={ButtonStyle.buttonSecondary}>
+            Зарегистрироваться
+          </Button>
+        </Link>
+        
+        <div css={css`height: calc(-50px + 70px);`}/>
       
-      <OverflowWrapper css={OverflowWrapperStyle.page}>
-        <PageContent>
-          <Form onSubmit={onSubmit}>
-            
-            <h3 css={formHeader}>Вход</h3>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'login'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder="логин (email)"
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'pwd'}
-              errorPropName={'hasError'} // todo
-            >
-              <PwdInput
-                css={InputStyle.input}
-                placeholder="пароль"
-              />
-            </InputValidationWrap>
-            
-            <Button
-              css={ButtonStyle.buttonPrimary}
-              type="submit"
-            >
-              Войти
-            </Button>
-            
-            
-            <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
-              <Button
-                css={ButtonStyle.buttonSecondary}>
-                Зарегистрироваться
-              </Button>
-            </Link>
-            
-            <div css={css`height: calc(-50px + 70px);`}/>
-          
-          </Form>
-          
-        </PageContent>
-      </OverflowWrapper>
+      </Form>
+      
       
       <BottomButtonBar>
         <Button css={ButtonStyle.iconTransparent}

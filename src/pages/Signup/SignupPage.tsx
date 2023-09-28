@@ -48,7 +48,6 @@ import { FormPage } from 'src/components/Page/FormPage'
 import Page = FormPage.Page
 import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
-import PageContent = FormPage.PageContent
 import trueOrUndef = CastUtils.trueOrUndef
 import GearIc = SimpleSvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
@@ -218,183 +217,179 @@ const SignupPage = () => {
   return <>
     <Page>
       
-      <OverflowWrapper css={OverflowWrapperStyle.page}>
-        <PageContent>
-          <Form onSubmit={onSubmit}>
-            
-            <h3 css={formHeader}>Регистрация</h3>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'email'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='email (логин)'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'email'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='email (логин)'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'email'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='email (логин)'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'email'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='email (логин)'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'email'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='email (логин)'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'email'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='email (логин)'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'pwd'}
-              errorPropName={'hasError'} // todo
-            >
-              <PwdInput
-                css={InputStyle.input}
-                placeholder='пароль'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'repeatPwd'}
-              errorPropName={'hasError'} // todo
-            >
-              <PwdInput
-                css={InputStyle.input}
-                placeholder='повторите пароль'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'firstName'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='имя'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'lastName'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='фамилия'
-              />
-            </InputValidationWrap>
-            
-            <InputValidationWrap
-              {...validationProps}
-              fieldName={'birthDate'}
-              errorPropName={'hasError'} // todo
-            >
-              <Input
-                css={InputStyle.input}
-                placeholder='день рождения (гггг-ММ-дд) (2002-01-01)'
-              />
-            </InputValidationWrap>
-            
-            
-            
-            <fieldset
-              css={radioGroupCss}
-              data-error={trueOrUndef(
-                signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow
-              )}>
-              
-              <RadioInputValidationWrap
-                {...validationProps}
-                fieldName={'sex'}
-                errorPropName={'hasError'} // todo
-              >
-                <RadioInput
-                  css={RadioInputStyle.radio}
-                  name={`${id}-radio-group-sex`}
-                  value="MALE"
-                >
-                  <div>Я парень</div>
-                </RadioInput>
-              </RadioInputValidationWrap>
-              
-              <RadioInputValidationWrap
-                {...validationProps}
-                fieldName={'sex'}
-                errorPropName={'hasError'} // todo
-              >
-                <RadioInput
-                  css={RadioInputStyle.radio}
-                  name={`${id}-radio-group-sex`}
-                  value="FEMALE"
-                >
-                  <div>Я девушка</div>
-                </RadioInput>
-              </RadioInputValidationWrap>
-              
-            </fieldset>
-            
-            <Button
-              css={ButtonStyle.buttonPrimary}
-              type='submit'>
-              Зарегистрироваться
-            </Button>
-            
-            <div css={css`height: calc(-50px + 70px);`}/>
-            
-          </Form>
+      <Form onSubmit={onSubmit}>
+        
+        <h3 css={formHeader}>Регистрация</h3>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'email'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='email (логин)'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'email'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='email (логин)'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'email'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='email (логин)'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'email'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='email (логин)'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'email'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='email (логин)'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'email'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='email (логин)'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'pwd'}
+          errorPropName={'hasError'} // todo
+        >
+          <PwdInput
+            css={InputStyle.input}
+            placeholder='пароль'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'repeatPwd'}
+          errorPropName={'hasError'} // todo
+        >
+          <PwdInput
+            css={InputStyle.input}
+            placeholder='повторите пароль'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'firstName'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='имя'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'lastName'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='фамилия'
+          />
+        </InputValidationWrap>
+        
+        <InputValidationWrap
+          {...validationProps}
+          fieldName={'birthDate'}
+          errorPropName={'hasError'} // todo
+        >
+          <Input
+            css={InputStyle.input}
+            placeholder='день рождения (гггг-ММ-дд) (2002-01-01)'
+          />
+        </InputValidationWrap>
+        
+        
+        
+        <fieldset
+          css={radioGroupCss}
+          data-error={trueOrUndef(
+            signupFailure.find(f=>f.fields.includes('sex'))?.highlightNow
+          )}>
           
-        </PageContent>
-      </OverflowWrapper>
+          <RadioInputValidationWrap
+            {...validationProps}
+            fieldName={'sex'}
+            errorPropName={'hasError'} // todo
+          >
+            <RadioInput
+              css={RadioInputStyle.radio}
+              name={`${id}-radio-group-sex`}
+              value="MALE"
+            >
+              <div>Я парень</div>
+            </RadioInput>
+          </RadioInputValidationWrap>
+          
+          <RadioInputValidationWrap
+            {...validationProps}
+            fieldName={'sex'}
+            errorPropName={'hasError'} // todo
+          >
+            <RadioInput
+              css={RadioInputStyle.radio}
+              name={`${id}-radio-group-sex`}
+              value="FEMALE"
+            >
+              <div>Я девушка</div>
+            </RadioInput>
+          </RadioInputValidationWrap>
+          
+        </fieldset>
+        
+        <Button
+          css={ButtonStyle.buttonPrimary}
+          type='submit'>
+          Зарегистрироваться
+        </Button>
+        
+        <div css={css`height: calc(-50px + 70px);`}/>
+        
+      </Form>
+      
       
       <BottomButtonBar>
         <Button css={ButtonStyle.iconTransparent}

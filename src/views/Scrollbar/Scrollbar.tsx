@@ -133,22 +133,23 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
                 start: thumbBoxD.clientYFloat,
                 client: ev.clientY,
                 end: thumbBoxD.clientBottomFloat,
-                scroll: scrollProps.scrollTop,
                 size: thumbBoxProps.height!,
-                trackStart: trackD.clientYFloat,
+                scroll: scrollProps.scrollTop,
                 scrollMax: scrollProps.scrollTopMax,
+                trackStart: trackD.clientYFloat,
               }
               case 'horizontal': return {
                 start: thumbBoxD.clientXFloat,
                 client: ev.clientX,
                 end: thumbBoxD.clientRightFloat,
-                scroll: scrollProps.scrollLeft,
                 size: thumbBoxProps.width!,
-                trackStart: trackD.clientXFloat,
+                scroll: scrollProps.scrollLeft,
                 scrollMax: scrollProps.scrollLeftMax,
+                trackStart: trackD.clientXFloat,
               }
             }
           }()
+          console.log('p',p)
           if (inRange(p.start, p.client, p.end))
             return { client: p.client, scroll: p.scroll }
           else {

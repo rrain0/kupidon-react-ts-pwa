@@ -22,7 +22,7 @@ export namespace OverflowWrapperStyle {
         }
       }
 
-      > .rrainuiScrollbarsContainer {
+      > .rrainuiScrollbarOverflow {
         padding: 3px;
 
         > .rrainuiScrollbarTrack[data-direction=vertical] {
@@ -53,7 +53,7 @@ export namespace OverflowWrapperStyle {
         }
       }
 
-      > .rrainuiScrollbarsContainer {
+      > .rrainuiScrollbarOverflow {
         > .rrainuiScrollbarTrack[data-direction=vertical] {
           width: 6px;
         }

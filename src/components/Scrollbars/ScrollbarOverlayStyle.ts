@@ -5,8 +5,17 @@ import Theme = Themes.Theme
 
 export namespace ScrollbarOverlayStyle {
   
-  export const style = (t:Theme) => css`
-  
+  export const page = (t:Theme) => css`
+    &.rrainuiScrollbarOverflow {
+      padding: 2px;
+
+      >.rrainuiScrollbarTrack[data-direction=vertical] {
+        width: 8px;
+      }
+
+      >.rrainuiScrollbarTrack[data-direction=horizontal] {
+        height: 8px;
+      }
   `
   
 }

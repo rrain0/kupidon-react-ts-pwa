@@ -44,10 +44,9 @@ const ScrollbarTest = (
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const {
-    //containerProps,
-    scrollbarProps,
     canScrollHorizontal,
     canScrollVertical,
+    ...scrollbarProps
   } = useContainerScrollState({
     containerRef, contentRef
   })

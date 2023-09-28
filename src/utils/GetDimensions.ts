@@ -115,7 +115,7 @@ export class GetDimensions {
     if (isWindow(this.view)) return 0
     // Returns the 'top' coordinate value of the DOMRect
     // (has the same value as 'y', or 'y' + 'height' if 'height' is negative).
-    return this.rect.top
+    return this.rect.left
   }
   
   // верхний край viewport <---> внешняя граница верхнего бордера элемента
@@ -124,7 +124,7 @@ export class GetDimensions {
     if (isWindow(this.view)) return 0
     // Returns the 'left' coordinate value of the DOMRect
     // (has the same value as 'x', or 'x' + 'width' if 'width' is negative).
-    return this.rect.left
+    return this.rect.top
   }
   
   // расстояние между правым краем viewport и внешней границей правого бордера
@@ -171,16 +171,16 @@ export class GetDimensions {
   
   
   
-  // width / height of content
+  // width / height of content's visible part
   // !!! for <img> works as offset width / height
   // rounded int value
   // Если масштаб страницы не 100%, значения остаются правильными.
   get contentWidth(){
-    if (isWindow(this.view)) return this.html.clientWidth
+    if (isWindow(this.view)) return this.view.innerWidth
     return this.view.clientWidth
   }
   get contentHeight(){
-    if (isWindow(this.view)) return this.html.clientHeight
+    if (isWindow(this.view)) return this.view.innerHeight
     return this.view.clientHeight
   }
   
