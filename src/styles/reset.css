@@ -62,13 +62,3 @@ a {
 
 
 
-
-
-@keyframes NoAnimation {
-  /*from { transform: scale(1) }
-  to { transform: scale(1) }*/
-}
-.no-animation {
-  animation-name: NoAnimation;
-  animation-duration: 1ms;
-}

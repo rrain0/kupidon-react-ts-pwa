@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
+import { Pages } from 'src/components/Page/Pages'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import { css } from '@emotion/react'
-import { SimplePage } from 'src/components/Page/SimplePage'
-import Page = SimplePage.Page
-import PageContent = SimplePage.PageContent
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
+import SimplePage = Pages.SimplePage
+import SimpleContent = Pages.SimpleContent
 
 
 
@@ -63,13 +63,13 @@ const ResizeObserverTestPage = ()=>{
   }
   
   
-  return <Page>
-    <PageContent>
+  return <SimplePage>
+    <SimpleContent>
       
       <div>Resize Observer Test Page</div>
       
       <Button css={ButtonStyle.buttonPrimary}
-        onClick={()=>addItem1()}
+        onClick={() => addItem1()}
       >
         +1
       </Button>
@@ -77,34 +77,32 @@ const ResizeObserverTestPage = ()=>{
       <div>Count of container resizes: {resizeCnt1}</div>
       
       <div
-        css={t=>css`
+        css={t => css`
           width: 400px;
           //height: fit-content;
           height: 400px;
           ${col};
           gap: 20px;
           padding: 20px;
-          background: linear-gradient(
-            to bottom right,
-            ${t.page.bgc2[0]} 0%,
-            ${t.page.bgc2[1]} 50%,
-            ${t.page.bgc2[2]} 100%
-          );
+          background: linear-gradient(to bottom right,
+          ${t.page.bgc2[0]} 0%,
+          ${t.page.bgc2[1]} 50%,
+          ${t.page.bgc2[2]} 100%);
           overflow: auto;
         `}
         ref={container1Ref}
       >
-        { items1.map(it=><div
+        {items1.map(it => <div
           css={css``}
           key={it}
         >
           Item {it}
-        </div>) }
+        </div>)}
       </div>
       
       
       <Button css={ButtonStyle.buttonPrimary}
-        onClick={()=>addItem2()}
+        onClick={() => addItem2()}
       >
         +1
       </Button>
@@ -112,31 +110,29 @@ const ResizeObserverTestPage = ()=>{
       <div>Count of container resizes: {resizeCnt2}</div>
       
       <div
-        css={t=>css`
+        css={t => css`
           width: 400px;
           height: fit-content;
           ${col};
           gap: 20px;
           padding: 20px;
-          background: linear-gradient(
-            to bottom right,
-            ${t.page.bgc2[0]} 0%,
-            ${t.page.bgc2[1]} 50%,
-            ${t.page.bgc2[2]} 100%
-          );
+          background: linear-gradient(to bottom right,
+          ${t.page.bgc2[0]} 0%,
+          ${t.page.bgc2[1]} 50%,
+          ${t.page.bgc2[2]} 100%);
         `}
         ref={container2Ref}
       >
-        { items2.map(it=><div
+        {items2.map(it => <div
           css={css``}
           key={it}
         >
           Item {it}
-        </div>) }
+        </div>)}
       </div>
-    
-    </PageContent>
-  </Page>
+      
+    </SimpleContent>
+  </SimplePage>
 }
 export default ResizeObserverTestPage
 

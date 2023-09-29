@@ -1,11 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
-import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import BottomButtonBar, {
+  bottomButtonBarHeight,
+} from 'src/components/BottomButtonBar/BottomButtonBar'
+import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { css } from '@emotion/react'
 import col = EmotionCommon.col
-import React, { useEffect, useId, useState } from 'react'
+import React, { useEffect, useId, useRef, useState } from 'react'
 import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
@@ -15,7 +20,7 @@ import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import { InputStyle } from 'src/views/Inputs/InputStyle'
 import Input from 'src/views/Inputs/Input'
-import { AppRoutes, AppRoutes0 } from 'src/app-routes/AppRoutes'
+import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Button from 'src/views/Buttons/Button'
 import PwdInput from 'src/views/Inputs/PwdInput'
@@ -26,6 +31,7 @@ import RadioInput from 'src/views/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
 import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
 import { CastUtils } from 'src/utils/CastUtils'
+import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import validate = ValidationValidate.validate
 import { SignupPageValidation } from './validation'
 import FormValues = SignupPageValidation.FormValues
@@ -44,10 +50,8 @@ import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
 import { AuthApi } from 'src/api/requests/AuthApi'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
-import { FormPage } from 'src/components/Page/FormPage'
-import Page = FormPage.Page
-import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
-import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
+import { Pages } from 'src/components/Page/Pages'
+import Page = Pages.Page
 import trueOrUndef = CastUtils.trueOrUndef
 import GearIc = SimpleSvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
@@ -214,8 +218,29 @@ const SignupPage = () => {
   
   const [settingsOpen, setSettingsOpen] = useState(false)
   
+  
+  
+  
+  const pageRef = useRef<HTMLElement>(null)
+  
+  const {
+    canScrollHorizontal,
+    canScrollVertical,
+    ...scrollbarProps
+  } = useContainerScrollState({
+    containerIsWindow: true,
+    contentRef: pageRef,
+  })
+  
+  
+  
   return <>
-    <Page>
+    <Page
+      ref={pageRef}
+      css={css`
+        padding-bottom: calc(${bottomButtonBarHeight}px);
+      `}
+    >
       
       <Form onSubmit={onSubmit}>
         
@@ -386,10 +411,23 @@ const SignupPage = () => {
           Зарегистрироваться
         </Button>
         
-        <div css={css`height: calc(-50px + 70px);`}/>
-        
       </Form>
       
+      
+      
+      <div
+        css={css`
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+        pointer-events: none;
+      `}
+      >
+        <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+          {...scrollbarProps}
+          showVertical={canScrollVertical}
+          showHorizontal={canScrollHorizontal}
+        />
+      </div>
       
       <BottomButtonBar>
         <Button css={ButtonStyle.iconTransparent}

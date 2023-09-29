@@ -44,20 +44,15 @@ const ProfileIdRouting = ReactMemoTyped(()=>{
 
 const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
   //console.log('profile id userId')
-  //console.log('RootRoutes.profile',RootRoutes.profile)
-  //console.log('RootRoutes.profile.id.userId.fullPath()',RootRoutes.profile.id.userId.fullPath())
-  //console.log('RootRoutes.profile.id.userId.path',RootRoutes.profile.id.userId.path)
-  //console.log('RootRoutes.profile.id.userId.path.slice(1)',RootRoutes.profile.id.userId.path.slice(1))
   
-  /*const urlId = useMatch(
-    RootRoutes.profile.id.userId.fullPath()
-  )?.params[RootRoutes.profile.id.userId.path.slice(1)]*/
   
   const [searchParams] = useSearchParams()
-  //console.log('searchParams instanceof URLSearchParams:', searchParams instanceof URLSearchParams)
+  
   
   const auth = useRecoilValue(AuthRecoil)
   const authId = auth?.user.id
+  
+  
   
   return <Routes>
     <Route path={RootRoute.profile.id.userId[path]+'/*'}

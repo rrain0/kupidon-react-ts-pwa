@@ -22,6 +22,9 @@ import fixedBottom = EmotionCommon.fixedBottom
 
 
 
+
+export const bottomNavBarHeight = 50;
+
 const BottomNavBar = ()=>{
   
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -75,8 +78,8 @@ export default BottomNavBar
 
 const Frame = styled.nav`
   ${fixedBottom};
-  height: 50px;
-  min-height: 50px;
+  height: ${bottomNavBarHeight}px;
+  min-height: ${bottomNavBarHeight}px;
   ${row};
   justify-content: space-between;
   background: ${p=>p.theme.nav.bgc[0]};

@@ -8,6 +8,9 @@ import fixedBottom = EmotionCommon.fixedBottom
 
 
 
+
+
+export const bottomButtonBarHeight = 70
 export type BottomButtonBarProps = JSX.IntrinsicElements['section'] & {
   children?: ReactNode
 }
@@ -38,6 +41,7 @@ const BottomButtonBar_ = styled.section`
   pointer-events: none;
 `
 const BottomButtonsContainer = styled.div`
+  height: 70px;
   ${rowWrap};
   place-content: center;
   padding: 10px;

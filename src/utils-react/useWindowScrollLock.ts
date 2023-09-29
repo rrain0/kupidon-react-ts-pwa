@@ -1,6 +1,8 @@
 import { useLayoutEffect } from 'react'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import empty = TypeUtils.empty
+import cmcss from 'src/styles/common.module.scss'
+
 
 
 
@@ -58,12 +60,14 @@ function disableScroll(){
     eventPreventDefault,
     supportsPassive && { passive: false }
   ) // modern desktop
-  window.addEventListener(
+  /* window.addEventListener(
     'touchmove',
     eventPreventDefault,
     supportsPassive && { passive: false }
-  ) // mobile
+  ) // mobile */
   window.addEventListener('keydown', preventDefaultForScrollKeys, false)
+  
+  document.body.classList.add(cmcss.noScroll)
   
   // if scroll happened after all
   scrollLeft = window.scrollX
@@ -84,11 +88,13 @@ function enableScroll(){
     'wheel',
     eventPreventDefault,
   ) // modern desktop
-  window.removeEventListener(
+  /* window.removeEventListener(
     'touchmove',
     eventPreventDefault,
-  ) // mobile
+  ) // mobile */
   window.removeEventListener('keydown', preventDefaultForScrollKeys, false)
+  
+  document.body.classList.remove(cmcss.noScroll)
   
   // if scroll happened after all
   window.removeEventListener('scroll', onWindowScroll, false)

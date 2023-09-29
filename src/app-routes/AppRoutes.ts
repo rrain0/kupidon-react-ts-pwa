@@ -1,81 +1,4 @@
 import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
-import { RoutesBuilder } from 'src/examples/routes-builder/RoutesBuilder'
-import RouteDescription = RoutesBuilder.RouteDescription
-
-
-
-export namespace AppRoutes0 {
-  
-  
-  const testRoutes = {
-    path: 'test',
-    paths: {
-      scrollbar: 'scrollbar',
-      bottomSheet: 'bottom-sheet',
-      resizeObserver: 'resize-observer',
-    }
-  }
-  
-  
-  // todo - это заглушка для дальнейшего развития приложения
-  const mainRoutes = {
-    path: 'main'
-  } satisfies RouteDescription
-  
-  
-  const loginRoutes = {
-    path: 'login',
-    params: {
-      returnPath: 'return-path',
-    }
-  } satisfies RouteDescription
-  
-  
-  
-  const signupRoutes = {
-    path: 'signup',
-    params: {
-      returnPath: 'return-path',
-    }
-  } satisfies RouteDescription
-  
-  
-  
-  const profileIdRoutes = {
-    path: 'p',
-    paths: {
-      id: { path: 'id',
-        paths: {
-          userId: ':userId',
-        }
-      },
-    }
-  } satisfies RouteDescription
-  
-  
-  
-  /*
-  const settingsRoutes = {
-    path: 'settings'
-  } satisfies RouteDescription
-  */
-  
-  
-  const rootRoutes = {
-    path: '/',
-    paths: {
-      test: testRoutes,
-      main: mainRoutes, // todo - это заглушка для дальнейшего развития приложения
-      login: loginRoutes,
-      signup: signupRoutes,
-      profile: profileIdRoutes,
-      //settings: settingsRoutes,
-    }
-  } satisfies RouteDescription
-  
-  export const RootRoutes = RoutesBuilder.buildRoutes(rootRoutes)
-  
-}
 
 
 
@@ -94,6 +17,7 @@ export namespace AppRoutes {
     scrollbar: buildPath('scrollbar'),
     bottomSheet: buildPath('bottom-sheet'),
     resizeObserver: buildPath('resize-observer'),
+    moveElementToAnotherView: buildPath('move-element-to-another-view'),
   })
   
   

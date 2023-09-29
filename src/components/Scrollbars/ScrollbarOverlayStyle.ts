@@ -7,14 +7,14 @@ export namespace ScrollbarOverlayStyle {
   
   export const page = (t:Theme) => css`
     &.rrainuiScrollbarOverflow {
-      padding: 2px;
+      padding: 1px;
 
       >.rrainuiScrollbarTrack[data-direction=vertical] {
-        width: 8px;
+        width: 7px;
       }
 
       >.rrainuiScrollbarTrack[data-direction=horizontal] {
-        height: 8px;
+        height: 7px;
       }
   `
   

@@ -1,8 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { SimplePage } from 'src/components/Page/SimplePage'
-import Page = SimplePage.Page
-import PageContent = SimplePage.PageContent
+import React, { useMemo, useRef, useState } from 'react'
+import { Pages } from 'src/components/Page/Pages'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -17,6 +15,8 @@ import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import rowWrap = EmotionCommon.rowWrap
 import Setter = TypeUtils.Setter
+import SimplePage = Pages.SimplePage
+import SimpleContent = Pages.SimpleContent
 
 
 
@@ -63,108 +63,111 @@ const BottomSheetTestPage = ()=>{
   
   
   
-  return <Page>
-    <PageContent>
+  return <>
+    <SimplePage>
       
       <div css={css`height: 200px;`}/>
       
-      <div>Bottom Sheet Test Page</div>
-      
-      <div
-        css={css`
-          ${row};
-          gap: 10px;
-        `}
-      >
-        <div>Number of items:</div>
-        <OverlayInput
-          value={itemsCnt}
-          onChange={ev=>{
-            setItemsCnt(intOrDefault(ev.target.value,12))
-          }}
-        />
-      </div>
-      
-      <div
-        css={css`
-        ${row};
-        gap: 10px;
-      `}
-      >
-        <div>Snap points:</div>
-        <div>{JSON.stringify(snapPoints)}</div>
-      </div>
-      
-      <div
-        css={css`
-          ${row};
-          gap: 10px;
-        `}
-      >
-        <div>Snap points px:</div>
-        <div>{JSON.stringify(snapPointsPx)}</div>
-      </div>
-      
-      
-      <div
-        css={t=>css`
-          width: 200px;
-          height: 50px;
-          border-radius: 16px;
-          border: 2px solid ${t.page.text[0]};
-          ${row};
-          padding: 0 10px;
-          align-items: center;
-          cursor: pointer;
-        `}
-        onClick={ev=>{
-          setState('opening')
-          setSnapIdx(openSnapIdx)
-        }}
-      >
-        {selectedItem}
-      </div>
-      
-      {
-        [...Array(itemsCnt).keys()]
-          .map(i=><div
-            css={css`
-                      cursor: pointer;
-                    `}
-            key={i}
-            onClick={()=>{
-              setSelectedItem(`Item ${i+1}`)
-              setState('closing')
+      <SimpleContent>
+        <div>Bottom Sheet Test Page</div>
+        
+        <div
+          css={css`
+            ${row};
+            gap: 10px;
+          `}
+        >
+          <div>Number of items:</div>
+          <OverlayInput
+            value={itemsCnt}
+            onChange={ev => {
+              setItemsCnt(intOrDefault(ev.target.value, 12))
             }}
-          >
-            Item {i+1}
-          </div>)
-      }
+          />
+        </div>
+        
+        <div
+          css={css`
+            ${row};
+            gap: 10px;
+          `}
+        >
+          <div>Snap points:</div>
+          <div>{JSON.stringify(snapPoints)}</div>
+        </div>
+        
+        <div
+          css={css`
+            ${row};
+            gap: 10px;
+          `}
+        >
+          <div>Snap points px:</div>
+          <div>{JSON.stringify(snapPointsPx)}</div>
+        </div>
+        
+        
+        <div
+          css={t => css`
+            width: 200px;
+            height: 50px;
+            border-radius: 16px;
+            border: 2px solid ${t.page.text[0]};
+            ${row};
+            padding: 0 10px;
+            align-items: center;
+            cursor: pointer;
+          `}
+          onClick={ev => {
+            setState('opening')
+            setSnapIdx(openSnapIdx)
+          }}
+        >
+          {selectedItem}
+        </div>
+        
+        {
+          [...Array(itemsCnt).keys()]
+            .map(i => <div
+              css={css`
+                cursor: pointer;
+              `}
+              key={i}
+              onClick={() => {
+                setSelectedItem(`Item ${i + 1}`)
+                setState('closing')
+              }}
+            >
+              Item {i + 1}
+            </div>)
+        }
       
-      
+      </SimpleContent>
       
       <div css={css`height: 1000px;`}/>
       
       
       
-      <BottomSheet
-        bottomSheetFrameRef={bottomSheetFrameRef}
-        bottomSheetRef={bottomSheetRef}
-        bottomSheetHeaderRef={bottomSheetHeaderRef}
-        bottomSheetContentRef={bottomSheetContentRef}
-        draggableElements={[bottomSheetHeaderRef]}
-        state={state}
-        setState={setState}
-        animationDuration={animationDuration}
-        snapPoints={snapPoints}
-        snapIdx={snapIdx}
-        setSnapIdx={setSnapIdx}
-        setSnapPointsPx={setSnapPointsPx}
-        setComputedDimens={setComputedSheetDimens}
-      >
-        <div // Header Component
-          // Must be without margins!!!
-          css={t=>css`
+    </SimplePage>
+    
+    <BottomSheet
+      bottomSheetFrameRef={bottomSheetFrameRef}
+      bottomSheetRef={bottomSheetRef}
+      bottomSheetHeaderRef={bottomSheetHeaderRef}
+      bottomSheetContentRef={bottomSheetContentRef}
+      draggableElements={[bottomSheetHeaderRef]}
+      state={state}
+      setState={setState}
+      animationDuration={animationDuration}
+      snapPoints={snapPoints}
+      snapIdx={snapIdx}
+      setSnapIdx={setSnapIdx}
+      setSnapPointsPx={setSnapPointsPx}
+      setComputedDimens={setComputedSheetDimens}
+    >
+      <div // Header Component
+        // Must be without margins!!!
+        css={t=>css`
             background: ${t.page.bgc3[0]};
             border-radius: 16px 16px 0 0;
             color: ${t.page.text[0]};
@@ -173,39 +176,39 @@ const BottomSheetTestPage = ()=>{
             align-items: center;
             gap: 6px;
           `}
-          ref={bottomSheetHeaderRef as any}
-        >
-          <div
-            css={t=>css`
+        ref={bottomSheetHeaderRef as any}
+      >
+        <div
+          css={t=>css`
               width: 60px;
               height: 4px;
               border-radius: 2px;
               background: ${t.page.bgc3[1]};
               ${state==='dragging' && css`background: ${t.page.text[0]};`}
             `}
-          />
-          <div>Header</div>
-        </div>
-        
-        <div // Body Component
-          // Must be without margins & paddings!!!
-          css={t=>css`
+        />
+        <div>Header</div>
+      </div>
+      
+      <div // Body Component
+        // Must be without margins & paddings!!!
+        css={t=>css`
             display: flex;
             place-items: center;
             overflow: hidden;
             background: ${t.page.bgc3[0]};
             color: ${t.page.text[0]};
           `}
+      >
+        <OverflowWrapper
+          css={OverflowWrapperStyle.page}
+          showVertical={
+            !['opening','closing','open','close','closed'].includes(state)
+          }
         >
-          <OverflowWrapper
-            css={OverflowWrapperStyle.page}
-            showVertical={
-              !['opening','closing','open','close','closed'].includes(state)
-            }
-          >
-            <div // scrollable content
-              // Must be without margins!!!
-              css={css`
+          <div // scrollable content
+            // Must be without margins!!!
+            css={css`
                 width: 100%;
                 padding: 10px;
                 ${col};
@@ -213,44 +216,43 @@ const BottomSheetTestPage = ()=>{
                 height: fit-content;
                 min-height: fit-content;
               `}
-              ref={bottomSheetContentRef as any}
-            >
-              {
-                [...Array(itemsCnt).keys()]
-                  .map(i=><div
-                    css={css`
+            ref={bottomSheetContentRef as any}
+          >
+            {
+              [...Array(itemsCnt).keys()]
+                .map(i=><div
+                  css={css`
                       cursor: pointer;
                     `}
-                    key={i}
-                    onClick={()=>{
-                      setSelectedItem(`Item ${i+1}`)
-                      setState('closing')
-                    }}
-                  >
-                    Item {i+1}
-                  </div>)
-              }
-            </div>
-          </OverflowWrapper>
-        </div>
-      </BottomSheet>
-      
-      
-      <BottomSheetControlOverlay
-        state={state}
-        setState={setState}
-        snapPoints={snapPoints}
-        snapPointsPx={snapPointsPx}
-        openSnapIdx={openSnapIdx}
-        setSnapIdx={setSnapIdx}
-        animationDuration={animationDuration}
-        setAnimationDuration={setAnimationDuration}
-        itemsCnt={itemsCnt}
-        setItemsCnt={setItemsCnt}
-      />
-      
-    </PageContent>
-  </Page>
+                  key={i}
+                  onClick={()=>{
+                    setSelectedItem(`Item ${i+1}`)
+                    setState('closing')
+                  }}
+                >
+                  Item {i+1}
+                </div>)
+            }
+          </div>
+        </OverflowWrapper>
+      </div>
+    </BottomSheet>
+    
+    
+    <BottomSheetControlOverlay
+      state={state}
+      setState={setState}
+      snapPoints={snapPoints}
+      snapPointsPx={snapPointsPx}
+      openSnapIdx={openSnapIdx}
+      setSnapIdx={setSnapIdx}
+      animationDuration={animationDuration}
+      setAnimationDuration={setAnimationDuration}
+      itemsCnt={itemsCnt}
+      setItemsCnt={setItemsCnt}
+    />
+    
+  </>
 }
 export default BottomSheetTestPage
 

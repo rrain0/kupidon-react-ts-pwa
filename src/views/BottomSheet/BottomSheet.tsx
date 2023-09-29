@@ -97,7 +97,7 @@ const BottomSheet = (props: BottomSheetProps) => {
   },[snapPointsPx,openSnapIdx])
   
   
-  useWindowScrollLock(state!=='closed')
+  //useWindowScrollLock(state!=='closed')
   useUpNodesScrollLock(bottomSheetFrameRef, state!=='closed')
   
   

@@ -50,6 +50,10 @@ export namespace EmotionCommon {
     display: grid;
     place-items: center;
   `
+  export const centerContent = css`
+    display: grid;
+    place-content: center;
+  `
   export const centerAll = css`
     display: grid;
     place-items: center;
@@ -64,6 +68,7 @@ export namespace EmotionCommon {
   export const stretch = css`
     display: grid;
     place-items: stretch;
+    place-content: stretch;
   `
   export const stretchAll = css`
     display: grid;
@@ -77,7 +82,7 @@ export namespace EmotionCommon {
     width: fit-content; height: fit-content;
     max-width: fit-content; max-height: fit-content;
   `
-  export const full = css`
+  export const fill = css`
     min-width: 100%; min-height: 100%;
     width: 100%; height: 100%;
     max-width: 100%; max-height: 100%;

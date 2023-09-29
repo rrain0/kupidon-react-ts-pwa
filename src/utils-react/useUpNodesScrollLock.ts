@@ -6,23 +6,15 @@ import cmcss from 'src/styles/common.module.scss'
 
 
 
-/*
-  DOESN'T FOR WINDOW
-  DOESN'T FOR WINDOW
-  DOESN'T FOR WINDOW
-  DOESN'T FOR WINDOW
-  DOESN'T FOR WINDOW
- */
 export const useUpNodesScrollLock = (
   elementRef: React.RefObject<HTMLElement>,
   lock?: boolean|empty,
 )=>{
   useLayoutEffect(()=>{
     const el = elementRef.current
-    console.log('el, lock', el, lock)
     if (el && lock){
-      const x: Element[] = []
-      const y: Element[] = []
+      const x: Element[] = [document.body]
+      const y: Element[] = [document.body]
       let up = el.parentElement
       while (up) {
         if (['auto','scroll'].includes(

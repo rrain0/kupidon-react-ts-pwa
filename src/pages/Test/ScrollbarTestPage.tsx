@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import React, { useRef } from 'react'
+import { Pages } from 'src/components/Page/Pages'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { css } from '@emotion/react'
 import Scrollbar from 'src/views/Scrollbar/Scrollbar'
@@ -10,15 +11,14 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import centerAll = EmotionCommon.centerAll
 import hideScrollbar = EmotionCommon.hideScrollbar
-import { SimplePage } from 'src/components/Page/SimplePage'
-import Page = SimplePage.Page
-import PageContent = SimplePage.PageContent
+import SimplePage = Pages.SimplePage
+import SimpleContent = Pages.SimpleContent
 
 
 
 const ScrollbarTestPage = ()=>{
-  return <Page>
-    <PageContent>
+  return <SimplePage>
+    <SimpleContent>
       
       <div>Scrollbar Test Page</div>
       
@@ -26,8 +26,8 @@ const ScrollbarTestPage = ()=>{
       <ScrollbarTest showVertical={true}/>
       <ScrollbarTest showHorizontal={true}/>
       
-    </PageContent>
-  </Page>
+    </SimpleContent>
+  </SimplePage>
 }
 export default ScrollbarTestPage
 

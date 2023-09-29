@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import RadioInput from 'src/views/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
 import { LangRecoil } from 'src/recoil/state/LangRecoil'
@@ -13,6 +13,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/TypeUtils'
 import Setter = TypeUtils.Setter
 import col = EmotionCommon.col
+
 
 
 
@@ -83,11 +84,9 @@ const QuickSettings = (props: SettingsProps)=>{
               key={opt.value}
               onChange={ev=>{
                 setTheme(()=>({...theme, type: opt.value}))
-                setSheetState('closing')
               }}
               onClick={ev=>{
                 setTheme(()=>({...theme, type: opt.value}))
-                setSheetState('closing')
               }}
             >
               <div

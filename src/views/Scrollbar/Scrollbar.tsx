@@ -149,7 +149,6 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
               }
             }
           }()
-          console.log('p',p)
           if (inRange(p.start, p.client, p.end))
             return { client: p.client, scroll: p.scroll }
           else {

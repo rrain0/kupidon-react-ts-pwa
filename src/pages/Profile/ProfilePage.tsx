@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
-import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
-import { FormPageStyle } from 'src/components/Page/FormPageStyle'
+import BottomButtonBar, {
+  bottomButtonBarHeight,
+} from 'src/components/BottomButtonBar/BottomButtonBar'
+import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -22,13 +23,11 @@ import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
-import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
-import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { ReactUtils } from 'src/utils/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
-import { FormPage } from 'src/components/Page/FormPage'
-import Page = FormPage.Page
+import { Pages } from 'src/components/Page/Pages'
+import Page = Pages.Page
 import ProfileImages from './ProfileImages'
 import DataField from 'src/views/DataField/DataField'
 import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
@@ -41,15 +40,14 @@ import textNormal = EmotionCommon.textNormal1
 import textSmall1 = EmotionCommon.textSmall1
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import center = EmotionCommon.center
-import rowWrap = EmotionCommon.rowWrap
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
 import ArrowReload = SimpleSvgIcons.ArrowReload
-import abs = EmotionCommon.abs
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import path = RouteBuilder.path
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
+import pageVerticalPadding = Pages.pageVerticalPadding
 
 
 
@@ -116,15 +114,6 @@ function ProfilePage(){
     setSnapIdx: setSnapIdx,
   }
   
-  /*
-  useEffect(()=>{
-    console.log('sheetState',sheetState)
-  },[sheetState])
-  useEffect(()=>{
-    console.log('selecting',selecting)
-  },[selecting])
-  */
-  
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -147,9 +136,15 @@ function ProfilePage(){
     })
   }/>
   
+  
   return <>
-    <Page ref={pageRef}>
-    
+    <Page
+      ref={pageRef}
+      css={css`
+          padding-bottom: calc(${bottomNavBarHeight}px + ${bottomButtonBarHeight}px);
+        `}
+    >
+        
       <Form onSubmit={onSubmit}>
         
         <h3 css={formHeader}>Профиль</h3>
@@ -168,9 +163,9 @@ function ProfilePage(){
             <ItemLabel>id</ItemLabel>
             <DataField css={[
               DataFieldStyle.statikSmall,
-              css`&.rrainuiFrame{
+              css`&.rrainuiFrame {
                 ${textSmall1};
-              }`
+              }`,
             ]}
             >
               {auth.user.id}
@@ -194,14 +189,14 @@ function ProfilePage(){
           <ItemContainer>
             <ItemLabel>Пользователь создан</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
-              {new Date(auth.user.created)+''}
+              {new Date(auth.user.created) + ''}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
             <ItemLabel>Пользователь обновлён</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
-              {new Date(auth.user.updated)+''}
+              {new Date(auth.user.updated) + ''}
             </DataField>
           </ItemContainer>
           
@@ -229,7 +224,7 @@ function ProfilePage(){
           <ItemContainer>
             <ItemLabel>Пол</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
-              {auth.user.sex==='MALE' ? 'Мужской' : 'Женский'}
+              {auth.user.sex === 'MALE' ? 'Мужской' : 'Женский'}
             </DataField>
           </ItemContainer>
           
@@ -247,8 +242,8 @@ function ProfilePage(){
               `}
             >
               <ItemLabel>Я ищу</ItemLabel>
-              { preferredGenders!=='Не выбрано' && <div
-                css={t=>css`
+              {preferredGenders !== 'Не выбрано' && <div
+                css={t => css`
                   ${center};
                   border-radius: 50%;
                   height: 1.5em;
@@ -258,21 +253,23 @@ function ProfilePage(){
                 `}
               >
                 <FloppyDisk1Ic
-                  css={t=>css`svg&{ --icon-color: ${t.icon.warning.color[0]} }`}
+                  css={t => css`svg& {
+                    --icon-color: ${t.icon.warning.color[0]}
+                  }`}
                 />
               </div>}
             </div>
             
             <DataField
               css={DataFieldStyle.interactiveSmall}
-              onClick={ev=>setSelecting('preferred-genders')}
-              role='listbox'
+              onClick={ev => setSelecting('preferred-genders')}
+              role="listbox"
             >
               {preferredGenders}
             </DataField>
             
             
-            {selecting==='preferred-genders' && <BottomSheetBasic
+            {selecting === 'preferred-genders' && <BottomSheetBasic
               {...bottomSheetProps}
               header={'Я ищу'}
             >
@@ -283,20 +280,20 @@ function ProfilePage(){
                 `}
               >
                 {
-                  ['Не выбрано','Парней','Девушек','Парней и девушек']
-                    .map(v=><RadioInput
+                  ['Не выбрано', 'Парней', 'Девушек', 'Парней и девушек']
+                    .map(v => <RadioInput
                       css={RadioInputStyle.radio}
-                      childrenPosition='start'
-                      role='option'
-                      aria-selected={v===preferredGenders}
-                      checked={v===preferredGenders}
+                      childrenPosition="start"
+                      role="option"
+                      aria-selected={v === preferredGenders}
+                      checked={v === preferredGenders}
                       value={v}
                       key={v}
-                      onChange={ev=>{
+                      onChange={ev => {
                         setPreferredGenders(v)
                         setSheetState('closing')
                       }}
-                      onClick={ev=>{
+                      onClick={ev => {
                         setPreferredGenders(v)
                         setSheetState('closing')
                       }}
@@ -310,13 +307,13 @@ function ProfilePage(){
                       >{v}</div>
                     </RadioInput>)
                 }
-                
+              
               </div>
             </BottomSheetBasic>}
-            
-            
-          </ItemContainer>
           
+          
+          </ItemContainer>
+        
         </Card>
         
         <div css={notInCard}>
@@ -326,55 +323,50 @@ function ProfilePage(){
             Выйти
           </Button>
         </div>
-        
-        
-        <div css={css`height: calc(-50px - 10px + 70px + 50px);`}/>
-        
+      
       </Form>
-      
-      
-      
-      <div
-        css={css`
-          position: fixed;
-          top: 0; right: 0; bottom: 50px; left: 0;
-          pointer-events: none;
-        `}
-      >
-        <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />
-      </div>
-      
-      
-      
-      <BottomButtonBar
-        css={css`
-          padding-bottom: 50px;
-        `}
-      >
         
-        <Button css={ButtonStyle.icon}
-          onClick={update}
-          disabled={false}
-        >
-          <ArrowReload />
-        </Button>
-        
-        <Button css={ButtonStyle.icon}
-          onClick={undefined}
-          disabled={preferredGenders==='Не выбрано'}
-        >
-          <FloppyDisk1Ic />
-        </Button>
-        
-      </BottomButtonBar>
-      
-      
       
     </Page>
+    
+    
+    
+    <div
+      css={css`
+        position: fixed;
+        top: 0; right: 0; bottom: ${bottomNavBarHeight}px; left: 0;
+        pointer-events: none;
+      `}
+    >
+      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+        {...scrollbarProps}
+        showVertical={canScrollVertical}
+        showHorizontal={canScrollHorizontal}
+      />
+    </div>
+    
+    
+    <BottomButtonBar
+      css={css`
+        padding-bottom: ${bottomNavBarHeight}px;
+      `}
+    >
+      
+      <Button css={ButtonStyle.icon}
+        onClick={update}
+        disabled={false}
+      >
+        <ArrowReload />
+      </Button>
+      
+      <Button css={ButtonStyle.icon}
+        onClick={undefined}
+        disabled={preferredGenders==='Не выбрано'}
+      >
+        <FloppyDisk1Ic />
+      </Button>
+    
+    </BottomButtonBar>
     
   
   </>

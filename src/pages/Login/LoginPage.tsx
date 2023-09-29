@@ -1,12 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import BottomButtonBar, {
+  bottomButtonBarHeight,
+} from 'src/components/BottomButtonBar/BottomButtonBar'
+import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
@@ -22,6 +27,7 @@ import col = EmotionCommon.col
 import { Themes } from 'src/theme/Themes'
 import { toast } from 'react-toastify'
 import { Toasts } from 'src/toasts/Toasts'
+import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
 import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
@@ -36,10 +42,8 @@ import InputValidationWrap = ValidationComponents.InputValidationWrap
 import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
-import { FormPage } from 'src/components/Page/FormPage'
-import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
-import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
-import Page = FormPage.Page
+import { Pages } from 'src/components/Page/Pages'
+import Page = Pages.Page
 import GearIc = SimpleSvgIcons.GearIc
 import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
@@ -195,8 +199,25 @@ const LoginPage = () => {
   const [settingsOpen, setSettingsOpen] = useState(false)
   
   
+  const pageRef = useRef<HTMLElement>(null)
+  
+  const {
+    canScrollHorizontal,
+    canScrollVertical,
+    ...scrollbarProps
+  } = useContainerScrollState({
+    containerIsWindow: true,
+    contentRef: pageRef,
+  })
+  
+  
   return <>
-    <Page>
+    <Page
+      ref={pageRef}
+      css={css`
+        padding-bottom: calc(${bottomButtonBarHeight}px);
+      `}
+    >
   
       <Form onSubmit={onSubmit}>
         
@@ -238,21 +259,36 @@ const LoginPage = () => {
             Зарегистрироваться
           </Button>
         </Link>
-        
-        <div css={css`height: calc(-50px + 70px);`}/>
       
       </Form>
-      
-      
-      <BottomButtonBar>
-        <Button css={ButtonStyle.iconTransparent}
-          onClick={() => setSettingsOpen(true)}
-        >
-          <GearIc/>
-        </Button>
-      </BottomButtonBar>
+    
     
     </Page>
+    
+    
+    
+    <div
+      css={css`
+        position: fixed;
+        top: 0; right: 0; bottom: 0; left: 0;
+        pointer-events: none;
+      `}
+    >
+      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+        {...scrollbarProps}
+        showVertical={canScrollVertical}
+        showHorizontal={canScrollHorizontal}
+      />
+    </div>
+      
+      
+    <BottomButtonBar>
+      <Button css={ButtonStyle.iconTransparent}
+        onClick={()=>setSettingsOpen(true)}
+      >
+        <GearIc/>
+      </Button>
+    </BottomButtonBar>
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
   

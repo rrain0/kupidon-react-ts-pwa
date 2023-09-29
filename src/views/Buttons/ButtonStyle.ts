@@ -86,8 +86,8 @@ export namespace ButtonStyle {
   
   export const icon = (t:Theme) => css`
     &.rrainuiButton {
-      min-height: 50px;
-      min-width: 50px;
+      //min-height: 50px;
+      //min-width: 50px;
       height: 50px;
       width: 50px;
       border-radius: 50%;
