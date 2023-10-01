@@ -13,6 +13,8 @@ import ArrayElement = TypeUtils.ArrayElement
    ISO 639-1 language code
    https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
    Initial lang must be undefined and then autodetected
+ 
+   https://datatracker.ietf.org/doc/html/rfc5646
 */
 
 export const AppLangs = ['en-US','ru-RU'] as const

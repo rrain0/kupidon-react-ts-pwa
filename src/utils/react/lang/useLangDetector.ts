@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 
 
 /*
@@ -22,10 +22,25 @@ import { useMemo } from 'react'
 
 // returns array of at least 1 language or undefined
 export const useLangDetector = (): [string, ...string[]] | undefined => {
-  let browserLangs: readonly string[] | undefined = navigator.languages
-  if ((!browserLangs || !browserLangs.length) && navigator.language)
-    browserLangs = [navigator.language]
-  if (!browserLangs || !browserLangs.length) browserLangs = undefined
+  
+  const [browserLangs,setBrowserLangs] = useState(undefined as undefined|[string, ...string[]])
+  
+  const updateBrowserLangs = ()=>{
+    let langs: readonly string[] | undefined = navigator.languages
+    if ((!langs || !langs.length) && navigator.language)
+      langs = [navigator.language]
+    if (!langs || !langs.length) langs = undefined
+    setBrowserLangs(langs as [string, ...string[]] | undefined)
+  }
+  
+  useLayoutEffect(()=>{
+    updateBrowserLangs()
+    const onLangChange = ()=>updateBrowserLangs()
+    window.addEventListener('languagechange',onLangChange)
+    return ()=>window.removeEventListener('languagechange',onLangChange)
+  },[])
+  
+  
   const langs = useMemo(
     ()=>browserLangs?.map(it=>{
         if (it.startsWith('en')) return 'en-US'
@@ -34,5 +49,7 @@ export const useLangDetector = (): [string, ...string[]] | undefined => {
     }),
     browserLangs
   ) as [string, ...string[]] | undefined
+  
+  
   return langs
 }

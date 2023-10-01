@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="">
+  
   <head>
     <meta charset="utf-8" />
     <title>Kupidon</title>
@@ -73,6 +74,27 @@
     -->
     
     
+    <script> // html lang script
+    {
+      const AppLangs = ['en-US','ru-RU']
+      const getLangs = () => {
+        let browserLangs = navigator.languages
+        if ((!browserLangs || !browserLangs.length) && navigator.language)
+          browserLangs = [navigator.language]
+        if (!browserLangs || !browserLangs.length) browserLangs = undefined
+        browserLangs = browserLangs?.map(it=>{
+          if (it.startsWith('en')) return 'en-US'
+          if (it.startsWith('ru')) return 'ru-RU'
+          return it
+        })
+        return browserLangs
+      }
+      let langs = getLangs().filter(it=>AppLangs.includes(it))
+      if (!langs.length) langs = ['en-US']
+      const html = document.documentElement
+      html.lang = langs[0]
+    }
+    </script>
     
     
   </head>
