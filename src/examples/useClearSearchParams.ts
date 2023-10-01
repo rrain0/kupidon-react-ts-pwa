@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router-dom'
 import { useMemo } from 'react'
-import { ObjectUtils } from 'src/utils/ObjectUtils'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import ObjectEntries = ObjectUtils.ObjectEntries
 
 

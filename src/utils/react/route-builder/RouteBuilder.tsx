@@ -1,6 +1,6 @@
-import { CastUtils } from 'src/utils/CastUtils'
-import { ObjectUtils } from 'src/utils/ObjectUtils'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { CastUtils } from 'src/utils/common/CastUtils'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import ObjectValues = ObjectUtils.ObjectValues
 import ObjectValuesType = ObjectUtils.ObjectValuesType

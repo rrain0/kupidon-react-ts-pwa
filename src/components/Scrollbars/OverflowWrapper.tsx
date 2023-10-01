@@ -7,7 +7,7 @@ import hideScrollbar = EmotionCommon.hideScrollbar
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import React, { HTMLAttributes, useRef } from 'react'
 import centerAll = EmotionCommon.centerAll
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import classNames from 'classnames'
 

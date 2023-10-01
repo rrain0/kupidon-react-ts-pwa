@@ -3,27 +3,26 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import center = EmotionCommon.center
 import { SimpleGradientBgc } from 'src/styles/bgc/SimpleGradientBgc'
 import fill = EmotionCommon.fill
-import centerContent = EmotionCommon.centerContent
+import col = EmotionCommon.col
 
 
 
 
 export namespace Pages {
-  
-  import col = EmotionCommon.col
   export const pageVerticalPadding = 50
   
   
   export const Page = styled.main`
     min-width: 220px;
-    width: 100%;
-    min-height: 100dvh;
+    width: 100dvw;
+    min-height: max(220px,100dvh);
     max-height: fit-content;
     position: relative;
     
     ${center};
     padding: ${pageVerticalPadding}px 12px;
     ${p=>SimpleGradientBgc(p.theme)};
+    color: ${p=>p.theme.page.text[0]};
   `
   
   
@@ -34,8 +33,8 @@ export namespace Pages {
   
   export const SimplePage = styled.main`
     min-width: 220px;
-    width: 100%;
-    min-height: 100dvh;
+    width: 100dvw;
+    min-height: max(220px,100dvh);
     max-height: fit-content;
     position: relative;
     

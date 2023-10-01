@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
 

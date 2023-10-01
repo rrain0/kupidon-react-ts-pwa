@@ -4,11 +4,12 @@ import React, { useLayoutEffect, useState } from 'react'
 import { css, ThemeProvider } from '@emotion/react'
 import AppFrame from 'src/pages/App/AppFrame'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ThemeObjectRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
-import { useDeriveThemeObject } from 'src/utils-react/useDeriveThemeObject'
+import { useLangSetup } from 'src/utils/react/lang/useLangSetup'
+import { useThemeSetup } from 'src/utils/react/theme/useThemeSetup'
 import center = EmotionCommon.center
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import mobileWidth = EmotionCommon.mobileWidth
 
@@ -17,14 +18,16 @@ import mobileWidth = EmotionCommon.mobileWidth
 
 
 function App() {
-  useDeriveThemeObject()
-  const themeObject = useRecoilValue(ThemeObjectRecoil)
+  useLangSetup()
+  useThemeSetup()
+  
+  const theme = useRecoilValue(ThemeRecoil)
   
   
-  const [readyToRender, setReadyToRender] = useState(false)
+  /* const [readyToRender, setReadyToRender] = useState(false)
   useLayoutEffect(()=>{
-    setReadyToRender(!!(themeObject))
-  },[themeObject])
+    setReadyToRender(!!(theme))
+  },[theme]) */
   
   
   /*useLayoutEffect(()=>{
@@ -44,8 +47,8 @@ function App() {
   },[])*/
   
   
-  if (!readyToRender) return <></>
-  return <ThemeProvider theme={themeObject}>
+  //if (!readyToRender) return <></>
+  return <ThemeProvider theme={theme.theme}>
     
     <AppFrame/>
     
@@ -91,7 +94,7 @@ function App() {
         rtl={false}
         pauseOnFocusLoss
         pauseOnHover
-        theme={themeObject.type}
+        theme={theme.theme.type}
       />
     </div>
     

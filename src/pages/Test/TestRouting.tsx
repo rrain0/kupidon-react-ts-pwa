@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import MoveElementToAnotherView from 'src/pages/Test/MoveElementToAnotherView'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import TestPage from './TestPage'
 import ScrollbarTestPage from './ScrollbarTestPage'
 import ResizeObserverTestPage from './ResizeObserverTestPage'

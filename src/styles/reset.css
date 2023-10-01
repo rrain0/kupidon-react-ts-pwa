@@ -39,15 +39,11 @@ html::-webkit-scrollbar {
   flex-flow: column nowrap;*/
 }
 
+
 /* :where() decreases specifity */
-/*:where(#app-frame) {
-  display: flex;
-  flex-flow: column nowrap;
+/*:where(#app-frame) :where(*) {
+  background: none;
 }*/
-:where(#app-frame) :where(*) {
-  display: flex;
-  flex-flow: column nowrap;
-}
 
 
 

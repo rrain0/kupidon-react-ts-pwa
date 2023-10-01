@@ -3,7 +3,7 @@ import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 import classNames from 'classnames'
 import React from 'react'
-import {ReactUtils} from "src/utils/ReactUtils"
+import {ReactUtils} from "src/utils/common/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import { ReactComponent as Arrow1DownSvg } from 'src/res/icon/arrow-1-down.svg'
 import { ReactComponent as Arrow2ForwardSvg } from 'src/res/icon/arrow-2-forward.svg'
@@ -12,6 +12,8 @@ import { ReactComponent as Arrow4DownSvg } from 'src/res/icon/arrow-4-down.svg'
 import { ReactComponent as Arrow5FwdSvg } from 'src/res/icon/arrow-5-fwd.svg'
 import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
 
+import { ReactComponent as BrowserSvg } from 'src/res/icon/browser.svg'
+
 import { ReactComponent as CardsHeartSvg } from 'src/res/icon/cards-heart.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
 import { ReactComponent as ChatRoundSvg } from 'src/res/icon/chat-round.svg'
@@ -19,6 +21,8 @@ import { ReactComponent as CheckmarkSvg } from 'src/res/icon/checkmark.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
 import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
 
+import { ReactComponent as DaySvg } from 'src/res/icon/day.svg'
+import { ReactComponent as DayNightSvg } from 'src/res/icon/day-night.svg'
 import { ReactComponent as DoubleCheckmarkSvg } from 'src/res/icon/double-checkmark.svg'
 
 import { ReactComponent as EyeSvg } from 'src/res/icon/eye.svg'
@@ -36,6 +40,8 @@ import { ReactComponent as HelpSvg } from 'src/res/icon/help.svg'
 import { ReactComponent as HomeSvg } from 'src/res/icon/home.svg'
 
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
+
+import { ReactComponent as NightSvg } from 'src/res/icon/night.svg'
 
 import { ReactComponent as PencilWriteSvg } from 'src/res/icon/pencil-write.svg'
 import { ReactComponent as Plane1Svg } from 'src/res/icon/plane-1.svg'
@@ -121,9 +127,14 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={Arrow5FwdSvg} />
   )
   
-  export const ArrowReload = ReactMemoTyped(
+  export const ArrowReloadIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ArrowReloadSvg} />
+  )
+  
+  export const BrowserIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={BrowserSvg} />
   )
   
   export const CardsHeartIc = ReactMemoTyped(
@@ -154,6 +165,16 @@ export namespace SimpleSvgIcons {
   export const Cross2Ic = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Cross2Svg} />
+  )
+  
+  export const DayIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={DaySvg} />
+  )
+  
+  export const DayNightIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={DayNightSvg} />
   )
   
   export const DoubleCheckmarkIc = ReactMemoTyped(
@@ -214,6 +235,11 @@ export namespace SimpleSvgIcons {
   export const MailIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={MailSvg} />
+  )
+  
+  export const NightIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={NightSvg} />
   )
   
   export const PencilWriteIc = ReactMemoTyped(

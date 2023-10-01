@@ -4,8 +4,10 @@ import styled from '@emotion/styled'
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
+import { BottomNavBarUiOptions } from 'src/components/BottomNavBar/BottomNavBarUiOptions'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { useUiOptionObject } from 'src/utils/react/lang/useUiOptions'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
@@ -29,7 +31,7 @@ const BottomNavBar = ()=>{
   
   const [settingsOpen, setSettingsOpen] = useState(false)
   
-  
+  const uiOptions = useUiOptionObject(BottomNavBarUiOptions)
   
   return <>
     
@@ -38,32 +40,32 @@ const BottomNavBar = ()=>{
       <NavLink to={RootRoute.profile[full]()}>
         <Button css={ButtonStyle.nav}>
           <ProfileIc/>
-          <div>Профиль</div>
+          <div>{uiOptions.profile[0].text}</div>
         </Button>
       </NavLink>
       
       <Button css={ButtonStyle.nav}>
         <ChatRoundIc/>
-        <div>Чат</div>
+        <div>{uiOptions.chat[0].text}</div>
       </Button>
       
       <NavLink to={RootRoute.main[full]()}>
         <Button css={ButtonStyle.nav}>
           <CardsHeartIc/>
-          <div>Найти пары</div>
+          <div>{uiOptions.findCouples[0].text}</div>
         </Button>
       </NavLink>
       
       <Button css={ButtonStyle.nav}>
         <HelpIc/>
-        <div>Советы</div>
+        <div>{uiOptions.advices[0].text}</div>
       </Button>
       
       <Button css={ButtonStyle.nav}
         onClick={()=>setSettingsOpen(true)}
       >
         <Gear2Ic/>
-        <div>Настройки</div>
+        <div>{uiOptions.settings[0].text}</div>
       </Button>
     
     </Frame>

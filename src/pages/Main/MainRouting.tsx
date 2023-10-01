@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import MainPage from './MainPage'
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams

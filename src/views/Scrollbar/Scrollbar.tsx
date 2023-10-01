@@ -9,15 +9,15 @@ import React, {
 } from 'react'
 import classNames from "classnames"
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { useNoSelect } from 'src/utils-react/useNoSelect'
-import { ElementProps } from 'src/utils/GetDimensions'
-import { MathUtils } from 'src/utils/MathUtils'
+import { useNoSelect } from 'src/utils/react/useNoSelect'
+import { ElementProps } from 'src/utils/common/GetDimensions'
+import { MathUtils } from 'src/utils/common/MathUtils'
 import inRange = MathUtils.inRange
 import fitRange = MathUtils.fitRange
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import styled from 'styled-components'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import { ScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import reset = EmotionCommon.reset

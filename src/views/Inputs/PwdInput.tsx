@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import Input, {InputProps} from "src/views/Inputs/Input"
 import { useRef, useState } from 'react'
 import React from "react"
-import {ReactUtils} from "src/utils/ReactUtils"
+import {ReactUtils} from "src/utils/common/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import {SimpleSvgIcons} from "src/views/icons/SimpleSvgIcons"
 import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc
 import EyeIc = SimpleSvgIcons.EyeIc
 import Ripple from "src/views/Ripple/Ripple"
 import { useRecoilValue } from 'recoil'
-import { ThemeObjectRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import center = EmotionCommon.center
@@ -27,7 +28,7 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
   
   const eyeRef = useRef<HTMLButtonElement>(null)
   
-  const themeObj = useRecoilValue(ThemeObjectRecoil)
+  const themeObj = useRecoilValue(ThemeRecoil)!
   
   return <Input
     {...restProps}
@@ -47,8 +48,10 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
         <RippleFrame2>
           <Ripple
             targetElement={eyeRef}
-            mode='center'
-            rippleColor={themeObj.input.ripple[0]}
+            css={t=>css`
+              --ripple-mode: center;
+              --ripple-color: ${t.input.ripple[0]};
+            `}
           />
         </RippleFrame2>
       </RippleFrame1>

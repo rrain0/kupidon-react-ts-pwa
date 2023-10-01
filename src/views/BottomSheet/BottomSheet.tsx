@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { useWindowScrollLock } from 'src/utils-react/useWindowScrollLock'
-import { useUpNodesScrollLock } from 'src/utils-react/useUpNodesScrollLock'
+import { useWindowScrollLock } from 'src/utils/react/useWindowScrollLock'
+import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
   useEffect, useLayoutEffect,
   useMemo,
   useState,
 } from 'react'
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import Setter = TypeUtils.Setter
 

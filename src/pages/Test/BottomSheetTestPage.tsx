@@ -4,10 +4,10 @@ import { Pages } from 'src/components/Page/Pages'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import row = EmotionCommon.row
 import col = EmotionCommon.col
-import { Utils } from 'src/utils/Utils'
+import { Utils } from 'src/utils/common/Utils'
 import styled from '@emotion/styled'
 import BottomSheet from 'src/views/BottomSheet/BottomSheet'
 import intOrDefault = Utils.nonNegIntOrDefault;

@@ -12,9 +12,11 @@ import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { useUiOptionObject } from 'src/utils/react/lang/useUiOptions'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import Input from 'src/views/Inputs/Input'
@@ -30,16 +32,16 @@ import { Toasts } from 'src/toasts/Toasts'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
-import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
+import { ValidationValidate } from 'src/utils/react/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
 import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
-import { Utils } from 'src/utils/Utils'
-import { ValidationActions } from 'src/utils-react/form-validation/ValidationActions'
+import { Utils } from 'src/utils/common/Utils'
+import { ValidationActions } from 'src/utils/react/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
-import { ValidationComponents } from 'src/utils-react/form-validation/ValidationComponents'
+import { ValidationComponents } from 'src/utils/react/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap
-import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay'
+import { useFailureDelay } from 'src/utils/react/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
 import { useToastFailures } from 'src/toasts/useToastFailures'
 import { Pages } from 'src/components/Page/Pages'
@@ -211,6 +213,9 @@ const LoginPage = () => {
   })
   
   
+  const uiOptions = useUiOptionObject(LoginPageUiOptions)
+  
+  
   return <>
     <Page
       ref={pageRef}
@@ -221,7 +226,9 @@ const LoginPage = () => {
   
       <Form onSubmit={onSubmit}>
         
-        <h3 css={formHeader}>Вход</h3>
+        <h3 css={formHeader}>
+          {uiOptions.login[0].text}
+        </h3>
         
         <InputValidationWrap
           {...validationProps}
@@ -230,7 +237,7 @@ const LoginPage = () => {
         >
           <Input
             css={InputStyle.input}
-            placeholder="логин (email)"
+            placeholder={uiOptions.loginEmailPlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -241,7 +248,7 @@ const LoginPage = () => {
         >
           <PwdInput
             css={InputStyle.input}
-            placeholder="пароль"
+            placeholder={uiOptions.pwdPlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -249,14 +256,13 @@ const LoginPage = () => {
           css={ButtonStyle.buttonPrimary}
           type="submit"
         >
-          Войти
+          {uiOptions.signIn[0].text}
         </Button>
         
         
         <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
-          <Button
-            css={ButtonStyle.buttonSecondary}>
-            Зарегистрироваться
+          <Button css={ButtonStyle.buttonSecondary}>
+            {uiOptions.signup[0].text}
           </Button>
         </Link>
       

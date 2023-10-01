@@ -6,17 +6,18 @@ import Theme = Themes.Theme
 
 
 
-export type ThemeSettingType = ThemeType|'system'
 
 export type ThemeSettingsStateType = {
-  type: ThemeSettingType,
+  setting: 'user'|'system',
+  userSetting: ThemeType,
   light: string,
   dark: string,
 }
 export const ThemeSettingsRecoil = atom<ThemeSettingsStateType>({
   key: 'themeSettings',
   default: {
-    type: 'system',
+    setting: 'system',
+    userSetting: 'light',
     light: Themes.defaultLight,
     dark: Themes.defaultDark,
   },
@@ -24,10 +25,16 @@ export const ThemeSettingsRecoil = atom<ThemeSettingsStateType>({
 })
 
 
-
-export const ThemeObjectRecoil = atom<Theme>({
+export type ThemeRecoilType = {
+  theme: Theme
+  isSystemAvailable: boolean
+}
+export const ThemeRecoil = atom<ThemeRecoilType>({
   key: 'themeObject',
-  default: undefined,
+  default: {
+    theme: Themes.LightPink,
+    isSystemAvailable: false,
+  },
 })
 
 

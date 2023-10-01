@@ -5,11 +5,11 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react'
-import { ElementProps } from 'src/utils/GetDimensions'
+import { ElementProps } from 'src/utils/common/GetDimensions'
 import css from 'src/views/Ripple/Ripple.module.scss'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
-import { ReactUtils } from "src/utils/ReactUtils"
+import { ReactUtils } from "src/utils/common/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 

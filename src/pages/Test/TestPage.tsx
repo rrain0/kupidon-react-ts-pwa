@@ -8,7 +8,7 @@ import BottomButtonBar, {
 } from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'

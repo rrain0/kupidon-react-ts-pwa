@@ -4,13 +4,13 @@ import React, {
   useMemo, useRef,
   useState,
 } from 'react'
-import { GetDimensions } from 'src/utils/GetDimensions'
-import { MathUtils } from 'src/utils/MathUtils'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { GetDimensions } from 'src/utils/common/GetDimensions'
+import { MathUtils } from 'src/utils/common/MathUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import fitRange = MathUtils.fitRange
-import { useNoSelect } from 'src/utils-react/useNoSelect'
-import { CssUtils } from 'src/utils/CssUtils'
+import { useNoSelect } from 'src/utils/react/useNoSelect'
+import { CssUtils } from 'src/utils/common/CssUtils'
 import parseCssValue = CssUtils.parseCssStringValue
 import CssValue = CssUtils.CssValue
 import inRangeExclusive = MathUtils.inRangeExclusive

@@ -14,9 +14,12 @@ export namespace DataFieldStyle {
       &[data-error]{
         background: ${t.input.error.bgc};
       }
+      min-width: 0;
       width: 100%;
       min-height: 50px;
       padding: 4px 16px;
+
+      word-break: break-word;
       font-weight: 500;
       font-size: 18px;
       line-height: 150%;

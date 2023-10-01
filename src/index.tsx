@@ -5,12 +5,23 @@ import 'src/styles/fonts.css'
 import 'src/styles/app-styles.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'animate.css'
+import { generateManifest } from 'src/utils/app/generateManifest'
 import App from './pages/App/App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { RecoilRoot } from 'recoil'
 import RecoilNexus from 'recoil-nexus' // access recoil state from not react component
 import { BrowserRouter } from 'react-router-dom'
+
+
+
+/* {
+  const manifest = generateManifest()
+  let manifestJsonString = encodeURIComponent(JSON.stringify(manifest));
+  let dataUrl = `data:application/manifest+json,${manifestJsonString}`
+  const link = document.querySelector('html head link[rel=manifest]') as HTMLLinkElement
+  link.href = dataUrl
+} */
 
 
 

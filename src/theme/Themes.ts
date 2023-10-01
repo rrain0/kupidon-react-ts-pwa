@@ -9,6 +9,8 @@ export namespace Themes {
     name: string
     
     page: {
+      // bgc[0] - theme color
+      // bgc[1] - background color
       bgc: string[]
       bgc2: string[]
       bgc3: string[]
@@ -310,7 +312,7 @@ export namespace Themes {
     LightPink2, Dark2,
   ] as const
   export const themeByName = (themeName: string)=>{
-    return allThemes.find(t=>t.name===themeName)
+    return allThemes.find(t=>t.name===themeName) ?? LightPink
   }
   
   

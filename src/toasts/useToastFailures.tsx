@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { ValidationCore } from 'src/utils-react/form-validation/ValidationCore'
+import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
 import Values = ValidationCore.Values
-import { useStateAndRef } from 'src/utils-react/useStateAndRef'
+import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import { Toasts } from './Toasts'
 import { css } from '@emotion/react'
 

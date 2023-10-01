@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import {GetDimensions} from "src/utils/GetDimensions"
-import { TypeUtils } from 'src/utils/TypeUtils'
+import {GetDimensions} from "src/utils/common/GetDimensions"
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import Setter = TypeUtils.Setter
 

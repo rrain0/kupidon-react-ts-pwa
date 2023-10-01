@@ -8,7 +8,6 @@ export const useMedia = (media: string) => {
     const mq = window.matchMedia(media)
     mq.onchange = ()=>{
       setMatches(mq.matches)
-      console.log('mq',mq)
     }
     return mq
   }, [media])

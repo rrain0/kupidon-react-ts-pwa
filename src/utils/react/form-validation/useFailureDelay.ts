@@ -1,9 +1,9 @@
-import { ObjectUtils } from 'src/utils/ObjectUtils'
-import { ValidationCore } from 'src/utils-react/form-validation/ValidationCore'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
 import Values = ValidationCore.Values
 import Failures = ValidationCore.Failures
 import { useEffect, useState } from 'react'
-import { Utils } from 'src/utils/Utils'
+import { Utils } from 'src/utils/common/Utils'
 
 
 

@@ -5,7 +5,7 @@ import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollS
 import { css } from '@emotion/react'
 import Scrollbar from 'src/views/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col

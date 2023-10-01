@@ -7,7 +7,7 @@ import React, { useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import center = EmotionCommon.center
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 

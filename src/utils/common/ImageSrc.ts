@@ -1,5 +1,5 @@
-import { FileUtils } from 'src/utils/FileUtils'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { FileUtils } from 'src/utils/common/FileUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import readToDataUrl = FileUtils.readToDataUrl
 import empty = TypeUtils.empty
 

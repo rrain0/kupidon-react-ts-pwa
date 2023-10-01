@@ -1,9 +1,9 @@
-
+import { Lang } from 'src/recoil/state/LangRecoil'
 
 
 export type UiOption<V> = {
   value: V
-  lang: string
+  lang: Lang
   text: string
 }
 
@@ -14,23 +14,23 @@ export type UiOption<V> = {
   export const theme: UiOption<ThemeType>[] = [
     {
       value: 'light',
-      lang: 'en',
+      lang: 'en-US',
       text: 'Light theme',
     },
     {
       value: 'light',
-      lang: 'ru',
+      lang: 'ru-RU',
       text: 'Светлая тема',
     },
     
     {
       value: 'dark',
-      lang: 'en',
+      lang: 'en-US',
       text: 'Dark theme',
     },
     {
       value: 'dark',
-      lang: 'ru',
+      lang: 'ru-RU',
       text: 'Тёмная тема',
     },
   ]

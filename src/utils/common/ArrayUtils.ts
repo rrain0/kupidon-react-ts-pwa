@@ -1,4 +1,4 @@
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 
 
@@ -24,6 +24,11 @@ export namespace ArrayUtils {
    */
   export const isArray = <T, E>(obj: T | E[]): obj is Array<E> => obj instanceof Array
   
+  
+  export const firstOrEmpty = <T>(arr?: readonly [T?, ...unknown[]] | empty): [T] | [] => {
+    if (arr?.length) return [arr[0] as T]
+    return []
+  }
   
   
 }

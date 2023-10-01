@@ -5,7 +5,7 @@ import React from 'react'
 import AppRouting from 'src/pages/App/AppRouting'
 import { SimpleGradientBgc } from 'src/styles/bgc/SimpleGradientBgc'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import full = EmotionCommon.fill
 

@@ -1,6 +1,6 @@
-import { ArrayUtils } from 'src/utils/ArrayUtils'
-import { ObjectUtils } from 'src/utils/ObjectUtils'
-import { ValidationCore } from 'src/utils-react/form-validation/ValidationCore'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
 
 
 

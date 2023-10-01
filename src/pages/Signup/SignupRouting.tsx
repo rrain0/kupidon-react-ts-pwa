@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import SignupPage from './SignupPage'
 import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams

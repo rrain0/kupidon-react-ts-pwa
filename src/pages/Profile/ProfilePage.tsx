@@ -6,6 +6,7 @@ import BottomButtonBar, {
 import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import styled from '@emotion/styled'
 import { useRecoilState, useResetRecoilState } from 'recoil'
@@ -16,7 +17,8 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
 import { Themes } from 'src/theme/Themes'
 import React, { useEffect, useRef, useState } from 'react'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { useUiOptionObject } from 'src/utils/react/lang/useUiOptions'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import Textarea from 'src/views/Textarea/Textarea'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
@@ -24,7 +26,7 @@ import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
@@ -41,13 +43,12 @@ import textSmall1 = EmotionCommon.textSmall1
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import center = EmotionCommon.center
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
-import ArrowReload = SimpleSvgIcons.ArrowReload
+import ArrowReload = SimpleSvgIcons.ArrowReloadIc
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import path = RouteBuilder.path
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-import pageVerticalPadding = Pages.pageVerticalPadding
 
 
 
@@ -89,7 +90,9 @@ function ProfilePage(){
   const openIdx = 2
   
   
-  const [preferredGenders, setPreferredGenders] = useState('Не выбрано')
+  const [preferredPeople, setPreferredPeople] = useState(
+    'notSelected' as 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
+  )
   const [selecting, setSelecting] = useState(
     undefined as undefined|'items'|'preferred-genders'
   )
@@ -129,6 +132,10 @@ function ProfilePage(){
   
   const [images, setImages] = useState(ProfileMockData.userImages)
   
+  
+  const uiOptions = useUiOptionObject(ProfileUiOptions)
+  
+  
   // todo вынести в ProfileRouting
   if (!auth || auth.user.id!==urlUserId) return <Navigate to={
     RootRoute.login[fullAllowedNameParams]({
@@ -141,13 +148,13 @@ function ProfilePage(){
     <Page
       ref={pageRef}
       css={css`
-          padding-bottom: calc(${bottomNavBarHeight}px + ${bottomButtonBarHeight}px);
-        `}
+        padding-bottom: calc(${bottomNavBarHeight}px + ${bottomButtonBarHeight}px);
+      `}
     >
         
       <Form onSubmit={onSubmit}>
         
-        <h3 css={formHeader}>Профиль</h3>
+        <h3 css={formHeader}>{uiOptions.profile[0].text}</h3>
         
         
         <ProfileImages
@@ -160,7 +167,7 @@ function ProfilePage(){
           
           
           <ItemContainer>
-            <ItemLabel>id</ItemLabel>
+            <ItemLabel>{uiOptions.id[0].text}</ItemLabel>
             <DataField css={[
               DataFieldStyle.statikSmall,
               css`&.rrainuiFrame {
@@ -173,63 +180,66 @@ function ProfilePage(){
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Email</ItemLabel>
+            <ItemLabel>{uiOptions.email[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {auth.user.email}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Email верифицирован</ItemLabel>
+            <ItemLabel>{uiOptions.emailVerified[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {auth.user.emailVerified ? 'да' : 'нет'}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Пользователь создан</ItemLabel>
+            <ItemLabel>{uiOptions.userCreated[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {new Date(auth.user.created) + ''}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Пользователь обновлён</ItemLabel>
+            <ItemLabel>{uiOptions.userUpdated[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {new Date(auth.user.updated) + ''}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Имя</ItemLabel>
+            <ItemLabel>{uiOptions.name[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {auth.user.firstName}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Фамилия</ItemLabel>
+            <ItemLabel>{uiOptions.lastName[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {auth.user.lastName}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Дата рождения</ItemLabel>
+            <ItemLabel>{uiOptions.birthDate[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {auth.user.birthDate}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Пол</ItemLabel>
+            <ItemLabel>{uiOptions.sex[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
-              {auth.user.sex === 'MALE' ? 'Мужской' : 'Женский'}
+              {auth.user.sex === 'MALE'
+                ? uiOptions.male[0].text
+                : uiOptions.female[0].text
+              }
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>Обо мне</ItemLabel>
+            <ItemLabel>{uiOptions.aboutMe[0].text}</ItemLabel>
             <Textarea css={TextareaStyle.textareaSmall}/>
           </ItemContainer>
           
@@ -241,8 +251,8 @@ function ProfilePage(){
                 gap: 6px;
               `}
             >
-              <ItemLabel>Я ищу</ItemLabel>
-              {preferredGenders !== 'Не выбрано' && <div
+              <ItemLabel>{uiOptions.imLookingFor[0].text}</ItemLabel>
+              {preferredPeople!=='notSelected' && <div
                 css={t => css`
                   ${center};
                   border-radius: 50%;
@@ -265,13 +275,13 @@ function ProfilePage(){
               onClick={ev => setSelecting('preferred-genders')}
               role="listbox"
             >
-              {preferredGenders}
+              {uiOptions.preferredPeople.find(it=>it.value===preferredPeople)?.text}
             </DataField>
             
             
             {selecting === 'preferred-genders' && <BottomSheetBasic
               {...bottomSheetProps}
-              header={'Я ищу'}
+              header={uiOptions.imLookingFor[0].text}
             >
               <div
                 css={css`
@@ -280,21 +290,21 @@ function ProfilePage(){
                 `}
               >
                 {
-                  ['Не выбрано', 'Парней', 'Девушек', 'Парней и девушек']
-                    .map(v => <RadioInput
+                  uiOptions.preferredPeople
+                    .map(opt => <RadioInput
                       css={RadioInputStyle.radio}
                       childrenPosition="start"
                       role="option"
-                      aria-selected={v === preferredGenders}
-                      checked={v === preferredGenders}
-                      value={v}
-                      key={v}
+                      aria-selected={opt.value===preferredPeople}
+                      checked={opt.value===preferredPeople}
+                      value={opt.value}
+                      key={opt.value}
                       onChange={ev => {
-                        setPreferredGenders(v)
+                        setPreferredPeople(opt.value)
                         setSheetState('closing')
                       }}
                       onClick={ev => {
-                        setPreferredGenders(v)
+                        setPreferredPeople(opt.value)
                         setSheetState('closing')
                       }}
                     >
@@ -304,7 +314,9 @@ function ProfilePage(){
                           padding-top: 4px;
                           padding-bottom: 4px;
                         `}
-                      >{v}</div>
+                      >
+                        {opt.text}
+                      </div>
                     </RadioInput>)
                 }
               
@@ -320,7 +332,7 @@ function ProfilePage(){
           <Button css={ButtonStyle.buttonPrimary}
             onClick={logout}
           >
-            Выйти
+            {uiOptions.signOut[0].text}
           </Button>
         </div>
       
@@ -361,7 +373,7 @@ function ProfilePage(){
       
       <Button css={ButtonStyle.icon}
         onClick={undefined}
-        disabled={preferredGenders==='Не выбрано'}
+        disabled={preferredPeople==='notSelected'}
       >
         <FloppyDisk1Ic />
       </Button>

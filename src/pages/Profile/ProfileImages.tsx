@@ -5,7 +5,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import rowWrap = EmotionCommon.rowWrap
 import center = EmotionCommon.center
 import Card from 'src/views/Card'
-import { TypeUtils } from 'src/utils/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
 
 

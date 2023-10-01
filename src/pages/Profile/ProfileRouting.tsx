@@ -3,9 +3,9 @@ import { useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import React from 'react'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import ProfilePage from './ProfilePage'
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path

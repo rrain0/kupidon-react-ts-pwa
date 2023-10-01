@@ -9,8 +9,8 @@ import ProfileRouting from 'src/pages/Profile/ProfileRouting'
 import React from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import TestRouting from 'src/pages/Test/TestRouting'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
-import { ReactUtils } from 'src/utils/ReactUtils'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path

@@ -3,10 +3,10 @@ import styled from '@emotion/styled'
 import BottomButtonBar, {
   bottomButtonBarHeight,
 } from 'src/components/BottomButtonBar/BottomButtonBar'
-import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { css } from '@emotion/react'
 import col = EmotionCommon.col
@@ -16,7 +16,8 @@ import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
-import { RouteBuilder } from 'src/utils-react/route-builder/RouteBuilder'
+import { useUiOptionObject } from 'src/utils/react/lang/useUiOptions'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import { InputStyle } from 'src/views/Inputs/InputStyle'
 import Input from 'src/views/Inputs/Input'
@@ -29,21 +30,21 @@ import row = EmotionCommon.row
 import reset = EmotionCommon.reset
 import RadioInput from 'src/views/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
-import { ValidationValidate } from 'src/utils-react/form-validation/ValidationValidate'
-import { CastUtils } from 'src/utils/CastUtils'
+import { ValidationValidate } from 'src/utils/react/form-validation/ValidationValidate'
+import { CastUtils } from 'src/utils/common/CastUtils'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import validate = ValidationValidate.validate
 import { SignupPageValidation } from './validation'
 import FormValues = SignupPageValidation.FormValues
 import validators = SignupPageValidation.validators
 import { toast } from 'react-toastify';
-import { ValidationActions } from 'src/utils-react/form-validation/ValidationActions'
+import { ValidationActions } from 'src/utils/react/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
 import CreateUserRespE = UserApi.CreateUserRespE
-import { useFailureDelay } from 'src/utils-react/form-validation/useFailureDelay'
+import { useFailureDelay } from 'src/utils/react/form-validation/useFailureDelay'
 import { Toasts } from 'src/toasts/Toasts'
-import { Utils } from 'src/utils/Utils'
-import { ValidationComponents } from 'src/utils-react/form-validation/ValidationComponents'
+import { Utils } from 'src/utils/common/Utils'
+import { ValidationComponents } from 'src/utils/react/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap;
 import UserToCreate = UserApi.UserToCreate
 import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
@@ -233,6 +234,7 @@ const SignupPage = () => {
   })
   
   
+  const uiOptions = useUiOptionObject(SignupPageUiOptions)
   
   return <>
     <Page
@@ -244,7 +246,7 @@ const SignupPage = () => {
       
       <Form onSubmit={onSubmit}>
         
-        <h3 css={formHeader}>Регистрация</h3>
+        <h3 css={formHeader}>{uiOptions.registration[0].text}</h3>
         
         <InputValidationWrap
           {...validationProps}
@@ -253,62 +255,7 @@ const SignupPage = () => {
         >
           <Input
             css={InputStyle.input}
-            placeholder='email (логин)'
-          />
-        </InputValidationWrap>
-        
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'email'}
-          errorPropName={'hasError'} // todo
-        >
-          <Input
-            css={InputStyle.input}
-            placeholder='email (логин)'
-          />
-        </InputValidationWrap>
-        
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'email'}
-          errorPropName={'hasError'} // todo
-        >
-          <Input
-            css={InputStyle.input}
-            placeholder='email (логин)'
-          />
-        </InputValidationWrap>
-        
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'email'}
-          errorPropName={'hasError'} // todo
-        >
-          <Input
-            css={InputStyle.input}
-            placeholder='email (логин)'
-          />
-        </InputValidationWrap>
-        
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'email'}
-          errorPropName={'hasError'} // todo
-        >
-          <Input
-            css={InputStyle.input}
-            placeholder='email (логин)'
-          />
-        </InputValidationWrap>
-        
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'email'}
-          errorPropName={'hasError'} // todo
-        >
-          <Input
-            css={InputStyle.input}
-            placeholder='email (логин)'
+            placeholder={uiOptions.emailLoginPlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -319,7 +266,7 @@ const SignupPage = () => {
         >
           <PwdInput
             css={InputStyle.input}
-            placeholder='пароль'
+            placeholder={uiOptions.pwdPlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -330,7 +277,7 @@ const SignupPage = () => {
         >
           <PwdInput
             css={InputStyle.input}
-            placeholder='повторите пароль'
+            placeholder={uiOptions.repeatPwdPlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -341,7 +288,7 @@ const SignupPage = () => {
         >
           <Input
             css={InputStyle.input}
-            placeholder='имя'
+            placeholder={uiOptions.namePlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -352,7 +299,7 @@ const SignupPage = () => {
         >
           <Input
             css={InputStyle.input}
-            placeholder='фамилия'
+            placeholder={uiOptions.lastNamePlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -363,7 +310,7 @@ const SignupPage = () => {
         >
           <Input
             css={InputStyle.input}
-            placeholder='день рождения (гггг-ММ-дд) (2002-01-01)'
+            placeholder={uiOptions.birthDatePlaceholder[0].text}
           />
         </InputValidationWrap>
         
@@ -385,7 +332,7 @@ const SignupPage = () => {
               name={`${id}-radio-group-sex`}
               value="MALE"
             >
-              <div>Я парень</div>
+              <div>{uiOptions.iAmGuy[0].text}</div>
             </RadioInput>
           </RadioInputValidationWrap>
           
@@ -399,7 +346,7 @@ const SignupPage = () => {
               name={`${id}-radio-group-sex`}
               value="FEMALE"
             >
-              <div>Я девушка</div>
+              <div>{uiOptions.iAmGirl[0].text}</div>
             </RadioInput>
           </RadioInputValidationWrap>
           
@@ -407,8 +354,9 @@ const SignupPage = () => {
         
         <Button
           css={ButtonStyle.buttonPrimary}
-          type='submit'>
-          Зарегистрироваться
+          type='submit'
+        >
+          {uiOptions.signup[0].text}
         </Button>
         
       </Form>
