@@ -223,7 +223,7 @@ export namespace RouteBuilder {
   
   
   
-  {
+  /* {
     const testRoutes = buildRoute({
       [path]: '',
       [params]: {
@@ -309,11 +309,11 @@ export namespace RouteBuilder {
     testStringValue = testRoutes.profile2.id.idName[full]()
     testStringValue = testRoutes.profile2.id2.down.downX2[fullParams]({
       anyNameParams: { down: 'y', param: 'a' },
-      allowedNameParams: { down: 'y', /*param: 'a'*/ }, // error for 'param' as expected
+      allowedNameParams: { down: 'y', /!*param: 'a'*!/ }, // error for 'param' as expected
       anyPathParams: { downParam: 'y', param: 'a' },
       allowedPathParams: { downParam: 'y', param: 'a' }, // NO error for 'param' as expected
     })
     
-  }
+  } */
   
 }

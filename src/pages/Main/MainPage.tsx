@@ -28,7 +28,7 @@ import SimpleContent = Pages.SimpleContent
 
 function MainPage(){
   
-  const [settingsOpen, setSettingsOpen] = useState(false)
+  /* const [settingsOpen, setSettingsOpen] = useState(false) */
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -78,7 +78,7 @@ function MainPage(){
     </div>
     
     
-    <BottomButtonBar
+    {/* <BottomButtonBar
       css={css`
         padding-bottom: ${bottomNavBarHeight}px;
       `}>
@@ -87,9 +87,9 @@ function MainPage(){
       >
         <GearIc/>
       </Button>
-    </BottomButtonBar>
+    </BottomButtonBar> */}
     
-    <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
+    {/* <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/> */}
     
   </>
 }

@@ -25,14 +25,14 @@ export const fallbackLang: Lang = 'en-US'
 
 
 export type LangSettingsRecoilType = {
-  setting: 'user' | 'system'
-  userSetting: [Lang, ...Lang[]] | undefined
+  setting: 'manual' | 'system'
+  manualSetting: [Lang, ...Lang[]] | undefined
 }
 export const LangSettingsRecoil = atom<LangSettingsRecoilType>({
   key: 'langSettings',
   default: {
     setting: 'system',
-    userSetting: undefined,
+    manualSetting: undefined,
   },
   effects: [localStorageEffect2({ removeWhen: ['reset',emptyValOrObj] })],
 })
@@ -41,15 +41,13 @@ export const LangSettingsRecoil = atom<LangSettingsRecoilType>({
 
 export type LangRecoilType = {
   lang: [Lang, ...Lang[]]
-  systemLangAvailable: boolean
-  askUser: boolean
+  systemLangAvailable: boolean | undefined
 }
 export const LangRecoil = atom<LangRecoilType>({
   key: 'lang',
   default: {
     lang: [fallbackLang],
-    systemLangAvailable: false,
-    askUser: false,
+    systemLangAvailable: undefined,
   },
 })
 

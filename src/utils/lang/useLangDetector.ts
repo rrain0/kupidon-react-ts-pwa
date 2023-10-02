@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useState } from 'react'
+import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 
 
 /*
@@ -23,19 +23,11 @@ import { useLayoutEffect, useMemo, useState } from 'react'
 // returns array of at least 1 language or undefined
 export const useLangDetector = (): [string, ...string[]] | undefined => {
   
-  const [browserLangs,setBrowserLangs] = useState(undefined as undefined|[string, ...string[]])
+  const [browserLangs,setBrowserLangs] = useState(()=>getBrowserLangs())
   
-  const updateBrowserLangs = ()=>{
-    let langs: readonly string[] | undefined = navigator.languages
-    if ((!langs || !langs.length) && navigator.language)
-      langs = [navigator.language]
-    if (!langs || !langs.length) langs = undefined
-    setBrowserLangs(langs as [string, ...string[]] | undefined)
-  }
   
   useLayoutEffect(()=>{
-    updateBrowserLangs()
-    const onLangChange = ()=>updateBrowserLangs()
+    const onLangChange = ()=>setBrowserLangs(getBrowserLangs())
     window.addEventListener('languagechange',onLangChange)
     return ()=>window.removeEventListener('languagechange',onLangChange)
   },[])
@@ -47,9 +39,18 @@ export const useLangDetector = (): [string, ...string[]] | undefined => {
         if (it.startsWith('ru')) return 'ru-RU'
         return it
     }),
-    browserLangs
+    [browserLangs]
   ) as [string, ...string[]] | undefined
   
   
   return langs
+}
+
+
+const getBrowserLangs = (): [string, ...string[]] | undefined =>{
+  let langs: readonly string[] | undefined = navigator.languages
+  if ((!langs || !langs.length) && navigator.language)
+    langs = [navigator.language]
+  if (!langs || !langs.length) langs = undefined
+  return langs as [string, ...string[]] | undefined
 }

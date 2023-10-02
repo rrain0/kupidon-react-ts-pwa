@@ -1,5 +1,5 @@
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/react/lang/UiOption'
+import { UiOption } from 'src/utils/lang/UiOption'
 
 
 
@@ -222,7 +222,7 @@ export const ProfileUiOptions = {
     {
       value: 'ofGuysAndGirls',
       lang: 'ru-RU',
-      text: 'Парней идевушек',
+      text: 'Парней и девушек',
     },
     
   ] as UiOption<'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'>[],

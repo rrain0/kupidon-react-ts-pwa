@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil'
 import { Lang, LangRecoil } from 'src/recoil/state/LangRecoil'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { UiOption } from 'src/utils/react/lang/UiOption'
+import { UiOption } from 'src/utils/lang/UiOption'
 import empty = TypeUtils.empty
 
 

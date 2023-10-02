@@ -1,4 +1,5 @@
-import { UiOption } from 'src/utils/react/lang/UiOption'
+import { Lang } from 'src/recoil/state/LangRecoil'
+import { UiOption } from 'src/utils/lang/UiOption'
 
 
 
@@ -158,6 +159,31 @@ export const CommonUiOptions = {
       text: 'Язык',
     },
   ] as UiOption<'language'>[],
+  
+  
+  languageOptions: [
+    {
+      value: 'system',
+      lang: 'en-US',
+      text: 'System language',
+    },
+    {
+      value: 'system',
+      lang: 'ru-RU',
+      text: 'Язык системы',
+    },
+    
+    {
+      value: 'ru-RU',
+      lang: 'ru-RU',
+      text: 'Русский',
+    },
+    {
+      value: 'en-US',
+      lang: 'en-US',
+      text: 'English',
+    },
+  ] as UiOption<Lang|'system'>[],
   
   
 } satisfies Record<string, UiOption<any>[]>

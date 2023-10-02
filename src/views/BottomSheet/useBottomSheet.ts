@@ -60,6 +60,7 @@ export type UseBottomSheetOptions = {
   setState: ((state: SheetState)=>void)
   setSnapIdx: (snapIdx: number)=>void
   snapPoints?: SheetSnapPoints | empty
+  //closeable?: boolean | empty
   animationDuration?: number | empty
 }
 export const useBottomSheet = (
@@ -156,6 +157,7 @@ export const useBottomSheet = (
     return options.snapPoints
   },[...(options.snapPoints??[])])
   
+  
   const snapPointsPx = useMemo<number[]>(()=>{
     const allowedUnits = ['px','',undefined,'%']
     const allowedKeywords = ['fit-content','fit-header','free']
@@ -196,7 +198,11 @@ export const useBottomSheet = (
             switch (cssValue.unit) {
               case 'px':
               case undefined:
-                return +cssValue.value
+                return fitRange(
+                  0,
+                  +cssValue.value,
+                  computedSheetDimens.frameH,
+                )
               case '%':
                 return fitRange(
                   0,
@@ -231,6 +237,7 @@ export const useBottomSheet = (
   const snapIdx = fitRange(0,options.snapIdx??0,snapPoints.length-1)
   const setState = options.setState
   const setSnapIdx = options.setSnapIdx
+  //const closeable = options.closeable ?? false
   
   
   const [newSheetStyle, setNewSheetStyle] = useState({
@@ -295,7 +302,7 @@ export const useBottomSheet = (
           stopCurrentAction()
           runAnimation(h,snapPointsPx[i],'opened')
         } else {
-          setState('opened')
+          setState('closed')
         }
       }
       
@@ -351,13 +358,14 @@ export const useBottomSheet = (
       
     },
     [
-      state, setState, setSnapIdx, snapIdx,
+      state, setState, setSnapIdx, snapIdx, /* closeable, */
       stopCurrentAction,
       computedSheetDimens,
       snapPointsPx, runAnimation
     ]
   )
   // 'reactOnState' will always be updated when calling
+  // because all these dependencies are present in 'reactOnState'
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(reactOnState,[state,snapIdx])
   

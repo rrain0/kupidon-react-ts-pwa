@@ -1,7 +1,7 @@
 import { Lang } from 'src/recoil/state/LangRecoil'
 import { Themes } from 'src/theme/Themes'
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/react/lang/UiOption'
+import { UiOption } from 'src/utils/lang/UiOption'
 import ThemeType = Themes.ThemeType
 
 
@@ -54,29 +54,7 @@ export const QuickSettingsUiOptions = {
   language: CommonUiOptions.language,
   
   
-  languageOptions: [
-    {
-      value: 'system',
-      lang: 'en-US',
-      text: 'System language',
-    },
-    {
-      value: 'system',
-      lang: 'ru-RU',
-      text: 'Язык системы',
-    },
-    
-    {
-      value: 'ru-RU',
-      lang: 'ru-RU',
-      text: 'Русский',
-    },
-    {
-      value: 'en-US',
-      lang: 'en-US',
-      text: 'English',
-    },
-  ] as UiOption<Lang|'system'>[],
+  languageOptions: CommonUiOptions.languageOptions,
   
   
 } satisfies Record<string, UiOption<any>[]>

@@ -2,7 +2,7 @@ import { useLayoutEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { Themes } from 'src/theme/Themes'
-import { useThemeDetector } from 'src/utils/react/theme/useThemeDetector'
+import { useThemeDetector } from 'src/utils/theme/useThemeDetector'
 
 
 
@@ -10,6 +10,21 @@ export const useThemeSetup = ()=>{
   const [themeSettings,setThemeSettings] = useRecoilState(ThemeSettingsRecoil)
   const [theme,setTheme] = useRecoilState(ThemeRecoil)
   const systemThemeType = useThemeDetector()
+  
+  
+  useLayoutEffect(
+    ()=>{
+      if (systemThemeType) setTheme(s=>({
+        ...s,
+        systemThemeAvailable: true,
+      }))
+      else setTheme(s=>({
+        ...s,
+        systemThemeAvailable: false,
+      }))
+    },
+    [setTheme, systemThemeType]
+  )
   
   
   useLayoutEffect(()=>{
@@ -27,16 +42,16 @@ export const useThemeSetup = ()=>{
         }))
       else setThemeSettings(s=>({
           ...s,
-          setting: 'user',
+          setting: 'manual',
         }))
     }
-    else if (setting==='user'){
-      if (themeSettings.userSetting==='light')
+    else if (setting==='manual'){
+      if (themeSettings.manualSetting==='light')
         setTheme(s=>({
           ...s,
           theme: Themes.themeByName(themeSettings.light)
         }))
-      else if (themeSettings.userSetting==='dark')
+      else if (themeSettings.manualSetting==='dark')
         setTheme(s=>({
           ...s,
           theme: Themes.themeByName(themeSettings.dark)

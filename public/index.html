@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en-US">
   
   <head>
     <meta charset="utf-8" />
+    
     <title>Kupidon</title>
     <meta name="description" content="Kupidon date app" />
+    
     <meta name="viewport"
       content="width=device-width, height=device-height, initial-scale=1"
     />
@@ -74,9 +76,20 @@
     -->
     
     
-    <script> // html lang script
+    <!--<script> // html lang script
     {
       const AppLangs = ['en-US','ru-RU']
+      
+      const titles = {
+        'en-US': 'Kupidon',
+        'ru-RU': 'Купидон',
+      }
+      
+      const descriptions = {
+        'en-US': 'Kupidon date app',
+        'ru-RU': 'Купидон - приложение для свидания',
+      }
+      
       const getLangs = () => {
         let browserLangs = navigator.languages
         if ((!browserLangs || !browserLangs.length) && navigator.language)
@@ -91,11 +104,20 @@
       }
       let langs = getLangs().filter(it=>AppLangs.includes(it))
       if (!langs.length) langs = ['en-US']
+      
       const html = document.documentElement
       html.lang = langs[0]
+      
+      const title = document.querySelector('html head title')
+      title.textContent = titles[langs[0]]
+      
+      const description = document.querySelector('html head meta[name=description]')
+      description.content = descriptions[langs[0]]
     }
-    </script>
+    </script>-->
     
+    
+    <script src="/setup.js"></script>
     
   </head>
   <body>

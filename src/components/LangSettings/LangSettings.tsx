@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
+import { LangSettingsUiOptions } from 'src/components/LangSettings/LangSettingsUiOptions'
 import { Themes } from 'src/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
@@ -13,7 +13,6 @@ import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioInput from 'src/views/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
 import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
-import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
@@ -21,9 +20,6 @@ import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = Themes.Theme
 import BrowserIc = SimpleSvgIcons.BrowserIc
-import DayIc = SimpleSvgIcons.DayIc
-import DayNightIc = SimpleSvgIcons.DayNightIc
-import NightIc = SimpleSvgIcons.NightIc
 
 
 
@@ -33,7 +29,7 @@ export type SettingsProps = {
   open: boolean
   setOpen: Setter<boolean>
 }
-const QuickSettings = (props: SettingsProps)=>{
+const LangSettings = (props: SettingsProps)=>{
   const { open, setOpen } = props
   
   
@@ -41,23 +37,19 @@ const QuickSettings = (props: SettingsProps)=>{
   const [snapIdx,setSnapIdx] = useState(3)
   const openIdx = 3
   
-  const lang = useRecoilValue(LangRecoil)
-  const theme = useRecoilValue(ThemeRecoil)
-  const [themeSettings, setThemeSettings] = useRecoilState(ThemeSettingsRecoil)
+  const langRecoil = useRecoilValue(LangRecoil)
+  
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
-  
-  const uiOptions0 = useUiOptionObject(QuickSettingsUiOptions)
+  const uiOptions0 = useUiOptionObject(LangSettingsUiOptions)
   const uiOptions = useMemo(
     ()=>{
       const uiOptions = {...uiOptions0}
-      if (!lang.systemLangAvailable)
+      if (!langRecoil.systemLangAvailable)
         uiOptions.languageOptions = uiOptions.languageOptions.filter(it=>it.value!=='system')
-      if (!theme.systemThemeAvailable)
-        uiOptions.themeOptions = uiOptions.themeOptions.filter(it=>it.value!=='system')
       return uiOptions
     },
-    [lang.systemLangAvailable, theme.systemThemeAvailable, uiOptions0]
+    [langRecoil.systemLangAvailable, uiOptions0]
   )
   
   
@@ -88,7 +80,7 @@ const QuickSettings = (props: SettingsProps)=>{
   return <>
     {open && <BottomSheetBasic
       {...bottomSheetProps}
-      header={uiOptions.settings[0].text}
+      header={<div css={css`height: 1em;`}/>}
     >
       <div
         css={css`
@@ -97,68 +89,6 @@ const QuickSettings = (props: SettingsProps)=>{
         `}
       >
         
-        <div
-          css={css`
-            padding: 8px 6px;
-          `}
-        >
-          {uiOptions.theme[0].text}:
-        </div>
-        
-        {
-          uiOptions.themeOptions
-            .map(opt=><RadioInput
-              css={RadioInputStyle.radio}
-              childrenPosition='start'
-              role='option'
-              aria-selected={function(){
-                if (themeSettings.setting==='system' && opt.value==='system')
-                  return true
-                if (themeSettings.setting!=='system' && opt.value===themeSettings.manualSetting)
-                  return true
-                return false
-              }()}
-              checked={function(){
-                if (themeSettings.setting==='system' && opt.value==='system')
-                  return true
-                if (themeSettings.setting!=='system' && opt.value===themeSettings.manualSetting)
-                  return true
-                return false
-              }()}
-              value={opt.value}
-              key={opt.value}
-              onChange={ev=>{
-                setThemeSettings(s=>({
-                  ...s,
-                  setting: opt.value==='system' ? 'system' : 'manual',
-                  manualSetting: opt.value==='system' ? s.manualSetting : opt.value,
-                }))
-              }}
-              onClick={ev=>{
-                setThemeSettings(s=>({
-                  ...s,
-                  setting: opt.value==='system' ? 'system' : 'manual',
-                  manualSetting: opt.value==='system' ? s.manualSetting : opt.value,
-                }))
-              }}
-            >
-              <OptionContainer>
-                {opt.value==='system' && <DayNightIc css={icon} />}
-                {opt.value==='light' && <DayIc css={icon} />}
-                {opt.value==='dark' && <NightIc css={icon} />}
-                {opt.text}
-              </OptionContainer>
-            </RadioInput>)
-        }
-        
-        
-        <div
-          css={css`
-            padding: 8px 6px;
-          `}
-        >
-          {uiOptions.language[0].text}:
-        </div>
         
         {
           uiOptions.languageOptions
@@ -221,7 +151,7 @@ const QuickSettings = (props: SettingsProps)=>{
     </BottomSheetBasic>}
   </>
 }
-export default QuickSettings
+export default LangSettings
 
 
 const OptionContainer = styled.div`

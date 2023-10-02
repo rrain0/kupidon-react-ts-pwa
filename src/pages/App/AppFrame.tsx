@@ -2,12 +2,10 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
+import AutoLangSettings from 'src/components/AutoLangSettings/AutoLangSettings'
 import AppRouting from 'src/pages/App/AppRouting'
-import { SimpleGradientBgc } from 'src/styles/bgc/SimpleGradientBgc'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
-import full = EmotionCommon.fill
 
 
 
@@ -17,6 +15,8 @@ const AppFrame = ()=>{
     
     <AppRouting/>
     
+    <AutoLangSettings />
+    
   </Frame>
 }
 export default ReactMemoTyped(AppFrame)
@@ -24,12 +24,4 @@ export default ReactMemoTyped(AppFrame)
 
 const Frame = styled.div`
   display: contents;
-  
-  /*width: 100dvw;
-  height: 100dvh;
-  
-  display: grid;
-  place-items: stretch;
-
-  ${p=>SimpleGradientBgc(p.theme)};*/
 `

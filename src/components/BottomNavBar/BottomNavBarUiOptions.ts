@@ -1,5 +1,5 @@
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/react/lang/UiOption'
+import { UiOption } from 'src/utils/lang/UiOption'
 
 
 

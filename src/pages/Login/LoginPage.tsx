@@ -15,7 +15,7 @@ import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverla
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useUiOptionObject } from 'src/utils/react/lang/useUiOptions'
+import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'

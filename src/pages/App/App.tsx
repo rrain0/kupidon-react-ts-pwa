@@ -6,8 +6,8 @@ import AppFrame from 'src/pages/App/AppFrame'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
-import { useLangSetup } from 'src/utils/react/lang/useLangSetup'
-import { useThemeSetup } from 'src/utils/react/theme/useThemeSetup'
+import { useLangSetup } from 'src/utils/lang/useLangSetup'
+import { useThemeSetup } from 'src/utils/theme/useThemeSetup'
 import center = EmotionCommon.center
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped

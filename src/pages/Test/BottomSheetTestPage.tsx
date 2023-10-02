@@ -33,7 +33,7 @@ const BottomSheetTestPage = ()=>{
   const [state, setState] =
     useState<SheetState>('closed')
   const [snapPoints, setSnapPoints] = useState<SheetSnapPoints>(
-    ['0px','fit-header',200,'fit-content','50%','free','80%']
+    ['0px','fit-header',200,'fit-content','50%','free','80%','800px']
   )
   const [snapIdx,setSnapIdx] =
     useState(2)
