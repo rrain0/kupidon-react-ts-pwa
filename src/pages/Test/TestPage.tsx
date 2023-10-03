@@ -39,16 +39,16 @@ const TestPage = () => {
         <div>Test Page</div>
         
         <Link to={RootRoute.test.scrollbar[fullAnySearchParams](searchParams)}>
-          <Button css={ButtonStyle.buttonPrimary}>Scrollbar test</Button>
+          <Button css={ButtonStyle.bigRectPrimary}>Scrollbar test</Button>
         </Link>
         <Link to={RootRoute.test.bottomSheet[fullAnySearchParams](searchParams)}>
-          <Button css={ButtonStyle.buttonPrimary}>Bottom Sheet test</Button>
+          <Button css={ButtonStyle.bigRectPrimary}>Bottom Sheet test</Button>
         </Link>
         <Link to={RootRoute.test.resizeObserver[fullAnySearchParams](searchParams)}>
-          <Button css={ButtonStyle.buttonPrimary}>Resize Observer test</Button>
+          <Button css={ButtonStyle.bigRectPrimary}>Resize Observer test</Button>
         </Link>
         <Link to={RootRoute.test.moveElementToAnotherView[fullAnySearchParams](searchParams)}>
-          <Button css={ButtonStyle.buttonPrimary}>Move to another view</Button>
+          <Button css={ButtonStyle.bigRectPrimary}>Move to another view</Button>
         </Link>
         
         {/*<div

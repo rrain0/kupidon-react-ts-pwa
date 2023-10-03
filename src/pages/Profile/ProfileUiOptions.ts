@@ -1,5 +1,5 @@
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
 
 
 
@@ -15,7 +15,7 @@ export const ProfileUiOptions = {
       lang: 'en-US',
       text: 'id',
     },
-  ] as UiOption<'id'>[],
+  ] satisfies UiOption<'id'>[],
   
   
   email: [
@@ -24,7 +24,7 @@ export const ProfileUiOptions = {
       lang: 'en-US',
       text: 'Email',
     },
-  ] as UiOption<'email'>[],
+  ] satisfies UiOption<'email'>[],
   
   
   emailVerified: [
@@ -38,7 +38,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Email верифицирован',
     },
-  ] as UiOption<'emailVerified'>[],
+  ] satisfies UiOption<'emailVerified'>[],
   
   
   userCreated: [
@@ -52,7 +52,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь создан',
     },
-  ] as UiOption<'userCreated'>[],
+  ] satisfies UiOption<'userCreated'>[],
   
   
   userUpdated: [
@@ -66,7 +66,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь обновлён',
     },
-  ] as UiOption<'userUpdated'>[],
+  ] satisfies UiOption<'userUpdated'>[],
   
   
   name: [
@@ -80,7 +80,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Имя',
     },
-  ] as UiOption<'name'>[],
+  ] satisfies UiOption<'name'>[],
   
   
   lastName: [
@@ -94,7 +94,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Фамилия',
     },
-  ] as UiOption<'lastName'>[],
+  ] satisfies UiOption<'lastName'>[],
   
   
   birthDate: [
@@ -108,7 +108,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Дата рождения',
     },
-  ] as UiOption<'birthDate'>[],
+  ] satisfies UiOption<'birthDate'>[],
   
   
   sex: [
@@ -122,7 +122,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Пол',
     },
-  ] as UiOption<'sex'>[],
+  ] satisfies UiOption<'sex'>[],
   
   
   male: [
@@ -136,7 +136,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Мужской',
     },
-  ] as UiOption<'male'>[],
+  ] satisfies UiOption<'male'>[],
   
   
   female: [
@@ -150,7 +150,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Женский',
     },
-  ] as UiOption<'female'>[],
+  ] satisfies UiOption<'female'>[],
   
   
   aboutMe: [
@@ -164,7 +164,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Обо мне',
     },
-  ] as UiOption<'aboutMe'>[],
+  ] satisfies UiOption<'aboutMe'>[],
   
   
   imLookingFor: [
@@ -178,7 +178,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Я ищу',
     },
-  ] as UiOption<'imLookingFor'>[],
+  ] satisfies UiOption<'imLookingFor'>[],
   
   
   preferredPeople: [
@@ -225,10 +225,10 @@ export const ProfileUiOptions = {
       text: 'Парней и девушек',
     },
     
-  ] as UiOption<'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'>[],
+  ] satisfies UiOption<'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'>[],
   
   
   signOut: CommonUiOptions.signOut,
   
   
-} satisfies Record<string, UiOption<any>[]>
+} satisfies UiOptionsContainer

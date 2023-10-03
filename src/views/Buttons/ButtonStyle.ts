@@ -1,85 +1,177 @@
 import { css } from '@emotion/react'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import onHover = EmotionCommon.onHover
+import Theme = Themes.Theme
+import col = EmotionCommon.col
+import textLarge1 = EmotionCommon.textLarge1
+import textSmall1 = EmotionCommon.textSmall1
+
 
 
 export namespace ButtonStyle {
-  import onHover = EmotionCommon.onHover
-  import Theme = Themes.Theme
-  import col = EmotionCommon.col
   
   
-  const buttonCommon = css`
+  const common = css`
     &.rrainuiButton {
-      width: 100%;
-      min-height: 50px;
-      border-radius: 15px;
-      padding: 8px 4px;
-
       transition: background linear 300ms;
-
       word-break: break-word;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 150%;
-      letter-spacing: 0.05em;
     }
   `
   
-  export const buttonPrimary = (t:Theme) => css`
-    ${buttonCommon};
+  
+  namespace Shape {
+    
+    export const bigRect = css`
+      &.rrainuiButton {
+        width: 100%;
+        min-height: 50px;
+        border-radius: 15px;
+        padding: 8px 4px;
+      }
+    `
+    
+    export const rounded = css`
+      &.rrainuiButton {
+        width: fit-content;
+        min-height: 40px;
+        border-radius: 1000000px;
+        padding: 8px 22px;
+      }
+    `
+    
+  }
+  
+  
+  namespace Color {
+    
+    export const primary = (t:Theme) => css`
+      &.rrainuiButton {
+        background: ${t.button.primary.bgc[0]};
+        color: ${t.button.primary.text[0]};
+        
+        .rrainuiRippleFrame {
+          --ripple-color: ${t.button.primary.ripple[0]};
+        }
+  
+        :active, :focus {}
+        :focus-visible {
+          background: ${t.button.primary.active[0]};
+        }
+        ${onHover(css`
+          background: ${t.button.primary.hover[0]};
+        `)};
+  
+        :disabled {
+          background: ${t.button.primary.disabled.bgc[0]};
+          color: ${t.button.primary.disabled.text[0]};
+        }
+      }
+      &.rrainuiButton[data-error] > .rrainuiBorder {}
+    `
+    
+    //export const normal = (t:Theme) => css``
+    
+    export const normal = (t:Theme) => css`
+      &.rrainuiButton {
+        background: ${t.element.normal.bgc[0]};
+        color: ${t.element.normal.text[0]};
+        
+        .rrainuiRippleFrame {
+          --ripple-color: ${t.ambience.bgc[0]};
+        }
+  
+        :focus {}
+        :active, :focus-visible {
+          background: ${t.element.normal.bgc[1]};
+        }
+        ${onHover(css`
+          background: ${t.element.normal.bgc[1]};
+        `)};
+  
+        :disabled {
+          background: ${t.element.disabled.bgc[0]};
+          color: ${t.element.disabled.text[0]};
+        }
+      }
+      &.rrainuiButton[data-error] > .rrainuiBorder {}
+    `
+    
+    
+    export const danger = (t:Theme) => css`
+      &.rrainuiButton {
+        background: ${t.element.danger.bgc[0]};
+        color: ${t.element.danger.text[0]};
+        
+        .rrainuiRippleFrame {
+          --ripple-color: ${t.ambience.bgc[0]};
+        }
+  
+        :focus {}
+        :active, :focus-visible {
+          background: ${t.element.danger.bgc[1]};
+        }
+        ${onHover(css`
+          background: ${t.element.danger.bgc[1]};
+        `)};
+  
+        :disabled {
+          background: ${t.element.disabled.bgc[0]};
+          color: ${t.element.disabled.text[0]};
+        }
+      }
+      &.rrainuiButton[data-error] > .rrainuiBorder {}
+    `
+    
+    
+  }
+  
+  
+  
+  export const bigRectPrimary = (t:Theme) => css`
+    ${common};
+    ${Shape.bigRect};
+    ${textLarge1};
+    ${Color.primary(t)};
+  `
+  
+  
+  export const bigRectNormal = (t:Theme) => css`
+    ${common};
+    ${Shape.bigRect};
+    ${textLarge1};
+    ${Color.normal(t)};
+  `
+  
+  
+  
+  
+  export const roundedNormal = (t:Theme) => css`
+    ${common};
+    ${Shape.rounded};
+    ${textSmall1};
+    ${Color.normal(t)};
     &.rrainuiButton {
-      background: ${t.button.primary.bgc[0]};
-      color: ${t.button.primary.text[0]};
-      
-      .rrainuiRippleFrame {
-        --ripple-color: ${t.button.primary.ripple[0]};
-      }
-
-      :active, :focus {}
-      :focus-visible {
-        background: ${t.button.primary.active[0]};
-      }
-      ${onHover(css`
-        background: ${t.button.primary.hover[0]};
-      `)};
-
-      :disabled {
-        background: ${t.button.primary.disabled.bgc[0]};
-        color: ${t.button.primary.disabled.text[0]};
-      }
+      color: ${t.element.normal.text2[0]};
     }
-    &.rrainuiButton[data-error] > .rrainuiBorder {}
   `
   
+  export const roundedDanger = (t:Theme) => css`
+    ${common};
+    ${Shape.rounded};
+    ${textSmall1};
+    ${Color.danger(t)};
+  `
   
-  export const buttonSecondary = (t:Theme) => css`
-    ${buttonCommon};
+  export const roundedSecondary = (t:Theme) => css`
+    ${common};
+    ${Shape.rounded};
+    ${textSmall1};
+    ${Color.normal(t)};
     &.rrainuiButton {
-      background: ${t.button.secondary.bgc[0]};
-      color: ${t.button.secondary.text[0]};
-      
-      .rrainuiRippleFrame {
-        --ripple-color: ${t.button.secondary.ripple[0]};
-      }
-
-      :focus {}
-      :active, :focus-visible {
-        background: ${t.button.secondary.active[0]};
-      }
-      ${onHover(css`
-          background: ${t.button.secondary.hover[0]};
-      `)};
-
-      :disabled {
-        background: ${t.button.secondary.disabled.bgc[0]};
-        color: ${t.button.secondary.disabled.text[0]};
-      }
+      color: ${t.element.normal.text2[0]};
     }
-    &.rrainuiButton[data-error] > .rrainuiBorder {}
   `
-  
-  
   
   
   

@@ -1,5 +1,5 @@
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
 
 
 
@@ -22,4 +22,4 @@ export const LoginPageUiOptions = {
   signup: CommonUiOptions.signup,
   
   
-} satisfies Record<string, UiOption<any>[]>
+} satisfies UiOptionsContainer

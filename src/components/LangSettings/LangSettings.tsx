@@ -4,9 +4,9 @@ import styled from '@emotion/styled'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { LangSettingsUiOptions } from 'src/components/LangSettings/LangSettingsUiOptions'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
@@ -41,7 +41,7 @@ const LangSettings = (props: SettingsProps)=>{
   
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
-  const uiOptions0 = useUiOptionObject(LangSettingsUiOptions)
+  const uiOptions0 = useUiOptionsContainer(LangSettingsUiOptions)
   const uiOptions = useMemo(
     ()=>{
       const uiOptions = {...uiOptions0}

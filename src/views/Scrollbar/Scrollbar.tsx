@@ -117,7 +117,10 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   
   
   const [dragStart, setDragStart] = useState(
-    undefined as undefined|{ client: number, scroll: number }
+    undefined as undefined | {
+      client: number,
+      scrollProgress: number // 0 <= scrollProgress <= 1
+    }
   )
   const onPointerDown = useCallback(
     function (this: HTMLElement, ev: PointerEvent){
@@ -150,15 +153,16 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
             }
           }()
           if (inRange(p.start, p.client, p.end))
-            return { client: p.client, scroll: p.scroll }
+            return { client: p.client, scrollProgress: p.scroll / p.scrollMax }
           else {
             let newScroll = toScrollScale(p.client - p.size/2 - p.trackStart)
             newScroll = fitRange(0, newScroll, p.scrollMax)
+            const newScrollProgress = fitRange(0, newScroll / p.scrollMax, 1)
             switch (direction){
               case 'vertical': setContainerScroll({ top: newScroll }); break
               case 'horizontal': setContainerScroll({ left: newScroll }); break
             }
-            return { client: p.client, scroll: newScroll }
+            return { client: p.client, scrollProgress: newScrollProgress }
           }
         }()
         
@@ -180,14 +184,17 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
           switch (direction) {
             case 'vertical': return {
               client: ev.clientY,
+              scrollMax: scrollProps.scrollTopMax,
             }
             case 'horizontal': return {
               client: ev.clientX,
+              scrollMax: scrollProps.scrollLeftMax,
             }
           }
         }()
         const addTrack = p.client-dragStart.client
-        const newScroll = dragStart.scroll + toScrollScale(addTrack)
+        let newScroll = dragStart.scrollProgress * p.scrollMax + toScrollScale(addTrack)
+        newScroll = fitRange(0, newScroll, p.scrollMax)
         
         switch (direction){
           case 'vertical': setContainerScroll({ top: newScroll }); break
@@ -195,7 +202,7 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
         }
       }
     },
-    [direction, dragStart, toScrollScale, setContainerScroll]
+    [direction, dragStart, toScrollScale, scrollProps, setContainerScroll]
   )
   
   const onPointerEnd = useCallback(

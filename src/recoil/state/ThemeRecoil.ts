@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 import { localStorageEffect2 } from '../RecoilPersist'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import ThemeType = Themes.ThemeType
 import Theme = Themes.Theme
 

@@ -3,12 +3,15 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import Button from 'src/views/Buttons/Button'
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioInput from 'src/views/Inputs/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
@@ -27,7 +30,9 @@ import NightIc = SimpleSvgIcons.NightIc
 
 
 
+
 const sheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
+const openIdx = 3
 
 export type SettingsProps = {
   open: boolean
@@ -38,8 +43,7 @@ const QuickSettings = (props: SettingsProps)=>{
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState(3)
-  const openIdx = 3
+  const [snapIdx,setSnapIdx] = useState(openIdx)
   
   const lang = useRecoilValue(LangRecoil)
   const theme = useRecoilValue(ThemeRecoil)
@@ -47,7 +51,10 @@ const QuickSettings = (props: SettingsProps)=>{
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
   
-  const uiOptions0 = useUiOptionObject(QuickSettingsUiOptions)
+  const [clearSite, setClearSite] = useState(false)
+  
+  
+  const uiOptions0 = useUiOptionsContainer(QuickSettingsUiOptions)
   const uiOptions = useMemo(
     ()=>{
       const uiOptions = {...uiOptions0}
@@ -215,10 +222,24 @@ const QuickSettings = (props: SettingsProps)=>{
             </RadioInput>)
         }
         
-        
+        <div
+          css={css`
+            ${col};
+            align-items: center;
+          `}
+        >
+          <Button css={ButtonStyle.roundedNormal}
+            onClick={()=>setClearSite(true)}
+          >
+            {uiOptions.clearAppData[0].text}
+          </Button>
+        </div>
       
       </div>
     </BottomSheetBasic>}
+    
+    <ClearSiteConfirmation open={clearSite} setOpen={setClearSite} />
+    
   </>
 }
 export default QuickSettings
@@ -241,7 +262,12 @@ const Flag = styled.img`
 `
 const icon = (t:Theme)=>css`
   &.rrainuiIcon {
+    height: 1.333em;
     width: 1.333em;
     --icon-color: ${t.page.text[0]};
   }
 `
+
+
+
+

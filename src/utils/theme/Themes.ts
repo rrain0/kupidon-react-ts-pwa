@@ -1,12 +1,46 @@
 
 
 export namespace Themes {
+  
   export type ThemeType = 'light'|'dark'
   
   
   export interface Theme {
     type: ThemeType
     name: string
+    
+    ambience: {
+      // [0]: contrast bgc / ripple
+      // [1]: main bgc
+      bgc: string[],
+      // [0]: secondary bgc
+      bgc2: string[],
+    }
+    element: {
+      primary?: {
+        bgc: string[]
+        text: string[]
+      }
+      normal: {
+        // [0]: usual bgc
+        // [1]: active / hover bgc
+        bgc: string[]
+        text: string[]
+        text2: string[]
+      }
+      secondary?: {
+        bgc: string[]
+        text: string[]
+      }
+      disabled: {
+        bgc: string[]
+        text: string[]
+      }
+      danger: {
+        bgc: string[]
+        text: string[]
+      }
+    }
     
     page: {
       // bgc[0] - theme color
@@ -79,9 +113,30 @@ export namespace Themes {
   }
   
   
+  
   export const LightPink: Theme = {
     type: 'light',
     name: 'Light Pink',
+    
+    ambience: {
+      bgc: ['#ffffff','#f0f0f0'],
+      bgc2: ['#ffaeba'],
+    },
+    element: {
+      normal: {
+        bgc: ['#f37190','#d93b5f'],
+        text: ['#F8F8F8'],
+        text2: ['#000000'],
+      },
+      disabled: {
+        bgc: ['#DCDCDC'],
+        text: ['#555']
+      },
+      danger: {
+        bgc: ['#dc362e','#f4362d'],
+        text: ['#000000'],
+      }
+    },
     
     page: {
       bgc: ['#ffaeba','#f0f0f0'],
@@ -92,7 +147,7 @@ export namespace Themes {
         '#dfa4b8','#ee4723','#dd8499',
         '#e35d4d','#e5bed3','#ed4d2b'
       ],
-      text: ['#000'],
+      text: ['#000000'],
     },
     
     nav: {
@@ -164,6 +219,26 @@ export namespace Themes {
   export const Dark: Theme = {
     type: 'dark',
     name: 'Dark',
+    
+    ambience: {
+      bgc: ['#000000','#282c34'],
+      bgc2: ['#992c46'],
+    },
+    element: {
+      normal: {
+        bgc: ['#d16780','#c6294e'],
+        text: ['#cdcdcd'],
+        text2: ['#000000'],
+      },
+      disabled: {
+        bgc: ['#DCDCDC'],
+        text: ['#555']
+      },
+      danger: {
+        bgc: ['#ac2c26','#dc362e'],
+        text: ['#bdbdbd'],
+      }
+    },
     
     page: {
       bgc: ['#992c46','#282c34'],

@@ -7,6 +7,8 @@ export type UiOption<V> = {
   text: string
 }
 
+export type UiOptionsContainer = Record<string, UiOption<any>[]>
+
 
 /*
   usage example:

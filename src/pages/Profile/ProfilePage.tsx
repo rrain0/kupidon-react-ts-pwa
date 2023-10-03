@@ -15,9 +15,9 @@ import { css } from '@emotion/react'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import React, { useEffect, useRef, useState } from 'react'
-import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import Textarea from 'src/views/Textarea/Textarea'
@@ -39,7 +39,7 @@ import Card from 'src/views/Card'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import textNormal = EmotionCommon.textNormal1
-import textSmall1 = EmotionCommon.textSmall1
+import textSmall1 = EmotionCommon.textSmall2
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import center = EmotionCommon.center
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
@@ -133,7 +133,7 @@ function ProfilePage(){
   const [images, setImages] = useState(ProfileMockData.userImages)
   
   
-  const uiOptions = useUiOptionObject(ProfileUiOptions)
+  const uiOptions = useUiOptionsContainer(ProfileUiOptions)
   
   
   // todo вынести в ProfileRouting
@@ -329,7 +329,7 @@ function ProfilePage(){
         </Card>
         
         <div css={notInCard}>
-          <Button css={ButtonStyle.buttonPrimary}
+          <Button css={ButtonStyle.bigRectPrimary}
             onClick={logout}
           >
             {uiOptions.signOut[0].text}
@@ -346,7 +346,8 @@ function ProfilePage(){
     <div
       css={css`
         position: fixed;
-        top: 0; right: 0; bottom: ${bottomNavBarHeight}px; left: 0;
+        bottom: ${bottomNavBarHeight}px; right: 0; left: 0;
+        height: calc(100dvh - ${bottomNavBarHeight}px);
         pointer-events: none;
       `}
     >

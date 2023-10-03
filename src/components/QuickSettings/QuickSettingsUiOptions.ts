@@ -1,5 +1,4 @@
-import { Lang } from 'src/recoil/state/LangRecoil'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
 import { UiOption } from 'src/utils/lang/UiOption'
 import ThemeType = Themes.ThemeType
@@ -48,7 +47,21 @@ export const QuickSettingsUiOptions = {
       lang: 'ru-RU',
       text: 'Тёмная тема',
     },
-  ] as UiOption<ThemeType|'system'>[],
+  ] satisfies UiOption<ThemeType|'system'>[],
+  
+  
+  clearAppData: [
+    {
+      value: 'clearAppData',
+      lang: 'en-US',
+      text: 'Clear app data',
+    },
+    {
+      value: 'clearAppData',
+      lang: 'ru-RU',
+      text: 'Очистить данные приложения',
+    },
+  ] satisfies UiOption<'clearAppData'>[],
   
   
   language: CommonUiOptions.language,

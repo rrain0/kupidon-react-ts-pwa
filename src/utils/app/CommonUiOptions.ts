@@ -18,7 +18,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'логин (email)',
     },
-  ] as UiOption<'loginPlaceholder'>[],
+  ] satisfies UiOption<'loginPlaceholder'>[],
   
   
   pwdPlaceholder: [
@@ -32,7 +32,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'пароль',
     },
-  ] as UiOption<'pwdPlaceholder'>[],
+  ] satisfies UiOption<'pwdPlaceholder'>[],
   
   
   login: [
@@ -46,7 +46,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Вход',
     },
-  ] as UiOption<'login'>[],
+  ] satisfies UiOption<'login'>[],
   
   
   signIn: [
@@ -60,7 +60,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Войти',
     },
-  ] as UiOption<'signIn'>[],
+  ] satisfies UiOption<'signIn'>[],
   
   
   signup: [
@@ -74,7 +74,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Зарегистрироваться',
     },
-  ] as UiOption<'signup'>[],
+  ] satisfies UiOption<'signup'>[],
   
   
   signOut: [
@@ -88,7 +88,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Выйти',
     },
-  ] as UiOption<'signOut'>[],
+  ] satisfies UiOption<'signOut'>[],
   
   
   profile: [
@@ -102,7 +102,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Профиль',
     },
-  ] as UiOption<'profile'>[],
+  ] satisfies UiOption<'profile'>[],
   
   
   chat: [
@@ -116,7 +116,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Чат',
     },
-  ] as UiOption<'chat'>[],
+  ] satisfies UiOption<'chat'>[],
   
   
   settings: [
@@ -130,7 +130,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Настройки',
     },
-  ] as UiOption<'settings'>[],
+  ] satisfies UiOption<'settings'>[],
   
   
   theme: [
@@ -144,7 +144,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Тема',
     },
-  ] as UiOption<'theme'>[],
+  ] satisfies UiOption<'theme'>[],
   
   
   language: [
@@ -158,7 +158,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Язык',
     },
-  ] as UiOption<'language'>[],
+  ] satisfies UiOption<'language'>[],
   
   
   languageOptions: [
@@ -183,7 +183,49 @@ export const CommonUiOptions = {
       lang: 'en-US',
       text: 'English',
     },
-  ] as UiOption<Lang|'system'>[],
+  ] satisfies UiOption<Lang|'system'>[],
+  
+  
+  reloading: [
+    {
+      value: 'reloading',
+      lang: 'en-US',
+      text: 'Reloading',
+    },
+    {
+      value: 'reloading',
+      lang: 'ru-RU',
+      text: 'Перезагрузка',
+    },
+  ] satisfies UiOption<'reloading'>[],
+  
+  
+  yes: [
+    {
+      value: 'yes',
+      lang: 'en-US',
+      text: 'Yes',
+    },
+    {
+      value: 'yes',
+      lang: 'ru-RU',
+      text: 'Да',
+    },
+  ] satisfies UiOption<'yes'>[],
+  
+  
+  no: [
+    {
+      value: 'no',
+      lang: 'en-US',
+      text: 'No',
+    },
+    {
+      value: 'no',
+      lang: 'ru-RU',
+      text: 'Нет',
+    },
+  ] satisfies UiOption<'no'>[],
   
   
 } satisfies Record<string, UiOption<any>[]>

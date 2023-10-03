@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Lang, LangRecoil } from 'src/recoil/state/LangRecoil'
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
 import empty = TypeUtils.empty
 
 
@@ -23,7 +22,7 @@ export const useUiOptionArr = <T>
 
 
 
-export const useUiOptionObject = <T extends Record<string, UiOption<any>[]>>
+export const useUiOptionsContainer = <T extends UiOptionsContainer>
 (uiOptions?: T | empty)
 : T => {
   const langs = useRecoilValue(LangRecoil).lang

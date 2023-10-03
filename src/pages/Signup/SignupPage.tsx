@@ -16,7 +16,7 @@ import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
-import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import { InputStyle } from 'src/views/Inputs/InputStyle'
@@ -25,7 +25,7 @@ import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Button from 'src/views/Buttons/Button'
 import PwdInput from 'src/views/Inputs/PwdInput'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import row = EmotionCommon.row
 import reset = EmotionCommon.reset
 import RadioInput from 'src/views/Inputs/RadioInput'
@@ -42,7 +42,7 @@ import { ValidationActions } from 'src/utils/react/form-validation/ValidationAct
 import updateFailures = ValidationActions.updateFailures
 import CreateUserRespE = UserApi.CreateUserRespE
 import { useFailureDelay } from 'src/utils/react/form-validation/useFailureDelay'
-import { Toasts } from 'src/toasts/Toasts'
+import { Toasts } from 'src/utils/toasts/Toasts'
 import { Utils } from 'src/utils/common/Utils'
 import { ValidationComponents } from 'src/utils/react/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap;
@@ -50,7 +50,7 @@ import UserToCreate = UserApi.UserToCreate
 import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
 import { AuthApi } from 'src/api/requests/AuthApi'
 import Lazy = Utils.Lazy
-import { useToastFailures } from 'src/toasts/useToastFailures'
+import { useToastFailures } from 'src/utils/toasts/useToastFailures'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import trueOrUndef = CastUtils.trueOrUndef
@@ -234,7 +234,7 @@ const SignupPage = () => {
   })
   
   
-  const uiOptions = useUiOptionObject(SignupPageUiOptions)
+  const uiOptions = useUiOptionsContainer(SignupPageUiOptions)
   
   return <>
     <Page
@@ -353,7 +353,7 @@ const SignupPage = () => {
         </fieldset>
         
         <Button
-          css={ButtonStyle.buttonPrimary}
+          css={ButtonStyle.bigRectPrimary}
           type='submit'
         >
           {uiOptions.signup[0].text}
@@ -366,7 +366,8 @@ const SignupPage = () => {
       <div
         css={css`
         position: fixed;
-        top: 0; right: 0; bottom: 0; left: 0;
+        bottom: 0; right: 0; left: 0;
+        height: 100dvh;
         pointer-events: none;
       `}
       >

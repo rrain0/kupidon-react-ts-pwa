@@ -15,7 +15,7 @@ import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverla
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
@@ -26,9 +26,9 @@ import { InputStyle } from 'src/views/Inputs/InputStyle'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { toast } from 'react-toastify'
-import { Toasts } from 'src/toasts/Toasts'
+import { Toasts } from 'src/utils/toasts/Toasts'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
@@ -43,7 +43,7 @@ import { ValidationComponents } from 'src/utils/react/form-validation/Validation
 import InputValidationWrap = ValidationComponents.InputValidationWrap
 import { useFailureDelay } from 'src/utils/react/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
-import { useToastFailures } from 'src/toasts/useToastFailures'
+import { useToastFailures } from 'src/utils/toasts/useToastFailures'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import GearIc = SimpleSvgIcons.GearIc
@@ -213,7 +213,7 @@ const LoginPage = () => {
   })
   
   
-  const uiOptions = useUiOptionObject(LoginPageUiOptions)
+  const uiOptions = useUiOptionsContainer(LoginPageUiOptions)
   
   
   return <>
@@ -253,7 +253,7 @@ const LoginPage = () => {
         </InputValidationWrap>
         
         <Button
-          css={ButtonStyle.buttonPrimary}
+          css={ButtonStyle.bigRectPrimary}
           type="submit"
         >
           {uiOptions.signIn[0].text}
@@ -261,7 +261,7 @@ const LoginPage = () => {
         
         
         <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
-          <Button css={ButtonStyle.buttonSecondary}>
+          <Button css={ButtonStyle.bigRectNormal}>
             {uiOptions.signup[0].text}
           </Button>
         </Link>
@@ -276,7 +276,8 @@ const LoginPage = () => {
     <div
       css={css`
         position: fixed;
-        top: 0; right: 0; bottom: 0; left: 0;
+        bottom: 0; right: 0; left: 0;
+        height: 100dvh;
         pointer-events: none;
       `}
     >

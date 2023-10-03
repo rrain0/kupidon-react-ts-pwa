@@ -66,7 +66,8 @@ function MainPage(){
     <div
       css={css`
         position: fixed;
-        top: 0; right: 0; bottom: ${bottomNavBarHeight}px; left: 0;
+        bottom: ${bottomNavBarHeight}px; right: 0; left: 0;
+        height: calc(100dvh - ${bottomNavBarHeight}px);
         pointer-events: none;
       `}
     >

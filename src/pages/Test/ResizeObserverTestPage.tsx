@@ -68,7 +68,7 @@ const ResizeObserverTestPage = ()=>{
       
       <div>Resize Observer Test Page</div>
       
-      <Button css={ButtonStyle.buttonPrimary}
+      <Button css={ButtonStyle.bigRectPrimary}
         onClick={() => addItem1()}
       >
         +1
@@ -101,7 +101,7 @@ const ResizeObserverTestPage = ()=>{
       </div>
       
       
-      <Button css={ButtonStyle.buttonPrimary}
+      <Button css={ButtonStyle.bigRectPrimary}
         onClick={() => addItem2()}
       >
         +1

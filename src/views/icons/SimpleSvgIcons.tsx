@@ -18,6 +18,7 @@ import { ReactComponent as CardsHeartSvg } from 'src/res/icon/cards-heart.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
 import { ReactComponent as ChatRoundSvg } from 'src/res/icon/chat-round.svg'
 import { ReactComponent as CheckmarkSvg } from 'src/res/icon/checkmark.svg'
+import { ReactComponent as ClearTrashSvg } from 'src/res/icon/clear-trash.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
 import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
 
@@ -155,6 +156,11 @@ export namespace SimpleSvgIcons {
   export const CheckmarkIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CheckmarkSvg} />
+  )
+  
+  export const ClearTrashIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={ClearTrashSvg} />
   )
   
   export const ClipIc = ReactMemoTyped(

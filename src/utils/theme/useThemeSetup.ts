@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { useThemeDetector } from 'src/utils/theme/useThemeDetector'
 
 

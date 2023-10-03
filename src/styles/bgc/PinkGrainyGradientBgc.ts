@@ -1,4 +1,4 @@
-import { Themes } from 'src/theme/Themes'
+import { Themes } from 'src/utils/theme/Themes'
 import { css } from '@emotion/react'
 import noise from 'src/res/img/effect/noise.svg'
 

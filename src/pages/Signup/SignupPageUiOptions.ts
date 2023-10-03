@@ -1,5 +1,5 @@
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
 
 
 
@@ -17,7 +17,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'Регистрация',
     },
-  ] as UiOption<'registration'>[],
+  ] satisfies UiOption<'registration'>[],
   
   
   emailLoginPlaceholder: [
@@ -31,7 +31,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'email (логин)',
     },
-  ] as UiOption<'emailPlaceholder'>[],
+  ] satisfies UiOption<'emailPlaceholder'>[],
   
   
   pwdPlaceholder: CommonUiOptions.pwdPlaceholder,
@@ -48,7 +48,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'повторите пароль',
     },
-  ] as UiOption<'repeatPwdPlaceholder'>[],
+  ] satisfies UiOption<'repeatPwdPlaceholder'>[],
   
   
   namePlaceholder: [
@@ -62,7 +62,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'имя',
     },
-  ] as UiOption<'namePlaceholder'>[],
+  ] satisfies UiOption<'namePlaceholder'>[],
   
   
   lastNamePlaceholder: [
@@ -76,7 +76,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'фамилия',
     },
-  ] as UiOption<'lastNamePlaceholder'>[],
+  ] satisfies UiOption<'lastNamePlaceholder'>[],
   
   
   birthDatePlaceholder: [
@@ -90,7 +90,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'день рождения (гггг-ММ-дд) (2002-01-01)',
     },
-  ] as UiOption<'birthDatePlaceholder'>[],
+  ] satisfies UiOption<'birthDatePlaceholder'>[],
   
   
   iAmGuy: [
@@ -104,7 +104,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'Я парень',
     },
-  ] as UiOption<'iAmGuy'>[],
+  ] satisfies UiOption<'iAmGuy'>[],
   
   
   iAmGirl: [
@@ -118,7 +118,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'Я девушка',
     },
-  ] as UiOption<'iAmGirl'>[],
+  ] satisfies UiOption<'iAmGirl'>[],
   
   
   signup: CommonUiOptions.signup,
@@ -126,4 +126,4 @@ export const SignupPageUiOptions = {
   
   
   
-} satisfies Record<string, UiOption<any>[]>
+} satisfies UiOptionsContainer

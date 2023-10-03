@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { BottomNavBarUiOptions } from 'src/components/BottomNavBar/BottomNavBarUiOptions'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
-import { useUiOptionObject } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -31,7 +31,7 @@ const BottomNavBar = ()=>{
   
   const [settingsOpen, setSettingsOpen] = useState(false)
   
-  const uiOptions = useUiOptionObject(BottomNavBarUiOptions)
+  const uiOptions = useUiOptionsContainer(BottomNavBarUiOptions)
   
   return <>
     

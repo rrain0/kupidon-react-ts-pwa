@@ -5,7 +5,7 @@ import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
 import Values = ValidationCore.Values
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
-import { Toasts } from './Toasts'
+import { Toasts } from 'src/utils/toasts/Toasts'
 import { css } from '@emotion/react'
 
 

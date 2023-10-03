@@ -28,7 +28,12 @@ export namespace EmotionCommon {
   
   export const fixedBottom = css`
     position: fixed;
-   right: 0; bottom: 0; left: 0;
+    right: 0; bottom: 0; left: 0;
+  `
+  
+  export const fixed = css`
+    position: fixed;
+    inset: 0; // top: 0; right: 0; bottom: 0; left: 0;
   `
   
   export const row = css`
@@ -180,6 +185,20 @@ export namespace EmotionCommon {
   
   
   
+  export const textLarge2 = css`
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 150%;
+    letter-spacing: 0.05em;
+  `
+  
+  export const textLarge1 = css`
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 150%;
+    letter-spacing: 0.05em;
+  `
+  
   export const textNormal1 = css`
     font-weight: 400;
     font-size: 16px;
@@ -187,6 +206,12 @@ export namespace EmotionCommon {
   `
   
   export const textSmall1 = css`
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 129%;
+  `
+  
+  export const textSmall2 = css`
     font-weight: 400;
     font-size: 14px;
     line-height: 129%;
