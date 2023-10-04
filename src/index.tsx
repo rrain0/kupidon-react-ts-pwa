@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import 'animate.css'
 import { generateManifest } from 'src/utils/app/generateManifest'
 import App from './pages/App/App'
-import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { RecoilRoot } from 'recoil'
 import RecoilNexus from 'recoil-nexus' // access recoil state from not react component

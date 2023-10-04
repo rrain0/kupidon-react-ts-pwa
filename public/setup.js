@@ -1,7 +1,9 @@
 
 
 
-//console.log('make a setup')
+console.log('make a setup')
+
+console.log('process.env.NODE_ENV',process?.env?.NODE_ENV)
 
 
 const AppLangs = ['en-US','ru-RU']
