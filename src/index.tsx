@@ -5,7 +5,6 @@ import 'src/styles/fonts.css'
 import 'src/styles/app-styles.css'
 import 'react-toastify/dist/ReactToastify.css'
 import 'animate.css'
-import { generateManifest } from 'src/utils/app/generateManifest'
 import App from './pages/App/App'
 import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
@@ -15,13 +14,6 @@ import { BrowserRouter } from 'react-router-dom'
 
 
 
-/* {
-  const manifest = generateManifest()
-  let manifestJsonString = encodeURIComponent(JSON.stringify(manifest));
-  let dataUrl = `data:application/manifest+json,${manifestJsonString}`
-  const link = document.querySelector('html head link[rel=manifest]') as HTMLLinkElement
-  link.href = dataUrl
-} */
 
 
 
@@ -38,6 +30,7 @@ root.render(
     </RecoilRoot>
   </React.StrictMode>
 )
+//navigator.serviceWorker.ready.then(()=>{})
 
 
 
@@ -45,6 +38,20 @@ root.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.register()
+
+
+
+// test message to service worker
+navigator.serviceWorker.ready.then(swRegistration=>{
+  swRegistration.active?.postMessage({
+    type: 'console.log',
+    data: {
+      msg1: 'test message for service worker',
+      isTest: true,
+    },
+  })
+})
+
 
 
 // If you want to start measuring performance in your app, pass a function

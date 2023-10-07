@@ -66,8 +66,10 @@ export const useLangSetup = ()=>{
   
   useLayoutEffect(()=>{
     if (lang.lang){
-      const html = document.documentElement
-      html.lang = lang.lang[0]
+      // @ts-ignore
+      setHtmlTags(
+        lang.lang
+      )
     }
   },[lang.lang])
   

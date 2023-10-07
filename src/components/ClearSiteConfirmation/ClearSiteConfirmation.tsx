@@ -63,8 +63,10 @@ const ClearSiteConfirmation = (props:{
   const [doClear, setDoClear] = useState(false)
   useEffect(()=>{
     if (doClear){
-      clearSiteData()
-      window.location.reload()
+      ;(async()=>{
+        await clearSiteData()
+        window.location.reload()
+      })()
     }
   },[doClear])
   

@@ -1,24 +1,34 @@
 {
-  // !!! Manifest changes only when reinstalling - may be it because of caching
+  // !!! How new manifest applies:
+  // https://web.dev/manifest-updates/
   
-  "short_name": "Kupidon",
   "name": "Kupidon",
+  "short_name": "Kupidon",
   "description": "Kupidon date app",
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait", // only in installed app mode
   
+  
   // Shlashscreen colors can't be overriden by html <meta/>
   // When app has loaded, html <meta/> will override manifest values.
   
-  // Title bar of window, status bar on mobile - only in installed app mode
+  // На нижний бар с полоской навигации андроида эти настройки не влияют
+  
+  // Title bar of window, status bar on mobile.
+  // Splashscreen status bar color.
   // It will be overriden by <meta name="theme-color" ... />.
+  //"theme_color": "#f0f0f0",
+  //"dark_theme_color": "#282c34",
   "theme_color": "#282c34",
   
   // Window or viewport background - before your app's stylesheets have loaded.
   // Splashscreen bgc color.
   // It will be overriden by <meta name="background-color" ... />.
+  //"background_color": "#f0f0f0",
+  //"dark_background_color": "#282c34",
   "background_color": "#282c34",
+  
   
   "icons": [
     {
@@ -35,4 +45,5 @@
       "sizes": "512x512" // splashscreen icon
     }
   ]
+  
 }

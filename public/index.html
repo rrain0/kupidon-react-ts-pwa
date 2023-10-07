@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  
+
+
   <head>
     <meta charset="utf-8" />
+    
+    <script>
+      const NODE_ENV = "%NODE_ENV%"
+      const PUBLIC_URL = "%PUBLIC_URL%"
+    </script>
+    
     
     <title>Kupidon</title>
     <meta name="description" content="Kupidon date app" />
@@ -19,30 +26,7 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-    <link rel="manifest" href="%PUBLIC_URL%/manifest-dark.json" />
-    <script>
-    {
-      const changeManifestByTheme = (theme)=>{
-        console.log('received theme',theme)
-        //console.log('node env',process.env.NODE_ENV)
-        return
-        if (theme==='light'){
-          const link = document.querySelector('html head link[rel=manifest]')
-          link.href = '%PUBLIC_URL%/manifest.json'
-        } else if (theme==='dark'){
-          const link = document.querySelector('html head link[rel=manifest]')
-          link.href = '%PUBLIC_URL%/manifest-dark.json'
-        }
-      }
-      const mq = window.matchMedia('(prefers-color-scheme: dark)')
-      changeManifestByTheme(mq.matches ? 'dark' : 'light')
-      mq.onchange = ()=>{
-        changeManifestByTheme(mq.matches ? 'dark' : 'light')
-      }
-    }
-    </script>
-    -->
+    
     
     
     <!-- Used as color of mobile browser toolbar in site mode -->
@@ -65,6 +49,8 @@
     
     
     
+    <script src="/setup-app.js"></script>
+    
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -76,50 +62,9 @@
     -->
     
     
-    <!--<script> // html lang script
-    {
-      const AppLangs = ['en-US','ru-RU']
-      
-      const titles = {
-        'en-US': 'Kupidon',
-        'ru-RU': 'Купидон',
-      }
-      
-      const descriptions = {
-        'en-US': 'Kupidon date app',
-        'ru-RU': 'Купидон - приложение для свидания',
-      }
-      
-      const getLangs = () => {
-        let browserLangs = navigator.languages
-        if ((!browserLangs || !browserLangs.length) && navigator.language)
-          browserLangs = [navigator.language]
-        if (!browserLangs || !browserLangs.length) browserLangs = undefined
-        browserLangs = browserLangs?.map(it=>{
-          if (it.startsWith('en')) return 'en-US'
-          if (it.startsWith('ru')) return 'ru-RU'
-          return it
-        })
-        return browserLangs
-      }
-      let langs = getLangs().filter(it=>AppLangs.includes(it))
-      if (!langs.length) langs = ['en-US']
-      
-      const html = document.documentElement
-      html.lang = langs[0]
-      
-      const title = document.querySelector('html head title')
-      title.textContent = titles[langs[0]]
-      
-      const description = document.querySelector('html head meta[name=description]')
-      description.content = descriptions[langs[0]]
-    }
-    </script>-->
-    
-    
-    <script src="/setup.js"></script>
-    
   </head>
+  
+  
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
@@ -134,4 +79,6 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
   </body>
+
+
 </html>

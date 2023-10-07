@@ -1,12 +1,22 @@
+import { ServiceWorkerUtils } from 'src/utils/app/ServiceWorkerUtils'
 
 
 
 
-
-export function clearSiteData(){
+/*
+  Use this article to determine what to clear
+  https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Clear-Site-Data
+*/
+export async function clearSiteData(): Promise<void> {
   clearCookies()
   localStorage.clear()
   sessionStorage.clear()
+  await clearCache()
+  
+  const swRegistrations = await navigator.serviceWorker.getRegistrations()
+  await Promise.allSettled(swRegistrations.map(it=>it.unregister()))
+  
+  //await ServiceWorkerUtils.sendMsgAndWaitAnswer({ type: 'clear-cache' }).catch(()=>undefined)
 }
 
 
@@ -24,6 +34,16 @@ export function clearCookies(){
     document.cookie = c
   })
 }
+
+
+
+export async function clearCache(): Promise<void> {
+  const entryKeys = await window.caches.keys()
+  await Promise.allSettled(entryKeys.map(key=>window.caches.delete(key)))
+}
+
+
+
 
 
 /*
@@ -44,7 +64,7 @@ Cookies:
 /*
 Cache:
  ● Clear:
-   ● localStorage.clear()
+   ● Get all names of cache entries and delete them
  
    ● Add query param 'v=1.0' to script url to force download it
    <script src="script.js?v=1.0"></script>

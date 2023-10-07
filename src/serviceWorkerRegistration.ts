@@ -29,7 +29,7 @@ type Config = {
 
 
 
-export function register(config?: Config){
+export async function register(config?: Config): Promise<void> {
   if (
     process.env.NODE_ENV === 'production'
     && 'serviceWorker' in navigator
@@ -44,16 +44,17 @@ export function register(config?: Config){
     if (publicUrl.origin !== window.location.origin) return
     
     window.addEventListener('load', async()=>{
-      console.log('public url',process.env.PUBLIC_URL)
+      //console.log('public url',process.env.PUBLIC_URL)
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
       
       let doRegister = true
+      
       if (isLocalhost){
         doRegister &&= await checkServiceWorkerValidity(swUrl,config)
         
-        // Add some additional logging to localhost, pointing developers to the
-        // service worker/PWA documentation.
         navigator.serviceWorker.ready.then(()=>{
+          // Add some additional logging to localhost, pointing developers to the
+          // service worker/PWA documentation.
           console.log(
             'This web app is being served cache-first by a service'
             + ' worker. To learn more, visit https://cra.link/PWA'
@@ -61,7 +62,10 @@ export function register(config?: Config){
         })
       }
       
-      if (doRegister) registerValidSW(swUrl, config)
+      if (doRegister) {
+        registerValidSW(swUrl, config)
+      }
+      
     })
   }
 }
@@ -96,8 +100,7 @@ async function registerValidSW(swUrl: string, config?: Config): Promise<void> {
     const registration = await navigator.serviceWorker.register(swUrl)
     registration.onupdatefound = ()=>{
       const installingWorker = registration.installing
-      if (!installingWorker) return
-      installingWorker.onstatechange = ()=>{
+      if (installingWorker) installingWorker.onstatechange = ()=>{
         if (installingWorker.state === 'installed') {
           if (navigator.serviceWorker.controller) {
             // At this point, the updated precached content has been fetched,

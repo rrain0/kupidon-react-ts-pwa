@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "esnext", // simply means which version of ECMAScript you're using to code
+    "target": "ESNext", // simply means which version of ECMAScript you're using to code
     "lib": [
       "dom",
       "dom.iterable",
