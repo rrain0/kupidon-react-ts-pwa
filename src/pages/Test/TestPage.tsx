@@ -72,6 +72,20 @@ const TestPage = () => {
     
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
+    
+    {/*
+    <div
+      css={css`
+        position: fixed;
+        left: 0; right: 0; bottom: env(safe-area-inset-bottom);
+        background: blue;
+        height: 2px;
+        //padding-bottom: env(safe-area-inset-bottom);
+      `}
+    >
+    
+    </div>
+     */}
   
   </>
 }
