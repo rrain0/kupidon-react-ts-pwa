@@ -5,10 +5,7 @@ import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import BottomButtonBar, {
-  bottomButtonBarHeight,
-} from 'src/components/BottomButtonBar/BottomButtonBar'
-import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
@@ -220,7 +217,7 @@ const LoginPage = () => {
     <Page
       ref={pageRef}
       css={css`
-        padding-bottom: calc(${bottomButtonBarHeight}px);
+        padding-bottom: calc(var(--bottom-button-bar-height));
       `}
     >
   

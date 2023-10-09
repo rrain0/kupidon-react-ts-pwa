@@ -1,6 +1,14 @@
 
 
 
+:root{
+  --bottom-nav-height: 0px;
+  --bottom-button-bar-height: 0px;
+}
+
+
+
+
 @keyframes NoAnimation {
   /*from { transform: scale(1) }
   to { transform: scale(1) }*/

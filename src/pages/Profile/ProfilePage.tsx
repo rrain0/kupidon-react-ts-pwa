@@ -1,9 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import BottomButtonBar, {
-  bottomButtonBarHeight,
-} from 'src/components/BottomButtonBar/BottomButtonBar'
-import { bottomNavBarHeight } from 'src/components/BottomNavBar/BottomNavBar'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
@@ -148,7 +145,7 @@ function ProfilePage(){
     <Page
       ref={pageRef}
       css={css`
-        padding-bottom: calc(${bottomNavBarHeight}px + ${bottomButtonBarHeight}px);
+        padding-bottom: calc(var(--bottom-nav-height) + var(--bottom-button-bar-height));
       `}
     >
         
@@ -189,7 +186,10 @@ function ProfilePage(){
           <ItemContainer>
             <ItemLabel>{uiOptions.emailVerified[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
-              {auth.user.emailVerified ? 'да' : 'нет'}
+              { auth.user.emailVerified
+                ? uiOptions.yes[0].text.toLowerCase()
+                : uiOptions.no[0].text.toLowerCase()
+              }
             </DataField>
           </ItemContainer>
           
@@ -346,8 +346,8 @@ function ProfilePage(){
     <div
       css={css`
         position: fixed;
-        bottom: ${bottomNavBarHeight}px; right: 0; left: 0;
-        height: calc(100dvh - ${bottomNavBarHeight}px);
+        bottom: var(--bottom-nav-height); right: 0; left: 0;
+        height: calc(100dvh - var(--bottom-nav-height));
         pointer-events: none;
       `}
     >
@@ -361,7 +361,7 @@ function ProfilePage(){
     
     <BottomButtonBar
       css={css`
-        padding-bottom: ${bottomNavBarHeight}px;
+        padding-bottom: var(--bottom-nav-height);
       `}
     >
       

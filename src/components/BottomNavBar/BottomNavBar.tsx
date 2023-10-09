@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
+import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
+import classNames from 'classnames'
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
@@ -25,7 +26,6 @@ import fixedBottom = EmotionCommon.fixedBottom
 
 
 
-export const bottomNavBarHeight = 50;
 
 const BottomNavBar = ()=>{
   
@@ -35,7 +35,17 @@ const BottomNavBar = ()=>{
   
   return <>
     
-    <Frame>
+    <Global
+      styles={css`
+        :root{
+          --bottom-nav-height: calc(50px + env(safe-area-inset-bottom, 0px));
+        }
+      `}
+    />
+    
+    <Frame
+      className={classNames('rrainuiBottomNavBar')}
+    >
       
       <NavLink to={RootRoute.profile[full]()}>
         <Button css={ButtonStyle.nav}>
@@ -80,8 +90,9 @@ export default BottomNavBar
 
 const Frame = styled.nav`
   ${fixedBottom};
-  height: ${bottomNavBarHeight}px;
-  min-height: ${bottomNavBarHeight}px;
+  height: var(--bottom-nav-height);
+  min-height: var(--bottom-nav-height);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   ${row};
   justify-content: space-between;
   background: ${p=>p.theme.nav.bgc[0]};

@@ -1,8 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
-import BottomButtonBar, {
-  bottomButtonBarHeight,
-} from 'src/components/BottomButtonBar/BottomButtonBar'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
@@ -240,7 +238,7 @@ const SignupPage = () => {
     <Page
       ref={pageRef}
       css={css`
-        padding-bottom: calc(${bottomButtonBarHeight}px);
+        padding-bottom: calc(var(--bottom-button-bar-height));
       `}
     >
       

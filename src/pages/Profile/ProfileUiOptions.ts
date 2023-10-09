@@ -41,6 +41,10 @@ export const ProfileUiOptions = {
   ] satisfies UiOption<'emailVerified'>[],
   
   
+  yes: CommonUiOptions.yes,
+  no: CommonUiOptions.no,
+  
+  
   userCreated: [
     {
       value: 'userCreated',

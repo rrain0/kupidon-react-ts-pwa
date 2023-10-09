@@ -3,9 +3,7 @@ import { css } from '@emotion/react'
 import React, { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import BottomButtonBar, {
-  bottomButtonBarHeight,
-} from 'src/components/BottomButtonBar/BottomButtonBar'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
@@ -30,7 +28,7 @@ const TestPage = () => {
       
     <SimplePage
       css={css`
-        padding-bottom: calc(${bottomButtonBarHeight}px);
+        padding-bottom: calc(var(--bottom-button-bar-height));
       `}
     >
       <SimpleContent>

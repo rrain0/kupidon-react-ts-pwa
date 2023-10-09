@@ -110,80 +110,98 @@ registerRoute(
 
 
 
-/*
-const manifestJson = {
-  // !!! Manifest changes only when reinstalling - may be it because of caching
-  
-  "name": "Kupidon",
-  "short_name": "Kupidon",
-  "description": "Kupidon date app",
-  "start_url": ".",
-  "display": "standalone",
-  "orientation": "portrait", // only in installed app mode
-  
-  
-  // Shlashscreen colors can't be overriden by html <meta/>
-  // When app has loaded, html <meta/> will override manifest values.
-  
-  // На нижний бар с полоской навигации андроида эти настройки не влияют
-  
-  // Title bar of window, status bar on mobile.
-  // Splashscreen status bar color.
-  // It will be overriden by <meta name="theme-color" ... />.
-  //"theme_color": "#f0f0f0",
-  //"dark_theme_color": "#282c34",
-  "theme_color": "#282c34",
-  
-  // Window or viewport background - before your app's stylesheets have loaded.
-  // Splashscreen bgc color.
-  // It will be overriden by <meta name="background-color" ... />.
-  //"background_color": "#f0f0f0",
-  //"dark_background_color": "#282c34",
-  "background_color": "#282c34",
-  
-  
-  "icons": [
-    {
-      "src": "logo64.png",
-      "type": "image/png",
-      "sizes": "64x64"
-    },{
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },{
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512" // splashscreen icon
-    }
-  ]
-  
-} as const
-*/
 
 
 
 /*
   manifest.json interceptor & generator
 */
-/* registerRoute(
+registerRoute(
   ({ url }) => url.pathname==='/manifest.json',
   async ({ event, request, url, params })=>{
-    console.log('request,url', request,url)
+    //console.log('request,url', request,url)
+    
+    
+    let manifest: Record<string,any> = {
+      "name": "Kupidon",
+      "short_name": "Kupidon",
+      "description": "Kupidon date app",
+      "start_url": ".",
+      "display": "standalone",
+      "orientation": "portrait",
+      "theme_color": "#282c34",
+      "background_color": "#282c34",
+      "icons": [
+        {
+          "src": "logo64.png",
+          "type": "image/png",
+          "sizes": "64x64"
+        },{
+          "src": "logo192.png",
+          "type": "image/png",
+          "sizes": "192x192"
+        },{
+          "src": "logo512.png",
+          "type": "image/png",
+          "sizes": "512x512"
+        }
+      ]
+    }
+    
+    
     const searchParams = url.searchParams
-    const manifest = { ...manifestJson } as Record<string, any>
-    manifest.id = `kupidon-react-pwa-${searchParams.get('nodeEnv')}`
+    
+    const baseId = "kupidon-react-pwa"
+    const nodeEnvMap = {
+      development: {
+        id: `${baseId}-development`
+      },
+      production: {
+        id: `${baseId}-production`
+      },
+    }
+    
+    const lacalizationMap = {
+      "en-US": {
+        lang: "en-US",
+        name: "Kupidon",
+        short_name: "Kupidon",
+        description: "Kupidon date app",
+      },
+      "ru-RU": {
+        lang: "ru-RU",
+        name: "Купидон",
+        short_name: "Купидон",
+        description: "Купидон - приложение для свидания",
+      },
+    }
+    
+    
+    const nodeEnv = searchParams.get("nodeEnv")
+    if (nodeEnv && nodeEnv in nodeEnvMap) manifest = { ...manifest, ...nodeEnvMap[nodeEnv] }
+    
+    const lang = searchParams.get("lang")
+    if (lang && lang in lacalizationMap) manifest = { ...manifest, ...lacalizationMap[lang] }
+    
+    if (nodeEnv==="development") {
+      manifest.name = `Dev ${manifest.name}`
+      manifest.short_name = `Dev ${manifest.short_name}`
+      manifest.description = `Dev ${manifest.description}`
+    }
+    
+    
     return new Response(
       JSON.stringify(manifest),
       {
         headers: {
-          //'Content-Type': 'application/json',
-          'Content-Type': 'application/manifest+json',
+          'Content-Type': 'application/json',
+          //'Content-Type': 'application/manifest+json',
         }
       }
     )
   }
-) */
+  
+)
 
 
 
