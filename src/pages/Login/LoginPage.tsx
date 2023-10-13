@@ -216,9 +216,6 @@ const LoginPage = () => {
   return <>
     <Page
       ref={pageRef}
-      css={css`
-        padding-bottom: calc(var(--bottom-button-bar-height));
-      `}
     >
   
       <Form onSubmit={onSubmit}>

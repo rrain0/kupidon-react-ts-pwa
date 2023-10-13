@@ -31,4 +31,20 @@ export namespace ArrayUtils {
   }
   
   
+  export type ArrayElement<ArrayType extends readonly unknown[]> =
+    ArrayType extends readonly (infer ElementType)[] ? ElementType : never
+  
+  export const arrIsNonEmpty = <T>(arr?: T[] | empty): arr is [T, ...T[]]  => {
+    return (arr?.length ?? 0) > 0
+  }
+  
+  
+  export type NonEmptyArr<T> = [T, ...T[]]
+  
+  
+  
+  export type ArrWithNonEmptyElements<A extends Array<E>, E = any> = A extends Array<infer E>
+    ? Array<Exclude<E, null|undefined>>
+    : never
+  
 }

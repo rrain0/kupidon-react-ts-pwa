@@ -38,7 +38,8 @@ const BottomNavBar = ()=>{
     <Global
       styles={css`
         :root{
-          --bottom-nav-height: calc(50px + env(safe-area-inset-bottom, 0px));
+          --bottom-nav-padding-bottom: max(calc(env(safe-area-inset-bottom, 0px) - 10px), 0px);
+          --bottom-nav-height: calc(50px + var(--bottom-nav-padding-bottom));
         }
       `}
     />
@@ -92,8 +93,11 @@ const Frame = styled.nav`
   ${fixedBottom};
   height: var(--bottom-nav-height);
   min-height: var(--bottom-nav-height);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: var(--bottom-nav-padding-bottom);
   ${row};
   justify-content: space-between;
   background: ${p=>p.theme.nav.bgc[0]};
 `
+
+
+

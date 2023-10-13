@@ -19,7 +19,7 @@ export namespace DataFieldStyle {
       min-height: 50px;
       padding: 4px 16px;
 
-      word-break: break-word;
+      overflow-wrap: anywhere;
       font-weight: 500;
       font-size: 18px;
       line-height: 150%;

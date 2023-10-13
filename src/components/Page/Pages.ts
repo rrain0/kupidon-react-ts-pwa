@@ -21,6 +21,7 @@ export namespace Pages {
     
     ${center};
     padding: ${pageVerticalPadding}px 12px;
+    padding-bottom: var(--bottom-page-inset);
     ${p=>SimpleGradientBgc(p.theme)};
     color: ${p=>p.theme.page.text[0]};
   `
@@ -40,6 +41,7 @@ export namespace Pages {
     
     ${center};
     padding: ${pageVerticalPadding}px 12px;
+    padding-bottom: var(--bottom-page-inset);
     background: ${p=>p.theme.page.bgc2[1]};
     color: ${p=>p.theme.page.text[0]};
   `

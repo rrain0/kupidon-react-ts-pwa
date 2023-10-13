@@ -2,8 +2,9 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
+import { ElementProps } from 'src/utils/common/GetDimensions'
 import styled from "styled-components"
-import React, {useImperativeHandle, useRef} from "react"
+import React, { useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import { ReactUtils } from "src/utils/common/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import classNames from "classnames"
@@ -15,6 +16,7 @@ import resetInput = EmotionCommon.resetInput
 import onHover = EmotionCommon.onHover
 import abs = EmotionCommon.abs
 import resetTextarea = EmotionCommon.resetTextarea
+import center = EmotionCommon.center
 
 
 
@@ -44,6 +46,29 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
   useImperativeHandle(forwardedRef, ()=>textareaRef.current!,[])
   
   
+  useLayoutEffect(()=>{
+    const textarea = textareaRef.current
+    if (textarea){
+      //textarea.
+    }
+  },)
+  
+  
+  const [value,setValue] = useState('')
+  const updateValue = (ev: React.ChangeEvent<HTMLTextAreaElement>)=>{
+    // there is no text node if textarea has no text
+    /* const textNode = ev.currentTarget.childNodes[0]
+    if (textNode){
+      const range = document.createRange()
+      range.selectNodeContents(textNode)
+      const rects = range.getBoundingClientRect()
+      console.log('text node rect',rects)
+    } */
+    setValue(ev.currentTarget.value)
+  }
+  
+  
+  
   return <Frame
     css={frameStyle}
     className={className}
@@ -58,6 +83,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
       {...restProps}
       data-error={hasError}
       ref={textareaRef}
+      
+      onScroll={ev=>textareaFitText(ev.currentTarget)}
+      value={value}
+      onChange={updateValue}
     />
     
     { childrenPosition==='end' && children }
@@ -93,7 +122,6 @@ const textarea_Style = css`
   ${resetTextarea};
 
   flex: 1;
-  height: 100%;
   border-radius: inherit;
 
   ${onHover(css`
@@ -110,3 +138,11 @@ const borderStyle = css`
   pointer-events: none;
   border-radius: inherit;
 `
+
+
+
+const textareaFitText = (textarea: HTMLTextAreaElement)=>{
+  const d = ElementProps(textarea)
+  if (d.scrollHeight > d.contentHeight)
+    textarea.style.height = `calc(${d.height-d.contentHeight + d.scrollHeight + 'px'} + 1em)`
+}

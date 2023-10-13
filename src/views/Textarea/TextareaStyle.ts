@@ -24,6 +24,10 @@ export namespace TextareaStyle {
     >.rrainuiTextarea {
       width: 100%;
       min-height: 150px;
+      //height: fit-content;
+      //resize: vertical;
+      resize: none;
+      overflow: hidden;
       padding: 8px 16px;
       font-weight: 500;
       font-size: 18px;

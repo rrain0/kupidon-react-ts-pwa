@@ -15,7 +15,7 @@ export namespace ButtonStyle {
   const common = css`
     &.rrainuiButton {
       transition: background linear 300ms;
-      word-break: break-word;
+      overflow-wrap: anywhere;
     }
   `
   
@@ -41,6 +41,7 @@ export namespace ButtonStyle {
     `
     
   }
+  
   
   
   namespace Color {
@@ -70,12 +71,13 @@ export namespace ButtonStyle {
       &.rrainuiButton[data-error] > .rrainuiBorder {}
     `
     
-    //export const normal = (t:Theme) => css``
+    
     
     export const normal = (t:Theme) => css`
       &.rrainuiButton {
         background: ${t.element.normal.bgc[0]};
         color: ${t.element.normal.text[0]};
+        --color: ${t.element.normal.text[0]};
         
         .rrainuiRippleFrame {
           --ripple-color: ${t.ambience.bgc[0]};
@@ -102,6 +104,7 @@ export namespace ButtonStyle {
       &.rrainuiButton {
         background: ${t.element.danger.bgc[0]};
         color: ${t.element.danger.text[0]};
+        --color: ${t.element.danger.text[0]};
         
         .rrainuiRippleFrame {
           --ripple-color: ${t.ambience.bgc[0]};
@@ -153,6 +156,7 @@ export namespace ButtonStyle {
     ${Color.normal(t)};
     &.rrainuiButton {
       color: ${t.element.normal.text2[0]};
+      --color: ${t.element.normal.text2[0]};
     }
   `
   

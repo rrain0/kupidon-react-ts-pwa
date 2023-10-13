@@ -11,7 +11,7 @@ import col = EmotionCommon.col
 import { css } from '@emotion/react'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
-import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useMatch, useSearchParams } from 'react-router-dom'
 import { Themes } from 'src/utils/theme/Themes'
 import React, { useEffect, useRef, useState } from 'react'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
@@ -57,7 +57,7 @@ function ProfilePage(){
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
   
-  const urlUserId = useMatch(RootRoute.profile.id.userId[full]())!
+  const urlUserId = useMatch(RootRoute.profile.id.userId[full]()+'/*')!
     .params[RootRoute.profile.id.userId[path].slice(1)]
   
   const logout = async() => {
@@ -144,11 +144,8 @@ function ProfilePage(){
   return <>
     <Page
       ref={pageRef}
-      css={css`
-        padding-bottom: calc(var(--bottom-nav-height) + var(--bottom-button-bar-height));
-      `}
     >
-        
+      
       <Form onSubmit={onSubmit}>
         
         <h3 css={formHeader}>{uiOptions.profile[0].text}</h3>
@@ -161,7 +158,6 @@ function ProfilePage(){
         
         
         <Card>
-          
           
           <ItemContainer>
             <ItemLabel>{uiOptions.id[0].text}</ItemLabel>
@@ -242,6 +238,9 @@ function ProfilePage(){
             <ItemLabel>{uiOptions.aboutMe[0].text}</ItemLabel>
             <Textarea css={TextareaStyle.textareaSmall}/>
           </ItemContainer>
+          
+          
+          <div>text node</div>
           
           
           <ItemContainer>

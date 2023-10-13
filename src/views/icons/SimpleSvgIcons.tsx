@@ -5,6 +5,8 @@ import classNames from 'classnames'
 import React from 'react'
 import {ReactUtils} from "src/utils/common/ReactUtils"
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+
+import { ReactComponent as AddModuleSvg } from 'src/res/icon/add-module.svg'
 import { ReactComponent as Arrow1DownSvg } from 'src/res/icon/arrow-1-down.svg'
 import { ReactComponent as Arrow2ForwardSvg } from 'src/res/icon/arrow-2-forward.svg'
 import { ReactComponent as Arrow3UpRightSvg } from 'src/res/icon/arrow-3-up-right.svg'
@@ -25,6 +27,8 @@ import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
 import { ReactComponent as DaySvg } from 'src/res/icon/day.svg'
 import { ReactComponent as DayNightSvg } from 'src/res/icon/day-night.svg'
 import { ReactComponent as DoubleCheckmarkSvg } from 'src/res/icon/double-checkmark.svg'
+import { ReactComponent as Download1Svg } from 'src/res/icon/download-1.svg'
+import { ReactComponent as Download2RoundSvg } from 'src/res/icon/download-2-round.svg'
 
 import { ReactComponent as EyeSvg } from 'src/res/icon/eye.svg'
 import { ReactComponent as EyeCrossedOutSvg } from 'src/res/icon/eye-crossed-out.svg'
@@ -103,6 +107,12 @@ export namespace SimpleSvgIcons {
   
   export type IconProps = CustomIconProps & SvgProps
   
+  
+  
+  export const AddModuleIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={AddModuleSvg} />
+  )
   export const Arrow1DownIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow1DownSvg} />
@@ -187,6 +197,18 @@ export namespace SimpleSvgIcons {
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={DoubleCheckmarkSvg} />
   )
+  
+  export const Download1Ic = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={Download1Svg} />
+  )
+  
+  export const Download2RoundIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={Download2RoundSvg} />
+  )
+  
+  
   
   export const EyeIc = ReactMemoTyped(
     (props: IconProps) =>

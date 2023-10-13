@@ -3,24 +3,6 @@ import { css, SerializedStyles } from '@emotion/react'
 
 export namespace EmotionCommon {
   
-  export const reset = css`
-    box-sizing: border-box;
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    //min-width: 0;
-    //min-height: 0;
-  `
-  export const allDefault = css`
-    all: unset;
-    ${reset}
-  `
-  
-  
   export const abs = css`
     position: absolute;
     inset: 0; // top: 0; right: 0; bottom: 0; left: 0;
@@ -120,40 +102,51 @@ export namespace EmotionCommon {
   
   
   
+  export const reset = css`
+    box-sizing: border-box;
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    //min-width: 0;
+    //min-height: 0;
+  `
+  
+  
   
   export const resetInput = css`
     ${reset}
-    &, &:hover, &:active, &:focus-visible, &:focus {
-      outline: inherit;
-      box-shadow: inherit;
-      border: inherit;
+    :hover, :active, :focus-visible, :focus {
+      outline: none;
+      box-shadow: none;
+      border: none;
     }
-    &::placeholder {
+    ::placeholder {
       opacity: 1;
     }
-    -webkit-tap-highlight-color: transparent;
   `
   export const resetButton = css`
     ${reset}
-    &, &:hover, &:active, &:focus-visible, &:focus {
-      outline: inherit;
-      box-shadow: inherit;
-      border: inherit;
+    :hover, :active, :focus-visible, :focus {
+      outline: none;
+      box-shadow: none;
+      border: none;
     }
-    -webkit-tap-highlight-color: transparent;
   `
   // todo reset Textarea - resize, autoheight, scrollbars
   export const resetTextarea = css`
     ${reset}
-    &, &:hover, &:active, &:focus-visible, &:focus {
-      outline: inherit;
-      box-shadow: inherit;
-      border: inherit;
+    :hover, :active, :focus-visible, :focus {
+      outline: none;
+      box-shadow: none;
+      border: none;
     }
-    &::placeholder {
+    ::placeholder {
       opacity: 1;
     }
-    -webkit-tap-highlight-color: transparent;
   `
   export const resetUl = css`
     ${reset};

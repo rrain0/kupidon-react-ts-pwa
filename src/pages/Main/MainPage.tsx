@@ -33,9 +33,6 @@ function MainPage(){
   return <>
     <Page
       ref={pageRef}
-      css={css`
-        padding-bottom: calc(var(--bottom-nav-height));
-      `}
     >
       <SimpleContent>
         

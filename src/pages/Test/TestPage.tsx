@@ -26,11 +26,7 @@ const TestPage = () => {
   
   return <>
       
-    <SimplePage
-      css={css`
-        padding-bottom: calc(var(--bottom-button-bar-height));
-      `}
-    >
+    <SimplePage>
       <SimpleContent>
     
       

@@ -19,6 +19,7 @@ export namespace RadioInputStyle {
       font: 500 18px/150% Roboto;
       letter-spacing: 0.05em;
       color: ${t.page.text[0]};
+      --color: ${t.page.text[0]};
       .rrainuiInput[data-error] {
         background: ${t.input.error.bgc};
       }

@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
-import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { emptyValOrObj, localStorageEffect2 } from '../RecoilPersist'
-import ArrayElement = TypeUtils.ArrayElement
+import ArrayElement = ArrayUtils.ArrayElement
 
 
 

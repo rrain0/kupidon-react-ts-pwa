@@ -1,4 +1,8 @@
 
+console.log('setup app script: make a setup')
+
+
+
 let _htmlProps = {
   // eslint-disable-next-line no-undef
   nodeEnv: NODE_ENV,
@@ -70,8 +74,7 @@ function setHtmlTags(langs){
   const html = document.documentElement
   html.lang = _htmlProps.lang
   
-  const htmlTitle = document.querySelector('html head title')
-  htmlTitle.textContent = _htmlProps.title
+  document.title = _htmlProps.title
   
   const htmlDescription = document.querySelector('html head meta[name=description]')
   htmlDescription.content = _htmlProps.description
@@ -90,8 +93,8 @@ function setHtmlTags(langs){
 
 
 
+
 {
-  console.log('setup app script: make a setup')
   
   const langSettings = JSON.parse(localStorage.getItem('langSettings'))
   if (langSettings?.setting==='manual'){
@@ -119,6 +122,41 @@ function setHtmlTags(langs){
   }
   
   
-  
-  console.log('setup app script: end of setup')
 }
+
+
+
+
+/*
+https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/How_to/Trigger_install_prompt
+BeforeInstallEvent отправляется браузером, если он определил, что сайт можно установить как PWA.
+При первой отправке эвента, браузер показывает свой UI с предолжением установки (его отключаем ev.preventDefault()).
+Запрос на установку из эвента можно вызвать только 1 раз, дальше нужен новый эвент.
+При отклонении запроса на установку, браузер сразу же отправляет новый эвент.
+*/
+let beforeInstallPromptEvent
+let onBeforeInstallPromptEvent
+const setBeforeInstallPromptEvent = ev=>{
+  beforeInstallPromptEvent = ev
+  onBeforeInstallPromptEvent?.(beforeInstallPromptEvent)
+}
+const promptInstall = ()=>{
+  const ev = beforeInstallPromptEvent
+  setBeforeInstallPromptEvent(undefined)
+  return ev?.prompt()
+}
+window.addEventListener('beforeinstallprompt', async ev=>{
+  // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getInstalledRelatedApps
+  const relatedApps = await navigator.getInstalledRelatedApps() // => { id, platform, url, version }[]
+  // Search for a specific installed platform-specific app
+  ev.preventDefault()
+  if (!relatedApps?.length) setBeforeInstallPromptEvent(ev)
+})
+window.addEventListener('appinstalled', ev=>{
+  setBeforeInstallPromptEvent(undefined)
+})
+
+
+
+
+console.log('setup app script: end of setup')

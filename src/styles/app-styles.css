@@ -4,6 +4,11 @@
 :root{
   --bottom-nav-height: 0px;
   --bottom-button-bar-height: 0px;
+  
+  --bottom-page-inset: calc(
+    var(--bottom-nav-height) +
+    var(--bottom-button-bar-height)
+  );
 }
 
 

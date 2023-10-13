@@ -64,6 +64,20 @@ export const QuickSettingsUiOptions = {
   ] satisfies UiOption<'clearAppData'>[],
   
   
+  installApp: [
+    {
+      value: 'installApp',
+      lang: 'en-US',
+      text: 'Install App',
+    },
+    {
+      value: 'installApp',
+      lang: 'ru-RU',
+      text: 'Установить Приложение',
+    },
+  ] satisfies UiOption<'installApp'>[],
+  
+  
   language: CommonUiOptions.language,
   
   

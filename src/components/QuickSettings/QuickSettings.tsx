@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
+import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
@@ -27,6 +28,7 @@ import BrowserIc = SimpleSvgIcons.BrowserIc
 import DayIc = SimpleSvgIcons.DayIc
 import DayNightIc = SimpleSvgIcons.DayNightIc
 import NightIc = SimpleSvgIcons.NightIc
+import AddModuleIc = SimpleSvgIcons.AddModuleIc
 
 
 
@@ -45,6 +47,7 @@ const QuickSettings = (props: SettingsProps)=>{
   const [sheetState, setSheetState] = useState<SheetState>('closed')
   const [snapIdx,setSnapIdx] = useState(openIdx)
   
+  const app = useRecoilValue(AppRecoil)
   const lang = useRecoilValue(LangRecoil)
   const theme = useRecoilValue(ThemeRecoil)
   const [themeSettings, setThemeSettings] = useRecoilState(ThemeSettingsRecoil)
@@ -222,19 +225,29 @@ const QuickSettings = (props: SettingsProps)=>{
             </RadioInput>)
         }
         
-        <div
-          css={css`
-            ${col};
-            align-items: center;
-          `}
-        >
-          <Button css={ButtonStyle.roundedNormal}
+        
+        
+        <RoundButtonContainer>
+          
+          { app.canInstall && <Button css={[ButtonStyle.roundedNormal, roundButton]}
+            onClick={async()=>{
+              const installed = await promptInstall()
+              console.log('installed', installed)
+            }}
+          >
+            <AddModuleIc css={icon}/>
+            {uiOptions.installApp[0].text}
+          </Button> }
+          
+          <Button css={ButtonStyle.roundedDanger}
             onClick={()=>setClearSite(true)}
           >
             {uiOptions.clearAppData[0].text}
           </Button>
-        </div>
+          
+        </RoundButtonContainer>
       
+        
       </div>
     </BottomSheetBasic>}
     
@@ -264,7 +277,18 @@ const icon = (t:Theme)=>css`
   &.rrainuiIcon {
     height: 1.333em;
     width: 1.333em;
-    --icon-color: ${t.page.text[0]};
+    --icon-color: var(--color);
+  }
+`
+const RoundButtonContainer = styled.div`
+  ${col};
+  align-items: center;
+  gap: 10px;
+`
+const roundButton = (t:Theme)=>css`
+  &.rrainuiButton {
+    min-width: 90px;
+    gap: 0.3em;
   }
 `
 

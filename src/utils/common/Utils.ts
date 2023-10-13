@@ -37,11 +37,6 @@ export namespace Utils {
   export type WithId<E extends object> = E & { id: string }
   
   
-  export type NonEmptyArr<A extends Array<E>, E = any> = A extends Array<infer E>
-    ? Array<Exclude<E, null|undefined>>
-    : never
-  
-  
   export type PointerEventListener<E extends HTMLElement = HTMLElement> =
     (this:E, ev: PointerEvent) => any
   

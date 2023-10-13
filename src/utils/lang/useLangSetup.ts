@@ -7,9 +7,10 @@ import {
   LangRecoil,
   LangSettingsRecoil,
 } from 'src/recoil/state/LangRecoil'
-import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { useLangDetector } from 'src/utils/lang/useLangDetector'
-import arrIsNonEmpty = TypeUtils.arrIsNonEmpty
+import arrIsNonEmpty = ArrayUtils.arrIsNonEmpty
+
 
 
 
@@ -66,10 +67,7 @@ export const useLangSetup = ()=>{
   
   useLayoutEffect(()=>{
     if (lang.lang){
-      // @ts-ignore
-      setHtmlTags(
-        lang.lang
-      )
+      setHtmlTags(lang.lang)
     }
   },[lang.lang])
   

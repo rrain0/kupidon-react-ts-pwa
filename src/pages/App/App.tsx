@@ -1,11 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { useRecoilValue } from 'recoil'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { css, ThemeProvider } from '@emotion/react'
 import AppFrame from 'src/pages/App/AppFrame'
+import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { ToastContainer } from 'react-toastify'
+import { useAppInstallationSetup } from 'src/utils/app/useAppInstallationSetup'
 import { useLangSetup } from 'src/utils/lang/useLangSetup'
 import { useThemeSetup } from 'src/utils/theme/useThemeSetup'
 import center = EmotionCommon.center
@@ -18,36 +20,23 @@ import mobileWidth = EmotionCommon.mobileWidth
 
 
 function App() {
+  useAppInstallationSetup()
   useLangSetup()
   useThemeSetup()
   
   const theme = useRecoilValue(ThemeRecoil)
   
   
-  /* const [readyToRender, setReadyToRender] = useState(false)
-  useLayoutEffect(()=>{
-    setReadyToRender(!!(theme))
-  },[theme]) */
+  
+  /*
+  const app = useRecoilValue(AppRecoil)
+  useEffect(()=>{
+    console.log('app',app)
+  },[app])
+   */
   
   
-  /*useLayoutEffect(()=>{
-    const onScroll = function(this: HTMLElement, ev: Event){
-      console.log('onScroll ev',ev)
-    }
-    window.addEventListener('scroll',onScroll)
-    return ()=>window.removeEventListener('scroll',onScroll)
-  },[])*/
   
-  /*useLayoutEffect(()=>{
-    const onResize = function(this: Window, ev: UIEvent){
-      console.log('onResize ev',ev)
-    }
-    window.addEventListener('resize',onResize)
-    return ()=>window.removeEventListener('resize',onResize)
-  },[])*/
-  
-  
-  //if (!readyToRender) return <></>
   return <ThemeProvider theme={theme.theme}>
     
     <AppFrame/>
@@ -101,6 +90,7 @@ function App() {
   </ThemeProvider>
 }
 export default ReactMemoTyped(App)
+
 
 
 

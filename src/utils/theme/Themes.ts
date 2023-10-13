@@ -124,7 +124,7 @@ export namespace Themes {
     },
     element: {
       normal: {
-        bgc: ['#f37190','#d93b5f'],
+        bgc: ['#f37190','#ffa4ba'],
         text: ['#F8F8F8'],
         text2: ['#000000'],
       },
@@ -133,8 +133,8 @@ export namespace Themes {
         text: ['#555']
       },
       danger: {
-        bgc: ['#dc362e','#f4362d'],
-        text: ['#000000'],
+        bgc: ['#ef3c34','#ff5047'],
+        text: ['#F8F8F8'],
       }
     },
     
@@ -216,6 +216,8 @@ export namespace Themes {
   }
   
   
+  
+  
   export const Dark: Theme = {
     type: 'dark',
     name: 'Dark',
@@ -226,7 +228,7 @@ export namespace Themes {
     },
     element: {
       normal: {
-        bgc: ['#d16780','#c6294e'],
+        bgc: ['#d16780','#e58ea2'],
         text: ['#cdcdcd'],
         text2: ['#000000'],
       },
@@ -235,7 +237,7 @@ export namespace Themes {
         text: ['#555']
       },
       danger: {
-        bgc: ['#ac2c26','#dc362e'],
+        bgc: ['#ac2c26','#c43730'],
         text: ['#bdbdbd'],
       }
     },
