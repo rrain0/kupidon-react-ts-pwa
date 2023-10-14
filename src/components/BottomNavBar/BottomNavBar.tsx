@@ -6,7 +6,6 @@ import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { BottomNavBarUiOptions } from 'src/components/BottomNavBar/BottomNavBarUiOptions'
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
@@ -22,6 +21,7 @@ import full = RouteBuilder.full
 import ChatRoundIc = SimpleSvgIcons.ChatRoundIc
 import HelpIc = SimpleSvgIcons.HelpIc
 import fixedBottom = EmotionCommon.fixedBottom
+import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 
 
 
@@ -73,7 +73,10 @@ const BottomNavBar = ()=>{
       </Button>
       
       <Button css={ButtonStyle.nav}
-        onClick={()=>setSettingsOpen(true)}
+        onClick={()=>{
+          //startTransition(()=>setSettingsOpen(true))
+          setSettingsOpen(true)
+        }}
       >
         <Gear2Ic/>
         <div>{uiOptions.settings[0].text}</div>

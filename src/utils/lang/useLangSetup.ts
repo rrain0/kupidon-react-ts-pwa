@@ -1,7 +1,6 @@
 import { useLayoutEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import {
-  AppLangs,
   fallbackLang,
   Lang,
   LangRecoil,

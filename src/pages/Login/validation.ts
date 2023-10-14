@@ -1,17 +1,17 @@
 import { ValidationValidators } from 'src/utils/react/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
-import { LoginDefaults } from './LoginPage';
+import { LoginDefaults } from './LoginPage'
+import Values = ValidationCore.Values
+import isValidEmail = ValidationValidators.isValidEmail
+import LoginRespE = AuthApi.LoginRespE
+import FailureData = ValidationCore.FailureData
+import Validators = ValidationCore.Validators
+import outer = ValidationCore.outer
 
 
 
 export namespace LoginPageValidation {
-  import Values = ValidationCore.Values
-  import isValidEmail = ValidationValidators.isValidEmail
-  import LoginRespE = AuthApi.LoginRespE
-  import FailureData = ValidationCore.FailureData
-  import Validators = ValidationCore.Validators
-  import outer = ValidationCore.outer
   
   type OuterCode = LoginRespE['data']['code'] | 'connection-error' | 'unknown'
   

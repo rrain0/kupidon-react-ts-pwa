@@ -123,6 +123,7 @@ registerRoute(
     
     
     let manifest: Record<string,any> = {
+      "lang": "en-US",
       "name": "Kupidon",
       "short_name": "Kupidon",
       "description": "Kupidon date app",
@@ -161,7 +162,7 @@ registerRoute(
       },
     }
     
-    const lacalizationMap = {
+    const localizationMap = {
       "en-US": {
         lang: "en-US",
         name: "Kupidon",
@@ -181,7 +182,7 @@ registerRoute(
     if (nodeEnv && nodeEnv in nodeEnvMap) manifest = { ...manifest, ...nodeEnvMap[nodeEnv] }
     
     const lang = searchParams.get("lang")
-    if (lang && lang in lacalizationMap) manifest = { ...manifest, ...lacalizationMap[lang] }
+    if (lang && lang in localizationMap) manifest = { ...manifest, ...localizationMap[lang] }
     
     if (nodeEnv==="development") {
       manifest.name = `Dev ${manifest.name}`

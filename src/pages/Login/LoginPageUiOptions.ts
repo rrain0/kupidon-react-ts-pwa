@@ -16,7 +16,13 @@ export const LoginPageUiOptions = {
   login: CommonUiOptions.login,
   
   
-  signIn: CommonUiOptions.signIn,
+  doLogin: CommonUiOptions.doLogin,
+  
+  
+  loggingIn: CommonUiOptions.loggingIn,
+  
+  
+  loginCompleted: CommonUiOptions.loginCompleted,
   
   
   signup: CommonUiOptions.signup,

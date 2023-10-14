@@ -6,7 +6,6 @@ import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
@@ -48,6 +47,7 @@ import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import params = RouteBuilder.params
+import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 
 
 
@@ -82,6 +82,8 @@ const LoginPage = () => {
   const [loginForm, setLoginForm] = useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
   
   
+  
+  const uiOptions = useUiOptionsContainer(LoginPageUiOptions)
   
   
   const [loginResponse, setLoginResponse] = useState(
@@ -144,11 +146,11 @@ const LoginPage = () => {
   
   
   useEffect(()=>{
-    if (loginLoading) Toasts.Loading.show('Вход...')
+    if (loginLoading) Toasts.Loading.show(uiOptions.loggingIn[0].text)
     else toast.dismiss(Toasts.Loading.id)
     
     if (loginSuccess) {
-      Toasts.SuccessSignIn.show('Вход выполнен')
+      Toasts.Success.show(uiOptions.loginCompleted[0].text)
       navigate(returnPath ?? RootRoute.main[full]())
     }
   },[loginLoading, loginSuccess, returnPath])
@@ -210,7 +212,6 @@ const LoginPage = () => {
   })
   
   
-  const uiOptions = useUiOptionsContainer(LoginPageUiOptions)
   
   
   return <>
@@ -250,7 +251,7 @@ const LoginPage = () => {
           css={ButtonStyle.bigRectPrimary}
           type="submit"
         >
-          {uiOptions.signIn[0].text}
+          {uiOptions.doLogin[0].text}
         </Button>
         
         
@@ -292,7 +293,7 @@ const LoginPage = () => {
     </BottomButtonBar>
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
-  
+    
   </>
 }
 

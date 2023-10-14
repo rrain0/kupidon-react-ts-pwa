@@ -20,10 +20,13 @@ import { ReactComponent as CardsHeartSvg } from 'src/res/icon/cards-heart.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
 import { ReactComponent as ChatRoundSvg } from 'src/res/icon/chat-round.svg'
 import { ReactComponent as CheckmarkSvg } from 'src/res/icon/checkmark.svg'
+import { ReactComponent as CheckmarkCircleToastifySvg } from 'src/res/icon/checkmark-circle-toastify.svg'
 import { ReactComponent as ClearTrashSvg } from 'src/res/icon/clear-trash.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
+import { ReactComponent as CrossSvg } from 'src/res/icon/cross.svg'
 import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
 
+import { ReactComponent as DangerRoundToastifySvg } from 'src/res/icon/danger-round-toastify.svg'
 import { ReactComponent as DaySvg } from 'src/res/icon/day.svg'
 import { ReactComponent as DayNightSvg } from 'src/res/icon/day-night.svg'
 import { ReactComponent as DoubleCheckmarkSvg } from 'src/res/icon/double-checkmark.svg'
@@ -44,6 +47,8 @@ import { ReactComponent as HeartSvg } from 'src/res/icon/heart.svg'
 import { ReactComponent as HelpSvg } from 'src/res/icon/help.svg'
 import { ReactComponent as HomeSvg } from 'src/res/icon/home.svg'
 
+import { ReactComponent as InfoToastifySvg } from 'src/res/icon/info-toastify.svg'
+
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
 
 import { ReactComponent as NightSvg } from 'src/res/icon/night.svg'
@@ -58,6 +63,9 @@ import { ReactComponent as RingingBellSvg } from 'src/res/icon/ringing-bell.svg'
 
 import { ReactComponent as SearchSvg } from 'src/res/icon/search.svg'
 import { ReactComponent as Spinner8LinesSvg } from 'src/res/icon/spinner-8-lines.svg'
+import { ReactComponent as SpinnerCircleQuarterSvg } from 'src/res/icon/spinner-circle-quarter.svg'
+
+import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-triangle-toastify.svg'
 
 
 
@@ -67,7 +75,8 @@ export namespace SimpleSvgIcons {
   
   type SvgProps = React.SVGProps<SVGSVGElement> & { title?: string }
   type CustomIconProps = {
-    mainColor?: string|undefined
+    iconColor?: string|undefined
+    accentColor?: string|undefined
     size?: number|string|undefined
   }
   type SvgElement = {
@@ -80,7 +89,7 @@ export namespace SimpleSvgIcons {
     (props: SimpleSvgIconProps) => {
       let {
         className,
-        mainColor, size,
+        iconColor, accentColor, size,
         SvgComponent,
         ...restProps
       } = props
@@ -91,8 +100,9 @@ export namespace SimpleSvgIcons {
           height: ${size ?? 'var(--icon-size)'};
           max-width: 100%;
           max-height: 100%;
-          fill: ${mainColor ?? 'var(--icon-color, black)'};
-          stroke: ${mainColor ?? 'var(--icon-color, black)'};
+          fill: ${iconColor ?? 'var(--icon-color, black)'};
+          stroke: ${iconColor ?? 'var(--icon-color, black)'};
+          --accent-color: ${accentColor ?? 'var(--accent-color, gray)'}
         `}
         className={classNames(className,'rrainuiIcon')}
         {...restProps}
@@ -168,6 +178,11 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={CheckmarkSvg} />
   )
   
+  export const CheckmarkCircleToastifyIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={CheckmarkCircleToastifySvg} />
+  )
+  
   export const ClearTrashIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ClearTrashSvg} />
@@ -178,9 +193,21 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={ClipSvg} />
   )
   
+  export const CrossIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={CrossSvg} />
+  )
+  
   export const Cross2Ic = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Cross2Svg} />
+  )
+  
+  
+  
+  export const DangerRoundToastifyIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={DangerRoundToastifySvg} />
   )
   
   export const DayIc = ReactMemoTyped(
@@ -260,6 +287,15 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={HomeSvg} />
   )
   
+  
+  
+  export const InfoToastifyIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={InfoToastifySvg} />
+  )
+  
+  
+  
   export const MailIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={MailSvg} />
@@ -300,6 +336,8 @@ export namespace SimpleSvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={RingingBellSvg} />
   )
   
+  
+  
   export const SearchIc = ReactMemoTyped(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={SearchSvg} />
@@ -315,6 +353,24 @@ export namespace SimpleSvgIcons {
     return (props: IconProps) =>
     <SimpleSvgIcon {...props} SvgComponent={Spinner8Lines_} />
   }())
+  
+  export const SpinnerCircleQuarterIc = ReactMemoTyped(function(){
+    const rotation = keyframes`
+      100% { rotate: 1turn }
+    `
+    const SpinnerCircleQuarter_ = styled(SpinnerCircleQuarterSvg)`
+      animation: ${rotation} .65s linear infinite;
+    `
+    return (props: IconProps) =>
+    <SimpleSvgIcon {...props} SvgComponent={SpinnerCircleQuarter_} />
+  }())
+  
+  
+  
+  export const WarnTriangleToastifyIc = ReactMemoTyped(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={WarnTriangleToastifySvg} />
+  )
   
   
   

@@ -1,5 +1,5 @@
 
-console.log('setup app script: make a setup')
+console.log('setup app script: make setup')
 
 
 
@@ -93,14 +93,14 @@ function setHtmlTags(langs){
 
 
 
-
+const langSettingsName = 'langSettings'
+const AppLangs = ['en-US','ru-RU']
 {
   
-  const langSettings = JSON.parse(localStorage.getItem('langSettings'))
+  const langSettings = JSON.parse(localStorage.getItem(langSettingsName))
   if (langSettings?.setting==='manual'){
     setHtmlTags(langSettings.manualSetting)
   } else {
-    const AppLangs = ['en-US','ru-RU']
     
     const getLangs = function(){
       let browserLangs = navigator.languages

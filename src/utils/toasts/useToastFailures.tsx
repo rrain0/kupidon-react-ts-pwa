@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
@@ -6,7 +7,6 @@ import Failures = ValidationCore.Failures
 import Values = ValidationCore.Values
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import { Toasts } from 'src/utils/toasts/Toasts'
-import { css } from '@emotion/react'
 
 
 
@@ -38,12 +38,12 @@ export const useToastFailures = <Vs extends Values>(failures: Failures<Vs>)=>{
         })
         showingIds.add(failToShow.id)
         Toasts.Error.show(failToShow.id,
-          ()=><div css={t=>css`
-          font: 400 14px/129% Roboto;
-          color: var(--toastify-text-color-${t.type satisfies 'light'|'dark'});
-          white-space: break-spaces;
-        `}>
-            Ошибка! {failToShow.msg}
+          <div css={t=>css`
+            font: 400 14px/129% Roboto;
+            color: var(--toastify-text-color-${t.type satisfies 'light'|'dark'});
+            white-space: break-spaces;
+          `}>
+            {failToShow.msg}
           </div>
         )
       }

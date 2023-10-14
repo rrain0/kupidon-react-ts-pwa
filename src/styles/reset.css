@@ -29,6 +29,8 @@ html::-webkit-scrollbar {
 }
 
 
+
+
 /* WARNING! Do not apply any display property to html or body - it behaves strange */
 
 #root {

@@ -13,6 +13,7 @@ export const useUpNodesScrollLock = (
   useLayoutEffect(()=>{
     const el = elementRef.current
     if (el && lock){
+      // Setting overflow on body passes directly to WINDOW
       const x: Element[] = [document.body]
       const y: Element[] = [document.body]
       let up = el.parentElement

@@ -1,4 +1,6 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -8,12 +10,10 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import styled from '@emotion/styled'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import col = EmotionCommon.col
-import { css } from '@emotion/react'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
-import { Navigate, Route, Routes, useMatch, useSearchParams } from 'react-router-dom'
+import { Navigate, useMatch, useSearchParams } from 'react-router-dom'
 import { Themes } from 'src/utils/theme/Themes'
-import React, { useEffect, useRef, useState } from 'react'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
@@ -22,7 +22,6 @@ import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import { ProfileMockData } from './MockData'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import row = EmotionCommon.row
-import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ReactMemoTyped = ReactUtils.ReactMemoTyped;
 import { Pages } from 'src/components/Page/Pages'
@@ -46,6 +45,7 @@ import full = RouteBuilder.full
 import path = RouteBuilder.path
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
+import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 
 
 
@@ -238,9 +238,6 @@ function ProfilePage(){
             <ItemLabel>{uiOptions.aboutMe[0].text}</ItemLabel>
             <Textarea css={TextareaStyle.textareaSmall}/>
           </ItemContainer>
-          
-          
-          <div>text node</div>
           
           
           <ItemContainer>

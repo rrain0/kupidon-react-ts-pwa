@@ -1,38 +1,67 @@
-import { cssTransition, toast, ToastTransition } from 'react-toastify';
-import { ToastContent } from 'react-toastify/dist/types';
+import { cssTransition, toast, ToastTransition } from 'react-toastify'
+import { ToastBody } from 'src/pages/App/ToastifySetup'
+
 
 
 export namespace Toasts {
   
+  
   const loadingId = 'loading'
   export const Loading = {
     id: loadingId,
-    show: (msg: string)=>toast.loading(msg, {
-      toastId: loadingId,
-      transition: slideInDownThenFadeOut,
-    })
+    show: (msg: string, id?: string|undefined)=>toast(
+      props=><ToastBody
+        closeToast={props.closeToast}
+        showClose={false}
+        type='loading'
+      >
+        {msg}
+      </ToastBody>,
+      {
+        toastId: id ?? loadingId,
+        transition: slideInDownThenFadeOut,
+      }
+    )
   }
   
   
-  const successSignInId = 'success'
-  export const SuccessSignIn = {
-    id: successSignInId,
-    show: (msg: string)=>toast.success(msg, {
-      toastId: successSignInId,
-      autoClose: 1500,
-      transition: slideInDownThenFadeOut,
-    })
+  const successId = 'success'
+  export const Success = {
+    id: successId,
+    show: (msg: string, id?: string|undefined)=>toast(
+      props=><ToastBody
+        closeToast={props.closeToast}
+        showClose={false}
+        type='ok'
+      >
+        {msg}
+      </ToastBody>,
+      {
+        toastId: id ?? successId,
+        autoClose: 1500,
+        transition: slideInDownThenFadeOut,
+      }
+    )
   }
   
   
   const errorId = 'error'
   export const Error = {
     id: errorId,
-    show: <TData = unknown>(id: string, content: ToastContent<TData>)=>toast.error(content, {
-      toastId: id,
-      closeButton: true,
-      transition: slideInDownThenFadeOut,
-    })
+    show: (id: string, content: React.ReactNode)=>toast(
+      props=><ToastBody
+        closeToast={props.closeToast}
+        showClose={true}
+        type='danger'
+      >
+        {content}
+      </ToastBody>,
+      {
+        toastId: id,
+        closeButton: false,
+        transition: slideInDownThenFadeOut,
+      }
+    )
   }
   
   

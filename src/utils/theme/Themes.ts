@@ -1,3 +1,4 @@
+import { Colors2 } from 'src/utils/theme/Colors'
 
 
 export namespace Themes {
@@ -5,10 +6,29 @@ export namespace Themes {
   export type ThemeType = 'light'|'dark'
   
   
+  
+  export type ToastTheme = {
+    // bgc[0]: main bgc
+    bgc: string[]
+    
+    // content[0]: text
+    // content[1]: close button
+    // content[2]: close button hovered
+    content: string[]
+    
+    // accent[0]: info icon / progress bar
+    accent: string[]
+    
+    // accentContent[0]: some content on accent color
+    // accentContent: string[]
+  }
+  
+  
   export interface Theme {
     type: ThemeType
     name: string
     
+    // окружение
     ambience: {
       // [0]: contrast bgc / ripple
       // [1]: main bgc
@@ -40,6 +60,15 @@ export namespace Themes {
         bgc: string[]
         text: string[]
       }
+    }
+    
+    toast:{
+      normal: ToastTheme
+      loading: ToastTheme
+      info: ToastTheme
+      ok: ToastTheme
+      warn: ToastTheme
+      danger: ToastTheme
     }
     
     page: {
@@ -136,6 +165,39 @@ export namespace Themes {
         bgc: ['#ef3c34','#ff5047'],
         text: ['#F8F8F8'],
       }
+    },
+    
+    toast:{
+      normal: {
+        bgc: [Colors2.toastLightBgc],
+        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
+        accent: [Colors2.toastNormalBgc],
+      },
+      loading: {
+        bgc: [Colors2.toastLightBgc],
+        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
+        accent: [Colors2.toastLoadingBgc, Colors2.toastLoadingBgcAccent],
+      },
+      info: {
+        bgc: [Colors2.toastLightBgc],
+        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
+        accent: [Colors2.toastInfoBgc],
+      },
+      ok: {
+        bgc: [Colors2.toastLightBgc],
+        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
+        accent: [Colors2.toastOkBgc],
+      },
+      warn: {
+        bgc: [Colors2.toastLightBgc],
+        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
+        accent: [Colors2.toastWarnBgc],
+      },
+      danger: {
+        bgc: [Colors2.toastLightBgc],
+        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
+        accent: [Colors2.toastDangerBgc],
+      },
     },
     
     page: {
@@ -240,6 +302,39 @@ export namespace Themes {
         bgc: ['#ac2c26','#c43730'],
         text: ['#bdbdbd'],
       }
+    },
+    
+    toast:{
+      normal: {
+        bgc: [Colors2.toastDarkBgc],
+        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
+        accent: [Colors2.toastNormalBgc],
+      },
+      loading: {
+        bgc: [Colors2.toastDarkBgc],
+        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
+        accent: [Colors2.toastLoadingBgc, Colors2.toastLoadingBgcAccent],
+      },
+      info: {
+        bgc: [Colors2.toastDarkBgc],
+        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
+        accent: [Colors2.toastInfoBgc],
+      },
+      ok: {
+        bgc: [Colors2.toastDarkBgc],
+        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
+        accent: [Colors2.toastOkBgc],
+      },
+      warn: {
+        bgc: [Colors2.toastDarkBgc],
+        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
+        accent: [Colors2.toastWarnBgc],
+      },
+      danger: {
+        bgc: [Colors2.toastDarkBgc],
+        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
+        accent: [Colors2.toastDangerBgc],
+      },
     },
     
     page: {

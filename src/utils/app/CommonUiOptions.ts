@@ -49,18 +49,46 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'login'>[],
   
   
-  signIn: [
+  doLogin: [
     {
-      value: 'signIn',
+      value: 'doLogin',
       lang: 'en-US',
-      text: 'Sign In',
+      text: 'Login',
     },
     {
-      value: 'signIn',
+      value: 'doLogin',
       lang: 'ru-RU',
       text: 'Войти',
     },
-  ] satisfies UiOption<'signIn'>[],
+  ] satisfies UiOption<'doLogin'>[],
+  
+  
+  loggingIn: [
+    {
+      value: 'loggingIn',
+      lang: 'en-US',
+      text: 'Logging In',
+    },
+    {
+      value: 'loggingIn',
+      lang: 'ru-RU',
+      text: 'Вход',
+    },
+  ] satisfies UiOption<'loggingIn'>[],
+  
+  
+  loginCompleted: [
+    {
+      value: 'loginCompleted',
+      lang: 'en-US',
+      text: 'Login is completed',
+    },
+    {
+      value: 'loginCompleted',
+      lang: 'ru-RU',
+      text: 'Вход выполнен',
+    },
+  ] satisfies UiOption<'loginCompleted'>[],
   
   
   signup: [
@@ -75,6 +103,34 @@ export const CommonUiOptions = {
       text: 'Зарегистрироваться',
     },
   ] satisfies UiOption<'signup'>[],
+  
+  
+  signingUp: [
+    {
+      value: 'signingUp',
+      lang: 'en-US',
+      text: 'Signing up',
+    },
+    {
+      value: 'signingUp',
+      lang: 'ru-RU',
+      text: 'Регистрация',
+    },
+  ] satisfies UiOption<'signingUp'>[],
+  
+  
+  userSuccessfullyRegistered: [
+    {
+      value: 'userSuccessfullyRegistered',
+      lang: 'en-US',
+      text: 'User successfully registered',
+    },
+    {
+      value: 'userSuccessfullyRegistered',
+      lang: 'ru-RU',
+      text: 'Пользователь успешно зарегистрирован',
+    },
+  ] satisfies UiOption<'userSuccessfullyRegistered'>[],
   
   
   signOut: [

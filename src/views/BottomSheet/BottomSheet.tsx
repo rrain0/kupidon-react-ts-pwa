@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { useWindowScrollLock } from 'src/utils/react/useWindowScrollLock'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from 'src/views/BottomSheet/useBottomSheet'
 import React, {

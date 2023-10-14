@@ -1,12 +1,14 @@
+import React, { Suspense } from 'react'
 import { useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import MainPage from './MainPage'
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
+const MainPage = React.lazy(()=>import('./MainPage'))
+
 
 
 function MainRouting(){
@@ -15,7 +17,7 @@ function MainRouting(){
   
   return <Routes>
     { auth && <Route path=''
-      element={<MainPage/>}
+      element={<Suspense><MainPage/></Suspense>}
     /> }
     { !auth && <Route path=''
       element={

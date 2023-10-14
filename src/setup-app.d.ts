@@ -38,6 +38,12 @@ declare global {
     
   }
   
+  
+  const langSettingsName: string
+  type AppLangsType = ['en-US','ru-RU']
+  const AppLangs: AppLangsType
+  
+  
   let beforeInstallPromptEvent: BeforeInstallPromptEvent | undefined
   let onBeforeInstallPromptEvent: ((ev: BeforeInstallPromptEvent|undefined)=>void) | undefined
   const promptInstall: ()=>Promise<InstallationUserChoice|undefined>

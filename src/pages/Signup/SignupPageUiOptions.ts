@@ -124,6 +124,10 @@ export const SignupPageUiOptions = {
   signup: CommonUiOptions.signup,
   
   
+  signingUp: CommonUiOptions.signingUp,
+  
+  
+  userSuccessfullyRegistered: CommonUiOptions.userSuccessfullyRegistered,
   
   
 } satisfies UiOptionsContainer

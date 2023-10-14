@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
@@ -56,6 +55,7 @@ import GearIc = SimpleSvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
 import params = RouteBuilder.params
 import full = RouteBuilder.full
+import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 
 
 
@@ -99,6 +99,8 @@ const SignupPage = () => {
   const [signupFailure, setSignupFailure] = useState(SignupDefaults.failures)
   const [signupForm, setSignupForm] = useState([SignupDefaults.values,SignupDefaults.values] as const) // [now,prev]
   
+  
+  const uiOptions = useUiOptionsContainer(SignupPageUiOptions)
   
   
   const [signupResponse, setSignupResponse] = useState(
@@ -165,11 +167,11 @@ const SignupPage = () => {
   useFailureDelay(signupFailure,setSignupFailure)
   
   useEffect(()=>{
-    if (signupLoading) Toasts.Loading.show('Регистрация...')
+    if (signupLoading) Toasts.Loading.show(uiOptions.signingUp[0].text)
     else toast.dismiss(Toasts.Loading.id)
     
     if (signupSuccess) {
-      Toasts.SuccessSignIn.show('Пользователь успешно зарегистрирован')
+      Toasts.Success.show(uiOptions.userSuccessfullyRegistered[0].text)
       navigate(returnPath ?? RootRoute.main[full]())
     }
   },[signupLoading, signupSuccess, returnPath])
@@ -230,9 +232,6 @@ const SignupPage = () => {
     containerIsWindow: true,
     contentRef: pageRef,
   })
-  
-  
-  const uiOptions = useUiOptionsContainer(SignupPageUiOptions)
   
   return <>
     <Page
@@ -382,6 +381,7 @@ const SignupPage = () => {
       </BottomButtonBar>
       
     </Page>
+    
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
     

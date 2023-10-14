@@ -9,7 +9,6 @@ import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { Setter } from 'src/utils/common/TypeUtils'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { Themes } from 'src/utils/theme/Themes'
-import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -22,6 +21,7 @@ import row = EmotionCommon.row
 import Spinner8LinesIc = SimpleSvgIcons.Spinner8LinesIc
 import Theme = Themes.Theme
 import ClearTrashIc = SimpleSvgIcons.ClearTrashIc
+import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 
 
 

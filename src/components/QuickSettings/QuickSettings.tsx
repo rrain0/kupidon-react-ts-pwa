@@ -3,13 +3,11 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
-import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -29,6 +27,8 @@ import DayIc = SimpleSvgIcons.DayIc
 import DayNightIc = SimpleSvgIcons.DayNightIc
 import NightIc = SimpleSvgIcons.NightIc
 import AddModuleIc = SimpleSvgIcons.AddModuleIc
+import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
+import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 
 
 
@@ -117,45 +117,45 @@ const QuickSettings = (props: SettingsProps)=>{
         
         {
           uiOptions.themeOptions
-            .map(opt=><RadioInput
+            .map(opt => <RadioInput
               css={RadioInputStyle.radio}
-              childrenPosition='start'
-              role='option'
-              aria-selected={function(){
-                if (themeSettings.setting==='system' && opt.value==='system')
+              childrenPosition="start"
+              role="option"
+              aria-selected={function () {
+                if (themeSettings.setting === 'system' && opt.value === 'system')
                   return true
-                if (themeSettings.setting!=='system' && opt.value===themeSettings.manualSetting)
+                if (themeSettings.setting !== 'system' && opt.value === themeSettings.manualSetting)
                   return true
                 return false
               }()}
-              checked={function(){
-                if (themeSettings.setting==='system' && opt.value==='system')
+              checked={function () {
+                if (themeSettings.setting === 'system' && opt.value === 'system')
                   return true
-                if (themeSettings.setting!=='system' && opt.value===themeSettings.manualSetting)
+                if (themeSettings.setting !== 'system' && opt.value === themeSettings.manualSetting)
                   return true
                 return false
               }()}
               value={opt.value}
               key={opt.value}
-              onChange={ev=>{
-                setThemeSettings(s=>({
+              onChange={ev => {
+                setThemeSettings(s => ({
                   ...s,
-                  setting: opt.value==='system' ? 'system' : 'manual',
-                  manualSetting: opt.value==='system' ? s.manualSetting : opt.value,
+                  setting: opt.value === 'system' ? 'system' : 'manual',
+                  manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
                 }))
               }}
-              onClick={ev=>{
-                setThemeSettings(s=>({
+              onClick={ev => {
+                setThemeSettings(s => ({
                   ...s,
-                  setting: opt.value==='system' ? 'system' : 'manual',
-                  manualSetting: opt.value==='system' ? s.manualSetting : opt.value,
+                  setting: opt.value === 'system' ? 'system' : 'manual',
+                  manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
                 }))
               }}
             >
               <OptionContainer>
-                {opt.value==='system' && <DayNightIc css={icon} />}
-                {opt.value==='light' && <DayIc css={icon} />}
-                {opt.value==='dark' && <NightIc css={icon} />}
+                {opt.value === 'system' && <DayNightIc css={icon}/>}
+                {opt.value === 'light' && <DayIc css={icon}/>}
+                {opt.value === 'dark' && <NightIc css={icon}/>}
                 {opt.text}
               </OptionContainer>
             </RadioInput>)
@@ -172,28 +172,28 @@ const QuickSettings = (props: SettingsProps)=>{
         
         {
           uiOptions.languageOptions
-            .map(opt=><RadioInput
+            .map(opt => <RadioInput
               css={RadioInputStyle.radio}
-              childrenPosition='start'
-              role='option'
-              aria-selected={function(){
-                if (langSettings.setting==='system' && opt.value==='system')
+              childrenPosition="start"
+              role="option"
+              aria-selected={function () {
+                if (langSettings.setting === 'system' && opt.value === 'system')
                   return true
-                if (langSettings.setting!=='system' && opt.value===langSettings.manualSetting?.[0])
+                if (langSettings.setting !== 'system' && opt.value === langSettings.manualSetting?.[0])
                   return true
                 return false
               }()}
-              checked={function(){
-                if (langSettings.setting==='system' && opt.value==='system')
+              checked={function () {
+                if (langSettings.setting === 'system' && opt.value === 'system')
                   return true
-                if (langSettings.setting!=='system' && opt.value===langSettings.manualSetting?.[0])
+                if (langSettings.setting !== 'system' && opt.value === langSettings.manualSetting?.[0])
                   return true
                 return false
               }()}
               value={opt.value}
               key={opt.value}
-              onChange={ev=>{
-                if (opt.value==='system') setLangSettings({
+              onChange={ev => {
+                if (opt.value === 'system') setLangSettings({
                   ...langSettings,
                   setting: 'system',
                 })
@@ -204,8 +204,8 @@ const QuickSettings = (props: SettingsProps)=>{
                   })
                 }
               }}
-              onClick={ev=>{
-                if (opt.value==='system') setLangSettings({
+              onClick={ev => {
+                if (opt.value === 'system') setLangSettings({
                   ...langSettings,
                   setting: 'system',
                 })
@@ -218,36 +218,35 @@ const QuickSettings = (props: SettingsProps)=>{
               }}
             >
               <OptionContainer>
-                {opt.value!=='system' && <Flag src={CountryFlag[opt.value]}/>}
-                {opt.value==='system' && <BrowserIc css={icon} />}
+                {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
+                {opt.value === 'system' && <BrowserIc css={icon}/>}
                 {opt.text}
               </OptionContainer>
             </RadioInput>)
         }
         
         
-        
         <RoundButtonContainer>
           
-          { app.canInstall && <Button css={[ButtonStyle.roundedNormal, roundButton]}
-            onClick={async()=>{
+          {app.canInstall && <Button css={[ButtonStyle.roundedNormal, roundButton]}
+            onClick={async () => {
               const installed = await promptInstall()
               console.log('installed', installed)
             }}
           >
             <AddModuleIc css={icon}/>
             {uiOptions.installApp[0].text}
-          </Button> }
+          </Button>}
           
           <Button css={ButtonStyle.roundedDanger}
-            onClick={()=>setClearSite(true)}
+            onClick={() => setClearSite(true)}
           >
             {uiOptions.clearAppData[0].text}
           </Button>
-          
+        
         </RoundButtonContainer>
       
-        
+      
       </div>
     </BottomSheetBasic>}
     

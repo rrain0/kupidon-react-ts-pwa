@@ -5,7 +5,6 @@ import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -15,6 +14,7 @@ import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
+import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 
 
 
@@ -45,6 +45,14 @@ const TestPage = () => {
           <Button css={ButtonStyle.bigRectPrimary}>Move to another view</Button>
         </Link>
         
+        
+        {/* <button
+          onClick={()=>toast(<ToastBody type={'danger'}>TOASttt</ToastBody>)}
+        >
+          toast
+        </button> */}
+        
+        
         {/*<div
           css={css`
             min-height: 2000px;
@@ -67,20 +75,7 @@ const TestPage = () => {
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
     
-    {/*
-    <div
-      css={css`
-        position: fixed;
-        left: 0; right: 0; bottom: env(safe-area-inset-bottom);
-        background: blue;
-        height: 2px;
-        //padding-bottom: env(safe-area-inset-bottom);
-      `}
-    >
     
-    </div>
-     */}
-  
   </>
 }
 export default TestPage

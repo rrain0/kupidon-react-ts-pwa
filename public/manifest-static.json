@@ -2,6 +2,7 @@
   // !!! How new manifest applies:
   // https://web.dev/manifest-updates/
   
+  "lang": "en-US",
   // "name" or "short_name" REQUIRED
   "name": "Kupidon",
   "short_name": "Kupidon",
@@ -23,9 +24,8 @@
   //"dark_theme_color": "#282c34",
   "theme_color": "#282c34",
   
-  // Window or viewport background - before your app's stylesheets have loaded.
   // Splashscreen bgc color.
-  // It will be overriden by <meta name="background-color" ... />.
+  // NOT Window or Viewport background
   //"background_color": "#f0f0f0",
   //"dark_background_color": "#282c34",
   "background_color": "#282c34",
