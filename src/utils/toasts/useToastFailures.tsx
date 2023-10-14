@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
 import Values = ValidationCore.Values
@@ -37,15 +38,7 @@ export const useToastFailures = <Vs extends Values>(failures: Failures<Vs>)=>{
           toast.dismiss(si)
         })
         showingIds.add(failToShow.id)
-        Toasts.Error.show(failToShow.id,
-          <div css={t=>css`
-            font: 400 14px/129% Roboto;
-            color: var(--toastify-text-color-${t.type satisfies 'light'|'dark'});
-            white-space: break-spaces;
-          `}>
-            {failToShow.msg}
-          </div>
-        )
+        Toasts.Error.show(failToShow.id,failToShow.msg)
       }
     }
     

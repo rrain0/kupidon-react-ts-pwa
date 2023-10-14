@@ -16,6 +16,7 @@ import CheckmarkCircleToastifyIc = SimpleSvgIcons.CheckmarkCircleToastifyIc
 import DangerRoundToastifyIc = SimpleSvgIcons.DangerRoundToastifyIc
 import InfoToastifyIc = SimpleSvgIcons.InfoToastifyIc
 import WarnTriangleToastifyIc = SimpleSvgIcons.WarnTriangleToastifyIc
+import textSmall2 = EmotionCommon.textSmall2
 
 
 
@@ -48,7 +49,7 @@ const ToastifySetup = React.memo(()=>{
                 margin: 0;
                 padding: 0;
                 
-                div:first-of-type {
+                >div:first-of-type {
                   display: contents;
                 }
                 
@@ -174,6 +175,8 @@ const Content = styled.div`
   ${row};
   flex: 1;
   color: ${p=>p.theme.toast.normal.content[0]};
+  white-space: break-spaces;
+  ${textSmall2};
 `
 
 const CloseButton = styled.button`
