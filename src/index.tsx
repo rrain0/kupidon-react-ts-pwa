@@ -42,7 +42,7 @@ serviceWorkerRegistration.register()
 
 
 // test message to service worker
-navigator.serviceWorker.ready.then(swRegistration=>{
+/* navigator.serviceWorker.ready.then(swRegistration=>{
   swRegistration.active?.postMessage({
     type: 'console.log',
     data: {
@@ -50,7 +50,7 @@ navigator.serviceWorker.ready.then(swRegistration=>{
       isTest: true,
     },
   })
-})
+}) */
 
 
 

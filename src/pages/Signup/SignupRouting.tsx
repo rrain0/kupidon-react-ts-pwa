@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-const SignupPage = React.lazy(()=>import('./SignupPage'))
+import SignupPage from './SignupPage'
 
 
 
@@ -13,7 +13,7 @@ function SignupRouting(){
   
   return <Routes>
     <Route path=''
-      element={<Suspense><SignupPage/></Suspense>}
+      element={<SignupPage/>}
     />
     <Route path='*'
       element={

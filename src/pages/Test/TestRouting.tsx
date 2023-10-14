@@ -1,17 +1,16 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-const TestPage = React.lazy(()=>import('./TestPage'))
-const ScrollbarTestPage = React.lazy(()=>import('./ScrollbarTestPage'))
-const ResizeObserverTestPage = React.lazy(()=>import('./ResizeObserverTestPage'))
-const BottomSheetTestPage = React.lazy(()=>import('./BottomSheetTestPage'))
-const MoveElementToAnotherView = React.lazy(()=>import(
-  'src/pages/Test/MoveElementToAnotherView'
-))
+import TestPage from './TestPage'
+import ScrollbarTestPage from './ScrollbarTestPage'
+import ResizeObserverTestPage from './ResizeObserverTestPage'
+import BottomSheetTestPage from './BottomSheetTestPage'
+import MoveElementToAnotherView from 'src/pages/Test/MoveElementToAnotherView'
+
 
 
 
@@ -20,19 +19,19 @@ function TestRouting(){
   
   return <Routes>
     <Route path=''
-      element={<Suspense><TestPage/></Suspense>}
+      element={<TestPage/>}
     />
     <Route path={RootRoute.test.scrollbar[path]}
-      element={<Suspense><ScrollbarTestPage/></Suspense>}
+      element={<ScrollbarTestPage/>}
     />
     <Route path={RootRoute.test.resizeObserver[path]}
-      element={<Suspense><ResizeObserverTestPage/></Suspense>}
+      element={<ResizeObserverTestPage/>}
     />
     <Route path={RootRoute.test.bottomSheet[path]}
-      element={<Suspense><BottomSheetTestPage/></Suspense>}
+      element={<BottomSheetTestPage/>}
     />
     <Route path={RootRoute.test.moveElementToAnotherView[path]}
-      element={<Suspense><MoveElementToAnotherView/></Suspense>}
+      element={<MoveElementToAnotherView/>}
     />
     
     <Route path='*'

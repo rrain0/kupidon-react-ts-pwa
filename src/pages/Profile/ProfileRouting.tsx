@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
@@ -11,7 +11,7 @@ import path = RouteBuilder.path
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import use = RouteBuilder.use
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-const ProfilePage = React.lazy(()=>import('./ProfilePage'))
+import ProfilePage from './ProfilePage'
 
 
 
@@ -30,7 +30,7 @@ const ProfileIdRouting = ReactMemoTyped(()=>{
   
   return <Routes>
     <Route path={RootRoute.profile.id[path]+'/*'}
-      element={<Suspense><ProfileIdUserIdRouting/></Suspense>}
+      element={<ProfileIdUserIdRouting/>}
     />
     <Route path='*'
       element={<Navigate to={RootRoute.profile.id[fullAnySearchParams](searchParams)}
@@ -56,7 +56,7 @@ const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
   
   return <Routes>
     <Route path={RootRoute.profile.id.userId[path]+'/*'}
-      element={<Suspense><ProfilePage/></Suspense>}
+      element={<ProfilePage/>}
     />
     { authId && <Route path=''
       element={

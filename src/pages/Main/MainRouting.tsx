@@ -7,7 +7,7 @@ import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-const MainPage = React.lazy(()=>import('./MainPage'))
+import MainPage from './MainPage'
 
 
 
@@ -17,7 +17,7 @@ function MainRouting(){
   
   return <Routes>
     { auth && <Route path=''
-      element={<Suspense><MainPage/></Suspense>}
+      element={<MainPage/>}
     /> }
     { !auth && <Route path=''
       element={

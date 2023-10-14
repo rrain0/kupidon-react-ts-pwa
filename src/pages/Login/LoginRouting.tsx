@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import RootRoute = AppRoutes.RootRoute
-const LoginPage = React.lazy(()=>import('./LoginPage'))
+import LoginPage from './LoginPage'
 
 
 
@@ -13,7 +13,7 @@ function LoginRouting(){
   
   return <Routes>
     <Route path=''
-      element={<Suspense><LoginPage/></Suspense>}
+      element={<LoginPage/>}
     />
     <Route path='*'
       element={
