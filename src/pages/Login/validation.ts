@@ -1,3 +1,4 @@
+import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
@@ -65,32 +66,45 @@ export namespace LoginPageValidation {
     
     [['fromServer'],([v])=>{
       if (v?.error.code==='NO_USER') return new PartialFailureData({
-        code: v,
+        code: v.error.code,
         msg: 'Не найдено пользователя с таким логином-паролем',
-        errorFields: ['login','pwd'],
+        errorFields: ['fromServer','login','pwd'],
+        canSubmit: true,
+      })
+    }],
+    [['fromServer'],([v])=>{
+      if (v?.error.code==='connection-error') return new PartialFailureData({
+        code: v.error.code,
+        msg: 'Ошибка соединения с сервером, возможно что-то с интернетом',
+        errorFields: ['fromServer'],
         canSubmit: true,
       })
     }],
     
-    [['fromServer'],([v])=>{
-      if (v?.error.code==='connection-error') return new PartialFailureData({
-        code: v,
-        msg: 'Ошибка соединения с сервером, возможно что-то с интернетом',
-        errorFields: [],
-        canSubmit: true,
-      })
-    }],
     
     [['fromServer'],([v])=>{
       if (v) return new PartialFailureData({
-        code: v,
+        code: 'unknown-error',
         msg: 'Неизвестная ошибка',
-        errorFields: [],
+        errorFields: ['fromServer'],
         canSubmit: true,
+        extra: v,
       })
     }],
     
   ]
   
   
+}
+
+
+
+
+export const mapFailureCodeToUiOption = {
+  'login-required': LoginPageUiOptions.emailNotEntered,
+  'login-incorrect': LoginPageUiOptions.emailFormatIsIncorrect,
+  'pwd-required': LoginPageUiOptions.pwdNotEntered,
+  'NO_USER': LoginPageUiOptions.noUserWithSuchLoginPwd,
+  'connection-error': LoginPageUiOptions.connectionError,
+  'unknown-error': LoginPageUiOptions.unknownError,
 }

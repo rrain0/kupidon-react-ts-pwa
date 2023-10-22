@@ -45,25 +45,26 @@ export namespace ValidationComponents {
     } = props
     
     const value = values[0][fieldName] as any
-    const failure = useMemo(
-      ()=>failures?.find(f=>f.errorFields.includes(fieldName)),
-      [failures, fieldName]
-    )
     const [highlight, setHighlight] = useState(false)
     useEffect(()=>{
       setHighlight(false)
       let stale = false
-      if (failure){
-        const usedValue = failure.usedValues[failure.usedFields.findIndex(f=>f===fieldName)]
-        if (failure.highlight && usedValue===value){
-          if (!failure.isDelayed) setHighlight(true)
-          else failure.awaitDelay.then(()=>{
-            !stale && setHighlight(true)
+      
+      const fs = failures
+        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      let delay = Number.POSITIVE_INFINITY
+      fs.forEach(f=>{
+        if (f.delayedFor < delay){
+          delay = f.delayedFor
+          if (!f.isDelayed) setHighlight(true)
+          else f.awaitDelay.then(()=>{
+            if (!stale) setHighlight(true)
           })
         }
-      }
+      })
+      
       return ()=>{stale=true}
-    },[failure, fieldName, value])
+    },[failures, fieldName, value])
     
     
     const Input = React.cloneElement(PassedInput, {
@@ -107,26 +108,28 @@ export namespace ValidationComponents {
       children: PassedInput,
     } = props
     
+    
     const value = values[0][fieldName] as any
-    const failure = useMemo(
-      ()=>failures?.find(f=>f.errorFields.includes(fieldName)),
-      [failures, fieldName]
-    )
     const [highlight, setHighlight] = useState(false)
     useEffect(()=>{
       setHighlight(false)
       let stale = false
-      if (failure){
-        const usedValue = failure.usedValues[failure.usedFields.findIndex(f=>f===fieldName)]
-        if (failure.highlight && usedValue===value){
-          if (!failure.isDelayed) setHighlight(true)
-          else failure.awaitDelay.then(()=>{
-            !stale && setHighlight(true)
+      
+      const fs = failures
+        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      let delay = Number.POSITIVE_INFINITY
+      fs.forEach(f=>{
+        if (f.delayedFor < delay){
+          delay = f.delayedFor
+          if (!f.isDelayed) setHighlight(true)
+          else f.awaitDelay.then(()=>{
+            if (!stale) setHighlight(true)
           })
         }
-      }
+      })
+      
       return ()=>{stale=true}
-    },[failure, fieldName, value])
+    },[failures, fieldName, value])
     
     
     const Input = React.cloneElement(PassedInput, {

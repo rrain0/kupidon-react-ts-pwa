@@ -55,9 +55,6 @@ export namespace ValidationValidate {
     //config.mode ??= 'all-errors'
     //config.type ??= 'auto'
     
-    //console.log('validate: prevValues',prevValues)
-    //console.log('validate: values',values)
-    //console.log('validate: prevFailures',prevFailures)
     
     
     const fields = ObjectKeys<Vs>(values)
@@ -71,9 +68,7 @@ export namespace ValidationValidate {
     )
     const newFails: Failures<Vs> = []
     
-    //console.log('validate: changedFields',changedFields)
-    console.log('VALIDATE: RETAINED_FAILS',retainedFails)
-    //console.log('validate: errorFields',errorFields)
+    //console.log('VALIDATE: RETAINED_FAILS',retainedFails)
     
     validators.forEach(([usedFields,vd])=>{
       if (

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { toast, ToastItem } from 'react-toastify'
+import { OnChangeCallback } from 'react-toastify/dist/core/eventManager'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastBody, ToastType } from 'src/utils/toasts/ToastifySetup'
@@ -27,10 +28,10 @@ export const useToasts = (props?: UseToastsProps)=>{
       const show = data.filter(d=>!prevData.includes(d))
       const hide = prevData.filter(d=>!data.includes(d))
       
-      console.log(
+      /* console.log(
         'USE_TOASTS: PREV_DATA',prevData,'\n',
         'USE_TOASTS: DATA',data,
-      )
+      ) */
       
       hide.forEach(d=>{
         if (d instanceof ToastMsgData){
@@ -50,33 +51,12 @@ export const useToasts = (props?: UseToastsProps)=>{
   useEffect(
     ()=>{
       onData(data)
-      
-      /* const unsubscribe = toast.onChange(toast=>{
-        // console.log('toast',toast)
-        // const id = toast.id
-        // if (typeof id === 'string' && id.startsWith(scope)){
-        //   if(toast.status==='removed'){
-        //     data.forEach(d=>{
-        //       if (d instanceof ToastMsgData && id===scope+d.id) d.onClose?.()
-        //     })
-        //   }
-        // }
-        if(toast.status==='removed'){
-          const d = toast.data
-          if (d instanceof ToastMsgData){
-            d.runCloseCallback && d.onClose?.()
-          }
-        }
-      })
-      
-      return ()=>unsubscribe() */
     },
     data
   )
   
   
   const closeOnUnmount = useEffectEvent(()=>{
-    console.log('unmount prev data',prevData)
     prevData.forEach(d=>{
       if (d instanceof ToastMsgData){
         if(d.closeOnUnmount){
@@ -123,11 +103,14 @@ export class ToastMsgData {
   closeOnUnmount: boolean
   
   id: string|number|undefined = undefined
-  //runCloseCallback = true
-  onChange(toast: ToastItem){
+  runCloseCallback = true
+  onChange: OnChangeCallback = (toast: ToastItem)=>{
     if(toast.status==='removed' && toast.data===this){
       this.unsubscribeOnChange?.()
-      /* this.runCloseCallback && */ this.onClose?.()
+      if (this.runCloseCallback){
+        console.log('toast removed',this)
+        this.onClose?.()
+      }
     }
   }
   unsubscribeOnChange: (()=>void) | undefined = undefined
@@ -153,7 +136,8 @@ export class ToastMsgData {
   }
   hide(){
     if (this.id!==undefined) {
-      //this.runCloseCallback = false
+      this.runCloseCallback = false
+      // it is not working BEFORE toast.dismiss
       this.unsubscribeOnChange?.()
       toast.dismiss(this.id)
     }

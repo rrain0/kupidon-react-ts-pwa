@@ -1,5 +1,5 @@
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
+import { UiOptionsContainer } from 'src/utils/lang/UiOption'
 
 
 
@@ -29,6 +29,11 @@ export const LoginPageUiOptions = {
   
   
   emailNotEntered: CommonUiOptions.emailNotEntered,
+  emailFormatIsIncorrect: CommonUiOptions.emailFormatIsIncorrect,
+  pwdNotEntered: CommonUiOptions.pwdNotEntered,
+  noUserWithSuchLoginPwd: CommonUiOptions.noUserWithSuchLoginPwd,
+  connectionError: CommonUiOptions.connectionError,
+  unknownError: CommonUiOptions.unknownError,
   
   
 } satisfies UiOptionsContainer

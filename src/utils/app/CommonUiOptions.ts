@@ -298,4 +298,74 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'emailNotEntered'>[],
   
   
+  emailFormatIsIncorrect: [
+    {
+      value: 'emailFormatIsIncorrect',
+      lang: 'en-US',
+      text: 'Email format is incorrect',
+    },
+    {
+      value: 'emailFormatIsIncorrect',
+      lang: 'ru-RU',
+      text: 'Некорректный формат email',
+    },
+  ] satisfies UiOption<'emailFormatIsIncorrect'>[],
+  
+  
+  pwdNotEntered: [
+    {
+      value: 'pwdNotEntered',
+      lang: 'en-US',
+      text: 'Password not entered',
+    },
+    {
+      value: 'pwdNotEntered',
+      lang: 'ru-RU',
+      text: 'Пароль не введён',
+    },
+  ] satisfies UiOption<'pwdNotEntered'>[],
+  
+  
+  noUserWithSuchLoginPwd: [
+    {
+      value: 'noUserWithSuchLoginPwd',
+      lang: 'en-US',
+      text: 'There is no user with such login-password',
+    },
+    {
+      value: 'noUserWithSuchLoginPwd',
+      lang: 'ru-RU',
+      text: 'Не найдено пользователя с таким логином-паролем',
+    },
+  ] satisfies UiOption<'noUserWithSuchLoginPwd'>[],
+  
+  
+  connectionError: [
+    {
+      value: 'connectionError',
+      lang: 'en-US',
+      text: 'Error connecting to the server, perhaps something with the Internet',
+    },
+    {
+      value: 'connectionError',
+      lang: 'ru-RU',
+      text: 'Ошибка соединения с сервером, возможно что-то с интернетом',
+    },
+  ] satisfies UiOption<'connectionError'>[],
+  
+  
+  unknownError: [
+    {
+      value: 'unknownError',
+      lang: 'en-US',
+      text: 'Unknown error',
+    },
+    {
+      value: 'unknownError',
+      lang: 'ru-RU',
+      text: 'Неизвестная ошибка',
+    },
+  ] satisfies UiOption<'unknownError'>[],
+  
+  
 } satisfies Record<string, UiOption<any>[]>

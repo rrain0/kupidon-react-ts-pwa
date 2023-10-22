@@ -31,7 +31,7 @@ import { Themes } from 'src/utils/theme/Themes'
 import { toast } from 'react-toastify'
 import { Toasts } from 'src/utils/toasts/Toasts'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
-import { LoginPageValidation } from './validation'
+import { LoginPageValidation, mapFailureCodeToUiOption } from './validation'
 import FormValues = LoginPageValidation.FormValues
 import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
@@ -104,9 +104,9 @@ const LoginPage = () => {
   )
   
   
-  useEffect(()=>{
+  /* useEffect(()=>{
     console.log('LOGIN_FAILURES',loginFailures)
-  },[loginFailures])
+  },[loginFailures]) */
   
   
   
@@ -121,6 +121,7 @@ const LoginPage = () => {
   useEffect(()=>{
     if (loginResponse){
       const { success:s, error:e, userValues } = loginResponse
+      //console.log('s',s,'e',e)
       if (s){
         setAuth(s.data)
         setLoginSuccess(true)
@@ -134,20 +135,21 @@ const LoginPage = () => {
                   values: userValues,
                   error: {
                     code: 'connection-error',
+                    msg: 'Connection error',
                   }
                 }
               },
               loginForm[0]
             ]))
           } else if (e.response?.status===400){
-            const err = e.response as LoginRespE
+            const response = e.response as LoginRespE
             setLoginForm(loginForm=>([
               { ...loginForm[0],
                 fromServer: {
                   values: userValues,
                   error: {
-                    code: err.data.code,
-                    msg: err.data.msg,
+                    code: response.data.code,
+                    msg: response.data.msg,
                   }
                 }
               },
@@ -161,6 +163,7 @@ const LoginPage = () => {
                 values: userValues,
                 error: {
                   code: 'unknown',
+                  msg: 'Unknown error',
                 }
               }
             },
@@ -177,31 +180,11 @@ const LoginPage = () => {
   
   
   
-  // todo extract
-  /* toast.onChange(toast=>{
-    const id = toast.id
-    if (typeof id === 'string' && id.startsWith('failure') && toast.status==='removed'){
-      //console.log('closed id',id)
-      setLoginFailures(updateFailures(
-        loginFailures, { failureIds: [id] }, { notify: false }
-      ))
-    }
-  }) */
-  
-  
-  
   
   const [userFailure, setUserFailure] =
     useState(undefined as undefined|Failure<FormValues>)
   const [serverFailure, setServerFailure] =
     useState(undefined as undefined|Failure<FormValues>)
-  
-  /* useEffect(()=>{
-    console.log('userFailure',userFailure)
-  },[userFailure])
-  useEffect(()=>{
-    console.log('serverFailure',serverFailure)
-  },[serverFailure]) */
   
   
   useEffect(()=>{
@@ -209,27 +192,33 @@ const LoginPage = () => {
     setServerFailure(undefined)
     let stale = false
     
-    const userFailure = loginFailures
-      .filter(f=>!f.canSubmit && f.notify)
-      .sort((a,b)=>a.delayedFor-b.delayedFor)[0]
-    console.log(
-      'userFailure',userFailure,'\n',
-      'loginFailures',loginFailures,
-    )
-    if (userFailure){
-      if (!userFailure.isDelayed) setUserFailure(userFailure)
-      else userFailure.awaitDelay.then(()=>{
-        if (!stale) setUserFailure(userFailure)
+    {
+      const userFailures = loginFailures
+        .filter(f=>!f.canSubmit && f.notify)
+      let delay = Number.POSITIVE_INFINITY
+      userFailures.forEach(f=>{
+        if (f.delayedFor < delay){
+          delay = f.delayedFor
+          if (!f.isDelayed) setUserFailure(f)
+          else f.awaitDelay.then(()=>{
+            if (!stale) setUserFailure(f)
+          })
+        }
       })
     }
     
-    const serverFailure = loginFailures
-      .filter(f=>f.canSubmit && f.notify)
-      .sort((a,b)=>a.delayedFor-b.delayedFor)[0]
-    if (serverFailure){
-      if (!serverFailure.isDelayed) setServerFailure(serverFailure)
-      else serverFailure.awaitDelay.then(()=>{
-        if (!stale) setServerFailure(serverFailure)
+    {
+      const serverFailures = loginFailures
+        .filter(f=>f.canSubmit && f.notify)
+      let delay = Number.POSITIVE_INFINITY
+      serverFailures.forEach(f=>{
+        if (f.delayedFor < delay){
+          delay = f.delayedFor
+          if (!f.isDelayed) setServerFailure(f)
+          else f.awaitDelay.then(()=>{
+            if (!stale) setServerFailure(f)
+          })
+        }
       })
     }
     
@@ -241,7 +230,10 @@ const LoginPage = () => {
       if (userFailure) return new ToastMsgData({
         //id: userFailure.id,
         type: 'danger',
-        msg: <ToastMsg defaultText={userFailure.msg}/>,
+        msg: <ToastMsg
+          uiOption={mapFailureCodeToUiOption[userFailure.code]}
+          defaultText={userFailure.msg}
+        />,
         closeOnUnmount: true,
         showCloseButton: true,
         dragToClose: true,
@@ -262,7 +254,10 @@ const LoginPage = () => {
       if (serverFailure) return new ToastMsgData({
         //id: serverFailure.id,
         type: 'danger',
-        msg: <ToastMsg defaultText={serverFailure.msg}/>,
+        msg: <ToastMsg
+          uiOption={mapFailureCodeToUiOption[serverFailure.code]}
+          defaultText={serverFailure.msg}
+        />,
         closeOnUnmount: true,
         showCloseButton: true,
         dragToClose: true,
@@ -301,31 +296,6 @@ const LoginPage = () => {
     ],
   })
   
-  /*
-  useEffect(()=>{
-    if (loginLoading) {
-      Toasts.Loading.show(<Msg uiOption={LoginPageUiOptions.loggingIn}/>)
-    }
-    else toast.dismiss(Toasts.Loading.id)
-    
-    if (loginSuccess) {
-      Toasts.Success.show(<Msg uiOption={LoginPageUiOptions.loginCompleted}/>)
-      navigate(returnPath ?? RootRoute.main[full]())
-    }
-  },[loginLoading, loginSuccess, navigate, returnPath])
-   */
-  
-  
-  
-  
-  
-  
-  
-  
-  //useToastFailures(loginFailures)
-  
-  
-  
   
   
   // It needs because of Chrome on Android: when browser pastes login/pwd,
@@ -356,14 +326,14 @@ const LoginPage = () => {
   const trySubmit = useCallback(
     ()=>{
       setLoginSuccess(false)
+      setServerFailure(undefined)
       
-      const updateIds = loginFailures
+      const updateThem = loginFailures
         .filter(f=>!f.canSubmit)
         .filter(f=>!f.highlight||!f.notify||f.isDelayed)
-        .map(f=>f.id)
       const newFails = updateFailures(
         loginFailures,
-        { failureIds: updateIds },
+        { failures: updateThem },
         { highlight: true, notify: true, delay: 0 }
       )
       setLoginFailures(newFails)
@@ -382,7 +352,7 @@ const LoginPage = () => {
         trySubmit()
       }
     },
-    [doSubmit]
+    [doSubmit, trySubmit]
   )
   
   
@@ -518,5 +488,4 @@ const formHeader = (theme: Themes.Theme) => css`
   color: ${theme.page.text[0]};
   align-self: center;
 `
-
 

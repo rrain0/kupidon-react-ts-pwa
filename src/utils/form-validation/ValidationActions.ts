@@ -28,12 +28,11 @@ export namespace ValidationActions {
     const newFails = failures.map(fail=>{
       if (
           (
-            failures?.some(f=>f===fail)
+            objects.failures?.some(f=>f===fail)
             || objects.failureIds==='all'
             || objects.failureIds?.some(id=>id===fail.id)
             || objects.errorFields?.some(f=>fail.errorFields.includes(f))
           )
-          && ObjectEntries(update).some(([prop,val]) => fail[prop]!==val)
       ) {
         changed++
         return fail.copy(update)
@@ -42,7 +41,7 @@ export namespace ValidationActions {
     })
     
     failures = changed ? newFails : failures
-    //console.log('updated failures:', changed, failures)
+    //console.log('UPDATED_FAILURES:', changed, failures)
     
     return failures
   }
