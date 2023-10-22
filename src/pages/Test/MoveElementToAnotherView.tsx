@@ -42,7 +42,7 @@ const MoveElementToAnotherView = ()=>{
         createPortal(
           <Rectange/>,
           position===0 ? container1.current! : container2.current!
-        )
+        ) as React.ReactNode
       }
     
     </SimpleContent>

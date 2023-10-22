@@ -284,4 +284,18 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'no'>[],
   
   
+  emailNotEntered: [
+    {
+      value: 'emailNotEntered',
+      lang: 'en-US',
+      text: 'Email is not entered',
+    },
+    {
+      value: 'emailNotEntered',
+      lang: 'ru-RU',
+      text: 'Email не введён',
+    },
+  ] satisfies UiOption<'emailNotEntered'>[],
+  
+  
 } satisfies Record<string, UiOption<any>[]>

@@ -1,21 +1,20 @@
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
-import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
-import Values = ValidationCore.Values
+import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
+import Failures = ValidationCore.Failures
+import ObjectEntries = ObjectUtils.ObjectEntries
 
 
 
 export namespace ValidationActions {
-  import Failures = ValidationCore.Failures
-  import Field = ValidationCore.Field
-  import ObjectEntries = ObjectUtils.ObjectEntries
   
   
-  export const updateFailures = <Vs extends Values>(
+  
+  export const updateFailures = <Vs extends object>(
     failures: Failures<Vs>,
     objects: {
+      failures?: Failures<Vs>,
       failureIds?: string[] | 'all',
-      fullCodes?: string[],
-      fields?: Field<Vs>[],
+      errorFields?: (keyof Vs)[], // todo process symbols
     },
     update?: {
       highlight?: boolean,
@@ -23,19 +22,21 @@ export namespace ValidationActions {
       delay?: number,
     }
   ): Failures<Vs> => {
+    //console.log('failureIds',objects.failureIds)
+    //console.log('update',update)
     let changed = 0
     const newFails = failures.map(fail=>{
       if (
           (
-            objects.failureIds==='all'
+            failures?.some(f=>f===fail)
+            || objects.failureIds==='all'
             || objects.failureIds?.some(id=>id===fail.id)
-            || objects.fullCodes?.some(fc=>fc===fail.fullCode)
-            || objects.fields?.some(f=>fail.fields.includes(f))
+            || objects.errorFields?.some(f=>fail.errorFields.includes(f))
           )
           && ObjectEntries(update).some(([prop,val]) => fail[prop]!==val)
       ) {
         changed++
-        return ObjectUtils.copy(fail, update)
+        return fail.copy(update)
       }
       return fail
     })

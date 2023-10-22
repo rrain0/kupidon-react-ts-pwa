@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
@@ -10,9 +10,14 @@ import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
+import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
+import { useUiOptionArr, useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
+import { useStateAndRef } from 'src/utils/react/useStateAndRef'
+import { ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import Button from 'src/views/Buttons/Button'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import Input from 'src/views/Inputs/Input'
@@ -28,18 +33,17 @@ import { Toasts } from 'src/utils/toasts/Toasts'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
-import { ValidationValidate } from 'src/utils/react/form-validation/ValidationValidate'
+import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
 import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
 import { Utils } from 'src/utils/common/Utils'
-import { ValidationActions } from 'src/utils/react/form-validation/ValidationActions'
+import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
-import { ValidationComponents } from 'src/utils/react/form-validation/ValidationComponents'
+import { ValidationComponents } from 'src/utils/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap
-import { useFailureDelay } from 'src/utils/react/form-validation/useFailureDelay'
 import Lazy = Utils.Lazy
-import { useToastFailures } from 'src/utils/toasts/useToastFailures'
+import { ToastMsg, useToastFailures } from 'src/utils/toasts/useToastFailures'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import GearIc = SimpleSvgIcons.GearIc
@@ -48,6 +52,9 @@ import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import params = RouteBuilder.params
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import UserValues = LoginPageValidation.UserValues
+import Failure = ValidationCore.Failure
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
@@ -55,6 +62,7 @@ export const LoginDefaults = function(){
   const defaultValues = new Lazy<FormValues>(()=>({
     login: '',
     pwd: '',
+    fromServer: undefined,
   }))
   const defaultFailures = new Lazy(()=>validate(
     { values: defaultValues.get(), validators: validators }
@@ -76,22 +84,43 @@ const LoginPage = () => {
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
+  const uiOptions = useUiOptionsContainer(LoginPageUiOptions)
+  
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
-  const [loginFailure, setLoginFailure] = useState(LoginDefaults.failures)
   const [loginForm, setLoginForm] = useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
+  const [loginFailures, setLoginFailures] = useState(LoginDefaults.failures)
+  useEffect(
+    ()=>{
+      setLoginFailures(s=>validate({
+        values: loginForm[0],
+        prevValues: loginForm[1],
+        prevFailures: s,
+        validators: validators,
+      }))
+    },
+    // not need to add loginFailures, because it must trigger only on loginForm
+    [loginForm]
+  )
   
   
+  useEffect(()=>{
+    console.log('LOGIN_FAILURES',loginFailures)
+  },[loginFailures])
   
-  const uiOptions = useUiOptionsContainer(LoginPageUiOptions)
+  
   
   
   const [loginResponse, setLoginResponse] = useState(
-    undefined as undefined | { success?: AuthApi.LoginRespS, error?: any }
+    undefined as undefined | { 
+      success?: AuthApi.LoginRespS
+      error?: any
+      userValues: UserValues
+    }
   )
   useEffect(()=>{
     if (loginResponse){
-      const { success:s, error:e } = loginResponse
+      const { success:s, error:e, userValues } = loginResponse
       if (s){
         setAuth(s.data)
         setLoginSuccess(true)
@@ -99,109 +128,277 @@ const LoginPage = () => {
         setLoginSuccess(false)
         if (e instanceof AxiosError){
           if (e.code===AxiosError.ERR_NETWORK){
-            setLoginFailure(validate({
-                values: loginForm[0], prevValues: loginForm[1],
-                outerValue: 'connection-error',
-                prevFailures: loginFailure,
-                validators: validators,
-            }))
+            setLoginForm(loginForm=>([
+              { ...loginForm[0],
+                fromServer: {
+                  values: userValues,
+                  error: {
+                    code: 'connection-error',
+                  }
+                }
+              },
+              loginForm[0]
+            ]))
           } else if (e.response?.status===400){
             const err = e.response as LoginRespE
-            setLoginFailure(validate({
-              values: loginForm[0], prevValues: loginForm[1],
-              outerValue: err.data.code,
-              prevFailures: loginFailure,
-              validators: validators,
-            }))
+            setLoginForm(loginForm=>([
+              { ...loginForm[0],
+                fromServer: {
+                  values: userValues,
+                  error: {
+                    code: err.data.code,
+                    msg: err.data.msg,
+                  }
+                }
+              },
+              loginForm[0]
+            ]))
           }
         } else {
-          setLoginFailure(validate({
-            values: loginForm[0], prevValues: loginForm[1],
-            outerValue: 'unknown',
-            prevFailures: loginFailure,
-            validators: validators,
-          }))
+          setLoginForm(loginForm=>([
+            { ...loginForm[0],
+              fromServer: {
+                values: userValues,
+                error: {
+                  code: 'unknown',
+                }
+              }
+            },
+            loginForm[0]
+          ]))
           console.warn('UNKNOWN ERROR',e)
         }
       }
       setLoginResponse(undefined)
     }
-  },[loginResponse, loginSuccess, loginFailure, loginForm])
+  },[loginResponse, setAuth])
+  
+  
+  
   
   
   // todo extract
-  toast.onChange(toast=>{
+  /* toast.onChange(toast=>{
     const id = toast.id
     if (typeof id === 'string' && id.startsWith('failure') && toast.status==='removed'){
       //console.log('closed id',id)
-      setLoginFailure(
-        updateFailures(loginFailure, { failureIds: [id] }, { notify: false }),
-      )
+      setLoginFailures(updateFailures(
+        loginFailures, { failureIds: [id] }, { notify: false }
+      ))
     }
-  })
+  }) */
   
   
-  useFailureDelay(loginFailure,setLoginFailure)
   
+  
+  const [userFailure, setUserFailure] =
+    useState(undefined as undefined|Failure<FormValues>)
+  const [serverFailure, setServerFailure] =
+    useState(undefined as undefined|Failure<FormValues>)
+  
+  /* useEffect(()=>{
+    console.log('userFailure',userFailure)
+  },[userFailure])
+  useEffect(()=>{
+    console.log('serverFailure',serverFailure)
+  },[serverFailure]) */
   
   
   useEffect(()=>{
-    if (loginLoading) Toasts.Loading.show(uiOptions.loggingIn[0].text)
+    setUserFailure(undefined)
+    setServerFailure(undefined)
+    let stale = false
+    
+    const userFailure = loginFailures
+      .filter(f=>!f.canSubmit && f.notify)
+      .sort((a,b)=>a.delayedFor-b.delayedFor)[0]
+    console.log(
+      'userFailure',userFailure,'\n',
+      'loginFailures',loginFailures,
+    )
+    if (userFailure){
+      if (!userFailure.isDelayed) setUserFailure(userFailure)
+      else userFailure.awaitDelay.then(()=>{
+        if (!stale) setUserFailure(userFailure)
+      })
+    }
+    
+    const serverFailure = loginFailures
+      .filter(f=>f.canSubmit && f.notify)
+      .sort((a,b)=>a.delayedFor-b.delayedFor)[0]
+    if (serverFailure){
+      if (!serverFailure.isDelayed) setServerFailure(serverFailure)
+      else serverFailure.awaitDelay.then(()=>{
+        if (!stale) setServerFailure(serverFailure)
+      })
+    }
+    
+    return ()=>{ stale=true }
+  },[loginFailures])
+  
+  const userFailureMsg = useMemo(
+    ()=>{
+      if (userFailure) return new ToastMsgData({
+        //id: userFailure.id,
+        type: 'danger',
+        msg: <ToastMsg defaultText={userFailure.msg}/>,
+        closeOnUnmount: true,
+        showCloseButton: true,
+        dragToClose: true,
+        onClose: ()=>{
+          if (userFailure.notify) setLoginFailures(s=>updateFailures(
+            s,
+            { failures: [userFailure] },
+            { notify: false }
+          ))
+        }
+      })
+      return undefined
+    },
+    [userFailure]
+  )
+  const serverFailureMsg = useMemo(
+    ()=>{
+      if (serverFailure) return new ToastMsgData({
+        //id: serverFailure.id,
+        type: 'danger',
+        msg: <ToastMsg defaultText={serverFailure.msg}/>,
+        closeOnUnmount: true,
+        showCloseButton: true,
+        dragToClose: true,
+        onClose: ()=>{
+          if (serverFailure.notify) setLoginFailures(s=>updateFailures(
+            s,
+            { failures: [serverFailure] },
+            { notify: false }
+          ))
+        }
+      })
+      return undefined
+    },
+    [serverFailure]
+  )
+  const [loadingMsg] = useState(()=>new ToastMsgData({
+    //id: 'loading',
+    type: 'loading',
+    msg: <ToastMsg uiOption={LoginPageUiOptions.loggingIn}/>,
+    closeOnUnmount: true,
+  }))
+  const [loginSuccessMsg] = useState(()=>new ToastMsgData({
+    //id: 'success',
+    type: 'ok',
+    msg: <ToastMsg uiOption={LoginPageUiOptions.loginCompleted}/>,
+    lifetime: 1500,
+    dragToClose: true,
+  }))
+  useToasts({
+    scope: 'login-page',
+    data: [
+      userFailureMsg,
+      loginLoading && loadingMsg,
+      loginSuccess && loginSuccessMsg,
+      serverFailureMsg,
+    ],
+  })
+  
+  /*
+  useEffect(()=>{
+    if (loginLoading) {
+      Toasts.Loading.show(<Msg uiOption={LoginPageUiOptions.loggingIn}/>)
+    }
     else toast.dismiss(Toasts.Loading.id)
     
     if (loginSuccess) {
-      Toasts.Success.show(uiOptions.loginCompleted[0].text)
+      Toasts.Success.show(<Msg uiOption={LoginPageUiOptions.loginCompleted}/>)
       navigate(returnPath ?? RootRoute.main[full]())
     }
-  },[loginLoading, loginSuccess, returnPath])
+  },[loginLoading, loginSuccess, navigate, returnPath])
+   */
   
   
-  useToastFailures(loginFailure)
   
   
+  
+  
+  
+  
+  //useToastFailures(loginFailures)
+  
+  
+  
+  
+  
+  // It needs because of Chrome on Android: when browser pastes login/pwd,
+  // failure state does not have time to update
+  const [doSubmit, setDoSubmit] = useState(false)
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
-    
-    const newFails = updateFailures(
-      loginFailure.filter(f=>f.type==='format'),
-      { failureIds:'all' },
-      { highlight: true, notify: true }
-    )
-    setLoginSuccess(false)
-    setLoginFailure(newFails)
-    
-    if (newFails.length>0) return
-    
-    void tryLogin()
+    setDoSubmit(true)
   }
   
-  const tryLogin = async()=>{
-    if (loginLoading) return
-    setLoginLoading(true)
-    try {
-      const response = await AuthApi.login(loginForm[0])
-      setLoginResponse({ success: response })
-    } catch (e){
-      setLoginResponse({ error: e })
-    } finally {
-      setLoginLoading(false)
-    }
-  }
+  
+  const tryLogin = useCallback(
+    async()=>{
+      if (loginLoading) return
+      setLoginLoading(true)
+      const form = loginForm[0]
+      try {
+        const response = await AuthApi.login(form)
+        setLoginResponse({ success: response, userValues: form })
+      } catch (e){
+        setLoginResponse({ error: e, userValues: form })
+      } finally {
+        setLoginLoading(false)
+      }
+    },
+    [loginForm, loginLoading]
+  )
+  const trySubmit = useCallback(
+    ()=>{
+      setLoginSuccess(false)
+      
+      const updateIds = loginFailures
+        .filter(f=>!f.canSubmit)
+        .filter(f=>!f.highlight||!f.notify||f.isDelayed)
+        .map(f=>f.id)
+      const newFails = updateFailures(
+        loginFailures,
+        { failureIds: updateIds },
+        { highlight: true, notify: true, delay: 0 }
+      )
+      setLoginFailures(newFails)
+      
+      const criticalFails = loginFailures.filter(f=>!f.canSubmit)
+      if (criticalFails.length>0) return
+      
+      void tryLogin()
+    },
+    [loginFailures, tryLogin]
+  )
+  useEffect(
+    ()=>{
+      if (doSubmit){
+        setDoSubmit(false)
+        trySubmit()
+      }
+    },
+    [doSubmit]
+  )
+  
   
   const validationProps = {
     values: loginForm,
     validators: validators,
-    failures: loginFailure,
-    setError: setLoginFailure,
+    failures: loginFailures,
+    setError: setLoginFailures,
     setValues: setLoginForm,
   }
   
   
+  
   const [settingsOpen, setSettingsOpen] = useState(false)
   
-  
   const pageRef = useRef<HTMLElement>(null)
-  
   const {
     canScrollHorizontal,
     canScrollVertical,
@@ -213,6 +410,12 @@ const LoginPage = () => {
   
   
   
+  
+  useEffect(()=>{
+    if (loginSuccess) {
+      navigate(returnPath ?? RootRoute.main[full]())
+    }
+  },[loginSuccess, navigate, returnPath])
   
   return <>
     <Page
@@ -297,7 +500,7 @@ const LoginPage = () => {
   </>
 }
 
-export default LoginPage
+export default ReactMemoTyped(LoginPage)
 
 
 
@@ -315,4 +518,5 @@ const formHeader = (theme: Themes.Theme) => css`
   color: ${theme.page.text[0]};
   align-self: center;
 `
+
 

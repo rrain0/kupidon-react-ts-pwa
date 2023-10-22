@@ -28,4 +28,7 @@ export const LoginPageUiOptions = {
   signup: CommonUiOptions.signup,
   
   
+  emailNotEntered: CommonUiOptions.emailNotEntered,
+  
+  
 } satisfies UiOptionsContainer

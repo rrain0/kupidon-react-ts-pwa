@@ -134,11 +134,12 @@ function ProfilePage(){
   
   
   // todo вынести в ProfileRouting
-  if (!auth || auth.user.id!==urlUserId) return <Navigate to={
-    RootRoute.login[fullAllowedNameParams]({
+  if (!auth || auth.user.id!==urlUserId) return <Navigate
+    to={RootRoute.login[fullAllowedNameParams]({
       returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
-    })
-  }/>
+    })}
+    //replace={true}
+  />
   
   
   return <>

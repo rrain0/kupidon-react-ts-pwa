@@ -1,5 +1,5 @@
 import { cssTransition, toast, ToastTransition } from 'react-toastify'
-import { ToastBody } from 'src/pages/App/ToastifySetup'
+import { ToastBody } from 'src/utils/toasts/ToastifySetup'
 
 
 
@@ -9,10 +9,10 @@ export namespace Toasts {
   const loadingId = 'loading'
   export const Loading = {
     id: loadingId,
-    show: (msg: string, id?: string|undefined)=>toast(
+    show: (msg: React.ReactNode, id?: string|undefined)=>toast(
       props=><ToastBody
         closeToast={props.closeToast}
-        showClose={false}
+        showCloseButton={false}
         type='loading'
       >
         {msg}
@@ -28,10 +28,10 @@ export namespace Toasts {
   const successId = 'success'
   export const Success = {
     id: successId,
-    show: (msg: string, id?: string|undefined)=>toast(
+    show: (msg: React.ReactNode, id?: string|undefined)=>toast(
       props=><ToastBody
         closeToast={props.closeToast}
-        showClose={false}
+        showCloseButton={false}
         type='ok'
       >
         {msg}
@@ -51,7 +51,7 @@ export namespace Toasts {
     show: (id: string, content: React.ReactNode)=>toast(
       props=><ToastBody
         closeToast={props.closeToast}
-        showClose={true}
+        showCloseButton={true}
         type='danger'
       >
         {content}

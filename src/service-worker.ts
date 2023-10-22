@@ -90,7 +90,7 @@ registerRoute(
   An example runtime caching route for requests that aren't handled by the
   precache, in this case same-origin .png requests like those from in public/
 */
-const imageExtensions = ['jpeg','jpg','png','webp','gif','bmp','svg']
+const imageExtensions = ['heic','jpeg','jpg','png','webp','gif','bmp','svg']
 const imageExtensionsRegexp = new RegExp(`\\.(${imageExtensions.join('|')})$`,'i')
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.

@@ -2,8 +2,9 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
-import { ToastContainer } from 'react-toastify'
+import { cssTransition, ToastContainer, ToastTransition } from 'react-toastify'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import mobileWidth = EmotionCommon.mobileWidth
 import center = EmotionCommon.center
@@ -17,6 +18,7 @@ import DangerRoundToastifyIc = SimpleSvgIcons.DangerRoundToastifyIc
 import InfoToastifyIc = SimpleSvgIcons.InfoToastifyIc
 import WarnTriangleToastifyIc = SimpleSvgIcons.WarnTriangleToastifyIc
 import textSmall2 = EmotionCommon.textSmall2
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
@@ -69,35 +71,37 @@ const ToastifySetup = React.memo(()=>{
       closeButton={false}
       closeOnClick={false}
       draggable
-      draggablePercent={40}
+      draggablePercent={30}
       hideProgressBar={true}
       newestOnTop={true}
       rtl={false}
       pauseOnFocusLoss
       pauseOnHover
       theme='light'
+      transition={slideInDownThenFadeOut}
     />
   </div>
   
 })
-export default ToastifySetup
+export default ReactMemoTyped(ToastifySetup)
 
 
 
 
+export type ToastType = 'normal'|'loading'|'info'|'ok'|'warn'|'danger'
 export type ToastBodyProps = {
   closeToast?: (()=>void) | undefined
-  showClose?: boolean|undefined
-  type?: 'normal'|'loading'|'info'|'ok'|'warn'|'danger'|undefined
+  showCloseButton?: boolean|undefined
+  type?: ToastType|undefined
   children?: React.ReactNode
 }
-export const ToastBody = (props: ToastBodyProps)=>{
-  const showClose = props.showClose ?? true
+export const ToastBody = React.memo((props: ToastBodyProps)=>{
+  const showClose = props.showCloseButton ?? true
   const type = props.type ?? 'normal'
   
   return <Body
     css={css`
-      ${props.showClose && css`padding-right: 30px;`}
+      ${props.showCloseButton && css`padding-right: 30px;`}
     `}
   >
     
@@ -158,7 +162,7 @@ export const ToastBody = (props: ToastBodyProps)=>{
     
     
   </Body>
-}
+})
 
 const Body = styled.div`
   width: 100%;
@@ -203,3 +207,38 @@ const CloseButton = styled.button`
 
 
 
+
+const ShakeX: ToastTransition = cssTransition({
+  enter: 'animate__animated animate__shakeX',
+  exit: 'animate__animated animate__shakeX',
+  collapse: false,
+})
+
+const Bounce = cssTransition({
+  enter: "animate__animated animate__bounceIn",
+  exit: "animate__animated animate__bounceOut",
+  collapse: false,
+})
+
+const Scale: ToastTransition = cssTransition({
+  enter: 'scale-up-center',
+  exit: 'scale-down-center',
+})
+
+const noAnimation: ToastTransition = cssTransition({
+  enter: 'no-animation',
+  exit: 'no-animation',
+  collapse: false,
+})
+
+const slideInDownThenFadeOut: ToastTransition = cssTransition({
+  enter: 'animate__animated animate__faster animate__slideInDown',
+  exit: 'animate__animated animate__faster animate__fadeOut',
+  collapse: false,
+})
+
+const noAnimationThenFadeOut: ToastTransition = cssTransition({
+  enter: 'no-animation',
+  exit: 'animate__animated animate__faster animate__fadeOut',
+  collapse: false,
+})

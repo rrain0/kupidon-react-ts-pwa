@@ -1,13 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import React, { useEffect } from 'react'
 import { toast } from 'react-toastify'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { UiOption } from 'src/utils/lang/UiOption'
+import { useUiOptionArr } from 'src/utils/lang/useUiOptions'
 import { ValidationCore } from 'src/utils/react/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
 import Values = ValidationCore.Values
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import { Toasts } from 'src/utils/toasts/Toasts'
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
@@ -53,3 +57,15 @@ export const useToastFailures = <Vs extends Values>(failures: Failures<Vs>)=>{
   },[])
   
 }
+
+
+
+export const ToastMsg = ReactMemoTyped(
+  <UO extends UiOption<any>[]>(props:{
+    uiOption?: UO | undefined
+    defaultText?: string | undefined
+  })=>{
+    const uiOption = useUiOptionArr(props.uiOption)
+    return <>{uiOption[0]?.text ?? props.defaultText}</>
+  }
+)

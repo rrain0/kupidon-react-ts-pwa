@@ -26,9 +26,6 @@ export namespace ValidationCore {
   export type Failures<Vs extends Values> = Failure<Vs>[]
   
   
-  
-  
-  
   export class FailureData<Vs extends Values> {
     constructor(public data: {
       code?: string|undefined,
@@ -65,6 +62,8 @@ export namespace ValidationCore {
      * @param highlight - highlight field with this error
      * @param notify - show error notification
      * @param extra - some extra data of any type if needed
+     * @param created - failure creation timestamp (Date object)
+     * @param delay - delay to show (ms)
      */
     constructor(
       public code: string,

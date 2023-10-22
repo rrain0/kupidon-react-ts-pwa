@@ -143,19 +143,20 @@ export namespace ValidationComponents {
 
 
 
-
-function f(){
-  type InputType = ReactElement<
-    React.InputHTMLAttributes<string>,
-    JSX.ElementType
-    /*React.JSXElementConstructor<JSX.IntrinsicElements['input']>*/
-  >
-  let i1: InputType = <input value={'ldksfjl'}/>
-  let i2: InputType = <Input value={'ldksfjl'}/>
-  
-  i1 = React.cloneElement(i1, { name: 'some-name' })
-  i2 = React.cloneElement(i2, { name: 'some-name' })
-  
-  i1 = React.cloneElement(i2, { name: 'some-name' })
-  i2 = React.cloneElement(i1, { name: 'some-name' })
+{
+  const f = ()=>{
+    type InputType = ReactElement<
+      React.InputHTMLAttributes<string>,
+      JSX.ElementType
+      /*React.JSXElementConstructor<JSX.IntrinsicElements['input']>*/
+    >
+    let i1: InputType = <input value={'ldksfjl'}/>
+    let i2: InputType = <Input value={'ldksfjl'}/>
+    
+    i1 = React.cloneElement(i1, { name: 'some-name' })
+    i2 = React.cloneElement(i2, { name: 'some-name' })
+    
+    i1 = React.cloneElement(i2, { name: 'some-name' })
+    i2 = React.cloneElement(i1, { name: 'some-name' })
+  }
 }
