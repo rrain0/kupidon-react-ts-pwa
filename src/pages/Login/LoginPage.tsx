@@ -88,6 +88,7 @@ const LoginPage = () => {
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [loginForm, setLoginForm] = useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
   const [loginFailures, setLoginFailures] = useState(LoginDefaults.failures)
+  // LayoutEffect is necessary to update data when making Chrome mobile autofill
   useLayoutEffect(
     ()=>{
       setLoginFailures(s=>validate({
@@ -323,24 +324,28 @@ const LoginPage = () => {
   const trySubmit = useCallback(
     ()=>{
       setLoginSuccess(false)
-      setServerFailure(undefined)
+      if (serverFailure?.highlight || serverFailure?.notify)
+        setLoginFailures(s=>updateFailures(
+          s,
+          { failures: [serverFailure] },
+          { highlight: false, notify: false }
+        ))
       
       const failsToUpdate = loginFailures
         .filter(f=>!f.canSubmit)
         .filter(f=>!f.highlight || !f.notify || f.isDelayed)
-      const newFails = updateFailures(
-        loginFailures,
+      setLoginFailures(s=>updateFailures(
+        s,
         { failures: failsToUpdate },
         { highlight: true, notify: true, delay: 0 }
-      )
-      setLoginFailures(newFails)
+      ))
       
       const criticalFails = loginFailures.filter(f=>!f.canSubmit)
       if (criticalFails.length>0) return
       
       void tryLogin()
     },
-    [loginFailures, tryLogin]
+    [loginFailures, tryLogin, serverFailure]
   )
   useEffect(
     ()=>{
