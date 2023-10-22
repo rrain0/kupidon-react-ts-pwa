@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
@@ -28,8 +28,6 @@ import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import { Themes } from 'src/utils/theme/Themes'
-import { toast } from 'react-toastify'
-import { Toasts } from 'src/utils/toasts/Toasts'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { LoginPageValidation, mapFailureCodeToUiOption } from './validation'
 import FormValues = LoginPageValidation.FormValues
@@ -43,7 +41,7 @@ import updateFailures = ValidationActions.updateFailures
 import { ValidationComponents } from 'src/utils/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap
 import Lazy = Utils.Lazy
-import { ToastMsg, useToastFailures } from 'src/utils/toasts/useToastFailures'
+import { ToastMsg } from 'src/utils/toasts/useToastFailures'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import GearIc = SimpleSvgIcons.GearIc
@@ -90,7 +88,7 @@ const LoginPage = () => {
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [loginForm, setLoginForm] = useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
   const [loginFailures, setLoginFailures] = useState(LoginDefaults.failures)
-  useEffect(
+  useLayoutEffect(
     ()=>{
       setLoginFailures(s=>validate({
         values: loginForm[0],
@@ -99,14 +97,13 @@ const LoginPage = () => {
         validators: validators,
       }))
     },
-    // not need to add loginFailures, because it must trigger only on loginForm
     [loginForm]
   )
   
   
-  /* useEffect(()=>{
+  useEffect(()=>{
     console.log('LOGIN_FAILURES',loginFailures)
-  },[loginFailures]) */
+  },[loginFailures])
   
   
   
@@ -328,12 +325,12 @@ const LoginPage = () => {
       setLoginSuccess(false)
       setServerFailure(undefined)
       
-      const updateThem = loginFailures
+      const failsToUpdate = loginFailures
         .filter(f=>!f.canSubmit)
-        .filter(f=>!f.highlight||!f.notify||f.isDelayed)
+        .filter(f=>!f.highlight || !f.notify || f.isDelayed)
       const newFails = updateFailures(
         loginFailures,
-        { failures: updateThem },
+        { failures: failsToUpdate },
         { highlight: true, notify: true, delay: 0 }
       )
       setLoginFailures(newFails)

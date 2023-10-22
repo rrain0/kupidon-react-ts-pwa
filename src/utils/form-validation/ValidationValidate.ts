@@ -55,7 +55,9 @@ export namespace ValidationValidate {
     //config.mode ??= 'all-errors'
     //config.type ??= 'auto'
     
-    
+    console.log('VALIDATE: PREV_VALUES',prevValues)
+    console.log('VALIDATE: VALUES',values)
+    console.log('VALIDATE: PREV_FAILURES',prevFailures)
     
     const fields = ObjectKeys<Vs>(values)
     const changedFields: Set<keyof Vs> = new Set(
@@ -91,7 +93,7 @@ export namespace ValidationValidate {
     })
     
     const totalFails = [...newFails,...retainedFails]
-    //console.log('VALIDATE: TOTAL_FAILS',totalFails)
+    console.log('VALIDATE: TOTAL_FAILS',totalFails)
     
     return totalFails
   }
