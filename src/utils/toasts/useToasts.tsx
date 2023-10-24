@@ -13,7 +13,7 @@ import falseable = TypeUtils.falseable
 //  but programmatically control them via ToastMsgData objects
 export type UseToastDataType = (ToastMsgData | falseable)[]
 export type UseToastsProps = {
-  scope?: string | undefined
+  //scope?: string | undefined
   data?: UseToastDataType | undefined
 }
 export const useToasts = (props?: UseToastsProps)=>{
@@ -120,7 +120,6 @@ export class ToastMsgData {
       this.id = toast(
         props=><ToastBody
           closeToast={props.closeToast}
-          //closeToast={d.onClose}
           showCloseButton={this.showCloseButton}
           type={this.type}
         >
@@ -137,7 +136,7 @@ export class ToastMsgData {
   hide(){
     if (this.id!==undefined) {
       this.runCloseCallback = false
-      // it is not working BEFORE toast.dismiss
+      // it is not working BEFORE toast.dismiss so need to use runCloseCallback
       this.unsubscribeOnChange?.()
       toast.dismiss(this.id)
     }

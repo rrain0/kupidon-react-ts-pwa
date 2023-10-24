@@ -6,14 +6,16 @@ import { LoginDefaults } from './LoginPage'
 import isValidEmail = ValidationValidators.isValidEmail
 import LoginRespE = AuthApi.LoginRespE
 import Validators = ValidationCore.Validators
+import PartialFailureData = ValidationCore.PartialFailureData
 
 
 
 export namespace LoginPageValidation {
   
-  // todo
-  import PartialFailureData = ValidationCore.PartialFailureData
-  type OuterCode = LoginRespE['data']['code'] | 'connection-error' | 'unknown'
+  
+  export type SeverErrorCode = LoginRespE['data']['code']
+    | 'connection-error' | 'unknown'
+  
   
   
   export type UserValues = {
@@ -23,8 +25,9 @@ export namespace LoginPageValidation {
   export type FromServerValue = {
     values: UserValues // значения, отправленные на сервердля проверки
     error: { // ошибка с сервера
-      code: string
-      msg?: string|undefined
+      code: SeverErrorCode
+      msg?: string | undefined
+      extra?: any | undefined
     }
   }
   export type FormValues = UserValues & {
@@ -35,7 +38,7 @@ export namespace LoginPageValidation {
   
   
   export const validators: Validators<FormValues> = [
-    [['login'], ([v])=>{
+    [['login'], ([v]: [UserValues['login']?,...any[]])=>{
       const d = LoginDefaults.values.login
       if (v===d) return new PartialFailureData({
         code: 'login-required',
@@ -44,7 +47,7 @@ export namespace LoginPageValidation {
         notify: false,
       })
     }],
-    [['login'], ([v])=>{
+    [['login'], ([v]: [UserValues['login']?,...any[]])=>{
       if (!isValidEmail(v)) return new PartialFailureData({
         code: 'login-incorrect',
         msg: 'Некорректный формат email',
@@ -53,7 +56,8 @@ export namespace LoginPageValidation {
     }],
     
     
-    [['pwd'], ([v])=>{
+    
+    [['pwd'], ([v]: [UserValues['pwd']?,...any[]])=>{
       const d = LoginDefaults.values.login
       if (v===d) return new PartialFailureData({
         code: 'pwd-required',
@@ -64,15 +68,20 @@ export namespace LoginPageValidation {
     }],
     
     
-    [['fromServer'],([v])=>{
+    
+    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
       if (v?.error.code==='NO_USER') return new PartialFailureData({
         code: v.error.code,
         msg: 'Не найдено пользователя с таким логином-паролем',
+        usedValues: [v, v.values.login, v.values.pwd],
         errorFields: ['fromServer','login','pwd'],
         canSubmit: true,
       })
     }],
-    [['fromServer'],([v])=>{
+    
+    
+    
+    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
       if (v?.error.code==='connection-error') return new PartialFailureData({
         code: v.error.code,
         msg: 'Ошибка соединения с сервером, возможно что-то с интернетом',
@@ -80,9 +89,7 @@ export namespace LoginPageValidation {
         canSubmit: true,
       })
     }],
-    
-    
-    [['fromServer'],([v])=>{
+    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
       if (v) return new PartialFailureData({
         code: 'unknown-error',
         msg: 'Неизвестная ошибка',

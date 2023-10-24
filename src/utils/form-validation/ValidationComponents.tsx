@@ -20,6 +20,7 @@ import updateFailures = ValidationActions.updateFailures
 export namespace ValidationComponents {
   
   
+  import awaitDelay = ValidationActions.awaitDelay
   export type InputValidationWrapProps<Vs extends object> = {
     fieldName: keyof Vs
     values: readonly [Vs,Vs]
@@ -48,22 +49,13 @@ export namespace ValidationComponents {
     const [highlight, setHighlight] = useState(false)
     useEffect(()=>{
       setHighlight(false)
-      let stale = false
+      let stale = [false] as [boolean]
       
       const fs = failures
-        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
-      let delay = Number.POSITIVE_INFINITY
-      fs.forEach(f=>{
-        if (f.delayedFor < delay){
-          delay = f.delayedFor
-          if (!f.isDelayed) setHighlight(true)
-          else f.awaitDelay.then(()=>{
-            if (!stale) setHighlight(true)
-          })
-        }
-      })
+        .filter(f=>f.usedValues[f.errorFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      awaitDelay(fs, stale, ()=>setHighlight(true))
       
-      return ()=>{stale=true}
+      return ()=>{ stale=[true] }
     },[failures, fieldName, value])
     
     
@@ -113,22 +105,13 @@ export namespace ValidationComponents {
     const [highlight, setHighlight] = useState(false)
     useEffect(()=>{
       setHighlight(false)
-      let stale = false
+      let stale = [false] as [boolean]
       
       const fs = failures
-        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
-      let delay = Number.POSITIVE_INFINITY
-      fs.forEach(f=>{
-        if (f.delayedFor < delay){
-          delay = f.delayedFor
-          if (!f.isDelayed) setHighlight(true)
-          else f.awaitDelay.then(()=>{
-            if (!stale) setHighlight(true)
-          })
-        }
-      })
+        .filter(f=>f.usedValues[f.errorFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      awaitDelay(fs, stale, ()=>setHighlight(true))
       
-      return ()=>{stale=true}
+      return ()=>{ stale=[true] }
     },[failures, fieldName, value])
     
     

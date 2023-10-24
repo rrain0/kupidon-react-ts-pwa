@@ -1,7 +1,6 @@
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
-import ObjectEntries = ObjectUtils.ObjectEntries
 
 
 
@@ -9,6 +8,7 @@ export namespace ValidationActions {
   
   
   
+  import Failure = ValidationCore.Failure
   export const updateFailures = <Vs extends object>(
     failures: Failures<Vs>,
     objects: {
@@ -45,6 +45,26 @@ export namespace ValidationActions {
     
     return failures
   }
+  
+  
+  
+  export const awaitDelay = <Vs extends object>(
+    failures: Failures<Vs>,
+    stale: [boolean],
+    callback: (failure: Failure<Vs>)=>void
+  ) => {
+    let delay = Number.POSITIVE_INFINITY
+    failures.forEach(f=>{
+      if (f.delayedFor < delay){
+        delay = f.delayedFor
+        if (!f.isDelayed) callback(f)
+        else f.awaitDelay.then(()=>{
+          if (!stale[0]) callback(f)
+        })
+      }
+    })
+  }
+  
   
   
   

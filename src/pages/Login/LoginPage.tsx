@@ -53,6 +53,7 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import UserValues = LoginPageValidation.UserValues
 import Failure = ValidationCore.Failure
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import awaitDelay = ValidationActions.awaitDelay
 
 
 
@@ -113,55 +114,62 @@ const LoginPage = () => {
     undefined as undefined | { 
       success?: AuthApi.LoginRespS
       error?: any
-      userValues: UserValues
+      usedValues: UserValues
     }
   )
   useEffect(()=>{
     if (loginResponse){
-      const { success:s, error:e, userValues } = loginResponse
+      const { success:s, error:e, usedValues } = loginResponse
       //console.log('s',s,'e',e)
       if (s){
         setAuth(s.data)
         setLoginSuccess(true)
       } else if (e){
         setLoginSuccess(false)
-        if (e instanceof AxiosError){
-          if (e.code===AxiosError.ERR_NETWORK){
-            setLoginForm(loginForm=>([
-              { ...loginForm[0],
-                fromServer: {
-                  values: userValues,
-                  error: {
-                    code: 'connection-error',
-                    msg: 'Connection error',
-                  }
-                }
-              },
-              loginForm[0]
-            ]))
-          } else if (e.response?.status===400){
-            const response = e.response as LoginRespE
-            setLoginForm(loginForm=>([
-              { ...loginForm[0],
-                fromServer: {
-                  values: userValues,
-                  error: {
-                    code: response.data.code,
-                    msg: response.data.msg,
-                  }
-                }
-              },
-              loginForm[0]
-            ]))
-          }
-        } else {
+        
+        if (e instanceof AxiosError && e.response?.status===400) {
+          const response = e.response as LoginRespE
           setLoginForm(loginForm=>([
-            { ...loginForm[0],
+            {
+              ...loginForm[0],
               fromServer: {
-                values: userValues,
+                values: usedValues,
+                error: {
+                  code: response.data.code,
+                  msg: response.data.msg,
+                  extra: e,
+                }
+              }
+            },
+            loginForm[0]
+          ]))
+        }
+        else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
+          setLoginForm(loginForm=>([
+            {
+              ...loginForm[0],
+              fromServer: {
+                values: usedValues,
+                error: {
+                  code: 'connection-error',
+                  msg: 'Connection error',
+                  extra: e,
+                }
+              }
+            },
+            loginForm[0]
+          ]))
+        }
+        else {
+          setLoginForm(loginForm=>([
+            {
+              ...loginForm[0],
+              fromServer: {
+                values: usedValues,
                 error: {
                   code: 'unknown',
                   msg: 'Unknown error',
+                  extra: e,
                 }
               }
             },
@@ -169,6 +177,7 @@ const LoginPage = () => {
           ]))
           console.warn('UNKNOWN ERROR',e)
         }
+        
       }
       setLoginResponse(undefined)
     }
@@ -184,49 +193,25 @@ const LoginPage = () => {
   const [serverFailure, setServerFailure] =
     useState(undefined as undefined|Failure<FormValues>)
   
-  
   useEffect(()=>{
     setUserFailure(undefined)
     setServerFailure(undefined)
-    let stale = false
+    const stale: [boolean] = [false]
     
-    {
-      const userFailures = loginFailures
-        .filter(f=>!f.canSubmit && f.notify)
-      let delay = Number.POSITIVE_INFINITY
-      userFailures.forEach(f=>{
-        if (f.delayedFor < delay){
-          delay = f.delayedFor
-          if (!f.isDelayed) setUserFailure(f)
-          else f.awaitDelay.then(()=>{
-            if (!stale) setUserFailure(f)
-          })
-        }
-      })
-    }
+    const userFailures = loginFailures
+      .filter(f=>!f.canSubmit && f.notify)
+    awaitDelay(userFailures, stale, setUserFailure)
+  
+    const serverFailures = loginFailures
+      .filter(f=>f.canSubmit && f.notify)
+    awaitDelay(serverFailures, stale, setServerFailure)
     
-    {
-      const serverFailures = loginFailures
-        .filter(f=>f.canSubmit && f.notify)
-      let delay = Number.POSITIVE_INFINITY
-      serverFailures.forEach(f=>{
-        if (f.delayedFor < delay){
-          delay = f.delayedFor
-          if (!f.isDelayed) setServerFailure(f)
-          else f.awaitDelay.then(()=>{
-            if (!stale) setServerFailure(f)
-          })
-        }
-      })
-    }
-    
-    return ()=>{ stale=true }
+    return ()=>{ stale[0]=true }
   },[loginFailures])
   
   const userFailureMsg = useMemo(
     ()=>{
       if (userFailure) return new ToastMsgData({
-        //id: userFailure.id,
         type: 'danger',
         msg: <ToastMsg
           uiOption={mapFailureCodeToUiOption[userFailure.code]}
@@ -250,7 +235,6 @@ const LoginPage = () => {
   const serverFailureMsg = useMemo(
     ()=>{
       if (serverFailure) return new ToastMsgData({
-        //id: serverFailure.id,
         type: 'danger',
         msg: <ToastMsg
           uiOption={mapFailureCodeToUiOption[serverFailure.code]}
@@ -272,20 +256,17 @@ const LoginPage = () => {
     [serverFailure]
   )
   const [loadingMsg] = useState(()=>new ToastMsgData({
-    //id: 'loading',
     type: 'loading',
     msg: <ToastMsg uiOption={LoginPageUiOptions.loggingIn}/>,
     closeOnUnmount: true,
   }))
   const [loginSuccessMsg] = useState(()=>new ToastMsgData({
-    //id: 'success',
     type: 'ok',
     msg: <ToastMsg uiOption={LoginPageUiOptions.loginCompleted}/>,
     lifetime: 1500,
     dragToClose: true,
   }))
   useToasts({
-    scope: 'login-page',
     data: [
       userFailureMsg,
       loginLoading && loadingMsg,
@@ -296,14 +277,13 @@ const LoginPage = () => {
   
   
   
-  // It needs because of Chrome on Android: when browser pastes login/pwd,
+  // It needs because of Chrome's autofill on Android: when browser pastes login/pwd,
   // failure state does not have time to update
   const [doSubmit, setDoSubmit] = useState(false)
   const onSubmit = (ev: React.FormEvent) => {
     ev.preventDefault()
     setDoSubmit(true)
   }
-  
   
   const tryLogin = useCallback(
     async()=>{
@@ -312,15 +292,16 @@ const LoginPage = () => {
       const form = loginForm[0]
       try {
         const response = await AuthApi.login(form)
-        setLoginResponse({ success: response, userValues: form })
+        setLoginResponse({ success: response, usedValues: form })
       } catch (e){
-        setLoginResponse({ error: e, userValues: form })
+        setLoginResponse({ error: e, usedValues: form })
       } finally {
         setLoginLoading(false)
       }
     },
     [loginForm, loginLoading]
   )
+  
   const trySubmit = useCallback(
     ()=>{
       setLoginSuccess(false)
@@ -347,6 +328,7 @@ const LoginPage = () => {
     },
     [loginFailures, tryLogin, serverFailure]
   )
+  
   useEffect(
     ()=>{
       if (doSubmit){
