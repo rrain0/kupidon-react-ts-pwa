@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
@@ -29,8 +30,8 @@ import Page = Pages.Page
 import ProfileImages from './ProfileImages'
 import DataField from 'src/views/DataField/DataField'
 import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
-import RadioInput from 'src/views/Inputs/RadioInput'
-import { RadioInputStyle } from 'src/views/Inputs/RadioInputStyle'
+import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
+import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import Card from 'src/views/Card'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -340,20 +341,13 @@ function ProfilePage(){
     
     
     
-    <div
-      css={css`
-        position: fixed;
-        bottom: var(--bottom-nav-height); right: 0; left: 0;
-        height: calc(100dvh - var(--bottom-nav-height));
-        pointer-events: none;
-      `}
-    >
+    <PageScrollbarOverlayFrame>
       <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
         {...scrollbarProps}
         showVertical={canScrollVertical}
         showHorizontal={canScrollHorizontal}
       />
-    </div>
+    </PageScrollbarOverlayFrame>
     
     
     <BottomButtonBar
@@ -381,7 +375,6 @@ function ProfilePage(){
   
   </>
 }
-
 export default ReactMemoTyped(ProfilePage)
 
 

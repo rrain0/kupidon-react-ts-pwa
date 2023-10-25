@@ -1,9 +1,13 @@
-import { css } from '@emotion/react';
-import { Themes } from 'src/utils/theme/Themes';
+import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { Themes } from 'src/utils/theme/Themes'
+import onHover = EmotionCommon.onHover
 
 
 
 export namespace RadioInputStyle {
+  
+  
   
   export const radio = (t: Themes.Theme) => css`
     &.rrainuiFrame {
@@ -20,35 +24,28 @@ export namespace RadioInputStyle {
       letter-spacing: 0.05em;
       color: ${t.page.text[0]};
       --color: ${t.page.text[0]};
-      .rrainuiInput[data-error] {
-        background: ${t.input.error.bgc};
-      }
     }
-    .rrainuiInput {
-      ::placeholder {}
-      @media not (hover: none) { :hover {} }
-      :active, :focus-visible, :focus {}
-      &[data-error]{}
-    }
+
+    
     .rrainuiIconWrap {
       width: 26px;
       height: 26px;
     }
+
+    
     .rrainuiBorder {}
-    @media not (hover: none) { .rrainuiInput:hover ~ .rrainuiBorder {
-      background: ${t.input.iconHover[0]};
-    } }
-    .rrainuiInput:active ~ .rrainuiBorder {
-      //background: ${t.input.iconHover[0]};
-    }
+    .rrainuiInput {${onHover(css` ~.rrainuiBorder {
+       background: ${t.input.iconHover[0]};
+    }`)}}
+    .rrainuiInput:active ~ .rrainuiBorder {}
     .rrainuiInput:focus-visible ~ .rrainuiBorder {
       background: ${t.input.iconHover[0]};
     }
     .rrainuiInput:focus ~ .rrainuiBorder {}
     .rrainuiInput[data-error] ~ .rrainuiBorder{}
+
+
   `
-  
-  
   
   
   

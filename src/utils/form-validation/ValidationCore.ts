@@ -38,7 +38,7 @@ export namespace ValidationCore {
       extra?: any | undefined, // extra failure data if needed
       usedFields?: NonEmptyArr<keyof Vs> | undefined, // использованные для валидации поля
       usedValues?: NonEmptyArr<any> | undefined, // использованные для валидации значения полей
-      errorFields?: (keyof Vs)[] | undefined, // поля, которые выделить как ошибочные
+      highlightFields?: (keyof Vs)[] | undefined, // поля, которые выделить как ошибочные
       highlight?: boolean | undefined,
       notify?: boolean | undefined,
       canSubmit?: boolean | undefined,
@@ -50,7 +50,7 @@ export namespace ValidationCore {
       this.extra = data.extra
       this.usedFields = data.usedFields
       this.usedValues = data.usedValues
-      this.errorFields = data.errorFields
+      this.highlightFields = data.highlightFields
       this.highlight = data.highlight
       this.notify = data.notify
       this.canSubmit = data.canSubmit
@@ -63,7 +63,7 @@ export namespace ValidationCore {
     extra?: any | undefined // extra failure data if needed
     usedFields?: NonEmptyArr<keyof Vs> | undefined // использованные для валидации поля
     usedValues?: NonEmptyArr<any> | undefined // использованные для валидации значения полей
-    errorFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
+    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
     highlight?: boolean | undefined
     notify?: boolean | undefined
     canSubmit?: boolean | undefined
@@ -80,7 +80,7 @@ export namespace ValidationCore {
    * @param usedFields - fields used to validate
    * @param usedValues - values used to validate
    * @param extra - some extra data of any type if needed
-   * @param errorFields - highlight this fields - failure is applied for this fields
+   * @param highlightFields - highlight this fields - failure is applied for this fields
    * @param highlight - highlight field with this error
    * @param notify - show error notification
    * @param canSubmit - can you submit if this error exists?
@@ -95,7 +95,7 @@ export namespace ValidationCore {
     usedFields: NonEmptyArr<keyof Vs> // использованные для валидации поля
     usedValues: NonEmptyArr<any> // использованные для валидации значения полей
     
-    errorFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
+    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
     highlight?: boolean | undefined,
     notify?: boolean | undefined,
     canSubmit?: boolean | undefined,
@@ -119,7 +119,7 @@ export namespace ValidationCore {
       this.extra = data.extra
       this.usedFields = data.usedFields
       this.usedValues = data.usedValues
-      this.errorFields = data.errorFields ?? this.usedFields
+      this.highlightFields = data.highlightFields ?? this.usedFields
       this.highlight = data.highlight ?? true
       this.notify = data.notify ?? true
       this.canSubmit = data.canSubmit ?? false
@@ -134,7 +134,7 @@ export namespace ValidationCore {
     readonly extra: any
     readonly usedFields: NonEmptyArr<keyof Vs>
     readonly usedValues: NonEmptyArr<any>
-    readonly errorFields: (keyof Vs)[]
+    readonly highlightFields: (keyof Vs)[]
     readonly highlight: boolean
     readonly notify: boolean
     readonly canSubmit: boolean
@@ -162,7 +162,7 @@ export namespace ValidationCore {
         extra: update && 'extra' in update ? update.extra : this.extra,
         usedFields: update && 'usedFields' in update ? update.usedFields : this.usedFields,
         usedValues: update && 'usedValues' in update ? update.usedValues : this.usedValues,
-        errorFields: update && 'errorFields' in update ? update.errorFields : this.errorFields,
+        highlightFields: update && 'highlightFields' in update ? update.highlightFields : this.highlightFields,
         highlight: update && 'highlight' in update ? update.highlight : this.highlight,
         notify: update && 'notify' in update ? update.notify : this.notify,
         canSubmit: update && 'canSubmit' in update ? update.canSubmit : this.canSubmit,

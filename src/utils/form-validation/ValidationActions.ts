@@ -1,4 +1,3 @@
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
 
@@ -14,7 +13,7 @@ export namespace ValidationActions {
     objects: {
       failures?: Failures<Vs>,
       failureIds?: string[] | 'all',
-      errorFields?: (keyof Vs)[], // todo process symbols
+      highlightFields?: (keyof Vs)[], // todo process symbols
     },
     update?: {
       highlight?: boolean,
@@ -31,7 +30,7 @@ export namespace ValidationActions {
             objects.failures?.some(f=>f===fail)
             || objects.failureIds==='all'
             || objects.failureIds?.some(id=>id===fail.id)
-            || objects.errorFields?.some(f=>fail.errorFields.includes(f))
+            || objects.highlightFields?.some(f=>fail.highlightFields.includes(f))
           )
       ) {
         changed++

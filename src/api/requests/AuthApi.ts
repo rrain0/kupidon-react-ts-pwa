@@ -1,13 +1,13 @@
-import { AxiosConfig } from '../AxiosConfig';
-import { ApiRoutes as r } from 'src/api-routes/ApiRoutes';
-import { UserApi } from './UserApi';
-import { AxiosResponse } from 'axios';
+import { AxiosConfig } from '../AxiosConfig'
+import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
+import { UserApi } from './UserApi'
+import { AxiosResponse } from 'axios'
+import ax = AxiosConfig.ax
+import CurrentUser = UserApi.CurrentUser
+
 
 
 export namespace AuthApi {
-  import ax = AxiosConfig.ax
-  import CurrentUser = UserApi.CurrentUser;
-  
   
   
   

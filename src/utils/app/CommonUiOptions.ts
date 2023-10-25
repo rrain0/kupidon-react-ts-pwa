@@ -105,11 +105,11 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'signup'>[],
   
   
-  signingUp: [
+  registration: [
     {
       value: 'signingUp',
       lang: 'en-US',
-      text: 'Signing up',
+      text: 'Registration',
     },
     {
       value: 'signingUp',
@@ -117,6 +117,20 @@ export const CommonUiOptions = {
       text: 'Регистрация',
     },
   ] satisfies UiOption<'signingUp'>[],
+  
+  
+  registrationCompleted: [
+    {
+      value: 'registrationCompleted',
+      lang: 'en-US',
+      text: 'Registration completed',
+    },
+    {
+      value: 'registrationCompleted',
+      lang: 'ru-RU',
+      text: 'Регистрация завершена',
+    },
+  ] satisfies UiOption<'registrationCompleted'>[],
   
   
   userSuccessfullyRegistered: [
@@ -284,6 +298,34 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'no'>[],
   
   
+  loginNotEntered: [
+    {
+      value: 'loginNotEntered',
+      lang: 'en-US',
+      text: 'Login is not entered',
+    },
+    {
+      value: 'loginNotEntered',
+      lang: 'ru-RU',
+      text: 'Логин не введён',
+    },
+  ] satisfies UiOption<'loginNotEntered'>[],
+  
+  
+  loginFormatIsIncorrect: [
+    {
+      value: 'loginFormatIsIncorrect',
+      lang: 'en-US',
+      text: 'Login format is incorrect',
+    },
+    {
+      value: 'loginFormatIsIncorrect',
+      lang: 'ru-RU',
+      text: 'Некорректный формат логина',
+    },
+  ] satisfies UiOption<'loginFormatIsIncorrect'>[],
+  
+  
   emailNotEntered: [
     {
       value: 'emailNotEntered',
@@ -326,6 +368,90 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'pwdNotEntered'>[],
   
   
+  pwdFormatIsIncorrect: [
+    {
+      value: 'pwdFormatIsIncorrect',
+      lang: 'en-US',
+      text: 'Password must be at least 6 characters long',
+    },
+    {
+      value: 'pwdFormatIsIncorrect',
+      lang: 'ru-RU',
+      text: 'Пароль должен быть не короче 6 символов',
+    },
+  ] satisfies UiOption<'pwdFormatIsIncorrect'>[],
+  
+  
+  passwordsDoNotMatch: [
+    {
+      value: 'passwordsDoNotMatch',
+      lang: 'en-US',
+      text: 'Passwords do not match',
+    },
+    {
+      value: 'passwordsDoNotMatch',
+      lang: 'ru-RU',
+      text: 'Пароли не совпадают',
+    },
+  ] satisfies UiOption<'passwordsDoNotMatch'>[],
+  
+  
+  firstNameIsNotEntered: [
+    {
+      value: 'firstNameIsNotEntered',
+      lang: 'en-US',
+      text: 'First name is not entered',
+    },
+    {
+      value: 'firstNameIsNotEntered',
+      lang: 'ru-RU',
+      text: 'Имя не введено',
+    },
+  ] satisfies UiOption<'firstNameIsNotEntered'>[],
+  
+  
+  lastNameIsNotEntered: [
+    {
+      value: 'lastNameIsNotEntered',
+      lang: 'en-US',
+      text: 'Last name is not entered',
+    },
+    {
+      value: 'lastNameIsNotEntered',
+      lang: 'ru-RU',
+      text: 'Фамилия не введена',
+    },
+  ] satisfies UiOption<'lastNameIsNotEntered'>[],
+  
+  
+  sexIsNotChosen: [
+    {
+      value: 'sexIsNotChosen',
+      lang: 'en-US',
+      text: 'Sex is not chosen',
+    },
+    {
+      value: 'sexIsNotChosen',
+      lang: 'ru-RU',
+      text: 'Пол не выбран',
+    },
+  ] satisfies UiOption<'sexIsNotChosen'>[],
+  
+  
+  birthDateIsNotEntered: [
+    {
+      value: 'birthDateIsNotEntered',
+      lang: 'en-US',
+      text: 'Birth date is not entered',
+    },
+    {
+      value: 'birthDateIsNotEntered',
+      lang: 'ru-RU',
+      text: 'Дата рождения не введена',
+    },
+  ] satisfies UiOption<'birthDateIsNotEntered'>[],
+  
+  
   noUserWithSuchLoginPwd: [
     {
       value: 'noUserWithSuchLoginPwd',
@@ -338,6 +464,20 @@ export const CommonUiOptions = {
       text: 'Не найдено пользователя с таким логином-паролем',
     },
   ] satisfies UiOption<'noUserWithSuchLoginPwd'>[],
+  
+  
+  userWithSuchEmailAlreadyRegistered: [
+    {
+      value: 'userWithSuchEmailAlreadyRegistered',
+      lang: 'en-US',
+      text: 'User with such email is already registered',
+    },
+    {
+      value: 'userWithSuchEmailAlreadyRegistered',
+      lang: 'ru-RU',
+      text: 'Пользователь с таким email уже зарегестрирован',
+    },
+  ] satisfies UiOption<'userWithSuchEmailAlreadyRegistered'>[],
   
   
   connectionError: [

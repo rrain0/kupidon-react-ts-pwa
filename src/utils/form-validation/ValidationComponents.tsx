@@ -1,3 +1,4 @@
+import { empty } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import React, {
   DetailedReactHTMLElement,
@@ -8,20 +9,165 @@ import React, {
   useEffect, useLayoutEffect, useMemo,
   useState,
 } from 'react'
-import Input from 'src/views/Inputs/Input'
-import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
+import Input from 'src/views/Inputs/Input/Input'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
-import validate = ValidationValidate.validate
+import { RadioInputGroupProps } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import Failures = ValidationCore.Failures
 import updateFailures = ValidationActions.updateFailures
+import awaitDelay = ValidationActions.awaitDelay
 
 
 
 export namespace ValidationComponents {
   
   
-  import awaitDelay = ValidationActions.awaitDelay
-  export type InputValidationWrapProps<Vs extends object> = {
+  
+  export type InputValidationWrapProps
+    <
+      Vs extends object,
+      I extends React.InputHTMLAttributes<Element>,
+    > = {
+    fieldName: keyof Vs
+    values: readonly [Vs,Vs]
+    failures: Failures<Vs>
+    errorPropName: keyof I
+    setError: (error: Failures<Vs>)=>void
+    setValues: (values: [Vs,Vs])=>void
+    //children: ReactHTMLElement</*React.InputHTMLAttributes<HTMLInputElement>,*/ HTMLInputElement>
+    children: ReactElement<
+      I,
+      JSX.ElementType /*React.JSXElementConstructor<JSX.IntrinsicElements['input']>*/
+    >
+  }
+  export const InputValidationWrap =
+    <
+      Vs extends object,
+      I extends React.InputHTMLAttributes<Element>,
+    >
+    (props: InputValidationWrapProps<Vs,I>) => {
+    const {
+      fieldName,
+      values,
+      failures,
+      errorPropName,
+      setError,
+      setValues,
+      children: PassedInput,
+    } = props
+    
+    const value = values[0][fieldName] as any
+    const [highlight, setHighlight] = useState(false)
+    useEffect(()=>{
+      setHighlight(false)
+      const stale = [false] as [boolean]
+      
+      const fs = failures
+        .filter(f=>f.highlightFields.includes(fieldName))
+        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      awaitDelay(fs, stale, ()=>setHighlight(true))
+      
+      return ()=>{ stale[0]=true }
+    },[failures, fieldName, value])
+    
+    
+    
+    const Input =
+      React.cloneElement<React.InputHTMLAttributes<Element> & { [Prop in typeof errorPropName]?: any }>(
+        PassedInput,
+        {
+          value: value as string,
+          [errorPropName]: highlight,
+          onChange: ev=>{
+            //console.log('ValidationWrap onChange')
+            const newValues = { ...values[0], [fieldName]: ev.target.value as any }
+            setValues([newValues,values[0]])
+            PassedInput.props.onChange?.(ev)
+          },
+          onBlur: ev=>{
+            if (failures.some(f=>f.highlightFields.includes(fieldName) && f.isDelayed)){
+              const newFails = updateFailures(
+                failures,
+                { highlightFields: [fieldName] },
+                { delay: 0 }
+              )
+              setError(newFails)
+            }
+            PassedInput.props.onBlur?.(ev)
+          }
+        }
+      )
+    
+    return <>{Input}</>
+  }
+  
+  
+  
+  
+  export const RadioInputValidationWrap =
+    <
+      Vs extends object,
+      I extends React.InputHTMLAttributes<Element>,
+    >
+    (props: InputValidationWrapProps<Vs,I>) => {
+    const {
+      fieldName,
+      values,
+      failures,
+      errorPropName,
+      setError,
+      setValues,
+      children: PassedInput,
+    } = props
+    
+    
+    const value = values[0][fieldName] as any
+    const [highlight, setHighlight] = useState(false)
+    useEffect(()=>{
+      setHighlight(false)
+      const stale = [false] as [boolean]
+      
+      const fs = failures
+        .filter(f=>f.highlightFields.includes(fieldName))
+        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      awaitDelay(fs, stale, ()=>setHighlight(true))
+      
+      return ()=>{ stale[0]=true }
+    },[failures, fieldName, value])
+    
+    
+    const Input =
+      React.cloneElement<React.InputHTMLAttributes<Element> & { [Prop in typeof errorPropName]?: any }>(
+        PassedInput,
+          {
+          checked: value===PassedInput.props.value,
+          [errorPropName]: highlight,
+          onChange: ev=>{
+            //console.log('ValidationWrap onChange')
+            const newValues = { ...values[0], [fieldName]: ev.target.value as any }
+            setValues([newValues,values[0]])
+            PassedInput.props.onChange?.(ev)
+          },
+          onBlur: ev=>{
+            if (failures.some(f=>f.highlightFields.includes(fieldName) && f.isDelayed)){
+              const newFails = updateFailures(
+                failures,
+                { highlightFields: [fieldName] },
+                { delay: 0 }
+              )
+              setError(newFails)
+            }
+            PassedInput.props.onBlur?.(ev)
+          }
+        }
+      )
+    
+    return <>{Input}</>
+  }
+  
+  
+  
+  
+  export type RadioInputGroupValidationWrapProps<Vs extends object> = {
     fieldName: keyof Vs
     values: readonly [Vs,Vs]
     failures: Failures<Vs>
@@ -30,11 +176,11 @@ export namespace ValidationComponents {
     setValues: (values: [Vs,Vs])=>void
     //children: ReactHTMLElement</*React.InputHTMLAttributes<HTMLInputElement>,*/ HTMLInputElement>
     children: ReactElement<
-      React.InputHTMLAttributes<string>,
+      RadioInputGroupProps,
       JSX.ElementType /*React.JSXElementConstructor<JSX.IntrinsicElements['input']>*/
     >
   }
-  export const InputValidationWrap = <Vs extends object>(props: InputValidationWrapProps<Vs>) => {
+  export const RadioInputGroupValidationWrap = <Vs extends object>(props: RadioInputGroupValidationWrapProps<Vs>) => {
     const {
       fieldName,
       values,
@@ -42,62 +188,7 @@ export namespace ValidationComponents {
       errorPropName,
       setError,
       setValues,
-      children: PassedInput,
-    } = props
-    
-    const value = values[0][fieldName] as any
-    const [highlight, setHighlight] = useState(false)
-    useEffect(()=>{
-      setHighlight(false)
-      let stale = [false] as [boolean]
-      
-      const fs = failures
-        .filter(f=>f.usedValues[f.errorFields.findIndex(f=>f===fieldName)]===value && f.highlight)
-      awaitDelay(fs, stale, ()=>setHighlight(true))
-      
-      return ()=>{ stale=[true] }
-    },[failures, fieldName, value])
-    
-    
-    const Input = React.cloneElement(PassedInput, {
-      value: value,
-      [errorPropName]: highlight,
-      onChange: ev=>{
-        //console.log('ValidationWrap onChange')
-        const newValues = { ...values[0], [fieldName]: ev.target.value as any }
-        setValues([newValues,values[0]])
-        PassedInput.props.onChange?.(ev)
-      },
-      onBlur: ev=>{
-        if (failures.some(f=>f.errorFields.includes(fieldName) && f.isDelayed)){
-          const newFails = updateFailures(
-            failures,
-            { errorFields: [fieldName] },
-            { delay: 0 }
-          )
-          setError(newFails)
-        }
-        PassedInput.props.onBlur?.(ev)
-      }
-    })
-    
-    //console.log('render ValidationWrap')
-    
-    return <>{Input}</>
-  }
-  
-  
-  
-  
-  export const RadioInputValidationWrap = <Vs extends object>(props: InputValidationWrapProps<Vs>) => {
-    const {
-      fieldName,
-      values,
-      failures,
-      errorPropName,
-      setError,
-      setValues,
-      children: PassedInput,
+      children: PassedDiv,
     } = props
     
     
@@ -105,45 +196,38 @@ export namespace ValidationComponents {
     const [highlight, setHighlight] = useState(false)
     useEffect(()=>{
       setHighlight(false)
-      let stale = [false] as [boolean]
+      const stale = [false] as [boolean]
       
       const fs = failures
-        .filter(f=>f.usedValues[f.errorFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+        .filter(f=>f.highlightFields.includes(fieldName))
+        .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
       awaitDelay(fs, stale, ()=>setHighlight(true))
       
-      return ()=>{ stale=[true] }
+      return ()=>{ stale[0]=true }
     },[failures, fieldName, value])
     
     
-    const Input = React.cloneElement(PassedInput, {
-      checked: value===PassedInput.props.value,
+    
+    
+    const Div = React.cloneElement(PassedDiv, {
       [errorPropName]: highlight,
-      onChange: ev=>{
-        //console.log('ValidationWrap onChange')
-        const newValues = { ...values[0], [fieldName]: ev.target.value as any }
-        setValues([newValues,values[0]])
-        PassedInput.props.onChange?.(ev)
-      },
-      onBlur: ev=>{
-        if (failures.some(f=>f.errorFields.includes(fieldName) && f.isDelayed)){
-          const newFails = updateFailures(
-            failures,
-            { errorFields: [fieldName] },
-            { delay: 0 }
-          )
-          setError(newFails)
-        }
-        PassedInput.props.onBlur?.(ev)
-      }
     })
     
-    //console.log('render ValidationWrap')
     
-    return <>{Input}</>
+    return <>{Div}</>
   }
   
   
 }
+
+
+
+
+
+
+
+
+
 
 
 

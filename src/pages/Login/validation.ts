@@ -2,6 +2,7 @@ import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
+import { UiOption } from 'src/utils/lang/UiOption'
 import { LoginDefaults } from './LoginPage'
 import isValidEmail = ValidationValidators.isValidEmail
 import LoginRespE = AuthApi.LoginRespE
@@ -15,6 +16,25 @@ export namespace LoginPageValidation {
   
   export type SeverErrorCode = LoginRespE['data']['code']
     | 'connection-error' | 'unknown'
+  
+  
+  export type FailureCode = 'login-required'
+    | 'login-incorrect'
+    | 'pwd-required'
+    | 'NO_USER'
+    | 'connection-error'
+    | 'unknown-error'
+  
+  
+  
+  export const mapFailureCodeToUiOption = {
+    'login-required': LoginPageUiOptions.loginNotEntered,
+    'login-incorrect': LoginPageUiOptions.loginFormatIsIncorrect,
+    'pwd-required': LoginPageUiOptions.pwdNotEntered,
+    'NO_USER': LoginPageUiOptions.noUserWithSuchLoginPwd,
+    'connection-error': LoginPageUiOptions.connectionError,
+    'unknown-error': LoginPageUiOptions.unknownError,
+  } satisfies Record<FailureCode, UiOption<any>[]>
   
   
   
@@ -41,7 +61,7 @@ export namespace LoginPageValidation {
     [['login'], ([v]: [UserValues['login']?,...any[]])=>{
       const d = LoginDefaults.values.login
       if (v===d) return new PartialFailureData({
-        code: 'login-required',
+        code: 'login-required' satisfies FailureCode,
         msg: 'Email не введён',
         highlight: false,
         notify: false,
@@ -49,7 +69,7 @@ export namespace LoginPageValidation {
     }],
     [['login'], ([v]: [UserValues['login']?,...any[]])=>{
       if (!isValidEmail(v)) return new PartialFailureData({
-        code: 'login-incorrect',
+        code: 'login-incorrect' satisfies FailureCode,
         msg: 'Некорректный формат email',
         delay: 3000,
       })
@@ -60,7 +80,7 @@ export namespace LoginPageValidation {
     [['pwd'], ([v]: [UserValues['pwd']?,...any[]])=>{
       const d = LoginDefaults.values.login
       if (v===d) return new PartialFailureData({
-        code: 'pwd-required',
+        code: 'pwd-required' satisfies FailureCode,
         msg: 'Пароль не введён',
         highlight: false,
         notify: false,
@@ -71,10 +91,11 @@ export namespace LoginPageValidation {
     
     [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
       if (v?.error.code==='NO_USER') return new PartialFailureData({
-        code: v.error.code,
+        code: v.error.code satisfies FailureCode,
         msg: 'Не найдено пользователя с таким логином-паролем',
+        usedFields: ['fromServer','login','pwd'],
         usedValues: [v, v.values.login, v.values.pwd],
-        errorFields: ['fromServer','login','pwd'],
+        highlightFields: ['fromServer','login','pwd'],
         canSubmit: true,
       })
     }],
@@ -83,17 +104,15 @@ export namespace LoginPageValidation {
     
     [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
       if (v?.error.code==='connection-error') return new PartialFailureData({
-        code: v.error.code,
+        code: v.error.code satisfies FailureCode,
         msg: 'Ошибка соединения с сервером, возможно что-то с интернетом',
-        errorFields: ['fromServer'],
         canSubmit: true,
       })
     }],
     [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
       if (v) return new PartialFailureData({
-        code: 'unknown-error',
+        code: 'unknown-error' satisfies FailureCode,
         msg: 'Неизвестная ошибка',
-        errorFields: ['fromServer'],
         canSubmit: true,
         extra: v,
       })
@@ -106,12 +125,3 @@ export namespace LoginPageValidation {
 
 
 
-
-export const mapFailureCodeToUiOption = {
-  'login-required': LoginPageUiOptions.emailNotEntered,
-  'login-incorrect': LoginPageUiOptions.emailFormatIsIncorrect,
-  'pwd-required': LoginPageUiOptions.pwdNotEntered,
-  'NO_USER': LoginPageUiOptions.noUserWithSuchLoginPwd,
-  'connection-error': LoginPageUiOptions.connectionError,
-  'unknown-error': LoginPageUiOptions.unknownError,
-}

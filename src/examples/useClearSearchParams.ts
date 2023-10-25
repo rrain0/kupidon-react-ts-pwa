@@ -4,7 +4,7 @@ import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import ObjectEntries = ObjectUtils.ObjectEntries
 
 
-// todo remove
+
 export const useClearSearchParams = (params: any) => {
   
   const [searchParams] = useSearchParams()

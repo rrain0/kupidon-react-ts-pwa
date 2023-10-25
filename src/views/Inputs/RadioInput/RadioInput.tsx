@@ -16,7 +16,6 @@ import RadioInactiveIc = SimpleSvgIcons.RadioInactiveIc
 import trueOrUndef = CastUtils.trueOrUndef
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
-import resetButton = EmotionCommon.resetButton
 import row = EmotionCommon.row
 
 
@@ -34,7 +33,7 @@ export type RadioInputProps = JSX.IntrinsicElements['input'] & {
 }
 
 const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
-  { ...props}, forwardedRef
+  props, forwardedRef
 ) => {
   let {
     hasError,
@@ -94,7 +93,6 @@ const Frame = styled.label.attrs(p=>({
   className: classNames(p.className,'rrainuiFrame')
 }))``
 const frameStyle = css`
-  ${resetButton};
   position: relative;
   ${row};
   justify-content: start;

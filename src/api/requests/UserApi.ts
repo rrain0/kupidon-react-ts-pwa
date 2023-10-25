@@ -1,12 +1,13 @@
-import { AxiosConfig } from '../AxiosConfig';
-import { ApiRoutes as r } from 'src/api-routes/ApiRoutes';
-import { AxiosResponse } from 'axios';
+import { AxiosConfig } from '../AxiosConfig'
+import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
+import { AxiosResponse } from 'axios'
+import axAccess = AxiosConfig.axAccess
+import ax = AxiosConfig.ax
+import AccessRespE = AxiosConfig.AccessRespE
+
 
 
 export namespace UserApi {
-  import axAccess = AxiosConfig.axAccess
-  import ax = AxiosConfig.ax
-  import AccessRespE = AxiosConfig.AccessRespE;
   
   
   
@@ -57,11 +58,10 @@ export namespace UserApi {
   export type CreateUserRespE = {
     status: 400,
     data: {
-      code: "INVALID_INPUT_BODY"
-      extraCode: "INVALID_EMAIL_FORMAT"
-        |"INVALID_PWD_FORMAT"
-        |"INVALID_FIRST_NAME_FORMAT"
-        |"INVALID_LAST_NAME_FORMAT"
+      code: "INVALID_INPUT_BODY__INVALID_EMAIL_FORMAT"
+        |"INVALID_INPUT_BODY__INVALID_PWD_FORMAT"
+        |"INVALID_INPUT_BODY__INVALID_FIRST_NAME_FORMAT"
+        |"INVALID_INPUT_BODY__INVALID_LAST_NAME_FORMAT"
       msg: string
     } | {
       code: "DUPLICATE_EMAIL"

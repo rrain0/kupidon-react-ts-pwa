@@ -26,8 +26,8 @@ export namespace ValidationValidate {
    значит поле готово для текущего валидатора.
    
    [
-   [field names be used to validate],
-   validator function: ([field values be used to validate])=>{}
+     [field names to be used to validate],
+     validator function: ([field values to be used to validate])=>{}
    ]
    */
   
@@ -66,7 +66,7 @@ export namespace ValidationValidate {
     const retainedFails: Failures<Vs> = prevFailures
       .filter(f=>f.usedFields.every(f=>!changedFields.has(f)))
     const errorFields = new Set(
-      retainedFails.filter(f=>!f.canSubmit).flatMap(f=>f.errorFields)
+      retainedFails.filter(f=>!f.canSubmit).flatMap(f=>f.highlightFields)
     )
     const newFails: Failures<Vs> = []
     
@@ -87,7 +87,7 @@ export namespace ValidationValidate {
             usedValues: result.usedValues ?? usedValues,
           })
           newFails.unshift(newFail) // fresh failures first
-          newFail.errorFields.forEach(f=>errorFields.add(f))
+          newFail.highlightFields.forEach(f=>errorFields.add(f))
         }
       }
     })

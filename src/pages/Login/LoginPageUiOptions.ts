@@ -28,8 +28,8 @@ export const LoginPageUiOptions = {
   signup: CommonUiOptions.signup,
   
   
-  emailNotEntered: CommonUiOptions.emailNotEntered,
-  emailFormatIsIncorrect: CommonUiOptions.emailFormatIsIncorrect,
+  loginNotEntered: CommonUiOptions.loginNotEntered,
+  loginFormatIsIncorrect: CommonUiOptions.loginFormatIsIncorrect,
   pwdNotEntered: CommonUiOptions.pwdNotEntered,
   noUserWithSuchLoginPwd: CommonUiOptions.noUserWithSuchLoginPwd,
   connectionError: CommonUiOptions.connectionError,

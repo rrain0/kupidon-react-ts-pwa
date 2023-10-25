@@ -16,7 +16,7 @@ import ObjectValues = ObjectUtils.ObjectValues
 
 
 /*
-  todo
+  to do
     Transform into
     {
       path: '',

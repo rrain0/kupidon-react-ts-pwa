@@ -136,7 +136,7 @@ export namespace EmotionCommon {
       border: none;
     }
   `
-  // todo reset Textarea - resize, autoheight, scrollbars
+  
   export const resetTextarea = css`
     ${reset}
     :hover, :active, :focus-visible, :focus {

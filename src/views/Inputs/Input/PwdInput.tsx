@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import Input, {InputProps} from "src/views/Inputs/Input"
+import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
 import React from "react"
 import {ReactUtils} from "src/utils/common/ReactUtils"

@@ -4,6 +4,7 @@ import React, { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { Pages } from 'src/components/Page/Pages'
+import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
@@ -49,20 +50,13 @@ function MainPage(){
     </Page>
     
     
-    <div
-      css={css`
-        position: fixed;
-        bottom: var(--bottom-nav-height); right: 0; left: 0;
-        height: calc(100dvh - var(--bottom-nav-height));
-        pointer-events: none;
-      `}
-    >
+    <PageScrollbarOverlayFrame>
       <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
         {...scrollbarProps}
         showVertical={canScrollVertical}
         showHorizontal={canScrollHorizontal}
       />
-    </div>
+    </PageScrollbarOverlayFrame>
     
     
     {/* <BottomButtonBar

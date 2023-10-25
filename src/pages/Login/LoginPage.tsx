@@ -6,30 +6,29 @@ import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
-import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
-import { useUiOptionArr, useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import { useStateAndRef } from 'src/utils/react/useStateAndRef'
-import { ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
+import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import Button from 'src/views/Buttons/Button'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import Input from 'src/views/Inputs/Input'
-import PwdInput from 'src/views/Inputs/PwdInput'
+import Input from 'src/views/Inputs/Input/Input'
+import PwdInput from 'src/views/Inputs/Input/PwdInput'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { InputStyle } from 'src/views/Inputs/InputStyle'
+import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import { Themes } from 'src/utils/theme/Themes'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
-import { LoginPageValidation, mapFailureCodeToUiOption } from './validation'
+import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
 import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
@@ -41,7 +40,6 @@ import updateFailures = ValidationActions.updateFailures
 import { ValidationComponents } from 'src/utils/form-validation/ValidationComponents'
 import InputValidationWrap = ValidationComponents.InputValidationWrap
 import Lazy = Utils.Lazy
-import { ToastMsg } from 'src/utils/toasts/useToastFailures'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import GearIc = SimpleSvgIcons.GearIc
@@ -54,6 +52,7 @@ import UserValues = LoginPageValidation.UserValues
 import Failure = ValidationCore.Failure
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import awaitDelay = ValidationActions.awaitDelay
+import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiOption
 
 
 
@@ -87,7 +86,8 @@ const LoginPage = () => {
   
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
-  const [loginForm, setLoginForm] = useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
+  const [loginForm, setLoginForm] =
+    useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
   const [loginFailures, setLoginFailures] = useState(LoginDefaults.failures)
   // LayoutEffect is necessary to update data when making Chrome mobile autofill
   useLayoutEffect(
@@ -103,9 +103,9 @@ const LoginPage = () => {
   )
   
   
-  useEffect(()=>{
+  /* useEffect(()=>{
     console.log('LOGIN_FAILURES',loginFailures)
-  },[loginFailures])
+  },[loginFailures]) */
   
   
   
@@ -305,6 +305,7 @@ const LoginPage = () => {
   const trySubmit = useCallback(
     ()=>{
       setLoginSuccess(false)
+      
       if (serverFailure?.highlight || serverFailure?.notify)
         setLoginFailures(s=>updateFailures(
           s,
@@ -312,12 +313,12 @@ const LoginPage = () => {
           { highlight: false, notify: false }
         ))
       
-      const failsToUpdate = loginFailures
+      const failsToShow = loginFailures
         .filter(f=>!f.canSubmit)
         .filter(f=>!f.highlight || !f.notify || f.isDelayed)
       setLoginFailures(s=>updateFailures(
         s,
-        { failures: failsToUpdate },
+        { failures: failsToShow },
         { highlight: true, notify: true, delay: 0 }
       ))
       
@@ -338,6 +339,7 @@ const LoginPage = () => {
     },
     [doSubmit, trySubmit]
   )
+  
   
   
   const validationProps = {
@@ -371,6 +373,7 @@ const LoginPage = () => {
     }
   },[loginSuccess, navigate, returnPath])
   
+  
   return <>
     <Page
       ref={pageRef}
@@ -385,7 +388,7 @@ const LoginPage = () => {
         <InputValidationWrap
           {...validationProps}
           fieldName={'login'}
-          errorPropName={'hasError'} // todo
+          errorPropName={'hasError'}
         >
           <Input
             css={InputStyle.input}
@@ -396,7 +399,7 @@ const LoginPage = () => {
         <InputValidationWrap
           {...validationProps}
           fieldName={'pwd'}
-          errorPropName={'hasError'} // todo
+          errorPropName={'hasError'}
         >
           <PwdInput
             css={InputStyle.input}
@@ -425,20 +428,13 @@ const LoginPage = () => {
     
     
     
-    <div
-      css={css`
-        position: fixed;
-        bottom: 0; right: 0; left: 0;
-        height: 100dvh;
-        pointer-events: none;
-      `}
-    >
+    <PageScrollbarOverlayFrame>
       <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
         {...scrollbarProps}
         showVertical={canScrollVertical}
         showHorizontal={canScrollHorizontal}
       />
-    </div>
+    </PageScrollbarOverlayFrame>
       
       
     <BottomButtonBar>

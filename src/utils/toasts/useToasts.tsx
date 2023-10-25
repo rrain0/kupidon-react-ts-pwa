@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { toast, ToastItem } from 'react-toastify'
 import { OnChangeCallback } from 'react-toastify/dist/core/eventManager'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { UiOption } from 'src/utils/lang/UiOption'
+import { useUiOptionArr } from 'src/utils/lang/useUiOptions'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import { ToastBody, ToastType } from 'src/utils/toasts/ToastifySetup'
+import { ToastBody, ToastType } from 'src/utils/toasts/ToastBody'
 import falseable = TypeUtils.falseable
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
-// todo maybe move it to App and Recoil
-// todo generate unique ids to control toasts
-//  but programmatically control them via ToastMsgData objects
+
 export type UseToastDataType = (ToastMsgData | falseable)[]
 export type UseToastsProps = {
-  //scope?: string | undefined
   data?: UseToastDataType | undefined
 }
 export const useToasts = (props?: UseToastsProps)=>{
-  //const scope = props?.scope===undefined ? '' : (props?.scope+'-')
   const data = props?.data??[]
   
   const [prevData, setPrevData] = useState([] as UseToastDataType)
@@ -108,7 +108,7 @@ export class ToastMsgData {
     if(toast.status==='removed' && toast.data===this){
       this.unsubscribeOnChange?.()
       if (this.runCloseCallback){
-        console.log('toast removed',this)
+        //console.log('toast removed',this)
         this.onClose?.()
       }
     }
@@ -142,3 +142,17 @@ export class ToastMsgData {
     }
   }
 }
+
+
+
+
+
+export const ToastMsg = ReactMemoTyped(
+  <UO extends UiOption<any>[]>(props:{
+    uiOption?: UO | undefined
+    defaultText?: string | undefined
+  })=>{
+    const uiOption = useUiOptionArr(props.uiOption)
+    return <>{uiOption[0]?.text ?? props.defaultText}</>
+  }
+)

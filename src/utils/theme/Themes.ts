@@ -127,6 +127,7 @@ export namespace Themes {
       border: string[]
       error: {
         bgc: string[]
+        border: string[]
       }
     }
     scrollbar: {
@@ -260,7 +261,8 @@ export namespace Themes {
       placeholder: ['#777777'],
       border: ['#00a8f3', '#9c20aa', '#fb3570'],
       error: {
-        bgc: ['#ffced2']
+        bgc: ['#ffced2'],
+        border: ['#ff0000'],
       }
     },
     
@@ -415,7 +417,8 @@ export namespace Themes {
       placeholder: ['#7b7b7b'],
       border: ['#00a8f3', '#9c20aa', '#fb3570'],
       error: {
-        bgc: ['#5e252c']
+        bgc: ['#5e252c'],
+        border: ['#cc221f'],
       }
     },
     
@@ -431,6 +434,8 @@ export namespace Themes {
       }
     },
   }
+  
+  
   
   
   

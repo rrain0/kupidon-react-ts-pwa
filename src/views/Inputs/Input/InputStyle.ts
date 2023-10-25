@@ -74,8 +74,15 @@ export namespace InputStyle {
     >.rrainuiInput:focus ~ .rrainuiBorder {
       background-position: 0 0;
     }
-    >.rrainuiInput[data-error] ~ .rrainuiBorder{}
+    >.rrainuiInput[data-error] ~ .rrainuiBorder{
+    
+    }
   `
-  
+  /* background-image: linear-gradient(
+   to right,
+   ${t.input.error.border[0]},
+   ${t.input.error.border[0]},
+   ${t.input.error.border[0]}
+   ); */
   
 }

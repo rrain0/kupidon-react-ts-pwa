@@ -17,7 +17,7 @@ import { RoutesBuilder } from 'src/examples/routes-builder/RoutesBuilder'
   }
   
   
-  // todo - это заглушка для дальнейшего развития приложения
+  
   const mainRoutes = {
     path: 'main'
   } satisfies RouteDescription
@@ -65,7 +65,7 @@ import { RoutesBuilder } from 'src/examples/routes-builder/RoutesBuilder'
     path: '/',
     paths: {
       test: testRoutes,
-      main: mainRoutes, // todo - это заглушка для дальнейшего развития приложения
+      main: mainRoutes,
       login: loginRoutes,
       signup: signupRoutes,
       profile: profileIdRoutes,

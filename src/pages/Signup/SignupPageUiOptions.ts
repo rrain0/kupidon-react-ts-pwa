@@ -6,19 +6,6 @@ import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
 
 export const SignupPageUiOptions = {
   
-  registration: [
-    {
-      value: 'registration',
-      lang: 'en-US',
-      text: 'Registration',
-    },
-    {
-      value: 'registration',
-      lang: 'ru-RU',
-      text: 'Регистрация',
-    },
-  ] satisfies UiOption<'registration'>[],
-  
   
   emailLoginPlaceholder: [
     {
@@ -124,10 +111,24 @@ export const SignupPageUiOptions = {
   signup: CommonUiOptions.signup,
   
   
-  signingUp: CommonUiOptions.signingUp,
+  registration: CommonUiOptions.registration,
+  registrationCompleted: CommonUiOptions.registrationCompleted,
   
   
   userSuccessfullyRegistered: CommonUiOptions.userSuccessfullyRegistered,
   
+  
+  emailIsNotEntered: CommonUiOptions.emailNotEntered,
+  emailFormatIsIncorrect: CommonUiOptions.emailFormatIsIncorrect,
+  pwdIsNotEntered: CommonUiOptions.pwdNotEntered,
+  pwdFormatIsIncorrect: CommonUiOptions.pwdFormatIsIncorrect,
+  passwordsDoNotMatch: CommonUiOptions.passwordsDoNotMatch,
+  firstNameIsNotEntered: CommonUiOptions.firstNameIsNotEntered,
+  lastNameIsNotEntered: CommonUiOptions.lastNameIsNotEntered,
+  sexIsNotChosen: CommonUiOptions.sexIsNotChosen,
+  birthDateIsNotEntered: CommonUiOptions.birthDateIsNotEntered,
+  userWithSuchEmailAlreadyRegistered: CommonUiOptions.userWithSuchEmailAlreadyRegistered,
+  connectionError: CommonUiOptions.connectionError,
+  unknownError: CommonUiOptions.unknownError,
   
 } satisfies UiOptionsContainer
