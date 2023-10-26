@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useMatch, useSearchParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
@@ -12,6 +12,7 @@ import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import use = RouteBuilder.use
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import ProfilePage from './ProfilePage'
+import full = RouteBuilder.full
 
 
 
@@ -53,11 +54,12 @@ const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
   const authId = auth?.user.id
   
   
+  const urlUserId = useMatch(RootRoute.profile.id.userId[full]()+'/*')
+    ?.params[RootRoute.profile.id.userId[path].slice(1)]
+  
+  
   
   return <Routes>
-    <Route path={RootRoute.profile.id.userId[path]+'/*'}
-      element={<ProfilePage/>}
-    />
     { authId && <Route path=''
       element={
         <Navigate
@@ -76,5 +78,20 @@ const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
         />
       }
     /> }
+    { authId!==urlUserId
+      ? <Route path={RootRoute.profile.id.userId[path]+'/*'}
+        element={<Navigate
+          to={RootRoute.login[fullAllowedNameParams]({
+            returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
+          })}
+          replace={true}
+        />}
+      />
+      : <Route path={RootRoute.profile.id.userId[path]+'/*'}
+        element={<ProfilePage/>}
+      />
+    }
+    
+    
   </Routes>
 })

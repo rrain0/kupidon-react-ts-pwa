@@ -3,7 +3,6 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useEffect, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
-import { UserApi } from 'src/api/requests/UserApi'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
 import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
@@ -68,7 +67,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [sheetSnaps, setSheetSnaps] = useState<SheetSnapPoints>(
+  const [sheetSnaps] = useState<SheetSnapPoints>(
     [0,200,'fit-content','50%','80%']
   )
   const [snapIdx,setSnapIdx] = useState(2)
@@ -114,6 +113,9 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   const uiOptions = useUiOptionsContainer(ProfileUiOptions)
+  
+  
+  
   
   return <Form onSubmit={onSubmit}>
     
@@ -250,9 +252,9 @@ const ProfileContent = (props: ProfileContentProps)=>{
         >
           <div
             css={css`
-                  ${col};
-                  padding-bottom: 20px;
-                `}
+              ${col};
+              padding-bottom: 20px;
+            `}
           >
             {
               uiOptions.preferredPeople
@@ -275,10 +277,10 @@ const ProfileContent = (props: ProfileContentProps)=>{
                 >
                   <div
                     css={css`
-                          flex: 1;
-                          padding-top: 4px;
-                          padding-bottom: 4px;
-                        `}
+                      flex: 1;
+                      padding-top: 4px;
+                      padding-bottom: 4px;
+                    `}
                   >
                     {opt.text}
                   </div>
