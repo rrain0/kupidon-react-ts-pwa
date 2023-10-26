@@ -5,6 +5,7 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
@@ -369,14 +370,6 @@ const SignupPage = () => {
   const [settingsOpen, setSettingsOpen] = useState(false)
   
   const pageRef = useRef<HTMLElement>(null)
-  const {
-    canScrollHorizontal,
-    canScrollVertical,
-    ...scrollbarProps
-  } = useContainerScrollState({
-    containerIsWindow: true,
-    contentRef: pageRef,
-  })
   
   
   
@@ -517,10 +510,16 @@ const SignupPage = () => {
       
       
       <PageScrollbarOverlayFrame>
-        <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
+        <UseScrollbars
+          containerIsWindow={true}
+          contentRef={pageRef}
+          render={(
+            { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
+          )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+            {...scrollbarProps}
+            showVertical={canScrollVertical}
+            showHorizontal={canScrollHorizontal}
+          />}
         />
       </PageScrollbarOverlayFrame>
       

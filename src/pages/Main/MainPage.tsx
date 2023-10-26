@@ -7,6 +7,7 @@ import { Pages } from 'src/components/Page/Pages'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import RootRoute = AppRoutes.RootRoute
@@ -22,14 +23,6 @@ function MainPage(){
   
   const pageRef = useRef<HTMLElement>(null)
   
-  const {
-    canScrollHorizontal,
-    canScrollVertical,
-    ...scrollbarProps
-  } = useContainerScrollState({
-    containerIsWindow: true,
-    contentRef: pageRef,
-  })
   
   return <>
     <Page
@@ -51,10 +44,16 @@ function MainPage(){
     
     
     <PageScrollbarOverlayFrame>
-      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-        {...scrollbarProps}
-        showVertical={canScrollVertical}
-        showHorizontal={canScrollHorizontal}
+      <UseScrollbars
+        containerIsWindow={true}
+        contentRef={pageRef}
+        render={(
+          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
+        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+          {...scrollbarProps}
+          showVertical={canScrollVertical}
+          showHorizontal={canScrollHorizontal}
+        />}
       />
     </PageScrollbarOverlayFrame>
     

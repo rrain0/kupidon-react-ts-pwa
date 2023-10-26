@@ -9,6 +9,7 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -355,14 +356,6 @@ const LoginPage = () => {
   const [settingsOpen, setSettingsOpen] = useState(false)
   
   const pageRef = useRef<HTMLElement>(null)
-  const {
-    canScrollHorizontal,
-    canScrollVertical,
-    ...scrollbarProps
-  } = useContainerScrollState({
-    containerIsWindow: true,
-    contentRef: pageRef,
-  })
   
   
   
@@ -429,10 +422,16 @@ const LoginPage = () => {
     
     
     <PageScrollbarOverlayFrame>
-      <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-        {...scrollbarProps}
-        showVertical={canScrollVertical}
-        showHorizontal={canScrollHorizontal}
+      <UseScrollbars
+        containerIsWindow={true}
+        contentRef={pageRef}
+        render={(
+          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
+        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+          {...scrollbarProps}
+          showVertical={canScrollVertical}
+          showHorizontal={canScrollHorizontal}
+        />}
       />
     </PageScrollbarOverlayFrame>
       

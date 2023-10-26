@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import hideScrollbar = EmotionCommon.hideScrollbar
@@ -29,16 +31,6 @@ const OverflowWrapper = (props: OverflowWrapperProps)=>{
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const scrollContentRef = useRef<HTMLDivElement>(null)
   
-  
-  
-  const {
-    canScrollHorizontal,
-    canScrollVertical,
-    ...scrollbarProps
-  } = useContainerScrollState({
-    containerRef: scrollContainerRef,
-    contentRef: scrollContentRef,
-  })
   
   
   return <div
@@ -91,10 +83,16 @@ const OverflowWrapper = (props: OverflowWrapperProps)=>{
     </div>
     
     
-    <ScrollbarOverlay
-      {...scrollbarProps}
-      showVertical={showVertical && canScrollVertical}
-      showHorizontal={showHorizontal && canScrollHorizontal}
+    <UseScrollbars
+      containerRef={scrollContainerRef}
+      contentRef={scrollContentRef}
+      render={(
+        { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
+      )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+        {...scrollbarProps}
+        showVertical={showVertical && canScrollVertical}
+        showHorizontal={showHorizontal && canScrollHorizontal}
+      />}
     />
     
   
