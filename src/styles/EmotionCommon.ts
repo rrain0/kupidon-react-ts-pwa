@@ -86,7 +86,7 @@ export namespace EmotionCommon {
   
   
   export const onHover = (cssStyle: SerializedStyles)=>css`
-    @media not (hover: none) { :hover {
+    @media (hover: hover) and (pointer: fine) { :hover {
       ${cssStyle};
     } }
   `

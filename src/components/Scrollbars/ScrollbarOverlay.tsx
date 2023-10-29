@@ -3,12 +3,14 @@ import { css } from '@emotion/react'
 import classNames from 'classnames'
 import React, { HTMLAttributes } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Scrollbar from 'src/views/Scrollbar/Scrollbar'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import { ScrollProps, SetScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import empty = TypeUtils.empty
 import abs = EmotionCommon.abs
+import ReactMemoTyped = ReactUtils.ReactMemoTyped
 
 
 
@@ -76,4 +78,4 @@ const ScrollbarOverlay = (props: ScrollbarOverlayProps)=>{
   
   </div>
 }
-export default ScrollbarOverlay
+export default ReactMemoTyped(ScrollbarOverlay)

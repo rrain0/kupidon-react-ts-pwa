@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -28,6 +28,7 @@ function ProfilePage(){
   
   const [,setAuth] = useRecoilState(AuthRecoil)
   
+  
   const update = async() => {
     try {
       const resp = await UserApi.current()
@@ -37,6 +38,11 @@ function ProfilePage(){
     }
   }
   
+  
+  useEffect(
+    ()=>void update(),
+    []
+  )
   
   
   const [canSave, setCanSave] = useState(false)

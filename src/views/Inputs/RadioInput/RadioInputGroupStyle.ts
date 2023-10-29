@@ -10,7 +10,7 @@ export namespace RadioInputGroupStyle {
   
   
   
-  export const style = (t: Themes.Theme) => css`
+  export const row = (t: Themes.Theme) => css`
     &.rrainuiRadioGroup {
       min-height: 50px;
       width: 100%;
@@ -25,8 +25,6 @@ export namespace RadioInputGroupStyle {
       }
 
       
-
-
       .rrainuiBorder {}
       ${onHover(css` >.rrainuiBorder {  }`)}
       &[data-error] >.rrainuiBorder{

@@ -5,21 +5,21 @@ import { AuthApi } from 'src/api/requests/AuthApi'
 import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import SettingsBottomButtonBar from 'src/components/BottomButtonBar/SettingsBottomButtonBar'
 import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import Button from 'src/views/Buttons/Button'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import PwdInput from 'src/views/Inputs/Input/PwdInput'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -28,22 +28,16 @@ import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import { Themes } from 'src/utils/theme/Themes'
-import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
 import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
 import validate = ValidationValidate.validate
 import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
-import { Utils } from 'src/utils/common/Utils'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
-import { ValidationComponents } from 'src/utils/form-validation/ValidationComponents'
-import InputValidationWrap = ValidationComponents.InputValidationWrap
-import Lazy = Utils.Lazy
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
-import GearIc = SimpleSvgIcons.GearIc
 import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
@@ -54,23 +48,11 @@ import Failure = ValidationCore.Failure
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
 import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiOption
+import defaultValues = LoginPageValidation.defaultValues
 
 
 
-export const LoginDefaults = function(){
-  const defaultValues = new Lazy<FormValues>(()=>({
-    login: '',
-    pwd: '',
-    fromServer: undefined,
-  }))
-  const defaultFailures = new Lazy(()=>validate(
-    { values: defaultValues.get(), validators: validators }
-  ))
-  return {
-    get values() { return defaultValues.get() },
-    get failures() { return defaultFailures.get() }
-  }
-}()
+
 
 
 
@@ -88,8 +70,10 @@ const LoginPage = () => {
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
   const [loginForm, setLoginForm] =
-    useState([LoginDefaults.values,LoginDefaults.values] as const) // [now,prev]
-  const [loginFailures, setLoginFailures] = useState(LoginDefaults.failures)
+    useState([defaultValues,defaultValues] as const) // [now,prev]
+  const [loginFailures, setLoginFailures] = useState(()=>validate(
+    { values: defaultValues, validators: validators }
+  ))
   // LayoutEffect is necessary to update data when making Chrome mobile autofill
   useLayoutEffect(
     ()=>{
@@ -345,7 +329,6 @@ const LoginPage = () => {
   
   const validationProps = {
     values: loginForm,
-    validators: validators,
     failures: loginFailures,
     setError: setLoginFailures,
     setValues: setLoginForm,
@@ -354,6 +337,7 @@ const LoginPage = () => {
   
   
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const openSettings = useCallback(()=>setSettingsOpen(true),[])
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -378,27 +362,29 @@ const LoginPage = () => {
           {uiOptions.login[0].text}
         </h3>
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'login'}
-          errorPropName={'hasError'}
-        >
-          <Input
+        
+        
+        <ValidationComponentWrap {...validationProps}
+          fieldName='login'
+          render={props => <Input
             css={InputStyle.input}
             placeholder={uiOptions.loginEmailPlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'pwd'}
-          errorPropName={'hasError'}
-        >
-          <PwdInput
+        <ValidationComponentWrap {...validationProps}
+          fieldName='pwd'
+          render={props => <PwdInput
             css={InputStyle.input}
             placeholder={uiOptions.pwdPlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
+        
+        
         
         <Button
           css={ButtonStyle.bigRectPrimary}
@@ -434,21 +420,13 @@ const LoginPage = () => {
         />}
       />
     </PageScrollbarOverlayFrame>
-      
-      
-    <BottomButtonBar>
-      <Button css={ButtonStyle.iconTransparent}
-        onClick={()=>setSettingsOpen(true)}
-      >
-        <GearIc/>
-      </Button>
-    </BottomButtonBar>
+    
+    <SettingsBottomButtonBar openSettings={openSettings}/>
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
     
   </>
 }
-
 export default ReactMemoTyped(LoginPage)
 
 

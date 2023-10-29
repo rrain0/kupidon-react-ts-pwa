@@ -34,11 +34,18 @@ import textSmall1 = EmotionCommon.textSmall2
 
 
 
+const sheetSnaps: SheetSnapPoints = [0,200,'fit-content','50%','80%']
+const openIdx = 2
+
+
+
 export type ProfileContentProps = {
   setCanSave?: Setter<boolean> | undefined,
 }
 const ProfileContent = (props: ProfileContentProps)=>{
-  
+  const {
+    setCanSave
+  } = props
   
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
@@ -49,8 +56,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
     emailVerified,
     created,
     updated,
-    firstName,
-    lastName,
+    name,
     birthDate,
     sex,
   } = auth!.user
@@ -67,12 +73,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [sheetSnaps] = useState<SheetSnapPoints>(
-    [0,200,'fit-content','50%','80%']
-  )
   const [snapIdx,setSnapIdx] = useState(2)
-  const openIdx = 2
-  
   
   const [preferredPeople, setPreferredPeople] = useState(
     'notSelected' as 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
@@ -95,10 +96,11 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   useEffect(
     ()=>{
-      props.setCanSave?.(preferredPeople!=='notSelected')
+      setCanSave?.(preferredPeople!=='notSelected')
     },
-    [preferredPeople]
+    [preferredPeople, setCanSave]
   )
+  
   
   
   const bottomSheetProps = {
@@ -135,8 +137,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
         <DataField css={[
           DataFieldStyle.statikSmall,
           css`&.rrainuiFrame {
-                ${textSmall1};
-              }`,
+            ${textSmall1};
+          }`,
         ]}
         >
           {id}
@@ -174,17 +176,14 @@ const ProfileContent = (props: ProfileContentProps)=>{
         </DataField>
       </ItemContainer>
       
+    </Card>
+    
+    <Card>
+      
       <ItemContainer>
         <ItemLabel>{uiOptions.name[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
-          {firstName}
-        </DataField>
-      </ItemContainer>
-      
-      <ItemContainer>
-        <ItemLabel>{uiOptions.lastName[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          {lastName}
+          {name}
         </DataField>
       </ItemContainer>
       
@@ -239,56 +238,61 @@ const ProfileContent = (props: ProfileContentProps)=>{
         
         <DataField
           css={DataFieldStyle.interactiveSmall}
-          onClick={ev => setSelecting('preferred-genders')}
+          onClick={ev => {
+            //console.log('CLICK')
+            setSelecting('preferred-genders')
+          }}
           role="listbox"
         >
           {uiOptions.preferredPeople.find(it=>it.value===preferredPeople)?.text}
-        </DataField>
-        
-        
-        {selecting === 'preferred-genders' && <BottomSheetBasic
-          {...bottomSheetProps}
-          header={uiOptions.imLookingFor[0].text}
-        >
-          <div
-            css={css`
-              ${col};
-              padding-bottom: 20px;
-            `}
+          
+          
+          { selecting === 'preferred-genders' && <BottomSheetBasic
+            {...bottomSheetProps}
+            header={uiOptions.imLookingFor[0].text}
           >
-            {
-              uiOptions.preferredPeople
-                .map(opt => <RadioInput
-                  css={RadioInputStyle.radio}
-                  childrenPosition="start"
-                  role="option"
-                  aria-selected={opt.value===preferredPeople}
-                  checked={opt.value===preferredPeople}
-                  value={opt.value}
-                  key={opt.value}
-                  onChange={ev => {
-                    setPreferredPeople(opt.value)
-                    setSheetState('closing')
-                  }}
-                  onClick={ev => {
-                    setPreferredPeople(opt.value)
-                    setSheetState('closing')
-                  }}
-                >
-                  <div
-                    css={css`
+            <div
+              css={css`
+                ${col};
+                padding-bottom: 20px;
+              `}
+            >
+              {
+                uiOptions.preferredPeople
+                  .map(opt => <RadioInput
+                    css={RadioInputStyle.radio}
+                    childrenPosition="start"
+                    role="option"
+                    aria-selected={opt.value===preferredPeople}
+                    checked={opt.value===preferredPeople}
+                    value={opt.value}
+                    key={opt.value}
+                    onChange={ev => {
+                      setPreferredPeople(opt.value)
+                      setSheetState('closing')
+                    }}
+                    onClick={ev => {
+                      setPreferredPeople(opt.value)
+                      setSheetState('closing')
+                    }}
+                  >
+                    <div
+                      css={css`
                       flex: 1;
                       padding-top: 4px;
                       padding-bottom: 4px;
                     `}
-                  >
-                    {opt.text}
-                  </div>
-                </RadioInput>)
-            }
+                    >
+                      {opt.text}
+                    </div>
+                  </RadioInput>)
+              }
+            
+            </div>
+          </BottomSheetBasic> }
           
-          </div>
-        </BottomSheetBasic>}
+          
+        </DataField>
       
       
       </ItemContainer>

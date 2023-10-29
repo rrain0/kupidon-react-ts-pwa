@@ -1,12 +1,13 @@
 import React, {
   useCallback,
-  useEffect,
+  useEffect, useLayoutEffect,
   useMemo, useRef,
   useState,
 } from 'react'
 import { GetDimensions } from 'src/utils/common/GetDimensions'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import empty = TypeUtils.empty
 import fitRange = MathUtils.fitRange
 import { useNoSelect } from 'src/utils/react/useNoSelect'
@@ -30,6 +31,16 @@ const speedThreshold = 50 // % высоты viewport в секунду
 const defaultAutoAnimationDuration = 400
 
 
+
+
+/*
+bugs:
+ todo It is slow - try use react spring
+ todo Adjust sheet if real sheet height does not match state
+ todo Animation end rewrites state changes that have happened while animation run
+ todo when dragging close, open button is not working for a long time
+ todo Maybe move to callbacks instead of exposing state because of unnecessary rerenders
+ */
 
 // only 'open' & 'close' are stable states, others are intermediate
 export type SheetState =
@@ -140,15 +151,8 @@ export const useBottomSheet = (
   )
   
   
-  const stopCurrentAction = useCallback(()=>{
-    animation?.commitStyles()
-    animation?.cancel()
-    setAnimation(undefined)
-    setDragStart(undefined)
-  },[animation,dragStart])
-  
-  
   const state = options.state
+  const stateRef = useRef(state); stateRef.current = state
   const animationDuration = options.animationDuration ?? defaultAutoAnimationDuration
   
   const snapPoints = useMemo(function(){
@@ -240,13 +244,17 @@ export const useBottomSheet = (
   //const closeable = options.closeable ?? false
   
   
-  const [newSheetStyle, setNewSheetStyle] = useState({
-    height: 0
-  })
+  const setNewSheetStyle = (style: { height: number })=>{
+    const sheet = bottomSheetRef.current
+    if (sheet){
+      sheet.style.height = style.height+'px'
+    }
+  }
+  useEffect(()=>setNewSheetStyle({ height: 0 }),[])
   
   
   const runAnimation = useCallback(
-    (startH: number, endH: number, endState: SheetState)=>{
+    (startH: number, endH: number, startState: SheetState, endState: SheetState)=>{
       const sheet = bottomSheetRef.current
       if (sheet){
         const duration = function(){
@@ -267,8 +275,7 @@ export const useBottomSheet = (
           animation.commitStyles()
           animation.cancel()
           setAnimation(undefined)
-          setState(endState)
-          setNewSheetStyle({ height: endH })
+          if (stateRef.current===startState) setState(endState)
         }
         animation.oncancel = ev=>{
           setLastSpeed(undefined)
@@ -277,6 +284,14 @@ export const useBottomSheet = (
     },
     [bottomSheetRef.current, animationDuration, setState, lastSpeed]
   )
+  
+  
+  const stopCurrentAction = useCallback(()=>{
+    animation?.commitStyles()
+    animation?.cancel()
+    setAnimation(undefined)
+    setDragStart(undefined)
+  },[animation/* ,bottomSheetRef.current */])
   
   
   const reactOnState = useCallback(
@@ -300,7 +315,7 @@ export const useBottomSheet = (
       else if (s==='opening'){
         if (h===0 && snapPointsPx[i]!==0){
           stopCurrentAction()
-          runAnimation(h,snapPointsPx[i],'opened')
+          runAnimation(h,snapPointsPx[i],s,'opened')
         } else {
           setState('closed')
         }
@@ -321,7 +336,7 @@ export const useBottomSheet = (
       else if (s==='closing'){
         if (h!==0){
           stopCurrentAction()
-          runAnimation(h,0,'closed')
+          runAnimation(h,0,s,'closed')
         } else {
           setState('closed')
         }
@@ -352,7 +367,7 @@ export const useBottomSheet = (
         }
         else {
           stopCurrentAction()
-          runAnimation(h,snapPointsPx[i],'opened')
+          runAnimation(h,snapPointsPx[i],s,'opened')
         }
       }
       
@@ -364,10 +379,9 @@ export const useBottomSheet = (
       snapPointsPx, runAnimation
     ]
   )
-  // 'reactOnState' will always be updated when calling
-  // because all these dependencies are present in 'reactOnState'
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(reactOnState,[state,snapIdx])
+  const reactOnStateEffectEvent = useEffectEvent(()=>reactOnState())
+  useEffect(reactOnStateEffectEvent,[state,snapIdx])
+  
   
   
   const movementRef = useRef([] as Array<{ clientY: number, timestamp: number }>)
@@ -541,12 +555,7 @@ export const useBottomSheet = (
     ]
   )
   
-  useEffect(()=>{
-    const sheet = bottomSheetRef.current
-    if (sheet){
-      sheet.style.height = newSheetStyle.height+'px'
-    }
-  },[bottomSheetRef.current, newSheetStyle])
+  
   
   
   // forbid content selection for all elements while dragging

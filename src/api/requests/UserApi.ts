@@ -19,8 +19,7 @@ export namespace UserApi {
     created: string,
     updated: string,
     enabled: boolean,
-    firstName: string,
-    lastName: string,
+    name: string,
     birthDate: string,
     sex: "MALE"|"FEMALE"
   }
@@ -43,8 +42,7 @@ export namespace UserApi {
   export type UserToCreate = {
     email: string,
     pwd: string,
-    firstName: string,
-    lastName: string,
+    name: string,
     sex: "MALE"|"FEMALE",
     birthDate: string, // "2002-12-30" "1999-12-31"
   }
@@ -60,7 +58,7 @@ export namespace UserApi {
     data: {
       code: "INVALID_INPUT_BODY__INVALID_EMAIL_FORMAT"
         |"INVALID_INPUT_BODY__INVALID_PWD_FORMAT"
-        |"INVALID_INPUT_BODY__INVALID_FIRST_NAME_FORMAT"
+        |"INVALID_INPUT_BODY__INVALID_NAME_FORMAT"
         |"INVALID_INPUT_BODY__INVALID_LAST_NAME_FORMAT"
       msg: string
     } | {

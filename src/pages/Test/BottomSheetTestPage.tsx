@@ -119,6 +119,7 @@ const BottomSheetTestPage = ()=>{
             cursor: pointer;
           `}
           onClick={ev => {
+            //console.log('Choose button clicked')
             setState('opening')
             setSnapIdx(openSnapIdx)
           }}

@@ -382,6 +382,20 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'pwdFormatIsIncorrect'>[],
   
   
+  repeatPwd: [
+    {
+      value: 'repeatPwd',
+      lang: 'en-US',
+      text: 'Repeat password',
+    },
+    {
+      value: 'repeatPwd',
+      lang: 'ru-RU',
+      text: 'Повторите пароль',
+    },
+  ] satisfies UiOption<'repeatPwd'>[],
+  
+  
   passwordsDoNotMatch: [
     {
       value: 'passwordsDoNotMatch',

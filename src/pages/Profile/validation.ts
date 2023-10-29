@@ -10,7 +10,7 @@ import CreateUserRespE = UserApi.CreateUserRespE
 
 
 
-export namespace SignupPageValidation {
+export namespace ProfilePageValidation {
   
   
   import PartialFailureData = ValidationCore.PartialFailureData
@@ -22,9 +22,9 @@ export namespace SignupPageValidation {
     | 'email-incorrect'
     | 'pwd-required'
     | 'pwd-incorrect'
-    | 'repeated-pwd-required'
-    | 'repeated-pwd-not-match'
-    | 'name-required'
+    | 'repeat-pwd-not-match'
+    | 'firstName-required'
+    | 'lastName-required'
     | 'sex-required'
     | 'birthDate-required'
     | "DUPLICATE_EMAIL"
@@ -38,9 +38,9 @@ export namespace SignupPageValidation {
     'email-incorrect': SignupPageUiOptions.emailFormatIsIncorrect,
     'pwd-required': SignupPageUiOptions.pwdIsNotEntered,
     'pwd-incorrect': SignupPageUiOptions.pwdFormatIsIncorrect,
-    'repeated-pwd-required': SignupPageUiOptions.repeatPwd,
-    'repeated-pwd-not-match': SignupPageUiOptions.passwordsDoNotMatch,
-    'name-required': SignupPageUiOptions.firstNameIsNotEntered,
+    'repeat-pwd-not-match': SignupPageUiOptions.passwordsDoNotMatch,
+    'firstName-required': SignupPageUiOptions.firstNameIsNotEntered,
+    'lastName-required': SignupPageUiOptions.lastNameIsNotEntered,
     'sex-required': SignupPageUiOptions.sexIsNotChosen,
     'birthDate-required': SignupPageUiOptions.birthDateIsNotEntered,
     "DUPLICATE_EMAIL": SignupPageUiOptions.userWithSuchEmailAlreadyRegistered,
@@ -54,7 +54,8 @@ export namespace SignupPageValidation {
     email: string
     pwd: string
     repeatPwd: string
-    name: string
+    firstName: string
+    lastName: string
     sex: 'MALE'|'FEMALE'|''
     birthDate: string // 2002-01-01 1999-12-31
     //notRobot: boolean
@@ -73,12 +74,12 @@ export namespace SignupPageValidation {
   }
   
   
-  
   export const defaultValues: FormValues = {
     email: '',
     pwd: '',
     repeatPwd: '',
-    name: '',
+    firstName: '',
+    lastName: '',
     sex: '',
     birthDate: '',
     fromServer: undefined,
@@ -126,18 +127,9 @@ export namespace SignupPageValidation {
     
     
     
-    [['repeatPwd'], ([v]: [UserValues['repeatPwd']?,...any[]])=>{
-      const d = defaultValues.repeatPwd
-      if (v===d) return new PartialFailureData({
-        code: 'repeated-pwd-required' satisfies FailureCode,
-        msg: 'Повторите пароль',
-        highlight: false,
-        notify: false,
-      })
-    }],
     [['pwd','repeatPwd'], ([pwd,repeatPwd]: [UserValues['pwd']?,UserValues['repeatPwd']?,...any[]])=>{
       if(pwd!==repeatPwd) return new PartialFailureData({
-        code: 'repeated-pwd-not-match' satisfies FailureCode,
+        code: 'repeat-pwd-not-match' satisfies FailureCode,
         msg: 'Пароли не совпадают',
         delay: 3000,
         highlightFields: ['repeatPwd'],
@@ -146,11 +138,23 @@ export namespace SignupPageValidation {
     
     
     
-    [['name'], ([v]: [UserValues['name']?,...any[]])=>{
-      const d = defaultValues.name
+    [['firstName'], ([v]: [UserValues['firstName']?,...any[]])=>{
+      const d = defaultValues.firstName
       if (v===d) return new PartialFailureData({
-        code: 'name-required' satisfies FailureCode,
+        code: 'firstName-required' satisfies FailureCode,
         msg: 'Имя не введено',
+        highlight: false,
+        notify: false,
+      })
+    }],
+    
+    
+    
+    [['lastName'], ([v]: [UserValues['lastName']?,...any[]])=>{
+      const d = defaultValues.lastName
+      if (v===d) return new PartialFailureData({
+        code: 'lastName-required' satisfies FailureCode,
+        msg: 'Фамилия не введена',
         highlight: false,
         notify: false,
       })

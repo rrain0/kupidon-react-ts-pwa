@@ -1,18 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import SettingsBottomButtonBar from 'src/components/BottomButtonBar/SettingsBottomButtonBar'
 import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import React, {
   useCallback,
   useEffect,
-  useId,
   useLayoutEffect,
   useMemo,
   useRef,
@@ -24,11 +23,11 @@ import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import Input from 'src/views/Inputs/Input/Input'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
@@ -41,7 +40,6 @@ import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputGroupStyle } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
-import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
 import validate = ValidationValidate.validate
 import { SignupPageValidation } from './validation'
 import FormValues = SignupPageValidation.FormValues
@@ -49,16 +47,10 @@ import validators = SignupPageValidation.validators
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import updateFailures = ValidationActions.updateFailures
 import CreateUserRespE = UserApi.CreateUserRespE
-import { Utils } from 'src/utils/common/Utils'
-import { ValidationComponents, } from 'src/utils/form-validation/ValidationComponents'
-import InputValidationWrap = ValidationComponents.InputValidationWrap
 import UserToCreate = UserApi.UserToCreate
-import RadioInputValidationWrap = ValidationComponents.RadioInputValidationWrap
 import { AuthApi } from 'src/api/requests/AuthApi'
-import Lazy = Utils.Lazy
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
-import GearIc = SimpleSvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
 import params = RouteBuilder.params
 import full = RouteBuilder.full
@@ -67,38 +59,15 @@ import UserValues = SignupPageValidation.UserValues
 import Failure = ValidationCore.Failure
 import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiOption
-import RadioInputGroupValidationWrap = ValidationComponents.RadioInputGroupValidationWrap
 import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import defaultValues = SignupPageValidation.defaultValues
 
 
-
-
-export const SignupDefaults = function(){
-  const defaultValues = new Lazy<FormValues>(()=>({
-    email: '',
-    pwd: '',
-    repeatPwd: '',
-    firstName: '',
-    lastName: '',
-    sex: '',
-    birthDate: '',
-    fromServer: undefined,
-  }))
-  const defaultFailures = new Lazy(()=>validate(
-    { values: defaultValues.get(), validators: validators }
-  ))
-  return {
-    get values() { return defaultValues.get() },
-    get failures() { return defaultFailures.get() }
-  }
-}()
 
 
 
 
 const SignupPage = () => {
-  
-  const id = useId()
   
   const [searchParams] = useSearchParams()
   const returnPath = searchParams.get(RootRoute.signup[params].returnPath) ?? undefined
@@ -108,12 +77,27 @@ const SignupPage = () => {
   
   const uiOptions = useUiOptionsContainer(SignupPageUiOptions)
   
+  const sexOptions = useMemo(
+    ()=>[
+      {
+        value: 'MALE',
+        text: uiOptions.iAmGuy[0].text,
+      },{
+        value: 'FEMALE',
+        text: uiOptions.iAmGirl[0].text,
+      }
+    ] satisfies { value: FormValues['sex'], text: string }[],
+    [uiOptions]
+  )
+  
   const [signupLoading, setSignupLoading] = useState(false)
   const [signupSuccess, setSignupSuccess] = useState(false)
   const [signupForm, setSignupForm] = 
-    useState([SignupDefaults.values,SignupDefaults.values] as const) // [now,prev]
-  const [signupFailures, setSignupFailures] = useState(SignupDefaults.failures)
-  // LayoutEffect is necessary to update data when making Chrome mobile autofill
+    useState([defaultValues,defaultValues] as const) // [now,prev]
+  const [signupFailures, setSignupFailures] = useState(()=>validate(
+    { values: defaultValues, validators: validators }
+  ))
+  // LayoutEffect is necessary to update data when there is Chrome mobile autofill
   useLayoutEffect(
     ()=>{
       setSignupFailures(s=>validate({
@@ -361,13 +345,13 @@ const SignupPage = () => {
   
   const validationProps = {
     values: signupForm,
-    validators: validators,
     failures: signupFailures,
     setError: setSignupFailures,
     setValues: setSignupForm,
   }
   
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const openSettings = useCallback(()=>setSettingsOpen(true),[])
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -392,110 +376,78 @@ const SignupPage = () => {
           {uiOptions.registration[0].text}
         </h3>
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'email'}
-          errorPropName={'hasError'}
-        >
-          <Input
+        
+        
+        <ValidationComponentWrap {...validationProps}
+          fieldName='email'
+          render={props => <Input
             css={InputStyle.input}
             placeholder={uiOptions.emailLoginPlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'pwd'}
-          errorPropName={'hasError'}
-        >
-          <PwdInput
+        <ValidationComponentWrap {...validationProps}
+          fieldName='pwd'
+          render={props => <PwdInput
             css={InputStyle.input}
             placeholder={uiOptions.pwdPlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'repeatPwd'}
-          errorPropName={'hasError'}
-        >
-          <PwdInput
+        <ValidationComponentWrap {...validationProps}
+          fieldName='repeatPwd'
+          render={props => <PwdInput
             css={InputStyle.input}
             placeholder={uiOptions.repeatPwdPlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'firstName'}
-          errorPropName={'hasError'}
-        >
-          <Input
+        <ValidationComponentWrap {...validationProps}
+          fieldName='name'
+          render={props => <Input
             css={InputStyle.input}
             placeholder={uiOptions.namePlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
         
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'lastName'}
-          errorPropName={'hasError'}
-        >
-          <Input
-            css={InputStyle.input}
-            placeholder={uiOptions.lastNamePlaceholder[0].text}
-          />
-        </InputValidationWrap>
-        
-        <InputValidationWrap
-          {...validationProps}
-          fieldName={'birthDate'}
-          errorPropName={'hasError'}
-        >
-          <Input
+        <ValidationComponentWrap {...validationProps}
+          fieldName='birthDate'
+          render={props => <Input
             css={InputStyle.input}
             placeholder={uiOptions.birthDatePlaceholder[0].text}
-          />
-        </InputValidationWrap>
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
         
         
-        <RadioInputGroupValidationWrap
-          {...validationProps}
-          fieldName={'sex'}
-          errorPropName={'hasError'}
-        >
-          <RadioInputGroup css={RadioInputGroupStyle.style}>
-            
-            <RadioInputValidationWrap
-              {...validationProps}
-              fieldName={'sex'}
-              errorPropName={'hasError'}
+        <ValidationComponentWrap {...validationProps}
+          fieldName='sex'
+          render={props =>
+            <RadioInputGroup css={RadioInputGroupStyle.row}
+              hasError={props.highlight}
             >
-              <RadioInput
-                css={RadioInputStyle.radio}
-                name={`${id}-radio-group-sex`}
-                value="MALE"
-              >
-                <div>{uiOptions.iAmGuy[0].text}</div>
-              </RadioInput>
-            </RadioInputValidationWrap>
-            
-            <RadioInputValidationWrap
-              {...validationProps}
-              fieldName={'sex'}
-              errorPropName={'hasError'}
-            >
-              <RadioInput
-                css={RadioInputStyle.radio}
-                name={`${id}-radio-group-sex`}
-                value="FEMALE"
-              >
-                <div>{uiOptions.iAmGirl[0].text}</div>
-              </RadioInput>
-            </RadioInputValidationWrap>
-          
-          </RadioInputGroup>
-        </RadioInputGroupValidationWrap>
+              { sexOptions.map(opt=>{
+                return <RadioInput
+                  css={RadioInputStyle.radio}
+                  key={opt.value}
+                  checked={props.value===opt.value}
+                  value={opt.value}
+                  onChange={props.inputProps.onChange}
+                >
+                  {opt.text}
+                </RadioInput>
+              }) }
+            </RadioInputGroup>}
+        />
         
         
         <Button
@@ -507,32 +459,25 @@ const SignupPage = () => {
         
       </Form>
       
-      
-      
-      <PageScrollbarOverlayFrame>
-        <UseScrollbars
-          containerIsWindow={true}
-          contentRef={pageRef}
-          render={(
-            { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-          )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-            {...scrollbarProps}
-            showVertical={canScrollVertical}
-            showHorizontal={canScrollHorizontal}
-          />}
-        />
-      </PageScrollbarOverlayFrame>
-      
-      <BottomButtonBar>
-        <Button css={ButtonStyle.iconTransparent}
-          onClick={() => setSettingsOpen(true)}
-        >
-          <GearIc/>
-        </Button>
-      </BottomButtonBar>
-      
     </Page>
     
+    
+    
+    <PageScrollbarOverlayFrame>
+      <UseScrollbars
+        containerIsWindow={true}
+        contentRef={pageRef}
+        render={(
+          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
+        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
+          {...scrollbarProps}
+          showVertical={canScrollVertical}
+          showHorizontal={canScrollHorizontal}
+        />}
+      />
+    </PageScrollbarOverlayFrame>
+    
+    <SettingsBottomButtonBar openSettings={openSettings}/>
     
     <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
     

@@ -3,7 +3,6 @@ import { ValidationValidators } from 'src/utils/form-validation/ValidationValida
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiOption } from 'src/utils/lang/UiOption'
-import { LoginDefaults } from './LoginPage'
 import isValidEmail = ValidationValidators.isValidEmail
 import LoginRespE = AuthApi.LoginRespE
 import Validators = ValidationCore.Validators
@@ -55,11 +54,18 @@ export namespace LoginPageValidation {
   }
   
   
+  export const defaultValues: FormValues = {
+    login: '',
+    pwd: '',
+    fromServer: undefined,
+  }
+  
+  
   
   
   export const validators: Validators<FormValues> = [
     [['login'], ([v]: [UserValues['login']?,...any[]])=>{
-      const d = LoginDefaults.values.login
+      const d = defaultValues.login
       if (v===d) return new PartialFailureData({
         code: 'login-required' satisfies FailureCode,
         msg: 'Email не введён',
@@ -78,7 +84,7 @@ export namespace LoginPageValidation {
     
     
     [['pwd'], ([v]: [UserValues['pwd']?,...any[]])=>{
-      const d = LoginDefaults.values.login
+      const d = defaultValues.login
       if (v===d) return new PartialFailureData({
         code: 'pwd-required' satisfies FailureCode,
         msg: 'Пароль не введён',

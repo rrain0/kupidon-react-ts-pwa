@@ -93,11 +93,14 @@ const BottomSheet = (props: BottomSheetProps) => {
       ) / snapPointsPx[openSnapIdx]
       * 256 * 0.6
     ).toString(16).padStart(2,'0')
-  },[snapPointsPx,openSnapIdx])
+  },[computedSheetDimens.sheetH, snapPointsPx, openSnapIdx])
   
   
-  //useWindowScrollLock(state!=='closed')
+  
   useUpNodesScrollLock(bottomSheetFrameRef, state!=='closed')
+  
+  
+  //useEffect(()=>console.log('state',state),[state])
   
   
   /*
@@ -142,14 +145,12 @@ const BottomSheet = (props: BottomSheetProps) => {
       `}
       display: grid;
       place-items: end center;
-      
-      // padding from frame to sheet
-      //padding: 4px 4px 0 4px;
-
-      //touch-action: none;
     `}
     ref={bottomSheetFrameRef as any}
-    onClick={ev=>setState('closing')}
+    onClick={ev=>{
+      //console.log("dimmed background click")
+      setState('closing')
+    }}
     /*onPointerDown={onFramePointerDown}
     onPointerUp={onFramePointerEnd}
     onPointerCancel={onFramePointerEnd}*/

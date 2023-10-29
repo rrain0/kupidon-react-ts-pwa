@@ -122,6 +122,7 @@ export const SignupPageUiOptions = {
   emailFormatIsIncorrect: CommonUiOptions.emailFormatIsIncorrect,
   pwdIsNotEntered: CommonUiOptions.pwdNotEntered,
   pwdFormatIsIncorrect: CommonUiOptions.pwdFormatIsIncorrect,
+  repeatPwd: CommonUiOptions.repeatPwd,
   passwordsDoNotMatch: CommonUiOptions.passwordsDoNotMatch,
   firstNameIsNotEntered: CommonUiOptions.firstNameIsNotEntered,
   lastNameIsNotEntered: CommonUiOptions.lastNameIsNotEntered,

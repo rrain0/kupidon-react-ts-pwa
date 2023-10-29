@@ -104,11 +104,11 @@ export namespace ValidationComponents {
   
   
   export const RadioInputValidationWrap =
-    <
-      Vs extends object,
-      I extends React.InputHTMLAttributes<Element>,
-    >
-    (props: InputValidationWrapProps<Vs,I>) => {
+  <
+    Vs extends object,
+    I extends React.InputHTMLAttributes<Element>,
+  >
+  (props: InputValidationWrapProps<Vs,I>) => {
     const {
       fieldName,
       values,
@@ -134,12 +134,14 @@ export namespace ValidationComponents {
       return ()=>{ stale[0]=true }
     },[failures, fieldName, value])
     
+    const selected = value===PassedInput.props.value
+    
     
     const Input =
       React.cloneElement<React.InputHTMLAttributes<Element> & { [Prop in typeof errorPropName]?: any }>(
         PassedInput,
           {
-          checked: value===PassedInput.props.value,
+          checked: selected,
           [errorPropName]: highlight,
           onChange: ev=>{
             //console.log('ValidationWrap onChange')
@@ -236,7 +238,7 @@ export namespace ValidationComponents {
 {
   const f = ()=>{
     type InputType = ReactElement<
-      React.InputHTMLAttributes<string>,
+      React.InputHTMLAttributes<Element>,
       JSX.ElementType
       /*React.JSXElementConstructor<JSX.IntrinsicElements['input']>*/
     >
