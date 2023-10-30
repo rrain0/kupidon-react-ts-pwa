@@ -2,6 +2,7 @@ import { atom } from 'recoil'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { emptyValOrObj, localStorageEffect2 } from '../RecoilPersist'
 import ArrayElement = ArrayUtils.ArrayElement
+import NonEmptyArr = ArrayUtils.NonEmptyArr
 
 
 
@@ -17,7 +18,7 @@ export const fallbackLang: Lang = 'en-US'
 
 export type LangSettingsRecoilType = {
   setting: 'manual' | 'system'
-  manualSetting: [Lang, ...Lang[]] | undefined
+  manualSetting: NonEmptyArr<Lang> | undefined
 }
 export const LangSettingsRecoil = atom<LangSettingsRecoilType>({
   key: langSettingsName,
@@ -31,14 +32,14 @@ export const LangSettingsRecoil = atom<LangSettingsRecoilType>({
 
 
 export type LangRecoilType = {
-  lang: [Lang, ...Lang[]]
-  systemLangAvailable: boolean | undefined
+  lang: NonEmptyArr<Lang>
+  availableSystemLangs: Lang[] | undefined
 }
 export const LangRecoil = atom<LangRecoilType>({
   key: 'lang',
   default: {
     lang: [fallbackLang],
-    systemLangAvailable: undefined,
+    availableSystemLangs: undefined,
   },
 })
 

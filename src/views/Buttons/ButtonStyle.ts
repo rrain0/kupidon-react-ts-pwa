@@ -137,13 +137,17 @@ export namespace ButtonStyle {
     ${textLarge1};
     ${Color.primary(t)};
   `
-  
-  
   export const bigRectNormal = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
     ${textLarge1};
     ${Color.normal(t)};
+  `
+  export const bigRectDanger = (t:Theme) => css`
+    ${common};
+    ${Shape.bigRect};
+    ${textLarge1};
+    ${Color.danger(t)};
   `
   
   

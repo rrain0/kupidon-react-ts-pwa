@@ -13,29 +13,17 @@ export type UiOptionsContainer = Record<string, UiOption<any>[]>
 /*
   usage example:
   
-  export const theme: UiOption<ThemeType>[] = [
+  export const theme = [
     {
-      value: 'light',
+      value: 'lightTheme',
       lang: 'en-US',
       text: 'Light theme',
-    },
-    {
-      value: 'light',
+    },{
+      value: 'lightTheme',
       lang: 'ru-RU',
       text: 'Светлая тема',
-    },
-    
-    {
-      value: 'dark',
-      lang: 'en-US',
-      text: 'Dark theme',
-    },
-    {
-      value: 'dark',
-      lang: 'ru-RU',
-      text: 'Тёмная тема',
-    },
-  ]
+    }
+  ] satisfies UiOption<lightTheme>[]
   
 */
 

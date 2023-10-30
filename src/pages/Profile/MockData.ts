@@ -16,6 +16,7 @@ import hotlineMiami2 from 'src/res/img/test/wallpaper-Hotline-Miami-2---Wrong-Nu
 import satoru from 'src/res/img/test/Сатору Годзё photo_2023-07-31_22-35-02.jpg'
 
 
+
 export namespace ProfileMockData {
   
   export const userImages = [

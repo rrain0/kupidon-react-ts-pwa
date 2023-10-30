@@ -1,4 +1,6 @@
 import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import NonEmptyArr = ArrayUtils.NonEmptyArr
 
 
 
@@ -42,7 +44,7 @@ import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
 
 
 // returns array of at least 1 language or undefined
-export const useLangDetector = (): [string, ...string[]] | undefined => {
+export const useLangDetector = (): NonEmptyArr<string> | undefined => {
   
   const [browserLangs,setBrowserLangs] = useState(()=>getBrowserLangs())
   
@@ -61,9 +63,10 @@ export const useLangDetector = (): [string, ...string[]] | undefined => {
         return it
     }),
     [browserLangs]
-  ) as [string, ...string[]] | undefined
+  ) as NonEmptyArr<string> | undefined
   
-  
+  //return useMemo(()=>["ja-JP"],[])
+  //return undefined
   return langs
 }
 

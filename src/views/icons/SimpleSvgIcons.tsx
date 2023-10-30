@@ -53,6 +53,7 @@ import { ReactComponent as InfoToastifySvg } from 'src/res/icon/info-toastify.sv
 import { ReactComponent as LockSvg } from 'src/res/icon/lock.svg'
 
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
+import { ReactComponent as MoonSvg } from 'src/res/icon/moon.svg'
 
 import { ReactComponent as NightSvg } from 'src/res/icon/night.svg'
 
@@ -323,6 +324,13 @@ export namespace SimpleSvgIcons {
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={MailSvg} />
   )
+  
+  export const MoonIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={MoonSvg} />
+  )
+  
+  
   
   export const NightIc = Mem(
     (props: IconProps) =>

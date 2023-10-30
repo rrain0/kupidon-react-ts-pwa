@@ -6,7 +6,9 @@ import { UiOption } from 'src/utils/lang/UiOption'
 export const LangSettingsUiOptions = {
   
   
-  languageOptions: CommonUiOptions.languageOptions,
+  systemLanguage: CommonUiOptions.systemLanguage,
+  russian: CommonUiOptions.russian,
+  english: CommonUiOptions.english,
   
   
 } satisfies Record<string, UiOption<any>[]>

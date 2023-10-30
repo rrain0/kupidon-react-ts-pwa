@@ -64,7 +64,7 @@
       }
       
       function setHtmlTags(langs){
-        if (langs[0]) {
+        if (langs?.[0]) {
           _htmlProps.lang = langs[0]
           
           const textPrefix = _htmlProps.nodeEnv==='development' ? 'Dev ' : ''
@@ -74,8 +74,7 @@
               value: 'kupidon',
               lang: 'en-US',
               text: 'Kupidon',
-            },
-            {
+            },{
               value: 'kupidon',
               lang: 'ru-RU',
               text: 'Купидон',
@@ -86,8 +85,7 @@
               value: 'kupidonDescription',
               lang: 'en-US',
               text: 'Kupidon date app',
-            },
-            {
+            },{
               value: 'kupidonDescription',
               lang: 'ru-RU',
               text: 'Купидон - приложение для свидания',

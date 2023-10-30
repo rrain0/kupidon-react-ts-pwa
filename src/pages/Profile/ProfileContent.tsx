@@ -28,7 +28,6 @@ import row = EmotionCommon.row
 import center = EmotionCommon.center
 import col = EmotionCommon.col
 import textNormal = EmotionCommon.textNormal1
-import textSmall1 = EmotionCommon.textSmall2
 
 
 
@@ -50,20 +49,20 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
   
-  const {
-    id,
-    email,
-    emailVerified,
-    created,
-    updated,
-    name,
-    birthDate,
-    sex,
-  } = auth!.user
+  const [initialValues, setInitialValues] = useState({
+    name: auth!.user.name,
+    birthDate: auth!.user.birthDate,
+    sex: auth!.user.sex,
+  })
+  useEffect(
+    ()=>{
+      // todo if auth was changed so set values with initaial values with new inititial values
+    },
+    [auth]
+  )
   
-  const logout = async() => {
-    resetAuth()
-  }
+  
+  const logout = async() => void resetAuth()
   
   
   const onSubmit = (ev: React.FormEvent) => {
@@ -130,74 +129,27 @@ const ProfileContent = (props: ProfileContentProps)=>{
     />
     
     
-    <Card>
-      
-      <ItemContainer>
-        <ItemLabel>{uiOptions.id[0].text}</ItemLabel>
-        <DataField css={[
-          DataFieldStyle.statikSmall,
-          css`&.rrainuiFrame {
-            ${textSmall1};
-          }`,
-        ]}
-        >
-          {id}
-        </DataField>
-      </ItemContainer>
-      
-      <ItemContainer>
-        <ItemLabel>{uiOptions.email[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          {email}
-        </DataField>
-      </ItemContainer>
-      
-      <ItemContainer>
-        <ItemLabel>{uiOptions.emailVerified[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          { emailVerified
-            ? uiOptions.yes[0].text.toLowerCase()
-            : uiOptions.no[0].text.toLowerCase()
-          }
-        </DataField>
-      </ItemContainer>
-      
-      <ItemContainer>
-        <ItemLabel>{uiOptions.userCreated[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          {new Date(created) + ''}
-        </DataField>
-      </ItemContainer>
-      
-      <ItemContainer>
-        <ItemLabel>{uiOptions.userUpdated[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          {new Date(updated) + ''}
-        </DataField>
-      </ItemContainer>
-      
-    </Card>
     
     <Card>
       
       <ItemContainer>
         <ItemLabel>{uiOptions.name[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
-          {name}
+          {initialValues.name}
         </DataField>
       </ItemContainer>
       
       <ItemContainer>
         <ItemLabel>{uiOptions.birthDate[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
-          {birthDate}
+          {initialValues.birthDate}
         </DataField>
       </ItemContainer>
       
       <ItemContainer>
         <ItemLabel>{uiOptions.sex[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
-          {sex === 'MALE'
+          {initialValues.sex === 'MALE'
             ? uiOptions.male[0].text
             : uiOptions.female[0].text
           }

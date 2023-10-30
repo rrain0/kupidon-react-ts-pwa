@@ -200,6 +200,39 @@ export const CommonUiOptions = {
       text: 'Тема',
     },
   ] satisfies UiOption<'theme'>[],
+  systemTheme: [
+    {
+      value: 'systemTheme',
+      lang: 'en-US',
+      text: 'System theme',
+    },{
+      value: 'systemTheme',
+      lang: 'ru-RU',
+      text: 'Тема системы',
+    },
+  ] satisfies UiOption<'systemTheme'>[],
+  lightTheme: [
+    {
+      value: 'lightTheme',
+      lang: 'en-US',
+      text: 'Light theme',
+    },{
+      value: 'lightTheme',
+      lang: 'ru-RU',
+      text: 'Светлая тема',
+    },
+  ] satisfies UiOption<'lightTheme'>[],
+  darkTheme: [
+    {
+      value: 'darkTheme',
+      lang: 'en-US',
+      text: 'Dark theme',
+    },{
+      value: 'darkTheme',
+      lang: 'ru-RU',
+      text: 'Тёмная тема',
+    },
+  ] satisfies UiOption<'darkTheme'>[],
   
   
   language: [
@@ -213,29 +246,31 @@ export const CommonUiOptions = {
       text: 'Язык',
     },
   ] satisfies UiOption<'language'>[],
-  
-  
-  languageOptions: [
+  systemLanguage: [
     {
-      value: 'system',
+      value: 'systemLanguage',
       lang: 'en-US',
       text: 'System language',
     },{
-      value: 'system',
+      value: 'systemLanguage',
       lang: 'ru-RU',
       text: 'Язык системы',
     },
-    
+  ] satisfies UiOption<'systemLanguage'>[],
+  russian: [
     {
-      value: 'ru-RU',
+      value: 'russian',
       lang: 'ru-RU',
       text: 'Русский',
-    },{
-      value: 'en-US',
+    },
+  ] satisfies UiOption<'russian'>[],
+  english: [
+    {
+      value: 'english',
       lang: 'en-US',
       text: 'English',
     },
-  ] satisfies UiOption<Lang|'system'>[],
+  ] satisfies UiOption<'english'>[],
   
   
   accountSettings: [
@@ -262,6 +297,19 @@ export const CommonUiOptions = {
       text: 'Настройки Приложения',
     },
   ] satisfies UiOption<'appSettings'>[],
+  
+  
+  account: [
+    {
+      value: 'account',
+      lang: 'en-US',
+      text: 'Account',
+    },{
+      value: 'account',
+      lang: 'ru-RU',
+      text: 'Аккаунт',
+    },
+  ] satisfies UiOption<'account'>[],
   
   
   testPage: [

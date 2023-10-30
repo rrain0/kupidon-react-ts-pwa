@@ -1,7 +1,5 @@
-import { Themes } from 'src/utils/theme/Themes'
 import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
 import { UiOption } from 'src/utils/lang/UiOption'
-import ThemeType = Themes.ThemeType
 
 
 
@@ -12,42 +10,9 @@ export const QuickSettingsUiOptions = {
   
   
   theme: CommonUiOptions.theme,
-  
-  
-  themeOptions: [
-    {
-      value: 'system',
-      lang: 'en-US',
-      text: 'System theme',
-    },
-    {
-      value: 'system',
-      lang: 'ru-RU',
-      text: 'Тема системы',
-    },
-    
-    {
-      value: 'light',
-      lang: 'en-US',
-      text: 'Light theme',
-    },
-    {
-      value: 'light',
-      lang: 'ru-RU',
-      text: 'Светлая тема',
-    },
-    
-    {
-      value: 'dark',
-      lang: 'en-US',
-      text: 'Dark theme',
-    },
-    {
-      value: 'dark',
-      lang: 'ru-RU',
-      text: 'Тёмная тема',
-    },
-  ] satisfies UiOption<ThemeType|'system'>[],
+  systemTheme: CommonUiOptions.systemTheme,
+  lightTheme: CommonUiOptions.lightTheme,
+  darkTheme: CommonUiOptions.darkTheme,
   
   
   clearAppData: [
@@ -79,9 +44,9 @@ export const QuickSettingsUiOptions = {
   
   
   language: CommonUiOptions.language,
-  
-  
-  languageOptions: CommonUiOptions.languageOptions,
+  systemLanguage: CommonUiOptions.systemLanguage,
+  russian: CommonUiOptions.russian,
+  english: CommonUiOptions.english,
   
   
   accountSettings: CommonUiOptions.accountSettings,

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { LangSettingsUiOptions } from 'src/components/LangSettings/LangSettingsUiOptions'
 import { Themes } from 'src/utils/theme/Themes'
@@ -12,7 +12,7 @@ import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
+import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
@@ -37,20 +37,39 @@ const LangSettings = (props: SettingsProps)=>{
   const [snapIdx,setSnapIdx] = useState(3)
   const openIdx = 3
   
-  const langRecoil = useRecoilValue(LangRecoil)
+  const lang = useRecoilValue(LangRecoil)
   
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
-  const uiOptions0 = useUiOptionsContainer(LangSettingsUiOptions)
-  const uiOptions = useMemo(
+  
+  const uiOptions = useUiOptionsContainer(LangSettingsUiOptions)
+  const languageOptions = useMemo(
     ()=>{
-      const uiOptions = {...uiOptions0}
-      if (!langRecoil.systemLangAvailable)
-        uiOptions.languageOptions = uiOptions.languageOptions.filter(it=>it.value!=='system')
-      return uiOptions
+      let opts = [
+        {
+          value: 'system',
+          text: uiOptions.systemLanguage[0].text,
+        },{
+          value: 'ru-RU',
+          text: uiOptions.russian[0].text,
+        },{
+          value: 'en-US',
+          text: uiOptions.english[0].text,
+        }
+      ] satisfies { value: Lang|'system', text: string }[]
+      if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
+      return opts
     },
-    [langRecoil.systemLangAvailable, uiOptions0]
+    [uiOptions, lang.availableSystemLangs]
   )
+  const languageOptionChecked = useCallback(
+    function (value: Lang|'system') {
+      return langSettings.setting === 'system' && value === 'system'
+        || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
+    },
+    [langSettings]
+  )
+  
   
   
   
@@ -91,58 +110,31 @@ const LangSettings = (props: SettingsProps)=>{
         
         
         {
-          uiOptions.languageOptions
-            .map(opt=><RadioInput
-              css={RadioInputStyle.radio}
-              childrenPosition='start'
-              role='option'
-              aria-selected={function(){
-                if (langSettings.setting==='system' && opt.value==='system')
-                  return true
-                if (langSettings.setting!=='system' && opt.value===langSettings.manualSetting?.[0])
-                  return true
-                return false
-              }()}
-              checked={function(){
-                if (langSettings.setting==='system' && opt.value==='system')
-                  return true
-                if (langSettings.setting!=='system' && opt.value===langSettings.manualSetting?.[0])
-                  return true
-                return false
-              }()}
-              value={opt.value}
-              key={opt.value}
-              onChange={ev=>{
-                if (opt.value==='system') setLangSettings({
-                  ...langSettings,
-                  setting: 'system',
+          languageOptions.map(opt => <RadioInput
+            css={RadioInputStyle.radio}
+            childrenPosition="start"
+            checked={languageOptionChecked(opt.value)}
+            value={opt.value}
+            key={opt.value}
+            onChange={ev => {
+              if (opt.value === 'system') setLangSettings({
+                ...langSettings,
+                setting: 'system',
+              })
+              else {
+                setLangSettings({
+                  setting: 'manual',
+                  manualSetting: [opt.value],
                 })
-                else {
-                  setLangSettings({
-                    setting: 'manual',
-                    manualSetting: [opt.value],
-                  })
-                }
-              }}
-              onClick={ev=>{
-                if (opt.value==='system') setLangSettings({
-                  ...langSettings,
-                  setting: 'system',
-                })
-                else {
-                  setLangSettings({
-                    setting: 'manual',
-                    manualSetting: [opt.value],
-                  })
-                }
-              }}
-            >
-              <OptionContainer>
-                {opt.value!=='system' && <Flag src={CountryFlag[opt.value]}/>}
-                {opt.value==='system' && <BrowserIc css={icon} />}
-                {opt.text}
-              </OptionContainer>
-            </RadioInput>)
+              }
+            }}
+          >
+            <OptionContainer>
+              {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
+              {opt.value === 'system' && <BrowserIc css={icon}/>}
+              {opt.text}
+            </OptionContainer>
+          </RadioInput>)
         }
         
         
@@ -152,6 +144,7 @@ const LangSettings = (props: SettingsProps)=>{
   </>
 }
 export default LangSettings
+
 
 
 const OptionContainer = styled.div`

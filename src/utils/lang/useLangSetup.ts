@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react'
+import { useLayoutEffect, useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import {
   fallbackLang,
@@ -12,6 +12,11 @@ import arrIsNonEmpty = ArrayUtils.arrIsNonEmpty
 
 
 
+function getAvailableSystemLangs(systemLangs: string[] | undefined): Lang[] {
+  return (systemLangs??[]).filter(sl=>AppLangs.includes(sl as any)) as Lang[]
+}
+
+
 
 export const useLangSetup = ()=>{
   const [langSettings,setLangSettings] = useRecoilState(LangSettingsRecoil)
@@ -21,47 +26,46 @@ export const useLangSetup = ()=>{
   //console.log('lang',lang)
   //console.log('systemLangs',systemLangs)
   
+  
   useLayoutEffect(
     ()=>{
-      if (arrIsNonEmpty(systemLangs)) setLang(s=>({
+      setLang(s=>({
         ...s,
-        systemLangAvailable: true,
-      }))
-      else setLang(s=>({
-        ...s,
-        systemLangAvailable: false,
+        availableSystemLangs: getAvailableSystemLangs(systemLangs),
       }))
     },
     [setLang, systemLangs]
   )
   
   
-  useLayoutEffect(()=>{
-    if (langSettings.setting==='system'){
-      const matchedLangs = systemLangs?.filter(
-        (it): it is Lang => AppLangs.includes(it as any)
-      )
-      //console.log('matchedLangs',matchedLangs)
-      if (arrIsNonEmpty(matchedLangs)) setLang(s=>({
-        ...s,
-        lang: matchedLangs,
-      }))
-      else setLangSettings({
-        ...langSettings,
-        setting: 'manual',
-      })
-    }
-    else if (langSettings.setting==='manual') {
-      if (langSettings.manualSetting) setLang(s=>({
-        ...s,
-        lang: langSettings.manualSetting!,
-      }))
-      else setLang(s=>({
-        ...s,
-        lang: [fallbackLang],
-      }))
-    }
-  },[systemLangs, langSettings, setLang, setLangSettings])
+  
+  useLayoutEffect(
+    ()=>{
+      if (langSettings.setting==='system'){
+        const available = lang.availableSystemLangs
+        if (!available) return
+        if (arrIsNonEmpty(available)) setLang(s=>({
+          ...s,
+          lang: [...available,fallbackLang],
+        }))
+        else setLangSettings({
+          ...langSettings,
+          setting: 'manual',
+        })
+      }
+      else if (langSettings.setting==='manual') {
+        if (langSettings.manualSetting) setLang(s=>({
+          ...s,
+          lang: langSettings.manualSetting!,
+        }))
+        else setLang(s=>({
+          ...s,
+          lang: [fallbackLang],
+        }))
+      }
+    },
+    [lang.availableSystemLangs, langSettings, setLang, setLangSettings]
+  )
   
   
   useLayoutEffect(()=>{
