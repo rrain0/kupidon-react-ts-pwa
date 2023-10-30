@@ -6,7 +6,7 @@ import React, {
 import css from './GalleryHorizontalScrollbar.module.scss'
 import classNames from "classnames"
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 

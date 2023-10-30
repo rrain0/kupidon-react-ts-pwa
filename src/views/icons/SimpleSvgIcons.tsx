@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import classNames from 'classnames'
 import React from 'react'
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import Mem = ReactUtils.Mem
 
 import { ReactComponent as AddModuleSvg } from 'src/res/icon/add-module.svg'
 import { ReactComponent as Arrow1DownSvg } from 'src/res/icon/arrow-1-down.svg'
@@ -42,12 +42,15 @@ import { ReactComponent as FloppyDisk3Svg } from 'src/res/icon/floppy-disk-3.svg
 
 import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
 import { ReactComponent as Gear2Svg } from 'src/res/icon/gear-2.svg'
+import { ReactComponent as GearInSquareSvg } from 'src/res/icon/gear-in-square.svg'
 
 import { ReactComponent as HeartSvg } from 'src/res/icon/heart.svg'
 import { ReactComponent as HelpSvg } from 'src/res/icon/help.svg'
 import { ReactComponent as HomeSvg } from 'src/res/icon/home.svg'
 
 import { ReactComponent as InfoToastifySvg } from 'src/res/icon/info-toastify.svg'
+
+import { ReactComponent as LockSvg } from 'src/res/icon/lock.svg'
 
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
 
@@ -69,6 +72,8 @@ import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-tri
 
 
 
+
+
 export namespace SimpleSvgIcons {
 
   // Base interface for simple svg icons
@@ -85,7 +90,7 @@ export namespace SimpleSvgIcons {
   
   
   export type SimpleSvgIconProps = CustomIconProps & SvgProps & SvgElement
-  export const SimpleSvgIcon = ReactMemoTyped(
+  export const SimpleSvgIcon = Mem(
     (props: SimpleSvgIconProps) => {
       let {
         className,
@@ -119,231 +124,249 @@ export namespace SimpleSvgIcons {
   
   
   
-  export const AddModuleIc = ReactMemoTyped(
+  export const AddModuleIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={AddModuleSvg} />
   )
-  export const Arrow1DownIc = ReactMemoTyped(
+  export const Arrow1DownIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow1DownSvg} />
   )
   
-  export const Arrow2ForwardIc = ReactMemoTyped(
+  export const Arrow2ForwardIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow2ForwardSvg} />
   )
   
-  export const Arrow3UpRightIc = ReactMemoTyped(
+  export const Arrow3UpRightIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow3UpRightSvg} />
   )
   
-  export const Arrow4DownIc = ReactMemoTyped(
+  export const Arrow4DownIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow4DownSvg} />
   )
   
-  export const Arrow5FwdIc = ReactMemoTyped(
+  export const Arrow5FwdIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow5FwdSvg} />
   )
   
-  export const ArrowReloadIc = ReactMemoTyped(
+  export const ArrowReloadIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ArrowReloadSvg} />
   )
   
-  export const BrowserIc = ReactMemoTyped(
+  export const BrowserIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={BrowserSvg} />
   )
   
-  export const CardsHeartIc = ReactMemoTyped(
+  export const CardsHeartIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CardsHeartSvg} />
   )
   
-  export const CautionIc = ReactMemoTyped(
+  export const CautionIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CautionSvg} />
   )
   
-  export const ChatRoundIc = ReactMemoTyped(
+  export const ChatRoundIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ChatRoundSvg} />
   )
   
-  export const CheckmarkIc = ReactMemoTyped(
+  export const CheckmarkIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CheckmarkSvg} />
   )
   
-  export const CheckmarkCircleToastifyIc = ReactMemoTyped(
+  export const CheckmarkCircleToastifyIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CheckmarkCircleToastifySvg} />
   )
   
-  export const ClearTrashIc = ReactMemoTyped(
+  export const ClearTrashIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ClearTrashSvg} />
   )
   
-  export const ClipIc = ReactMemoTyped(
+  export const ClipIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ClipSvg} />
   )
   
-  export const CrossIc = ReactMemoTyped(
+  export const CrossIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={CrossSvg} />
   )
   
-  export const Cross2Ic = ReactMemoTyped(
+  export const Cross2Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Cross2Svg} />
   )
   
   
   
-  export const DangerRoundToastifyIc = ReactMemoTyped(
+  export const DangerRoundToastifyIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={DangerRoundToastifySvg} />
   )
   
-  export const DayIc = ReactMemoTyped(
+  export const DayIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={DaySvg} />
   )
   
-  export const DayNightIc = ReactMemoTyped(
+  export const DayNightIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={DayNightSvg} />
   )
   
-  export const DoubleCheckmarkIc = ReactMemoTyped(
+  export const DoubleCheckmarkIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={DoubleCheckmarkSvg} />
   )
   
-  export const Download1Ic = ReactMemoTyped(
+  export const Download1Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Download1Svg} />
   )
   
-  export const Download2RoundIc = ReactMemoTyped(
+  export const Download2RoundIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Download2RoundSvg} />
   )
   
   
   
-  export const EyeIc = ReactMemoTyped(
+  export const EyeIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={EyeSvg} />
   )
   
-  export const EyeCrossedOutIc = ReactMemoTyped(
+  export const EyeCrossedOutIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={EyeCrossedOutSvg} />
   )
   
-  export const FloppyDisk1Ic = ReactMemoTyped(
+  
+  
+  export const FloppyDisk1Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={FloppyDisk1Svg} />
   )
   
-  export const FloppyDisk2Ic = ReactMemoTyped(
+  export const FloppyDisk2Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={FloppyDisk2Svg} />
   )
   
-  export const FloppyDisk3Ic = ReactMemoTyped(
+  export const FloppyDisk3Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={FloppyDisk3Svg} />
   )
   
-  export const GearIc = ReactMemoTyped(
+  
+  
+  export const GearIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={GearSvg} />
   )
   
-  export const Gear2Ic = ReactMemoTyped(
+  export const Gear2Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Gear2Svg} />
   )
   
-  export const HeartIc = ReactMemoTyped(
+  export const GearInSquareIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={GearInSquareSvg} />
+  )
+  
+  
+  
+  export const HeartIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={HeartSvg} />
   )
   
-  export const HelpIc = ReactMemoTyped(
+  export const HelpIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={HelpSvg} />
   )
   
-  export const HomeIc = ReactMemoTyped(
+  export const HomeIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={HomeSvg} />
   )
   
   
   
-  export const InfoToastifyIc = ReactMemoTyped(
+  export const InfoToastifyIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={InfoToastifySvg} />
   )
   
   
   
-  export const MailIc = ReactMemoTyped(
+  export const LockIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={LockSvg} />
+  )
+  
+  
+  
+  export const MailIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={MailSvg} />
   )
   
-  export const NightIc = ReactMemoTyped(
+  export const NightIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={NightSvg} />
   )
   
-  export const PencilWriteIc = ReactMemoTyped(
+  export const PencilWriteIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={PencilWriteSvg} />
   )
   
-  export const Plane1Ic = ReactMemoTyped(
+  export const Plane1Ic = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Plane1Svg} />
   )
   
-  export const ProfileIc = ReactMemoTyped(
+  export const ProfileIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={ProfileSvg} />
   )
   
-  export const RadioActiveIc = ReactMemoTyped(
+  export const RadioActiveIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={RadioActiveSvg} />
   )
   
-  export const RadioInactiveIc = ReactMemoTyped(
+  export const RadioInactiveIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={RadioInactiveSvg} />
   )
   
-  export const RingingBellIc = ReactMemoTyped(
+  export const RingingBellIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={RingingBellSvg} />
   )
   
   
   
-  export const SearchIc = ReactMemoTyped(
+  export const SearchIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={SearchSvg} />
   )
   
-  export const Spinner8LinesIc = ReactMemoTyped(function(){
+  export const Spinner8LinesIc = Mem(function(){
     const rotation = keyframes`
       100% { rotate: 1turn }
     `
@@ -354,7 +377,7 @@ export namespace SimpleSvgIcons {
     <SimpleSvgIcon {...props} SvgComponent={Spinner8Lines_} />
   }())
   
-  export const SpinnerCircleQuarterIc = ReactMemoTyped(function(){
+  export const SpinnerCircleQuarterIc = Mem(function(){
     const rotation = keyframes`
       100% { rotate: 1turn }
     `
@@ -367,7 +390,7 @@ export namespace SimpleSvgIcons {
   
   
   
-  export const WarnTriangleToastifyIc = ReactMemoTyped(
+  export const WarnTriangleToastifyIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={WarnTriangleToastifySvg} />
   )

@@ -12,8 +12,9 @@ const BottomNavBarRouting = ()=>{
   return <Routes>
     {
       [
-        RootRoute.main[full](),
         RootRoute.profile[full](),
+        RootRoute.findPairs[full](),
+        RootRoute.settings[full](),
       ]
         .map(path=>path+'/*')
         .map(path=><Route

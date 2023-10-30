@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
 import { ReactUtils } from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'

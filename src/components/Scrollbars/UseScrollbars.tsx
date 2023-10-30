@@ -6,7 +6,7 @@ import {
   ContainerScrollStateOptions,
   useContainerScrollState,
 } from 'src/views/Scrollbar/useContainerScrollState'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 

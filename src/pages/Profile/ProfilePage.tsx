@@ -11,7 +11,7 @@ import { useRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import Button from 'src/views/Buttons/Button'
@@ -85,12 +85,12 @@ function ProfilePage(){
       `}
     >
       
-      <Button css={ButtonStyle.icon}
+      {/* <Button css={ButtonStyle.icon}
         onClick={update}
         disabled={false}
       >
         <ArrowReload />
-      </Button>
+      </Button> */}
       
       <Button css={ButtonStyle.icon}
         onClick={undefined}

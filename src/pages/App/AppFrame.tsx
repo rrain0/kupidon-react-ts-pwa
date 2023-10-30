@@ -5,7 +5,7 @@ import React from 'react'
 import AutoLangSettings from 'src/components/AutoLangSettings/AutoLangSettings'
 import AppRouting from 'src/pages/App/AppRouting'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 

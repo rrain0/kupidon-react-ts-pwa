@@ -60,7 +60,7 @@ const BottomNavBar = ()=>{
         <div>{uiOptions.chat[0].text}</div>
       </Button>
       
-      <NavLink to={RootRoute.main[full]()}>
+      <NavLink to={RootRoute.findPairs[full]()}>
         <Button css={ButtonStyle.nav}>
           <CardsHeartIc/>
           <div>{uiOptions.findCouples[0].text}</div>
@@ -72,15 +72,16 @@ const BottomNavBar = ()=>{
         <div>{uiOptions.advices[0].text}</div>
       </Button>
       
-      <Button css={ButtonStyle.nav}
-        onClick={()=>{
-          //startTransition(()=>setSettingsOpen(true))
-          setSettingsOpen(true)
-        }}
+      <NavLink to={RootRoute.settings[full]()}
+        onClick={ev=>ev.preventDefault()} // prevent follow link
       >
-        <Gear2Ic/>
-        <div>{uiOptions.settings[0].text}</div>
-      </Button>
+        <Button css={ButtonStyle.nav}
+          onClick={()=>setSettingsOpen(true)}
+        >
+          <Gear2Ic/>
+          <div>{uiOptions.settings[0].text}</div>
+        </Button>
+      </NavLink>
     
     </Frame>
     

@@ -3,7 +3,8 @@ import React, {CSSProperties} from "react"
 
 export namespace ReactUtils {
   
-  export const ReactMemoTyped = <C>(Component: C): C => {
+  // React.memo wrapper
+  export const Mem = <C>(Component: C): C => {
     // @ts-ignore
     return React.memo(Component)
   }

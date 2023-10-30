@@ -6,7 +6,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import mobileWidth = EmotionCommon.mobileWidth
 import center = EmotionCommon.center
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 

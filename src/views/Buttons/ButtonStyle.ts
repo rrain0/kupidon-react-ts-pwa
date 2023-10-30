@@ -36,7 +36,7 @@ export namespace ButtonStyle {
         width: fit-content;
         min-height: 40px;
         border-radius: 1000000px;
-        padding: 8px 22px;
+        padding: 8px 20px;
       }
     `
     

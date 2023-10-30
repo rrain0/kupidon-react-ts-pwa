@@ -27,7 +27,7 @@ import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 
 
 
-const sheetSnaps = [0,'fit-content','80%']
+const sheetSnaps = [0,'fit-content','50%']
 const openIdx = 1
 
 
@@ -102,7 +102,7 @@ const ClearSiteConfirmation = (props:{
           <Button css={[ButtonStyle.roundedDanger, button]}
             onClick={()=>setDoClear(true)}
           >
-            <ClearTrashIc css={icon}/>
+            <ClearTrashIc css={[icon,iconOnDanger]}/>
             {uiOptions.yes[0].text}
           </Button>
           
@@ -142,6 +142,11 @@ const icon = (t:Theme)=>css`
   &.rrainuiIcon {
     height: 1.333em;
     width: 1.333em;
+    --icon-color: ${t.page.text[0]};
+  }
+`
+const iconOnDanger = (t:Theme)=>css`
+  &.rrainuiIcon {
     --icon-color: ${t.element.danger.text[0]};
   }
 `

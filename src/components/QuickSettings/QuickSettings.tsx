@@ -2,9 +2,12 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
@@ -29,6 +32,13 @@ import NightIc = SimpleSvgIcons.NightIc
 import AddModuleIc = SimpleSvgIcons.AddModuleIc
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
+import LockIc = SimpleSvgIcons.LockIc
+import GearInSquareIc = SimpleSvgIcons.GearInSquareIc
+import GearIc = SimpleSvgIcons.GearIc
+import Gear2Ic = SimpleSvgIcons.Gear2Ic
+import RootRoute = AppRoutes.RootRoute
+import full = RouteBuilder.full
+import rowWrap = EmotionCommon.rowWrap
 
 
 
@@ -41,7 +51,6 @@ export type SettingsProps = {
   setOpen: Setter<boolean>
 }
 const QuickSettings = (props: SettingsProps)=>{
-  const { open, setOpen } = props
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
@@ -74,16 +83,16 @@ const QuickSettings = (props: SettingsProps)=>{
   
   
   useEffect(()=>{
-    if (open){
+    if (props.open){
       setSheetState('opening')
       setSnapIdx(openIdx)
     }
-  },[open])
+  },[props.open])
   useEffect(()=>{
     if (sheetState==='closed'){
-      setOpen(false)
+      props.setOpen(false)
     }
-  },[setOpen, sheetState])
+  },[props.setOpen, sheetState])
   
   
   const bottomSheetProps = {
@@ -96,7 +105,7 @@ const QuickSettings = (props: SettingsProps)=>{
   
   
   return <>
-    {open && <BottomSheetBasic
+    {props.open && <BottomSheetBasic
       {...bottomSheetProps}
       header={uiOptions.settings[0].text}
     >
@@ -111,6 +120,7 @@ const QuickSettings = (props: SettingsProps)=>{
           css={css`
             padding: 8px 6px;
           `}
+          role='radiogroup'
         >
           {uiOptions.theme[0].text}:
         </div>
@@ -120,14 +130,6 @@ const QuickSettings = (props: SettingsProps)=>{
             .map(opt => <RadioInput
               css={RadioInputStyle.radio}
               childrenPosition="start"
-              role="option"
-              aria-selected={function () {
-                if (themeSettings.setting === 'system' && opt.value === 'system')
-                  return true
-                if (themeSettings.setting !== 'system' && opt.value === themeSettings.manualSetting)
-                  return true
-                return false
-              }()}
               checked={function () {
                 if (themeSettings.setting === 'system' && opt.value === 'system')
                   return true
@@ -175,14 +177,6 @@ const QuickSettings = (props: SettingsProps)=>{
             .map(opt => <RadioInput
               css={RadioInputStyle.radio}
               childrenPosition="start"
-              role="option"
-              aria-selected={function () {
-                if (langSettings.setting === 'system' && opt.value === 'system')
-                  return true
-                if (langSettings.setting !== 'system' && opt.value === langSettings.manualSetting?.[0])
-                  return true
-                return false
-              }()}
               checked={function () {
                 if (langSettings.setting === 'system' && opt.value === 'system')
                   return true
@@ -226,7 +220,45 @@ const QuickSettings = (props: SettingsProps)=>{
         }
         
         
-        <RoundButtonContainer>
+        <RoundButtonsContainer>
+          
+          <Link to={RootRoute.settings.account[full]()}>
+            <Button css={[
+              ButtonStyle.roundedNormal,
+              roundButton,
+            ]}
+              onClick={()=>setSheetState('closing')}
+            >
+              <LockIc css={[
+                icon,
+                css`translate: 0 -0.1em;`,
+              ]}/>
+              {uiOptions.accountSettings[0].text}
+            </Button>
+          </Link>
+          
+          <Link to={RootRoute.settings.app[full]()}>
+            <Button css={[
+              ButtonStyle.roundedNormal,
+              roundButton,
+            ]}
+              onClick={()=>setSheetState('closing')}
+            >
+              <GearIc css={icon} />
+              {uiOptions.appSettings[0].text}
+            </Button>
+          </Link>
+          
+          <Link to={RootRoute.test[full]()}>
+            <Button css={[
+              ButtonStyle.roundedNormal,
+              roundButton,
+            ]}
+              onClick={()=>setSheetState('closing')}
+            >
+              {uiOptions.testPage[0].text}
+            </Button>
+          </Link>
           
           {app.canInstall && <Button css={[ButtonStyle.roundedNormal, roundButton]}
             onClick={async () => {
@@ -244,7 +276,7 @@ const QuickSettings = (props: SettingsProps)=>{
             {uiOptions.clearAppData[0].text}
           </Button>
         
-        </RoundButtonContainer>
+        </RoundButtonsContainer>
       
       
       </div>
@@ -275,11 +307,11 @@ const Flag = styled.img`
 const icon = (t:Theme)=>css`
   &.rrainuiIcon {
     height: 1.333em;
-    width: 1.333em;
+    width: auto;
     --icon-color: var(--color);
   }
 `
-const RoundButtonContainer = styled.div`
+const RoundButtonsContainer = styled.div`
   ${col};
   align-items: center;
   gap: 10px;
@@ -287,7 +319,7 @@ const RoundButtonContainer = styled.div`
 const roundButton = (t:Theme)=>css`
   &.rrainuiButton {
     min-width: 90px;
-    gap: 0.3em;
+    gap: 0.6em;
   }
 `
 

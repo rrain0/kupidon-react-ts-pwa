@@ -5,7 +5,7 @@ import { CastUtils } from 'src/utils/common/CastUtils'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
 import { ReactUtils } from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty

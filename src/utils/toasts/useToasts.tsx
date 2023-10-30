@@ -8,17 +8,17 @@ import { useUiOptionArr } from 'src/utils/lang/useUiOptions'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastBody, ToastType } from 'src/utils/toasts/ToastBody'
 import falseable = TypeUtils.falseable
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 
 
 export type UseToastDataType = (ToastMsgData | falseable)[]
 export type UseToastsProps = {
-  data?: UseToastDataType | undefined
+  toasts?: UseToastDataType | undefined
 }
 export const useToasts = (props?: UseToastsProps)=>{
-  const data = props?.data??[]
+  const data = props?.toasts??[]
   
   const [prevData, setPrevData] = useState([] as UseToastDataType)
   

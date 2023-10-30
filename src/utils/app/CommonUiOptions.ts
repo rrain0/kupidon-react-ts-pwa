@@ -12,8 +12,7 @@ export const CommonUiOptions = {
       value: 'loginPlaceholder',
       lang: 'en-US',
       text: 'login (email)',
-    },
-    {
+    },{
       value: 'loginPlaceholder',
       lang: 'ru-RU',
       text: 'логин (email)',
@@ -26,8 +25,7 @@ export const CommonUiOptions = {
       value: 'pwdPlaceholder',
       lang: 'en-US',
       text: 'password',
-    },
-    {
+    },{
       value: 'pwdPlaceholder',
       lang: 'ru-RU',
       text: 'пароль',
@@ -40,8 +38,7 @@ export const CommonUiOptions = {
       value: 'login',
       lang: 'en-US',
       text: 'Login',
-    },
-    {
+    },{
       value: 'login',
       lang: 'ru-RU',
       text: 'Вход',
@@ -54,8 +51,7 @@ export const CommonUiOptions = {
       value: 'doLogin',
       lang: 'en-US',
       text: 'Login',
-    },
-    {
+    },{
       value: 'doLogin',
       lang: 'ru-RU',
       text: 'Войти',
@@ -68,8 +64,7 @@ export const CommonUiOptions = {
       value: 'loggingIn',
       lang: 'en-US',
       text: 'Logging In',
-    },
-    {
+    },{
       value: 'loggingIn',
       lang: 'ru-RU',
       text: 'Вход',
@@ -82,8 +77,7 @@ export const CommonUiOptions = {
       value: 'loginCompleted',
       lang: 'en-US',
       text: 'Login is completed',
-    },
-    {
+    },{
       value: 'loginCompleted',
       lang: 'ru-RU',
       text: 'Вход выполнен',
@@ -96,8 +90,7 @@ export const CommonUiOptions = {
       value: 'signup',
       lang: 'en-US',
       text: 'Sign up',
-    },
-    {
+    },{
       value: 'signup',
       lang: 'ru-RU',
       text: 'Зарегистрироваться',
@@ -110,8 +103,7 @@ export const CommonUiOptions = {
       value: 'signingUp',
       lang: 'en-US',
       text: 'Registration',
-    },
-    {
+    },{
       value: 'signingUp',
       lang: 'ru-RU',
       text: 'Регистрация',
@@ -124,8 +116,7 @@ export const CommonUiOptions = {
       value: 'registrationCompleted',
       lang: 'en-US',
       text: 'Registration completed',
-    },
-    {
+    },{
       value: 'registrationCompleted',
       lang: 'ru-RU',
       text: 'Регистрация завершена',
@@ -138,8 +129,7 @@ export const CommonUiOptions = {
       value: 'userSuccessfullyRegistered',
       lang: 'en-US',
       text: 'User successfully registered',
-    },
-    {
+    },{
       value: 'userSuccessfullyRegistered',
       lang: 'ru-RU',
       text: 'Пользователь успешно зарегистрирован',
@@ -152,8 +142,7 @@ export const CommonUiOptions = {
       value: 'signOut',
       lang: 'en-US',
       text: 'Sign Out',
-    },
-    {
+    },{
       value: 'signOut',
       lang: 'ru-RU',
       text: 'Выйти',
@@ -166,8 +155,7 @@ export const CommonUiOptions = {
       value: 'profile',
       lang: 'en-US',
       text: 'Profile',
-    },
-    {
+    },{
       value: 'profile',
       lang: 'ru-RU',
       text: 'Профиль',
@@ -180,8 +168,7 @@ export const CommonUiOptions = {
       value: 'chat',
       lang: 'en-US',
       text: 'Chat',
-    },
-    {
+    },{
       value: 'chat',
       lang: 'ru-RU',
       text: 'Чат',
@@ -194,8 +181,7 @@ export const CommonUiOptions = {
       value: 'settings',
       lang: 'en-US',
       text: 'Settings',
-    },
-    {
+    },{
       value: 'settings',
       lang: 'ru-RU',
       text: 'Настройки',
@@ -208,8 +194,7 @@ export const CommonUiOptions = {
       value: 'theme',
       lang: 'en-US',
       text: 'Theme',
-    },
-    {
+    },{
       value: 'theme',
       lang: 'ru-RU',
       text: 'Тема',
@@ -222,8 +207,7 @@ export const CommonUiOptions = {
       value: 'language',
       lang: 'en-US',
       text: 'Language',
-    },
-    {
+    },{
       value: 'language',
       lang: 'ru-RU',
       text: 'Язык',
@@ -236,8 +220,7 @@ export const CommonUiOptions = {
       value: 'system',
       lang: 'en-US',
       text: 'System language',
-    },
-    {
+    },{
       value: 'system',
       lang: 'ru-RU',
       text: 'Язык системы',
@@ -247,13 +230,51 @@ export const CommonUiOptions = {
       value: 'ru-RU',
       lang: 'ru-RU',
       text: 'Русский',
-    },
-    {
+    },{
       value: 'en-US',
       lang: 'en-US',
       text: 'English',
     },
   ] satisfies UiOption<Lang|'system'>[],
+  
+  
+  accountSettings: [
+    {
+      value: 'accountSettings',
+      lang: 'en-US',
+      text: 'Account Settings',
+    },{
+      value: 'accountSettings',
+      lang: 'ru-RU',
+      text: 'Настройки Аккаунта',
+    },
+  ] satisfies UiOption<'accountSettings'>[],
+  
+  
+  appSettings: [
+    {
+      value: 'appSettings',
+      lang: 'en-US',
+      text: 'Application Settings',
+    },{
+      value: 'appSettings',
+      lang: 'ru-RU',
+      text: 'Настройки Приложения',
+    },
+  ] satisfies UiOption<'appSettings'>[],
+  
+  
+  testPage: [
+    {
+      value: 'testPage',
+      lang: 'en-US',
+      text: 'Test page',
+    },{
+      value: 'testPage',
+      lang: 'ru-RU',
+      text: 'Тестовая страница',
+    },
+  ] satisfies UiOption<'testPage'>[],
   
   
   reloading: [

@@ -15,7 +15,7 @@ import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import Failures = ValidationCore.Failures
 import updateFailures = ValidationActions.updateFailures
 import awaitDelay = ValidationActions.awaitDelay
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import trueOrUndef = CastUtils.trueOrUndef
 
 

@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import Setter = TypeUtils.Setter

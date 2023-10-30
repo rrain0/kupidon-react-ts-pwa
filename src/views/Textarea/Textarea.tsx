@@ -6,7 +6,7 @@ import { ElementProps } from 'src/utils/common/GetDimensions'
 import styled from "styled-components"
 import React, { useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
 import { ReactUtils } from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty

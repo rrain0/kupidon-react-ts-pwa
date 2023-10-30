@@ -1,11 +1,11 @@
 import React from 'react'
-import { Navigate, Route, Routes, useMatch, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useMatch, useSearchParams } from 'react-router-dom'
 import { useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import Mem = ReactUtils.Mem
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
@@ -17,81 +17,98 @@ import full = RouteBuilder.full
 
 
 function ProfileRouting(){
-  //console.log('profile')
-  
-  return <ProfileIdRouting/>
-}
-export default ReactMemoTyped(ProfileRouting)
-
-
-
-const ProfileIdRouting = ReactMemoTyped(()=>{
-  //console.log('profile id')
+  //console.log('profile / <check here>')
   const [searchParams] = useSearchParams()
   
   return <Routes>
+    
     <Route path={RootRoute.profile.id[path]+'/*'}
+      element={<ProfileIdRouting/>}
+    />
+    
+    <Route path="*"
+      element={
+        <Navigate
+          to={RootRoute.profile.id[fullAnySearchParams](searchParams)}
+          replace={true}
+        />
+      }
+    />
+  
+  </Routes>
+}
+export default Mem(ProfileRouting)
+
+
+
+const ProfileIdRouting = Mem(()=>{
+  //console.log('profile / id / <check here>')
+  const [searchParams] = useSearchParams()
+  const auth = useRecoilValue(AuthRecoil)
+  const authId = auth?.user.id
+  
+  return <Routes>
+    
+    <Route path=''
+      element={
+        authId
+        ? <Navigate
+            to={RootRoute.profile.id.userId[use](authId)[fullAnySearchParams](searchParams)}
+            replace={true}
+          />
+        : <Navigate
+            to={RootRoute.login[fullAllowedNameParams]({
+              returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
+            })}
+            replace={true}
+          />
+      }
+    />
+    
+    <Route path={RootRoute.profile.id.userId[path]+'/*'}
       element={<ProfileIdUserIdRouting/>}
     />
-    <Route path='*'
-      element={<Navigate to={RootRoute.profile.id[fullAnySearchParams](searchParams)}
-        replace={true}
-      />}
-    />
+    
   </Routes>
 })
 
 
 
-const ProfileIdUserIdRouting = ReactMemoTyped(()=>{
-  //console.log('profile id userId')
-  
-  
+const ProfileIdUserIdRouting = Mem(()=>{
+  //console.log('profile / id / userId / <check here>')
   const [searchParams] = useSearchParams()
-  
-  
   const auth = useRecoilValue(AuthRecoil)
   const authId = auth?.user.id
-  
-  
   const urlUserId = useMatch(RootRoute.profile.id.userId[full]()+'/*')
-    ?.params[RootRoute.profile.id.userId[path].slice(1)]
+    ?.params[RootRoute.profile.id.userId[path].slice(1)]!
   
   
   
   return <Routes>
-    { authId && <Route path=''
-      element={
-        <Navigate
-          to={RootRoute.profile.id.userId[use](authId)[fullAnySearchParams](searchParams)}
-          replace={true}
-        />
-      }
-    /> }
-    { !authId && <Route path=''
-      element={
-        <Navigate
-          to={RootRoute.login[fullAllowedNameParams]({
-            returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
-          })}
-          replace={true}
-        />
-      }
-    /> }
-    { authId!==urlUserId
-      ? <Route path={RootRoute.profile.id.userId[path]+'/*'}
-        element={<Navigate
-          to={RootRoute.login[fullAllowedNameParams]({
-            returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
-          })}
-          replace={true}
-        />}
-      />
-      : <Route path={RootRoute.profile.id.userId[path]+'/*'}
-        element={<ProfilePage/>}
-      />
-    }
     
+    <Route path=''
+      element={
+        authId===urlUserId
+          ? <ProfilePage/>
+          : <div>
+              <div>Просмотр чужого профиля пока что не реализован.</div>
+              <Link to={RootRoute.login[fullAllowedNameParams]({
+                returnPath: RootRoute.profile[fullAnySearchParams](searchParams)
+              })}>
+                <button>Войти</button>
+              </Link>
+            </div>
+      }
+    />
+    
+    <Route path='*'
+      element={
+        <Navigate
+          to={RootRoute.profile.id.userId[use](urlUserId)[fullAnySearchParams](searchParams)}
+          replace={true}
+        />
+      }
+    />
     
   </Routes>
 })

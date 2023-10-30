@@ -9,6 +9,7 @@ import LoginPage from './LoginPage'
 
 
 function LoginRouting(){
+  //console.log('login / <check here>')
   const [searchParams] = useSearchParams()
   
   return <Routes>
@@ -26,3 +27,4 @@ function LoginRouting(){
   </Routes>
 }
 export default LoginRouting
+

@@ -1,25 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import React, { useRef } from 'react'
-import { Link } from 'react-router-dom'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { Pages } from 'src/components/Page/Pages'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import { useContainerScrollState } from 'src/views/Scrollbar/useContainerScrollState'
-import RootRoute = AppRoutes.RootRoute
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import Page = Pages.Page
-import full = RouteBuilder.full
 import SimpleContent = Pages.SimpleContent
+import Mem = ReactUtils.Mem
 
 
 
-function MainPage(){
+function FindPairsPage(){
   
-  /* const [settingsOpen, setSettingsOpen] = useState(false) */
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -30,13 +25,6 @@ function MainPage(){
     >
       <SimpleContent>
         
-        <Link to={RootRoute.profile[full]()}>
-          <button>Профиль</button>
-        </Link>
-        <Link to={RootRoute.test[full]()}>
-          <button>Test Page</button>
-        </Link>
-        <div>Какая-то главная страница.</div>
         <div>Здесь будут карточки людей.</div>
         
       </SimpleContent>
@@ -57,21 +45,7 @@ function MainPage(){
       />
     </PageScrollbarOverlayFrame>
     
-    
-    {/* <BottomButtonBar
-      css={css`
-        padding-bottom: ${bottomNavBarHeight}px;
-      `}>
-      <Button css={ButtonStyle.iconTransparent}
-        onClick={()=>setSettingsOpen(true)}
-      >
-        <GearIc/>
-      </Button>
-    </BottomButtonBar> */}
-    
-    {/* <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/> */}
-    
   </>
 }
-export default MainPage
+export default Mem(FindPairsPage)
 

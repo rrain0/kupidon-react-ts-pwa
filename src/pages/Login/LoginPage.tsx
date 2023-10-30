@@ -45,7 +45,7 @@ import params = RouteBuilder.params
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import UserValues = LoginPageValidation.UserValues
 import Failure = ValidationCore.Failure
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiOption
 import defaultValues = LoginPageValidation.defaultValues
@@ -253,14 +253,12 @@ const LoginPage = () => {
   }))
   
   
-  useToasts({
-    data: [
-      userFailureMsg,
-      loginLoading && loadingMsg,
-      loginSuccess && loginSuccessMsg,
-      serverFailureMsg,
-    ],
-  })
+  useToasts({ toasts: [
+    userFailureMsg,
+    loginLoading && loadingMsg,
+    loginSuccess && loginSuccessMsg,
+    serverFailureMsg,
+  ]})
   
   
   
@@ -348,7 +346,7 @@ const LoginPage = () => {
   
   useEffect(()=>{
     if (loginSuccess) {
-      navigate(returnPath ?? RootRoute.main[full]())
+      navigate(returnPath ?? RootRoute.findPairs[full]())
     }
   },[loginSuccess, navigate, returnPath])
   

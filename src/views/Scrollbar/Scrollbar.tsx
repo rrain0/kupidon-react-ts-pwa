@@ -15,7 +15,7 @@ import { MathUtils } from 'src/utils/common/MathUtils'
 import inRange = MathUtils.inRange
 import fitRange = MathUtils.fitRange
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import styled from 'styled-components'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty

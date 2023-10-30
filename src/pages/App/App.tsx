@@ -9,7 +9,7 @@ import { useAppInstallationSetup } from 'src/utils/app/useAppInstallationSetup'
 import { useLangSetup } from 'src/utils/lang/useLangSetup'
 import { useThemeSetup } from 'src/utils/theme/useThemeSetup'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 

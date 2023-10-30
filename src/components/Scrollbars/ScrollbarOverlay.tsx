@@ -10,7 +10,7 @@ import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import { ScrollProps, SetScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import empty = TypeUtils.empty
 import abs = EmotionCommon.abs
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 
 
 

@@ -2,7 +2,6 @@
 import { css } from '@emotion/react'
 import React from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import rowWrap = EmotionCommon.rowWrap
 import center = EmotionCommon.center
 import Card from 'src/views/Card'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -19,11 +18,21 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
   
   
   return <Card>
-    <div css={t => css`
-      ${rowWrap};
+    <div css={t=>css`
+      display: grid;
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      grid:
+        'im1 im1 im2' auto
+        'im1 im1 im3' auto
+        'im4 im5 im6' auto
+      / 1fr 1fr 1fr
+      ;
+      place-items: stretch;
       gap: 6px;
     `}>
-      {images.map(im => <div
+      {images.map((im,i) => <div
           
           draggable
           onDragStart={ev => {
@@ -47,19 +56,20 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
           
           key={im}
           css={css`
-                width: 100px; height: 100px;
-                ${center};
-                border-radius: 6px;
-                overflow: hidden;
-              `}
+            grid-area: im${i+1};
+            ${center};
+            border-radius: 6px;
+            overflow: hidden;
+          `}
         >
           <img
             src={im}
             css={css`
-                  width: 100%; height: 100%;
-                  object-position: center;
-                  object-fit: cover;
-                `}
+              width: 100%;
+              aspect-ratio: 1;
+              object-position: center;
+              object-fit: cover;
+            `}
           />
         </div>,
       )}

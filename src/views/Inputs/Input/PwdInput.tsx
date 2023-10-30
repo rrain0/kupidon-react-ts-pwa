@@ -4,7 +4,7 @@ import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
 import React from "react"
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import {SimpleSvgIcons} from "src/views/icons/SimpleSvgIcons"
 import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc
 import EyeIc = SimpleSvgIcons.EyeIc

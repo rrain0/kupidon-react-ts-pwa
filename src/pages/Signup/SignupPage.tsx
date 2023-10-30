@@ -59,7 +59,7 @@ import UserValues = SignupPageValidation.UserValues
 import Failure = ValidationCore.Failure
 import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiOption
-import ReactMemoTyped = ReactUtils.ReactMemoTyped
+import ReactMemoTyped = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
 
 
@@ -76,19 +76,6 @@ const SignupPage = () => {
   const setAuth = useSetRecoilState(AuthRecoil)
   
   const uiOptions = useUiOptionsContainer(SignupPageUiOptions)
-  
-  const sexOptions = useMemo(
-    ()=>[
-      {
-        value: 'MALE',
-        text: uiOptions.iAmGuy[0].text,
-      },{
-        value: 'FEMALE',
-        text: uiOptions.iAmGirl[0].text,
-      }
-    ] satisfies { value: FormValues['sex'], text: string }[],
-    [uiOptions]
-  )
   
   const [signupLoading, setSignupLoading] = useState(false)
   const [signupSuccess, setSignupSuccess] = useState(false)
@@ -270,14 +257,12 @@ const SignupPage = () => {
   }))
   
   
-  useToasts({
-    data: [
-      userFailureMsg,
-      signupLoading && loadingMsg,
-      signupSuccess && loginSuccessMsg,
-      serverFailureMsg,
-    ],
-  })
+  useToasts({ toasts: [
+    userFailureMsg,
+    signupLoading && loadingMsg,
+    signupSuccess && loginSuccessMsg,
+    serverFailureMsg,
+  ]})
   
   
   
@@ -345,6 +330,20 @@ const SignupPage = () => {
   
   
   
+  const sexOptions = useMemo(
+    ()=>[
+      {
+        value: 'MALE',
+        text: uiOptions.iAmGuy[0].text,
+      },{
+        value: 'FEMALE',
+        text: uiOptions.iAmGirl[0].text,
+      }
+    ] satisfies { value: FormValues['sex'], text: string }[],
+    [uiOptions]
+  )
+  
+  
   const validationProps = {
     values: signupForm,
     failures: signupFailures,
@@ -362,9 +361,11 @@ const SignupPage = () => {
   
   useEffect(()=>{
     if (signupSuccess) {
-      navigate(returnPath ?? RootRoute.main[full]())
+      navigate(returnPath ?? RootRoute.findPairs[full]())
     }
   },[signupSuccess, navigate, returnPath])
+  
+  
   
   
   return <>

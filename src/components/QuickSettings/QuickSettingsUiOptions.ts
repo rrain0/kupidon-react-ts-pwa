@@ -84,4 +84,9 @@ export const QuickSettingsUiOptions = {
   languageOptions: CommonUiOptions.languageOptions,
   
   
+  accountSettings: CommonUiOptions.accountSettings,
+  appSettings: CommonUiOptions.appSettings,
+  testPage: CommonUiOptions.testPage,
+  
+  
 } satisfies Record<string, UiOption<any>[]>

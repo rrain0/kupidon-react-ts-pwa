@@ -9,6 +9,7 @@ import SignupPage from './SignupPage'
 
 
 function SignupRouting(){
+  //console.log('signup / <check here>')
   const [searchParams] = useSearchParams()
   
   return <Routes>
@@ -26,3 +27,5 @@ function SignupRouting(){
   </Routes>
 }
 export default SignupRouting
+
+
