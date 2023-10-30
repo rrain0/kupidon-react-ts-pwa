@@ -106,6 +106,7 @@ export class ToastMsgData {
   runCloseCallback = true
   onChange: OnChangeCallback = (toast: ToastItem)=>{
     if(toast.status==='removed' && toast.data===this){
+      this.id = undefined
       this.unsubscribeOnChange?.()
       if (this.runCloseCallback){
         //console.log('toast removed',this)
@@ -139,6 +140,7 @@ export class ToastMsgData {
       // it is not working BEFORE toast.dismiss so need to use runCloseCallback
       this.unsubscribeOnChange?.()
       toast.dismiss(this.id)
+      this.id = undefined
     }
   }
 }

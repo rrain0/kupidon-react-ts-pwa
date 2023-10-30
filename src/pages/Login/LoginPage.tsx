@@ -105,6 +105,7 @@ const LoginPage = () => {
   useEffect(()=>{
     if (loginResponse){
       const { success:s, error:e, usedValues } = loginResponse
+      setLoginResponse(undefined)
       //console.log('s',s,'e',e)
       if (s){
         setAuth(s.data)
@@ -164,7 +165,6 @@ const LoginPage = () => {
         }
         
       }
-      setLoginResponse(undefined)
     }
   },[loginResponse, setAuth])
   
@@ -251,6 +251,8 @@ const LoginPage = () => {
     lifetime: 1500,
     dragToClose: true,
   }))
+  
+  
   useToasts({
     data: [
       userFailureMsg,

@@ -126,6 +126,7 @@ const SignupPage = () => {
   useEffect(()=>{
     if (signupResponse){
       const { success:s, error:e, usedValues } = signupResponse
+      setSignupResponse(undefined)
       if (s){
         setAuth(s.data)
         setSignupSuccess(true)
@@ -184,7 +185,6 @@ const SignupPage = () => {
         }
         
       }
-      setSignupResponse(undefined)
     }
   },[signupResponse, setAuth])
   
@@ -268,6 +268,8 @@ const SignupPage = () => {
     lifetime: 1500,
     dragToClose: true,
   }))
+  
+  
   useToasts({
     data: [
       userFailureMsg,
