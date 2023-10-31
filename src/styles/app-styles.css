@@ -2,15 +2,23 @@
 
 
 :root{
+  --page-vertical-padding: 50px;
+  
   --bottom-nav-height: 0px;
   --bottom-button-bar-height: 0px;
+  
+  
   
   --bottom-bars-inset: calc(
     var(--bottom-nav-height)
   );
+  
   --bottom-page-inset: calc(
     var(--bottom-nav-height) +
-    var(--bottom-button-bar-height)
+    max(
+      var(--bottom-button-bar-height),
+      var(--page-vertical-padding)
+    )
   );
 }
 

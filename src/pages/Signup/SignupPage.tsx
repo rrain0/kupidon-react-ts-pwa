@@ -435,7 +435,7 @@ const SignupPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='sex'
           render={props =>
-            <RadioInputGroup css={RadioInputGroupStyle.row}
+            <RadioInputGroup css={RadioInputGroupStyle.rowGroup}
               hasError={props.highlight}
             >
               { sexOptions.map(opt=>{

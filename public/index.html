@@ -146,7 +146,7 @@
       {
         
         const langSettings = JSON.parse(localStorage.getItem(langSettingsName))
-        if (langSettings?.setting==='manual'){
+        if (langSettings?.setting==='manual' && langSettings.manualSetting){
           setHtmlTags(langSettings.manualSetting)
         } else {
           
@@ -164,7 +164,7 @@
           }
           
           let langs = getLangs().filter(it=>AppLangs.includes(it))
-          if (!langs.length) langs = ['en-US']
+          langs = [...langs,'en-US']
           
           setHtmlTags(langs)
         }

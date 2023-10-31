@@ -18,6 +18,7 @@ import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
+import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
@@ -30,7 +31,6 @@ import Theme = Themes.Theme
 import BrowserIc = SimpleSvgIcons.BrowserIc
 import DayIc = SimpleSvgIcons.DayIc
 import DayNightIc = SimpleSvgIcons.DayNightIc
-import NightIc = SimpleSvgIcons.NightIc
 import AddModuleIc = SimpleSvgIcons.AddModuleIc
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
@@ -41,6 +41,7 @@ import full = RouteBuilder.full
 import Mem = ReactUtils.Mem
 import MoonIc = SimpleSvgIcons.MoonIc
 import ThemeType = Themes.ThemeType
+import resetH = EmotionCommon.resetH
 
 
 
@@ -157,91 +158,75 @@ const QuickSettings = (props: SettingsProps)=>{
       {...bottomSheetProps}
       header={uiOptions.settings[0].text}
     >
-      <div
-        css={css`
-          ${col};
-          padding-bottom: 20px;
-        `}
-      >
+      <Content>
         
-        <div
-          css={css`
-            padding: 8px 6px;
-          `}
-          role='radiogroup'
-        >
+        <OptionHeader>
           {uiOptions.theme[0].text}:
-        </div>
+        </OptionHeader>
+        <RadioInputGroup>
+          {
+            themeOptions.map(opt => <RadioInput
+              css={RadioInputStyle.radio}
+              childrenPosition="start"
+              checked={themeOptionChecked(opt.value)}
+              value={opt.value}
+              key={opt.value}
+              onChange={ev => {
+                setThemeSettings(s => ({
+                  ...s,
+                  setting: opt.value === 'system' ? 'system' : 'manual',
+                  manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
+                }))
+              }}
+            >
+              <OptionContainer>
+                {opt.value === 'system' && <DayNightIc css={icon}/>}
+                {opt.value === 'light' && <DayIc css={icon}/>}
+                {opt.value === 'dark' && <MoonIc css={iconSmall}/>}
+                {opt.text}
+              </OptionContainer>
+            </RadioInput>)
+          }
+        </RadioInputGroup>
         
-        {
-          themeOptions.map(opt => <RadioInput
-            css={RadioInputStyle.radio}
-            childrenPosition="start"
-            checked={themeOptionChecked(opt.value)}
-            value={opt.value}
-            key={opt.value}
-            onChange={ev => {
-              setThemeSettings(s => ({
-                ...s,
-                setting: opt.value === 'system' ? 'system' : 'manual',
-                manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
-              }))
-            }}
-          >
-            <OptionContainer>
-              {opt.value === 'system' && <DayNightIc css={icon}/>}
-              {opt.value === 'light' && <DayIc css={icon}/>}
-              {opt.value === 'dark' && <MoonIc css={iconSmall}/>}
-              {opt.text}
-            </OptionContainer>
-          </RadioInput>)
-        }
         
-        
-        <div
-          css={css`
-            padding: 8px 6px;
-          `}
-        >
+        <OptionHeader>
           {uiOptions.language[0].text}:
-        </div>
-        
-        {
-          languageOptions.map(opt => <RadioInput
-            css={RadioInputStyle.radio}
-            childrenPosition="start"
-            checked={languageOptionChecked(opt.value)}
-            value={opt.value}
-            key={opt.value}
-            onChange={ev => {
-              if (opt.value === 'system') setLangSettings({
-                ...langSettings,
-                setting: 'system',
-              })
-              else {
-                setLangSettings({
-                  setting: 'manual',
-                  manualSetting: [opt.value],
+        </OptionHeader>
+        <RadioInputGroup>
+          {
+            languageOptions.map(opt => <RadioInput
+              css={RadioInputStyle.radio}
+              childrenPosition="start"
+              checked={languageOptionChecked(opt.value)}
+              value={opt.value}
+              key={opt.value}
+              onChange={ev => {
+                if (opt.value === 'system') setLangSettings({
+                  ...langSettings,
+                  setting: 'system',
                 })
-              }
-            }}
-          >
-            <OptionContainer>
-              {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
-              {opt.value === 'system' && <BrowserIc css={icon}/>}
-              {opt.text}
-            </OptionContainer>
-          </RadioInput>)
-        }
-        
+                else {
+                  setLangSettings({
+                    setting: 'manual',
+                    manualSetting: [opt.value],
+                  })
+                }
+              }}
+            >
+              <OptionContainer>
+                {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
+                {opt.value === 'system' && <BrowserIc css={icon}/>}
+                {opt.text}
+              </OptionContainer>
+            </RadioInput>)
+          }
+        </RadioInputGroup>
         
         <RoundButtonsContainer>
           
           { auth && <Link to={RootRoute.settings.account[full]()}>
-            <Button css={[
-              ButtonStyle.roundedNormal,
-              roundButton,
-            ]}
+            <Button css={normalIconRoundButton}
               onClick={()=>setSheetState('closing')}
             >
               <LockIc css={[
@@ -253,10 +238,7 @@ const QuickSettings = (props: SettingsProps)=>{
           </Link> }
           
           <Link to={RootRoute.settings.app[full]()}>
-            <Button css={[
-              ButtonStyle.roundedNormal,
-              roundButton,
-            ]}
+            <Button css={normalIconRoundButton}
               onClick={()=>setSheetState('closing')}
             >
               <GearIc css={icon} />
@@ -265,18 +247,15 @@ const QuickSettings = (props: SettingsProps)=>{
           </Link>
           
           <Link to={RootRoute.test[full]()}>
-            <Button css={[
-              ButtonStyle.roundedNormal,
-              roundButton,
-            ]}
+            <Button css={normalIconRoundButton}
               onClick={()=>setSheetState('closing')}
             >
               {uiOptions.testPage[0].text}
             </Button>
           </Link>
           
-          {app.canInstall && <Button css={[ButtonStyle.roundedNormal, roundButton]}
-            onClick={async () => {
+          {app.canInstall && <Button css={normalIconRoundButton}
+            onClick={async()=>{
               const installed = await promptInstall()
               console.log('installed', installed)
             }}
@@ -294,7 +273,7 @@ const QuickSettings = (props: SettingsProps)=>{
         </RoundButtonsContainer>
       
       
-      </div>
+      </Content>
     </BottomSheetBasic>}
     
     <ClearSiteConfirmation open={clearSite} setOpen={setClearSite} />
@@ -305,6 +284,15 @@ export default Mem(QuickSettings)
 
 
 
+const Content = styled.div`
+  ${col};
+  padding-bottom: 20px;
+`
+
+const OptionHeader = styled.h5`
+  ${resetH};
+  padding: 8px 6px;
+`
 const OptionContainer = styled.div`
   flex: 1;
   padding-top: 4px;
@@ -338,7 +326,8 @@ const RoundButtonsContainer = styled.div`
   align-items: center;
   gap: 10px;
 `
-const roundButton = (t:Theme)=>css`
+const normalIconRoundButton = (t:Theme)=>css`
+  ${ButtonStyle.roundedNormal(t)};
   &.rrainuiButton {
     min-width: 90px;
     gap: 0.6em;

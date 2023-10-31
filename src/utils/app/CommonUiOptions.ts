@@ -290,11 +290,11 @@ export const CommonUiOptions = {
     {
       value: 'appSettings',
       lang: 'en-US',
-      text: 'Application Settings',
+      text: 'Application settings',
     },{
       value: 'appSettings',
       lang: 'ru-RU',
-      text: 'Настройки Приложения',
+      text: 'Настройки приложения',
     },
   ] satisfies UiOption<'appSettings'>[],
   

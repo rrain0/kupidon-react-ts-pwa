@@ -1,4 +1,5 @@
 import { css, SerializedStyles } from '@emotion/react'
+import { Themes } from 'src/utils/theme/Themes'
 
 
 export namespace EmotionCommon {
@@ -163,6 +164,10 @@ export namespace EmotionCommon {
     text-decoration: none;
     color: inherit;
   `
+  export const resetH = css`
+    font-weight: inherit;
+    font-size: inherit;
+  `
   
   
   
@@ -209,6 +214,9 @@ export namespace EmotionCommon {
     font-size: 14px;
     line-height: 129%;
   `
+  
+  
+  
   
   
 }
