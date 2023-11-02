@@ -7,8 +7,11 @@ import Axios, {
 import { ApiRoutes } from 'src/api-routes/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus"
+import { ApiUtils } from 'src/api/ApiUtils'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { RecoilUtils } from 'src/recoil/RecoilUtils'
+import ValOrUpdater = RecoilUtils.ValOrUpdater
+import ErrorResponse = ApiUtils.ErrorResponse
 
 
 
@@ -16,7 +19,6 @@ import { RecoilUtils } from 'src/recoil/RecoilUtils'
 export namespace AxiosConfig {
   
   
-  import ValOrUpdater = RecoilUtils.ValOrUpdater;
   export const ax = Axios.create({
     /* `validateStatus` defines whether to resolve or reject the promise for a given
      * HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
@@ -54,7 +56,7 @@ export namespace AxiosConfig {
   
   
   // General Authentication Error
-  export type AccessRespE = {
+  export interface AccessRespE extends ErrorResponse {
     status: 401,
     data: {
       code: "NO_AUTHORIZATION_HEADER"
@@ -82,7 +84,7 @@ export namespace AxiosConfig {
     data: AuthRespData
   }
   // Error - Невалидные токены
-  export type RefreshTokenRespE = {
+  export interface RefreshTokenRespE extends ErrorResponse {
     status: 400,
     data: {
       code: "NO_REFRESH_TOKEN_COOKIE"
@@ -94,9 +96,9 @@ export namespace AxiosConfig {
       msg: string
     }
   }
-  export const refreshToken = async (
-    originalRequestConfig?: InternalAxiosRequestConfig
-  ): Promise<RefreshTokenRespS> => {
+  export const refreshToken =
+  async(originalRequestConfig?: InternalAxiosRequestConfig)
+  : Promise<RefreshTokenRespS> => {
     const configWithCustomData: AxiosRequestConfig & CustomConfig = {
       customData: {
         state: 'refresh-request',
@@ -105,6 +107,7 @@ export namespace AxiosConfig {
     }
     return axAccess.get(ApiRoutes.authRefresh, configWithCustomData)
   }
+  
   
   export const rawTestRefreshToken = async () => {
     return Axios.get(ApiRoutes.authRefresh, {

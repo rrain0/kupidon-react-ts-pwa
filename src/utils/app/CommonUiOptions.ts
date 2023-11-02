@@ -111,6 +111,32 @@ export const CommonUiOptions = {
   ] satisfies UiOption<'signingUp'>[],
   
   
+  update: [
+    {
+      value: 'update',
+      lang: 'en-US',
+      text: 'Update',
+    },{
+      value: 'update',
+      lang: 'ru-RU',
+      text: 'Обновление',
+    },
+  ] satisfies UiOption<'update'>[],
+  
+  
+  updated: [
+    {
+      value: 'updated',
+      lang: 'en-US',
+      text: 'Updated',
+    },{
+      value: 'updated',
+      lang: 'ru-RU',
+      text: 'Обновлено',
+    },
+  ] satisfies UiOption<'updated'>[],
+  
+  
   registrationCompleted: [
     {
       value: 'registrationCompleted',
@@ -344,8 +370,7 @@ export const CommonUiOptions = {
       value: 'yes',
       lang: 'en-US',
       text: 'Yes',
-    },
-    {
+    },{
       value: 'yes',
       lang: 'ru-RU',
       text: 'Да',
@@ -358,13 +383,85 @@ export const CommonUiOptions = {
       value: 'no',
       lang: 'en-US',
       text: 'No',
-    },
-    {
+    },{
       value: 'no',
       lang: 'ru-RU',
       text: 'Нет',
     },
   ] satisfies UiOption<'no'>[],
+  
+  
+  reset: [
+    {
+      value: 'reset',
+      lang: 'en-US',
+      text: 'Reset',
+    },{
+      value: 'reset',
+      lang: 'ru-RU',
+      text: 'Сброс',
+    },
+  ] satisfies UiOption<'reset'>[],
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  notSelected: [
+    {
+      value: 'notSelected',
+      lang: 'en-US',
+      text: "Not selected",
+    },{
+      value: 'notSelected',
+      lang: 'ru-RU',
+      text: 'Не выбрано',
+    },
+  ] satisfies UiOption<'notSelected'>[],
+  
+  
+  ofGuys: [
+    {
+      value: 'ofGuys',
+      lang: 'en-US',
+      text: "Guys",
+    },{
+      value: 'ofGuys',
+      lang: 'ru-RU',
+      text: 'Парней',
+    },
+  ] satisfies UiOption<'ofGuys'>[],
+  
+  ofGirls: [
+    {
+      value: 'ofGirls',
+      lang: 'en-US',
+      text: "Girls",
+    },{
+      value: 'ofGirls',
+      lang: 'ru-RU',
+      text: 'Девушек',
+    },
+  ] satisfies UiOption<'ofGirls'>[],
+  
+  ofGuysAndGirls: [
+    {
+      value: 'ofGuysAndGirls',
+      lang: 'en-US',
+      text: "Guys and girls",
+    },{
+      value: 'ofGuysAndGirls',
+      lang: 'ru-RU',
+      text: 'Парней и девушек',
+    },
+  ] satisfies UiOption<'ofGuysAndGirls'>[],
   
   
   loginNotEntered: [

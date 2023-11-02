@@ -43,6 +43,7 @@ export const ProfileUiOptions = {
   
   yes: CommonUiOptions.yes,
   no: CommonUiOptions.no,
+  reset: CommonUiOptions.reset,
   
   
   userCreated: [
@@ -185,54 +186,21 @@ export const ProfileUiOptions = {
   ] satisfies UiOption<'imLookingFor'>[],
   
   
-  preferredPeople: [
-    {
-      value: 'notSelected',
-      lang: 'en-US',
-      text: "Not selected",
-    },
-    {
-      value: 'notSelected',
-      lang: 'ru-RU',
-      text: 'Не выбрано',
-    },
-    
-    {
-      value: 'ofGuys',
-      lang: 'en-US',
-      text: "Guys",
-    },
-    {
-      value: 'ofGuys',
-      lang: 'ru-RU',
-      text: 'Парней',
-    },
-    
-    {
-      value: 'ofGirls',
-      lang: 'en-US',
-      text: "Girls",
-    },
-    {
-      value: 'ofGirls',
-      lang: 'ru-RU',
-      text: 'Девушек',
-    },
-    {
-      value: 'ofGuysAndGirls',
-      lang: 'en-US',
-      text: "Guys and girls",
-    },
-    {
-      value: 'ofGuysAndGirls',
-      lang: 'ru-RU',
-      text: 'Парней и девушек',
-    },
-    
-  ] satisfies UiOption<'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'>[],
+  notSelected: CommonUiOptions.notSelected,
+  ofGuys: CommonUiOptions.ofGuys,
+  ofGirls: CommonUiOptions.ofGirls,
+  ofGuysAndGirls: CommonUiOptions.ofGuysAndGirls,
   
   
   signOut: CommonUiOptions.signOut,
+  update: CommonUiOptions.update,
+  updated: CommonUiOptions.updated,
+  
+  
+  
+  firstNameIsNotEntered: CommonUiOptions.firstNameIsNotEntered,
+  connectionError: CommonUiOptions.connectionError,
+  unknownError: CommonUiOptions.unknownError,
   
   
 } satisfies UiOptionsContainer

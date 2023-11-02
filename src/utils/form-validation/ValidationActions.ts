@@ -1,5 +1,7 @@
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import Failures = ValidationCore.Failures
+import Failure = ValidationCore.Failure
+import Values = ValidationCore.Values
 
 
 
@@ -7,13 +9,12 @@ export namespace ValidationActions {
   
   
   
-  import Failure = ValidationCore.Failure
-  export const updateFailures = <Vs extends object>(
+  export const updateFailures = <Vs extends Values>(
     failures: Failures<Vs>,
     objects: {
       failures?: Failures<Vs>,
       failureIds?: string[] | 'all',
-      highlightFields?: (keyof Vs)[], // todo process symbols
+      highlightFields?: (keyof Vs)[],
     },
     update?: {
       highlight?: boolean,
@@ -47,7 +48,7 @@ export namespace ValidationActions {
   
   
   
-  export const awaitDelay = <Vs extends object>(
+  export const awaitDelay = <Vs extends Values>(
     failures: Failures<Vs>,
     stale: [boolean],
     callback: (failure: Failure<Vs>)=>void

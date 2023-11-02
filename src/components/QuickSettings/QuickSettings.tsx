@@ -91,7 +91,7 @@ const QuickSettings = (props: SettingsProps)=>{
     },
     [uiOptions, theme.systemThemeAvailable]
   )
-  const themeOptionChecked = useCallback(
+  const onThemeOptionChecked = useCallback(
     function (value: ThemeType|'system') {
       return themeSettings.setting === 'system' && value === 'system'
         || themeSettings.setting !== 'system' && value === themeSettings.manualSetting
@@ -119,7 +119,7 @@ const QuickSettings = (props: SettingsProps)=>{
     },
     [uiOptions, lang.availableSystemLangs]
   )
-  const languageOptionChecked = useCallback(
+  const onLanguageOptionChecked = useCallback(
     function (value: Lang|'system') {
       return langSettings.setting === 'system' && value === 'system'
         || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
@@ -168,7 +168,7 @@ const QuickSettings = (props: SettingsProps)=>{
             themeOptions.map(opt => <RadioInput
               css={RadioInputStyle.radio}
               childrenPosition="start"
-              checked={themeOptionChecked(opt.value)}
+              checked={onThemeOptionChecked(opt.value)}
               value={opt.value}
               key={opt.value}
               onChange={ev => {
@@ -198,7 +198,7 @@ const QuickSettings = (props: SettingsProps)=>{
             languageOptions.map(opt => <RadioInput
               css={RadioInputStyle.radio}
               childrenPosition="start"
-              checked={languageOptionChecked(opt.value)}
+              checked={onLanguageOptionChecked(opt.value)}
               value={opt.value}
               key={opt.value}
               onChange={ev => {
@@ -310,7 +310,7 @@ const Flag = styled.img`
 `
 const icon = (t:Theme)=>css`
   &.rrainuiIcon {
-    height: 1.333em;
+    height: 1.3em;
     width: 1.333em;
     --icon-color: var(--color);
   }

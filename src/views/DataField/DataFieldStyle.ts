@@ -1,4 +1,5 @@
 import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
 
@@ -6,6 +7,7 @@ import Theme = Themes.Theme
 
 export namespace DataFieldStyle {
   
+  import textLarge1 = EmotionCommon.textLarge1
   export const interactive = (t:Theme) => css`
     &.rrainuiFrame {
       cursor: pointer;
@@ -67,10 +69,7 @@ export namespace DataFieldStyle {
       width: 100%;
       min-height: 40px;
       padding: 4px 12px;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 129%;
-      letter-spacing: 0.05em;
+      ${textLarge1};
       
       >.rrainuiBorder {
         border-width: 1px;

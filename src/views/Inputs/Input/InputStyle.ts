@@ -2,13 +2,15 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
+import onHover = EmotionCommon.onHover
+import textLarge1 = EmotionCommon.textLarge1
+import textLarge2 = EmotionCommon.textLarge2
 
 
 
 export namespace InputStyle {
   
-  import onHover = EmotionCommon.onHover
-  export const input = (t:Theme) => css`
+  export const inputNormal = (t:Theme) => css`
     &.rrainuiFrame {
       border-radius: 15px;
       background: ${t.input.bgc};
@@ -22,13 +24,10 @@ export namespace InputStyle {
     }
     >.rrainuiInput {
       width: 100%;
-      height: 50px;
+      min-height: 50px;
       padding-right: 16px;
       padding-left: 16px;
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 150%;
-      letter-spacing: 0.05em;
+      ${textLarge2};
       color: ${t.input.text};
 
       ::placeholder {
@@ -84,5 +83,30 @@ export namespace InputStyle {
    ${t.input.error.border[0]},
    ${t.input.error.border[0]}
    ); */
+  
+  
+  
+  
+  
+  const small = (t:Theme) => css`
+    &.rrainuiFrame {
+      >.rrainuiInput {
+        width: 100%;
+        min-height: 40px;
+        padding: 4px 12px;
+        ${textLarge1};
+      }
+      
+      >.rrainuiBorder {
+        border-width: 1px;
+      }
+    }
+  `
+  
+  
+  export const inputSmall = (t:Theme) => css`
+    ${inputNormal(t)};
+    ${small(t)};
+  `
   
 }

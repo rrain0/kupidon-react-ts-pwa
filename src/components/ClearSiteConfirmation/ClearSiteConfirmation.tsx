@@ -15,7 +15,7 @@ import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import col = EmotionCommon.col
 import fixed = EmotionCommon.fixed
-import textLarge1 = EmotionCommon.textLarge1
+import textLarge1 = EmotionCommon.textLarge2
 import center = EmotionCommon.center
 import row = EmotionCommon.row
 import Spinner8LinesIc = SimpleSvgIcons.Spinner8LinesIc

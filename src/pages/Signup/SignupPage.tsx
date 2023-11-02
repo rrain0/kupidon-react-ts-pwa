@@ -384,7 +384,7 @@ const SignupPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='email'
           render={props => <Input
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.emailLoginPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
@@ -394,7 +394,7 @@ const SignupPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='pwd'
           render={props => <PwdInput
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.pwdPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
@@ -404,7 +404,7 @@ const SignupPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='repeatPwd'
           render={props => <PwdInput
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.repeatPwdPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
@@ -414,7 +414,7 @@ const SignupPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='name'
           render={props => <Input
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.namePlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
@@ -424,7 +424,7 @@ const SignupPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='birthDate'
           render={props => <Input
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.birthDatePlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}

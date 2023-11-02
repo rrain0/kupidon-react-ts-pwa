@@ -1,9 +1,11 @@
+import { ApiUtils } from 'src/api/ApiUtils'
 import { AxiosConfig } from '../AxiosConfig'
 import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
 import { UserApi } from './UserApi'
-import { AxiosResponse } from 'axios'
 import ax = AxiosConfig.ax
 import CurrentUser = UserApi.CurrentUser
+import SuccessResponse = ApiUtils.SuccessResponse
+import ErrorResponse = ApiUtils.ErrorResponse
 
 
 
@@ -11,25 +13,24 @@ export namespace AuthApi {
   
   
   
-  export type LoginPwd = {
-    login: string,
-    pwd: string
-  }
-  export interface LoginRespS extends AxiosResponse{
-    status: 200,
+  export interface LoginRespS extends SuccessResponse {
     data: {
       accessToken: string,
       user: CurrentUser
     }
   }
-  export type LoginRespE = {
-    status: 400,
+  export interface LoginRespE extends ErrorResponse {
     data: {
       code: "INVALID_INPUT_BODY"|"NO_USER"
       msg: string
     }
   }
-  export const login = (loginPwd: LoginPwd): Promise<LoginRespS> => ax.post(r.authLogin, loginPwd)
+  export type LoginPwd = {
+    login: string,
+    pwd: string
+  }
+  export const login = (loginPwd: LoginPwd): Promise<LoginRespS> =>
+    ax.post(r.authLogin, loginPwd)
   
   
   

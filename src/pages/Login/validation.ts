@@ -64,16 +64,17 @@ export namespace LoginPageValidation {
   
   
   export const validators: Validators<FormValues> = [
-    [['login'], ([v]: [UserValues['login']?,...any[]])=>{
+    [['login'], (values)=>{
+      const [v] = values as [UserValues['login']]
       const d = defaultValues.login
       if (v===d) return new PartialFailureData({
         code: 'login-required' satisfies FailureCode,
         msg: 'Email не введён',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
-    [['login'], ([v]: [UserValues['login']?,...any[]])=>{
+    [['login'], (values)=>{
+      const [v] = values as [UserValues['login']]
       if (!isValidEmail(v)) return new PartialFailureData({
         code: 'login-incorrect' satisfies FailureCode,
         msg: 'Некорректный формат email',
@@ -83,44 +84,47 @@ export namespace LoginPageValidation {
     
     
     
-    [['pwd'], ([v]: [UserValues['pwd']?,...any[]])=>{
+    [['pwd'], (values)=>{
+      const [v] = values as [UserValues['pwd']]
       const d = defaultValues.login
       if (v===d) return new PartialFailureData({
         code: 'pwd-required' satisfies FailureCode,
         msg: 'Пароль не введён',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
     
     
     
-    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
+    [['fromServer'], (values)=>{
+      const [v] = values as [FromServerValue]
       if (v?.error.code==='NO_USER') return new PartialFailureData({
         code: v.error.code satisfies FailureCode,
         msg: 'Не найдено пользователя с таким логином-паролем',
         usedFields: ['fromServer','login','pwd'],
         usedValues: [v, v.values.login, v.values.pwd],
         highlightFields: ['fromServer','login','pwd'],
-        canSubmit: true,
+        type: 'server',
       })
     }],
     
     
     
-    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
+    [['fromServer'], (values)=>{
+      const [v] = values as [FromServerValue]
       if (v?.error.code==='connection-error') return new PartialFailureData({
         code: v.error.code satisfies FailureCode,
         msg: 'Ошибка соединения с сервером, возможно что-то с интернетом',
-        canSubmit: true,
+        type: 'server',
       })
     }],
-    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
+    [['fromServer'], (values)=>{
+      const [v] = values as [FromServerValue]
       if (v) return new PartialFailureData({
         code: 'unknown-error' satisfies FailureCode,
         msg: 'Неизвестная ошибка',
-        canSubmit: true,
         extra: v,
+        type: 'server',
       })
     }],
     

@@ -17,13 +17,14 @@ import updateFailures = ValidationActions.updateFailures
 import awaitDelay = ValidationActions.awaitDelay
 import ReactMemoTyped = ReactUtils.Mem
 import trueOrUndef = CastUtils.trueOrUndef
+import Values = ValidationCore.Values
 
 
 
 
 export type ValidationComponentWrapRenderProps
 <
-  Vs extends object,
+  Vs extends Values,
   F extends keyof Vs,
 > = {
   value: Vs[F]
@@ -39,7 +40,7 @@ export type ValidationComponentWrapRenderProps
   
 export type ValidationComponentWrapProps
 <
-  Vs extends object,
+  Vs extends Values,
   F extends keyof Vs,
 > = {
   values: readonly [Vs,Vs]
@@ -51,7 +52,7 @@ export type ValidationComponentWrapProps
 }
 const ValidationComponentWrap =
 <
-  Vs extends object,
+  Vs extends Values,
   F extends keyof Vs,
 >
 (props: ValidationComponentWrapProps<Vs,F>) => {

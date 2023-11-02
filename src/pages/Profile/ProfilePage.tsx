@@ -46,6 +46,9 @@ function ProfilePage(){
   
   
   const [canSave, setCanSave] = useState(false)
+  const [submitCb, setSubmitCb] = useState(
+    undefined as (()=>()=>void) | undefined
+  )
   
   
   const pageRef = useRef<HTMLElement>(null)
@@ -58,7 +61,10 @@ function ProfilePage(){
       ref={pageRef}
     >
       
-      <ProfileContent setCanSave={setCanSave}/>
+      <ProfileContent
+        setCanSave={setCanSave}
+        setSubmitCb={setSubmitCb}
+      />
       
     </Page>
     
@@ -93,7 +99,7 @@ function ProfilePage(){
       </Button> */}
       
       <Button css={ButtonStyle.icon}
-        onClick={undefined}
+        onClick={submitCb}
         disabled={!canSave}
       >
         <FloppyDisk1Ic />

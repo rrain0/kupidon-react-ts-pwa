@@ -18,6 +18,7 @@ import ValidationComponentWrap from 'src/utils/form-validation/ValidationCompone
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
+import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import Button from 'src/views/Buttons/Button'
 import Input from 'src/views/Inputs/Input/Input'
@@ -75,7 +76,7 @@ const LoginPage = () => {
     { values: defaultValues, validators: validators }
   ))
   // LayoutEffect is necessary to update data when making Chrome mobile autofill
-  useLayoutEffect(
+  /* useLayoutEffect(
     ()=>{
       setLoginFailures(s=>validate({
         values: loginForm[0],
@@ -84,6 +85,19 @@ const LoginPage = () => {
         validators: validators,
       }))
     },
+    [loginForm]
+  ) */
+  
+  const updateFailsEffectEvent = useEffectEvent(
+    ()=>setLoginFailures(s=>validate({
+      values: loginForm[0],
+      prevValues: loginForm[1],
+      prevFailures: s,
+      validators: validators,
+    }))
+  )
+  useLayoutEffect(
+    ()=>updateFailsEffectEvent(),
     [loginForm]
   )
   
@@ -116,49 +130,40 @@ const LoginPage = () => {
         if (e instanceof AxiosError && e.response?.status===400) {
           const response = e.response as LoginRespE
           setLoginForm(loginForm=>([
-            {
-              ...loginForm[0],
-              fromServer: {
-                values: usedValues,
-                error: {
-                  code: response.data.code,
-                  msg: response.data.msg,
-                  extra: e,
-                }
+            { ...loginForm[0], fromServer: {
+              values: usedValues,
+              error: {
+                code: response.data.code,
+                msg: response.data.msg,
+                extra: e,
               }
-            },
+            }},
             loginForm[0]
           ]))
         }
         else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
           setLoginForm(loginForm=>([
-            {
-              ...loginForm[0],
-              fromServer: {
-                values: usedValues,
-                error: {
-                  code: 'connection-error',
-                  msg: 'Connection error',
-                  extra: e,
-                }
+            { ...loginForm[0], fromServer: {
+              values: usedValues,
+              error: {
+                code: 'connection-error',
+                msg: 'Connection error',
+                extra: e,
               }
-            },
+            }},
             loginForm[0]
           ]))
         }
         else {
           setLoginForm(loginForm=>([
-            {
-              ...loginForm[0],
-              fromServer: {
-                values: usedValues,
-                error: {
-                  code: 'unknown',
-                  msg: 'Unknown error',
-                  extra: e,
-                }
+            { ...loginForm[0], fromServer: {
+              values: usedValues,
+              error: {
+                code: 'unknown',
+                msg: 'Unknown error',
+                extra: e,
               }
-            },
+            }},
             loginForm[0]
           ]))
           console.warn('UNKNOWN ERROR',e)
@@ -259,6 +264,9 @@ const LoginPage = () => {
     loginSuccess && loginSuccessMsg,
     serverFailureMsg,
   ]})
+  
+  
+  
   
   
   
@@ -367,7 +375,7 @@ const LoginPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='login'
           render={props => <Input
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.loginEmailPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
@@ -377,7 +385,7 @@ const LoginPage = () => {
         <ValidationComponentWrap {...validationProps}
           fieldName='pwd'
           render={props => <PwdInput
-            css={InputStyle.input}
+            css={InputStyle.inputNormal}
             placeholder={uiOptions.pwdPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}

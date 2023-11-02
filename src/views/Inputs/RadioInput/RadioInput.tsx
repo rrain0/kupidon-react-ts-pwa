@@ -58,8 +58,9 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     
     <Input_
       css={input_Style}
-      {...restProps}
       aria-checked={restProps.checked}
+      role='radio'
+      {...restProps}
       data-error={hasError}
       ref={inputRef}
     />
@@ -108,7 +109,6 @@ type Input_Props = {
 const Input_ = styled.input.attrs<Input_Props>(p=>({
   className: classNames(p.className,'rrainuiInput'),
   type: 'radio',
-  role: 'radio',
   'data-error': trueOrUndef(p['data-error'])
 }))<Input_Props>``
 const input_Style = css`

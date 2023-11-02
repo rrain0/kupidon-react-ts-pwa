@@ -183,17 +183,24 @@ export namespace EmotionCommon {
   
   
   
-  export const textLarge2 = css`
+  export const textLarge3 = css`
     font-weight: 500;
     font-size: 24px;
     line-height: 150%;
     letter-spacing: 0.05em;
   `
   
-  export const textLarge1 = css`
+  export const textLarge2 = css`
     font-weight: 500;
     font-size: 18px;
     line-height: 150%;
+    letter-spacing: 0.05em;
+  `
+  
+  export const textLarge1 = css`
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 129%;
     letter-spacing: 0.05em;
   `
   

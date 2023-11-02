@@ -4,8 +4,9 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import onHover = EmotionCommon.onHover
 import Theme = Themes.Theme
 import col = EmotionCommon.col
-import textLarge1 = EmotionCommon.textLarge1
+import textLarge1 = EmotionCommon.textLarge2
 import textSmall1 = EmotionCommon.textSmall1
+import textNormal1 = EmotionCommon.textNormal1
 
 
 
@@ -28,6 +29,15 @@ export namespace ButtonStyle {
         min-height: 50px;
         border-radius: 15px;
         padding: 8px 4px;
+      }
+    `
+    export const smallRect = css`
+      &.rrainuiButton {
+        width: auto;
+        min-height: 30px;
+        border-radius: 10px;
+        padding: 4px 6px;
+        gap: 4px;
       }
     `
     
@@ -151,6 +161,12 @@ export namespace ButtonStyle {
   `
   
   
+  export const smallRectNormal = (t:Theme) => css`
+    ${common};
+    ${Shape.smallRect};
+    ${textNormal1};
+    ${Color.normal(t)};
+  `
   
   
   export const roundedNormal = (t:Theme) => css`

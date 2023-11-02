@@ -88,16 +88,17 @@ export namespace SignupPageValidation {
   
   export const validators: Validators<FormValues> = [
     
-    [['email'], ([v]: [UserValues['email']?,...any[]])=>{
+    [['email'], (values)=>{
+      const [v] = values as [UserValues['email']]
       const d = defaultValues.email
       if (v===d) return new PartialFailureData({
         code: 'email-required' satisfies FailureCode,
         msg: 'Email не введён',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
-    [['email'], ([v]: [UserValues['email']?,...any[]])=>{
+    [['email'], (values)=>{
+      const [v] = values as [UserValues['email']]
       if (!isValidEmail(v)) return new PartialFailureData({
         code: 'email-incorrect' satisfies FailureCode,
         msg: 'Некорректный формат email',
@@ -107,16 +108,17 @@ export namespace SignupPageValidation {
     
     
     
-    [['pwd'], ([v]: [UserValues['pwd']?,...any[]])=>{
+    [['pwd'], (values)=>{
+      const [v] = values as [UserValues['pwd']]
       const d = defaultValues.pwd
       if (v===d) return new PartialFailureData({
         code: 'pwd-required' satisfies FailureCode,
         msg: 'Пароль не введён',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
-    [['pwd'], ([v]: [UserValues['pwd']?,...any[]])=>{
+    [['pwd'], (values)=>{
+      const [v] = values as [UserValues['pwd']]
       if (!isValidPwd(v)) return new PartialFailureData({
         code: 'pwd-incorrect' satisfies FailureCode,
         msg: 'Пароль должен быть не короче 6 символов',
@@ -126,16 +128,17 @@ export namespace SignupPageValidation {
     
     
     
-    [['repeatPwd'], ([v]: [UserValues['repeatPwd']?,...any[]])=>{
+    [['repeatPwd'], (values)=>{
+      const [v] = values as [UserValues['repeatPwd']]
       const d = defaultValues.repeatPwd
       if (v===d) return new PartialFailureData({
         code: 'repeated-pwd-required' satisfies FailureCode,
         msg: 'Повторите пароль',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
-    [['pwd','repeatPwd'], ([pwd,repeatPwd]: [UserValues['pwd']?,UserValues['repeatPwd']?,...any[]])=>{
+    [['pwd','repeatPwd'], (values)=>{
+      const [pwd,repeatPwd] = values as [UserValues['pwd'],UserValues['repeatPwd']]
       if(pwd!==repeatPwd) return new PartialFailureData({
         code: 'repeated-pwd-not-match' satisfies FailureCode,
         msg: 'Пароли не совпадают',
@@ -146,68 +149,71 @@ export namespace SignupPageValidation {
     
     
     
-    [['name'], ([v]: [UserValues['name']?,...any[]])=>{
+    [['name'], (values)=>{
+      const [v] = values as [UserValues['name']]
       const d = defaultValues.name
       if (v===d) return new PartialFailureData({
         code: 'name-required' satisfies FailureCode,
         msg: 'Имя не введено',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
     
     
     
-    [['birthDate'], ([v]: [UserValues['birthDate']?,...any[]])=>{
+    [['birthDate'], (values)=>{
+      const [v] = values as [UserValues['birthDate']]
       const d = defaultValues.sex
       if (v===d) return new PartialFailureData({
         code: 'birthDate-required' satisfies FailureCode,
         msg: 'Дата рождения не введена',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
     
     
     
-    [['sex'], ([v]: [UserValues['sex']?,...any[]])=>{
+    [['sex'], (values)=>{
+      const [v] = values as [UserValues['sex']]
       const d = defaultValues.sex
       if (v===d) return new PartialFailureData({
         code: 'sex-required' satisfies FailureCode,
         msg: 'Пол не выбран',
-        highlight: false,
-        notify: false,
+        type: 'default',
       })
     }],
     
     
     
-    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
+    [['fromServer'], (values)=>{
+      const [v] = values as [FromServerValue]
       if (v?.error.code==='DUPLICATE_EMAIL') return new PartialFailureData({
         code: v?.error.code satisfies FailureCode,
         msg: 'Пользователь с таким email уже зарегестрирован',
         usedFields: ['fromServer','email'],
         usedValues: [v, v.values.email],
         highlightFields: ['fromServer','email'],
-        canSubmit: true,
+        type: 'server',
       })
     }],
     
     
     
-    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
+    [['fromServer'], (values)=>{
+      const [v] = values as [FromServerValue]
       if (v?.error.code==='connection-error') return new PartialFailureData({
         code: v.error.code satisfies FailureCode,
         msg: 'Ошибка соединения с сервером, возможно что-то с интернетом',
-        canSubmit: true,
+        type: 'server',
       })
     }],
-    [['fromServer'],([v]: [FromServerValue?,...any[]])=>{
+    [['fromServer'], (values)=>{
+      const [v] = values as [FromServerValue]
       if (v) return new PartialFailureData({
         code: 'unknown-error' satisfies FailureCode,
         msg: 'Неизвестная ошибка',
-        canSubmit: true,
         extra: v,
+        type: 'server',
       })
     }],
     

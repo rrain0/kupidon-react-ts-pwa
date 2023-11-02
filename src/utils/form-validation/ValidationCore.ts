@@ -6,106 +6,30 @@ import NonEmptyArr = ArrayUtils.NonEmptyArr
 
 
 
-/*
-todo Restrict Values to only string keys
-
-*/
-
 export namespace ValidationCore {
   
-  
+  export type Values = { [field: string]: unknown }
   
   /**
    * @returns {'ok' | undefined | void} - валидатор не обнаружил ошибок
    * @returns {PartialFailureData} - валидатор обнаружил ошибку и вернул этот объект с ошибкой,
    * последующие валидаторы для этого поля не будут запущены.
    */
-  export type Validator<Vs extends object> = [
+  export type Validator
+  <Vs extends Values> = [
     NonEmptyArr<keyof Vs>,
     (values: any[]) => ('ok' | undefined | void) | PartialFailureData<Vs>
   ]
   
-  export type Validators<Vs extends object> = Validator<Vs>[]
+  export type Validators<Vs extends Values> = Validator<Vs>[]
   
-  export type Failures<Vs extends object> = Failure<Vs>[]
-  
-  
-  
-  export class PartialFailureData<Vs extends object> {
-    constructor(data: {
-      code: string,
-      msg?: string | undefined,
-      extra?: any | undefined, // extra failure data if needed
-      usedFields?: NonEmptyArr<keyof Vs> | undefined, // использованные для валидации поля
-      usedValues?: NonEmptyArr<any> | undefined, // использованные для валидации значения полей
-      highlightFields?: (keyof Vs)[] | undefined, // поля, которые выделить как ошибочные
-      highlight?: boolean | undefined,
-      notify?: boolean | undefined,
-      canSubmit?: boolean | undefined,
-      created?: Date | undefined,
-      delay?: number | undefined,
-    }) {
-      this.code = data.code
-      this.msg = data.msg
-      this.extra = data.extra
-      this.usedFields = data.usedFields
-      this.usedValues = data.usedValues
-      this.highlightFields = data.highlightFields
-      this.highlight = data.highlight
-      this.notify = data.notify
-      this.canSubmit = data.canSubmit
-      this.created = data.created
-      this.delay = data.delay
-    }
-    
-    code: string
-    msg?: string | undefined
-    extra?: any | undefined // extra failure data if needed
-    usedFields?: NonEmptyArr<keyof Vs> | undefined // использованные для валидации поля
-    usedValues?: NonEmptyArr<any> | undefined // использованные для валидации значения полей
-    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
-    highlight?: boolean | undefined
-    notify?: boolean | undefined
-    canSubmit?: boolean | undefined
-    created?: Date | undefined
-    delay?: number | undefined
-  }
+  export type Failures<Vs extends Values> = Failure<Vs>[]
   
   
   
+  export type FailureType = 'default'|'initial'|'normal'|'server'
   
-  /**
-   * @param code - error main code, eg 'incorrect', 'login-already-exists'
-   * @param msg - message to display to user
-   * @param usedFields - fields used to validate
-   * @param usedValues - values used to validate
-   * @param extra - some extra data of any type if needed
-   * @param highlightFields - highlight this fields - failure is applied for this fields
-   * @param highlight - highlight field with this error
-   * @param notify - show error notification
-   * @param canSubmit - can you submit if this error exists?
-   * @param created - failure creation timestamp (Date object)
-   * @param delay - delay to show (ms)
-   */
-  export type FailureData<Vs extends object> = {
-    code: string
-    msg?: string | undefined
-    extra?: any | undefined, // extra failure data if needed
-    
-    usedFields: NonEmptyArr<keyof Vs> // использованные для валидации поля
-    usedValues: NonEmptyArr<any> // использованные для валидации значения полей
-    
-    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
-    highlight?: boolean | undefined,
-    notify?: boolean | undefined,
-    canSubmit?: boolean | undefined,
-    created?: Date | undefined
-    delay?: number | undefined
-  }
-  
-  
-  
-  export class Failure<Vs extends object> {
+  export class Failure<Vs extends Values> {
     
     static getAwaitDelay(created: Date, delay: number): Promise<void> {
       return new Promise(
@@ -119,10 +43,20 @@ export namespace ValidationCore {
       this.extra = data.extra
       this.usedFields = data.usedFields
       this.usedValues = data.usedValues
+      this.type = data.type ?? 'normal'
       this.highlightFields = data.highlightFields ?? this.usedFields
-      this.highlight = data.highlight ?? true
-      this.notify = data.notify ?? true
-      this.canSubmit = data.canSubmit ?? false
+      this.highlight = data.highlight ?? (()=>{switch(this.type){
+        case 'normal': case 'server': return true
+        default: return false
+      }})()
+      this.notify = data.notify ?? (()=>{switch(this.type){
+        case 'normal': case 'server': return true
+        default: return false
+      }})()
+      this.canSubmit = data.canSubmit ?? (()=>{switch(this.type){
+        case 'server': return true
+        default: return false
+      }})()
       this.created = data.created ?? new Date()
       this.delay = data.delay ?? 0
       this.awaitDelay = Failure.getAwaitDelay(this.created, this.delay)
@@ -134,6 +68,7 @@ export namespace ValidationCore {
     readonly extra: any
     readonly usedFields: NonEmptyArr<keyof Vs>
     readonly usedValues: NonEmptyArr<any>
+    readonly type: FailureType
     readonly highlightFields: (keyof Vs)[]
     readonly highlight: boolean
     readonly notify: boolean
@@ -156,22 +91,107 @@ export namespace ValidationCore {
     }
     
     copy(update?: Partial<FailureData<Vs>> | undefined): Failure<Vs> {
+      const u = update
       return new Failure({
-        code: update && 'code' in update ? update.code : this.code,
-        msg: update && 'msg' in update ? update.msg : this.msg,
-        extra: update && 'extra' in update ? update.extra : this.extra,
-        usedFields: update && 'usedFields' in update ? update.usedFields : this.usedFields,
-        usedValues: update && 'usedValues' in update ? update.usedValues : this.usedValues,
-        highlightFields: update && 'highlightFields' in update ? update.highlightFields : this.highlightFields,
-        highlight: update && 'highlight' in update ? update.highlight : this.highlight,
-        notify: update && 'notify' in update ? update.notify : this.notify,
-        canSubmit: update && 'canSubmit' in update ? update.canSubmit : this.canSubmit,
-        created: update && 'created' in update ? update.created : this.created,
-        delay: update && 'delay' in update ? update.delay : this.delay,
+        code: u && 'code' in u ? u.code : this.code,
+        msg: u && 'msg' in u ? u.msg : this.msg,
+        extra: u && 'extra' in u ? u.extra : this.extra,
+        usedFields: u && 'usedFields' in u ? u.usedFields : this.usedFields,
+        usedValues: u && 'usedValues' in u ? u.usedValues : this.usedValues,
+        type: u && 'type' in u ? u.type : this.type,
+        highlightFields: u && 'highlightFields' in u ? u.highlightFields : this.highlightFields,
+        highlight: u && 'highlight' in u ? u.highlight : this.highlight,
+        notify: u && 'notify' in u ? u.notify : this.notify,
+        canSubmit: u && 'canSubmit' in u ? u.canSubmit : this.canSubmit,
+        created: u && 'created' in u ? u.created : this.created,
+        delay: u && 'delay' in u ? u.delay : this.delay,
       })
     }
   }
   
+  
+  
+  
+  
+  
+  
+  
+  /**
+   * @param code - error main code, eg 'incorrect', 'login-already-exists'
+   * @param msg - message to display to user
+   * @param usedFields - fields used to validate
+   * @param usedValues - values used to validate
+   * @param extra - some extra data of any type if needed
+   * @param highlightFields - highlight this fields - failure is applied for this fields
+   * @param highlight - highlight field with this error
+   * @param notify - show error notification
+   * @param canSubmit - can you submit if this error exists?
+   * @param created - failure creation timestamp (Date object)
+   * @param delay - delay to show (ms)
+   */
+  export type FailureData<Vs extends Values> = {
+    code: string
+    msg?: string | undefined
+    extra?: any | undefined, // extra failure data if needed
+    
+    usedFields: NonEmptyArr<keyof Vs> // использованные для валидации поля
+    usedValues: NonEmptyArr<any> // использованные для валидации значения полей
+    
+    type?: FailureType | undefined
+    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
+    highlight?: boolean | undefined,
+    notify?: boolean | undefined,
+    canSubmit?: boolean | undefined,
+    created?: Date | undefined
+    delay?: number | undefined
+  }
+  
+  
+  
+  
+  
+  export class PartialFailureData<Vs extends Values> {
+    constructor(data: {
+      code: string,
+      msg?: string | undefined,
+      extra?: any | undefined, // extra failure data if needed
+      usedFields?: NonEmptyArr<keyof Vs> | undefined, // использованные для валидации поля
+      usedValues?: NonEmptyArr<any> | undefined, // использованные для валидации значения полей
+      type?: FailureType | undefined
+      highlightFields?: (keyof Vs)[] | undefined, // поля, которые выделить как ошибочные
+      highlight?: boolean | undefined,
+      notify?: boolean | undefined,
+      canSubmit?: boolean | undefined,
+      created?: Date | undefined,
+      delay?: number | undefined,
+    }) {
+      this.code = data.code
+      this.msg = data.msg
+      this.extra = data.extra
+      this.usedFields = data.usedFields
+      this.usedValues = data.usedValues
+      this.type = data.type
+      this.highlightFields = data.highlightFields
+      this.highlight = data.highlight
+      this.notify = data.notify
+      this.canSubmit = data.canSubmit
+      this.created = data.created
+      this.delay = data.delay
+    }
+    
+    code: string
+    msg?: string | undefined
+    extra?: any | undefined // extra failure data if needed
+    usedFields?: NonEmptyArr<keyof Vs> | undefined // использованные для валидации поля
+    usedValues?: NonEmptyArr<any> | undefined // использованные для валидации значения полей
+    type?: FailureType | undefined
+    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
+    highlight?: boolean | undefined
+    notify?: boolean | undefined
+    canSubmit?: boolean | undefined
+    created?: Date | undefined
+    delay?: number | undefined
+  }
   
   
   
