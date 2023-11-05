@@ -1,7 +1,7 @@
 import { UserApi } from 'src/api/requests/UserApi'
-import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
+import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiText } from 'src/utils/lang/UiText'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
 import UpdateUserRespE = UserApi.UpdateUserRespE
@@ -23,12 +23,12 @@ export namespace ProfilePageValidation {
   
   
   export const mapFailureCodeToUiOption = {
-    'name-required': ProfileUiOptions.firstNameIsNotEntered,
+    'name-required': ProfileUiText.firstNameIsNotEntered,
     // todo
     'name-not-changed': [],
-    'connection-error': ProfileUiOptions.connectionError,
-    'unknown-error': ProfileUiOptions.unknownError,
-  } satisfies Record<FailureCode, UiOption<any>[]>
+    'connection-error': ProfileUiText.connectionError,
+    'unknown-error': ProfileUiText.unknownError,
+  } satisfies Record<FailureCode, UiText<any>[]>
   
   
   

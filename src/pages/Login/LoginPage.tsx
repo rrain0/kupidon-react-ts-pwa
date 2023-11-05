@@ -10,13 +10,13 @@ import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import SettingsBottomButtonBar from 'src/components/BottomButtonBar/SettingsBottomButtonBar'
-import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
+import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
@@ -48,7 +48,7 @@ import UserValues = LoginPageValidation.UserValues
 import Failure = ValidationCore.Failure
 import ReactMemoTyped = ReactUtils.Mem
 import awaitDelay = ValidationActions.awaitDelay
-import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiOption
+import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
 
 
@@ -66,7 +66,7 @@ const LoginPage = () => {
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
-  const uiOptions = useUiOptionsContainer(LoginPageUiOptions)
+  const uiOptions = useUiTextContainer(LoginPageUiText)
   
   const [loginLoading, setLoginLoading] = useState(false)
   const [loginSuccess, setLoginSuccess] = useState(false)
@@ -247,12 +247,12 @@ const LoginPage = () => {
   )
   const [loadingMsg] = useState(()=>new ToastMsgData({
     type: 'loading',
-    msg: <ToastMsg uiOption={LoginPageUiOptions.loggingIn}/>,
+    msg: <ToastMsg uiOption={LoginPageUiText.loggingIn}/>,
     closeOnUnmount: true,
   }))
   const [loginSuccessMsg] = useState(()=>new ToastMsgData({
     type: 'ok',
-    msg: <ToastMsg uiOption={LoginPageUiOptions.loginCompleted}/>,
+    msg: <ToastMsg uiOption={LoginPageUiText.loginCompleted}/>,
     lifetime: 1500,
     dragToClose: true,
   }))
@@ -344,9 +344,6 @@ const LoginPage = () => {
   
   
   
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const openSettings = useCallback(()=>setSettingsOpen(true),[])
-  
   const pageRef = useRef<HTMLElement>(null)
   
   
@@ -429,9 +426,7 @@ const LoginPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <SettingsBottomButtonBar openSettings={openSettings}/>
-    
-    <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
+    <SettingsBottomButtonBar />
     
   </>
 }

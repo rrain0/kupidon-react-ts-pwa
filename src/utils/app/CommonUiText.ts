@@ -1,10 +1,10 @@
 import { Lang } from 'src/recoil/state/LangRecoil'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiText } from 'src/utils/lang/UiText'
 
 
 
 
-export const CommonUiOptions = {
+export const CommonUiText = {
   
   
   loginEmailPlaceholder: [
@@ -17,7 +17,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'логин (email)',
     },
-  ] satisfies UiOption<'loginPlaceholder'>[],
+  ] satisfies UiText<'loginPlaceholder'>[],
   
   
   pwdPlaceholder: [
@@ -30,7 +30,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'пароль',
     },
-  ] satisfies UiOption<'pwdPlaceholder'>[],
+  ] satisfies UiText<'pwdPlaceholder'>[],
   
   
   login: [
@@ -43,7 +43,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Вход',
     },
-  ] satisfies UiOption<'login'>[],
+  ] satisfies UiText<'login'>[],
   
   
   doLogin: [
@@ -56,7 +56,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Войти',
     },
-  ] satisfies UiOption<'doLogin'>[],
+  ] satisfies UiText<'doLogin'>[],
   
   
   loggingIn: [
@@ -69,7 +69,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Вход',
     },
-  ] satisfies UiOption<'loggingIn'>[],
+  ] satisfies UiText<'loggingIn'>[],
   
   
   loginCompleted: [
@@ -82,7 +82,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Вход выполнен',
     },
-  ] satisfies UiOption<'loginCompleted'>[],
+  ] satisfies UiText<'loginCompleted'>[],
   
   
   signup: [
@@ -95,7 +95,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Зарегистрироваться',
     },
-  ] satisfies UiOption<'signup'>[],
+  ] satisfies UiText<'signup'>[],
   
   
   registration: [
@@ -108,7 +108,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Регистрация',
     },
-  ] satisfies UiOption<'signingUp'>[],
+  ] satisfies UiText<'signingUp'>[],
   
   
   update: [
@@ -121,7 +121,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Обновление',
     },
-  ] satisfies UiOption<'update'>[],
+  ] satisfies UiText<'update'>[],
   
   
   updated: [
@@ -134,7 +134,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Обновлено',
     },
-  ] satisfies UiOption<'updated'>[],
+  ] satisfies UiText<'updated'>[],
   
   
   registrationCompleted: [
@@ -147,7 +147,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Регистрация завершена',
     },
-  ] satisfies UiOption<'registrationCompleted'>[],
+  ] satisfies UiText<'registrationCompleted'>[],
   
   
   userSuccessfullyRegistered: [
@@ -160,7 +160,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь успешно зарегистрирован',
     },
-  ] satisfies UiOption<'userSuccessfullyRegistered'>[],
+  ] satisfies UiText<'userSuccessfullyRegistered'>[],
   
   
   signOut: [
@@ -173,7 +173,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Выйти',
     },
-  ] satisfies UiOption<'signOut'>[],
+  ] satisfies UiText<'signOut'>[],
   
   
   profile: [
@@ -186,7 +186,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Профиль',
     },
-  ] satisfies UiOption<'profile'>[],
+  ] satisfies UiText<'profile'>[],
   
   
   chat: [
@@ -199,7 +199,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Чат',
     },
-  ] satisfies UiOption<'chat'>[],
+  ] satisfies UiText<'chat'>[],
   
   
   settings: [
@@ -212,7 +212,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Настройки',
     },
-  ] satisfies UiOption<'settings'>[],
+  ] satisfies UiText<'settings'>[],
   
   
   theme: [
@@ -225,7 +225,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Тема',
     },
-  ] satisfies UiOption<'theme'>[],
+  ] satisfies UiText<'theme'>[],
   systemTheme: [
     {
       value: 'systemTheme',
@@ -236,7 +236,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Тема системы',
     },
-  ] satisfies UiOption<'systemTheme'>[],
+  ] satisfies UiText<'systemTheme'>[],
   lightTheme: [
     {
       value: 'lightTheme',
@@ -247,7 +247,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Светлая тема',
     },
-  ] satisfies UiOption<'lightTheme'>[],
+  ] satisfies UiText<'lightTheme'>[],
   darkTheme: [
     {
       value: 'darkTheme',
@@ -258,7 +258,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Тёмная тема',
     },
-  ] satisfies UiOption<'darkTheme'>[],
+  ] satisfies UiText<'darkTheme'>[],
   
   
   language: [
@@ -271,7 +271,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Язык',
     },
-  ] satisfies UiOption<'language'>[],
+  ] satisfies UiText<'language'>[],
   systemLanguage: [
     {
       value: 'systemLanguage',
@@ -282,21 +282,21 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Язык системы',
     },
-  ] satisfies UiOption<'systemLanguage'>[],
+  ] satisfies UiText<'systemLanguage'>[],
   russian: [
     {
       value: 'russian',
       lang: 'ru-RU',
       text: 'Русский',
     },
-  ] satisfies UiOption<'russian'>[],
+  ] satisfies UiText<'russian'>[],
   english: [
     {
       value: 'english',
       lang: 'en-US',
       text: 'English',
     },
-  ] satisfies UiOption<'english'>[],
+  ] satisfies UiText<'english'>[],
   
   
   accountSettings: [
@@ -309,7 +309,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Настройки Аккаунта',
     },
-  ] satisfies UiOption<'accountSettings'>[],
+  ] satisfies UiText<'accountSettings'>[],
   
   
   appSettings: [
@@ -322,7 +322,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Настройки приложения',
     },
-  ] satisfies UiOption<'appSettings'>[],
+  ] satisfies UiText<'appSettings'>[],
   
   
   account: [
@@ -335,7 +335,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Аккаунт',
     },
-  ] satisfies UiOption<'account'>[],
+  ] satisfies UiText<'account'>[],
   
   
   testPage: [
@@ -348,7 +348,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Тестовая страница',
     },
-  ] satisfies UiOption<'testPage'>[],
+  ] satisfies UiText<'testPage'>[],
   
   
   reloading: [
@@ -362,7 +362,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Перезагрузка',
     },
-  ] satisfies UiOption<'reloading'>[],
+  ] satisfies UiText<'reloading'>[],
   
   
   yes: [
@@ -375,7 +375,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Да',
     },
-  ] satisfies UiOption<'yes'>[],
+  ] satisfies UiText<'yes'>[],
   
   
   no: [
@@ -388,7 +388,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Нет',
     },
-  ] satisfies UiOption<'no'>[],
+  ] satisfies UiText<'no'>[],
   
   
   reset: [
@@ -401,7 +401,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Сброс',
     },
-  ] satisfies UiOption<'reset'>[],
+  ] satisfies UiText<'reset'>[],
   
   
   
@@ -424,7 +424,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Не выбрано',
     },
-  ] satisfies UiOption<'notSelected'>[],
+  ] satisfies UiText<'notSelected'>[],
   
   
   ofGuys: [
@@ -437,7 +437,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Парней',
     },
-  ] satisfies UiOption<'ofGuys'>[],
+  ] satisfies UiText<'ofGuys'>[],
   
   ofGirls: [
     {
@@ -449,7 +449,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Девушек',
     },
-  ] satisfies UiOption<'ofGirls'>[],
+  ] satisfies UiText<'ofGirls'>[],
   
   ofGuysAndGirls: [
     {
@@ -461,7 +461,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Парней и девушек',
     },
-  ] satisfies UiOption<'ofGuysAndGirls'>[],
+  ] satisfies UiText<'ofGuysAndGirls'>[],
   
   
   loginNotEntered: [
@@ -475,7 +475,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Логин не введён',
     },
-  ] satisfies UiOption<'loginNotEntered'>[],
+  ] satisfies UiText<'loginNotEntered'>[],
   
   
   loginFormatIsIncorrect: [
@@ -489,7 +489,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Некорректный формат логина',
     },
-  ] satisfies UiOption<'loginFormatIsIncorrect'>[],
+  ] satisfies UiText<'loginFormatIsIncorrect'>[],
   
   
   emailNotEntered: [
@@ -503,7 +503,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Email не введён',
     },
-  ] satisfies UiOption<'emailNotEntered'>[],
+  ] satisfies UiText<'emailNotEntered'>[],
   
   
   emailFormatIsIncorrect: [
@@ -517,7 +517,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Некорректный формат email',
     },
-  ] satisfies UiOption<'emailFormatIsIncorrect'>[],
+  ] satisfies UiText<'emailFormatIsIncorrect'>[],
   
   
   pwdNotEntered: [
@@ -531,7 +531,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Пароль не введён',
     },
-  ] satisfies UiOption<'pwdNotEntered'>[],
+  ] satisfies UiText<'pwdNotEntered'>[],
   
   
   pwdFormatIsIncorrect: [
@@ -545,7 +545,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Пароль должен быть не короче 6 символов',
     },
-  ] satisfies UiOption<'pwdFormatIsIncorrect'>[],
+  ] satisfies UiText<'pwdFormatIsIncorrect'>[],
   
   
   repeatPwd: [
@@ -559,7 +559,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Повторите пароль',
     },
-  ] satisfies UiOption<'repeatPwd'>[],
+  ] satisfies UiText<'repeatPwd'>[],
   
   
   passwordsDoNotMatch: [
@@ -573,7 +573,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Пароли не совпадают',
     },
-  ] satisfies UiOption<'passwordsDoNotMatch'>[],
+  ] satisfies UiText<'passwordsDoNotMatch'>[],
   
   
   firstNameIsNotEntered: [
@@ -587,7 +587,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Имя не введено',
     },
-  ] satisfies UiOption<'firstNameIsNotEntered'>[],
+  ] satisfies UiText<'firstNameIsNotEntered'>[],
   
   
   lastNameIsNotEntered: [
@@ -601,7 +601,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Фамилия не введена',
     },
-  ] satisfies UiOption<'lastNameIsNotEntered'>[],
+  ] satisfies UiText<'lastNameIsNotEntered'>[],
   
   
   sexIsNotChosen: [
@@ -615,7 +615,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Пол не выбран',
     },
-  ] satisfies UiOption<'sexIsNotChosen'>[],
+  ] satisfies UiText<'sexIsNotChosen'>[],
   
   
   birthDateIsNotEntered: [
@@ -629,7 +629,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Дата рождения не введена',
     },
-  ] satisfies UiOption<'birthDateIsNotEntered'>[],
+  ] satisfies UiText<'birthDateIsNotEntered'>[],
   
   
   noUserWithSuchLoginPwd: [
@@ -643,7 +643,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Не найдено пользователя с таким логином-паролем',
     },
-  ] satisfies UiOption<'noUserWithSuchLoginPwd'>[],
+  ] satisfies UiText<'noUserWithSuchLoginPwd'>[],
   
   
   userWithSuchEmailAlreadyRegistered: [
@@ -657,7 +657,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь с таким email уже зарегестрирован',
     },
-  ] satisfies UiOption<'userWithSuchEmailAlreadyRegistered'>[],
+  ] satisfies UiText<'userWithSuchEmailAlreadyRegistered'>[],
   
   
   connectionError: [
@@ -671,7 +671,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Ошибка соединения с сервером, возможно что-то с интернетом',
     },
-  ] satisfies UiOption<'connectionError'>[],
+  ] satisfies UiText<'connectionError'>[],
   
   
   unknownError: [
@@ -685,7 +685,7 @@ export const CommonUiOptions = {
       lang: 'ru-RU',
       text: 'Неизвестная ошибка',
     },
-  ] satisfies UiOption<'unknownError'>[],
+  ] satisfies UiText<'unknownError'>[],
   
   
-} satisfies Record<string, UiOption<any>[]>
+} satisfies Record<string, UiText<any>[]>

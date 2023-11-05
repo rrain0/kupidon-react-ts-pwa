@@ -1,10 +1,10 @@
-import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
+import { CommonUiText } from 'src/utils/app/CommonUiText'
+import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 
 
 
 
-export const SignupPageUiOptions = {
+export const SignupPageUiText = {
   
   
   emailLoginPlaceholder: [
@@ -18,10 +18,10 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'email (логин)',
     },
-  ] satisfies UiOption<'emailPlaceholder'>[],
+  ] satisfies UiText<'emailPlaceholder'>[],
   
   
-  pwdPlaceholder: CommonUiOptions.pwdPlaceholder,
+  pwdPlaceholder: CommonUiText.pwdPlaceholder,
   
   
   repeatPwdPlaceholder: [
@@ -35,7 +35,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'повторите пароль',
     },
-  ] satisfies UiOption<'repeatPwdPlaceholder'>[],
+  ] satisfies UiText<'repeatPwdPlaceholder'>[],
   
   
   namePlaceholder: [
@@ -49,7 +49,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'имя',
     },
-  ] satisfies UiOption<'namePlaceholder'>[],
+  ] satisfies UiText<'namePlaceholder'>[],
   
   
   lastNamePlaceholder: [
@@ -63,7 +63,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'фамилия',
     },
-  ] satisfies UiOption<'lastNamePlaceholder'>[],
+  ] satisfies UiText<'lastNamePlaceholder'>[],
   
   
   birthDatePlaceholder: [
@@ -77,7 +77,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'день рождения (гггг-ММ-дд) (2002-01-01)',
     },
-  ] satisfies UiOption<'birthDatePlaceholder'>[],
+  ] satisfies UiText<'birthDatePlaceholder'>[],
   
   
   iAmGuy: [
@@ -91,7 +91,7 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'Я парень',
     },
-  ] satisfies UiOption<'iAmGuy'>[],
+  ] satisfies UiText<'iAmGuy'>[],
   
   
   iAmGirl: [
@@ -105,31 +105,31 @@ export const SignupPageUiOptions = {
       lang: 'ru-RU',
       text: 'Я девушка',
     },
-  ] satisfies UiOption<'iAmGirl'>[],
+  ] satisfies UiText<'iAmGirl'>[],
   
   
-  signup: CommonUiOptions.signup,
+  signup: CommonUiText.signup,
   
   
-  registration: CommonUiOptions.registration,
-  registrationCompleted: CommonUiOptions.registrationCompleted,
+  registration: CommonUiText.registration,
+  registrationCompleted: CommonUiText.registrationCompleted,
   
   
-  userSuccessfullyRegistered: CommonUiOptions.userSuccessfullyRegistered,
+  userSuccessfullyRegistered: CommonUiText.userSuccessfullyRegistered,
   
   
-  emailIsNotEntered: CommonUiOptions.emailNotEntered,
-  emailFormatIsIncorrect: CommonUiOptions.emailFormatIsIncorrect,
-  pwdIsNotEntered: CommonUiOptions.pwdNotEntered,
-  pwdFormatIsIncorrect: CommonUiOptions.pwdFormatIsIncorrect,
-  repeatPwd: CommonUiOptions.repeatPwd,
-  passwordsDoNotMatch: CommonUiOptions.passwordsDoNotMatch,
-  firstNameIsNotEntered: CommonUiOptions.firstNameIsNotEntered,
-  lastNameIsNotEntered: CommonUiOptions.lastNameIsNotEntered,
-  sexIsNotChosen: CommonUiOptions.sexIsNotChosen,
-  birthDateIsNotEntered: CommonUiOptions.birthDateIsNotEntered,
-  userWithSuchEmailAlreadyRegistered: CommonUiOptions.userWithSuchEmailAlreadyRegistered,
-  connectionError: CommonUiOptions.connectionError,
-  unknownError: CommonUiOptions.unknownError,
+  emailIsNotEntered: CommonUiText.emailNotEntered,
+  emailFormatIsIncorrect: CommonUiText.emailFormatIsIncorrect,
+  pwdIsNotEntered: CommonUiText.pwdNotEntered,
+  pwdFormatIsIncorrect: CommonUiText.pwdFormatIsIncorrect,
+  repeatPwd: CommonUiText.repeatPwd,
+  passwordsDoNotMatch: CommonUiText.passwordsDoNotMatch,
+  firstNameIsNotEntered: CommonUiText.firstNameIsNotEntered,
+  lastNameIsNotEntered: CommonUiText.lastNameIsNotEntered,
+  sexIsNotChosen: CommonUiText.sexIsNotChosen,
+  birthDateIsNotEntered: CommonUiText.birthDateIsNotEntered,
+  userWithSuchEmailAlreadyRegistered: CommonUiText.userWithSuchEmailAlreadyRegistered,
+  connectionError: CommonUiText.connectionError,
+  unknownError: CommonUiText.unknownError,
   
-} satisfies UiOptionsContainer
+} satisfies UiTextContainer

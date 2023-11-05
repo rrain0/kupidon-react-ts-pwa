@@ -10,30 +10,18 @@ import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOver
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import { AccountSettingsUiOptions } from 'src/pages/AccountSettings/AccountSettingsUiOptions'
-import { ProfileMockData } from 'src/pages/Profile/MockData'
-import ProfileImages from 'src/pages/Profile/ProfileImages'
-import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
+import { AccountSettingsUiText } from 'src/pages/AccountSettings/AccountSettingsUiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Setter } from 'src/utils/common/TypeUtils'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Themes } from 'src/utils/theme/Themes'
-import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
 import DataField from 'src/views/DataField/DataField'
 import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
-import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import Textarea from 'src/views/Textarea/Textarea'
-import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
-import row = EmotionCommon.row
-import center = EmotionCommon.center
 import col = EmotionCommon.col
 import textNormal = EmotionCommon.textNormal1
 import textSmall1 = EmotionCommon.textSmall2
@@ -43,14 +31,11 @@ import Page = Pages.Page
 
 
 
-const sheetSnaps: SheetSnapPoints = [0,200,'fit-content','50%','80%']
-const openIdx = 2
-
-
 
 
 const AccountSettingsPage = ()=>{
   
+  const uiText = useUiTextContainer(AccountSettingsUiText)
   
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
@@ -78,9 +63,6 @@ const AccountSettingsPage = ()=>{
     emailVerified,
     created,
     updated,
-    name,
-    birthDate,
-    sex,
   } = auth!.user
   
   const logout = async() => {
@@ -94,48 +76,6 @@ const AccountSettingsPage = ()=>{
   
   
   
-  const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState(2)
-  
-  const [preferredPeople, setPreferredPeople] = useState(
-    'notSelected' as 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
-  )
-  const [selecting, setSelecting] = useState(
-    undefined as undefined|'items'|'preferred-genders'
-  )
-  useEffect(()=>{
-    if (selecting){
-      setSheetState('opening')
-      setSnapIdx(openIdx)
-    }
-  },[selecting])
-  useEffect(()=>{
-    if (sheetState==='closed'){
-      setSelecting(undefined)
-    }
-  },[sheetState])
-  
-  
-  useEffect(
-    ()=>{
-      setCanSave?.(preferredPeople!=='notSelected')
-    },
-    [preferredPeople, setCanSave]
-  )
-  
-  
-  
-  const bottomSheetProps = {
-    state: sheetState,
-    setState: setSheetState,
-    snapPoints: sheetSnaps,
-    snapIdx: snapIdx,
-    setSnapIdx: setSnapIdx,
-  }
-  
-  
-  
-  const uiOptions = useUiOptionsContainer(AccountSettingsUiOptions)
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -143,19 +83,17 @@ const AccountSettingsPage = ()=>{
   
   return <>
     
-    <Page
-      ref={pageRef}
-    >
+    <Page ref={pageRef}>
       <Form onSubmit={onSubmit}>
         
-        <h3 css={formHeader}>{uiOptions.account[0].text}</h3>
+        <h3 css={formHeader}>{uiText.account[0].text}</h3>
         
         
         
         <Card>
           
           <ItemContainer>
-            <ItemLabel>{uiOptions.id[0].text}</ItemLabel>
+            <ItemLabel>{uiText.id[0].text}</ItemLabel>
             <DataField css={[
               DataFieldStyle.statikSmall,
               css`&.rrainuiFrame {
@@ -168,31 +106,31 @@ const AccountSettingsPage = ()=>{
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiOptions.email[0].text}</ItemLabel>
+            <ItemLabel>{uiText.email[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {email}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiOptions.emailVerified[0].text}</ItemLabel>
+            <ItemLabel>{uiText.emailVerified[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               { emailVerified
-                ? uiOptions.yes[0].text.toLowerCase()
-                : uiOptions.no[0].text.toLowerCase()
+                ? uiText.yes[0].text.toLowerCase()
+                : uiText.no[0].text.toLowerCase()
               }
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiOptions.userCreated[0].text}</ItemLabel>
+            <ItemLabel>{uiText.userCreated[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {new Date(created) + ''}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiOptions.userUpdated[0].text}</ItemLabel>
+            <ItemLabel>{uiText.userUpdated[0].text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {new Date(updated) + ''}
             </DataField>
@@ -205,7 +143,7 @@ const AccountSettingsPage = ()=>{
           <Button css={ButtonStyle.bigRectPrimary}
             onClick={logout}
           >
-            {uiOptions.signOut[0].text}
+            {uiText.signOut[0].text}
           </Button>
         </div>
         
@@ -213,7 +151,7 @@ const AccountSettingsPage = ()=>{
           <Button css={ButtonStyle.bigRectDanger}
             onClick={undefined}
           >
-            {uiOptions.deleteAccount[0].text}
+            {uiText.deleteAccount[0].text}
           </Button>
         </div>
       

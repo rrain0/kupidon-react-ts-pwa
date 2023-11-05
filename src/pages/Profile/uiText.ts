@@ -1,12 +1,12 @@
-import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
+import { CommonUiText } from 'src/utils/app/CommonUiText'
+import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 
 
 
-export const ProfileUiOptions = {
+export const ProfileUiText = {
   
   
-  profile: CommonUiOptions.profile,
+  profile: CommonUiText.profile,
   
   
   id: [
@@ -15,7 +15,7 @@ export const ProfileUiOptions = {
       lang: 'en-US',
       text: 'id',
     },
-  ] satisfies UiOption<'id'>[],
+  ] satisfies UiText<'id'>[],
   
   
   email: [
@@ -24,7 +24,7 @@ export const ProfileUiOptions = {
       lang: 'en-US',
       text: 'Email',
     },
-  ] satisfies UiOption<'email'>[],
+  ] satisfies UiText<'email'>[],
   
   
   emailVerified: [
@@ -38,12 +38,12 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Email верифицирован',
     },
-  ] satisfies UiOption<'emailVerified'>[],
+  ] satisfies UiText<'emailVerified'>[],
   
   
-  yes: CommonUiOptions.yes,
-  no: CommonUiOptions.no,
-  reset: CommonUiOptions.reset,
+  yes: CommonUiText.yes,
+  no: CommonUiText.no,
+  reset: CommonUiText.reset,
   
   
   userCreated: [
@@ -57,7 +57,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь создан',
     },
-  ] satisfies UiOption<'userCreated'>[],
+  ] satisfies UiText<'userCreated'>[],
   
   
   userUpdated: [
@@ -71,7 +71,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь обновлён',
     },
-  ] satisfies UiOption<'userUpdated'>[],
+  ] satisfies UiText<'userUpdated'>[],
   
   
   name: [
@@ -85,7 +85,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Имя',
     },
-  ] satisfies UiOption<'name'>[],
+  ] satisfies UiText<'name'>[],
   
   
   lastName: [
@@ -99,7 +99,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Фамилия',
     },
-  ] satisfies UiOption<'lastName'>[],
+  ] satisfies UiText<'lastName'>[],
   
   
   birthDate: [
@@ -113,7 +113,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Дата рождения',
     },
-  ] satisfies UiOption<'birthDate'>[],
+  ] satisfies UiText<'birthDate'>[],
   
   
   sex: [
@@ -127,7 +127,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Пол',
     },
-  ] satisfies UiOption<'sex'>[],
+  ] satisfies UiText<'sex'>[],
   
   
   male: [
@@ -141,7 +141,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Мужской',
     },
-  ] satisfies UiOption<'male'>[],
+  ] satisfies UiText<'male'>[],
   
   
   female: [
@@ -155,7 +155,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Женский',
     },
-  ] satisfies UiOption<'female'>[],
+  ] satisfies UiText<'female'>[],
   
   
   aboutMe: [
@@ -169,7 +169,7 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Обо мне',
     },
-  ] satisfies UiOption<'aboutMe'>[],
+  ] satisfies UiText<'aboutMe'>[],
   
   
   imLookingFor: [
@@ -183,24 +183,24 @@ export const ProfileUiOptions = {
       lang: 'ru-RU',
       text: 'Я ищу',
     },
-  ] satisfies UiOption<'imLookingFor'>[],
+  ] satisfies UiText<'imLookingFor'>[],
   
   
-  notSelected: CommonUiOptions.notSelected,
-  ofGuys: CommonUiOptions.ofGuys,
-  ofGirls: CommonUiOptions.ofGirls,
-  ofGuysAndGirls: CommonUiOptions.ofGuysAndGirls,
+  notSelected: CommonUiText.notSelected,
+  ofGuys: CommonUiText.ofGuys,
+  ofGirls: CommonUiText.ofGirls,
+  ofGuysAndGirls: CommonUiText.ofGuysAndGirls,
   
   
-  signOut: CommonUiOptions.signOut,
-  update: CommonUiOptions.update,
-  updated: CommonUiOptions.updated,
+  signOut: CommonUiText.signOut,
+  update: CommonUiText.update,
+  updated: CommonUiText.updated,
   
   
   
-  firstNameIsNotEntered: CommonUiOptions.firstNameIsNotEntered,
-  connectionError: CommonUiOptions.connectionError,
-  unknownError: CommonUiOptions.unknownError,
+  firstNameIsNotEntered: CommonUiText.firstNameIsNotEntered,
+  connectionError: CommonUiText.connectionError,
+  unknownError: CommonUiText.unknownError,
   
   
-} satisfies UiOptionsContainer
+} satisfies UiTextContainer

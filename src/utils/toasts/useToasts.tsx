@@ -3,8 +3,8 @@ import { toast, ToastItem } from 'react-toastify'
 import { OnChangeCallback } from 'react-toastify/dist/core/eventManager'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { UiOption } from 'src/utils/lang/UiOption'
-import { useUiOptionArr } from 'src/utils/lang/useUiOptions'
+import { UiText } from 'src/utils/lang/UiText'
+import { useUiTextArr } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastBody, ToastType } from 'src/utils/toasts/ToastBody'
 import falseable = TypeUtils.falseable
@@ -150,11 +150,11 @@ export class ToastMsgData {
 
 
 export const ToastMsg = ReactMemoTyped(
-  <UO extends UiOption<any>[]>(props:{
+  <UO extends UiText<any>[]>(props:{
     uiOption?: UO | undefined
     defaultText?: string | undefined
   })=>{
-    const uiOption = useUiOptionArr(props.uiOption)
+    const uiOption = useUiTextArr(props.uiOption)
     return <>{uiOption[0]?.text ?? props.defaultText}</>
   }
 )

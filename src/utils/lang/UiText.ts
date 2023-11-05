@@ -1,13 +1,13 @@
 import { Lang } from 'src/recoil/state/LangRecoil'
 
 
-export type UiOption<V> = {
+export type UiText<V = any> = {
   value: V
   lang: Lang
   text: string
 }
 
-export type UiOptionsContainer = Record<string, UiOption<any>[]>
+export type UiTextContainer = Record<string, UiText[]>
 
 
 /*
@@ -23,7 +23,7 @@ export type UiOptionsContainer = Record<string, UiOption<any>[]>
       lang: 'ru-RU',
       text: 'Светлая тема',
     }
-  ] satisfies UiOption<lightTheme>[]
+  ] satisfies UiText<lightTheme>[]
   
 */
 

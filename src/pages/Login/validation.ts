@@ -1,8 +1,8 @@
-import { LoginPageUiOptions } from 'src/pages/Login/LoginPageUiOptions'
+import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiText } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
 import LoginRespE = AuthApi.LoginRespE
 import Validators = ValidationCore.Validators
@@ -26,14 +26,14 @@ export namespace LoginPageValidation {
   
   
   
-  export const mapFailureCodeToUiOption = {
-    'login-required': LoginPageUiOptions.loginNotEntered,
-    'login-incorrect': LoginPageUiOptions.loginFormatIsIncorrect,
-    'pwd-required': LoginPageUiOptions.pwdNotEntered,
-    'NO_USER': LoginPageUiOptions.noUserWithSuchLoginPwd,
-    'connection-error': LoginPageUiOptions.connectionError,
-    'unknown-error': LoginPageUiOptions.unknownError,
-  } satisfies Record<FailureCode, UiOption<any>[]>
+  export const mapFailureCodeToUiText = {
+    'login-required': LoginPageUiText.loginNotEntered,
+    'login-incorrect': LoginPageUiText.loginFormatIsIncorrect,
+    'pwd-required': LoginPageUiText.pwdNotEntered,
+    'NO_USER': LoginPageUiText.noUserWithSuchLoginPwd,
+    'connection-error': LoginPageUiText.connectionError,
+    'unknown-error': LoginPageUiText.unknownError,
+  } satisfies Record<FailureCode, UiText<any>[]>
   
   
   

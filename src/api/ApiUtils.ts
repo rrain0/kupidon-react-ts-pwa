@@ -17,4 +17,12 @@ export namespace ApiUtils {
     }
   }
   
+  export interface NoUserErrorResponse extends ErrorResponse {
+    status: 400,
+    data: {
+      code: "NO_USER"
+      msg: string
+    }
+  }
+  
 }

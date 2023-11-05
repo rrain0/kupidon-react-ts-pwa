@@ -1,15 +1,15 @@
-import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { CommonUiText } from 'src/utils/app/CommonUiText'
+import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 
 
 
-export const BottomNavBarUiOptions = {
+export const BottomNavBarUiText = {
   
   
-  profile: CommonUiOptions.profile,
+  profile: CommonUiText.profile,
   
   
-  chat: CommonUiOptions.chat,
+  chat: CommonUiText.chat,
   
   
   findCouples: [
@@ -23,7 +23,7 @@ export const BottomNavBarUiOptions = {
       lang: 'ru-RU',
       text: 'Найти пары',
     },
-  ] as UiOption<'findCouples'>[],
+  ] as UiText<'findCouples'>[],
   
   
   advices: [
@@ -37,12 +37,12 @@ export const BottomNavBarUiOptions = {
       lang: 'ru-RU',
       text: 'Советы',
     },
-  ] as UiOption<'advices'>[],
+  ] as UiText<'advices'>[],
   
   
-  settings: CommonUiOptions.settings,
+  settings: CommonUiText.settings,
   
   
   
   
-} satisfies Record<string, UiOption<any>[]>
+} satisfies UiTextContainer

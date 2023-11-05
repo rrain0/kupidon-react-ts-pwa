@@ -2,50 +2,50 @@ import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { Lang, LangRecoil } from 'src/recoil/state/LangRecoil'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { UiOption, UiOptionsContainer } from 'src/utils/lang/UiOption'
+import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 import empty = TypeUtils.empty
 
 
 
-export const useUiOptionArr = <T>
-(uiOptions?: readonly UiOption<T>[] | empty)
-: UiOption<T>[] => {
+export const useUiTextArr = <T>
+(uiText?: readonly UiText<T>[] | empty)
+: UiText<T>[] => {
   const langs = useRecoilValue(LangRecoil).lang
   
-  const preparedUiOpitons = useMemo(
-    ()=>prepareUiOptions(uiOptions??[], langs),
-    [langs, uiOptions]
+  const preparedUiText = useMemo(
+    ()=>prepareUiOptions(uiText??[], langs),
+    [langs, uiText]
   )
   
-  return preparedUiOpitons
+  return preparedUiText
 }
 
 
 
-export const useUiOptionsContainer = <T extends UiOptionsContainer>
-(uiOptions?: T | empty)
+export const useUiTextContainer = <T extends UiTextContainer>
+(uiText?: T | empty)
 : T => {
   const langs = useRecoilValue(LangRecoil).lang
   
-  const selectedUiOptions = useMemo(
+  const selectedUiText = useMemo(
     ()=>{
-      const preparedUiOpitons = {...uiOptions}
-      for (const option in preparedUiOpitons) {
-        preparedUiOpitons[option] = prepareUiOptions(preparedUiOpitons[option], langs)
+      const preparedUiText = {...uiText}
+      for (const option in preparedUiText) {
+        preparedUiText[option] = prepareUiOptions(preparedUiText[option], langs)
       }
-      return preparedUiOpitons
+      return preparedUiText
     },
-    [langs, uiOptions]
+    [langs, uiText]
   )
   
-  return selectedUiOptions as T
+  return selectedUiText as T
 }
 
 
 
 function prepareUiOptions<T>
-(uiOptions: readonly UiOption<T>[], langs: Lang[])
-: UiOption<T>[] {
+(uiOptions: readonly UiText<T>[], langs: Lang[])
+: UiText<T>[] {
   const used = new Set<T>()
   return uiOptions
     .toSorted((a,b)=>{

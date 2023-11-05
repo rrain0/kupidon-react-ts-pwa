@@ -3,10 +3,10 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { LangSettingsUiOptions } from 'src/components/LangSettings/LangSettingsUiOptions'
+import { LangSettingsUiText } from 'src/components/LangSettings/uiText'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
@@ -42,25 +42,25 @@ const LangSettings = (props: SettingsProps)=>{
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
   
-  const uiOptions = useUiOptionsContainer(LangSettingsUiOptions)
+  const uiText = useUiTextContainer(LangSettingsUiText)
   const languageOptions = useMemo(
     ()=>{
-      let opts = [
+      let text = [
         {
           value: 'system',
-          text: uiOptions.systemLanguage[0].text,
+          text: uiText.systemLanguage[0].text,
         },{
           value: 'ru-RU',
-          text: uiOptions.russian[0].text,
+          text: uiText.russian[0].text,
         },{
           value: 'en-US',
-          text: uiOptions.english[0].text,
+          text: uiText.english[0].text,
         }
       ] satisfies { value: Lang|'system', text: string }[]
-      if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
-      return opts
+      if (!lang.availableSystemLangs?.length) text = text.filter(it=>it.value!=='system')
+      return text
     },
-    [uiOptions, lang.availableSystemLangs]
+    [uiText, lang.availableSystemLangs]
   )
   const languageOptionChecked = useCallback(
     function (value: Lang|'system') {

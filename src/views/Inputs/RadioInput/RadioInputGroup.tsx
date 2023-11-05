@@ -4,12 +4,13 @@ import classNames from 'classnames'
 import React, { useImperativeHandle, useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
-import { empty } from 'src/utils/common/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import styled from 'styled-components'
 import reset = EmotionCommon.reset
 import trueOrUndef = CastUtils.trueOrUndef
 import abs = EmotionCommon.abs
+import empty = TypeUtils.empty
 
 
 

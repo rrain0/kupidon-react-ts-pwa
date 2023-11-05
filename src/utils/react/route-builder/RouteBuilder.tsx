@@ -105,8 +105,8 @@ export namespace RouteBuilder {
       allowedSearchParams?: URLSearchParams | empty
       anyNameParams?: { [pathName: string]: string | empty } | empty
       allowedNameParams?: empty | (
-        R[typeof params] extends object
-          ? { [Path in ObjectKeysType<R[typeof params]>]: string | empty }
+        (R)[typeof params] extends object
+          ? { [Path in ObjectKeysType<(R)[typeof params]>]: string | empty }
           : never
         )
       anyPathParams?: { [path: string]: string | empty } | empty
@@ -174,8 +174,8 @@ export namespace RouteBuilder {
     (
       this:R,
       applyParams?: empty | (
-        R[typeof params] extends object
-          ? { [Path in ObjectKeysType<R[typeof params]>]: string | empty }
+        (R)[typeof params] extends object
+          ? { [Path in ObjectKeysType<(R)[typeof params]>]: string | empty }
           : never
       )
     )

@@ -1,8 +1,8 @@
 import { UserApi } from 'src/api/requests/UserApi'
-import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
+import { SignupPageUiText } from 'src/pages/Signup/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { UiText } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
 import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
@@ -33,20 +33,20 @@ export namespace SignupPageValidation {
   
   
   
-  export const mapFailureCodeToUiOption = {
-    'email-required': SignupPageUiOptions.emailIsNotEntered,
-    'email-incorrect': SignupPageUiOptions.emailFormatIsIncorrect,
-    'pwd-required': SignupPageUiOptions.pwdIsNotEntered,
-    'pwd-incorrect': SignupPageUiOptions.pwdFormatIsIncorrect,
-    'repeated-pwd-required': SignupPageUiOptions.repeatPwd,
-    'repeated-pwd-not-match': SignupPageUiOptions.passwordsDoNotMatch,
-    'name-required': SignupPageUiOptions.firstNameIsNotEntered,
-    'sex-required': SignupPageUiOptions.sexIsNotChosen,
-    'birthDate-required': SignupPageUiOptions.birthDateIsNotEntered,
-    "DUPLICATE_EMAIL": SignupPageUiOptions.userWithSuchEmailAlreadyRegistered,
-    'connection-error': SignupPageUiOptions.connectionError,
-    'unknown-error': SignupPageUiOptions.unknownError,
-  } satisfies Record<FailureCode, UiOption<any>[]>
+  export const mapFailureCodeToUiText = {
+    'email-required': SignupPageUiText.emailIsNotEntered,
+    'email-incorrect': SignupPageUiText.emailFormatIsIncorrect,
+    'pwd-required': SignupPageUiText.pwdIsNotEntered,
+    'pwd-incorrect': SignupPageUiText.pwdFormatIsIncorrect,
+    'repeated-pwd-required': SignupPageUiText.repeatPwd,
+    'repeated-pwd-not-match': SignupPageUiText.passwordsDoNotMatch,
+    'name-required': SignupPageUiText.firstNameIsNotEntered,
+    'sex-required': SignupPageUiText.sexIsNotChosen,
+    'birthDate-required': SignupPageUiText.birthDateIsNotEntered,
+    "DUPLICATE_EMAIL": SignupPageUiText.userWithSuchEmailAlreadyRegistered,
+    'connection-error': SignupPageUiText.connectionError,
+    'unknown-error': SignupPageUiText.unknownError,
+  } satisfies Record<FailureCode, UiText<any>[]>
   
   
   

@@ -1,25 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
-import { ProfileUiOptions } from 'src/pages/Profile/ProfileUiOptions'
+import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
-import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Setter } from 'src/utils/common/TypeUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useForm } from 'src/utils/form-validation/form/useForm'
-import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
+import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
-import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { Themes } from 'src/utils/theme/Themes'
-import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import Button from 'src/views/Buttons/Button'
@@ -43,14 +41,11 @@ import defaultValues = ProfilePageValidation.defaultValues
 import validators = ProfilePageValidation.validators
 import FormValues = ProfilePageValidation.FormValues
 import UserToUpdate = UserApi.UserToUpdate
-import rowWrap = EmotionCommon.rowWrap
 import ArrowReloadIc = SimpleSvgIcons.ArrowReloadIc
-import CurrentUser = UserApi.CurrentUser
 import UpdateUserRespS = UserApi.UpdateUserRespS
-import Failure = ValidationCore.Failure
-import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = ProfilePageValidation.mapFailureCodeToUiOption
-import updateFailures = ValidationActions.updateFailures
+import Setter = TypeUtils.Setter
+import Mem = ReactUtils.Mem
 
 
 
@@ -75,11 +70,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const resetAuth = useResetRecoilState(AuthRecoil)
   const logout = async() => void resetAuth()
   
-  
-  const [initialValues, setInitialValues] = useState({
-    birthDate: auth!.user.birthDate,
-    sex: auth!.user.sex,
-  })
+  const uiText = useUiTextContainer(ProfileUiText)
   
   
   
@@ -135,12 +126,15 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const updateValues = useEffectEvent(()=>{
     setFormValues(s=>{
       const u = auth!.user, vs = s[0], ivs = vs.initialValues
-      return [{...vs,
-        name: !('name' in ivs) || vs.name===ivs.name ? u.name : vs.name,
-        initialValues: {
-          name: u.name,
+      return [
+        {...vs,
+          name: !('name' in ivs) || vs.name===ivs.name ? u.name : vs.name,
+          initialValues: {
+            name: u.name,
+          }
         }
-      },vs]
+        ,vs
+      ]
     })
   })
   useEffect(updateValues, [auth])
@@ -168,100 +162,15 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  const [userFailure, setUserFailure] =
-    useState(undefined as undefined|Failure<FormValues>)
-  const [serverFailure, setServerFailure] =
-    useState(undefined as undefined|Failure<FormValues>)
-  
-  useEffect(()=>{
-    setUserFailure(undefined)
-    setServerFailure(undefined)
-    const stale: [boolean] = [false]
-    
-    const userFailures = failures
-      .filter(f=>!f.canSubmit && f.notify)
-    awaitDelay(userFailures, stale, setUserFailure)
-    
-    const serverFailures = failures
-      .filter(f=>f.canSubmit && f.notify)
-    awaitDelay(serverFailures, stale, setServerFailure)
-    
-    return ()=>{ stale[0]=true }
-  },[failures])
-  
-  const userFailureMsg = useMemo(
-    ()=>{
-      if (userFailure) return new ToastMsgData({
-        type: 'danger',
-        msg: <ToastMsg
-          uiOption={mapFailureCodeToUiOption[userFailure.code]}
-          defaultText={userFailure.msg}
-        />,
-        closeOnUnmount: true,
-        showCloseButton: true,
-        dragToClose: true,
-        onClose: ()=>{
-          if (userFailure.notify) setFailures(s=>updateFailures(
-            s,
-            { failures: [userFailure] },
-            { notify: false }
-          ))
-        }
-      })
-      return undefined
-    },
-    [userFailure]
-  )
-  const serverFailureMsg = useMemo(
-    ()=>{
-      if (serverFailure) return new ToastMsgData({
-        type: 'danger',
-        msg: <ToastMsg
-          uiOption={mapFailureCodeToUiOption[serverFailure.code]}
-          defaultText={serverFailure.msg}
-        />,
-        closeOnUnmount: true,
-        showCloseButton: true,
-        dragToClose: true,
-        onClose: ()=>{
-          if (serverFailure.notify) setFailures(s=>updateFailures(
-            s,
-            { failures: [serverFailure] },
-            { notify: false }
-          ))
-        }
-      })
-      return undefined
-    },
-    [serverFailure]
-  )
-  const [loadingMsg] = useState(()=>new ToastMsgData({
-    type: 'loading',
-    msg: <ToastMsg uiOption={ProfileUiOptions.update}/>,
-    closeOnUnmount: true,
-  }))
-  const [loginSuccessMsg] = useState(()=>new ToastMsgData({
-    type: 'ok',
-    msg: <ToastMsg uiOption={ProfileUiOptions.updated}/>,
-    lifetime: 1500,
-    dragToClose: true,
-  }))
-  
-  
-  useToasts({ toasts: [
-      userFailureMsg,
-      loading && loadingMsg,
-      success && loginSuccessMsg,
-      serverFailureMsg,
-    ]})
+  useFormToasts({
+    isLoading: loading,
+    loadingText: ProfileUiText.update,
+    isSuccess: success,
+    successText: ProfileUiText.updated,
+    failures: failures,
+    setFailures: setFailures,
+    failureCodeToUiText: mapFailureCodeToUiOption,
+  })
   
   
   
@@ -272,9 +181,10 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  
-  
-  
+  const [initialValues, setInitialValues] = useState({
+    birthDate: auth!.user.birthDate,
+    sex: auth!.user.sex,
+  })
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
@@ -319,7 +229,6 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const [images, setImages] = useState(ProfileMockData.userImages)
   
   
-  const uiOptions = useUiOptionsContainer(ProfileUiOptions)
   
   
   type PreferredPeopleOption = 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
@@ -327,19 +236,19 @@ const ProfileContent = (props: ProfileContentProps)=>{
     ()=>[
       {
         value: 'notSelected',
-        text: uiOptions.notSelected[0].text,
+        text: uiText.notSelected[0].text,
       },{
         value: 'ofGuys',
-        text: uiOptions.ofGuys[0].text,
+        text: uiText.ofGuys[0].text,
       },{
         value: 'ofGirls',
-        text: uiOptions.ofGirls[0].text,
+        text: uiText.ofGirls[0].text,
       },{
         value: 'ofGuysAndGirls',
-        text: uiOptions.ofGuysAndGirls[0].text,
+        text: uiText.ofGuysAndGirls[0].text,
       }
     ] satisfies { value: PreferredPeopleOption, text: string }[],
-    [uiOptions]
+    [uiText]
   )
   const onPreferredPeopleOptionChecked = useCallback(
     function (value: PreferredPeopleOption){
@@ -351,7 +260,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const vs = formValues[0], ivs = formValues[0].initialValues
   return <Form onSubmit={onSubmit}>
     
-    <h3 css={formHeader}>{uiOptions.profile[0].text}</h3>
+    <h3 css={formHeader}>{uiText.profile[0].text}</h3>
     
     
     <ProfileImages
@@ -375,7 +284,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
           `}
         >
           <ItemLabel>
-            {uiOptions.name[0].text}
+            {uiText.name[0].text}
           </ItemLabel>
           { 'name' in ivs && vs.name!==ivs.name
             && <Button css={ButtonStyle.smallRectNormal}
@@ -394,7 +303,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
               <div
                 css={css`white-space: nowrap;`}
               >
-                {uiOptions.reset[0].text}
+                {uiText.reset[0].text}
               </div>
             </Button>
           }
@@ -403,7 +312,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
           fieldName='name'
           render={props => <Input
             css={InputStyle.inputSmall}
-            placeholder={uiOptions.name[0].text.toLowerCase()}
+            placeholder={uiText.name[0].text.toLowerCase()}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -411,24 +320,24 @@ const ProfileContent = (props: ProfileContentProps)=>{
       </ItemContainer>
       
       <ItemContainer>
-        <ItemLabel>{uiOptions.birthDate[0].text}</ItemLabel>
+        <ItemLabel>{uiText.birthDate[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
           {initialValues.birthDate}
         </DataField>
       </ItemContainer>
       
       <ItemContainer>
-        <ItemLabel>{uiOptions.sex[0].text}</ItemLabel>
+        <ItemLabel>{uiText.sex[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
           {initialValues.sex === 'MALE'
-            ? uiOptions.male[0].text
-            : uiOptions.female[0].text
+            ? uiText.male[0].text
+            : uiText.female[0].text
           }
         </DataField>
       </ItemContainer>
       
       <ItemContainer>
-        <ItemLabel>{uiOptions.aboutMe[0].text}</ItemLabel>
+        <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
         <Textarea css={TextareaStyle.textareaSmall}/>
       </ItemContainer>
       
@@ -440,7 +349,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
             gap: 6px;
           `}
         >
-          <ItemLabel>{uiOptions.imLookingFor[0].text}</ItemLabel>
+          <ItemLabel>{uiText.imLookingFor[0].text}</ItemLabel>
           {preferredPeople!=='notSelected' && <div
             css={t=>css`
               ${center};
@@ -472,7 +381,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
           
           { selecting === 'preferred-genders' && <BottomSheetBasic
             {...bottomSheetProps}
-            header={uiOptions.imLookingFor[0].text}
+            header={uiText.imLookingFor[0].text}
           >
             <div
               css={css`
@@ -526,13 +435,13 @@ const ProfileContent = (props: ProfileContentProps)=>{
       <Button css={ButtonStyle.bigRectPrimary}
         onClick={logout}
       >
-        {uiOptions.signOut[0].text}
+        {uiText.signOut[0].text}
       </Button>
     </div>
   
   </Form>
 }
-export default ProfileContent
+export default Mem(ProfileContent)
 
 
 

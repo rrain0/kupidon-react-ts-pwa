@@ -1,6 +1,6 @@
 import { CastUtils } from 'src/utils/common/CastUtils'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import { Setter } from 'src/utils/common/TypeUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import React, {
   JSX,
@@ -18,6 +18,7 @@ import awaitDelay = ValidationActions.awaitDelay
 import ReactMemoTyped = ReactUtils.Mem
 import trueOrUndef = CastUtils.trueOrUndef
 import Values = ValidationCore.Values
+import Setter = TypeUtils.Setter
 
 
 

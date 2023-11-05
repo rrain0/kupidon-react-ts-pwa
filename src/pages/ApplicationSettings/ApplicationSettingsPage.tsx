@@ -12,14 +12,14 @@ import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import {
-  ApplicationSettingsUiOptions
-} from 'src/pages/ApplicationSettings/ApplicationSettingsUiOptions'
+  ApplicationSettingsUiText
+} from 'src/pages/ApplicationSettings/ApplicationSettingsUiText'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Themes } from 'src/utils/theme/Themes'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -70,7 +70,7 @@ const ApplicationSettingsPage = ()=>{
   
   
   
-  const uiOptions = useUiOptionsContainer(ApplicationSettingsUiOptions)
+  const uiOptions = useUiTextContainer(ApplicationSettingsUiText)
   
   
   

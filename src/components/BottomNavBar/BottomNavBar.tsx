@@ -5,8 +5,10 @@ import classNames from 'classnames'
 import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import { BottomNavBarUiOptions } from 'src/components/BottomNavBar/BottomNavBarUiOptions'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { BottomNavBarUiText } from 'src/components/BottomNavBar/uiText'
+import UseBool from 'src/components/StateCarriers/UseBool'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -22,6 +24,7 @@ import ChatRoundIc = SimpleSvgIcons.ChatRoundIc
 import HelpIc = SimpleSvgIcons.HelpIc
 import fixedBottom = EmotionCommon.fixedBottom
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import Mem = ReactUtils.Mem
 
 
 
@@ -29,9 +32,7 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 
 const BottomNavBar = ()=>{
   
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  
-  const uiOptions = useUiOptionsContainer(BottomNavBarUiOptions)
+  const uiOptions = useUiTextContainer(BottomNavBarUiText)
   
   return <>
     
@@ -72,24 +73,26 @@ const BottomNavBar = ()=>{
         <div>{uiOptions.advices[0].text}</div>
       </Button>
       
-      <NavLink to={RootRoute.settings[full]()}
-        onClick={ev=>ev.preventDefault()} // prevent follow link
-      >
-        <Button css={ButtonStyle.nav}
-          onClick={()=>setSettingsOpen(true)}
+      <UseBool render={props=><>
+        <NavLink to={RootRoute.settings[full]()}
+          onClick={ev=>ev.preventDefault()} // prevent follow link
         >
-          <Gear2Ic/>
-          <div>{uiOptions.settings[0].text}</div>
-        </Button>
-      </NavLink>
+          <Button css={ButtonStyle.nav}
+            onClick={props.setTrue}
+          >
+            <Gear2Ic/>
+            <div>{uiOptions.settings[0].text}</div>
+          </Button>
+        </NavLink>
+        <QuickSettings open={props.value} setOpen={props.setValue}/>
+      </>}/>
+        
     
     </Frame>
     
-    <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
-    
   </>
 }
-export default BottomNavBar
+export default Mem(BottomNavBar)
 
 
 

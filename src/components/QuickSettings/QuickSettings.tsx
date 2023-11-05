@@ -1,19 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import { QuickSettingsUiOptions } from 'src/components/QuickSettings/QuickSettingsUiOptions'
+import { QuickSettingsUiText } from 'src/components/QuickSettings/uiText'
+import UseBool from 'src/components/StateCarriers/UseBool'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
-import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
@@ -47,17 +48,18 @@ import resetH = EmotionCommon.resetH
 
 
 const sheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
-const openIdx = 3
+const sheetOpenIdx = 3
+
 
 export type SettingsProps = {
   open: boolean
   setOpen: Setter<boolean>
 }
 const QuickSettings = (props: SettingsProps)=>{
+  const { open, setOpen } = props
+  
   const auth = useRecoilValue(AuthRecoil)
   
-  const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState(openIdx)
   
   const app = useRecoilValue(AppRecoil)
   const lang = useRecoilValue(LangRecoil)
@@ -66,10 +68,9 @@ const QuickSettings = (props: SettingsProps)=>{
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
   
-  const [clearSite, setClearSite] = useState(false)
   
   
-  const uiOptions = useUiOptionsContainer(QuickSettingsUiOptions)
+  const uiText = useUiTextContainer(QuickSettingsUiText)
   
   
   const themeOptions = useMemo(
@@ -77,19 +78,19 @@ const QuickSettings = (props: SettingsProps)=>{
       let opts = [
         {
           value: 'system',
-          text: uiOptions.systemTheme[0].text,
+          text: uiText.systemTheme[0].text,
         },{
           value: 'light',
-          text: uiOptions.lightTheme[0].text,
+          text: uiText.lightTheme[0].text,
         },{
           value: 'dark',
-          text: uiOptions.darkTheme[0].text,
+          text: uiText.darkTheme[0].text,
         }
       ] satisfies { value: ThemeType|'system', text: string }[]
       if (!theme.systemThemeAvailable) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
-    [uiOptions, theme.systemThemeAvailable]
+    [uiText, theme.systemThemeAvailable]
   )
   const onThemeOptionChecked = useCallback(
     function (value: ThemeType|'system') {
@@ -105,19 +106,19 @@ const QuickSettings = (props: SettingsProps)=>{
       let opts = [
         {
           value: 'system',
-          text: uiOptions.systemLanguage[0].text,
+          text: uiText.systemLanguage[0].text,
         },{
           value: 'ru-RU',
-          text: uiOptions.russian[0].text,
+          text: uiText.russian[0].text,
         },{
           value: 'en-US',
-          text: uiOptions.english[0].text,
+          text: uiText.english[0].text,
         }
       ] satisfies { value: Lang|'system', text: string }[]
       if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
-    [uiOptions, lang.availableSystemLangs]
+    [uiText, lang.availableSystemLangs]
   )
   const onLanguageOptionChecked = useCallback(
     function (value: Lang|'system') {
@@ -131,152 +132,143 @@ const QuickSettings = (props: SettingsProps)=>{
   
   
   
-  useEffect(()=>{
-    if (props.open){
-      setSheetState('opening')
-      setSnapIdx(openIdx)
-    }
-  },[props.open])
-  useEffect(()=>{
-    if (sheetState==='closed'){
-      props.setOpen(false)
-    }
-  },[props.setOpen, sheetState])
-  
-  
-  const bottomSheetProps = {
-    state: sheetState,
-    setState: setSheetState,
-    snapPoints: sheetSnaps,
-    snapIdx: snapIdx,
-    setSnapIdx: setSnapIdx,
-  }
+
   
   
   return <>
-    {props.open && <BottomSheetBasic
-      {...bottomSheetProps}
-      header={uiOptions.settings[0].text}
-    >
-      <Content>
-        
-        <OptionHeader>
-          {uiOptions.theme[0].text}:
-        </OptionHeader>
-        <RadioInputGroup>
-          {
-            themeOptions.map(opt => <RadioInput
-              css={RadioInputStyle.radio}
-              childrenPosition="start"
-              checked={onThemeOptionChecked(opt.value)}
-              value={opt.value}
-              key={opt.value}
-              onChange={ev => {
-                setThemeSettings(s => ({
-                  ...s,
-                  setting: opt.value === 'system' ? 'system' : 'manual',
-                  manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
-                }))
-              }}
-            >
-              <OptionContainer>
-                {opt.value === 'system' && <DayNightIc css={icon}/>}
-                {opt.value === 'light' && <DayIc css={icon}/>}
-                {opt.value === 'dark' && <MoonIc css={iconSmall}/>}
-                {opt.text}
-              </OptionContainer>
-            </RadioInput>)
-          }
-        </RadioInputGroup>
-        
-        
-        <OptionHeader>
-          {uiOptions.language[0].text}:
-        </OptionHeader>
-        <RadioInputGroup>
-          {
-            languageOptions.map(opt => <RadioInput
-              css={RadioInputStyle.radio}
-              childrenPosition="start"
-              checked={onLanguageOptionChecked(opt.value)}
-              value={opt.value}
-              key={opt.value}
-              onChange={ev => {
-                if (opt.value === 'system') setLangSettings({
-                  ...langSettings,
-                  setting: 'system',
-                })
-                else {
-                  setLangSettings({
-                    setting: 'manual',
-                    manualSetting: [opt.value],
+    <UseModalSheetState
+      open={open}
+      setOpen={setOpen}
+      snapPoints={sheetSnaps}
+      openIdx={sheetOpenIdx}
+      render={props => open && <BottomSheetBasic
+        {...props.sheetProps}
+        header={uiText.settings[0].text}
+      >
+        <Content>
+          
+          <OptionHeader>
+            {uiText.theme[0].text}:
+          </OptionHeader>
+          <RadioInputGroup>
+            {
+              themeOptions.map(opt => <RadioInput
+                css={RadioInputStyle.radio}
+                childrenPosition="start"
+                checked={onThemeOptionChecked(opt.value)}
+                value={opt.value}
+                key={opt.value}
+                onChange={ev => {
+                  setThemeSettings(s => ({
+                    ...s,
+                    setting: opt.value === 'system' ? 'system' : 'manual',
+                    manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
+                  }))
+                }}
+              >
+                <OptionContainer>
+                  {opt.value === 'system' && <DayNightIc css={icon}/>}
+                  {opt.value === 'light' && <DayIc css={icon}/>}
+                  {opt.value === 'dark' && <MoonIc css={iconSmall}/>}
+                  {opt.text}
+                </OptionContainer>
+              </RadioInput>)
+            }
+          </RadioInputGroup>
+          
+          
+          <OptionHeader>
+            {uiText.language[0].text}:
+          </OptionHeader>
+          <RadioInputGroup>
+            {
+              languageOptions.map(opt => <RadioInput
+                css={RadioInputStyle.radio}
+                childrenPosition="start"
+                checked={onLanguageOptionChecked(opt.value)}
+                value={opt.value}
+                key={opt.value}
+                onChange={ev => {
+                  if (opt.value === 'system') setLangSettings({
+                    ...langSettings,
+                    setting: 'system',
                   })
-                }
+                  else {
+                    setLangSettings({
+                      setting: 'manual',
+                      manualSetting: [opt.value],
+                    })
+                  }
+                }}
+              >
+                <OptionContainer>
+                  {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
+                  {opt.value === 'system' && <BrowserIc css={icon}/>}
+                  {opt.text}
+                </OptionContainer>
+              </RadioInput>)
+            }
+          </RadioInputGroup>
+          
+          <RoundButtonsContainer>
+            
+            {auth && <Link to={RootRoute.settings.account[full]()}>
+              <Button css={normalIconRoundButton}
+                onClick={props.setClosing}
+              >
+                <LockIc css={[
+                  icon,
+                  css`translate: 0 -0.1em;`,
+                ]}/>
+                {uiText.accountSettings[0].text}
+              </Button>
+            </Link>}
+            
+            <Link to={RootRoute.settings.app[full]()}>
+              <Button css={normalIconRoundButton}
+                onClick={props.setClosing}
+              >
+                <GearIc css={icon}/>
+                {uiText.appSettings[0].text}
+              </Button>
+            </Link>
+            
+            <Link to={RootRoute.test[full]()}>
+              <Button css={normalIconRoundButton}
+                onClick={props.setClosing}
+              >
+                {uiText.testPage[0].text}
+              </Button>
+            </Link>
+            
+            {app.canInstall && <Button css={normalIconRoundButton}
+              onClick={async () => {
+                const installed = await promptInstall()
+                console.log('installed', installed)
               }}
             >
-              <OptionContainer>
-                {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
-                {opt.value === 'system' && <BrowserIc css={icon}/>}
-                {opt.text}
-              </OptionContainer>
-            </RadioInput>)
-          }
-        </RadioInputGroup>
+              <AddModuleIc css={icon}/>
+              {uiText.installApp[0].text}
+            </Button>}
+            
+            <UseBool render={props => <>
+              <Button css={ButtonStyle.roundedDanger}
+                onClick={props.setTrue}
+              >
+                {uiText.clearAppData[0].text}
+              </Button>
+              <ClearSiteConfirmation open={props.value} setOpen={props.setValue}/>
+            </>}/>
+          
+          
+          </RoundButtonsContainer>
         
-        <RoundButtonsContainer>
-          
-          { auth && <Link to={RootRoute.settings.account[full]()}>
-            <Button css={normalIconRoundButton}
-              onClick={()=>setSheetState('closing')}
-            >
-              <LockIc css={[
-                icon,
-                css`translate: 0 -0.1em;`,
-              ]}/>
-              {uiOptions.accountSettings[0].text}
-            </Button>
-          </Link> }
-          
-          <Link to={RootRoute.settings.app[full]()}>
-            <Button css={normalIconRoundButton}
-              onClick={()=>setSheetState('closing')}
-            >
-              <GearIc css={icon} />
-              {uiOptions.appSettings[0].text}
-            </Button>
-          </Link>
-          
-          <Link to={RootRoute.test[full]()}>
-            <Button css={normalIconRoundButton}
-              onClick={()=>setSheetState('closing')}
-            >
-              {uiOptions.testPage[0].text}
-            </Button>
-          </Link>
-          
-          {app.canInstall && <Button css={normalIconRoundButton}
-            onClick={async()=>{
-              const installed = await promptInstall()
-              console.log('installed', installed)
-            }}
-          >
-            <AddModuleIc css={icon}/>
-            {uiOptions.installApp[0].text}
-          </Button>}
-          
-          <Button css={ButtonStyle.roundedDanger}
-            onClick={() => setClearSite(true)}
-          >
-            {uiOptions.clearAppData[0].text}
-          </Button>
         
-        </RoundButtonsContainer>
-      
-      
-      </Content>
-    </BottomSheetBasic>}
+        </Content>
+      </BottomSheetBasic>}
+    />
     
-    <ClearSiteConfirmation open={clearSite} setOpen={setClearSite} />
+    
     
   </>
 }

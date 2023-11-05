@@ -2,23 +2,21 @@
 import { css } from '@emotion/react'
 import React from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import SettingsButton from 'src/components/SettingsButton'
+import UseBool from 'src/components/StateCarriers/UseBool'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Button from 'src/views/Buttons/Button'
-import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import ReactMemoTyped = ReactUtils.Mem
-import GearIc = SimpleSvgIcons.GearIc
+import Mem = ReactUtils.Mem
 
 
 
 
-const SettingsBottomButtonBar = (props: { openSettings: ()=>void })=>{
+const SettingsBottomButtonBar = ()=>{
   return <BottomButtonBar>
-    <Button css={ButtonStyle.iconTransparent}
-      onClick={props.openSettings}
-    >
-      <GearIc/>
-    </Button>
+    <UseBool render={props=><>
+      <SettingsButton onClick={props.setTrue}/>
+      <QuickSettings open={props.value} setOpen={props.setValue}/>
+    </>}/>
   </BottomButtonBar>
 }
-export default ReactMemoTyped(SettingsBottomButtonBar)
+export default Mem(SettingsBottomButtonBar)

@@ -6,7 +6,7 @@ import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import SettingsBottomButtonBar from 'src/components/BottomButtonBar/SettingsBottomButtonBar'
-import { SignupPageUiOptions } from 'src/pages/Signup/SignupPageUiOptions'
+import { SignupPageUiText } from 'src/pages/Signup/uiText'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import React, {
@@ -25,7 +25,7 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { useUiOptionsContainer } from 'src/utils/lang/useUiOptions'
+import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
@@ -58,7 +58,7 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import UserValues = SignupPageValidation.UserValues
 import Failure = ValidationCore.Failure
 import awaitDelay = ValidationActions.awaitDelay
-import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiOption
+import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiText
 import ReactMemoTyped = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
 
@@ -75,7 +75,7 @@ const SignupPage = () => {
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
-  const uiOptions = useUiOptionsContainer(SignupPageUiOptions)
+  const uiOptions = useUiTextContainer(SignupPageUiText)
   
   const [signupLoading, setSignupLoading] = useState(false)
   const [signupSuccess, setSignupSuccess] = useState(false)
@@ -246,12 +246,12 @@ const SignupPage = () => {
   )
   const [loadingMsg] = useState(()=>new ToastMsgData({
     type: 'loading',
-    msg: <ToastMsg uiOption={SignupPageUiOptions.registration}/>,
+    msg: <ToastMsg uiOption={SignupPageUiText.registration}/>,
     closeOnUnmount: true,
   }))
   const [loginSuccessMsg] = useState(()=>new ToastMsgData({
     type: 'ok',
-    msg: <ToastMsg uiOption={SignupPageUiOptions.registrationCompleted}/>,
+    msg: <ToastMsg uiOption={SignupPageUiText.registrationCompleted}/>,
     lifetime: 1500,
     dragToClose: true,
   }))
@@ -351,8 +351,6 @@ const SignupPage = () => {
     setValues: setSignupForm,
   }
   
-  const [settingsOpen, setSettingsOpen] = useState(false)
-  const openSettings = useCallback(()=>setSettingsOpen(true),[])
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -480,9 +478,8 @@ const SignupPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <SettingsBottomButtonBar openSettings={openSettings}/>
+    <SettingsBottomButtonBar />
     
-    <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
     
   </>
 }

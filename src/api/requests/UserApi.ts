@@ -13,6 +13,7 @@ export namespace UserApi {
   
   
   
+  import NoUserErrorResponse = ApiUtils.NoUserErrorResponse
   export type CurrentUser = {
     id: string,
     email: string,
@@ -29,14 +30,7 @@ export namespace UserApi {
     status: 200,
     data: { user: CurrentUser }
   }
-  interface CurrentUserRespEOwn extends ErrorResponse {
-    status: 400,
-    data: {
-      code: "NO_USER"
-      msg: string
-    }
-  }
-  export type CurrentUserRespE = AccessRespE | CurrentUserRespEOwn
+  export type CurrentUserRespE = AccessRespE | NoUserErrorResponse
   export const current = async(): Promise<CurrentUserRespS> =>
     axAccess.get(r.userCurrent)
   
@@ -79,14 +73,13 @@ export namespace UserApi {
   export interface UpdateUserRespS extends CurrentUserRespS {}
   export interface UpdateUserRespEOwn extends ErrorResponse {
     status: 400,
-    // todo user not found by id
     data: {
       code: "INVALID_INPUT_BODY"
         |"INVALID_INPUT_BODY__INVALID_NAME_FORMAT"
       msg: string
     }
   }
-  export type UpdateUserRespE = AccessRespE | UpdateUserRespEOwn
+  export type UpdateUserRespE = AccessRespE | UpdateUserRespEOwn | NoUserErrorResponse
   export type UserToUpdate = {
     name?: string | undefined,
   }

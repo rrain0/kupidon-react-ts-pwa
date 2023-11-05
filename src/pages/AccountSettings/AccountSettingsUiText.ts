@@ -1,11 +1,11 @@
-import { CommonUiOptions } from 'src/utils/app/CommonUiOptions'
-import { UiOption } from 'src/utils/lang/UiOption'
+import { CommonUiText } from 'src/utils/app/CommonUiText'
+import { UiText } from 'src/utils/lang/UiText'
 
 
 
-export const AccountSettingsUiOptions = {
+export const AccountSettingsUiText = {
   
-  account: CommonUiOptions.account,
+  account: CommonUiText.account,
   
   id: [
     {
@@ -13,7 +13,7 @@ export const AccountSettingsUiOptions = {
       lang: 'en-US',
       text: 'id',
     },
-  ] satisfies UiOption<'id'>[],
+  ] satisfies UiText<'id'>[],
   
   
   email: [
@@ -22,7 +22,7 @@ export const AccountSettingsUiOptions = {
       lang: 'en-US',
       text: 'Email',
     },
-  ] satisfies UiOption<'email'>[],
+  ] satisfies UiText<'email'>[],
   
   
   emailVerified: [
@@ -36,11 +36,11 @@ export const AccountSettingsUiOptions = {
       lang: 'ru-RU',
       text: 'Email верифицирован',
     },
-  ] satisfies UiOption<'emailVerified'>[],
+  ] satisfies UiText<'emailVerified'>[],
   
   
-  yes: CommonUiOptions.yes,
-  no: CommonUiOptions.no,
+  yes: CommonUiText.yes,
+  no: CommonUiText.no,
   
   
   userCreated: [
@@ -54,7 +54,7 @@ export const AccountSettingsUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь создан',
     },
-  ] satisfies UiOption<'userCreated'>[],
+  ] satisfies UiText<'userCreated'>[],
   
   
   userUpdated: [
@@ -68,10 +68,10 @@ export const AccountSettingsUiOptions = {
       lang: 'ru-RU',
       text: 'Пользователь обновлён',
     },
-  ] satisfies UiOption<'userUpdated'>[],
+  ] satisfies UiText<'userUpdated'>[],
   
   
-  signOut: CommonUiOptions.signOut,
+  signOut: CommonUiText.signOut,
   
   
   deleteAccount: [
@@ -85,7 +85,7 @@ export const AccountSettingsUiOptions = {
       lang: 'ru-RU',
       text: 'Удалить Аккаунт',
     },
-  ] satisfies UiOption<'deleteAccount'>[],
+  ] satisfies UiText<'deleteAccount'>[],
   
   
-} satisfies Record<string, UiOption<any>[]>
+} satisfies Record<string, UiText<any>[]>
