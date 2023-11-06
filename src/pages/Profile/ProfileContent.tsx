@@ -8,13 +8,14 @@ import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
-import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
+import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { DateTime } from 'src/utils/DateTime'
 import { useForm } from 'src/utils/form-validation/form/useForm'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap2'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { Themes } from 'src/utils/theme/Themes'
@@ -43,7 +44,7 @@ import FormValues = ProfilePageValidation.FormValues
 import UserToUpdate = UserApi.UserToUpdate
 import ArrowReloadIc = SimpleSvgIcons.ArrowReloadIc
 import UpdateUserRespS = UserApi.UpdateUserRespS
-import mapFailureCodeToUiOption = ProfilePageValidation.mapFailureCodeToUiOption
+import mapFailureCodeToUiOption = ProfilePageValidation.mapFailureCodeToUiText
 import Setter = TypeUtils.Setter
 import Mem = ReactUtils.Mem
 
@@ -91,7 +92,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
     validators: validators,
     getCanSubmit: useCallback(
       failed=>{
-        const usableFields: (keyof FormValues)[] = ['name']
+        const usableFields: (keyof FormValues)[] = ['name','birthDate']
         return usableFields.some(uf=>!failed.includes(uf))
       },
       []
@@ -102,10 +103,13 @@ const ProfileContent = (props: ProfileContentProps)=>{
     (
       (values, failedFields)=>{
         const userToUpdate: UserToUpdate = {}
-        const usableFields: (keyof FormValues)[] = ['name']
+        const usableFields: (keyof FormValues)[] = ['name','birthDate']
         usableFields.forEach(uf=>{
           if (!failedFields.includes(uf)) userToUpdate[uf] = values[uf]
         })
+        if (userToUpdate.birthDate) userToUpdate.birthDate = DateTime
+            .from_yyyy_MM_dd(userToUpdate.birthDate)!
+            .to_yyyy_MM_dd()
         return [userToUpdate]
       },
       []
@@ -123,36 +127,46 @@ const ProfileContent = (props: ProfileContentProps)=>{
   })
   
   
-  const updateValues = useEffectEvent(()=>{
+  const updateValues = useEffectEvent((auth: AuthStateType)=>{
     setFormValues(s=>{
-      const u = auth!.user, vs = s[0], ivs = vs.initialValues
-      return [
-        {...vs,
-          name: !('name' in ivs) || vs.name===ivs.name ? u.name : vs.name,
-          initialValues: {
-            name: u.name,
-          }
+      const u = auth!.user, vs = s, ivs = vs.initialValues
+      const newValues = {
+        ...vs,
+        name: vs.name,
+        birthDate: vs.birthDate,
+        initialValues: {
+          name: u.name,
+          birthDate: u.birthDate,
         }
-        ,vs
-      ]
+      }
+      if (!('name' in ivs) || vs.name===ivs.name) newValues.name = u.name
+      if (
+        !('birthDate' in ivs)
+        || DateTime.eqFrom_yyyy_MM_dd(vs.birthDate, ivs.birthDate)
+      ) newValues.birthDate = u.birthDate
+      return newValues
     })
   })
-  useEffect(updateValues, [auth])
-  
-  
+  useEffect(()=>updateValues(auth), [auth])
   
   const resetField = useCallback(
     (fieldName: keyof FormValues)=>{
-      const vs = formValues[0], ivs = formValues[0].initialValues
+      const vs = formValues, ivs = formValues.initialValues
       if (fieldName in ivs && vs[fieldName]!==ivs[fieldName]) 
-        setFormValues([{
+        setFormValues({
           ...vs,
           [fieldName]: ivs[fieldName],
-        },vs])
+        })
     },
     [formValues, setFormValues]
   )
-  
+  const fieldIsNotInitial = useCallback(
+    (field: keyof FormValues)=>{
+      return !failures
+        .some(f=>f.type==='initial' && f.errorFields.includes(field))
+    },
+    [failures]
+  )
   
   useEffect(
     ()=>setSubmitCb?.(()=>()=>setDoSubmit(true)),
@@ -177,14 +191,14 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
+  /* useEffect(()=>{
+    console.log('PROFILE_FAILURES',failures)
+  },[failures]) */
   
   
   
   
-  const [initialValues, setInitialValues] = useState({
-    birthDate: auth!.user.birthDate,
-    sex: auth!.user.sex,
-  })
+  
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
@@ -257,7 +271,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
     []
   )
   
-  const vs = formValues[0], ivs = formValues[0].initialValues
+  
+  
   return <Form onSubmit={onSubmit}>
     
     <h3 css={formHeader}>{uiText.profile[0].text}</h3>
@@ -273,41 +288,19 @@ const ProfileContent = (props: ProfileContentProps)=>{
     <Card>
       
       <ItemContainer>
-        <div
-          css={css`
-            width: 100%;
-            height: 30px;
-            ${row};
-            align-items: center;
-            justify-content: space-between;
-            gap: 4px;
-          `}
-        >
-          <ItemLabel>
-            {uiText.name[0].text}
-          </ItemLabel>
-          { 'name' in ivs && vs.name!==ivs.name
+        <ItemTitleContainer>
+          <ItemLabel>{uiText.name[0].text}</ItemLabel>
+          { fieldIsNotInitial('name')
             && <Button css={ButtonStyle.smallRectNormal}
               onClick={()=>resetField('name')}
             >
-              <ArrowReloadIc
-                css={css`
-                  &.rrainuiIcon {
-                    height: 1em;
-                    width: 1em;
-                    --icon-color: var(--color);
-                    transform: scale(-1, 1);
-                  }
-                `}
-              />
-              <div
-                css={css`white-space: nowrap;`}
-              >
+              <ArrowReloadIc css={resetButtonIcon}/>
+              <ResetButtonText>
                 {uiText.reset[0].text}
-              </div>
+              </ResetButtonText>
             </Button>
           }
-        </div>
+        </ItemTitleContainer>
         <ValidationComponentWrap {...validationProps}
           fieldName='name'
           render={props => <Input
@@ -320,16 +313,36 @@ const ProfileContent = (props: ProfileContentProps)=>{
       </ItemContainer>
       
       <ItemContainer>
-        <ItemLabel>{uiText.birthDate[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          {initialValues.birthDate}
-        </DataField>
+        <ItemTitleContainer>
+          <ItemLabel>{uiText.birthDate[0].text}</ItemLabel>
+          { fieldIsNotInitial('birthDate')
+            && <Button css={ButtonStyle.smallRectNormal}
+              onClick={()=>resetField('birthDate')}
+            >
+              <ArrowReloadIc css={resetButtonIcon}/>
+              <ResetButtonText>
+                {uiText.reset[0].text}
+              </ResetButtonText>
+            </Button>
+          }
+        </ItemTitleContainer>
+        <ValidationComponentWrap {...validationProps}
+          fieldName='birthDate'
+          render={props => <Input
+            css={InputStyle.inputSmall}
+            inputMode='numeric'
+            placeholder={uiText.birthDatePlaceholder[0].text.toLowerCase()}
+            {...props.inputProps}
+            hasError={props.highlight}
+          />}
+        />
       </ItemContainer>
+      
       
       <ItemContainer>
         <ItemLabel>{uiText.sex[0].text}</ItemLabel>
         <DataField css={DataFieldStyle.statikSmall}>
-          {initialValues.sex === 'MALE'
+          { auth!.user.sex === 'MALE'
             ? uiText.male[0].text
             : uiText.female[0].text
           }
@@ -361,9 +374,9 @@ const ProfileContent = (props: ProfileContentProps)=>{
             `}
           >
             <FloppyDisk1Ic
-              css={t => css`svg& {
-                    --icon-color: ${t.icon.warning.color[0]}
-                  }`}
+              css={t => css`&.rrainuiIcon {
+                --icon-color: ${t.icon.warning.color[0]}
+              }`}
             />
           </div>}
         </div>
@@ -467,10 +480,29 @@ const ItemContainer = styled.div`
   ${col};
   gap: 4px;
 `
+const ItemTitleContainer = styled.div`
+  width: 100%;
+  height: 30px;
+  ${row};
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+`
 const ItemLabel = styled.label`
   padding-left: 12px;
   ${textNormal};
   color: ${p=>p.theme.page.text[0]}
+`
+const resetButtonIcon = css`
+  &.rrainuiIcon {
+    height: 1em;
+    width: 1em;
+    --icon-color: var(--color);
+    transform: scale(-1, 1);
+  }
+`
+const ResetButtonText = styled.div`
+  white-space: nowrap;
 `
 
 const notInCard = css`

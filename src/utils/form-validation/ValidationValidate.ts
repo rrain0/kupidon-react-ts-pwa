@@ -56,9 +56,9 @@ export namespace ValidationValidate {
     //config.mode ??= 'all-errors'
     //config.type ??= 'auto'
     
-    //console.log('VALIDATE: PREV_VALUES',prevValues)
-    //console.log('VALIDATE: VALUES',values)
-    //console.log('VALIDATE: PREV_FAILURES',prevFailures)
+    //console.log('VALIDATE I: PREV_VALUES',prevValues)
+    //console.log('VALIDATE II: VALUES',values)
+    //console.log('VALIDATE III: PREV_FAILURES',prevFailures)
     
     const fields = ObjectKeys<Vs>(values)
     const changedFields: Set<keyof Vs> = new Set(
@@ -67,11 +67,14 @@ export namespace ValidationValidate {
     const retainedFails: Failures<Vs> = prevFailures
       .filter(f=>f.usedFields.every(f=>!changedFields.has(f)))
     const errorFields = new Set(
-      retainedFails.filter(f=>!f.canSubmit).flatMap(f=>f.highlightFields)
+      retainedFails
+        .filter(f=>f.type!=='server')
+        .flatMap(f=>f.errorFields)
     )
     const newFails: Failures<Vs> = []
     
-    //console.log('VALIDATE: RETAINED_FAILS',retainedFails)
+    //console.log('VALIDATE IV: CHANGED_FIELDS',changedFields)
+    //console.log('VALIDATE V: RETAINED_FAILS',retainedFails)
     
     validators.forEach(([usedFields,vd])=>{
       if (
@@ -88,13 +91,13 @@ export namespace ValidationValidate {
             usedValues: result.usedValues ?? usedValues,
           })
           newFails.unshift(newFail) // fresh failures first
-          newFail.highlightFields.forEach(f=>errorFields.add(f))
+          newFail.errorFields.forEach(f=>errorFields.add(f))
         }
       }
     })
     
     const totalFails = [...newFails,...retainedFails]
-    //console.log('VALIDATE: TOTAL_FAILS',totalFails)
+    //console.log('VALIDATE VI: TOTAL_FAILS',totalFails)
     
     return totalFails
   }

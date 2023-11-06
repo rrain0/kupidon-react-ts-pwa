@@ -98,9 +98,9 @@ const SignupPage = () => {
   )
   
   
-  useEffect(()=>{
+  /* useEffect(()=>{
    console.log('SIGNUP_FAILURES',signupFailures)
-  },[signupFailures])
+  },[signupFailures]) */
   
   
   const [signupResponse, setSignupResponse] = useState(

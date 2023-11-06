@@ -33,7 +33,7 @@ export namespace LoginPageValidation {
     'NO_USER': LoginPageUiText.noUserWithSuchLoginPwd,
     'connection-error': LoginPageUiText.connectionError,
     'unknown-error': LoginPageUiText.unknownError,
-  } satisfies Record<FailureCode, UiText<any>[]>
+  } satisfies Record<FailureCode, UiText[]>
   
   
   
@@ -63,6 +63,8 @@ export namespace LoginPageValidation {
   
   
   
+  const delay = 4000
+  
   export const validators: Validators<FormValues> = [
     [['login'], (values)=>{
       const [v] = values as [UserValues['login']]
@@ -78,7 +80,7 @@ export namespace LoginPageValidation {
       if (!isValidEmail(v)) return new PartialFailureData({
         code: 'login-incorrect' satisfies FailureCode,
         msg: 'Некорректный формат email',
-        delay: 3000,
+        delay,
       })
     }],
     
@@ -103,7 +105,7 @@ export namespace LoginPageValidation {
         msg: 'Не найдено пользователя с таким логином-паролем',
         usedFields: ['fromServer','login','pwd'],
         usedValues: [v, v.values.login, v.values.pwd],
-        highlightFields: ['fromServer','login','pwd'],
+        errorFields: ['fromServer','login','pwd'],
         type: 'server',
       })
     }],

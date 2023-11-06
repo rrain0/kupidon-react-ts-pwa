@@ -44,7 +44,7 @@ export namespace ValidationCore {
       this.usedFields = data.usedFields
       this.usedValues = data.usedValues
       this.type = data.type ?? 'normal'
-      this.highlightFields = data.highlightFields ?? this.usedFields
+      this.errorFields = data.errorFields ?? this.usedFields
       this.highlight = data.highlight ?? (()=>{switch(this.type){
         case 'normal': case 'server': return true
         default: return false
@@ -69,7 +69,7 @@ export namespace ValidationCore {
     readonly usedFields: NonEmptyArr<keyof Vs>
     readonly usedValues: NonEmptyArr<any>
     readonly type: FailureType
-    readonly highlightFields: (keyof Vs)[]
+    readonly errorFields: (keyof Vs)[]
     readonly highlight: boolean
     readonly notify: boolean
     readonly canSubmit: boolean
@@ -99,7 +99,7 @@ export namespace ValidationCore {
         usedFields: u && 'usedFields' in u ? u.usedFields : this.usedFields,
         usedValues: u && 'usedValues' in u ? u.usedValues : this.usedValues,
         type: u && 'type' in u ? u.type : this.type,
-        highlightFields: u && 'highlightFields' in u ? u.highlightFields : this.highlightFields,
+        errorFields: u && 'errorFields' in u ? u.errorFields : this.errorFields,
         highlight: u && 'highlight' in u ? u.highlight : this.highlight,
         notify: u && 'notify' in u ? u.notify : this.notify,
         canSubmit: u && 'canSubmit' in u ? u.canSubmit : this.canSubmit,
@@ -122,7 +122,7 @@ export namespace ValidationCore {
    * @param usedFields - fields used to validate
    * @param usedValues - values used to validate
    * @param extra - some extra data of any type if needed
-   * @param highlightFields - highlight this fields - failure is applied for this fields
+   * @param errorFields - highlight this fields - failure is applied for this fields
    * @param highlight - highlight field with this error
    * @param notify - show error notification
    * @param canSubmit - can you submit if this error exists?
@@ -132,16 +132,20 @@ export namespace ValidationCore {
   export type FailureData<Vs extends Values> = {
     code: string
     msg?: string | undefined
-    extra?: any | undefined, // extra failure data if needed
-    
-    usedFields: NonEmptyArr<keyof Vs> // использованные для валидации поля
-    usedValues: NonEmptyArr<any> // использованные для валидации значения полей
-    
+    // extra failure data if needed
+    extra?: any | undefined
     type?: FailureType | undefined
-    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
-    highlight?: boolean | undefined,
-    notify?: boolean | undefined,
-    canSubmit?: boolean | undefined,
+    
+    // использованные для валидации поля
+    usedFields: NonEmptyArr<keyof Vs>
+    // использованные для валидации значения полей
+    usedValues: NonEmptyArr<any>
+    // поля, которые выделить как ошибочные
+    errorFields?: (keyof Vs)[] | undefined
+    
+    highlight?: boolean | undefined
+    notify?: boolean | undefined
+    canSubmit?: boolean | undefined
     created?: Date | undefined
     delay?: number | undefined
   }
@@ -154,11 +158,17 @@ export namespace ValidationCore {
     constructor(data: {
       code: string,
       msg?: string | undefined,
-      extra?: any | undefined, // extra failure data if needed
-      usedFields?: NonEmptyArr<keyof Vs> | undefined, // использованные для валидации поля
-      usedValues?: NonEmptyArr<any> | undefined, // использованные для валидации значения полей
-      type?: FailureType | undefined
-      highlightFields?: (keyof Vs)[] | undefined, // поля, которые выделить как ошибочные
+      // extra failure data if needed
+      extra?: any | undefined,
+      type?: FailureType | undefined,
+      
+      // использованные для валидации поля
+      usedFields?: NonEmptyArr<keyof Vs> | undefined,
+      // использованные для валидации значения полей
+      usedValues?: NonEmptyArr<any> | undefined,
+      // поля, которые выделить как ошибочные
+      errorFields?: (keyof Vs)[] | undefined,
+      
       highlight?: boolean | undefined,
       notify?: boolean | undefined,
       canSubmit?: boolean | undefined,
@@ -168,10 +178,10 @@ export namespace ValidationCore {
       this.code = data.code
       this.msg = data.msg
       this.extra = data.extra
+      this.type = data.type
       this.usedFields = data.usedFields
       this.usedValues = data.usedValues
-      this.type = data.type
-      this.highlightFields = data.highlightFields
+      this.errorFields = data.errorFields
       this.highlight = data.highlight
       this.notify = data.notify
       this.canSubmit = data.canSubmit
@@ -181,11 +191,15 @@ export namespace ValidationCore {
     
     code: string
     msg?: string | undefined
-    extra?: any | undefined // extra failure data if needed
-    usedFields?: NonEmptyArr<keyof Vs> | undefined // использованные для валидации поля
-    usedValues?: NonEmptyArr<any> | undefined // использованные для валидации значения полей
+    // extra failure data if needed
+    extra?: any | undefined
     type?: FailureType | undefined
-    highlightFields?: (keyof Vs)[] | undefined // поля, которые выделить как ошибочные
+    // использованные для валидации поля
+    usedFields?: NonEmptyArr<keyof Vs> | undefined
+    // использованные для валидации значения полей
+    usedValues?: NonEmptyArr<any> | undefined
+    // поля, которые выделить как ошибочные
+    errorFields?: (keyof Vs)[] | undefined
     highlight?: boolean | undefined
     notify?: boolean | undefined
     canSubmit?: boolean | undefined

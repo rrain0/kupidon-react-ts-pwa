@@ -82,6 +82,7 @@ export namespace UserApi {
   export type UpdateUserRespE = AccessRespE | UpdateUserRespEOwn | NoUserErrorResponse
   export type UserToUpdate = {
     name?: string | undefined,
+    birthDate?: string | undefined, // "2002-12-30" "1999-12-31"
   }
   export const update = async(user: UserToUpdate): Promise<UpdateUserRespS> =>
     axAccess.put(r.userUpdate,user)

@@ -8,112 +8,12 @@ export const ProfileUiText = {
   
   profile: CommonUiText.profile,
   
-  
-  id: [
-    {
-      value: 'id',
-      lang: 'en-US',
-      text: 'id',
-    },
-  ] satisfies UiText<'id'>[],
-  
-  
-  email: [
-    {
-      value: 'email',
-      lang: 'en-US',
-      text: 'Email',
-    },
-  ] satisfies UiText<'email'>[],
-  
-  
-  emailVerified: [
-    {
-      value: 'emailVerified',
-      lang: 'en-US',
-      text: 'Email verified',
-    },
-    {
-      value: 'emailVerified',
-      lang: 'ru-RU',
-      text: 'Email верифицирован',
-    },
-  ] satisfies UiText<'emailVerified'>[],
-  
-  
-  yes: CommonUiText.yes,
-  no: CommonUiText.no,
   reset: CommonUiText.reset,
   
-  
-  userCreated: [
-    {
-      value: 'userCreated',
-      lang: 'en-US',
-      text: 'User created',
-    },
-    {
-      value: 'userCreated',
-      lang: 'ru-RU',
-      text: 'Пользователь создан',
-    },
-  ] satisfies UiText<'userCreated'>[],
-  
-  
-  userUpdated: [
-    {
-      value: 'userUpdated',
-      lang: 'en-US',
-      text: 'User updated',
-    },
-    {
-      value: 'userUpdated',
-      lang: 'ru-RU',
-      text: 'Пользователь обновлён',
-    },
-  ] satisfies UiText<'userUpdated'>[],
-  
-  
-  name: [
-    {
-      value: 'name',
-      lang: 'en-US',
-      text: 'Name',
-    },
-    {
-      value: 'name',
-      lang: 'ru-RU',
-      text: 'Имя',
-    },
-  ] satisfies UiText<'name'>[],
-  
-  
-  lastName: [
-    {
-      value: 'lastName',
-      lang: 'en-US',
-      text: 'Last name',
-    },
-    {
-      value: 'lastName',
-      lang: 'ru-RU',
-      text: 'Фамилия',
-    },
-  ] satisfies UiText<'lastName'>[],
-  
-  
-  birthDate: [
-    {
-      value: 'birthDate',
-      lang: 'en-US',
-      text: 'Birth date',
-    },
-    {
-      value: 'birthDate',
-      lang: 'ru-RU',
-      text: 'Дата рождения',
-    },
-  ] satisfies UiText<'birthDate'>[],
+  name: CommonUiText.name,
+  namePlaceholder: CommonUiText.namePlaceholder,
+  birthDate: CommonUiText.birthDate,
+  birthDatePlaceholder: CommonUiText.birthDatePlaceholder,
   
   
   sex: [
@@ -199,6 +99,11 @@ export const ProfileUiText = {
   
   
   firstNameIsNotEntered: CommonUiText.firstNameIsNotEntered,
+  noUserWithSuchId: CommonUiText.noUserWithSuchId,
+  birthDateIsNotEntered: CommonUiText.birthDateIsNotEntered,
+  birthDateHasIncorrectFormat: CommonUiText.birthDateHasIncorrectFormat,
+  dateNotExists: CommonUiText.dateNotExists,
+  youMustBeAtLeast18YearsOld: CommonUiText.youMustBeAtLeast18YearsOld,
   connectionError: CommonUiText.connectionError,
   unknownError: CommonUiText.unknownError,
   

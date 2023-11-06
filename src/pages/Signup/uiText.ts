@@ -7,77 +7,11 @@ import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 export const SignupPageUiText = {
   
   
-  emailLoginPlaceholder: [
-    {
-      value: 'emailPlaceholder',
-      lang: 'en-US',
-      text: 'email (login)',
-    },
-    {
-      value: 'emailPlaceholder',
-      lang: 'ru-RU',
-      text: 'email (логин)',
-    },
-  ] satisfies UiText<'emailPlaceholder'>[],
-  
-  
+  emailLoginPlaceholder: CommonUiText.emailLoginPlaceholder,
   pwdPlaceholder: CommonUiText.pwdPlaceholder,
-  
-  
-  repeatPwdPlaceholder: [
-    {
-      value: 'repeatPwdPlaceholder',
-      lang: 'en-US',
-      text: 'repeat password',
-    },
-    {
-      value: 'repeatPwdPlaceholder',
-      lang: 'ru-RU',
-      text: 'повторите пароль',
-    },
-  ] satisfies UiText<'repeatPwdPlaceholder'>[],
-  
-  
-  namePlaceholder: [
-    {
-      value: 'namePlaceholder',
-      lang: 'en-US',
-      text: 'name',
-    },
-    {
-      value: 'namePlaceholder',
-      lang: 'ru-RU',
-      text: 'имя',
-    },
-  ] satisfies UiText<'namePlaceholder'>[],
-  
-  
-  lastNamePlaceholder: [
-    {
-      value: 'lastNamePlaceholder',
-      lang: 'en-US',
-      text: 'last name',
-    },
-    {
-      value: 'lastNamePlaceholder',
-      lang: 'ru-RU',
-      text: 'фамилия',
-    },
-  ] satisfies UiText<'lastNamePlaceholder'>[],
-  
-  
-  birthDatePlaceholder: [
-    {
-      value: 'birthDatePlaceholder',
-      lang: 'en-US',
-      text: 'birth date (yyyy-MM-dd) (2002-01-01)',
-    },
-    {
-      value: 'birthDatePlaceholder',
-      lang: 'ru-RU',
-      text: 'день рождения (гггг-ММ-дд) (2002-01-01)',
-    },
-  ] satisfies UiText<'birthDatePlaceholder'>[],
+  repeatPwdPlaceholder: CommonUiText.repeatPwdPlaceholder,
+  namePlaceholder: CommonUiText.namePlaceholder,
+  birthDatePlaceholder: CommonUiText.birthDatePlaceholder,
   
   
   iAmGuy: [

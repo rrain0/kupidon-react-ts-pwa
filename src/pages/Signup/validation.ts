@@ -7,13 +7,13 @@ import isValidEmail = ValidationValidators.isValidEmail
 import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
 import CreateUserRespE = UserApi.CreateUserRespE
+import PartialFailureData = ValidationCore.PartialFailureData
 
 
 
 export namespace SignupPageValidation {
   
   
-  import PartialFailureData = ValidationCore.PartialFailureData
   export type SeverErrorCode = CreateUserRespE['data']['code']
     | 'connection-error' | 'unknown'
   
@@ -46,7 +46,7 @@ export namespace SignupPageValidation {
     "DUPLICATE_EMAIL": SignupPageUiText.userWithSuchEmailAlreadyRegistered,
     'connection-error': SignupPageUiText.connectionError,
     'unknown-error': SignupPageUiText.unknownError,
-  } satisfies Record<FailureCode, UiText<any>[]>
+  } satisfies Record<FailureCode, UiText[]>
   
   
   
@@ -86,6 +86,8 @@ export namespace SignupPageValidation {
   
   
   
+  const delay = 4000
+  
   export const validators: Validators<FormValues> = [
     
     [['email'], (values)=>{
@@ -102,7 +104,7 @@ export namespace SignupPageValidation {
       if (!isValidEmail(v)) return new PartialFailureData({
         code: 'email-incorrect' satisfies FailureCode,
         msg: 'Некорректный формат email',
-        delay: 3000,
+        delay,
       })
     }],
     
@@ -122,7 +124,7 @@ export namespace SignupPageValidation {
       if (!isValidPwd(v)) return new PartialFailureData({
         code: 'pwd-incorrect' satisfies FailureCode,
         msg: 'Пароль должен быть не короче 6 символов',
-        delay: 3000,
+        delay,
       })
     }],
     
@@ -142,8 +144,8 @@ export namespace SignupPageValidation {
       if(pwd!==repeatPwd) return new PartialFailureData({
         code: 'repeated-pwd-not-match' satisfies FailureCode,
         msg: 'Пароли не совпадают',
-        delay: 3000,
-        highlightFields: ['repeatPwd'],
+        delay,
+        errorFields: ['repeatPwd'],
       })
     }],
     
@@ -192,7 +194,7 @@ export namespace SignupPageValidation {
         msg: 'Пользователь с таким email уже зарегестрирован',
         usedFields: ['fromServer','email'],
         usedValues: [v, v.values.email],
-        highlightFields: ['fromServer','email'],
+        errorFields: ['fromServer','email'],
         type: 'server',
       })
     }],

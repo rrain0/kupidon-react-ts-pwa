@@ -31,7 +31,7 @@ export namespace ValidationActions {
             objects.failures?.some(f=>f===fail)
             || objects.failureIds==='all'
             || objects.failureIds?.some(id=>id===fail.id)
-            || objects.highlightFields?.some(f=>fail.highlightFields.includes(f))
+            || objects.highlightFields?.some(f=>fail.errorFields.includes(f))
           )
       ) {
         changed++

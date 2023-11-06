@@ -44,11 +44,11 @@ export type ValidationComponentWrapProps
   Vs extends Values,
   F extends keyof Vs,
 > = {
-  values: readonly [Vs,Vs]
+  values: Vs
   fieldName: F
   failures: Failures<Vs>
   setError: (error: Failures<Vs>)=>void
-  setValues: (values: [Vs,Vs])=>void
+  setValues: (values: Vs)=>void
   render: (props: ValidationComponentWrapRenderProps<Vs,F>)=>React.ReactNode
 }
 const ValidationComponentWrap =
@@ -67,7 +67,7 @@ const ValidationComponentWrap =
   } = props
   
   
-  const value = values[0][fieldName]
+  const value = values[fieldName]
   
   
   const [highlight, setHighlight] = useState(false)
@@ -85,8 +85,8 @@ const ValidationComponentWrap =
   
   
   const setValueEffectEvent = useEffectEvent((value: Vs[F])=>{
-    const newValues = { ...values[0], [fieldName]: value }
-    setValues([newValues,values[0]])
+    const newValues = { ...values, [fieldName]: value }
+    setValues(newValues)
   })
   const setValue = useCallback(
     (value: Vs[F])=>setValueEffectEvent(value),

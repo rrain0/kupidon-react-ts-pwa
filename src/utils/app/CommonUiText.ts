@@ -20,6 +20,20 @@ export const CommonUiText = {
   ] satisfies UiText<'loginPlaceholder'>[],
   
   
+  emailLoginPlaceholder: [
+    {
+      value: 'emailPlaceholder',
+      lang: 'en-US',
+      text: 'email (login)',
+    },
+    {
+      value: 'emailPlaceholder',
+      lang: 'ru-RU',
+      text: 'email (логин)',
+    },
+  ] satisfies UiText<'emailPlaceholder'>[],
+  
+  
   pwdPlaceholder: [
     {
       value: 'pwdPlaceholder',
@@ -31,6 +45,48 @@ export const CommonUiText = {
       text: 'пароль',
     },
   ] satisfies UiText<'pwdPlaceholder'>[],
+  
+  
+  repeatPwdPlaceholder: [
+    {
+      value: 'repeatPwdPlaceholder',
+      lang: 'en-US',
+      text: 'repeat password',
+    },
+    {
+      value: 'repeatPwdPlaceholder',
+      lang: 'ru-RU',
+      text: 'повторите пароль',
+    },
+  ] satisfies UiText<'repeatPwdPlaceholder'>[],
+  
+  
+  namePlaceholder: [
+    {
+      value: 'namePlaceholder',
+      lang: 'en-US',
+      text: 'name',
+    },
+    {
+      value: 'namePlaceholder',
+      lang: 'ru-RU',
+      text: 'имя',
+    },
+  ] satisfies UiText<'namePlaceholder'>[],
+  
+  
+  birthDatePlaceholder: [
+    {
+      value: 'birthDatePlaceholder',
+      lang: 'en-US',
+      text: 'birth date (yyyy-MM-dd) (2002-01-01)',
+    },
+    {
+      value: 'birthDatePlaceholder',
+      lang: 'ru-RU',
+      text: 'дата рождения (гггг-ММ-дд) (2002-01-01)',
+    },
+  ] satisfies UiText<'birthDatePlaceholder'>[],
   
   
   login: [
@@ -187,6 +243,34 @@ export const CommonUiText = {
       text: 'Профиль',
     },
   ] satisfies UiText<'profile'>[],
+  
+  
+  name: [
+    {
+      value: 'name',
+      lang: 'en-US',
+      text: 'Name',
+    },
+    {
+      value: 'name',
+      lang: 'ru-RU',
+      text: 'Имя',
+    },
+  ] satisfies UiText<'name'>[],
+  
+  
+  birthDate: [
+    {
+      value: 'birthDate',
+      lang: 'en-US',
+      text: 'Birth date',
+    },
+    {
+      value: 'birthDate',
+      lang: 'ru-RU',
+      text: 'Дата рождения',
+    },
+  ] satisfies UiText<'birthDate'>[],
   
   
   chat: [
@@ -590,6 +674,20 @@ export const CommonUiText = {
   ] satisfies UiText<'firstNameIsNotEntered'>[],
   
   
+  noUserWithSuchId: [
+    {
+      value: 'noUserWithSuchId',
+      lang: 'en-US',
+      text: 'No user with such id',
+    },
+    {
+      value: 'noUserWithSuchId',
+      lang: 'ru-RU',
+      text: 'Нет пользователя с таким id',
+    },
+  ] satisfies UiText<'noUserWithSuchId'>[],
+  
+  
   lastNameIsNotEntered: [
     {
       value: 'lastNameIsNotEntered',
@@ -630,6 +728,62 @@ export const CommonUiText = {
       text: 'Дата рождения не введена',
     },
   ] satisfies UiText<'birthDateIsNotEntered'>[],
+  
+  
+  birthDateIsIncorrect: [
+    {
+      value: 'birthDateIsIncorrect',
+      lang: 'en-US',
+      text: 'Birth date is incorrect',
+    },
+    {
+      value: 'birthDateIsIncorrect',
+      lang: 'ru-RU',
+      text: 'Дата рождения не корректна',
+    },
+  ] satisfies UiText<'birthDateIsIncorrect'>[],
+  
+  
+  birthDateHasIncorrectFormat: [
+    {
+      value: 'birthDateHasIncorrectFormat',
+      lang: 'en-US',
+      text: 'Birth date has incorrect format',
+    },
+    {
+      value: 'birthDateHasIncorrectFormat',
+      lang: 'ru-RU',
+      text: 'Некорректный формат даты рождения',
+    },
+  ] satisfies UiText<'birthDateHasIncorrectFormat'>[],
+  
+  
+  dateNotExists: [
+    {
+      value: 'dateNotExists',
+      lang: 'en-US',
+      text: 'Date does not exists',
+    },
+    {
+      value: 'dateNotExists',
+      lang: 'ru-RU',
+      text: 'Дата не существует',
+    },
+  ] satisfies UiText<'dateNotExists'>[],
+  
+  
+  youMustBeAtLeast18YearsOld: [
+    {
+      value: 'youMustBeAtLeast18YearsOld',
+      lang: 'en-US',
+      text: 'You must be at least 18 years old',
+    },
+    {
+      value: 'youMustBeAtLeast18YearsOld',
+      lang: 'ru-RU',
+      text: 'Вам нет 18 лет',
+    },
+  ] satisfies UiText<'youMustBeAtLeast18YearsOld'>[],
   
   
   noUserWithSuchLoginPwd: [
