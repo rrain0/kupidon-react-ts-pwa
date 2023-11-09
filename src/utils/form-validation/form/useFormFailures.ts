@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import validate = ValidationValidate.validate
 import Validators = ValidationCore.Validators
 import Values = ValidationCore.Values
+import ValuesWithFromServer = ValidationCore.ValuesWithFromServer
 
 
 
@@ -12,13 +13,13 @@ import Values = ValidationCore.Values
 
 
 export type UseFormFailuresProps
-<Vs extends Values>
+<Vs extends ValuesWithFromServer>
 = {
   defaultValues: Vs
   validators: Validators<Vs>
 }
 export const useFormFailures =
-<Vs extends Values>
+<Vs extends ValuesWithFromServer>
 (props: UseFormFailuresProps<Vs>)=>{
   const {
     defaultValues,
@@ -51,7 +52,9 @@ export const useFormFailures =
       setPrevValues(values)
     }
   )
-  useEffect(
+  // Layout Effect is necessary because of Chrome's autofill on Android:
+  // when browser pastes login/pwd, failure state does not have time to update
+  useLayoutEffect(
     ()=>updateFailuresEffectEvent(values),
     [values]
   )
@@ -60,7 +63,9 @@ export const useFormFailures =
   
   
   const [failedFields, setFailedFields] = useState([] as (keyof Vs)[])
-  useEffect(
+  // Layout Effect is necessary because of Chrome's autofill on Android:
+  // when browser pastes login/pwd, failure state does not have time to update
+  useLayoutEffect(
     ()=>{
       const failedFieldsSet = failures
         .filter(f=>f.type!=='server')

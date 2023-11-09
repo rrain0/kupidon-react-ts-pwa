@@ -27,6 +27,11 @@ export namespace ApiUtils {
   
   
   
+  export type GenericErrorCodes<E extends ResponseError> = E['code']
+    | UnknownError['code'] | ConnectionError['code']
+  
+  
+  
   export type GenericError<E extends ResponseError>
     = E | ConnectionError | UnknownError
   export type GenericErrorResponse<E extends ResponseError>
@@ -41,7 +46,7 @@ export namespace ApiUtils {
   
   
   export interface UnknownError extends ResponseError {
-    code: 'unknown'
+    code: 'unknown-error'
     msg: 'Unknown error'
     extra?: any
   }
@@ -50,7 +55,7 @@ export namespace ApiUtils {
     const unknown: UnknownErrorResponse = {
       success: false,
       error: {
-        code: 'unknown',
+        code: 'unknown-error',
         msg: 'Unknown error',
       }
     }

@@ -1,20 +1,21 @@
+import { ApiUtils } from 'src/api/ApiUtils'
 import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
-import LoginRespE = AuthApi.LoginRespE0
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
+import LoginErrorData = AuthApi.LoginErrorData
+import GenericErrorCodes = ApiUtils.GenericErrorCodes
 
 
 
 export namespace LoginPageValidation {
   
   
-  export type SeverErrorCode = LoginRespE['data']['code']
-    | 'connection-error' | 'unknown'
+  export type SeverErrorCode = GenericErrorCodes<LoginErrorData>
   
   
   export type FailureCode = 'login-required'
@@ -42,7 +43,7 @@ export namespace LoginPageValidation {
     pwd: string
   }
   export type FromServerValue = {
-    values: UserValues // значения, отправленные на сервердля проверки
+    values: UserValues // значения, отправленные на сервер для проверки
     error: { // ошибка с сервера
       code: SeverErrorCode
       msg?: string | undefined
@@ -50,7 +51,7 @@ export namespace LoginPageValidation {
     }
   }
   export type FormValues = UserValues & {
-    fromServer?: undefined | FromServerValue
+    fromServer: undefined | FromServerValue
   }
   
   

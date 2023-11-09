@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import { ResponseData } from 'src/api/useApiRequest'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
@@ -50,7 +50,9 @@ export const useFormSubmit =
   
   
   const [canSubmit, setCanSubmit] = useState(false)
-  useEffect(
+  // Layout Effect is necessary because of Chrome's autofill on Android:
+  // when browser pastes login/pwd, failure state does not have time to update
+  useLayoutEffect(
     ()=>{
       setCanSubmit(getCanSubmit(failedFields))
     },
@@ -59,8 +61,6 @@ export const useFormSubmit =
   
   
   
-  // It needs because of Chrome's autofill on Android: when browser pastes login/pwd,
-  // failure state does not have time to update
   const [doSubmit, setDoSubmit] = useState(false)
   const onFormSubmitCallback = useCallback(
     (ev: React.FormEvent) => {

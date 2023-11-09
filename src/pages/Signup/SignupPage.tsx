@@ -105,7 +105,7 @@ const SignupPage = () => {
   
   const [signupResponse, setSignupResponse] = useState(
     undefined as undefined | { 
-      success?: AuthApi.LoginRespS0
+      success?: UserApi.CreateUserRespS
       error?: any
       usedValues: UserValues
     }

@@ -112,7 +112,7 @@ export const useFormToasts =
       msg: <ToastMsg uiOption={loadingText}/>,
       closeOnUnmount: true,
     }),
-    [loadingText]
+    [loadingText,isLoading]
   )
   const loginSuccessMsg = useMemo(
     ()=>new ToastMsgData({
@@ -121,7 +121,7 @@ export const useFormToasts =
       lifetime: 1500,
       dragToClose: true,
     }),
-    [successText]
+    [successText,isSuccess]
   )
   
   
