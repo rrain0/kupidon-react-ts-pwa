@@ -1,5 +1,6 @@
 import { UserApi } from 'src/api/requests/UserApi'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
@@ -12,6 +13,7 @@ import UpdateUserRespE = UserApi.UpdateUserRespE
 export namespace ProfilePageValidation {
   
   
+  import ObjectKeys = ObjectUtils.ObjectKeys
   export type SeverErrorCode = UpdateUserRespE['data']['code']
     | 'connection-error' | 'unknown'
   
@@ -70,6 +72,8 @@ export namespace ProfilePageValidation {
     initialValues: {},
   }
   
+  export const fieldsToSubmit = ObjectKeys(defaultValues)
+    .filter(f=>!['initialValues','fromServer'].includes(f))
   
   
   const delay = 4000

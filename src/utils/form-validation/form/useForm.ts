@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { ApiUtils } from 'src/api/ApiUtils'
+import { ApiUtils0 } from 'src/api/ApiUtils0'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
@@ -8,7 +8,7 @@ import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import validate = ValidationValidate.validate
 import Validators = ValidationCore.Validators
 import updateFailures = ValidationActions.updateFailures
-import ErrorResponse = ApiUtils.ErrorResponse
+import ErrorResponse = ApiUtils0.ErrorResponse0
 import Values = ValidationCore.Values
 import FailureType = ValidationCore.FailureType
 
@@ -18,34 +18,34 @@ import FailureType = ValidationCore.FailureType
 
 
 export type UseFormProps
-<Vs extends Values, RP extends any[], R extends AxiosResponse>
+<Vs extends Values, R extends AxiosResponse>
 = {
   defaultValues: Vs
   validators: Validators<Vs>
   getCanSubmit: (failedFields: (keyof Vs)[])=>boolean
-  prepareRequestData: (values: Vs, failedFields: (keyof Vs)[])=>RP
-  doRequest: (...args: RP)=>Promise<R>
+  doRequest: (values: Vs, failedFields: (keyof Vs)[])=>Promise<R>
   onSuccess: (data: R['data'])=>void
 }
 export const useForm =
-<Vs extends Values, RP extends any[], R extends AxiosResponse>
-(props: UseFormProps<Vs,RP,R>)=>{
+<Vs extends Values, R extends AxiosResponse>
+(props: UseFormProps<Vs,R>)=>{
   const {
     defaultValues,
     validators,
     getCanSubmit,
-    prepareRequestData,
     doRequest,
     onSuccess,
   } = props
   
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
+  
   const [values, setValues] = useState(defaultValues)
   const [prevValues, setPrevValues] = useState(defaultValues)
   const [failures, setFailures] = useState(()=>validate(
     { values: defaultValues, validators: validators }
   ))
+  
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
   
   
   
@@ -83,56 +83,59 @@ export const useForm =
   
   
   
-  useEffect(()=>{
-    if (response){
-      const { success:s, error:e, usedValues } = response
-      setResponse(undefined)
-      //console.log('s',s,'e',e)
-      if (s){
-        onSuccess(s.data)
-        setSuccess(true)
-      } else if (e){
-        setSuccess(false)
-        
-        if (e instanceof AxiosError && e.response?.status===400) {
-          const response = e.response as ErrorResponse
-          setValues(vs=>(
-            { ...vs, fromServer: {
-                values: usedValues,
-                error: {
-                  code: response.data.code,
-                  msg: response.data.msg,
-                  extra: e,
-                }
-              }}))
+  useEffect(
+    ()=>{
+      if (response){
+        const { success:s, error:e, usedValues } = response
+        setResponse(undefined)
+        //console.log('s',s,'e',e)
+        if (s){
+          onSuccess(s.data)
+          setSuccess(true)
+        } else if (e){
+          setSuccess(false)
+          
+          if (e instanceof AxiosError && e.response?.status===400) {
+            const response = e.response as ErrorResponse
+            setValues(vs=>(
+              { ...vs, fromServer: {
+                  values: usedValues,
+                  error: {
+                    code: response.data.code,
+                    msg: response.data.msg,
+                    extra: e,
+                  }
+                }}))
+          }
+          else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
+            setValues(vs=>(
+              { ...vs, fromServer: {
+                  values: usedValues,
+                  error: {
+                    code: 'connection-error',
+                    msg: 'Connection error',
+                    extra: e,
+                  }
+                }}))
+          }
+          else {
+            setValues(vs=>(
+              { ...vs, fromServer: {
+                  values: usedValues,
+                  error: {
+                    code: 'unknown',
+                    msg: 'Unknown error',
+                    extra: e,
+                  }
+                }}))
+            console.warn('UNKNOWN ERROR',e)
+          }
+          
         }
-        else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
-          setValues(vs=>(
-            { ...vs, fromServer: {
-                values: usedValues,
-                error: {
-                  code: 'connection-error',
-                  msg: 'Connection error',
-                  extra: e,
-                }
-              }}))
-        }
-        else {
-          setValues(vs=>(
-            { ...vs, fromServer: {
-                values: usedValues,
-                error: {
-                  code: 'unknown',
-                  msg: 'Unknown error',
-                  extra: e,
-                }
-              }}))
-          console.warn('UNKNOWN ERROR',e)
-        }
-        
       }
-    }
-  },[response, onSuccess])
+    },
+    [response, onSuccess]
+  )
   
   
   
@@ -143,7 +146,7 @@ export const useForm =
   const [failedFields, setFailedFields] = useState([] as (keyof Vs)[])
   useEffect(
     ()=>{
-      const failed = [...failures
+      const failedFieldsSet = failures
         .filter(f=>f.type!=='server')
         .reduce(
           (accum,f)=>{
@@ -151,12 +154,14 @@ export const useForm =
             return accum
           },
           new Set<keyof Vs>()
-        )]
-      setFailedFields(failed)
-      setCanSubmit(getCanSubmit(failed))
+        )
+      const failedFields = [...failedFieldsSet]
+      setFailedFields(failedFields)
+      setCanSubmit(getCanSubmit(failedFields))
     },
     [failures, getCanSubmit]
   )
+  
   
   
   // It needs because of Chrome's autofill on Android: when browser pastes login/pwd,
@@ -176,7 +181,7 @@ export const useForm =
       setLoading(true)
       const form = values
       try {
-        const response = await doRequest(...prepareRequestData(form,failedFields))
+        const response = await doRequest(form,failedFields)
         setResponse({ success: response, usedValues: form })
       } catch (e){
         setResponse({ error: e, usedValues: form })
@@ -184,9 +189,8 @@ export const useForm =
         setLoading(false)
       }
     },
-    [loading, values, doRequest, prepareRequestData, failedFields]
+    [loading, values, doRequest, failedFields]
   )
-  const tryRequestEffectEvent = useEffectEvent(()=>void tryRequest())
   
   const trySubmit = useCallback(
     ()=>{
@@ -209,11 +213,11 @@ export const useForm =
         { highlight: true, notify: true, delay: 0 }
       ))
       
-      if (!getCanSubmit(failedFields)) return
+      if (!canSubmit) return
       
-      tryRequestEffectEvent()
+      void tryRequest()
     },
-    [failures, getCanSubmit, failedFields, tryRequestEffectEvent]
+    [failures, canSubmit, tryRequest]
   )
   
   useEffect(
@@ -233,7 +237,7 @@ export const useForm =
     ()=>({
       values,
       failures,
-      setError: setFailures,
+      setFailures,
       setValues,
     }),
     [failures, values]

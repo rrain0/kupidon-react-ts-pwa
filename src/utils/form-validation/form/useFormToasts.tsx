@@ -106,17 +106,23 @@ export const useFormToasts =
     },
     [failureCodeToUiText, serverFailure]
   )
-  const [loadingMsg] = useState(()=>new ToastMsgData({
-    type: 'loading',
-    msg: <ToastMsg uiOption={loadingText}/>,
-    closeOnUnmount: true,
-  }))
-  const [loginSuccessMsg] = useState(()=>new ToastMsgData({
-    type: 'ok',
-    msg: <ToastMsg uiOption={successText}/>,
-    lifetime: 1500,
-    dragToClose: true,
-  }))
+  const loadingMsg = useMemo(
+    ()=>new ToastMsgData({
+      type: 'loading',
+      msg: <ToastMsg uiOption={loadingText}/>,
+      closeOnUnmount: true,
+    }),
+    [loadingText]
+  )
+  const loginSuccessMsg = useMemo(
+    ()=>new ToastMsgData({
+      type: 'ok',
+      msg: <ToastMsg uiOption={successText}/>,
+      lifetime: 1500,
+      dragToClose: true,
+    }),
+    [successText]
+  )
   
   
   useToasts({ toasts: [

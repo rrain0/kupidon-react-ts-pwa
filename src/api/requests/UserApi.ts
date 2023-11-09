@@ -1,11 +1,11 @@
-import { ApiUtils } from 'src/api/ApiUtils'
+import { ApiUtils0 } from 'src/api/ApiUtils0'
 import { AxiosConfig } from '../AxiosConfig'
 import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
 import axAccess = AxiosConfig.axAccess
 import ax = AxiosConfig.ax
 import AccessRespE = AxiosConfig.AccessRespE
-import SuccessResponse = ApiUtils.SuccessResponse
-import ErrorResponse = ApiUtils.ErrorResponse
+import SuccessResponse = ApiUtils0.SuccessResponse0
+import ErrorResponse = ApiUtils0.ErrorResponse0
 
 
 
@@ -13,7 +13,7 @@ export namespace UserApi {
   
   
   
-  import NoUserErrorResponse = ApiUtils.NoUserErrorResponse
+  import NoUserErrorResponse = ApiUtils0.NoUserErrorResponse0
   export type CurrentUser = {
     id: string,
     email: string,

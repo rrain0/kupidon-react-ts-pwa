@@ -9,7 +9,17 @@ import onHover = EmotionCommon.onHover
 export namespace TextareaStyle {
   
   
+  import bgcBorderMask = EmotionCommon.bgcBorderMask
   export const textarea = (t:Theme) => css`
+
+
+    &.rrainuiFrame {
+    }
+
+    >.rrainuiBorder {
+      border: 2px solid ${t.page.text[0]};
+    }
+    
     &.rrainuiFrame {
       border-radius: 15px;
       background: ${t.input.bgc};
@@ -19,6 +29,10 @@ export namespace TextareaStyle {
       // todo not supported by firefox
       :has(.rrainuiTextarea[data-error]){
         background: ${t.input.error.bgc};
+      }
+      :has(.rrainuiTextarea:disabled) {
+        cursor: auto;
+        color: ${t.input.text};
       }
     }
     >.rrainuiTextarea {
@@ -55,15 +69,7 @@ export namespace TextareaStyle {
       background-size: 200% 100%;
       background-position: 100% 0;
       transition: background-position 0.8s ease-out;
-      -webkit-mask:
-              linear-gradient(#fff 0 0) content-box,
-              linear-gradient(#fff 0 0) border-box;
-      mask:
-              linear-gradient(#fff 0 0) content-box,
-              linear-gradient(#fff 0 0) border-box;
-
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
+      ${bgcBorderMask};
     }
     ${onHover(css`
       >.rrainuiTextarea:hover ~ .rrainuiBorder {
@@ -78,6 +84,9 @@ export namespace TextareaStyle {
       background-position: 0 0;
     }
     >.rrainuiTextarea[data-error] ~ .rrainuiBorder{}
+    >.rrainuiTextarea:disabled ~ .rrainuiBorder{
+      border-color: ${t.input.text};
+    }
   `
   
   

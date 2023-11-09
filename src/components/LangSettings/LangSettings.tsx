@@ -62,7 +62,7 @@ const LangSettings = (props: SettingsProps)=>{
     },
     [uiText, lang.availableSystemLangs]
   )
-  const languageOptionChecked = useCallback(
+  const isLanguageOptionChecked = useCallback(
     function (value: Lang|'system') {
       return langSettings.setting === 'system' && value === 'system'
         || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
@@ -113,7 +113,7 @@ const LangSettings = (props: SettingsProps)=>{
           languageOptions.map(opt => <RadioInput
             css={RadioInputStyle.radio}
             childrenPosition="start"
-            checked={languageOptionChecked(opt.value)}
+            checked={isLanguageOptionChecked(opt.value)}
             value={opt.value}
             key={opt.value}
             onChange={ev => {

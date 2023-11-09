@@ -23,7 +23,7 @@ import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap0'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
@@ -105,7 +105,7 @@ const SignupPage = () => {
   
   const [signupResponse, setSignupResponse] = useState(
     undefined as undefined | { 
-      success?: AuthApi.LoginRespS
+      success?: AuthApi.LoginRespS0
       error?: any
       usedValues: UserValues
     }

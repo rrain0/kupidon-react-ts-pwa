@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef} from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
-import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
+import { useApiRequest } from 'src/api/useApiRequest'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -14,12 +14,12 @@ import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
+import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
+import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
-import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import Button from 'src/views/Buttons/Button'
 import Input from 'src/views/Inputs/Input/Input'
 import PwdInput from 'src/views/Inputs/Input/PwdInput'
@@ -31,25 +31,17 @@ import col = EmotionCommon.col
 import { Themes } from 'src/utils/theme/Themes'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
-import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
-import validate = ValidationValidate.validate
-import LoginRespE = AuthApi.LoginRespE
 import validators = LoginPageValidation.validators
-import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
-import updateFailures = ValidationActions.updateFailures
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import params = RouteBuilder.params
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
-import UserValues = LoginPageValidation.UserValues
-import Failure = ValidationCore.Failure
 import ReactMemoTyped = ReactUtils.Mem
-import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
+import LoginRespS = AuthApi.LoginRespS0
 
 
 
@@ -66,294 +58,99 @@ const LoginPage = () => {
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
-  const uiOptions = useUiTextContainer(LoginPageUiText)
-  
-  const [loginLoading, setLoginLoading] = useState(false)
-  const [loginSuccess, setLoginSuccess] = useState(false)
-  const [loginForm, setLoginForm] =
-    useState([defaultValues,defaultValues] as const) // [now,prev]
-  const [loginFailures, setLoginFailures] = useState(()=>validate(
-    { values: defaultValues, validators: validators }
-  ))
-  // LayoutEffect is necessary to update data when making Chrome mobile autofill
-  /* useLayoutEffect(
-    ()=>{
-      setLoginFailures(s=>validate({
-        values: loginForm[0],
-        prevValues: loginForm[1],
-        prevFailures: s,
-        validators: validators,
-      }))
-    },
-    [loginForm]
-  ) */
-  
-  const updateFailsEffectEvent = useEffectEvent(
-    ()=>setLoginFailures(s=>validate({
-      values: loginForm[0],
-      prevValues: loginForm[1],
-      prevFailures: s,
-      validators: validators,
-    }))
-  )
-  useLayoutEffect(
-    ()=>updateFailsEffectEvent(),
-    [loginForm]
-  )
+  const uiText = useUiTextContainer(LoginPageUiText)
   
   
-  /* useEffect(()=>{
-    console.log('LOGIN_FAILURES',loginFailures)
-  },[loginFailures]) */
+  const {
+    formValues,
+    setFormValues,
+    failures,
+    setFailures,
+    failedFields,
+    validationProps,
+  } = useFormFailures({
+    defaultValues,
+    validators
+  })
+  
+  const {
+    request,
+    loading,
+    success,
+    resetSuccess,
+  } = useApiRequest({
+    values: formValues,
+    setValues: setFormValues,
+    failedFields,
+    prepareAndRequest: useCallback(
+      (values: FormValues, failedFields: (keyof FormValues)[])=>{
+        return AuthApi.login0({
+          login: values.login,
+          pwd: values.pwd,
+        })
+      },
+      []
+    ),
+    onSuccess: useCallback(
+      (data: LoginRespS['data'])=>{
+        setAuth(data)
+      },
+      []
+    )
+  })
+  
+  const {
+    canSubmit,
+    onFormSubmitCallback,
+    submit,
+  } = useFormSubmit({
+    failures,
+    setFailures,
+    failedFields,
+    getCanSubmit: useCallback(
+      (failedFields: (keyof FormValues)[]) => {
+        return failedFields
+          .filter(ff=>ff!=='fromServer')
+          .length===0
+      },
+      []
+    ),
+    request,
+    loading,
+    resetSuccess,
+  })
   
   
   
   
-  const [loginResponse, setLoginResponse] = useState(
-    undefined as undefined | { 
-      success?: AuthApi.LoginRespS
-      error?: any
-      usedValues: UserValues
-    }
-  )
-  useEffect(()=>{
-    if (loginResponse){
-      const { success:s, error:e, usedValues } = loginResponse
-      setLoginResponse(undefined)
-      //console.log('s',s,'e',e)
-      if (s){
-        setAuth(s.data)
-        setLoginSuccess(true)
-      } else if (e){
-        setLoginSuccess(false)
-        
-        if (e instanceof AxiosError && e.response?.status===400) {
-          const response = e.response as LoginRespE
-          setLoginForm(loginForm=>([
-            { ...loginForm[0], fromServer: {
-              values: usedValues,
-              error: {
-                code: response.data.code,
-                msg: response.data.msg,
-                extra: e,
-              }
-            }},
-            loginForm[0]
-          ]))
-        }
-        else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
-          setLoginForm(loginForm=>([
-            { ...loginForm[0], fromServer: {
-              values: usedValues,
-              error: {
-                code: 'connection-error',
-                msg: 'Connection error',
-                extra: e,
-              }
-            }},
-            loginForm[0]
-          ]))
-        }
-        else {
-          setLoginForm(loginForm=>([
-            { ...loginForm[0], fromServer: {
-              values: usedValues,
-              error: {
-                code: 'unknown',
-                msg: 'Unknown error',
-                extra: e,
-              }
-            }},
-            loginForm[0]
-          ]))
-          console.warn('UNKNOWN ERROR',e)
-        }
-        
-      }
-    }
-  },[loginResponse, setAuth])
+  
+  useFormToasts({
+    isLoading: loading,
+    loadingText: LoginPageUiText.loggingIn,
+    isSuccess: success,
+    successText: LoginPageUiText.loginCompleted,
+    failures: failures,
+    setFailures: setFailures,
+    failureCodeToUiText: mapFailureCodeToUiOption,
+  })
   
   
   
   
   
   
-  const [userFailure, setUserFailure] =
-    useState(undefined as undefined|Failure<FormValues>)
-  const [serverFailure, setServerFailure] =
-    useState(undefined as undefined|Failure<FormValues>)
   
-  useEffect(()=>{
-    setUserFailure(undefined)
-    setServerFailure(undefined)
-    const stale: [boolean] = [false]
-    
-    const userFailures = loginFailures
-      .filter(f=>!f.canSubmit && f.notify)
-    awaitDelay(userFailures, stale, setUserFailure)
-  
-    const serverFailures = loginFailures
-      .filter(f=>f.canSubmit && f.notify)
-    awaitDelay(serverFailures, stale, setServerFailure)
-    
-    return ()=>{ stale[0]=true }
-  },[loginFailures])
-  
-  const userFailureMsg = useMemo(
-    ()=>{
-      if (userFailure) return new ToastMsgData({
-        type: 'danger',
-        msg: <ToastMsg
-          uiOption={mapFailureCodeToUiOption[userFailure.code]}
-          defaultText={userFailure.msg}
-        />,
-        closeOnUnmount: true,
-        showCloseButton: true,
-        dragToClose: true,
-        onClose: ()=>{
-          if (userFailure.notify) setLoginFailures(s=>updateFailures(
-            s,
-            { failures: [userFailure] },
-            { notify: false }
-          ))
-        }
-      })
-      return undefined
-    },
-    [userFailure]
-  )
-  const serverFailureMsg = useMemo(
-    ()=>{
-      if (serverFailure) return new ToastMsgData({
-        type: 'danger',
-        msg: <ToastMsg
-          uiOption={mapFailureCodeToUiOption[serverFailure.code]}
-          defaultText={serverFailure.msg}
-        />,
-        closeOnUnmount: true,
-        showCloseButton: true,
-        dragToClose: true,
-        onClose: ()=>{
-          if (serverFailure.notify) setLoginFailures(s=>updateFailures(
-            s,
-            { failures: [serverFailure] },
-            { notify: false }
-          ))
-        }
-      })
-      return undefined
-    },
-    [serverFailure]
-  )
-  const [loadingMsg] = useState(()=>new ToastMsgData({
-    type: 'loading',
-    msg: <ToastMsg uiOption={LoginPageUiText.loggingIn}/>,
-    closeOnUnmount: true,
-  }))
-  const [loginSuccessMsg] = useState(()=>new ToastMsgData({
-    type: 'ok',
-    msg: <ToastMsg uiOption={LoginPageUiText.loginCompleted}/>,
-    lifetime: 1500,
-    dragToClose: true,
-  }))
-  
-  
-  useToasts({ toasts: [
-    userFailureMsg,
-    loginLoading && loadingMsg,
-    loginSuccess && loginSuccessMsg,
-    serverFailureMsg,
-  ]})
-  
-  
-  
-  
-  
-  
-  // It needs because of Chrome's autofill on Android: when browser pastes login/pwd,
-  // failure state does not have time to update
-  const [doSubmit, setDoSubmit] = useState(false)
-  const onSubmit = (ev: React.FormEvent) => {
-    ev.preventDefault()
-    setDoSubmit(true)
-  }
-  
-  const tryLogin = useCallback(
-    async()=>{
-      if (loginLoading) return
-      setLoginLoading(true)
-      const form = loginForm[0]
-      try {
-        const response = await AuthApi.login(form)
-        setLoginResponse({ success: response, usedValues: form })
-      } catch (e){
-        setLoginResponse({ error: e, usedValues: form })
-      } finally {
-        setLoginLoading(false)
-      }
-    },
-    [loginForm, loginLoading]
-  )
-  
-  const trySubmit = useCallback(
-    ()=>{
-      setLoginSuccess(false)
-      
-      if (serverFailure?.highlight || serverFailure?.notify)
-        setLoginFailures(s=>updateFailures(
-          s,
-          { failures: [serverFailure] },
-          { highlight: false, notify: false }
-        ))
-      
-      const failsToShow = loginFailures
-        .filter(f=>!f.canSubmit)
-        .filter(f=>!f.highlight || !f.notify || f.isDelayed)
-      setLoginFailures(s=>updateFailures(
-        s,
-        { failures: failsToShow },
-        { highlight: true, notify: true, delay: 0 }
-      ))
-      
-      const criticalFails = loginFailures.filter(f=>!f.canSubmit)
-      if (criticalFails.length>0) return
-      
-      void tryLogin()
-    },
-    [loginFailures, tryLogin, serverFailure]
-  )
-  
-  useEffect(
-    ()=>{
-      if (doSubmit){
-        setDoSubmit(false)
-        trySubmit()
-      }
-    },
-    [doSubmit, trySubmit]
-  )
-  
-  
-  
-  const validationProps = {
-    values: loginForm,
-    failures: loginFailures,
-    setError: setLoginFailures,
-    setValues: setLoginForm,
-  }
   
   
   
   const pageRef = useRef<HTMLElement>(null)
   
-  
-  
-  
   useEffect(()=>{
-    if (loginSuccess) {
+    if (success) {
       navigate(returnPath ?? RootRoute.findPairs[full]())
     }
-  },[loginSuccess, navigate, returnPath])
+  },[success, navigate, returnPath])
+  
   
   
   return <>
@@ -361,10 +158,10 @@ const LoginPage = () => {
       ref={pageRef}
     >
   
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onFormSubmitCallback}>
         
         <h3 css={formHeader}>
-          {uiOptions.login[0].text}
+          {uiText.login[0].text}
         </h3>
         
         
@@ -373,7 +170,7 @@ const LoginPage = () => {
           fieldName='login'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.loginEmailPlaceholder[0].text}
+            placeholder={uiText.loginEmailPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -383,7 +180,7 @@ const LoginPage = () => {
           fieldName='pwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.pwdPlaceholder[0].text}
+            placeholder={uiText.pwdPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -395,13 +192,13 @@ const LoginPage = () => {
           css={ButtonStyle.bigRectPrimary}
           type="submit"
         >
-          {uiOptions.doLogin[0].text}
+          {uiText.doLogin[0].text}
         </Button>
         
         
         <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
           <Button css={ButtonStyle.bigRectNormal}>
-            {uiOptions.signup[0].text}
+            {uiText.signup[0].text}
           </Button>
         </Link>
       

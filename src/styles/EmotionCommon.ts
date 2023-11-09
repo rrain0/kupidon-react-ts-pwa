@@ -101,6 +101,20 @@ export namespace EmotionCommon {
   
   
   
+  export const bgcBorderMask = css`
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0) border-box;
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0) border-box;
+
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  `
+  
+  
+  
   
   
   export const reset = css`

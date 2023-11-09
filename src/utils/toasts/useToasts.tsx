@@ -137,7 +137,7 @@ export class ToastMsgData {
   hide(){
     if (this.id!==undefined) {
       this.runCloseCallback = false
-      // it is not working BEFORE toast.dismiss so need to use runCloseCallback
+      // it is not working BEFORE toast.dismiss so need to use runCloseCallback = false
       this.unsubscribeOnChange?.()
       toast.dismiss(this.id)
       this.id = undefined

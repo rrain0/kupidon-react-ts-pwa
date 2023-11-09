@@ -4,7 +4,7 @@ import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
-import LoginRespE = AuthApi.LoginRespE
+import LoginRespE = AuthApi.LoginRespE0
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
 

@@ -2,12 +2,12 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
+import textLarge1 = EmotionCommon.textLarge1
 
 
 
 export namespace DataFieldStyle {
   
-  import textLarge1 = EmotionCommon.textLarge1
   export const interactive = (t:Theme) => css`
     &.rrainuiFrame {
       cursor: pointer;

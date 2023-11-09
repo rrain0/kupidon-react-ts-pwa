@@ -92,7 +92,7 @@ const QuickSettings = (props: SettingsProps)=>{
     },
     [uiText, theme.systemThemeAvailable]
   )
-  const onThemeOptionChecked = useCallback(
+  const isThemeOptionChecked = useCallback(
     function (value: ThemeType|'system') {
       return themeSettings.setting === 'system' && value === 'system'
         || themeSettings.setting !== 'system' && value === themeSettings.manualSetting
@@ -120,7 +120,7 @@ const QuickSettings = (props: SettingsProps)=>{
     },
     [uiText, lang.availableSystemLangs]
   )
-  const onLanguageOptionChecked = useCallback(
+  const isLanguageOptionChecked = useCallback(
     function (value: Lang|'system') {
       return langSettings.setting === 'system' && value === 'system'
         || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
@@ -155,7 +155,7 @@ const QuickSettings = (props: SettingsProps)=>{
               themeOptions.map(opt => <RadioInput
                 css={RadioInputStyle.radio}
                 childrenPosition="start"
-                checked={onThemeOptionChecked(opt.value)}
+                checked={isThemeOptionChecked(opt.value)}
                 value={opt.value}
                 key={opt.value}
                 onChange={ev => {
@@ -185,7 +185,7 @@ const QuickSettings = (props: SettingsProps)=>{
               languageOptions.map(opt => <RadioInput
                 css={RadioInputStyle.radio}
                 childrenPosition="start"
-                checked={onLanguageOptionChecked(opt.value)}
+                checked={isLanguageOptionChecked(opt.value)}
                 value={opt.value}
                 key={opt.value}
                 onChange={ev => {

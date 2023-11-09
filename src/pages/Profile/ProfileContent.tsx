@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
+import UseBool from 'src/components/StateCarriers/UseBool'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
@@ -15,12 +16,13 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { useForm } from 'src/utils/form-validation/form/useForm'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap2'
+import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { Themes } from 'src/utils/theme/Themes'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
@@ -33,9 +35,7 @@ import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import Textarea from 'src/views/Textarea/Textarea'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
-import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
 import row = EmotionCommon.row
-import center = EmotionCommon.center
 import col = EmotionCommon.col
 import textNormal = EmotionCommon.textNormal1
 import defaultValues = ProfilePageValidation.defaultValues
@@ -47,24 +47,25 @@ import UpdateUserRespS = UserApi.UpdateUserRespS
 import mapFailureCodeToUiOption = ProfilePageValidation.mapFailureCodeToUiText
 import Setter = TypeUtils.Setter
 import Mem = ReactUtils.Mem
+import fieldsToSubmit = ProfilePageValidation.fieldsToSubmit
 
 
 
 
 
 const sheetSnaps: SheetSnapPoints = [0,200,'fit-content','50%','80%']
-const openIdx = 2
+const sheetOpenIdx = 2
 
 
 
 export type ProfileContentProps = {
-  setCanSave?: Setter<boolean> | undefined,
-  setSubmitCb?: Setter<(()=>()=>void)|undefined>
+  setCanSubmit?: Setter<boolean> | undefined,
+  setSubmitCallback?: Setter<(()=>()=>void)|undefined>
 }
 const ProfileContent = (props: ProfileContentProps)=>{
   const {
-    setCanSave,
-    setSubmitCb,
+    setCanSubmit,
+    setSubmitCallback,
   } = props
   
   const [auth,setAuth] = useRecoilState(AuthRecoil)
@@ -91,30 +92,24 @@ const ProfileContent = (props: ProfileContentProps)=>{
     defaultValues: defaultValues,
     validators: validators,
     getCanSubmit: useCallback(
-      failed=>{
-        const usableFields: (keyof FormValues)[] = ['name','birthDate']
-        return usableFields.some(uf=>!failed.includes(uf))
+      (failedFields: (keyof FormValues)[])=>{
+        return fieldsToSubmit.some(fts=>!failedFields.includes(fts))
       },
       []
     ),
-    prepareRequestData: useCallback<
-      (values: FormValues,failedFields: (keyof FormValues)[])=>[UserToUpdate]
-    >
-    (
-      (values, failedFields)=>{
+    doRequest: useCallback(
+      (values: FormValues,failedFields: (keyof FormValues)[])=>{
         const userToUpdate: UserToUpdate = {}
-        const usableFields: (keyof FormValues)[] = ['name','birthDate']
-        usableFields.forEach(uf=>{
-          if (!failedFields.includes(uf)) userToUpdate[uf] = values[uf]
+        fieldsToSubmit.forEach(fts=>{
+          if (!failedFields.includes(fts)) userToUpdate[fts] = values[fts]
         })
         if (userToUpdate.birthDate) userToUpdate.birthDate = DateTime
             .from_yyyy_MM_dd(userToUpdate.birthDate)!
             .to_yyyy_MM_dd()
-        return [userToUpdate]
+        return UserApi.update(userToUpdate)
       },
       []
     ),
-    doRequest: UserApi.update,
     onSuccess: useCallback<(data: UpdateUserRespS['data'])=>void>(
       data=>{
         setAuth(s=>({
@@ -169,8 +164,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
   )
   
   useEffect(
-    ()=>setSubmitCb?.(()=>()=>setDoSubmit(true)),
-    [setDoSubmit, setSubmitCb]
+    ()=>setSubmitCallback?.(()=>()=>setDoSubmit(true)),
+    [setDoSubmit, setSubmitCallback]
   )
   
   
@@ -189,6 +184,12 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
+  useEffect(
+    ()=>setCanSubmit?.(canSubmit),
+    [canSubmit, setCanSubmit]
+  )
+  
+  
   
   
   /* useEffect(()=>{
@@ -201,44 +202,11 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState(2)
-  
-  const [preferredPeople, setPreferredPeople] = useState(
-    'notSelected' as 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
-  )
-  const [selecting, setSelecting] = useState(
-    undefined as undefined|'items'|'preferred-genders'
-  )
-  useEffect(()=>{
-    if (selecting){
-      setSheetState('opening')
-      setSnapIdx(openIdx)
-    }
-  },[selecting])
-  useEffect(()=>{
-    if (sheetState==='closed'){
-      setSelecting(undefined)
-    }
-  },[sheetState])
-  
-  
-  useEffect(
-    ()=>{
-      setCanSave?.(canSubmit)
-    },
-    [canSubmit, setCanSave]
-  )
   
   
   
-  const bottomSheetProps = {
-    state: sheetState,
-    setState: setSheetState,
-    snapPoints: sheetSnaps,
-    snapIdx: snapIdx,
-    setSnapIdx: setSnapIdx,
-  }
+  
+  
   
   const [images, setImages] = useState(ProfileMockData.userImages)
   
@@ -246,6 +214,9 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   type PreferredPeopleOption = 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
+  const [preferredPeople, setPreferredPeople] =
+    useState('notSelected' as PreferredPeopleOption)
+  
   const preferredPeopleOptions = useMemo(
     ()=>[
       {
@@ -263,12 +234,6 @@ const ProfileContent = (props: ProfileContentProps)=>{
       }
     ] satisfies { value: PreferredPeopleOption, text: string }[],
     [uiText]
-  )
-  const onPreferredPeopleOptionChecked = useCallback(
-    function (value: PreferredPeopleOption){
-    
-    },
-    []
   )
   
   
@@ -351,98 +316,85 @@ const ProfileContent = (props: ProfileContentProps)=>{
       
       <ItemContainer>
         <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
-        <Textarea css={TextareaStyle.textareaSmall}/>
+        <Textarea css={TextareaStyle.textareaSmall} disabled />
       </ItemContainer>
       
+    </Card>
+    
+    
+    
+    <Card>
       
       <ItemContainer>
-        <div
-          css={css`
-            ${row};
-            gap: 6px;
-          `}
-        >
-          <ItemLabel>{uiText.imLookingFor[0].text}</ItemLabel>
-          {preferredPeople!=='notSelected' && <div
-            css={t=>css`
-              ${center};
-              border-radius: 50%;
-              height: 1.5em;
-              padding: 0.27em;
-              aspect-ratio: 1;
-              background: ${t.icon.warning.bgc[0]};
-            `}
-          >
-            <FloppyDisk1Ic
-              css={t => css`&.rrainuiIcon {
-                --icon-color: ${t.icon.warning.color[0]}
-              }`}
-            />
-          </div>}
-        </div>
+        <ItemLabel>{uiText.imLookingFor[0].text}</ItemLabel>
         
-        <DataField
-          css={DataFieldStyle.interactiveSmall}
-          onClick={ev => {
-            //console.log('CLICK')
-            setSelecting('preferred-genders')
-          }}
-          role="listbox"
-        >
-          {preferredPeopleOptions.find(it=>it.value===preferredPeople)?.text}
-          
-          
-          { selecting === 'preferred-genders' && <BottomSheetBasic
-            {...bottomSheetProps}
-            header={uiText.imLookingFor[0].text}
-          >
-            <div
-              css={css`
-                ${col};
-                padding-bottom: 20px;
-              `}
-            >
-              {
-                preferredPeopleOptions
-                  .map(opt => <RadioInput
-                    css={RadioInputStyle.radio}
-                    childrenPosition="start"
-                    role="option"
-                    aria-selected={opt.value===preferredPeople}
-                    checked={opt.value===preferredPeople}
-                    value={opt.value}
-                    key={opt.value}
-                    onChange={ev => {
-                      setPreferredPeople(opt.value)
-                      setSheetState('closing')
-                    }}
-                    onClick={ev => {
-                      setPreferredPeople(opt.value)
-                      setSheetState('closing')
-                    }}
-                  >
-                    <div
-                      css={css`
-                      flex: 1;
-                      padding-top: 4px;
-                      padding-bottom: 4px;
+        <UseBool render={boolProps=>
+          <UseModalSheetState
+            open={boolProps.value}
+            setOpen={boolProps.setValue}
+            snapPoints={sheetSnaps}
+            openIdx={sheetOpenIdx}
+            render={props =>
+              <DataField
+                //css={DataFieldStyle.interactiveSmall}
+                css={DataFieldStyle.statikSmall}
+                onClick={boolProps.setTrue}
+                role="listbox"
+              >
+                {preferredPeopleOptions.find(it=>it.value===preferredPeople)?.text}
+                
+                
+                { boolProps.value && <BottomSheetBasic
+                  {...props.sheetProps}
+                  header={uiText.imLookingFor[0].text}
+                >
+                  <div
+                    css={css`
+                      ${col};
+                      padding-bottom: 20px;
                     `}
-                    >
-                      {opt.text}
-                    </div>
-                  </RadioInput>)
-              }
-            
-            </div>
-          </BottomSheetBasic> }
-          
-          
-        </DataField>
-      
+                  >
+                    {
+                      preferredPeopleOptions
+                        .map(opt => <RadioInput
+                          css={RadioInputStyle.radio}
+                          childrenPosition="start"
+                          role="option"
+                          aria-selected={opt.value===preferredPeople}
+                          checked={opt.value===preferredPeople}
+                          value={opt.value}
+                          key={opt.value}
+                          onChange={ev => {
+                            setPreferredPeople(opt.value)
+                            props.setClosing()
+                          }}
+                        >
+                          <div
+                            css={css`
+                            flex: 1;
+                            padding-top: 4px;
+                            padding-bottom: 4px;
+                          `}
+                          >
+                            {opt.text}
+                          </div>
+                        </RadioInput>)
+                    }
+                  
+                  </div>
+                </BottomSheetBasic> }
+                
+                
+              </DataField>
+            }
+          />
+        }/>
       
       </ItemContainer>
     
     </Card>
+    
+    
     
     <div css={notInCard}>
       <Button css={ButtonStyle.bigRectPrimary}
@@ -452,6 +404,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
       </Button>
     </div>
   
+    
   </Form>
 }
 export default Mem(ProfileContent)
