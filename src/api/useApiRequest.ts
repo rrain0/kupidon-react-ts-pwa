@@ -12,6 +12,12 @@ import GenericError = ApiUtils.GenericError
 
 
 
+export type ResponseData
+<Vs extends Values, D, E extends ResponseError> = {
+  data?: D
+  error?: GenericError<E>
+  usedValues: Vs
+}
 
 export type UseApiRequestProps
 <Vs extends Values, D, E extends ResponseError
@@ -20,7 +26,6 @@ export type UseApiRequestProps
   setValues: SetterOrUpdater<Vs>
   failedFields: (keyof Vs)[]
   prepareAndRequest: (values: Vs, failedFields: (keyof Vs)[])=>Promise<ApiResponse<D,E>>
-  onSuccess: (data: D)=>void
 }
 export const useApiRequest =
 <Vs extends Values, D, E extends ResponseError>
@@ -30,59 +35,27 @@ export const useApiRequest =
     setValues,
     failedFields,
     prepareAndRequest,
-    onSuccess,
   } = props
   
   
   
   
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const resetSuccess = useCallback(
-    ()=>setSuccess(false),
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const resetResponse = useCallback(
+    ()=>{
+      setIsSuccess(false)
+      setIsError(false)
+      setResponse(undefined)
+    },
     []
   )
   
   
-  
-  
   const [response, setResponse] = useState(
-    undefined as undefined | {
-      data?: D
-      error?: GenericError<E>
-      usedValues: Vs
-    }
+    undefined as undefined | ResponseData<Vs,D,E>
   )
-  
-  
-  
-  useEffect(
-    ()=>{
-      if (response){
-        const { data:d, error:e, usedValues } = response
-        setResponse(undefined)
-        //console.log('d',d,'e',e)
-        if (d){
-          onSuccess(d)
-          setSuccess(true)
-        } else if (e){
-          setSuccess(false)
-          setValues(vs=>({
-            ...vs,
-            fromServer: {
-              values: usedValues,
-              error: {
-                code: e.code,
-                msg: e.msg,
-              }
-            }
-          }))
-        }
-      }
-    },
-    [response, onSuccess, setValues]
-  )
-  
   
   
   
@@ -97,19 +70,24 @@ export const useApiRequest =
   
   const tryRequest = useCallback(
     async()=>{
-      if (loading) return
-      setLoading(true)
+      if (isLoading) return
+      setIsLoading(true)
+      resetResponse()
       try {
         const response = await prepareAndRequest(values,failedFields)
-        if (response.success)
+        if (response.success){
           setResponse({ data: response.data, usedValues: values })
-        else
+          setIsSuccess(true)
+        }
+        else {
           setResponse({ error: response.error, usedValues: values })
+          setIsError(true)
+        }
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     },
-    [loading, values, prepareAndRequest, failedFields]
+    [isLoading, resetResponse, prepareAndRequest, values, failedFields]
   )
   
   
@@ -128,8 +106,10 @@ export const useApiRequest =
   
   return {
     request,
-    loading,
-    success,
-    resetSuccess,
+    isLoading,
+    isSuccess,
+    isError,
+    response,
+    resetResponse,
   } as const
 }

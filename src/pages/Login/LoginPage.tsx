@@ -41,9 +41,6 @@ import params = RouteBuilder.params
 import ReactMemoTyped = ReactUtils.Mem
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
-import LoginRespS = AuthApi.LoginRespS0
-import LoginSR = AuthApi.LoginSuccessData
-import LoginSuccessData = AuthApi.LoginSuccessData
 
 
 
@@ -77,29 +74,34 @@ const LoginPage = () => {
   
   const {
     request,
-    loading,
-    success,
-    resetSuccess,
+    isLoading,
+    isSuccess,
+    isError,
+    response,
+    resetResponse,
   } = useApiRequest({
     values: formValues,
     setValues: setFormValues,
     failedFields,
     prepareAndRequest: useCallback(
-      (values: FormValues, failedFields: (keyof FormValues)[])=>{
+      (values: FormValues)=>{
         return AuthApi.login({
           login: values.login,
           pwd: values.pwd,
         })
       },
       []
-    ),
-    onSuccess: useCallback(
-      (data: LoginSuccessData)=>{
-        setAuth(data)
-      },
-      [setAuth]
     )
   })
+  
+  useEffect(
+    ()=>{
+      if (isSuccess && response && 'data' in response){
+        setAuth(response.data)
+      }
+    },
+    [isSuccess, response, setAuth]
+  )
   
   const {
     canSubmit,
@@ -109,6 +111,7 @@ const LoginPage = () => {
     failures,
     setFailures,
     failedFields,
+    setFormValues,
     getCanSubmit: useCallback(
       (failedFields: (keyof FormValues)[]) => {
         return failedFields
@@ -118,8 +121,10 @@ const LoginPage = () => {
       []
     ),
     request,
-    loading,
-    resetSuccess,
+    isLoading,
+    isError,
+    response,
+    resetResponse,
   })
   
   
@@ -127,9 +132,9 @@ const LoginPage = () => {
   
   
   useFormToasts({
-    isLoading: loading,
+    isLoading,
     loadingText: LoginPageUiText.loggingIn,
-    isSuccess: success,
+    isSuccess,
     successText: LoginPageUiText.loginCompleted,
     failures: failures,
     setFailures: setFailures,
@@ -148,10 +153,10 @@ const LoginPage = () => {
   const pageRef = useRef<HTMLElement>(null)
   
   useEffect(()=>{
-    if (success) {
+    if (isSuccess) {
       navigate(returnPath ?? RootRoute.findPairs[full]())
     }
-  },[success, navigate, returnPath])
+  },[isSuccess, navigate, returnPath])
   
   
   

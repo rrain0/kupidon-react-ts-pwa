@@ -31,10 +31,6 @@ export namespace AuthApi {
       msg: string
     }
   }
-  export type LoginPwd = {
-    login: string,
-    pwd: string
-  }
   export const login0 = (loginPwd: LoginPwd): Promise<LoginRespS0> =>
     ax.post(r.authLogin, loginPwd)
   
@@ -48,6 +44,10 @@ export namespace AuthApi {
   export interface LoginErrorData {
     code: "INVALID_INPUT_BODY"|"NO_USER"
     msg: string
+  }
+  export type LoginPwd = {
+    login: string,
+    pwd: string
   }
   export const login = async (loginPwd: LoginPwd) =>
     handleResponse<LoginSuccessData, LoginErrorData>(ax.post(r.authLogin, loginPwd))

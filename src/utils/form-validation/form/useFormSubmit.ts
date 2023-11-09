@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { ResponseData } from 'src/api/useApiRequest'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
@@ -19,10 +20,13 @@ export type UseFormSubmitProps
   failures: Failures<Vs>
   setFailures: SetterOrUpdater<Failures<Vs>>
   failedFields: (keyof Vs)[]
+  setFormValues: SetterOrUpdater<Vs>
   getCanSubmit: (failedFields: (keyof Vs)[])=>boolean
   request: ()=>void
-  loading: boolean
-  resetSuccess: ()=>void
+  isLoading: boolean
+  isError: boolean
+  response: ResponseData<Vs,any,any> | undefined
+  resetResponse: ()=>void
 }
 export const useFormSubmit =
 <Vs extends Values>
@@ -31,10 +35,13 @@ export const useFormSubmit =
     failures,
     setFailures,
     failedFields,
+    setFormValues,
     getCanSubmit,
     request,
-    loading,
-    resetSuccess,
+    isLoading,
+    isError,
+    response,
+    resetResponse,
   } = props
   
   
@@ -70,9 +77,9 @@ export const useFormSubmit =
   
   const trySubmit = useCallback(
     ()=>{
-      if (loading) return
+      if (isLoading) return
       
-      resetSuccess()
+      resetResponse()
       
       const serverFailures = failures
         .filter(f=>f.type==='server' && (f.highlight || f.notify))
@@ -95,7 +102,7 @@ export const useFormSubmit =
       
       request()
     },
-    [loading, resetSuccess, failures, setFailures, canSubmit, request]
+    [isLoading, resetResponse, failures, setFailures, canSubmit, request]
   )
   
   useEffect(
@@ -110,6 +117,28 @@ export const useFormSubmit =
   
   
   
+  
+  
+  
+  
+  useEffect(
+    ()=>{
+      if (isError && response && 'error' in response){
+        resetResponse()
+        setFormValues(vs=>({
+          ...vs,
+          fromServer: {
+            values: response.usedValues,
+            error: {
+              code: response.error?.code,
+              msg: response.error?.msg,
+            }
+          }
+        }))
+      }
+    },
+    [response, resetResponse, setFormValues, isError]
+  )
   
   
   
