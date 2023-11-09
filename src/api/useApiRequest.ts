@@ -1,11 +1,12 @@
-import { AxiosError, AxiosResponse } from 'axios'
 import { useCallback, useEffect, useState } from 'react'
-import { ApiUtils0 } from 'src/api/ApiUtils0'
+import { ApiUtils } from 'src/api/ApiUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import ErrorResponse = ApiUtils0.ErrorResponse0
 import Values = ValidationCore.Values
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
+import ApiResponse = ApiUtils.ApiResponse
+import ResponseError = ApiUtils.ResponseError
+import GenericError = ApiUtils.GenericError
 
 
 
@@ -13,17 +14,17 @@ import SetterOrUpdater = TypeUtils.SetterOrUpdater
 
 
 export type UseApiRequestProps
-<Vs extends Values, R extends AxiosResponse>
-= {
+<Vs extends Values, D, E extends ResponseError
+> = {
   values: Vs
   setValues: SetterOrUpdater<Vs>
   failedFields: (keyof Vs)[]
-  prepareAndRequest: (values: Vs, failedFields: (keyof Vs)[])=>Promise<R>
-  onSuccess: (data: R['data'])=>void
+  prepareAndRequest: (values: Vs, failedFields: (keyof Vs)[])=>Promise<ApiResponse<D,E>>
+  onSuccess: (data: D)=>void
 }
 export const useApiRequest =
-<Vs extends Values, R extends AxiosResponse>
-(props: UseApiRequestProps<Vs,R>)=>{
+<Vs extends Values, D, E extends ResponseError>
+(props: UseApiRequestProps<Vs,D,E>)=>{
   const {
     values,
     setValues,
@@ -47,8 +48,8 @@ export const useApiRequest =
   
   const [response, setResponse] = useState(
     undefined as undefined | {
-      success?: R
-      error?: any
+      data?: D
+      error?: GenericError<E>
       usedValues: Vs
     }
   )
@@ -58,51 +59,24 @@ export const useApiRequest =
   useEffect(
     ()=>{
       if (response){
-        const { success:s, error:e, usedValues } = response
+        const { data:d, error:e, usedValues } = response
         setResponse(undefined)
-        //console.log('s',s,'e',e)
-        if (s){
-          onSuccess(s.data)
+        //console.log('d',d,'e',e)
+        if (d){
+          onSuccess(d)
           setSuccess(true)
         } else if (e){
           setSuccess(false)
-          
-          if (e instanceof AxiosError && e.response?.status===400) {
-            const response = e.response as ErrorResponse
-            setValues(vs=>(
-              { ...vs, fromServer: {
-                  values: usedValues,
-                  error: {
-                    code: response.data.code,
-                    msg: response.data.msg,
-                    extra: e,
-                  }
-                }}))
-          }
-          else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
-            setValues(vs=>(
-              { ...vs, fromServer: {
-                  values: usedValues,
-                  error: {
-                    code: 'connection-error',
-                    msg: 'Connection error',
-                    extra: e,
-                  }
-                }}))
-          }
-          else {
-            setValues(vs=>(
-              { ...vs, fromServer: {
-                  values: usedValues,
-                  error: {
-                    code: 'unknown',
-                    msg: 'Unknown error',
-                    extra: e,
-                  }
-                }}))
-            console.warn('UNKNOWN ERROR',e)
-          }
-          
+          setValues(vs=>({
+            ...vs,
+            fromServer: {
+              values: usedValues,
+              error: {
+                code: e.code,
+                msg: e.msg,
+              }
+            }
+          }))
         }
       }
     },
@@ -127,9 +101,10 @@ export const useApiRequest =
       setLoading(true)
       try {
         const response = await prepareAndRequest(values,failedFields)
-        setResponse({ success: response, usedValues: values })
-      } catch (e){
-        setResponse({ error: e, usedValues: values })
+        if (response.success)
+          setResponse({ data: response.data, usedValues: values })
+        else
+          setResponse({ error: response.error, usedValues: values })
       } finally {
         setLoading(false)
       }

@@ -8,6 +8,9 @@ import ax = AxiosConfig.ax
 import CurrentUser = UserApi.CurrentUser
 import SuccessResponse0 = ApiUtils0.SuccessResponse0
 import ErrorResponse0 = ApiUtils0.ErrorResponse0
+import SuccessResponse = ApiUtils.SuccessResponse
+import ErrorResponse = ApiUtils.ErrorResponse
+import handleResponse = ApiUtils.handleResponse
 
 
 
@@ -15,13 +18,6 @@ export namespace AuthApi {
   
   
   
-  import SuccessResponse = ApiUtils.SuccessResponse
-  import ErrorResponse = ApiUtils.ErrorResponse
-  import getUnknownError = ApiUtils.getUnknownError
-  import getConnectionError = ApiUtils.getConnectionError
-  import handleResponseError = ApiUtils.handleErrorResponse
-  import handleResponseSuccess = ApiUtils.handleSuccessResponse
-  import handleResponse = ApiUtils.handleResponse
   
   export interface LoginRespS0 extends SuccessResponse0 {
     data: {
@@ -45,22 +41,16 @@ export namespace AuthApi {
   
   
   
-  export interface LoginSR extends SuccessResponse {
-    success: true
-    data: {
-      accessToken: string
-      user: CurrentUser
-    }
+  export interface LoginSuccessData {
+    accessToken: string
+    user: CurrentUser
   }
-  export interface LoginER extends ErrorResponse {
-    success: false
-    error: {
-      code: "INVALID_INPUT_BODY"|"NO_USER"
-      msg: string
-    }
+  export interface LoginErrorData {
+    code: "INVALID_INPUT_BODY"|"NO_USER"
+    msg: string
   }
   export const login = async (loginPwd: LoginPwd) =>
-    handleResponse<LoginSR, LoginER>(ax.post(r.authLogin, loginPwd))
+    handleResponse<LoginSuccessData, LoginErrorData>(ax.post(r.authLogin, loginPwd))
   
   
   

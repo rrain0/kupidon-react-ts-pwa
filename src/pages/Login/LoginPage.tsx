@@ -42,6 +42,8 @@ import ReactMemoTyped = ReactUtils.Mem
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
 import LoginRespS = AuthApi.LoginRespS0
+import LoginSR = AuthApi.LoginSuccessData
+import LoginSuccessData = AuthApi.LoginSuccessData
 
 
 
@@ -84,7 +86,7 @@ const LoginPage = () => {
     failedFields,
     prepareAndRequest: useCallback(
       (values: FormValues, failedFields: (keyof FormValues)[])=>{
-        return AuthApi.login0({
+        return AuthApi.login({
           login: values.login,
           pwd: values.pwd,
         })
@@ -92,10 +94,10 @@ const LoginPage = () => {
       []
     ),
     onSuccess: useCallback(
-      (data: LoginRespS['data'])=>{
+      (data: LoginSuccessData)=>{
         setAuth(data)
       },
-      []
+      [setAuth]
     )
   })
   
