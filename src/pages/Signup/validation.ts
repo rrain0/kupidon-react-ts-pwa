@@ -1,33 +1,44 @@
 import { UserApi } from 'src/api/requests/UserApi'
 import { SignupPageUiText } from 'src/pages/Signup/uiText'
+import { DateTime } from 'src/utils/DateTime'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
 import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
-import CreateUserRespE = UserApi.CreateUserRespE
 import PartialFailureData = ValidationCore.PartialFailureData
+import CreateErrorData = UserApi.CreateErrorData
 
 
 
 export namespace SignupPageValidation {
   
   
-  export type SeverErrorCode = CreateUserRespE['data']['code']
-    | 'connection-error' | 'unknown'
+  export type SeverErrorCode = CreateErrorData['code']
   
   
-  export type FailureCode = 'email-required'
+  export type FailureCode =
+    'email-required'
     | 'email-incorrect'
+    
     | 'pwd-required'
     | 'pwd-incorrect'
+    
     | 'repeated-pwd-required'
     | 'repeated-pwd-not-match'
+    
     | 'name-required'
+    
     | 'sex-required'
-    | 'birthDate-required'
+    
+    | 'birth-date-required'
+    | 'birth-date-incorrect-format'
+    | 'birth-date-not-exists'
+    | 'birth-date-younger-18'
+    
     | "DUPLICATE_EMAIL"
+    
     | 'connection-error'
     | 'unknown-error'
   
@@ -42,7 +53,10 @@ export namespace SignupPageValidation {
     'repeated-pwd-not-match': SignupPageUiText.passwordsDoNotMatch,
     'name-required': SignupPageUiText.firstNameIsNotEntered,
     'sex-required': SignupPageUiText.sexIsNotChosen,
-    'birthDate-required': SignupPageUiText.birthDateIsNotEntered,
+    'birth-date-required': SignupPageUiText.birthDateIsNotEntered,
+    'birth-date-incorrect-format': SignupPageUiText.birthDateHasIncorrectFormat,
+    'birth-date-not-exists': SignupPageUiText.dateNotExists,
+    'birth-date-younger-18': SignupPageUiText.youMustBeAtLeast18YearsOld,
     "DUPLICATE_EMAIL": SignupPageUiText.userWithSuchEmailAlreadyRegistered,
     'connection-error': SignupPageUiText.connectionError,
     'unknown-error': SignupPageUiText.unknownError,
@@ -50,12 +64,13 @@ export namespace SignupPageValidation {
   
   
   
+  export type SexEnum = 'MALE'|'FEMALE'
   export type UserValues = {
     email: string
     pwd: string
     repeatPwd: string
     name: string
-    sex: 'MALE'|'FEMALE'|''
+    sex: SexEnum|''
     birthDate: string // 2002-01-01 1999-12-31
     //notRobot: boolean
     //form: LoginRespE['data']['code'] | 'connection-error'|'unknown'|undefined
@@ -68,20 +83,27 @@ export namespace SignupPageValidation {
       extra?: any | undefined
     }
   }
-  export type FormValues = UserValues & {
-    fromServer?: undefined | FromServerValue
+  export type AuxiliaryValues = {
+    fromServer: undefined | FromServerValue
   }
+  export type FormValues = UserValues & AuxiliaryValues
   
   
   
-  export const defaultValues: FormValues = {
+  export const userDefaultValues: UserValues = {
     email: '',
     pwd: '',
     repeatPwd: '',
     name: '',
     sex: '',
     birthDate: '',
+  }
+  export const auxiliaryDefaultValues: AuxiliaryValues = {
     fromServer: undefined,
+  }
+  export const defaultValues: FormValues = {
+    ...userDefaultValues,
+    ...auxiliaryDefaultValues,
   }
   
   
@@ -164,13 +186,43 @@ export namespace SignupPageValidation {
     
     
     [['birthDate'], (values)=>{
-      const [v] = values as [UserValues['birthDate']]
-      const d = defaultValues.sex
+      const [v] = values as [FormValues['birthDate']]
+      const d = defaultValues.birthDate
       if (v===d) return new PartialFailureData({
-        code: 'birthDate-required' satisfies FailureCode,
-        msg: 'Дата рождения не введена',
+        code: 'birth-date-required' satisfies FailureCode,
+        msg: 'Birth date is not entered',
         type: 'default',
       })
+    }],
+    [['birthDate'], (values)=>{
+      const [v] = values as [FormValues['birthDate']]
+      const parsed = DateTime.from_yyyy_MM_dd(v)
+      if (!parsed) return new PartialFailureData({
+        code: 'birth-date-incorrect-format' satisfies FailureCode,
+        msg: 'Birth date has incorrect format',
+        delay,
+      })
+    }],
+    [['birthDate'], (values)=>{
+      const [v] = values as [FormValues['birthDate']]
+      const parsed = DateTime.from_yyyy_MM_dd(v)
+      const normalized = parsed?.copy().normalize()
+      if (parsed && !parsed.eq(normalized))
+        return new PartialFailureData({
+          code: 'birth-date-not-exists' satisfies FailureCode,
+          msg: 'This date does not exists',
+          delay,
+        })
+    }],
+    [['birthDate'], (values)=>{
+      const [v] = values as [FormValues['birthDate']]
+      const parsed = DateTime.from_yyyy_MM_dd(v)
+      if (parsed && parsed.getAge()<18)
+        return new PartialFailureData({
+          code: 'birth-date-younger-18' satisfies FailureCode,
+          msg: 'You must be at least 18 years old',
+          delay,
+        })
     }],
     
     
@@ -192,8 +244,6 @@ export namespace SignupPageValidation {
       if (v?.error.code==='DUPLICATE_EMAIL') return new PartialFailureData({
         code: v?.error.code satisfies FailureCode,
         msg: 'Пользователь с таким email уже зарегестрирован',
-        usedFields: ['fromServer','email'],
-        usedValues: [v, v.values.email],
         errorFields: ['fromServer','email'],
         type: 'server',
       })

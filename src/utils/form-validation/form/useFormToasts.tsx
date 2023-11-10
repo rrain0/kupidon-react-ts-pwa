@@ -50,11 +50,11 @@ export const useFormToasts =
     const stale: [boolean] = [false]
     
     const userFailures = failures
-      .filter(f=>!f.canSubmit && f.notify)
+      .filter(f=>f.type!=='server' && f.notify)
     awaitDelay(userFailures, stale, setUserFailure)
     
     const serverFailures = failures
-      .filter(f=>f.canSubmit && f.notify)
+      .filter(f=>f.type==='server' && f.notify)
     awaitDelay(serverFailures, stale, setServerFailure)
     
     return ()=>{ stale[0]=true }

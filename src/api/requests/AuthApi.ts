@@ -5,6 +5,8 @@ import { UserApi } from './UserApi'
 import ax = AxiosConfig.ax
 import CurrentUser = UserApi.CurrentUser
 import handleResponse = ApiUtils.handleResponse
+import NoUserResponseError = ApiUtils.NoUserResponseError
+import TechnicalError = ApiUtils.TechnicalError
 
 
 
@@ -12,20 +14,19 @@ export namespace AuthApi {
   
   
   
-  export interface LoginSuccessData {
+  
+  export type LoginSuccessData = {
     accessToken: string
     user: CurrentUser
   }
-  export interface LoginErrorData {
-    code: "INVALID_INPUT_BODY"|"NO_USER"
-    msg: string
-  }
+  export type LoginErrorData = NoUserResponseError | TechnicalError
   export type LoginPwd = {
     login: string,
     pwd: string
   }
-  export const login = async (loginPwd: LoginPwd) =>
-    handleResponse<LoginSuccessData, LoginErrorData>(ax.post(r.authLogin, loginPwd))
+  export const login = async(loginPwd: LoginPwd) =>
+    handleResponse<LoginSuccessData, LoginErrorData>
+    (ax.post(r.authLogin,loginPwd))
   
   
   

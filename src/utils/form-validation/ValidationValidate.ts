@@ -68,7 +68,7 @@ export namespace ValidationValidate {
       .filter(f=>f.usedFields.every(f=>!changedFields.has(f)))
     const errorFields = new Set(
       retainedFails
-        .filter(f=>f.type!=='server')
+        //.filter(f=>f.type!=='server')
         .flatMap(f=>f.errorFields)
     )
     const newFails: Failures<Vs> = []

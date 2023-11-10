@@ -1,4 +1,5 @@
-
+import { MathUtils } from 'src/utils/common/MathUtils'
+import floorTo0 = MathUtils.floorTo0
 
 
 export class DateTime {
@@ -9,6 +10,8 @@ export class DateTime {
     hour?: number | undefined,
     minute?: number | undefined,
     second?: number | undefined,
+    millisecond?: number | undefined,
+    timezone?: number | undefined,
   }){
     if (data.year!==undefined) this.year = data.year
     if (data.month!==undefined) this.month = data.month
@@ -16,14 +19,18 @@ export class DateTime {
     if (data.hour!==undefined) this.hour = data.hour
     if (data.minute!==undefined) this.minute = data.minute
     if (data.second!==undefined) this.second = data.second
+    if (data.millisecond!==undefined) this.millisecond = data.millisecond
+    if (data.timezone!==undefined) this.timezone = data.timezone
   }
   
   year = 0 // integer (-∞,+∞) // Date fullYear: integer (-∞,+∞)
   month = 0 // integer [1,12] // Date month: integer [0,11]
   day = 0 // integer [1,28-31] // Date date: integer [1,28-31]
   hour = 0 // integer [1,23] // Date hours: integer [1,23]
-  minute = 0 // integer [1,59] // Date minutes: integer [1,59]
-  second = 0 // integer [1,59] // Date seconds: integer [1,59]
+  minute = 0 // integer [0,59] // Date minutes: integer [0,59]
+  second = 0 // integer [0,59] // Date seconds: integer [0,59]
+  millisecond = 0 // integer [0,999] // Date seconds: integer [0,999]
+  timezone = 0 // integer in minutes
   
   
   
@@ -35,6 +42,8 @@ export class DateTime {
       hour: date.getHours(),
       minute: date.getMinutes(),
       second: date.getSeconds(),
+      millisecond: date.getMilliseconds(),
+      timezone: -date.getTimezoneOffset(),
     })
   }
   
@@ -93,6 +102,19 @@ export class DateTime {
       +`:${(this.second+'').padStart(2,'0')}`
   }
   
+  
+  // to 2020-08-26T06:53:27.609+00:00
+  to_yyyy_MM_dd_HH_mm_ss_SSS_XX(){
+    return `${(this.year+'').padStart(4,'0')}`
+      +`-${(this.month+'').padStart(2,'0')}`
+      +`-${(this.day+'').padStart(2,'0')}`
+      +`T${(this.hour+'').padStart(2,'0')}`
+      +`:${(this.minute+'').padStart(2,'0')}`
+      +`:${(this.second+'').padStart(2,'0')}`
+      +`.${(this.millisecond+'').padStart(3,'0')}`
+      +this.timezoneToString()
+  }
+  
   to_yyyy_MM_dd_HH_mm(){
     return `${(this.year+'').padStart(4,'0')}`
       +`-${(this.month+'').padStart(2,'0')}`
@@ -122,6 +144,15 @@ export class DateTime {
       + `${divider}${(this.year%100+'').padStart(2,'0')}`
   }
   
+  timezoneToString(){
+    let offset = this.timezone >= 0 ? '+' : '-'
+    const hours = Math.floor(Math.abs(this.timezone)/60)
+    const minutes = Math.floor(Math.abs(this.timezone%60))
+    offset += hours.toString().padStart(2,'0')
+    offset += ':'
+    offset += minutes.toString().padStart(2,'0')
+    return offset
+  }
   
   getAge(other = DateTime.now()){
     let age = other.year - this.year

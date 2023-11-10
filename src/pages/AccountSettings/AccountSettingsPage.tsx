@@ -41,16 +41,14 @@ const AccountSettingsPage = ()=>{
   const resetAuth = useResetRecoilState(AuthRecoil)
   
   
-  const update = async() => {
-    try {
-      const resp = await UserApi.current()
+  const fetchUser = async() => {
+    const resp = await UserApi.current()
+    if (resp.success)
       setAuth(curr=>({ ...curr!, user: resp.data.user }))
-    } catch (e) {
-      console.warn(e)
-    }
+    else console.warn('Failed to fetch user:', resp)
   }
   useEffect(
-    ()=>void update(),
+    ()=>void fetchUser(),
     []
   )
   
@@ -181,7 +179,7 @@ const AccountSettingsPage = ()=>{
     >
       
       {/* <Button css={ButtonStyle.icon}
-       onClick={update}
+       onClick={fetchUser}
        disabled={false}
        >
        <ArrowReload />

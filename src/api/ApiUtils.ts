@@ -27,22 +27,6 @@ export namespace ApiUtils {
   
   
   
-  export type GenericErrorCodes<E extends ResponseError> = E['code']
-    | UnknownError['code'] | ConnectionError['code']
-  
-  
-  
-  export type GenericError<E extends ResponseError>
-    = E | ConnectionError | UnknownError
-  export type GenericErrorResponse<E extends ResponseError>
-    = ErrorResponse<GenericError<E>>
-  
-  
-  
-  export type ApiResponse<D, E extends ResponseError>
-    = SuccessResponse<D> | GenericErrorResponse<E>
-  
-  
   
   
   export interface UnknownError extends ResponseError {
@@ -83,34 +67,142 @@ export namespace ApiUtils {
   
   
   
+  export type TechnicalError = UnknownError | ConnectionError
+  
+  
+  
+  export interface AuthenticationError extends ResponseError {
+    code: 'authentication-error'
+    msg: 'Authentication error'
+    extra?: any
+  }
+  export interface AuthenticationErrorResponse extends ErrorResponse<AuthenticationError>{}
+  export function getAuthenticationError(error?: any): AuthenticationErrorResponse {
+    const auth: AuthenticationErrorResponse = {
+      success: false,
+      error: {
+        code: 'authentication-error',
+        msg: 'Authentication error',
+      }
+    }
+    if (error!==undefined) auth.error.extra = error
+    console.warn('Authentication response error',auth)
+    return auth
+  }
+  
+  
+  
+  export interface NoUserResponseError extends ResponseError {
+    code: 'NO_USER'
+    msg: 'No users found for the requested data'
+  }
+  
+  
+  
+  
+  
+  
+  
+  export type ApiResponse<D, E extends ResponseError>
+    = SuccessResponse<D> | ErrorResponse<E>
+  
+  
+  
+  
+  
+  
   export function handleErrorResponse
   <E extends ResponseError>
   (ex: any)
-  : GenericErrorResponse<E> {
+  : ErrorResponse<E> | undefined {
     if (ex instanceof AxiosError && ex.response?.status===400) {
       return {
         success: false,
         error: ex.response.data as E
       } as ErrorResponse<E>
     }
+  }
+  
+  export function handleAuthenticationErrorResponse
+  (ex: any)
+  : AuthenticationErrorResponse | undefined {
+    if (ex instanceof AxiosError && ex.response?.status===401) {
+      return getAuthenticationError(ex)
+    }
+  }
+  
+  export function handleConnectionError
+  (ex: any)
+  : ConnectionErrorResponse | undefined {
     if (ex instanceof AxiosError && ex.code===AxiosError.ERR_NETWORK){
       return getConnectionError()
     }
-    return getUnknownError(ex)
   }
   
   export function handleSuccessResponse
   <D = unknown>
   (response: AxiosResponse)
-  : SuccessResponse<D> | UnknownErrorResponse {
+  : SuccessResponse<D> | undefined {
     if (response.status===200) return {
       success: true,
       data: response.data as D,
     } as SuccessResponse<D>
-    return getUnknownError(response)
   }
   
   export async function handleResponse
+  <D, E extends ResponseError>
+  (responsePromise: Promise<AxiosResponse>)
+  : Promise<ApiResponse<D, E | TechnicalError>> {
+    try {
+      const serverResponse = await responsePromise
+      {
+        const response = handleSuccessResponse<D>(serverResponse)
+        if (response) return response
+      }
+      return getUnknownError(serverResponse)
+    } catch (ex) {
+      {
+        const response = handleErrorResponse<E>(ex)
+        if (response) return response
+      }
+      {
+        const response = handleConnectionError(ex)
+        if (response) return response
+      }
+      return getUnknownError(ex)
+    }
+  }
+  
+  export async function handleAuthenticatedResponse
+  <D, E extends ResponseError>
+  (responsePromise: Promise<AxiosResponse>)
+  : Promise<ApiResponse<D, E | TechnicalError | AuthenticationError>> {
+    try {
+      const serverResponse = await responsePromise
+      {
+        const response = handleSuccessResponse<D>(serverResponse)
+        if (response) return response
+      }
+      return getUnknownError(serverResponse)
+    } catch (ex) {
+      {
+        const response = handleErrorResponse<E>(ex)
+        if (response) return response
+      }
+      {
+        const response = handleAuthenticationErrorResponse(ex)
+        if (response) return response
+      }
+      {
+        const response = handleConnectionError(ex)
+        if (response) return response
+      }
+      return getUnknownError(ex)
+    }
+  }
+  
+  
+  /* export async function handleAuthorizedResponse
   <D, E extends ResponseError>
   (responsePromise: Promise<AxiosResponse>){
     try {
@@ -119,15 +211,11 @@ export namespace ApiUtils {
     } catch (ex) {
       return handleErrorResponse<E>(ex)
     }
-  }
+  } */
   
   
   
   
-  export interface NoUserResponseError extends ResponseError {
-    code: "NO_USER"
-    msg: string
-  }
   
   
   

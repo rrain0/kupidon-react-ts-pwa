@@ -1,24 +1,22 @@
 import { UserApi } from 'src/api/requests/UserApi'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
-import UpdateUserRespE = UserApi.UpdateUserRespE
+import UpdateUserErrorData = UserApi.UpdateUserErrorData
 
 
 
 export namespace ProfilePageValidation {
   
   
-  import ObjectKeys = ObjectUtils.ObjectKeys
-  export type SeverErrorCode = UpdateUserRespE['data']['code']
-    | 'connection-error' | 'unknown'
+  export type SeverErrorCode = UpdateUserErrorData['code']
   
   
-  export type FailureCode = 'name-required'
+  export type FailureCode =
+    'name-required'
     | 'name-not-changed'
     
     | 'birth-date-not-changed'
@@ -60,20 +58,26 @@ export namespace ProfilePageValidation {
       extra?: any | undefined
     }
   }
-  export type FormValues = UserValues & {
+  export type AuxiliaryValues = {
+    fromServer: undefined | FromServerValue
     initialValues: Partial<UserValues>
-    fromServer?: undefined | FromServerValue
   }
+  export type FormValues = UserValues & AuxiliaryValues
   
   
-  export const defaultValues: FormValues = {
+  export const userDefaultValues: UserValues = {
     name: '',
     birthDate: '',
+  }
+  export const auxiliaryDefaultValues: AuxiliaryValues = {
+    fromServer: undefined,
     initialValues: {},
   }
+  export const defaultValues: FormValues = {
+    ...userDefaultValues,
+    ...auxiliaryDefaultValues,
+  }
   
-  export const fieldsToSubmit = ObjectKeys(defaultValues)
-    .filter(f=>!['initialValues','fromServer'].includes(f))
   
   
   const delay = 4000

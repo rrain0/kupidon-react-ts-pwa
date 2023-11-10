@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { useApiRequest } from 'src/api/useApiRequest'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
@@ -12,22 +13,21 @@ import col = EmotionCommon.col
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
   useMemo,
   useRef,
-  useState,
 } from 'react'
-import { AxiosError } from 'axios'
 import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap0'
-import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
+import { DateTime } from 'src/utils/DateTime'
+import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
+import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
+import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
+import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import Input from 'src/views/Inputs/Input/Input'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
@@ -39,28 +39,19 @@ import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputGroupStyle } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import { ValidationValidate } from 'src/utils/form-validation/ValidationValidate'
-import validate = ValidationValidate.validate
 import { SignupPageValidation } from './validation'
 import FormValues = SignupPageValidation.FormValues
 import validators = SignupPageValidation.validators
-import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
-import updateFailures = ValidationActions.updateFailures
-import CreateUserRespE = UserApi.CreateUserRespE
-import UserToCreate = UserApi.UserToCreate
-import { AuthApi } from 'src/api/requests/AuthApi'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import RootRoute = AppRoutes.RootRoute
 import params = RouteBuilder.params
 import full = RouteBuilder.full
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
-import UserValues = SignupPageValidation.UserValues
-import Failure = ValidationCore.Failure
-import awaitDelay = ValidationActions.awaitDelay
 import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiText
 import ReactMemoTyped = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
+import SexEnum = SignupPageValidation.SexEnum
+import userDefaultValues = SignupPageValidation.userDefaultValues
 
 
 
@@ -75,258 +66,109 @@ const SignupPage = () => {
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
-  const uiOptions = useUiTextContainer(SignupPageUiText)
-  
-  const [signupLoading, setSignupLoading] = useState(false)
-  const [signupSuccess, setSignupSuccess] = useState(false)
-  const [signupForm, setSignupForm] = 
-    useState([defaultValues,defaultValues] as const) // [now,prev]
-  const [signupFailures, setSignupFailures] = useState(()=>validate(
-    { values: defaultValues, validators: validators }
-  ))
-  // LayoutEffect is necessary to update data when there is Chrome mobile autofill
-  useLayoutEffect(
-    ()=>{
-      setSignupFailures(s=>validate({
-        values: signupForm[0],
-        prevValues: signupForm[1],
-        prevFailures: s,
-        validators: validators,
-      }))
-    },
-    [signupForm]
-  )
+  const uiText = useUiTextContainer(SignupPageUiText)
   
   
-  /* useEffect(()=>{
-   console.log('SIGNUP_FAILURES',signupFailures)
-  },[signupFailures]) */
+  const {
+    formValues,
+    setFormValues,
+    failures,
+    setFailures,
+    failedFields,
+    validationProps,
+  } = useFormFailures({
+    defaultValues,
+    validators
+  })
   
-  
-  const [signupResponse, setSignupResponse] = useState(
-    undefined as undefined | { 
-      success?: UserApi.CreateUserRespS
-      error?: any
-      usedValues: UserValues
-    }
-  )
-  useEffect(()=>{
-    if (signupResponse){
-      const { success:s, error:e, usedValues } = signupResponse
-      setSignupResponse(undefined)
-      if (s){
-        setAuth(s.data)
-        setSignupSuccess(true)
-      } else if (e){
-        setSignupSuccess(false)
-        
-        if (e instanceof AxiosError && e.response?.status===400) {
-          const response = e.response as CreateUserRespE
-          setSignupForm(s=>([
-            {
-              ...s[0],
-              fromServer: {
-                values: usedValues,
-                error: {
-                  code: response.data.code,
-                  msg: response.data.msg,
-                  extra: e,
-                }
-              }
-            },
-            s[0]
-          ]))
-        }
-        else if (e instanceof AxiosError && e.code===AxiosError.ERR_NETWORK){
-          setSignupForm(s=>([
-            {
-              ...s[0],
-              fromServer: {
-                values: usedValues,
-                error: {
-                  code: 'connection-error',
-                  msg: 'Connection error',
-                  extra: e,
-                }
-              }
-            },
-            s[0]
-          ]))
-        }
-        else {
-          setSignupForm(s=>([
-            {
-              ...s[0],
-              fromServer: {
-                values: usedValues,
-                error: {
-                  code: 'unknown',
-                  msg: 'Unknown error',
-                  extra: e,
-                }
-              }
-            },
-            s[0]
-          ]))
-          console.warn('UNKNOWN ERROR',e)
-        }
-        
-      }
-    }
-  },[signupResponse, setAuth])
-  
-  
-  
-  const [userFailure, setUserFailure] =
-    useState(undefined as undefined|Failure<FormValues>)
-  const [serverFailure, setServerFailure] =
-    useState(undefined as undefined|Failure<FormValues>)
-  
-  useEffect(()=>{
-    setUserFailure(undefined)
-    setServerFailure(undefined)
-    const stale: [boolean] = [false]
-    
-    const userFailures = signupFailures
-      .filter(f=>!f.canSubmit && f.notify)
-    awaitDelay(userFailures, stale, setUserFailure)
-    
-    const serverFailures = signupFailures
-      .filter(f=>f.canSubmit && f.notify)
-    awaitDelay(serverFailures, stale, setServerFailure)
-    
-    return ()=>{ stale[0]=true }
-  },[signupFailures])
-  
-  const userFailureMsg = useMemo(
-    ()=>{
-      if (userFailure) return new ToastMsgData({
-        type: 'danger',
-        msg: <ToastMsg
-          uiOption={mapFailureCodeToUiOption[userFailure.code]}
-          defaultText={userFailure.msg}
-        />,
-        closeOnUnmount: true,
-        showCloseButton: true,
-        dragToClose: true,
-        onClose: ()=>{
-          if (userFailure.notify) setSignupFailures(s=>updateFailures(
-            s,
-            { failures: [userFailure] },
-            { notify: false }
-          ))
-        }
-      })
-      return undefined
-    },
-    [userFailure]
-  )
-  const serverFailureMsg = useMemo(
-    ()=>{
-      if (serverFailure) return new ToastMsgData({
-        type: 'danger',
-        msg: <ToastMsg
-          uiOption={mapFailureCodeToUiOption[serverFailure.code]}
-          defaultText={serverFailure.msg}
-        />,
-        closeOnUnmount: true,
-        showCloseButton: true,
-        dragToClose: true,
-        onClose: ()=>{
-          if (serverFailure.notify) setSignupFailures(s=>updateFailures(
-            s,
-            { failures: [serverFailure] },
-            { notify: false }
-          ))
-        }
-      })
-      return undefined
-    },
-    [serverFailure]
-  )
-  const [loadingMsg] = useState(()=>new ToastMsgData({
-    type: 'loading',
-    msg: <ToastMsg uiOption={SignupPageUiText.registration}/>,
-    closeOnUnmount: true,
-  }))
-  const [loginSuccessMsg] = useState(()=>new ToastMsgData({
-    type: 'ok',
-    msg: <ToastMsg uiOption={SignupPageUiText.registrationCompleted}/>,
-    lifetime: 1500,
-    dragToClose: true,
-  }))
-  
-  
-  useToasts({ toasts: [
-    userFailureMsg,
-    signupLoading && loadingMsg,
-    signupSuccess && loginSuccessMsg,
-    serverFailureMsg,
-  ]})
-  
-  
-  
-  
-  // It needs because of Chrome's autofill on Android: when browser pastes login/pwd,
-  // failure state does not have time to update
-  const [doSubmit, setDoSubmit] = useState(false)
-  const onSubmit = (ev: React.FormEvent) => {
-    ev.preventDefault()
-    setDoSubmit(true)
-  }
-  const trySignup = useCallback(
-    async()=>{
-      if (signupLoading) return
-      setSignupLoading(true)
-      const form = signupForm[0]
-      try {
-        const response = await UserApi.create(signupForm[0] as UserToCreate)
-        setSignupResponse({ success: response, usedValues: form })
-      } catch (e){
-        setSignupResponse({ error: e, usedValues: form })
-      } finally {
-        setSignupLoading(false)
-      }
-    },
-    [signupForm, signupLoading]
-  )
-  const trySubmit = useCallback(
-    ()=>{
-      setSignupSuccess(false)
-      
-      if (serverFailure?.highlight || serverFailure?.notify)
-        setSignupFailures(s=>updateFailures(
-          s,
-          { failures: [serverFailure] },
-          { highlight: false, notify: false }
-        ))
-      
-      const failsToShow = signupFailures
-        .filter(f=>!f.canSubmit)
-        .filter(f=>!f.highlight || !f.notify || f.isDelayed)
-      setSignupFailures(s=>updateFailures(
-        s,
-        { failures: failsToShow },
-        { highlight: true, notify: true, delay: 0 }
-      ))
-      
-      const criticalFails = signupFailures.filter(f=>!f.canSubmit)
-      if (criticalFails.length>0) return
-      
-      void trySignup()
-    },
-    [signupFailures, trySignup, serverFailure]
-  )
+  const {
+    request,
+    isLoading,
+    isSuccess,
+    isError,
+    response,
+    resetResponse,
+  } = useApiRequest({
+    values: formValues,
+    failedFields,
+    prepareAndRequest: useCallback(
+      (values: FormValues)=>{
+        const birthDateTime = DateTime.from_yyyy_MM_dd(values.birthDate)!
+        birthDateTime.timezone = DateTime.fromDate(new Date()).timezone
+        return UserApi.create({
+          email: values.email,
+          pwd: values.pwd,
+          name: values.name,
+          sex: values.sex as SexEnum,
+          birthDate: birthDateTime.to_yyyy_MM_dd_HH_mm_ss_SSS_XX(),
+        })
+      },
+      []
+    )
+  })
   
   useEffect(
     ()=>{
-      if (doSubmit){
-        setDoSubmit(false)
-        trySubmit()
+      if (isSuccess && response && Object.hasOwn(response,'data')){
+        setAuth(response.data)
       }
     },
-    [doSubmit, trySubmit]
+    [isSuccess, response, setAuth]
   )
+  
+  const {
+    canSubmit,
+    onFormSubmitCallback,
+    submit,
+  } = useFormSubmit({
+    failures,
+    setFailures,
+    failedFields,
+    setFormValues,
+    getCanSubmit: useCallback(
+      (failedFields: (keyof FormValues)[]) => {
+        return failedFields
+          .filter(ff=>Object.hasOwn(userDefaultValues,ff))
+          .length===0
+      },
+      []
+    ),
+    request,
+    isLoading,
+    isError,
+    response,
+    resetResponse,
+  })
+  
+  
+  
+  
+  
+  useFormToasts({
+    isLoading,
+    loadingText: SignupPageUiText.registration,
+    isSuccess,
+    successText: SignupPageUiText.registrationCompleted,
+    failures: failures,
+    setFailures: setFailures,
+    failureCodeToUiText: mapFailureCodeToUiOption,
+  })
+  
+  
+  
+  
+  
+  /* useEffect(()=>{
+    console.log('SIGNUP_FAILURES',failures)
+  },[failures]) */
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -334,22 +176,16 @@ const SignupPage = () => {
     ()=>[
       {
         value: 'MALE',
-        text: uiOptions.iAmGuy[0].text,
+        text: uiText.iAmGuy[0].text,
       },{
         value: 'FEMALE',
-        text: uiOptions.iAmGirl[0].text,
+        text: uiText.iAmGirl[0].text,
       }
-    ] satisfies { value: FormValues['sex'], text: string }[],
-    [uiOptions]
+    ] satisfies { value: SexEnum, text: string }[],
+    [uiText]
   )
   
   
-  const validationProps = {
-    values: signupForm,
-    failures: signupFailures,
-    setError: setSignupFailures,
-    setValues: setSignupForm,
-  }
   
   
   const pageRef = useRef<HTMLElement>(null)
@@ -358,10 +194,10 @@ const SignupPage = () => {
   
   
   useEffect(()=>{
-    if (signupSuccess) {
+    if (isSuccess) {
       navigate(returnPath ?? RootRoute.findPairs[full]())
     }
-  },[signupSuccess, navigate, returnPath])
+  },[isSuccess, navigate, returnPath])
   
   
   
@@ -371,10 +207,10 @@ const SignupPage = () => {
       ref={pageRef}
     >
       
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onFormSubmitCallback}>
         
         <h3 css={formHeader}>
-          {uiOptions.registration[0].text}
+          {uiText.registration[0].text}
         </h3>
         
         
@@ -383,7 +219,7 @@ const SignupPage = () => {
           fieldName='email'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.emailLoginPlaceholder[0].text}
+            placeholder={uiText.emailLoginPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -393,7 +229,7 @@ const SignupPage = () => {
           fieldName='pwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.pwdPlaceholder[0].text}
+            placeholder={uiText.pwdPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -403,7 +239,7 @@ const SignupPage = () => {
           fieldName='repeatPwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.repeatPwdPlaceholder[0].text}
+            placeholder={uiText.repeatPwdPlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -413,7 +249,7 @@ const SignupPage = () => {
           fieldName='name'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.namePlaceholder[0].text}
+            placeholder={uiText.namePlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -423,7 +259,7 @@ const SignupPage = () => {
           fieldName='birthDate'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiOptions.birthDatePlaceholder[0].text}
+            placeholder={uiText.birthDatePlaceholder[0].text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -455,7 +291,7 @@ const SignupPage = () => {
           css={ButtonStyle.bigRectPrimary}
           type='submit'
         >
-          {uiOptions.signup[0].text}
+          {uiText.signup[0].text}
         </Button>
         
       </Form>

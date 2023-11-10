@@ -6,7 +6,6 @@ import Values = ValidationCore.Values
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import ApiResponse = ApiUtils.ApiResponse
 import ResponseError = ApiUtils.ResponseError
-import GenericError = ApiUtils.GenericError
 
 
 
@@ -15,7 +14,7 @@ import GenericError = ApiUtils.GenericError
 export type ResponseData
 <Vs extends Values, D, E extends ResponseError> = {
   data?: D
-  error?: GenericError<E>
+  error?: E
   usedValues: Vs
 }
 
@@ -23,7 +22,6 @@ export type UseApiRequestProps
 <Vs extends Values, D, E extends ResponseError
 > = {
   values: Vs
-  setValues: SetterOrUpdater<Vs>
   failedFields: (keyof Vs)[]
   prepareAndRequest: (values: Vs, failedFields: (keyof Vs)[])=>Promise<ApiResponse<D,E>>
 }
@@ -32,7 +30,6 @@ export const useApiRequest =
 (props: UseApiRequestProps<Vs,D,E>)=>{
   const {
     values,
-    setValues,
     failedFields,
     prepareAndRequest,
   } = props
@@ -71,6 +68,7 @@ export const useApiRequest =
   const tryRequest = useCallback(
     async()=>{
       if (isLoading) return
+      console.log('tryRequest')
       setIsLoading(true)
       resetResponse()
       try {

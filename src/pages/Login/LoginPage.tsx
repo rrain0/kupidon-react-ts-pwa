@@ -41,6 +41,7 @@ import params = RouteBuilder.params
 import ReactMemoTyped = ReactUtils.Mem
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
+import userDefaultValues = LoginPageValidation.userDefaultValues
 
 
 
@@ -81,7 +82,6 @@ const LoginPage = () => {
     resetResponse,
   } = useApiRequest({
     values: formValues,
-    setValues: setFormValues,
     failedFields,
     prepareAndRequest: useCallback(
       (values: FormValues)=>{
@@ -96,7 +96,7 @@ const LoginPage = () => {
   
   useEffect(
     ()=>{
-      if (isSuccess && response && 'data' in response){
+      if (isSuccess && response && Object.hasOwn(response,'data')){
         setAuth(response.data)
       }
     },
@@ -115,7 +115,7 @@ const LoginPage = () => {
     getCanSubmit: useCallback(
       (failedFields: (keyof FormValues)[]) => {
         return failedFields
-          .filter(ff=>ff!=='fromServer')
+          .filter(ff=>Object.hasOwn(userDefaultValues,ff))
           .length===0
       },
       []
@@ -145,6 +145,9 @@ const LoginPage = () => {
   
   
   
+  /* useEffect(()=>{
+   console.log('LOGIN_FAILURES',failures)
+  },[failures]) */
   
   
   

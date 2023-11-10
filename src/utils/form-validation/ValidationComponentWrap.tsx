@@ -15,10 +15,11 @@ import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import Failures = ValidationCore.Failures
 import updateFailures = ValidationActions.updateFailures
 import awaitDelay = ValidationActions.awaitDelay
-import ReactMemoTyped = ReactUtils.Mem
 import trueOrUndef = CastUtils.trueOrUndef
 import Values = ValidationCore.Values
 import Setter = TypeUtils.Setter
+import SetterOrUpdater = TypeUtils.SetterOrUpdater
+import Mem = ReactUtils.Mem
 
 
 
@@ -47,7 +48,7 @@ export type ValidationComponentWrapProps
   values: Vs
   fieldName: F
   failures: Failures<Vs>
-  setFailures: (error: Failures<Vs>)=>void
+  setFailures: SetterOrUpdater<Failures<Vs>>
   setValues: (values: Vs)=>void
   render: (props: ValidationComponentWrapRenderProps<Vs,F>)=>React.ReactNode
 }
@@ -76,15 +77,38 @@ const ValidationComponentWrap =
     const stale = [false] as [boolean]
     
     const fs = failures
-      .filter(f=>f.errorFields.includes(fieldName))
-      .filter(f=>f.usedValues[f.usedFields.findIndex(f=>f===fieldName)]===value && f.highlight)
+      .filter(f=>f.highlight && f.errorFields.includes(fieldName))
+      .filter(f=>{
+        const usedIdx = f.usedFields.findIndex(f=>f===fieldName)
+        if (usedIdx>=0) return f.usedValues[usedIdx]===value
+        const fromServerIdx = f.usedFields.findIndex(f=>f==='fromServer')
+        if (fromServerIdx>=0){
+          const fromServerUsedValues = f.usedValues[fromServerIdx].values as Vs
+          return f.errorFields
+            .filter(ef=>ef!=='fromServer' && f.errorFields.includes(ef))
+            .every(ef=>values[ef]===fromServerUsedValues[ef])
+        }
+        return false
+      })
     awaitDelay(fs, stale, ()=>setHighlight(true))
     
     return ()=>{ stale[0]=true }
-  },[failures, fieldName, value])
+  },[failures, fieldName, value, values])
   
   
   const setValueEffectEvent = useEffectEvent((value: Vs[F])=>{
+    setFailures(f=>{
+      const update = f.filter(f=>(f.notify || f.highlight)
+        && f.errorFields.includes(fieldName)
+      )
+      if (update.length>0)
+        return updateFailures(
+          failures,
+          { failures: update, },
+          { notify: false, highlight: false, }
+        )
+      return f
+    })
     const newValues = { ...values, [fieldName]: value }
     setValues(newValues)
   })
@@ -133,7 +157,7 @@ const ValidationComponentWrap =
     inputProps: inputProps,
   })
 }
-export default ReactMemoTyped(ValidationComponentWrap)
+export default Mem(ValidationComponentWrap)
 
 
 

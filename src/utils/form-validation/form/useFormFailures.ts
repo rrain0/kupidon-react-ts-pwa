@@ -5,7 +5,6 @@ import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import validate = ValidationValidate.validate
 import Validators = ValidationCore.Validators
 import Values = ValidationCore.Values
-import ValuesWithFromServer = ValidationCore.ValuesWithFromServer
 
 
 
@@ -13,13 +12,13 @@ import ValuesWithFromServer = ValidationCore.ValuesWithFromServer
 
 
 export type UseFormFailuresProps
-<Vs extends ValuesWithFromServer>
+<Vs extends Values>
 = {
   defaultValues: Vs
   validators: Validators<Vs>
 }
 export const useFormFailures =
-<Vs extends ValuesWithFromServer>
+<Vs extends Values>
 (props: UseFormFailuresProps<Vs>)=>{
   const {
     defaultValues,

@@ -21,6 +21,10 @@ export namespace InputStyle {
       :has(.rrainuiInput[data-error]){
         background: ${t.input.error.bgc};
       }
+      :has(.rrainuiInput:disabled) {
+        cursor: auto;
+        color: ${t.input.text};
+      }
     }
     >.rrainuiInput {
       width: 100%;
@@ -75,6 +79,9 @@ export namespace InputStyle {
     }
     >.rrainuiInput[data-error] ~ .rrainuiBorder{
     
+    }
+    >.rrainuiInput:disabled ~ .rrainuiBorder{
+      border-color: ${t.input.text};
     }
   `
   /* background-image: linear-gradient(

@@ -7,11 +7,9 @@ import Axios, {
 import { ApiRoutes } from 'src/api-routes/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus"
-import { ApiUtils0 } from 'src/api/ApiUtils0'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { RecoilUtils } from 'src/recoil/RecoilUtils'
 import ValOrUpdater = RecoilUtils.ValOrUpdater
-import ErrorResponse = ApiUtils0.ErrorResponse0
 
 
 
@@ -53,7 +51,13 @@ export namespace AxiosConfig {
   
   
   
-  
+  export interface ErrorResponse {
+    status: 400|401
+    data: {
+      code: string
+      msg: string
+    }
+  }
   
   // General Authentication Error
   export interface AccessRespE extends ErrorResponse {
@@ -149,10 +153,10 @@ export namespace AxiosConfig {
     Система перехватчиков, проверяющих и обновляющих токены пользователя.
     1) Если при оригинальном запросе возвращается 401, значит access token не валиден и его надо обновить
     1.1) Вместо того чтобы делать лишний запрос, токен проверяется (но не валидируется)
-         на месте на предмет того, что он устарел.
-    2) При необходимости обновить токен делается refresh запрос, в конфиге которого
+         на фронте на предмет того, что он устарел.
+    2) При необходимости обновить токен, делается refresh запрос, в конфиге которого
        сохраняется конфиг оригинального запроса.
-    2.1) При неудаче refresh запроса ошибка возвращается пользователю.
+    2.1) При неудаче refresh запроса ошибка refresh запроса возвращается пользователю.
     3) При успешном refresh из его конфига достаётся конфиг оригинального запроса и
        повторяется запрос только с обновлённым токеном - его успех или неудача возвращаются пользователю.
    */

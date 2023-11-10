@@ -14,8 +14,26 @@ export namespace MathUtils {
   export const round = (n: number, scale: number = 0): number => {
     const mult = (n < 0 ? -1 : 1) * 10 ** scale
     return Math.round(n * mult) / mult
-  };
+  }
   
+  /**
+   * Возвращение округлённого в сторону нуля числа
+   * @param n - исходное число
+   * @returns {number} - округлённое в сторону нуля число
+   */
+  export const roundTo0 = (n: number): number => {
+    return n<0 ? -Math.round(-n) : Math.round(n)
+  }
+  
+  
+  /**
+   * Возвращение округлённого вниз в сторону нуля числа
+   * @param n - исходное число
+   * @returns {number} - округлённое вниз в сторону нуля число
+   */
+  export function floorTo0(n: number){
+    return n<0 ? -Math.floor(-n) : Math.floor(n)
+  }
   
   
   /**
@@ -82,14 +100,6 @@ export namespace MathUtils {
   
   
   
-  /**
-   * Возвращение округлённого вниз в сторону нуля числа
-   * @param n - исходное число
-   * @returns {number} - округлённое в сторону нуля число
-   */
-  export function floorTo0(n: number){
-    return n<0 ? -Math.floor(-n) : Math.floor(n)
-  }
   
   
   

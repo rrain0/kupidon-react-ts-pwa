@@ -9,9 +9,9 @@ import NonEmptyArr = ArrayUtils.NonEmptyArr
 export namespace ValidationCore {
   
   export type Values = { [field: string]: unknown }
-  export interface ValuesWithFromServer extends Values {
-    fromServer: unknown
-  }
+  export type ValuesWithFromServer<Vs extends Values> =
+    Vs extends { fromServer?: undefined | { values: Vs } } ? Vs : never
+  
   
   /**
    * @returns {'ok' | undefined | void} - валидатор не обнаружил ошибок

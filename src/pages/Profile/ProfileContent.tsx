@@ -4,24 +4,28 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
+import { useApiRequest } from 'src/api/useApiRequest'
 import UseBool from 'src/components/StateCarriers/UseBool'
+import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { DateTime } from 'src/utils/DateTime'
-import { useForm } from 'src/utils/form-validation/form/useForm'
+import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
+import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { Themes } from 'src/utils/theme/Themes'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import { SheetSnapPoints } from 'src/views/BottomSheet/useBottomSheet'
 import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -43,11 +47,11 @@ import validators = ProfilePageValidation.validators
 import FormValues = ProfilePageValidation.FormValues
 import UserToUpdate = UserApi.UserToUpdate
 import ArrowReloadIc = SimpleSvgIcons.ArrowReloadIc
-import UpdateUserRespS = UserApi.UpdateUserRespS
 import mapFailureCodeToUiOption = ProfilePageValidation.mapFailureCodeToUiText
 import Setter = TypeUtils.Setter
 import Mem = ReactUtils.Mem
-import fieldsToSubmit = ProfilePageValidation.fieldsToSubmit
+import userDefaultValues = ProfilePageValidation.userDefaultValues
+import ObjectKeys = ObjectUtils.ObjectKeys
 
 
 
@@ -70,57 +74,112 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
-  const logout = async() => void resetAuth()
   
   const uiText = useUiTextContainer(ProfileUiText)
   
   
   
   
+  
+  
+  
+  
+  
+  
   const {
-    canSubmit,
-    loading,
-    success,
     formValues,
     setFormValues,
     failures,
     setFailures,
+    failedFields,
     validationProps,
-    onSubmit,
-    setDoSubmit,
-  } = useForm({
-    defaultValues: defaultValues,
-    validators: validators,
-    getCanSubmit: useCallback(
-      (failedFields: (keyof FormValues)[])=>{
-        return fieldsToSubmit.some(fts=>!failedFields.includes(fts))
-      },
-      []
-    ),
-    doRequest: useCallback(
+  } = useFormFailures({
+    defaultValues,
+    validators
+  })
+  
+  const {
+    request,
+    isLoading,
+    isSuccess,
+    isError,
+    response,
+    resetResponse,
+  } = useApiRequest({
+    values: formValues,
+    failedFields,
+    prepareAndRequest: useCallback(
       (values: FormValues,failedFields: (keyof FormValues)[])=>{
         const userToUpdate: UserToUpdate = {}
-        fieldsToSubmit.forEach(fts=>{
-          if (!failedFields.includes(fts)) userToUpdate[fts] = values[fts]
+        ObjectKeys(userDefaultValues).forEach(fName=>{
+          if (!failedFields.includes(fName)) userToUpdate[fName] = values[fName]
         })
         if (userToUpdate.birthDate) userToUpdate.birthDate = DateTime
-            .from_yyyy_MM_dd(userToUpdate.birthDate)!
-            .to_yyyy_MM_dd()
+          .from_yyyy_MM_dd(userToUpdate.birthDate)!
+          .to_yyyy_MM_dd()
         return UserApi.update(userToUpdate)
       },
       []
-    ),
-    onSuccess: useCallback<(data: UpdateUserRespS['data'])=>void>(
-      data=>{
+    )
+  })
+  
+  useEffect(
+    ()=>{
+      if (isSuccess && response && Object.hasOwn(response,'data')){
         setAuth(s=>({
           accessToken: s?.accessToken ?? '',
-          user: data.user,
+          user: response.data!.user,
         }))
+      }
+    },
+    [isSuccess, response, setAuth]
+  )
+  
+  const {
+    canSubmit,
+    onFormSubmitCallback,
+    submit,
+  } = useFormSubmit({
+    failures,
+    setFailures,
+    failedFields,
+    setFormValues,
+    getCanSubmit: useCallback(
+      (failedFields: (keyof FormValues)[]) => {
+        return failedFields
+          .filter(ff=>Object.hasOwn(userDefaultValues,ff))
+          .length < ObjectKeys(userDefaultValues).length
       },
       []
     ),
+    request,
+    isLoading,
+    isError,
+    response,
+    resetResponse,
   })
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  useEffect(
+    ()=>setSubmitCallback?.(()=>()=>submit()),
+    [submit, setSubmitCallback]
+  )
+  useEffect(
+    ()=>setCanSubmit?.(canSubmit),
+    [canSubmit, setCanSubmit]
+  )
   
   const updateValues = useEffectEvent((auth: AuthStateType)=>{
     setFormValues(s=>{
@@ -163,19 +222,16 @@ const ProfileContent = (props: ProfileContentProps)=>{
     [failures]
   )
   
-  useEffect(
-    ()=>setSubmitCallback?.(()=>()=>setDoSubmit(true)),
-    [setDoSubmit, setSubmitCallback]
-  )
+  
   
   
   
   
   useFormToasts({
-    isLoading: loading,
-    loadingText: ProfileUiText.update,
-    isSuccess: success,
-    successText: ProfileUiText.updated,
+    isLoading,
+    loadingText: LoginPageUiText.loggingIn,
+    isSuccess,
+    successText: LoginPageUiText.loginCompleted,
     failures: failures,
     setFailures: setFailures,
     failureCodeToUiText: mapFailureCodeToUiOption,
@@ -183,11 +239,6 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  
-  useEffect(
-    ()=>setCanSubmit?.(canSubmit),
-    [canSubmit, setCanSubmit]
-  )
   
   
   
@@ -238,7 +289,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  return <Form onSubmit={onSubmit}>
+  return <Form onSubmit={onFormSubmitCallback}>
     
     <h3 css={formHeader}>{uiText.profile[0].text}</h3>
     
@@ -293,7 +344,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
         </ItemTitleContainer>
         <ValidationComponentWrap {...validationProps}
           fieldName='birthDate'
-          render={props => <Input
+          render={props => <Input disabled
             css={InputStyle.inputSmall}
             inputMode='numeric'
             placeholder={uiText.birthDatePlaceholder[0].text.toLowerCase()}
@@ -398,7 +449,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
     
     <div css={notInCard}>
       <Button css={ButtonStyle.bigRectPrimary}
-        onClick={logout}
+        onClick={resetAuth}
       >
         {uiText.signOut[0].text}
       </Button>

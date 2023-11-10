@@ -1,4 +1,3 @@
-import { ApiUtils } from 'src/api/ApiUtils'
 import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
@@ -8,14 +7,13 @@ import isValidEmail = ValidationValidators.isValidEmail
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
 import LoginErrorData = AuthApi.LoginErrorData
-import GenericErrorCodes = ApiUtils.GenericErrorCodes
 
 
 
 export namespace LoginPageValidation {
   
   
-  export type SeverErrorCode = GenericErrorCodes<LoginErrorData>
+  export type SeverErrorCode = LoginErrorData['code']
   
   
   export type FailureCode = 'login-required'
@@ -50,15 +48,23 @@ export namespace LoginPageValidation {
       extra?: any | undefined
     }
   }
-  export type FormValues = UserValues & {
+  export type AuxiliaryValues = {
     fromServer: undefined | FromServerValue
   }
+  export type FormValues = UserValues & AuxiliaryValues
   
   
-  export const defaultValues: FormValues = {
+  
+  export const userDefaultValues: UserValues = {
     login: '',
     pwd: '',
+  }
+  export const auxiliaryDefaultValues: AuxiliaryValues = {
     fromServer: undefined,
+  }
+  export const defaultValues: FormValues = {
+    ...userDefaultValues,
+    ...auxiliaryDefaultValues,
   }
   
   
@@ -104,8 +110,6 @@ export namespace LoginPageValidation {
       if (v?.error.code==='NO_USER') return new PartialFailureData({
         code: v.error.code satisfies FailureCode,
         msg: 'Не найдено пользователя с таким логином-паролем',
-        usedFields: ['fromServer','login','pwd'],
-        usedValues: [v, v.values.login, v.values.pwd],
         errorFields: ['fromServer','login','pwd'],
         type: 'server',
       })
