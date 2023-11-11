@@ -114,26 +114,15 @@ const ProfileContent = (props: ProfileContentProps)=>{
         ObjectKeys(userDefaultValues).forEach(fName=>{
           if (!failedFields.includes(fName)) userToUpdate[fName] = values[fName]
         })
-        if (userToUpdate.birthDate) userToUpdate.birthDate = DateTime
-          .from_yyyy_MM_dd(userToUpdate.birthDate)!
-          .to_yyyy_MM_dd()
+        if (userToUpdate.birthDate) userToUpdate.birthDate =
+          DateTime.from_yyyy_MM_dd(userToUpdate.birthDate)!
+          .set({ timezone: DateTime.fromDate(new Date()).timezone})
+          .to_yyyy_MM_dd_HH_mm_ss_SSS_XX()
         return UserApi.update(userToUpdate)
       },
       []
     )
   })
-  
-  useEffect(
-    ()=>{
-      if (isSuccess && response && Object.hasOwn(response,'data')){
-        setAuth(s=>({
-          accessToken: s?.accessToken ?? '',
-          user: response.data!.user,
-        }))
-      }
-    },
-    [isSuccess, response, setAuth]
-  )
   
   const {
     canSubmit,
@@ -161,15 +150,17 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
+  useEffect(
+    ()=>{
+      if (isSuccess && response && Object.hasOwn(response,'data')){
+        setAuth(s=>({
+          accessToken: s?.accessToken ?? '',
+          user: response.data!.user,
+        }))
+      }
+    },
+    [isSuccess, response, setAuth]
+  )
   
   
   useEffect(
@@ -181,23 +172,27 @@ const ProfileContent = (props: ProfileContentProps)=>{
     [canSubmit, setCanSubmit]
   )
   
+  const fieldIsNotInitial = useCallback(
+    (field: keyof FormValues)=>{
+      return !failures
+        .some(f=>f.type==='initial' && f.errorFields.includes(field))
+    },
+    [failures]
+  )
   const updateValues = useEffectEvent((auth: AuthStateType)=>{
     setFormValues(s=>{
       const u = auth!.user, vs = s, ivs = vs.initialValues
       const newValues = {
         ...vs,
-        name: vs.name,
-        birthDate: vs.birthDate,
         initialValues: {
           name: u.name,
           birthDate: u.birthDate,
         }
       }
-      if (!('name' in ivs) || vs.name===ivs.name) newValues.name = u.name
-      if (
-        !('birthDate' in ivs)
-        || DateTime.eqFrom_yyyy_MM_dd(vs.birthDate, ivs.birthDate)
-      ) newValues.birthDate = u.birthDate
+      ObjectKeys(userDefaultValues).forEach(fName=>{
+        if (!(fName in ivs) || !fieldIsNotInitial(fName))
+          newValues[fName] = u[fName]
+      })
       return newValues
     })
   })
@@ -206,20 +201,13 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const resetField = useCallback(
     (fieldName: keyof FormValues)=>{
       const vs = formValues, ivs = formValues.initialValues
-      if (fieldName in ivs && vs[fieldName]!==ivs[fieldName]) 
+      if (fieldIsNotInitial(fieldName))
         setFormValues({
           ...vs,
           [fieldName]: ivs[fieldName],
         })
     },
     [formValues, setFormValues]
-  )
-  const fieldIsNotInitial = useCallback(
-    (field: keyof FormValues)=>{
-      return !failures
-        .some(f=>f.type==='initial' && f.errorFields.includes(field))
-    },
-    [failures]
   )
   
   
@@ -229,9 +217,9 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   useFormToasts({
     isLoading,
-    loadingText: LoginPageUiText.loggingIn,
+    loadingText: ProfileUiText.update,
     isSuccess,
-    successText: LoginPageUiText.loginCompleted,
+    successText: ProfileUiText.updated,
     failures: failures,
     setFailures: setFailures,
     failureCodeToUiText: mapFailureCodeToUiOption,
@@ -344,7 +332,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
         </ItemTitleContainer>
         <ValidationComponentWrap {...validationProps}
           fieldName='birthDate'
-          render={props => <Input disabled
+          render={props => <Input
             css={InputStyle.inputSmall}
             inputMode='numeric'
             placeholder={uiText.birthDatePlaceholder[0].text.toLowerCase()}

@@ -1,26 +1,32 @@
-import { MathUtils } from 'src/utils/common/MathUtils'
-import floorTo0 = MathUtils.floorTo0
+
+
+
+
+export type DateTimeData = {
+  year?: number | undefined,
+  month?: number | undefined,
+  day?: number | undefined,
+  hour?: number | undefined,
+  minute?: number | undefined,
+  second?: number | undefined,
+  millisecond?: number | undefined,
+  timezone?: number | undefined,
+}
 
 
 export class DateTime {
-  constructor(data:{
-    year?: number | undefined,
-    month?: number | undefined,
-    day?: number | undefined,
-    hour?: number | undefined,
-    minute?: number | undefined,
-    second?: number | undefined,
-    millisecond?: number | undefined,
-    timezone?: number | undefined,
-  }){
-    if (data.year!==undefined) this.year = data.year
-    if (data.month!==undefined) this.month = data.month
-    if (data.day!==undefined) this.day = data.day
-    if (data.hour!==undefined) this.hour = data.hour
-    if (data.minute!==undefined) this.minute = data.minute
-    if (data.second!==undefined) this.second = data.second
-    if (data.millisecond!==undefined) this.millisecond = data.millisecond
-    if (data.timezone!==undefined) this.timezone = data.timezone
+  constructor(data?:DateTimeData | undefined){ this.set(data) }
+  
+  set(data?: DateTimeData | undefined){
+    if (data?.year!==undefined) this.year = data.year
+    if (data?.month!==undefined) this.month = data.month
+    if (data?.day!==undefined) this.day = data.day
+    if (data?.hour!==undefined) this.hour = data.hour
+    if (data?.minute!==undefined) this.minute = data.minute
+    if (data?.second!==undefined) this.second = data.second
+    if (data?.millisecond!==undefined) this.millisecond = data.millisecond
+    if (data?.timezone!==undefined) this.timezone = data.timezone
+    return this
   }
   
   year = 0 // integer (-∞,+∞) // Date fullYear: integer (-∞,+∞)
@@ -180,6 +186,7 @@ export class DateTime {
     this.hour = d.getHours()
     this.minute = d.getMinutes()
     this.second = d.getSeconds()
+    this.millisecond = d.getMilliseconds()
     return this
   }
   
@@ -191,6 +198,8 @@ export class DateTime {
       hour: this.hour,
       minute: this.minute,
       second: this.second,
+      millisecond: this.millisecond,
+      timezone: this.timezone,
     })
   }
   
@@ -203,6 +212,8 @@ export class DateTime {
       && this.hour === other.hour
       && this.minute === other.minute
       && this.second === other.second
+      && this.millisecond === other.millisecond
+      && this.timezone === other.timezone
     )
   }
   

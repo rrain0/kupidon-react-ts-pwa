@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ApiUtils } from 'src/api/ApiUtils'
-import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import Values = ValidationCore.Values
-import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import ApiResponse = ApiUtils.ApiResponse
 import ResponseError = ApiUtils.ResponseError
 

@@ -94,13 +94,14 @@ const SignupPage = () => {
     prepareAndRequest: useCallback(
       (values: FormValues)=>{
         const birthDateTime = DateTime.from_yyyy_MM_dd(values.birthDate)!
-        birthDateTime.timezone = DateTime.fromDate(new Date()).timezone
+          .set({ timezone: DateTime.fromDate(new Date()).timezone})
+          .to_yyyy_MM_dd_HH_mm_ss_SSS_XX()
         return UserApi.create({
           email: values.email,
           pwd: values.pwd,
           name: values.name,
           sex: values.sex as SexEnum,
-          birthDate: birthDateTime.to_yyyy_MM_dd_HH_mm_ss_SSS_XX(),
+          birthDate: birthDateTime,
         })
       },
       []
