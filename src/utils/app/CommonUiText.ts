@@ -273,6 +273,48 @@ export const CommonUiText = {
   ] satisfies UiText<'birthDate'>[],
   
   
+  gender: [
+    {
+      value: 'gender',
+      lang: 'en-US',
+      text: 'Sex',
+    },
+    {
+      value: 'gender',
+      lang: 'ru-RU',
+      text: 'Пол',
+    },
+  ] satisfies UiText<'gender'>[],
+  
+  
+  male: [
+    {
+      value: 'male',
+      lang: 'en-US',
+      text: 'Male',
+    },
+    {
+      value: 'male',
+      lang: 'ru-RU',
+      text: 'Мужской',
+    },
+  ] satisfies UiText<'male'>[],
+  
+  
+  female: [
+    {
+      value: 'female',
+      lang: 'en-US',
+      text: 'Female',
+    },
+    {
+      value: 'female',
+      lang: 'ru-RU',
+      text: 'Женский',
+    },
+  ] satisfies UiText<'female'>[],
+  
+  
   chat: [
     {
       value: 'chat',
@@ -702,18 +744,18 @@ export const CommonUiText = {
   ] satisfies UiText<'lastNameIsNotEntered'>[],
   
   
-  sexIsNotChosen: [
+  genderIsNotChosen: [
     {
-      value: 'sexIsNotChosen',
+      value: 'genderIsNotChosen',
       lang: 'en-US',
       text: 'Sex is not chosen',
     },
     {
-      value: 'sexIsNotChosen',
+      value: 'genderIsNotChosen',
       lang: 'ru-RU',
       text: 'Пол не выбран',
     },
-  ] satisfies UiText<'sexIsNotChosen'>[],
+  ] satisfies UiText<'genderIsNotChosen'>[],
   
   
   birthDateIsNotEntered: [

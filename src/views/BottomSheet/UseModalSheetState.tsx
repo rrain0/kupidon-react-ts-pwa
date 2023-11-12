@@ -8,7 +8,7 @@ import Setter = TypeUtils.Setter
 
 
 
-export type UseModalSheetStateRenderProps = {
+export type UseModalSheetRenderProps = {
   setClosing: ()=>void
   sheetProps:{
     state: SheetState,
@@ -18,14 +18,14 @@ export type UseModalSheetStateRenderProps = {
     setSnapIdx: Setter<number>,
   }
 }
-export type UseModalSheetStateProps = {
+export type UseModalSheetProps = {
   open: boolean
   setOpen: Setter<boolean>
   openIdx: number
   snapPoints: SheetSnapPoints
-  render: (props: UseModalSheetStateRenderProps)=>React.ReactNode
+  render: (props: UseModalSheetRenderProps)=>React.ReactNode
 }
-const UseModalSheetState = (props: UseModalSheetStateProps)=>{
+const UseModalSheet = (props: UseModalSheetProps)=>{
   const {
     open,
     setOpen,
@@ -78,4 +78,4 @@ const UseModalSheetState = (props: UseModalSheetStateProps)=>{
     sheetProps: bottomSheetProps
   })
 }
-export default Mem(UseModalSheetState)
+export default Mem(UseModalSheet)

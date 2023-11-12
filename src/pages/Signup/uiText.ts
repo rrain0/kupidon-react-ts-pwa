@@ -60,7 +60,7 @@ export const SignupPageUiText = {
   passwordsDoNotMatch: CommonUiText.passwordsDoNotMatch,
   firstNameIsNotEntered: CommonUiText.firstNameIsNotEntered,
   lastNameIsNotEntered: CommonUiText.lastNameIsNotEntered,
-  sexIsNotChosen: CommonUiText.sexIsNotChosen,
+  genderIsNotChosen: CommonUiText.genderIsNotChosen,
   birthDateIsNotEntered: CommonUiText.birthDateIsNotEntered,
   birthDateHasIncorrectFormat: CommonUiText.birthDateHasIncorrectFormat,
   dateNotExists: CommonUiText.dateNotExists,

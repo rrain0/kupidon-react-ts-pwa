@@ -14,4 +14,8 @@ export namespace TypeUtils {
   export type Updater<T> = (updater: (prevValue: T)=>T)=>void
   export type SetterOrUpdater<T> = (updater: T | ((prevValue: T)=>T))=>void
   
+  
+  export type PartialUndef<O extends object> =
+    { [Prop in keyof O]+?: O[Prop] | undefined }
+  
 }

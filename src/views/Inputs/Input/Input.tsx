@@ -5,7 +5,7 @@ import { CastUtils } from 'src/utils/common/CastUtils'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
 import { ReactUtils } from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
@@ -26,6 +26,7 @@ export type InputProps = JSX.IntrinsicElements['input'] & {
   endViews?: React.ReactNode
   children?: React.ReactNode
   childrenPosition?: 'start'|'end'|empty
+  frameProps?: Omit<JSX.IntrinsicElements['label'],'ref'> | undefined
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((
@@ -34,7 +35,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
   let {
     hasError,
     startViews, endViews, children, childrenPosition,
-    className, style, ...restProps
+    className, style,
+    frameProps,
+    ...restProps
   } = props
   childrenPosition ??= 'end'
   
@@ -47,6 +50,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
     css={frameStyle}
     className={className}
     style={style}
+    {...frameProps}
   >
     
     { startViews }
@@ -66,7 +70,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((
     
   </Frame>
 })
-export default ReactMemoTyped(Input)
+export default Mem(Input)
 
 
 

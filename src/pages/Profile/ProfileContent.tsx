@@ -6,7 +6,6 @@ import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import UseBool from 'src/components/StateCarriers/UseBool'
-import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
@@ -26,7 +25,7 @@ import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { Themes } from 'src/utils/theme/Themes'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetSnapPoints } from 'src/views/BottomSheet/useBottomSheet'
-import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
+import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
@@ -52,6 +51,7 @@ import Setter = TypeUtils.Setter
 import Mem = ReactUtils.Mem
 import userDefaultValues = ProfilePageValidation.userDefaultValues
 import ObjectKeys = ObjectUtils.ObjectKeys
+import GenderEnum = UserApi.GenderEnum
 
 
 
@@ -116,8 +116,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
         })
         if (userToUpdate.birthDate) userToUpdate.birthDate =
           DateTime.from_yyyy_MM_dd(userToUpdate.birthDate)!
-          .set({ timezone: DateTime.fromDate(new Date()).timezone})
-          .to_yyyy_MM_dd_HH_mm_ss_SSS_XX()
+          .set({ timezone: DateTime.fromDate(new Date()).timezone })
+          .to_yyyy_MM_dd_HH_mm_ss_SSS_XXX()
         return UserApi.update(userToUpdate)
       },
       []
@@ -187,11 +187,12 @@ const ProfileContent = (props: ProfileContentProps)=>{
         initialValues: {
           name: u.name,
           birthDate: u.birthDate,
+          gender: u.gender,
         }
       }
       ObjectKeys(userDefaultValues).forEach(fName=>{
         if (!(fName in ivs) || !fieldIsNotInitial(fName))
-          newValues[fName] = u[fName]
+          newValues[fName] = u[fName] as any
       })
       return newValues
     })
@@ -207,7 +208,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
           [fieldName]: ivs[fieldName],
         })
     },
-    [formValues, setFormValues]
+    [fieldIsNotInitial, formValues, setFormValues]
   )
   
   
@@ -241,13 +242,23 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  
-  
-  
-  
-  
-  
   const [images, setImages] = useState(ProfileMockData.userImages)
+  
+  
+  
+  
+  const genderOptions = useMemo(
+    ()=>[
+      {
+        value: 'MALE',
+        text: uiText.male[0].text,
+      },{
+        value: 'FEMALE',
+        text: uiText.female[0].text,
+      }
+    ] satisfies { value: GenderEnum, text: string }[],
+    [uiText]
+  )
   
   
   
@@ -291,18 +302,15 @@ const ProfileContent = (props: ProfileContentProps)=>{
     
     <Card>
       
+      
       <ItemContainer>
         <ItemTitleContainer>
           <ItemLabel>{uiText.name[0].text}</ItemLabel>
           { fieldIsNotInitial('name')
-            && <Button css={ButtonStyle.smallRectNormal}
+            && <ResetButton
+              text={uiText.reset[0].text}
               onClick={()=>resetField('name')}
-            >
-              <ArrowReloadIc css={resetButtonIcon}/>
-              <ResetButtonText>
-                {uiText.reset[0].text}
-              </ResetButtonText>
-            </Button>
+            />
           }
         </ItemTitleContainer>
         <ValidationComponentWrap {...validationProps}
@@ -316,18 +324,15 @@ const ProfileContent = (props: ProfileContentProps)=>{
         />
       </ItemContainer>
       
+      
       <ItemContainer>
         <ItemTitleContainer>
           <ItemLabel>{uiText.birthDate[0].text}</ItemLabel>
           { fieldIsNotInitial('birthDate')
-            && <Button css={ButtonStyle.smallRectNormal}
+            && <ResetButton
+              text={uiText.reset[0].text}
               onClick={()=>resetField('birthDate')}
-            >
-              <ArrowReloadIc css={resetButtonIcon}/>
-              <ResetButtonText>
-                {uiText.reset[0].text}
-              </ResetButtonText>
-            </Button>
+            />
           }
         </ItemTitleContainer>
         <ValidationComponentWrap {...validationProps}
@@ -344,14 +349,69 @@ const ProfileContent = (props: ProfileContentProps)=>{
       
       
       <ItemContainer>
-        <ItemLabel>{uiText.sex[0].text}</ItemLabel>
-        <DataField css={DataFieldStyle.statikSmall}>
-          { auth!.user.sex === 'MALE'
-            ? uiText.male[0].text
-            : uiText.female[0].text
+        <ItemTitleContainer>
+          <ItemLabel>{uiText.gender[0].text}</ItemLabel>
+          { fieldIsNotInitial('gender')
+            && <ResetButton
+              text={uiText.reset[0].text}
+              onClick={()=>resetField('gender')}
+            />
           }
-        </DataField>
+        </ItemTitleContainer>
+        
+        <ValidationComponentWrap {...validationProps}
+          fieldName='gender'
+          render={validProps =>
+            <UseBool render={boolProps=>
+              <UseModalSheet
+                open={boolProps.value}
+                setOpen={boolProps.setValue}
+                snapPoints={sheetSnaps}
+                openIdx={sheetOpenIdx}
+                render={sheetProps =>
+                  <Input
+                    css={InputStyle.input({ size: 'small', clickable: true })}
+                    readOnly
+                    frameProps={{ role: 'listbox' }}
+                    onClick={boolProps.setTrue}
+                    value={genderOptions.find(opt=>opt.value===validProps.value)?.text ?? ''}
+                    hasError={validProps.highlight}
+                  >
+                    
+                    { boolProps.value && <BottomSheetBasic
+                      {...sheetProps.sheetProps}
+                      header={uiText.gender[0].text}
+                    >
+                      <div css={selectItemsContainer}>
+                        { genderOptions.map(opt => <RadioInput
+                          css={RadioInputStyle.radio}
+                          childrenPosition="start"
+                          role="option"
+                          aria-selected={validProps.checked(opt.value)}
+                          checked={validProps.checked(opt.value)}
+                          value={opt.value}
+                          key={opt.value}
+                          onChange={validProps.inputProps.onChange}
+                          onClick={sheetProps.setClosing}
+                        >
+                          <div css={selectItemText}>
+                            {opt.text}
+                          </div>
+                        </RadioInput>)
+                        }
+                      
+                      </div>
+                    </BottomSheetBasic> }
+                  
+                  </Input>
+                }
+              />
+            }/>
+          }
+        />
+        
       </ItemContainer>
+      
       
       <ItemContainer>
         <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
@@ -368,31 +428,24 @@ const ProfileContent = (props: ProfileContentProps)=>{
         <ItemLabel>{uiText.imLookingFor[0].text}</ItemLabel>
         
         <UseBool render={boolProps=>
-          <UseModalSheetState
+          <UseModalSheet
             open={boolProps.value}
             setOpen={boolProps.setValue}
             snapPoints={sheetSnaps}
             openIdx={sheetOpenIdx}
-            render={props =>
-              <DataField
-                //css={DataFieldStyle.interactiveSmall}
-                css={DataFieldStyle.statikSmall}
+            render={sheetProps =>
+              <Input css={InputStyle.inputSmall}
+                //readOnly
+                disabled
                 onClick={boolProps.setTrue}
                 role="listbox"
+                value={preferredPeopleOptions.find(it=>it.value===preferredPeople)?.text}
               >
-                {preferredPeopleOptions.find(it=>it.value===preferredPeople)?.text}
-                
-                
                 { boolProps.value && <BottomSheetBasic
-                  {...props.sheetProps}
+                  {...sheetProps.sheetProps}
                   header={uiText.imLookingFor[0].text}
                 >
-                  <div
-                    css={css`
-                      ${col};
-                      padding-bottom: 20px;
-                    `}
-                  >
+                  <div css={selectItemsContainer}>
                     {
                       preferredPeopleOptions
                         .map(opt => <RadioInput
@@ -405,16 +458,10 @@ const ProfileContent = (props: ProfileContentProps)=>{
                           key={opt.value}
                           onChange={ev => {
                             setPreferredPeople(opt.value)
-                            props.setClosing()
+                            sheetProps.setClosing()
                           }}
                         >
-                          <div
-                            css={css`
-                            flex: 1;
-                            padding-top: 4px;
-                            padding-bottom: 4px;
-                          `}
-                          >
+                          <div css={selectItemText}>
                             {opt.text}
                           </div>
                         </RadioInput>)
@@ -424,7 +471,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
                 </BottomSheetBasic> }
                 
                 
-              </DataField>
+              </Input>
             }
           />
         }/>
@@ -485,6 +532,20 @@ const ItemLabel = styled.label`
   ${textNormal};
   color: ${p=>p.theme.page.text[0]}
 `
+
+
+
+const ResetButton = Mem(
+({text,onClick}: { text: string, onClick: ()=>void })=>{
+  return <Button css={ButtonStyle.smallRectNormal}
+    onClick={onClick}
+  >
+    <ArrowReloadIc css={resetButtonIcon}/>
+    <ResetButtonText>
+      {text}
+    </ResetButtonText>
+  </Button>
+})
 const resetButtonIcon = css`
   &.rrainuiIcon {
     height: 1em;
@@ -496,6 +557,20 @@ const resetButtonIcon = css`
 const ResetButtonText = styled.div`
   white-space: nowrap;
 `
+
+
+
+const selectItemsContainer = css`
+  ${col};
+  padding-bottom: 20px;
+`
+const selectItemText = css`
+  flex: 1;
+  padding-top: 4px;
+  padding-bottom: 4px;
+`
+
+
 
 const notInCard = css`
   ${col};

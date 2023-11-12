@@ -15,6 +15,7 @@ import CreateErrorData = UserApi.CreateErrorData
 export namespace SignupPageValidation {
   
   
+  import GenderEnum = UserApi.GenderEnum
   export type SeverErrorCode = CreateErrorData['code']
   
   
@@ -30,7 +31,7 @@ export namespace SignupPageValidation {
     
     | 'name-required'
     
-    | 'sex-required'
+    | 'gender-required'
     
     | 'birth-date-required'
     | 'birth-date-incorrect-format'
@@ -52,7 +53,7 @@ export namespace SignupPageValidation {
     'repeated-pwd-required': SignupPageUiText.repeatPwd,
     'repeated-pwd-not-match': SignupPageUiText.passwordsDoNotMatch,
     'name-required': SignupPageUiText.firstNameIsNotEntered,
-    'sex-required': SignupPageUiText.sexIsNotChosen,
+    'gender-required': SignupPageUiText.genderIsNotChosen,
     'birth-date-required': SignupPageUiText.birthDateIsNotEntered,
     'birth-date-incorrect-format': SignupPageUiText.birthDateHasIncorrectFormat,
     'birth-date-not-exists': SignupPageUiText.dateNotExists,
@@ -64,13 +65,12 @@ export namespace SignupPageValidation {
   
   
   
-  export type SexEnum = 'MALE'|'FEMALE'
   export type UserValues = {
     email: string
     pwd: string
     repeatPwd: string
     name: string
-    sex: SexEnum|''
+    gender: GenderEnum|''
     birthDate: string // 2002-01-01 1999-12-31
     //notRobot: boolean
     //form: LoginRespE['data']['code'] | 'connection-error'|'unknown'|undefined
@@ -95,7 +95,7 @@ export namespace SignupPageValidation {
     pwd: '',
     repeatPwd: '',
     name: '',
-    sex: '',
+    gender: '',
     birthDate: '',
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
@@ -227,11 +227,11 @@ export namespace SignupPageValidation {
     
     
     
-    [['sex'], (values)=>{
-      const [v] = values as [UserValues['sex']]
-      const d = defaultValues.sex
+    [['gender'], (values)=>{
+      const [v] = values as [UserValues['gender']]
+      const d = defaultValues.gender
       if (v===d) return new PartialFailureData({
-        code: 'sex-required' satisfies FailureCode,
+        code: 'gender-required' satisfies FailureCode,
         msg: 'Пол не выбран',
         type: 'default',
       })

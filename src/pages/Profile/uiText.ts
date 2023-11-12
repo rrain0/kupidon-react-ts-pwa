@@ -14,48 +14,9 @@ export const ProfileUiText = {
   namePlaceholder: CommonUiText.namePlaceholder,
   birthDate: CommonUiText.birthDate,
   birthDatePlaceholder: CommonUiText.birthDatePlaceholder,
-  
-  
-  sex: [
-    {
-      value: 'sex',
-      lang: 'en-US',
-      text: 'Sex',
-    },
-    {
-      value: 'sex',
-      lang: 'ru-RU',
-      text: 'Пол',
-    },
-  ] satisfies UiText<'sex'>[],
-  
-  
-  male: [
-    {
-      value: 'male',
-      lang: 'en-US',
-      text: 'Male',
-    },
-    {
-      value: 'male',
-      lang: 'ru-RU',
-      text: 'Мужской',
-    },
-  ] satisfies UiText<'male'>[],
-  
-  
-  female: [
-    {
-      value: 'female',
-      lang: 'en-US',
-      text: 'Female',
-    },
-    {
-      value: 'female',
-      lang: 'ru-RU',
-      text: 'Женский',
-    },
-  ] satisfies UiText<'female'>[],
+  gender: CommonUiText.gender,
+  male: CommonUiText.male,
+  female: CommonUiText.female,
   
   
   aboutMe: [
@@ -104,6 +65,7 @@ export const ProfileUiText = {
   birthDateHasIncorrectFormat: CommonUiText.birthDateHasIncorrectFormat,
   dateNotExists: CommonUiText.dateNotExists,
   youMustBeAtLeast18YearsOld: CommonUiText.youMustBeAtLeast18YearsOld,
+  genderIsNotChosen: CommonUiText.genderIsNotChosen,
   connectionError: CommonUiText.connectionError,
   unknownError: CommonUiText.unknownError,
   

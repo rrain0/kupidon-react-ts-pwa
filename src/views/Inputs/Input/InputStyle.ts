@@ -1,15 +1,19 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
 import onHover = EmotionCommon.onHover
 import textLarge1 = EmotionCommon.textLarge1
 import textLarge2 = EmotionCommon.textLarge2
+import bgcBorderMask = EmotionCommon.bgcBorderMask
 
 
 
 export namespace InputStyle {
   
+  
+  import PartialUndef = TypeUtils.PartialUndef
   export const inputNormal = (t:Theme) => css`
     &.rrainuiFrame {
       border-radius: 15px;
@@ -20,10 +24,6 @@ export namespace InputStyle {
       // todo not supported by firefox
       :has(.rrainuiInput[data-error]){
         background: ${t.input.error.bgc};
-      }
-      :has(.rrainuiInput:disabled) {
-        cursor: auto;
-        color: ${t.input.text};
       }
     }
     >.rrainuiInput {
@@ -40,6 +40,11 @@ export namespace InputStyle {
       ${onHover(css``)}
       :active, :focus-visible, :focus {}
       &[data-error]{}
+      :read-only { }
+      :disabled {
+        cursor: auto;
+        color: ${t.input.text};
+      }
     }
     
     >.rrainuiBorder {
@@ -54,15 +59,7 @@ export namespace InputStyle {
       background-size: 200% 100%;
       background-position: 100% 0;
       transition: background-position 0.8s ease-out;
-      -webkit-mask:
-              linear-gradient(#fff 0 0) content-box,
-              linear-gradient(#fff 0 0) border-box;
-      mask:
-              linear-gradient(#fff 0 0) content-box,
-              linear-gradient(#fff 0 0) border-box;
-
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
+      ${bgcBorderMask};
     }
 
     ${onHover(css`
@@ -115,5 +112,34 @@ export namespace InputStyle {
     ${inputNormal(t)};
     ${small(t)};
   `
+  
+  
+  export const clickable = css`
+    >.rrainuiInput {
+      :read-only {
+        cursor: pointer;
+      }
+    }
+  `
+  
+  
+  export type InputStyleProps = {
+    size: 'normal'|'small'
+    clickable: boolean
+  }
+  export type InputStylePartialProps = PartialUndef<InputStyleProps>
+  export const input = (props?:InputStylePartialProps|undefined) =>
+  (t:Theme) =>
+  css`
+    ${{
+      'true': clickable,
+    }[(props?.clickable??false)+'']};
+    
+    ${inputNormal(t)};
+    ${{
+      'small': small(t),
+    }[props?.size??'normal']};
+  `
+  
   
 }

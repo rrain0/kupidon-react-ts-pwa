@@ -12,6 +12,7 @@ import UpdateUserErrorData = UserApi.UpdateUserErrorData
 export namespace ProfilePageValidation {
   
   
+  import GenderEnum = UserApi.GenderEnum
   export type SeverErrorCode = UpdateUserErrorData['code']
   
   
@@ -24,6 +25,9 @@ export namespace ProfilePageValidation {
     | 'birth-date-incorrect-format'
     | 'birth-date-not-exists'
     | 'birth-date-younger-18'
+    
+    | 'gender-not-changed'
+    | 'gender-required'
     
     | 'NO_USER'
     | 'connection-error'
@@ -39,6 +43,8 @@ export namespace ProfilePageValidation {
     'birth-date-incorrect-format': ProfileUiText.birthDateHasIncorrectFormat,
     'birth-date-not-exists': ProfileUiText.dateNotExists,
     'birth-date-younger-18': ProfileUiText.youMustBeAtLeast18YearsOld,
+    'gender-not-changed': [],
+    'gender-required': ProfileUiText.genderIsNotChosen,
     'NO_USER': ProfileUiText.noUserWithSuchId,
     'connection-error': ProfileUiText.connectionError,
     'unknown-error': ProfileUiText.unknownError,
@@ -49,6 +55,7 @@ export namespace ProfilePageValidation {
   export type UserValues = {
     name: string
     birthDate: string
+    gender: GenderEnum|''
   }
   export type FromServerValue = {
     values: UserValues // значения, отправленные на сервердля проверки
@@ -68,6 +75,7 @@ export namespace ProfilePageValidation {
   export const userDefaultValues: UserValues = {
     name: '',
     birthDate: '',
+    gender: '',
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
     fromServer: undefined,
@@ -159,6 +167,27 @@ export namespace ProfilePageValidation {
           msg: 'You must be at least 18 years old',
           delay,
         })
+    }],
+    
+    
+    
+    [['gender','initialValues'], (values)=>{
+      const [v,ivs] = values as [FormValues['gender'],FormValues['initialValues']]
+      if ('gender' in ivs && v===ivs.gender) return new PartialFailureData({
+        code: 'gender-not-changed' satisfies FailureCode,
+        msg: 'Gender is not changed',
+        type: 'initial',
+        errorFields: ['gender'],
+      })
+    }],
+    [['gender'], (values)=>{
+      const [v] = values as [UserValues['gender']]
+      const d = defaultValues.gender
+      if (v===d) return new PartialFailureData({
+        code: 'gender-required' satisfies FailureCode,
+        msg: 'Пол не выбран',
+        type: 'default',
+      })
     }],
     
     

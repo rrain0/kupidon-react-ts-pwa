@@ -1,4 +1,5 @@
 import { CastUtils } from 'src/utils/common/CastUtils'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
@@ -20,6 +21,7 @@ import Values = ValidationCore.Values
 import Setter = TypeUtils.Setter
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import Mem = ReactUtils.Mem
+import ObjectValuesType = ObjectUtils.ObjectValuesType
 
 
 
@@ -33,6 +35,7 @@ export type ValidationComponentWrapRenderProps
   highlight: true | undefined
   setValue: Setter<Vs[F]>
   onBlur: ()=>void
+  checked: (value: ObjectValuesType<Vs>)=>boolean
   inputProps: {
     value: Vs[F]
     onChange: (ev: React.ChangeEvent<HTMLInputElement>)=>void
@@ -134,27 +137,32 @@ const ValidationComponentWrap =
     ()=>onBlurEffectEvent(),
     []
   )
+  const checked = useCallback(
+    (v: ObjectValuesType<Vs>)=>v===value,
+    [value]
+  )
   
   
   
   const inputProps = {
-    value: value,
+    value,
     onChange: useCallback(
       (ev: React.ChangeEvent<HTMLInputElement>)=>{
         setValue(ev.currentTarget.value as any)
       },
       []
     ),
-    onBlur: onBlur
+    onBlur,
   }
   
   
   return render({
-    value: value,
+    value,
     highlight: trueOrUndef(highlight),
-    setValue: setValue,
-    onBlur: onBlur,
-    inputProps: inputProps,
+    setValue,
+    onBlur,
+    checked,
+    inputProps,
   })
 }
 export default Mem(ValidationComponentWrap)

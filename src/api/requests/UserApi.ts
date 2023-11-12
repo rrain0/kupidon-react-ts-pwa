@@ -14,7 +14,7 @@ import NoUserResponseError = ApiUtils.NoUserResponseError
 export namespace UserApi {
   
   
-  
+  export type GenderEnum = "MALE"|"FEMALE"
   export type CurrentUser = {
     id: string,
     email: string,
@@ -25,7 +25,7 @@ export namespace UserApi {
     enabled: boolean,
     name: string,
     birthDate: string,
-    sex: "MALE"|"FEMALE"
+    gender: GenderEnum
   }
   export type CurrentUserSuccessData = {
     user: CurrentUser
@@ -54,7 +54,7 @@ export namespace UserApi {
     email: string,
     pwd: string,
     name: string,
-    sex: "MALE"|"FEMALE",
+    gender: "MALE"|"FEMALE",
     birthDate: string, // "2002-12-30" "1999-12-31"
   }
   export const create = async(user: UserToCreate) =>

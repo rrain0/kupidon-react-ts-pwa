@@ -110,7 +110,7 @@ export class DateTime {
   
   
   // to 2020-08-26T06:53:27.609+00:00
-  to_yyyy_MM_dd_HH_mm_ss_SSS_XX(){
+  to_yyyy_MM_dd_HH_mm_ss_SSS_XXX(){
     return `${(this.year+'').padStart(4,'0')}`
       +`-${(this.month+'').padStart(2,'0')}`
       +`-${(this.day+'').padStart(2,'0')}`

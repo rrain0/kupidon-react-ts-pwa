@@ -50,8 +50,8 @@ import full = RouteBuilder.full
 import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiText
 import ReactMemoTyped = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
-import SexEnum = SignupPageValidation.SexEnum
 import userDefaultValues = SignupPageValidation.userDefaultValues
+import GenderEnum = UserApi.GenderEnum
 
 
 
@@ -95,12 +95,12 @@ const SignupPage = () => {
       (values: FormValues)=>{
         const birthDateTime = DateTime.from_yyyy_MM_dd(values.birthDate)!
           .set({ timezone: DateTime.fromDate(new Date()).timezone})
-          .to_yyyy_MM_dd_HH_mm_ss_SSS_XX()
+          .to_yyyy_MM_dd_HH_mm_ss_SSS_XXX()
         return UserApi.create({
           email: values.email,
           pwd: values.pwd,
           name: values.name,
-          sex: values.sex as SexEnum,
+          gender: values.gender as GenderEnum,
           birthDate: birthDateTime,
         })
       },
@@ -173,7 +173,7 @@ const SignupPage = () => {
   
   
   
-  const sexOptions = useMemo(
+  const genderOptions = useMemo(
     ()=>[
       {
         value: 'MALE',
@@ -182,7 +182,7 @@ const SignupPage = () => {
         value: 'FEMALE',
         text: uiText.iAmGirl[0].text,
       }
-    ] satisfies { value: SexEnum, text: string }[],
+    ] satisfies { value: GenderEnum, text: string }[],
     [uiText]
   )
   
@@ -268,12 +268,12 @@ const SignupPage = () => {
         
         
         <ValidationComponentWrap {...validationProps}
-          fieldName='sex'
+          fieldName='gender'
           render={props =>
             <RadioInputGroup css={RadioInputGroupStyle.rowGroup}
               hasError={props.highlight}
             >
-              { sexOptions.map(opt=>{
+              { genderOptions.map(opt=>{
                 return <RadioInput
                   css={RadioInputStyle.radio}
                   key={opt.value}
