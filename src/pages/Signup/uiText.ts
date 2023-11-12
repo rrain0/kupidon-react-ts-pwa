@@ -19,8 +19,7 @@ export const SignupPageUiText = {
       value: 'iAmGuy',
       lang: 'en-US',
       text: 'I am guy',
-    },
-    {
+    },{
       value: 'iAmGuy',
       lang: 'ru-RU',
       text: 'Я парень',
@@ -33,8 +32,7 @@ export const SignupPageUiText = {
       value: 'iAmGirl',
       lang: 'en-US',
       text: 'I am girl',
-    },
-    {
+    },{
       value: 'iAmGirl',
       lang: 'ru-RU',
       text: 'Я девушка',

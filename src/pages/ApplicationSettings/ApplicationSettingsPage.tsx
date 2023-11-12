@@ -13,7 +13,7 @@ import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverla
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import {
   ApplicationSettingsUiText
-} from 'src/pages/ApplicationSettings/ApplicationSettingsUiText'
+} from 'src/pages/ApplicationSettings/uiText'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'

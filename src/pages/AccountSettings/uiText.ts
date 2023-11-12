@@ -1,5 +1,5 @@
 import { CommonUiText } from 'src/utils/app/CommonUiText'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 
 
 
@@ -30,8 +30,7 @@ export const AccountSettingsUiText = {
       value: 'emailVerified',
       lang: 'en-US',
       text: 'Email verified',
-    },
-    {
+    },{
       value: 'emailVerified',
       lang: 'ru-RU',
       text: 'Email верифицирован',
@@ -48,8 +47,7 @@ export const AccountSettingsUiText = {
       value: 'userCreated',
       lang: 'en-US',
       text: 'User created',
-    },
-    {
+    },{
       value: 'userCreated',
       lang: 'ru-RU',
       text: 'Пользователь создан',
@@ -62,8 +60,7 @@ export const AccountSettingsUiText = {
       value: 'userUpdated',
       lang: 'en-US',
       text: 'User updated',
-    },
-    {
+    },{
       value: 'userUpdated',
       lang: 'ru-RU',
       text: 'Пользователь обновлён',
@@ -79,8 +76,7 @@ export const AccountSettingsUiText = {
       value: 'deleteAccount',
       lang: 'en-US',
       text: 'Delete Account',
-    },
-    {
+    },{
       value: 'deleteAccount',
       lang: 'ru-RU',
       text: 'Удалить Аккаунт',
@@ -88,4 +84,4 @@ export const AccountSettingsUiText = {
   ] satisfies UiText<'deleteAccount'>[],
   
   
-} satisfies Record<string, UiText<any>[]>
+} satisfies UiTextContainer

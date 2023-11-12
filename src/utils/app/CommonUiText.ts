@@ -1,4 +1,3 @@
-import { Lang } from 'src/recoil/state/LangRecoil'
 import { UiText } from 'src/utils/lang/UiText'
 
 
@@ -25,8 +24,7 @@ export const CommonUiText = {
       value: 'emailPlaceholder',
       lang: 'en-US',
       text: 'email (login)',
-    },
-    {
+    },{
       value: 'emailPlaceholder',
       lang: 'ru-RU',
       text: 'email (логин)',
@@ -52,8 +50,7 @@ export const CommonUiText = {
       value: 'repeatPwdPlaceholder',
       lang: 'en-US',
       text: 'repeat password',
-    },
-    {
+    }, {
       value: 'repeatPwdPlaceholder',
       lang: 'ru-RU',
       text: 'повторите пароль',
@@ -66,8 +63,7 @@ export const CommonUiText = {
       value: 'namePlaceholder',
       lang: 'en-US',
       text: 'name',
-    },
-    {
+    },{
       value: 'namePlaceholder',
       lang: 'ru-RU',
       text: 'имя',
@@ -80,8 +76,7 @@ export const CommonUiText = {
       value: 'birthDatePlaceholder',
       lang: 'en-US',
       text: 'birth date (yyyy-MM-dd) (2002-01-01)',
-    },
-    {
+    },{
       value: 'birthDatePlaceholder',
       lang: 'ru-RU',
       text: 'дата рождения (гггг-ММ-дд) (2002-01-01)',
@@ -292,8 +287,7 @@ export const CommonUiText = {
       value: 'male',
       lang: 'en-US',
       text: 'Male',
-    },
-    {
+    },{
       value: 'male',
       lang: 'ru-RU',
       text: 'Мужской',
@@ -306,8 +300,7 @@ export const CommonUiText = {
       value: 'female',
       lang: 'en-US',
       text: 'Female',
-    },
-    {
+    },{
       value: 'female',
       lang: 'ru-RU',
       text: 'Женский',
@@ -482,8 +475,7 @@ export const CommonUiText = {
       value: 'reloading',
       lang: 'en-US',
       text: 'Reloading',
-    },
-    {
+    },{
       value: 'reloading',
       lang: 'ru-RU',
       text: 'Перезагрузка',
@@ -534,6 +526,31 @@ export const CommonUiText = {
   
   
   
+  
+  
+  clearAppData: [
+    {
+      value: 'clearAppData',
+      lang: 'en-US',
+      text: 'Clear app data',
+    },{
+      value: 'clearAppData',
+      lang: 'ru-RU',
+      text: 'Очистить данные приложения',
+    },
+  ] satisfies UiText<'clearAppData'>[],
+  
+  installApp: [
+    {
+      value: 'installApp',
+      lang: 'en-US',
+      text: 'Install App',
+    },{
+      value: 'installApp',
+      lang: 'ru-RU',
+      text: 'Установить Приложение',
+    },
+  ] satisfies UiText<'installApp'>[],
   
   
   
@@ -609,8 +626,7 @@ export const CommonUiText = {
       value: 'loginFormatIsIncorrect',
       lang: 'en-US',
       text: 'Login format is incorrect',
-    },
-    {
+    },{
       value: 'loginFormatIsIncorrect',
       lang: 'ru-RU',
       text: 'Некорректный формат логина',
@@ -623,8 +639,7 @@ export const CommonUiText = {
       value: 'emailNotEntered',
       lang: 'en-US',
       text: 'Email is not entered',
-    },
-    {
+    },{
       value: 'emailNotEntered',
       lang: 'ru-RU',
       text: 'Email не введён',
@@ -637,8 +652,7 @@ export const CommonUiText = {
       value: 'emailFormatIsIncorrect',
       lang: 'en-US',
       text: 'Email format is incorrect',
-    },
-    {
+    },{
       value: 'emailFormatIsIncorrect',
       lang: 'ru-RU',
       text: 'Некорректный формат email',
@@ -651,8 +665,7 @@ export const CommonUiText = {
       value: 'pwdNotEntered',
       lang: 'en-US',
       text: 'Password not entered',
-    },
-    {
+    },{
       value: 'pwdNotEntered',
       lang: 'ru-RU',
       text: 'Пароль не введён',
@@ -665,8 +678,7 @@ export const CommonUiText = {
       value: 'pwdFormatIsIncorrect',
       lang: 'en-US',
       text: 'Password must be at least 6 characters long',
-    },
-    {
+    },{
       value: 'pwdFormatIsIncorrect',
       lang: 'ru-RU',
       text: 'Пароль должен быть не короче 6 символов',
@@ -679,8 +691,7 @@ export const CommonUiText = {
       value: 'repeatPwd',
       lang: 'en-US',
       text: 'Repeat password',
-    },
-    {
+    },{
       value: 'repeatPwd',
       lang: 'ru-RU',
       text: 'Повторите пароль',
@@ -693,8 +704,7 @@ export const CommonUiText = {
       value: 'passwordsDoNotMatch',
       lang: 'en-US',
       text: 'Passwords do not match',
-    },
-    {
+    },{
       value: 'passwordsDoNotMatch',
       lang: 'ru-RU',
       text: 'Пароли не совпадают',
@@ -707,8 +717,7 @@ export const CommonUiText = {
       value: 'firstNameIsNotEntered',
       lang: 'en-US',
       text: 'First name is not entered',
-    },
-    {
+    },{
       value: 'firstNameIsNotEntered',
       lang: 'ru-RU',
       text: 'Имя не введено',
@@ -721,8 +730,7 @@ export const CommonUiText = {
       value: 'noUserWithSuchId',
       lang: 'en-US',
       text: 'No user with such id',
-    },
-    {
+    },{
       value: 'noUserWithSuchId',
       lang: 'ru-RU',
       text: 'Нет пользователя с таким id',
@@ -735,8 +743,7 @@ export const CommonUiText = {
       value: 'lastNameIsNotEntered',
       lang: 'en-US',
       text: 'Last name is not entered',
-    },
-    {
+    },{
       value: 'lastNameIsNotEntered',
       lang: 'ru-RU',
       text: 'Фамилия не введена',
@@ -749,8 +756,7 @@ export const CommonUiText = {
       value: 'genderIsNotChosen',
       lang: 'en-US',
       text: 'Sex is not chosen',
-    },
-    {
+    },{
       value: 'genderIsNotChosen',
       lang: 'ru-RU',
       text: 'Пол не выбран',
@@ -763,8 +769,7 @@ export const CommonUiText = {
       value: 'birthDateIsNotEntered',
       lang: 'en-US',
       text: 'Birth date is not entered',
-    },
-    {
+    },{
       value: 'birthDateIsNotEntered',
       lang: 'ru-RU',
       text: 'Дата рождения не введена',
@@ -777,8 +782,7 @@ export const CommonUiText = {
       value: 'birthDateIsIncorrect',
       lang: 'en-US',
       text: 'Birth date is incorrect',
-    },
-    {
+    },{
       value: 'birthDateIsIncorrect',
       lang: 'ru-RU',
       text: 'Дата рождения не корректна',
@@ -791,8 +795,7 @@ export const CommonUiText = {
       value: 'birthDateHasIncorrectFormat',
       lang: 'en-US',
       text: 'Birth date has incorrect format',
-    },
-    {
+    },{
       value: 'birthDateHasIncorrectFormat',
       lang: 'ru-RU',
       text: 'Некорректный формат даты рождения',
@@ -805,8 +808,7 @@ export const CommonUiText = {
       value: 'dateNotExists',
       lang: 'en-US',
       text: 'Date does not exists',
-    },
-    {
+    },{
       value: 'dateNotExists',
       lang: 'ru-RU',
       text: 'Дата не существует',
@@ -819,8 +821,7 @@ export const CommonUiText = {
       value: 'youMustBeAtLeast18YearsOld',
       lang: 'en-US',
       text: 'You must be at least 18 years old',
-    },
-    {
+    },{
       value: 'youMustBeAtLeast18YearsOld',
       lang: 'ru-RU',
       text: 'Вам нет 18 лет',
@@ -833,8 +834,7 @@ export const CommonUiText = {
       value: 'noUserWithSuchLoginPwd',
       lang: 'en-US',
       text: 'There is no user with such login-password',
-    },
-    {
+    },{
       value: 'noUserWithSuchLoginPwd',
       lang: 'ru-RU',
       text: 'Не найдено пользователя с таким логином-паролем',
@@ -847,8 +847,7 @@ export const CommonUiText = {
       value: 'userWithSuchEmailAlreadyRegistered',
       lang: 'en-US',
       text: 'User with such email is already registered',
-    },
-    {
+    },{
       value: 'userWithSuchEmailAlreadyRegistered',
       lang: 'ru-RU',
       text: 'Пользователь с таким email уже зарегестрирован',
@@ -861,8 +860,7 @@ export const CommonUiText = {
       value: 'connectionError',
       lang: 'en-US',
       text: 'Error connecting to the server, perhaps something with the Internet',
-    },
-    {
+    },{
       value: 'connectionError',
       lang: 'ru-RU',
       text: 'Ошибка соединения с сервером, возможно что-то с интернетом',
@@ -875,8 +873,7 @@ export const CommonUiText = {
       value: 'unknownError',
       lang: 'en-US',
       text: 'Unknown error',
-    },
-    {
+    },{
       value: 'unknownError',
       lang: 'ru-RU',
       text: 'Неизвестная ошибка',
@@ -884,4 +881,4 @@ export const CommonUiText = {
   ] satisfies UiText<'unknownError'>[],
   
   
-} satisfies Record<string, UiText<any>[]>
+} satisfies Record<string, UiText[]>

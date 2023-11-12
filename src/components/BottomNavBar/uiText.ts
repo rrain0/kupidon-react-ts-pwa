@@ -17,8 +17,7 @@ export const BottomNavBarUiText = {
       value: 'findCouples',
       lang: 'en-US',
       text: 'Find couples',
-    },
-    {
+    },{
       value: 'findCouples',
       lang: 'ru-RU',
       text: 'Найти пары',
@@ -31,8 +30,7 @@ export const BottomNavBarUiText = {
       value: 'advices',
       lang: 'en-US',
       text: 'Advice',
-    },
-    {
+    },{
       value: 'advices',
       lang: 'ru-RU',
       text: 'Советы',

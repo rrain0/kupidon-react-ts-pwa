@@ -10,7 +10,7 @@ import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOver
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import { AccountSettingsUiText } from 'src/pages/AccountSettings/AccountSettingsUiText'
+import { AccountSettingsUiText } from 'src/pages/AccountSettings/uiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'

@@ -24,8 +24,7 @@ export const ProfileUiText = {
       value: 'aboutMe',
       lang: 'en-US',
       text: 'About me',
-    },
-    {
+    },{
       value: 'aboutMe',
       lang: 'ru-RU',
       text: 'Обо мне',
@@ -38,8 +37,7 @@ export const ProfileUiText = {
       value: 'imLookingFor',
       lang: 'en-US',
       text: "I'm looking for",
-    },
-    {
+    },{
       value: 'imLookingFor',
       lang: 'ru-RU',
       text: 'Я ищу',

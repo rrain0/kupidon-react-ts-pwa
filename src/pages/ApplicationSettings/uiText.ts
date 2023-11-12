@@ -3,16 +3,17 @@ import { UiTextContainer } from 'src/utils/lang/UiText'
 
 
 
-export const QuickSettingsUiText = {
+export const ApplicationSettingsUiText = {
   
   
-  settings: CommonUiText.settings,
+  appSettings: CommonUiText.appSettings,
   
   
   theme: CommonUiText.theme,
   systemTheme: CommonUiText.systemTheme,
   lightTheme: CommonUiText.lightTheme,
   darkTheme: CommonUiText.darkTheme,
+  
   
   
   clearAppData: CommonUiText.clearAppData,
@@ -26,7 +27,6 @@ export const QuickSettingsUiText = {
   
   
   accountSettings: CommonUiText.accountSettings,
-  appSettings: CommonUiText.appSettings,
   testPage: CommonUiText.testPage,
   
   
