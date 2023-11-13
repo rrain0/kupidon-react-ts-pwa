@@ -29,8 +29,6 @@ import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
-import DataField from 'src/views/DataField/DataField'
-import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
@@ -172,26 +170,25 @@ const ProfileContent = (props: ProfileContentProps)=>{
     [canSubmit, setCanSubmit]
   )
   
-  const fieldIsNotInitial = useCallback(
+  const fieldIsInitial = useCallback(
     (field: keyof FormValues)=>{
-      return !failures
+      return failures
         .some(f=>f.type==='initial' && f.errorFields.includes(field))
     },
     [failures]
   )
+  
   const updateValues = useEffectEvent((auth: AuthStateType)=>{
     setFormValues(s=>{
-      const u = auth!.user, vs = s, ivs = vs.initialValues
-      const newValues = {
-        ...vs,
-        initialValues: {
-          name: u.name,
-          birthDate: u.birthDate,
-          gender: u.gender,
-        }
-      }
+      const u = auth!.user
+      const newValues = {...s, initialValues: {...s.initialValues}}
+      newValues.initialValues.name = u.name
+      newValues.initialValues.birthDate = u.birthDate
+      newValues.initialValues.gender = u.gender
+      newValues.initialValues.aboutMe = u.aboutMe
+      
       ObjectKeys(userDefaultValues).forEach(fName=>{
-        if (!(fName in ivs) || !fieldIsNotInitial(fName))
+        if (fieldIsInitial(fName) && fName in u)
           newValues[fName] = u[fName] as any
       })
       return newValues
@@ -202,13 +199,12 @@ const ProfileContent = (props: ProfileContentProps)=>{
   const resetField = useCallback(
     (fieldName: keyof FormValues)=>{
       const vs = formValues, ivs = formValues.initialValues
-      if (fieldIsNotInitial(fieldName))
-        setFormValues({
-          ...vs,
-          [fieldName]: ivs[fieldName],
-        })
+      setFormValues({
+        ...vs,
+        [fieldName]: ivs[fieldName],
+      })
     },
-    [fieldIsNotInitial, formValues, setFormValues]
+    [formValues, setFormValues]
   )
   
   
@@ -306,7 +302,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
       <ItemContainer>
         <ItemTitleContainer>
           <ItemLabel>{uiText.name[0].text}</ItemLabel>
-          { fieldIsNotInitial('name')
+          { !fieldIsInitial('name')
             && <ResetButton
               text={uiText.reset[0].text}
               onClick={()=>resetField('name')}
@@ -328,7 +324,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
       <ItemContainer>
         <ItemTitleContainer>
           <ItemLabel>{uiText.birthDate[0].text}</ItemLabel>
-          { fieldIsNotInitial('birthDate')
+          { !fieldIsInitial('birthDate')
             && <ResetButton
               text={uiText.reset[0].text}
               onClick={()=>resetField('birthDate')}
@@ -351,7 +347,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
       <ItemContainer>
         <ItemTitleContainer>
           <ItemLabel>{uiText.gender[0].text}</ItemLabel>
-          { fieldIsNotInitial('gender')
+          { !fieldIsInitial('gender')
             && <ResetButton
               text={uiText.reset[0].text}
               onClick={()=>resetField('gender')}
@@ -414,8 +410,24 @@ const ProfileContent = (props: ProfileContentProps)=>{
       
       
       <ItemContainer>
-        <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
-        <Textarea css={TextareaStyle.textareaSmall} disabled />
+        <ItemTitleContainer>
+          <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
+          { !fieldIsInitial('aboutMe')
+            && <ResetButton
+              text={uiText.reset[0].text}
+              onClick={()=>resetField('aboutMe')}
+            />
+          }
+        </ItemTitleContainer>
+        <ValidationComponentWrap {...validationProps}
+          fieldName='aboutMe'
+          render={props =>
+            <Textarea css={TextareaStyle.textareaSmall}
+              {...props.inputProps}
+              hasError={props.highlight}
+            />
+          }
+        />
       </ItemContainer>
       
     </Card>

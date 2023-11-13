@@ -816,6 +816,19 @@ export const CommonUiText = {
   ] satisfies UiText<'dateNotExists'>[],
   
   
+  textMaxLenIs2000: [
+    {
+      value: 'textMaxLenIs2000',
+      lang: 'en-US',
+      text: 'Text max length is 2000 chars',
+    },{
+      value: 'textMaxLenIs2000',
+      lang: 'ru-RU',
+      text: 'Максимальная длина текста - 2000 символов',
+    },
+  ] satisfies UiText<'textMaxLenIs2000'>[],
+  
+  
   youMustBeAtLeast18YearsOld: [
     {
       value: 'youMustBeAtLeast18YearsOld',

@@ -4,7 +4,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
 import { ElementProps } from 'src/utils/common/GetDimensions'
 import styled from "styled-components"
-import React, { useImperativeHandle, useLayoutEffect, useRef, useState } from 'react'
+import React, { useImperativeHandle, useRef, useState } from 'react'
 import { ReactUtils } from "src/utils/common/ReactUtils"
 import ReactMemoTyped = ReactUtils.Mem
 import classNames from "classnames"
@@ -12,11 +12,9 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import trueOrUndef = CastUtils.trueOrUndef
 import row = EmotionCommon.row
-import resetInput = EmotionCommon.resetInput
 import onHover = EmotionCommon.onHover
 import abs = EmotionCommon.abs
 import resetTextarea = EmotionCommon.resetTextarea
-import center = EmotionCommon.center
 
 
 
@@ -46,27 +44,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
   useImperativeHandle(forwardedRef, ()=>textareaRef.current!,[])
   
   
-  useLayoutEffect(()=>{
-    const textarea = textareaRef.current
-    if (textarea){
-      //textarea.
-    }
-  },)
-  
-  
-  const [value,setValue] = useState('')
-  const updateValue = (ev: React.ChangeEvent<HTMLTextAreaElement>)=>{
-    // there is no text node if textarea has no text
-    /* const textNode = ev.currentTarget.childNodes[0]
-    if (textNode){
-      const range = document.createRange()
-      range.selectNodeContents(textNode)
-      const rects = range.getBoundingClientRect()
-      console.log('text node rect',rects)
-    } */
-    setValue(ev.currentTarget.value)
-  }
-  
   
   
   return <Frame
@@ -84,9 +61,10 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
       data-error={hasError}
       ref={textareaRef}
       
-      onScroll={ev=>textareaFitText(ev.currentTarget)}
-      value={value}
-      onChange={updateValue}
+      onScroll={ev=>{
+        textareaFitText(ev.currentTarget)
+        restProps.onScroll?.(ev)
+      }}
     />
     
     { childrenPosition==='end' && children }

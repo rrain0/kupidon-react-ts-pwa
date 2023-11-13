@@ -64,6 +64,7 @@ export const ProfileUiText = {
   dateNotExists: CommonUiText.dateNotExists,
   youMustBeAtLeast18YearsOld: CommonUiText.youMustBeAtLeast18YearsOld,
   genderIsNotChosen: CommonUiText.genderIsNotChosen,
+  textMaxLenIs2000: CommonUiText.textMaxLenIs2000,
   connectionError: CommonUiText.connectionError,
   unknownError: CommonUiText.unknownError,
   

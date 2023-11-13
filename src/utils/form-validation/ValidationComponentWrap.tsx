@@ -38,7 +38,7 @@ export type ValidationComponentWrapRenderProps
   checked: (value: ObjectValuesType<Vs>)=>boolean
   inputProps: {
     value: Vs[F]
-    onChange: (ev: React.ChangeEvent<HTMLInputElement>)=>void
+    onChange: (ev: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>void
     onBlur: ()=>void
   }
 }
@@ -147,7 +147,7 @@ const ValidationComponentWrap =
   const inputProps = {
     value,
     onChange: useCallback(
-      (ev: React.ChangeEvent<HTMLInputElement>)=>{
+      (ev: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
         setValue(ev.currentTarget.value as any)
       },
       []

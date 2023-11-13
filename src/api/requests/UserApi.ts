@@ -1,4 +1,5 @@
 import { ApiUtils } from 'src/api/ApiUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { AxiosConfig } from '../AxiosConfig'
 import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
 import axAccess = AxiosConfig.axAccess
@@ -14,18 +15,20 @@ import NoUserResponseError = ApiUtils.NoUserResponseError
 export namespace UserApi {
   
   
+  import PartialUndef = TypeUtils.PartialUndef
   export type GenderEnum = "MALE"|"FEMALE"
   export type CurrentUser = {
-    id: string,
-    email: string,
-    emailVerified: boolean,
-    roles: string[],
-    created: string,
-    updated: string,
-    enabled: boolean,
-    name: string,
-    birthDate: string,
+    id: string
+    email: string
+    emailVerified: boolean
+    roles: string[]
+    created: string
+    updated: string
+    enabled: boolean
+    name: string
+    birthDate: string
     gender: GenderEnum
+    aboutMe: string
   }
   export type CurrentUserSuccessData = {
     user: CurrentUser
@@ -55,7 +58,7 @@ export namespace UserApi {
     pwd: string,
     name: string,
     gender: "MALE"|"FEMALE",
-    birthDate: string, // "2002-12-30" "1999-12-31"
+    birthDate: string, // '2005-11-10T00:00:00.000+08:00'
   }
   export const create = async(user: UserToCreate) =>
     handleResponse<CreateSuccessData,CreateErrorData>
@@ -68,10 +71,11 @@ export namespace UserApi {
   export type UpdateUserSuccessData = CurrentUserSuccessData
   export type UpdateUserErrorData =
     AuthenticationError | NoUserResponseError | TechnicalError
-  export type UserToUpdate = {
-    name?: string | undefined,
-    birthDate?: string | undefined, // "2002-12-30" "1999-12-31"
-  }
+  export type UserToUpdate = PartialUndef<{
+    name: string
+    birthDate: string // '2005-11-10T00:00:00.000+08:00'
+    aboutMe: string
+  }>
   export const update = async(user: UserToUpdate) =>
     handleAuthenticatedResponse<UpdateUserSuccessData, UpdateUserErrorData>
     (axAccess.put(r.userUpdate,user))

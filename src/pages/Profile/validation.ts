@@ -29,6 +29,9 @@ export namespace ProfilePageValidation {
     | 'gender-not-changed'
     | 'gender-required'
     
+    | 'about-me-not-changed'
+    | 'about-me-is-too-long'
+    
     | 'NO_USER'
     | 'connection-error'
     | 'unknown-error'
@@ -45,6 +48,8 @@ export namespace ProfilePageValidation {
     'birth-date-younger-18': ProfileUiText.youMustBeAtLeast18YearsOld,
     'gender-not-changed': [],
     'gender-required': ProfileUiText.genderIsNotChosen,
+    'about-me-not-changed': [],
+    'about-me-is-too-long': ProfileUiText.textMaxLenIs2000,
     'NO_USER': ProfileUiText.noUserWithSuchId,
     'connection-error': ProfileUiText.connectionError,
     'unknown-error': ProfileUiText.unknownError,
@@ -56,6 +61,7 @@ export namespace ProfilePageValidation {
     name: string
     birthDate: string
     gender: GenderEnum|''
+    aboutMe: string
   }
   export type FromServerValue = {
     values: UserValues // значения, отправленные на сервердля проверки
@@ -67,7 +73,7 @@ export namespace ProfilePageValidation {
   }
   export type AuxiliaryValues = {
     fromServer: undefined | FromServerValue
-    initialValues: Partial<UserValues>
+    initialValues: UserValues
   }
   export type FormValues = UserValues & AuxiliaryValues
   
@@ -76,10 +82,11 @@ export namespace ProfilePageValidation {
     name: '',
     birthDate: '',
     gender: '',
+    aboutMe: '',
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
     fromServer: undefined,
-    initialValues: {},
+    initialValues: userDefaultValues,
   }
   export const defaultValues: FormValues = {
     ...userDefaultValues,
@@ -97,7 +104,7 @@ export namespace ProfilePageValidation {
     [['name','initialValues'], (values)=>{
       const [v,ivs] = values as [FormValues['name'],FormValues['initialValues']]
       //console.log('v:',v,'ivs:',ivs)
-      if ('name' in ivs && v===ivs.name) return new PartialFailureData({
+      if (v===ivs.name) return new PartialFailureData({
         code: 'name-not-changed' satisfies FailureCode,
         msg: 'Имя не изменено',
         type: 'initial',
@@ -118,9 +125,8 @@ export namespace ProfilePageValidation {
     
     [['birthDate','initialValues'], (values)=>{
       const [v,ivs] = values as [FormValues['birthDate'],FormValues['initialValues']]
-      if (
-        'birthDate' in ivs
-        && DateTime.eqFrom_yyyy_MM_dd(v,ivs.birthDate)
+      if (v===ivs.birthDate
+        || DateTime.eqFrom_yyyy_MM_dd(v,ivs.birthDate)
       )
         return new PartialFailureData({
           code: 'birth-date-not-changed' satisfies FailureCode,
@@ -173,7 +179,7 @@ export namespace ProfilePageValidation {
     
     [['gender','initialValues'], (values)=>{
       const [v,ivs] = values as [FormValues['gender'],FormValues['initialValues']]
-      if ('gender' in ivs && v===ivs.gender) return new PartialFailureData({
+      if (v===ivs.gender) return new PartialFailureData({
         code: 'gender-not-changed' satisfies FailureCode,
         msg: 'Gender is not changed',
         type: 'initial',
@@ -187,6 +193,27 @@ export namespace ProfilePageValidation {
         code: 'gender-required' satisfies FailureCode,
         msg: 'Пол не выбран',
         type: 'default',
+      })
+    }],
+    
+    
+    
+    [['aboutMe','initialValues'], (values)=>{
+      const [v,ivs] = values as [FormValues['aboutMe'],FormValues['initialValues']]
+      //console.log('v:',v,'ivs:',ivs)
+      if (v===ivs.aboutMe) return new PartialFailureData({
+        code: 'about-me-not-changed' satisfies FailureCode,
+        msg: 'Field "About me" is not changed',
+        type: 'initial',
+        errorFields: ['aboutMe'],
+      })
+    }],
+    [['aboutMe'], (values)=>{
+      const [v] = values as [FormValues['aboutMe']]
+      if (v.length>2000) return new PartialFailureData({
+        code: 'about-me-is-too-long' satisfies FailureCode,
+        msg: 'About me is longer than 2000 chars',
+        delay,
       })
     }],
     
