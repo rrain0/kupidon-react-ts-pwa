@@ -19,6 +19,7 @@ export namespace ProfilePageValidation {
   export type FailureCode =
     'name-required'
     | 'name-not-changed'
+    | 'name-too-long'
     
     | 'birth-date-not-changed'
     | 'birth-date-required'
@@ -39,8 +40,9 @@ export namespace ProfilePageValidation {
   
   
   export const mapFailureCodeToUiText = {
-    'name-required': ProfileUiText.firstNameIsNotEntered,
+    'name-required': ProfileUiText.nameIsNotEntered,
     'name-not-changed': [],
+    'name-too-long': ProfileUiText.nameMaxLenIs100,
     'birth-date-not-changed': [],
     'birth-date-required': ProfileUiText.birthDateIsNotEntered,
     'birth-date-incorrect-format': ProfileUiText.birthDateHasIncorrectFormat,
@@ -49,7 +51,7 @@ export namespace ProfilePageValidation {
     'gender-not-changed': [],
     'gender-required': ProfileUiText.genderIsNotChosen,
     'about-me-not-changed': [],
-    'about-me-is-too-long': ProfileUiText.textMaxLenIs2000,
+    'about-me-is-too-long': ProfileUiText.descriptionMaxLenIs2000,
     'NO_USER': ProfileUiText.noUserWithSuchId,
     'connection-error': ProfileUiText.connectionError,
     'unknown-error': ProfileUiText.unknownError,
@@ -118,6 +120,14 @@ export namespace ProfilePageValidation {
         code: 'name-required' satisfies FailureCode,
         msg: 'Имя не введено',
         type: 'default',
+      })
+    }],
+    [['name'], (values)=>{
+      const [v] = values as [UserValues['name']]
+      if (v.length>100) return new PartialFailureData({
+        code: 'name-too-long' satisfies FailureCode,
+        msg: 'Name max length is 100',
+        delay,
       })
     }],
     

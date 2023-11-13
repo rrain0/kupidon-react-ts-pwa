@@ -22,14 +22,17 @@ export namespace SignupPageValidation {
   export type FailureCode =
     'email-required'
     | 'email-incorrect'
+    | 'email-too-long'
     
     | 'pwd-required'
     | 'pwd-incorrect'
+    | 'pwd-too-long'
     
     | 'repeated-pwd-required'
     | 'repeated-pwd-not-match'
     
     | 'name-required'
+    | 'name-too-long'
     
     | 'gender-required'
     
@@ -48,11 +51,14 @@ export namespace SignupPageValidation {
   export const mapFailureCodeToUiText = {
     'email-required': SignupPageUiText.emailIsNotEntered,
     'email-incorrect': SignupPageUiText.emailFormatIsIncorrect,
+    'email-too-long': SignupPageUiText.emailMaxLenIs100,
     'pwd-required': SignupPageUiText.pwdIsNotEntered,
     'pwd-incorrect': SignupPageUiText.pwdFormatIsIncorrect,
+    'pwd-too-long': SignupPageUiText.pwdMaxLenIs200,
     'repeated-pwd-required': SignupPageUiText.repeatPwd,
     'repeated-pwd-not-match': SignupPageUiText.passwordsDoNotMatch,
-    'name-required': SignupPageUiText.firstNameIsNotEntered,
+    'name-required': SignupPageUiText.nameIsNotEntered,
+    'name-too-long': SignupPageUiText.nameMaxLenIs100,
     'gender-required': SignupPageUiText.genderIsNotChosen,
     'birth-date-required': SignupPageUiText.birthDateIsNotEntered,
     'birth-date-incorrect-format': SignupPageUiText.birthDateHasIncorrectFormat,
@@ -129,6 +135,14 @@ export namespace SignupPageValidation {
         delay,
       })
     }],
+    [['email'], (values)=>{
+      const [v] = values as [UserValues['email']]
+      if (v.length>100) return new PartialFailureData({
+        code: 'email-too-long' satisfies FailureCode,
+        msg: 'Email max length is 100',
+        delay,
+      })
+    }],
     
     
     
@@ -146,6 +160,14 @@ export namespace SignupPageValidation {
       if (!isValidPwd(v)) return new PartialFailureData({
         code: 'pwd-incorrect' satisfies FailureCode,
         msg: 'Пароль должен быть не короче 6 символов',
+        delay,
+      })
+    }],
+    [['pwd'], (values)=>{
+      const [v] = values as [UserValues['pwd']]
+      if (v.length>200) return new PartialFailureData({
+        code: 'pwd-too-long' satisfies FailureCode,
+        msg: 'Password max length is 200',
         delay,
       })
     }],
@@ -180,6 +202,14 @@ export namespace SignupPageValidation {
         code: 'name-required' satisfies FailureCode,
         msg: 'Имя не введено',
         type: 'default',
+      })
+    }],
+    [['name'], (values)=>{
+      const [v] = values as [UserValues['name']]
+      if (v.length>100) return new PartialFailureData({
+        code: 'name-too-long' satisfies FailureCode,
+        msg: 'Name max length is 100',
+        delay,
       })
     }],
     

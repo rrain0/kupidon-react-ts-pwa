@@ -712,7 +712,7 @@ export const CommonUiText = {
   ] satisfies UiText<'passwordsDoNotMatch'>[],
   
   
-  firstNameIsNotEntered: [
+  nameIsNotEntered: [
     {
       value: 'firstNameIsNotEntered',
       lang: 'en-US',
@@ -736,19 +736,6 @@ export const CommonUiText = {
       text: 'Нет пользователя с таким id',
     },
   ] satisfies UiText<'noUserWithSuchId'>[],
-  
-  
-  lastNameIsNotEntered: [
-    {
-      value: 'lastNameIsNotEntered',
-      lang: 'en-US',
-      text: 'Last name is not entered',
-    },{
-      value: 'lastNameIsNotEntered',
-      lang: 'ru-RU',
-      text: 'Фамилия не введена',
-    },
-  ] satisfies UiText<'lastNameIsNotEntered'>[],
   
   
   genderIsNotChosen: [
@@ -816,19 +803,6 @@ export const CommonUiText = {
   ] satisfies UiText<'dateNotExists'>[],
   
   
-  textMaxLenIs2000: [
-    {
-      value: 'textMaxLenIs2000',
-      lang: 'en-US',
-      text: 'Text max length is 2000 chars',
-    },{
-      value: 'textMaxLenIs2000',
-      lang: 'ru-RU',
-      text: 'Максимальная длина текста - 2000 символов',
-    },
-  ] satisfies UiText<'textMaxLenIs2000'>[],
-  
-  
   youMustBeAtLeast18YearsOld: [
     {
       value: 'youMustBeAtLeast18YearsOld',
@@ -840,6 +814,58 @@ export const CommonUiText = {
       text: 'Вам нет 18 лет',
     },
   ] satisfies UiText<'youMustBeAtLeast18YearsOld'>[],
+  
+  
+  descriptionMaxLenIs2000: [
+    {
+      value: 'descriptionMaxLenIs2000',
+      lang: 'en-US',
+      text: 'Description max length is 2000 chars',
+    },{
+      value: 'descriptionMaxLenIs2000',
+      lang: 'ru-RU',
+      text: 'Максимальная длина описания - 2000 символов',
+    },
+  ] satisfies UiText<'descriptionMaxLenIs2000'>[],
+  
+  
+  emailMaxLenIs100: [
+    {
+      value: 'emailMaxLenIs100',
+      lang: 'en-US',
+      text: 'Email max length is 100 chars',
+    },{
+      value: 'emailMaxLenIs100',
+      lang: 'ru-RU',
+      text: 'Максимальная длина email - 100 символов',
+    },
+  ] satisfies UiText<'emailMaxLenIs100'>[],
+  
+  
+  pwdMaxLenIs200: [
+    {
+      value: 'pwdMaxLenIs200',
+      lang: 'en-US',
+      text: 'Password max length is 200 chars',
+    },{
+      value: 'pwdMaxLenIs200',
+      lang: 'ru-RU',
+      text: 'Максимальная длина пароля - 200 символов',
+    },
+  ] satisfies UiText<'pwdMaxLenIs200'>[],
+  
+  
+  nameMaxLenIs100: [
+    {
+      value: 'nameMaxLenIs100',
+      lang: 'en-US',
+      text: 'Name max length is 100 chars',
+    },{
+      value: 'nameMaxLenIs100',
+      lang: 'ru-RU',
+      text: 'Максимальная длина имени - 100 символов',
+    },
+  ] satisfies UiText<'nameMaxLenIs100'>[],
   
   
   noUserWithSuchLoginPwd: [

@@ -57,14 +57,15 @@ export const ProfileUiText = {
   
   
   
-  firstNameIsNotEntered: CommonUiText.firstNameIsNotEntered,
+  nameIsNotEntered: CommonUiText.nameIsNotEntered,
+  nameMaxLenIs100: CommonUiText.nameMaxLenIs100,
   noUserWithSuchId: CommonUiText.noUserWithSuchId,
   birthDateIsNotEntered: CommonUiText.birthDateIsNotEntered,
   birthDateHasIncorrectFormat: CommonUiText.birthDateHasIncorrectFormat,
   dateNotExists: CommonUiText.dateNotExists,
   youMustBeAtLeast18YearsOld: CommonUiText.youMustBeAtLeast18YearsOld,
   genderIsNotChosen: CommonUiText.genderIsNotChosen,
-  textMaxLenIs2000: CommonUiText.textMaxLenIs2000,
+  descriptionMaxLenIs2000: CommonUiText.descriptionMaxLenIs2000,
   connectionError: CommonUiText.connectionError,
   unknownError: CommonUiText.unknownError,
   
