@@ -1,10 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
+import Form from 'src/components/FormElements/Form'
+import FormHeader from 'src/components/FormElements/FormHeader'
+import ItemContainer from 'src/components/FormElements/ItemContainer'
+import ItemLabel from 'src/components/FormElements/ItemLabel'
+import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
+import ResetButton from 'src/components/FormElements/ResetButton'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
@@ -22,7 +27,6 @@ import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import { Themes } from 'src/utils/theme/Themes'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetSnapPoints } from 'src/views/BottomSheet/useBottomSheet'
 import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
@@ -36,15 +40,12 @@ import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import Textarea from 'src/views/Textarea/Textarea'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
-import row = EmotionCommon.row
 import col = EmotionCommon.col
-import textNormal = EmotionCommon.textNormal1
 import defaultValues = ProfilePageValidation.defaultValues
 import validators = ProfilePageValidation.validators
 import FormValues = ProfilePageValidation.FormValues
 import UserToUpdate = UserApi.UserToUpdate
-import ArrowReloadIc = SimpleSvgIcons.ArrowReloadIc
-import mapFailureCodeToUiOption = ProfilePageValidation.mapFailureCodeToUiText
+import mapFailureCodeToUiText = ProfilePageValidation.mapFailureCodeToUiText
 import Setter = TypeUtils.Setter
 import Mem = ReactUtils.Mem
 import userDefaultValues = ProfilePageValidation.userDefaultValues
@@ -85,24 +86,17 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   const {
-    formValues,
-    setFormValues,
-    failures,
-    setFailures,
-    failedFields,
-    validationProps,
+    formValues, setFormValues,
+    failures, setFailures,
+    failedFields, validationProps,
   } = useFormFailures({
-    defaultValues,
-    validators
+    defaultValues, validators
   })
   
   const {
-    request,
-    isLoading,
-    isSuccess,
-    isError,
-    response,
-    resetResponse,
+    request, isLoading,
+    isSuccess, isError,
+    response, resetResponse,
   } = useApiRequest({
     values: formValues,
     failedFields,
@@ -123,14 +117,11 @@ const ProfileContent = (props: ProfileContentProps)=>{
   })
   
   const {
-    canSubmit,
-    onFormSubmitCallback,
+    canSubmit, onFormSubmitCallback,
     submit,
   } = useFormSubmit({
-    failures,
-    setFailures,
-    failedFields,
-    setFormValues,
+    failures, setFailures,
+    failedFields, setFormValues,
     getCanSubmit: useCallback(
       (failedFields: (keyof FormValues)[]) => {
         return failedFields
@@ -139,10 +130,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
       },
       []
     ),
-    request,
-    isLoading,
-    isError,
-    response,
+    request, isLoading,
+    isError, response,
     resetResponse,
   })
   
@@ -219,7 +208,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
     successText: ProfileUiText.updated,
     failures: failures,
     setFailures: setFailures,
-    failureCodeToUiText: mapFailureCodeToUiOption,
+    failureCodeToUiText: mapFailureCodeToUiText,
   })
   
   
@@ -229,7 +218,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   /* useEffect(()=>{
-    console.log('PROFILE_FAILURES',failures)
+    console.log('PROFILE_CONTENT_FAILURES',failures)
   },[failures]) */
   
   
@@ -286,7 +275,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   return <Form onSubmit={onFormSubmitCallback}>
     
-    <h3 css={formHeader}>{uiText.profile[0].text}</h3>
+    <FormHeader>{uiText.profile[0].text}</FormHeader>
     
     
     <ProfileImages
@@ -512,63 +501,9 @@ export default Mem(ProfileContent)
 
 
 
-const Form = styled.form`
-  max-width: 500px;
-  width: 100%;
-  ${col};
-  gap: 10px;
-`
-
-const formHeader = (theme: Themes.Theme) => css`
-  font-weight: 500;
-  font-size: 28px;
-  line-height: 150%;
-  letter-spacing: 0.05em;
-  color: ${theme.page.text[0]};
-  align-self: center;
-`
-const ItemContainer = styled.div`
-  ${col};
-  gap: 4px;
-`
-const ItemTitleContainer = styled.div`
-  width: 100%;
-  height: 30px;
-  ${row};
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
-`
-const ItemLabel = styled.label`
-  padding-left: 12px;
-  ${textNormal};
-  color: ${p=>p.theme.page.text[0]}
-`
 
 
 
-const ResetButton = Mem(
-({text,onClick}: { text: string, onClick: ()=>void })=>{
-  return <Button css={ButtonStyle.smallRectNormal}
-    onClick={onClick}
-  >
-    <ArrowReloadIc css={resetButtonIcon}/>
-    <ResetButtonText>
-      {text}
-    </ResetButtonText>
-  </Button>
-})
-const resetButtonIcon = css`
-  &.rrainuiIcon {
-    height: 1em;
-    width: 1em;
-    --icon-color: var(--color);
-    transform: scale(-1, 1);
-  }
-`
-const ResetButtonText = styled.div`
-  white-space: nowrap;
-`
 
 
 

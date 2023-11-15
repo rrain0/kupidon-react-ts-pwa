@@ -9,17 +9,17 @@ import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
 import PartialFailureData = ValidationCore.PartialFailureData
 import CreateErrorData = UserApi.CreateErrorData
+import GenderEnum = UserApi.GenderEnum
 
 
 
 export namespace SignupPageValidation {
   
   
-  import GenderEnum = UserApi.GenderEnum
-  export type SeverErrorCode = CreateErrorData['code']
+  type SeverErrorCode = CreateErrorData['code']
   
   
-  export type FailureCode =
+  type FailureCode =
     'email-required'
     | 'email-incorrect'
     | 'email-too-long'

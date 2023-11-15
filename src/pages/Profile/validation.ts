@@ -6,17 +6,17 @@ import { UiText } from 'src/utils/lang/UiText'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
 import UpdateUserErrorData = UserApi.UpdateUserErrorData
+import GenderEnum = UserApi.GenderEnum
 
 
 
 export namespace ProfilePageValidation {
   
   
-  import GenderEnum = UserApi.GenderEnum
-  export type SeverErrorCode = UpdateUserErrorData['code']
+  type SeverErrorCode = UpdateUserErrorData['code']
   
   
-  export type FailureCode =
+  type FailureCode =
     'name-required'
     | 'name-not-changed'
     | 'name-too-long'

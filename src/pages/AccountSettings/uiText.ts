@@ -40,7 +40,17 @@ export const AccountSettingsUiText = {
   
   yes: CommonUiText.yes,
   no: CommonUiText.no,
+  reset: CommonUiText.reset,
   
+  
+  newPwd: CommonUiText.newPwd,
+  newPwdPlaceholder: CommonUiText.newPwdPlaceholder,
+  repeatPwd: CommonUiText.repeatPwd,
+  repeatPwdPlaceholder: CommonUiText.repeatPwdPlaceholder,
+  
+  
+  update: CommonUiText.update,
+  updated: CommonUiText.updated,
   
   userCreated: [
     {
@@ -66,6 +76,14 @@ export const AccountSettingsUiText = {
       text: 'Пользователь обновлён',
     },
   ] satisfies UiText<'userUpdated'>[],
+  
+  
+  pwdIsNotEntered: CommonUiText.pwdNotEntered,
+  pwdFormatIsIncorrect: CommonUiText.pwdFormatIsIncorrect,
+  pwdMaxLenIs200: CommonUiText.pwdMaxLenIs200,
+  passwordsDoNotMatch: CommonUiText.passwordsDoNotMatch,
+  connectionError: CommonUiText.connectionError,
+  unknownError: CommonUiText.unknownError,
   
   
   signOut: CommonUiText.signOut,

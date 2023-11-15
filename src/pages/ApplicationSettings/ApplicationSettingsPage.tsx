@@ -2,7 +2,6 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import { ComponentStyles } from 'src/components/ComponentStyles'
@@ -39,7 +38,6 @@ import MoonIc = SimpleSvgIcons.MoonIc
 import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
 import Theme = Themes.Theme
-import center = EmotionCommon.center
 import formHeader = ComponentStyles.formHeader
 import AddModuleIc = SimpleSvgIcons.AddModuleIc
 

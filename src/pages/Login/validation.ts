@@ -13,10 +13,10 @@ import LoginErrorData = AuthApi.LoginErrorData
 export namespace LoginPageValidation {
   
   
-  export type SeverErrorCode = LoginErrorData['code']
+  type SeverErrorCode = LoginErrorData['code']
   
   
-  export type FailureCode = 'login-required'
+  type FailureCode = 'login-required'
     | 'login-incorrect'
     | 'pwd-required'
     | 'NO_USER'

@@ -45,6 +45,19 @@ export const CommonUiText = {
   ] satisfies UiText<'pwdPlaceholder'>[],
   
   
+  newPwdPlaceholder: [
+    {
+      value: 'newPwdPlaceholder',
+      lang: 'en-US',
+      text: 'new password',
+    },{
+      value: 'newPwdPlaceholder',
+      lang: 'ru-RU',
+      text: 'новый пароль',
+    },
+  ] satisfies UiText<'newPwdPlaceholder'>[],
+  
+  
   repeatPwdPlaceholder: [
     {
       value: 'repeatPwdPlaceholder',
@@ -238,6 +251,41 @@ export const CommonUiText = {
       text: 'Профиль',
     },
   ] satisfies UiText<'profile'>[],
+  
+  
+  pwd: [
+    {
+      value: 'pwd',
+      lang: 'en-US',
+      text: 'Password',
+    },{
+      value: 'pwd',
+      lang: 'ru-RU',
+      text: 'Пароль',
+    },
+  ] satisfies UiText<'pwd'>[],
+  newPwd: [
+    {
+      value: 'newPwd',
+      lang: 'en-US',
+      text: 'New password',
+    },{
+      value: 'newPwd',
+      lang: 'ru-RU',
+      text: 'Новый пароль',
+    },
+  ] satisfies UiText<'newPwd'>[],
+  repeatPwd: [
+    {
+      value: 'repeatPwd',
+      lang: 'en-US',
+      text: 'Repeat password',
+    },{
+      value: 'repeatPwd',
+      lang: 'ru-RU',
+      text: 'Повторите пароль',
+    },
+  ] satisfies UiText<'repeatPwd'>[],
   
   
   name: [
@@ -684,19 +732,6 @@ export const CommonUiText = {
       text: 'Пароль должен быть не короче 6 символов',
     },
   ] satisfies UiText<'pwdFormatIsIncorrect'>[],
-  
-  
-  repeatPwd: [
-    {
-      value: 'repeatPwd',
-      lang: 'en-US',
-      text: 'Repeat password',
-    },{
-      value: 'repeatPwd',
-      lang: 'ru-RU',
-      text: 'Повторите пароль',
-    },
-  ] satisfies UiText<'repeatPwd'>[],
   
   
   passwordsDoNotMatch: [

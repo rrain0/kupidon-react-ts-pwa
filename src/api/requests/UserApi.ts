@@ -24,7 +24,6 @@ export namespace UserApi {
     roles: string[]
     created: string
     updated: string
-    enabled: boolean
     name: string
     birthDate: string
     gender: GenderEnum
@@ -75,6 +74,7 @@ export namespace UserApi {
     name: string
     birthDate: string // '2005-11-10T00:00:00.000+08:00'
     aboutMe: string
+    pwd: string
   }>
   export const update = async(user: UserToUpdate) =>
     handleAuthenticatedResponse<UpdateUserSuccessData, UpdateUserErrorData>
