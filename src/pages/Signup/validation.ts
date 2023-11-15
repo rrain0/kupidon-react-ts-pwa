@@ -272,7 +272,7 @@ export namespace SignupPageValidation {
     [['fromServer'], (values)=>{
       const [v] = values as [FromServerValue]
       if (v?.error.code==='DUPLICATE_EMAIL') return new PartialFailureData({
-        code: v?.error.code satisfies FailureCode,
+        code: v.error.code satisfies FailureCode,
         msg: 'Пользователь с таким email уже зарегестрирован',
         errorFields: ['fromServer','email'],
         type: 'server',

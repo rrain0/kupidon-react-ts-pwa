@@ -85,21 +85,9 @@ export const AccountSettingsUiText = {
   connectionError: CommonUiText.connectionError,
   unknownError: CommonUiText.unknownError,
   
-  
+  changePwd: CommonUiText.changePwd,
   signOut: CommonUiText.signOut,
-  
-  
-  deleteAccount: [
-    {
-      value: 'deleteAccount',
-      lang: 'en-US',
-      text: 'Delete Account',
-    },{
-      value: 'deleteAccount',
-      lang: 'ru-RU',
-      text: 'Удалить Аккаунт',
-    },
-  ] satisfies UiText<'deleteAccount'>[],
+  deleteAccount: CommonUiText.deleteAccount,
   
   
 } satisfies UiTextContainer

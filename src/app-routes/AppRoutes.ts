@@ -60,18 +60,19 @@ export namespace AppRoutes {
     [path]: 'settings',
     account: buildPath('account'),
     app: buildPath('app'),
+    pwdChange: buildPath('pwdChange'),
   })
   
   
   
   export const RootRoute = buildRoute({
     [path]: '',
-    test: test,
-    findPairs: findPairs,
-    login: login,
-    signup: signup,
-    profile: profile,
-    settings: settings,
+    test,
+    findPairs,
+    login,
+    signup,
+    profile,
+    settings,
   })
   
 }

@@ -7,13 +7,14 @@ import onHover = EmotionCommon.onHover
 import textLarge1 = EmotionCommon.textLarge1
 import textLarge2 = EmotionCommon.textLarge2
 import bgcBorderMask = EmotionCommon.bgcBorderMask
+import PartialUndef = TypeUtils.PartialUndef
+import textSmall2 = EmotionCommon.textSmall2
 
 
 
 export namespace InputStyle {
   
   
-  import PartialUndef = TypeUtils.PartialUndef
   export const inputNormal = (t:Theme) => css`
     &.rrainuiFrame {
       border-radius: 15px;
@@ -94,16 +95,15 @@ export namespace InputStyle {
   
   const small = (t:Theme) => css`
     &.rrainuiFrame {
-      >.rrainuiInput {
-        width: 100%;
-        min-height: 40px;
-        padding: 4px 12px;
-        ${textLarge1};
-      }
-      
-      >.rrainuiBorder {
-        border-width: 1px;
-      }
+    }
+    >.rrainuiInput {
+      width: 100%;
+      min-height: 40px;
+      padding: 4px 12px;
+      ${textLarge1};
+    }
+    >.rrainuiBorder {
+      border-width: 1px;
     }
   `
   
@@ -125,20 +125,39 @@ export namespace InputStyle {
   
   export type InputStyleProps = {
     size: 'normal'|'small'
+    textSize: 'normal'|'small'|'smaller'
     clickable: boolean
+    static: boolean
   }
   export type InputStylePartialProps = PartialUndef<InputStyleProps>
   export const input = (props?:InputStylePartialProps|undefined) =>
   (t:Theme) =>
   css`
-    ${{
-      'true': clickable,
-    }[(props?.clickable??false)+'']};
+    ${props?.clickable && clickable};
     
     ${inputNormal(t)};
     ${{
       'small': small(t),
     }[props?.size??'normal']};
+    
+    >.rrainuiInput {
+      ${{
+        'normal': textLarge2,
+        'small': textLarge1,
+        'smaller': textSmall2,
+      }[props?.textSize??'']};
+    }
+    
+    ${props?.static && css`
+      &.rrainuiFrame {
+        cursor: auto;
+        color: ${t.input.text};
+      }
+
+      >.rrainuiBorder {
+        border-color: ${t.page.text[0]};
+      }
+    `}
   `
   
   

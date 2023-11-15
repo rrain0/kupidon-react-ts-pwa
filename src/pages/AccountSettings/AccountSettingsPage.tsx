@@ -2,9 +2,11 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
+import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
@@ -30,6 +32,7 @@ import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { formSubmitPreventDefault } from 'src/utils/react/formSubmitPreventDefault'
+import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -52,6 +55,8 @@ import ObjectKeys = ObjectUtils.ObjectKeys
 import validators = AccountSettingsPageValidation.validators
 import defaultValues = AccountSettingsPageValidation.defaultValues
 import mapFailureCodeToUiText = AccountSettingsPageValidation.mapFailureCodeToUiText
+import RootRoute = AppRoutes.RootRoute
+import full = RouteBuilder.full
 
 
 
@@ -143,20 +148,6 @@ const AccountSettingsPage = ()=>{
   
   
   
-  useEffect(
-    ()=>{
-      if (isSuccess && response && Object.hasOwn(response,'data')){
-        setAuth(s=>({
-          accessToken: s?.accessToken ?? '',
-          user: response.data!.user,
-        }))
-      }
-    },
-    [isSuccess, response, setAuth]
-  )
-  
-  
-  
   const fieldIsInitial = useCallback(
     (field: keyof FormValues)=>{
       return failures
@@ -193,6 +184,27 @@ const AccountSettingsPage = ()=>{
   
   
   
+  useEffect(
+    ()=>{
+      if (isSuccess && response && 'data' in response){
+        setAuth(s=>({
+          accessToken: s?.accessToken ?? '',
+          user: response.data!.user,
+        }))
+        const used = response.usedValues
+        if ('pwd' in used){
+          if (formValues.pwd===used.pwd)
+            resetField('pwd')
+          if (formValues.repeatPwd===used.pwd)
+            resetField('repeatPwd')
+        }
+      }
+    },
+    [isSuccess, response, setAuth, formValues, resetField]
+  )
+  
+  
+  
   
   
   
@@ -208,17 +220,15 @@ const AccountSettingsPage = ()=>{
   
   
   
-  useEffect(()=>{
+  /* useEffect(()=>{
     console.log('ACCOUNT_SETTINGS_FAILURES',failures)
-  },[failures])
+  },[failures]) */
   
   
   
   
   
   const pageRef = useRef<HTMLElement>(null)
-  
-  
   
   return <>
     
@@ -231,35 +241,64 @@ const AccountSettingsPage = ()=>{
         
         <Card>
           
+          
           <ItemContainer>
             <ItemLabel>{uiText.id[0].text}</ItemLabel>
-            <DataField css={[
-              DataFieldStyle.statikSmall,
-              css`&.rrainuiFrame {
-                ${textSmall1};
-              }`,
-            ]}
-            >
-              {user.id}
-            </DataField>
+            <Input
+              css={InputStyle.input(
+                { size: 'small', textSize: 'smaller', static: true }
+              )}
+              readOnly
+              value={user.id}
+            />
           </ItemContainer>
           
           <ItemContainer>
             <ItemLabel>{uiText.email[0].text}</ItemLabel>
-            <DataField css={DataFieldStyle.statikSmall}>
-              {user.email}
-            </DataField>
+            <Input
+              css={InputStyle.input(
+                { size: 'small', static: true }
+              )}
+              readOnly
+              value={user.email}
+            />
           </ItemContainer>
           
           <ItemContainer>
             <ItemLabel>{uiText.emailVerified[0].text}</ItemLabel>
-            <DataField css={DataFieldStyle.statikSmall}>
-              { user.emailVerified
+            <Input
+              css={InputStyle.input(
+                { size: 'small', static: true }
+              )}
+              readOnly
+              value={ user.emailVerified
                 ? uiText.yes[0].text.toLowerCase()
                 : uiText.no[0].text.toLowerCase()
               }
-            </DataField>
+            />
           </ItemContainer>
+          
+          {/* <ItemContainer>
+            <ItemLabel>{uiText.userCreated[0].text}</ItemLabel>
+            <Input
+              css={InputStyle.input(
+                { size: 'small', static: true }
+              )}
+              readOnly
+              value={new Date(user.created) + ''}
+            />
+          </ItemContainer>
+          
+          <ItemContainer>
+            <ItemLabel>{uiText.userUpdated[0].text}</ItemLabel>
+            <Input
+              css={InputStyle.input(
+                { size: 'small', static: true }
+              )}
+              readOnly
+              value={new Date(user.updated) + ''}
+            />
+          </ItemContainer> */}
           
           <ItemContainer>
             <ItemLabel>{uiText.userCreated[0].text}</ItemLabel>
@@ -276,60 +315,20 @@ const AccountSettingsPage = ()=>{
           </ItemContainer>
           
           
-          
-          
-          <ItemContainer>
-            <ItemTitleContainer>
-              <ItemLabel>{uiText.newPwd[0].text}</ItemLabel>
-              { !fieldIsInitial('pwd')
-                && <ResetButton
-                  text={uiText.reset[0].text}
-                  onClick={()=>resetField('pwd')}
-                />
-              }
-            </ItemTitleContainer>
-            <ValidationComponentWrap {...validationProps}
-              fieldName='pwd'
-              render={props => <PwdInput
-                css={InputStyle.inputSmall}
-                placeholder={uiText.newPwdPlaceholder[0].text}
-                {...props.inputProps}
-                hasError={props.highlight}
-              />}
-            />
-          </ItemContainer>
-          
-          
-          
-          
-          <ItemContainer>
-            <ItemTitleContainer>
-              <ItemLabel>{uiText.repeatPwd[0].text}</ItemLabel>
-              { !fieldIsInitial('repeatPwd')
-                && <ResetButton
-                  text={uiText.reset[0].text}
-                  onClick={()=>resetField('repeatPwd')}
-                />
-              }
-            </ItemTitleContainer>
-            <ValidationComponentWrap {...validationProps}
-              fieldName='repeatPwd'
-              render={props => <PwdInput
-                css={InputStyle.inputSmall}
-                placeholder={uiText.repeatPwdPlaceholder[0].text}
-                {...props.inputProps}
-                hasError={props.highlight}
-              />}
-            />
-          </ItemContainer>
-          
-          
-          
         
         </Card>
         
         
         
+        
+        
+        <div css={notInCard}>
+          <Link to={RootRoute.settings.pwdChange[full]()}>
+            <Button css={ButtonStyle.bigRectNormal}>
+              {uiText.changePwd[0].text}
+            </Button>
+          </Link>
+        </div>
         
         <div css={notInCard}>
           <Button css={ButtonStyle.bigRectPrimary}

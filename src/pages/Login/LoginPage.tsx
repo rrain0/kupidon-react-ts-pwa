@@ -62,24 +62,17 @@ const LoginPage = () => {
   
   
   const {
-    formValues,
-    setFormValues,
-    failures,
-    setFailures,
-    failedFields,
-    validationProps,
+    formValues, setFormValues,
+    failures, setFailures,
+    failedFields, validationProps,
   } = useFormFailures({
-    defaultValues,
-    validators
+    defaultValues, validators
   })
   
   const {
     request,
-    isLoading,
-    isSuccess,
-    isError,
-    response,
-    resetResponse,
+    isLoading, isSuccess, isError,
+    response, resetResponse,
   } = useApiRequest({
     values: formValues,
     failedFields,
@@ -94,6 +87,26 @@ const LoginPage = () => {
     )
   })
   
+  const {
+    canSubmit, onFormSubmitCallback, submit,
+  } = useFormSubmit({
+    failures, setFailures,
+    failedFields, setFormValues,
+    getCanSubmit: useCallback(
+      (failedFields: (keyof FormValues)[]) => {
+        return failedFields
+          .filter(ff=>ff in userDefaultValues)
+          .length===0
+      },
+      []
+    ),
+    request,
+    isLoading, isError,
+    response, resetResponse,
+  })
+  
+  
+  
   useEffect(
     ()=>{
       if (isSuccess && response && Object.hasOwn(response,'data')){
@@ -102,32 +115,6 @@ const LoginPage = () => {
     },
     [isSuccess, response, setAuth]
   )
-  
-  const {
-    canSubmit,
-    onFormSubmitCallback,
-    submit,
-  } = useFormSubmit({
-    failures,
-    setFailures,
-    failedFields,
-    setFormValues,
-    getCanSubmit: useCallback(
-      (failedFields: (keyof FormValues)[]) => {
-        return failedFields
-          .filter(ff=>Object.hasOwn(userDefaultValues,ff))
-          .length===0
-      },
-      []
-    ),
-    request,
-    isLoading,
-    isError,
-    response,
-    resetResponse,
-  })
-  
-  
   
   
   

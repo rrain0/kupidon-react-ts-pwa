@@ -117,8 +117,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
   })
   
   const {
-    canSubmit, onFormSubmitCallback,
-    submit,
+    canSubmit, onFormSubmitCallback, submit,
   } = useFormSubmit({
     failures, setFailures,
     failedFields, setFormValues,
@@ -130,9 +129,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
       },
       []
     ),
-    request, isLoading,
-    isError, response,
-    resetResponse,
+    request, isLoading, isError,
+    response, resetResponse,
   })
   
   
@@ -144,6 +142,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
           accessToken: s?.accessToken ?? '',
           user: response.data!.user,
         }))
+        
       }
     },
     [isSuccess, response, setAuth]

@@ -118,14 +118,10 @@ const SignupPage = () => {
   )
   
   const {
-    canSubmit,
-    onFormSubmitCallback,
-    submit,
+    canSubmit, onFormSubmitCallback, submit,
   } = useFormSubmit({
-    failures,
-    setFailures,
-    failedFields,
-    setFormValues,
+    failures, setFailures,
+    failedFields, setFormValues,
     getCanSubmit: useCallback(
       (failedFields: (keyof FormValues)[]) => {
         return failedFields
@@ -135,10 +131,8 @@ const SignupPage = () => {
       []
     ),
     request,
-    isLoading,
-    isError,
-    response,
-    resetResponse,
+    isLoading, isError,
+    response, resetResponse,
   })
   
   

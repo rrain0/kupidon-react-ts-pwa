@@ -32,6 +32,17 @@ export const CommonUiText = {
   ] satisfies UiText<'emailPlaceholder'>[],
   
   
+  currentPwdPlaceholder: [
+    {
+      value: 'currentPwdPlaceholder',
+      lang: 'en-US',
+      text: 'current password',
+    },{
+      value: 'currentPwdPlaceholder',
+      lang: 'ru-RU',
+      text: 'текущий пароль',
+    },
+  ] satisfies UiText<'currentPwdPlaceholder'>[],
   pwdPlaceholder: [
     {
       value: 'pwdPlaceholder',
@@ -43,8 +54,6 @@ export const CommonUiText = {
       text: 'пароль',
     },
   ] satisfies UiText<'pwdPlaceholder'>[],
-  
-  
   newPwdPlaceholder: [
     {
       value: 'newPwdPlaceholder',
@@ -56,8 +65,6 @@ export const CommonUiText = {
       text: 'новый пароль',
     },
   ] satisfies UiText<'newPwdPlaceholder'>[],
-  
-  
   repeatPwdPlaceholder: [
     {
       value: 'repeatPwdPlaceholder',
@@ -227,6 +234,45 @@ export const CommonUiText = {
   ] satisfies UiText<'userSuccessfullyRegistered'>[],
   
   
+  changePwd: [
+    {
+      value: 'changePwd',
+      lang: 'en-US',
+      text: 'Change password',
+    },{
+      value: 'changePwd',
+      lang: 'ru-RU',
+      text: 'Смена пароля',
+    },
+  ] satisfies UiText<'changePwd'>[],
+  
+  
+  doChangePwd: [
+    {
+      value: 'doChangePwd',
+      lang: 'en-US',
+      text: 'Change password',
+    },{
+      value: 'doChangePwd',
+      lang: 'ru-RU',
+      text: 'Изменить пароль',
+    },
+  ] satisfies UiText<'doChangePwd'>[],
+  
+  
+  pwdRecovery: [
+    {
+      value: 'pwdRecovery',
+      lang: 'en-US',
+      text: 'Password recovery',
+    },{
+      value: 'pwdRecovery',
+      lang: 'ru-RU',
+      text: 'Восстановление пароля',
+    },
+  ] satisfies UiText<'pwdRecovery'>[],
+  
+  
   signOut: [
     {
       value: 'signOut',
@@ -238,6 +284,19 @@ export const CommonUiText = {
       text: 'Выйти',
     },
   ] satisfies UiText<'signOut'>[],
+  
+  
+  deleteAccount: [
+    {
+      value: 'deleteAccount',
+      lang: 'en-US',
+      text: 'Delete Account',
+    },{
+      value: 'deleteAccount',
+      lang: 'ru-RU',
+      text: 'Удалить Аккаунт',
+    },
+  ] satisfies UiText<'deleteAccount'>[],
   
   
   profile: [
@@ -253,6 +312,17 @@ export const CommonUiText = {
   ] satisfies UiText<'profile'>[],
   
   
+  currentPwd: [
+    {
+      value: 'currentPwd',
+      lang: 'en-US',
+      text: 'Current pwd',
+    },{
+      value: 'currentPwd',
+      lang: 'ru-RU',
+      text: 'Текущий пароль',
+    },
+  ] satisfies UiText<'currentPwd'>[],
   pwd: [
     {
       value: 'pwd',

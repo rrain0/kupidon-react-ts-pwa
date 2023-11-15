@@ -69,11 +69,15 @@ export namespace UserApi {
   
   export type UpdateUserSuccessData = CurrentUserSuccessData
   export type UpdateUserErrorData =
-    AuthenticationError | NoUserResponseError | TechnicalError
+    AuthenticationError | NoUserResponseError | TechnicalError | {
+    code: "INVALID_PWD"
+    msg: string
+  }
   export type UserToUpdate = PartialUndef<{
     name: string
     birthDate: string // '2005-11-10T00:00:00.000+08:00'
     aboutMe: string
+    currentPwd: string
     pwd: string
   }>
   export const update = async(user: UserToUpdate) =>
