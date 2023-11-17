@@ -12,8 +12,6 @@ import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
-import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
-import ResetButton from 'src/components/FormElements/ResetButton'
 import { Pages } from 'src/components/Page/Pages'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -25,11 +23,9 @@ import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import { DateTime } from 'src/utils/DateTime'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { formSubmitPreventDefault } from 'src/utils/react/formSubmitPreventDefault'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
@@ -42,10 +38,8 @@ import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
-import PwdInput from 'src/views/Inputs/Input/PwdInput'
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
 import col = EmotionCommon.col
-import textSmall1 = EmotionCommon.textSmall2
 import Page = Pages.Page
 import Mem = ReactUtils.Mem
 import FormValues = AccountSettingsPageValidation.FormValues
@@ -366,11 +360,7 @@ const AccountSettingsPage = ()=>{
     </PageScrollbarOverlayFrame>
     
     
-    <BottomButtonBar
-      css={css`
-        padding-bottom: var(--bottom-nav-height);
-      `}
-    >
+    <BottomButtonBar backBtn refreshBtn>
       
       {/* <Button css={ButtonStyle.icon}
        onClick={fetchUser}

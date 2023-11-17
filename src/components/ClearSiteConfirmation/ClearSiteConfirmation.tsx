@@ -6,6 +6,7 @@ import {
 } from 'src/components/ClearSiteConfirmation/uiText'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Themes } from 'src/utils/theme/Themes'
@@ -15,7 +16,6 @@ import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import col = EmotionCommon.col
 import fixed = EmotionCommon.fixed
-import textLarge1 = EmotionCommon.textLarge2
 import center = EmotionCommon.center
 import row = EmotionCommon.row
 import Spinner8LinesIc = SimpleSvgIcons.Spinner8LinesIc
@@ -23,6 +23,8 @@ import Theme = Themes.Theme
 import ClearTrashIc = SimpleSvgIcons.ClearTrashIc
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import Setter = TypeUtils.Setter
+import Txt = EmotionCommon.Txt
+import Mem = ReactUtils.Mem
 
 
 
@@ -106,7 +108,7 @@ const ClearSiteConfirmation = (props:{
         z-index: 40;
         background: ${t.page.bgc[1]}9a;
         color: ${t.page.text[0]};
-        ${textLarge1};
+        ${Txt.large2};
         ${center};
       `}
     >
@@ -124,7 +126,7 @@ const ClearSiteConfirmation = (props:{
   
   </>
 }
-export default ClearSiteConfirmation
+export default Mem(ClearSiteConfirmation)
 
 
 

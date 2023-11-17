@@ -1,4 +1,4 @@
-import { css, SerializedStyles } from '@emotion/react'
+import { css, keyframes, SerializedStyles } from '@emotion/react'
 import { Themes } from 'src/utils/theme/Themes'
 
 
@@ -195,46 +195,55 @@ export namespace EmotionCommon {
   
   
   
+  export const rotateKfs = keyframes`
+    from { rotate: 0turn; }
+    to { rotate: 1turn; }
+  `
   
   
-  export const textLarge3 = css`
+  
+  export namespace Txt {
+    
+    export const large3 = css`
     font-weight: 500;
     font-size: 24px;
     line-height: 150%;
     letter-spacing: 0.05em;
   `
-  
-  export const textLarge2 = css`
+    
+    export const large2 = css`
     font-weight: 500;
     font-size: 18px;
     line-height: 150%;
     letter-spacing: 0.05em;
   `
-  
-  export const textLarge1 = css`
+    
+    export const large1 = css`
     font-weight: 500;
     font-size: 16px;
     line-height: 129%;
     letter-spacing: 0.05em;
   `
-  
-  export const textNormal1 = css`
+    
+    export const normal1 = css`
     font-weight: 400;
     font-size: 16px;
     line-height: 129%;
   `
-  
-  export const textSmall1 = css`
+    
+    export const small1 = css`
     font-weight: 400;
     font-size: 15px;
     line-height: 129%;
   `
-  
-  export const textSmall2 = css`
+    
+    export const small2 = css`
     font-weight: 400;
     font-size: 14px;
     line-height: 129%;
   `
+  
+  }
   
   
   

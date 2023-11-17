@@ -82,11 +82,7 @@ function ProfilePage(){
     </PageScrollbarOverlayFrame>
     
     
-    <BottomButtonBar
-      css={css`
-        padding-bottom: var(--bottom-nav-height);
-      `}
-    >
+    <BottomButtonBar backBtn refreshBtn>
       
       <Button css={ButtonStyle.icon}
         onClick={submitCallback}

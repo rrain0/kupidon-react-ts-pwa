@@ -4,11 +4,9 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
 import onHover = EmotionCommon.onHover
-import textLarge1 = EmotionCommon.textLarge1
-import textLarge2 = EmotionCommon.textLarge2
 import bgcBorderMask = EmotionCommon.bgcBorderMask
 import PartialUndef = TypeUtils.PartialUndef
-import textSmall2 = EmotionCommon.textSmall2
+import Txt = EmotionCommon.Txt
 
 
 
@@ -32,7 +30,7 @@ export namespace InputStyle {
       min-height: 50px;
       padding-right: 16px;
       padding-left: 16px;
-      ${textLarge2};
+      ${Txt.large2};
       color: ${t.input.text};
 
       ::placeholder {
@@ -100,7 +98,7 @@ export namespace InputStyle {
       width: 100%;
       min-height: 40px;
       padding: 4px 12px;
-      ${textLarge1};
+      ${Txt.large1};
     }
     >.rrainuiBorder {
       border-width: 1px;
@@ -142,9 +140,9 @@ export namespace InputStyle {
     
     >.rrainuiInput {
       ${{
-        'normal': textLarge2,
-        'small': textLarge1,
-        'smaller': textSmall2,
+        'normal': Txt.large2,
+        'small': Txt.large1,
+        'smaller': Txt.small2,
       }[props?.textSize??'']};
     }
     

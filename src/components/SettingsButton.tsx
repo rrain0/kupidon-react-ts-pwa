@@ -14,7 +14,7 @@ export type SettingsButtonProps = {
   onClick?: (()=>void) | undefined
 }
 const SettingsButton = (props: SettingsButtonProps)=>{
-  return <Button css={ButtonStyle.iconTransparent}
+  return <Button css={ButtonStyle.iconTransparentBig}
     onClick={props.onClick}
   >
     <GearIc/>

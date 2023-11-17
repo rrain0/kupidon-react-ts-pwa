@@ -3,9 +3,6 @@ import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import Mem = ReactUtils.Mem
-import col = EmotionCommon.col
-import row = EmotionCommon.row
-import textNormal1 = EmotionCommon.textNormal1
 
 
 

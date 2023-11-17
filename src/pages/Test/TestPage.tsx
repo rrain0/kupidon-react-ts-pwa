@@ -8,13 +8,10 @@ import { Pages } from 'src/components/Page/Pages'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import GearIc = SimpleSvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
-import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 
 
 
@@ -22,7 +19,6 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 const TestPage = () => {
   const [searchParams] = useSearchParams()
   
-  const [settingsOpen, setSettingsOpen] = useState(false)
   
   return <>
       
@@ -64,16 +60,8 @@ const TestPage = () => {
       </SimpleContent>
     </SimplePage>
     
-    <BottomButtonBar>
-      <Button css={ButtonStyle.iconTransparent}
-        onClick={()=>setSettingsOpen(true)}
-      >
-        <GearIc/>
-      </Button>
-    </BottomButtonBar>
     
-    
-    <QuickSettings open={settingsOpen} setOpen={setSettingsOpen}/>
+    <BottomButtonBar backBtn settingsBtn refreshBtn/>
     
     
   </>

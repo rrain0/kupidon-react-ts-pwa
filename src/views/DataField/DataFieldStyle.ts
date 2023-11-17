@@ -2,12 +2,13 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
-import textLarge1 = EmotionCommon.textLarge1
+import Txt = EmotionCommon.Txt
 
 
 
 export namespace DataFieldStyle {
   
+  import bgcBorderMask = EmotionCommon.bgcBorderMask
   export const interactive = (t:Theme) => css`
     &.rrainuiFrame {
       cursor: pointer;
@@ -41,15 +42,7 @@ export namespace DataFieldStyle {
       background-size: 200% 100%;
       background-position: 100% 0;
       transition: background-position 0.8s ease-out;
-      -webkit-mask:
-              linear-gradient(#fff 0 0) content-box,
-              linear-gradient(#fff 0 0) border-box;
-      mask:
-              linear-gradient(#fff 0 0) content-box,
-              linear-gradient(#fff 0 0) border-box;
-
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
+      ${bgcBorderMask};
     }
     @media not (hover: none) { :hover>.rrainuiBorder {
         background-position: 0 0;
@@ -69,7 +62,7 @@ export namespace DataFieldStyle {
       width: 100%;
       min-height: 40px;
       padding: 4px 12px;
-      ${textLarge1};
+      ${Txt.large1};
       
       >.rrainuiBorder {
         border-width: 1px;

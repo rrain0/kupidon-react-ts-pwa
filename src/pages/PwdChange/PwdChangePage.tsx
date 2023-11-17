@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
@@ -253,6 +254,9 @@ const PwdChangePage = ()=>{
         />}
       />
     </PageScrollbarOverlayFrame>
+    
+    <BottomButtonBar backBtn refreshBtn/>
+    
     
   </>
 }

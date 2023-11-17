@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import React, { useRef } from 'react'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -44,6 +45,8 @@ function FindPairsPage(){
         />}
       />
     </PageScrollbarOverlayFrame>
+    
+    <BottomButtonBar backBtn refreshBtn/>
     
   </>
 }

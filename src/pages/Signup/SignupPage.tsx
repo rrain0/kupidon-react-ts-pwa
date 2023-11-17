@@ -306,7 +306,7 @@ const SignupPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <BottomButtonBar settingsBtn />
+    <BottomButtonBar backBtn settingsBtn refreshBtn/>
     
     
   </>

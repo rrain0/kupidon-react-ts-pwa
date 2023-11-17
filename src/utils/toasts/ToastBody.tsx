@@ -11,10 +11,10 @@ import WarnTriangleToastifyIc = SimpleSvgIcons.WarnTriangleToastifyIc
 import DangerRoundToastifyIc = SimpleSvgIcons.DangerRoundToastifyIc
 import CrossIc = SimpleSvgIcons.CrossIc
 import row = EmotionCommon.row
-import textSmall2 = EmotionCommon.textSmall2
 import resetButton = EmotionCommon.resetButton
 import center = EmotionCommon.center
 import onHover = EmotionCommon.onHover
+import Txt = EmotionCommon.Txt
 
 
 
@@ -110,7 +110,7 @@ const Content = styled.div`
   flex: 1;
   color: ${p=>p.theme.toast.normal.content[0]};
   white-space: break-spaces;
-  ${textSmall2};
+  ${Txt.small2};
 `
 
 const CloseButton = styled.button`

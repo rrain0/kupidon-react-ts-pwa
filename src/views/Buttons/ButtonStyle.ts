@@ -4,15 +4,13 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import onHover = EmotionCommon.onHover
 import Theme = Themes.Theme
 import col = EmotionCommon.col
-import textLarge1 = EmotionCommon.textLarge2
-import textSmall1 = EmotionCommon.textSmall1
-import textNormal1 = EmotionCommon.textNormal1
 
 
 
 export namespace ButtonStyle {
   
   
+  import Txt = EmotionCommon.Txt
   const common = css`
     &.rrainuiButton {
       transition: background linear 300ms;
@@ -144,19 +142,19 @@ export namespace ButtonStyle {
   export const bigRectPrimary = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${textLarge1};
+    ${Txt.large1};
     ${Color.primary(t)};
   `
   export const bigRectNormal = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${textLarge1};
+    ${Txt.large1};
     ${Color.normal(t)};
   `
   export const bigRectDanger = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${textLarge1};
+    ${Txt.large1};
     ${Color.danger(t)};
   `
   
@@ -164,7 +162,7 @@ export namespace ButtonStyle {
   export const smallRectNormal = (t:Theme) => css`
     ${common};
     ${Shape.smallRect};
-    ${textNormal1};
+    ${Txt.normal1};
     ${Color.normal(t)};
   `
   
@@ -172,7 +170,7 @@ export namespace ButtonStyle {
   export const roundedNormal = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${textSmall1};
+    ${Txt.small1};
     ${Color.normal(t)};
     &.rrainuiButton {
       color: ${t.element.normal.text2[0]};
@@ -183,14 +181,14 @@ export namespace ButtonStyle {
   export const roundedDanger = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${textSmall1};
+    ${Txt.small1};
     ${Color.danger(t)};
   `
   
   export const roundedSecondary = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${textSmall1};
+    ${Txt.small1};
     ${Color.normal(t)};
     &.rrainuiButton {
       color: ${t.element.normal.text2[0]};
@@ -254,11 +252,10 @@ export namespace ButtonStyle {
   `
   
   
+  
   export const iconTransparent = (t:Theme) => css`
     ${icon(t)};
     &.rrainuiButton {
-      padding: 11px;
-      
       background: none;
       color: ${t.button.secondary.bgc[0]};
       --color: ${t.button.secondary.bgc[0]};
@@ -282,30 +279,15 @@ export namespace ButtonStyle {
   `
   
   
-  export const iconTranslucent = (t:Theme) => css`
-    ${icon(t)};
+  export const iconTransparentBig = (t:Theme) => css`
+    ${iconTransparent(t)};
     &.rrainuiButton {
-
-      background: ${t.button.primary.disabled.bgc[0]};
-      color: ${t.button.primary.disabled.text[0]};
-
-      .rrainuiIcon {
-        --icon-color: ${t.button.primary.disabled.text[0]};
-      }
-      
-      .rrainuiRippleFrame {
-        --ripple-color: ${t.input.ripple[0]};
-        --ripple-mode: center;
-      }
-
-      :focus-visible {
-        background: ${t.input.iconActive[0]};
-      }
-      ${onHover(css`
-        background: ${t.input.iconHover[0]};
-      `)};
+      padding: 11px;
     }
   `
+  
+  
+  
   
   
   

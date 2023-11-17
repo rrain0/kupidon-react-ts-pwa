@@ -3,8 +3,9 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
-import { ComponentStyles } from 'src/components/ComponentStyles'
+import FormHeader from 'src/components/FormElements/FormHeader'
 import { Pages } from 'src/components/Page/Pages'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -17,6 +18,7 @@ import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Themes } from 'src/utils/theme/Themes'
@@ -28,7 +30,6 @@ import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import col = EmotionCommon.col
-import textNormal = EmotionCommon.textNormal1
 import Page = Pages.Page
 import ThemeType = Themes.ThemeType
 import BrowserIc = SimpleSvgIcons.BrowserIc
@@ -38,8 +39,9 @@ import MoonIc = SimpleSvgIcons.MoonIc
 import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
 import Theme = Themes.Theme
-import formHeader = ComponentStyles.formHeader
 import AddModuleIc = SimpleSvgIcons.AddModuleIc
+import Txt = EmotionCommon.Txt
+import Mem = ReactUtils.Mem
 
 
 
@@ -135,12 +137,10 @@ const ApplicationSettingsPage = ()=>{
   return <>
     
     
-    <Page
-      ref={pageRef}
-    >
+    <Page ref={pageRef}>
       <Content>
         
-        <h3 css={formHeader}>{uiOptions.appSettings[0].text}</h3>
+        <FormHeader>{uiOptions.appSettings[0].text}</FormHeader>
         
         
         
@@ -218,6 +218,7 @@ const ApplicationSettingsPage = ()=>{
         </Card>
         
         
+        {/* TODO: Добавить настройки звука в приложении */}
         
         
         <RoundButtonsContainer>
@@ -241,8 +242,7 @@ const ApplicationSettingsPage = ()=>{
         </RoundButtonsContainer>
         
         
-        
-        {/* TODO: Добавить настройки звука в приложении */}
+        <BottomButtonBar backBtn refreshBtn/>
       
       </Content>
     </Page>
@@ -269,7 +269,7 @@ const ApplicationSettingsPage = ()=>{
     
   </>
 }
-export default ApplicationSettingsPage
+export default Mem(ApplicationSettingsPage)
 
 
 
@@ -283,25 +283,6 @@ const Content = styled.div`
   gap: 10px;
 `
 
-
-
-
-const ItemContainer = styled.div`
-  ${col};
-  gap: 4px;
-`
-const ItemLabel = styled.label`
-  padding-left: 12px;
-  ${textNormal};
-  line-height: 1.5em; // for icon
-  color: ${p=>p.theme.page.text[0]}
-`
-
-const notInCard = css`
-  ${col};
-  gap: inherit;
-  padding: 0 12px;
-`
 
 
 
