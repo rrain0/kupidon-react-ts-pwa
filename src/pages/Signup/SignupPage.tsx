@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useApiRequest } from 'src/api/useApiRequest'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
@@ -292,6 +293,8 @@ const SignupPage = () => {
     
     
     
+    <TopButtonBar backBtn/>
+    
     <PageScrollbarOverlayFrame>
       <UseScrollbars
         containerIsWindow={true}
@@ -306,7 +309,7 @@ const SignupPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <BottomButtonBar backBtn settingsBtn refreshBtn/>
+    <BottomButtonBar settingsBtn/>
     
     
   </>

@@ -14,6 +14,7 @@ const FormHeader = styled.h3`
   letter-spacing: 0.05em;
   color: ${p=>p.theme.page.text[0]};
   align-self: center;
+  text-align: center;
 `
 export default Mem(FormHeader)
 

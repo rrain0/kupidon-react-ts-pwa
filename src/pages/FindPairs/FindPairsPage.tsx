@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import React, { useRef } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
@@ -32,6 +33,8 @@ function FindPairsPage(){
     </Page>
     
     
+    <TopButtonBar />
+    
     <PageScrollbarOverlayFrame>
       <UseScrollbars
         containerIsWindow={true}
@@ -46,7 +49,7 @@ function FindPairsPage(){
       />
     </PageScrollbarOverlayFrame>
     
-    <BottomButtonBar backBtn refreshBtn/>
+    <BottomButtonBar />
     
   </>
 }

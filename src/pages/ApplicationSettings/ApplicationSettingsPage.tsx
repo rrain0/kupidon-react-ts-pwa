@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import { Pages } from 'src/components/Page/Pages'
@@ -242,11 +243,12 @@ const ApplicationSettingsPage = ()=>{
         </RoundButtonsContainer>
         
         
-        <BottomButtonBar backBtn refreshBtn/>
       
       </Content>
     </Page>
     
+    
+    <TopButtonBar backBtn/>
     
     <PageScrollbarOverlayFrame>
       <UseScrollbars
@@ -262,6 +264,7 @@ const ApplicationSettingsPage = ()=>{
       />
     </PageScrollbarOverlayFrame>
     
+    <BottomButtonBar />
     
     
     <ClearSiteConfirmation open={clearSite} setOpen={setClearSite} />

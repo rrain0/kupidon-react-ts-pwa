@@ -1,5 +1,6 @@
 import { css, keyframes, SerializedStyles } from '@emotion/react'
-import { Themes } from 'src/utils/theme/Themes'
+
+
 
 
 export namespace EmotionCommon {
@@ -9,6 +10,10 @@ export namespace EmotionCommon {
     inset: 0; // top: 0; right: 0; bottom: 0; left: 0;
   `
   
+  export const fixedTop = css`
+    position: fixed;
+    top: 0; right: 0; left: 0;
+  `
   export const fixedBottom = css`
     position: fixed;
     right: 0; bottom: 0; left: 0;
@@ -86,11 +91,16 @@ export namespace EmotionCommon {
   `
   
   
-  export const onHover = (cssStyle: SerializedStyles)=>css`
-    @media (hover: hover) and (pointer: fine) { :hover {
+  export const hoverable = (cssStyle: SerializedStyles)=>css`
+    @media (hover: hover) and (pointer: fine) {
       ${cssStyle};
-    } }
+    }
   `
+  export const onHover = (cssStyle: SerializedStyles)=>hoverable(css`
+    :hover {
+      ${cssStyle};
+    }
+  `)
   
   export const mobileWidth = (cssStyle: SerializedStyles)=>css`
     @media only screen and (max-width: 480px) {
@@ -205,43 +215,51 @@ export namespace EmotionCommon {
   export namespace Txt {
     
     export const large3 = css`
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 150%;
-    letter-spacing: 0.05em;
-  `
+      font-weight: 500;
+      font-size: 24px;
+      line-height: 150%;
+      letter-spacing: 0.05em;
+    `
     
     export const large2 = css`
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 150%;
-    letter-spacing: 0.05em;
-  `
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 150%;
+      letter-spacing: 0.05em;
+    `
     
     export const large1 = css`
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 129%;
-    letter-spacing: 0.05em;
-  `
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 129%;
+      letter-spacing: 0.05em;
+    `
     
     export const normal1 = css`
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 129%;
-  `
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 129%;
+    `
     
     export const small1 = css`
-    font-weight: 400;
-    font-size: 15px;
-    line-height: 129%;
-  `
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 129%;
+    `
     
     export const small2 = css`
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 129%;
-  `
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 129%;
+    `
+    
+    
+    
+    export const small5 = css`
+      font-weight: 400;
+      font-size: 10px;
+      line-height: 129%;
+    `
   
   }
   

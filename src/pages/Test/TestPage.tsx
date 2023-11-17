@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
@@ -61,7 +62,9 @@ const TestPage = () => {
     </SimplePage>
     
     
-    <BottomButtonBar backBtn settingsBtn refreshBtn/>
+    <TopButtonBar backBtn/>
+    
+    <BottomButtonBar settingsBtn/>
     
     
   </>

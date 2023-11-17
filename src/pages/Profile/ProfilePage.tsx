@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import React, { useEffect, useRef, useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
@@ -66,6 +67,7 @@ function ProfilePage(){
     </Page>
     
     
+    <TopButtonBar/>
     
     <PageScrollbarOverlayFrame>
       <UseScrollbars
@@ -82,7 +84,7 @@ function ProfilePage(){
     </PageScrollbarOverlayFrame>
     
     
-    <BottomButtonBar backBtn refreshBtn>
+    <BottomButtonBar>
       
       <Button css={ButtonStyle.icon}
         onClick={submitCallback}

@@ -16,6 +16,7 @@ export type SettingsButtonProps = {
 const SettingsButton = (props: SettingsButtonProps)=>{
   return <Button css={ButtonStyle.iconTransparentBig}
     onClick={props.onClick}
+    //disabled
   >
     <GearIc/>
   </Button>

@@ -5,6 +5,7 @@ import { useSetRecoilState } from 'recoil'
 import { useApiRequest } from 'src/api/useApiRequest'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
@@ -198,6 +199,7 @@ const LoginPage = () => {
     </Page>
     
     
+    <TopButtonBar backBtn/>
     
     <PageScrollbarOverlayFrame>
       <UseScrollbars
@@ -213,7 +215,7 @@ const LoginPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <BottomButtonBar backBtn settingsBtn refreshBtn />
+    <BottomButtonBar settingsBtn/>
     
   </>
 }

@@ -4,8 +4,9 @@
 :root{
   --page-vertical-padding: 50px;
   
-  --bottom-nav-height: 0px;
+  --top-button-bar-height: 0px;
   --bottom-button-bar-height: 0px;
+  --bottom-nav-height: 0px;
   
   
   

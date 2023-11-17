@@ -47,11 +47,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
         targetElement={buttonRef}
         mode={rippleMode}
         rippleDuration={rippleDuration}
-        css={css`
+        
+        // and IT IS WORKING !!!
+        /* css={css`
           .rrainuiButton:disabled>*>&.rrainuiRippleFrame {
             display: none;
           }
-        `}
+        `} */
+        
       />
     </Border>
   </Button_>

@@ -11,7 +11,6 @@ import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Mem = ReactUtils.Mem
 import PartialUndef = TypeUtils.PartialUndef
-import BottomButtonBarFrame = ButtonBarComponents.BottomButtonBarFrame
 import ButtonsContainer = ButtonBarComponents.ButtonsContainer
 import LeftButtonsContainer = ButtonBarComponents.LeftButtonsContainer
 import BackBtn = ButtonBarComponents.BackBtn
@@ -19,21 +18,21 @@ import CenterButtonsContainer = ButtonBarComponents.CenterButtonsContainer
 import SettingsBtn = ButtonBarComponents.SettingsBtn
 import RightButtonsContainer = ButtonBarComponents.RightButtonsContainer
 import RefreshBtn = ButtonBarComponents.RefreshBtn
+import TopButtonBarFrame = ButtonBarComponents.TopButtonBarFrame
 
 
 
 
 
 
-export type BottomButtonBarProps = JSX.IntrinsicElements['section']
+export type TopButtonBarProps = JSX.IntrinsicElements['section']
   & PartialUndef<{
     children: ReactNode
     backBtn: boolean
     settingsBtn: boolean
-    settingsBtnLeft: boolean
     refreshBtn: boolean
   }>
-const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBarProps>(
+const TopButtonBar = React.forwardRef<HTMLTableSectionElement, TopButtonBarProps>(
   (props, forwardedRef)=>{
   
   const thisRef = useRef<HTMLTableSectionElement>(null)
@@ -45,12 +44,12 @@ const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBa
     <Global
       styles={css`
         :root{
-          --bottom-button-bar-height: 70px;
+          --top-button-bar-height: 70px;
         }
       `}
     />
     
-    <BottomButtonBarFrame
+    <TopButtonBarFrame
       {...props}
       ref={thisRef}
     >
@@ -58,7 +57,6 @@ const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBa
         
         <LeftButtonsContainer>
           {props.backBtn && <BackBtn/>}
-          {props.settingsBtnLeft && <SettingsBtn/>}
         </LeftButtonsContainer>
         
         
@@ -76,11 +74,11 @@ const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBa
         </RightButtonsContainer>
         
       </ButtonsContainer>
-    </BottomButtonBarFrame>
+    </TopButtonBarFrame>
     
   </>
 })
-export default Mem(BottomButtonBar)
+export default Mem(TopButtonBar)
 
 
 

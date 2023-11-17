@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useRef } from 'react'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
@@ -241,6 +242,8 @@ const PwdChangePage = ()=>{
     </Page>
     
     
+    <TopButtonBar backBtn/>
+    
     <PageScrollbarOverlayFrame>
       <UseScrollbars
         containerIsWindow={true}
@@ -255,7 +258,7 @@ const PwdChangePage = ()=>{
       />
     </PageScrollbarOverlayFrame>
     
-    <BottomButtonBar backBtn refreshBtn/>
+    <BottomButtonBar/>
     
     
   </>
