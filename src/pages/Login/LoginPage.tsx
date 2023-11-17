@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import React, { useCallback, useEffect, useRef} from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { useSetRecoilState } from 'recoil'
 import { useApiRequest } from 'src/api/useApiRequest'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import Form from 'src/components/FormElements/Form'
+import FormHeader from 'src/components/FormElements/FormHeader'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import SettingsBottomButtonBar from 'src/components/BottomButtonBar/SettingsBottomButtonBar'
 import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -25,10 +26,6 @@ import Input from 'src/views/Inputs/Input/Input'
 import PwdInput from 'src/views/Inputs/Input/PwdInput'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
-import styled from '@emotion/styled'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
-import col = EmotionCommon.col
-import { Themes } from 'src/utils/theme/Themes'
 import { LoginPageValidation } from './validation'
 import FormValues = LoginPageValidation.FormValues
 import validators = LoginPageValidation.validators
@@ -38,7 +35,7 @@ import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import params = RouteBuilder.params
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
 import userDefaultValues = LoginPageValidation.userDefaultValues
@@ -151,15 +148,11 @@ const LoginPage = () => {
   
   
   return <>
-    <Page
-      ref={pageRef}
-    >
+    <Page ref={pageRef}>
   
       <Form onSubmit={onFormSubmitCallback}>
         
-        <h3 css={formHeader}>
-          {uiText.login[0].text}
-        </h3>
+        <FormHeader>{uiText.login[0].text}</FormHeader>
         
         
         
@@ -220,26 +213,9 @@ const LoginPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <SettingsBottomButtonBar />
+    <BottomButtonBar backBtn settingsBtn refreshBtn />
     
   </>
 }
-export default ReactMemoTyped(LoginPage)
-
-
-
-const Form = styled.form`
-  max-width: 500px;
-  width: 100%;
-  ${col};
-  gap: 16px;
-  justify-items: stretch;
-`
-
-const formHeader = (theme: Themes.Theme) => css`
-  font: 500 28px/150% Roboto;
-  letter-spacing: 0.05em;
-  color: ${theme.page.text[0]};
-  align-self: center;
-`
+export default Mem(LoginPage)
 

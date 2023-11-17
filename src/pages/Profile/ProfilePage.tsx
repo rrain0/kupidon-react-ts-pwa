@@ -11,14 +11,13 @@ import { useRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
-import ArrowReload = SimpleSvgIcons.ArrowReloadIc
 
 
 
@@ -89,13 +88,6 @@ function ProfilePage(){
       `}
     >
       
-      {/* <Button css={ButtonStyle.icon}
-        onClick={fetchUser}
-        disabled={false}
-      >
-        <ArrowReload />
-      </Button> */}
-      
       <Button css={ButtonStyle.icon}
         onClick={submitCallback}
         disabled={!canSubmit}
@@ -108,7 +100,7 @@ function ProfilePage(){
   
   </>
 }
-export default ReactMemoTyped(ProfilePage)
+export default Mem(ProfilePage)
 
 
 

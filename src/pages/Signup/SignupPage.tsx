@@ -2,14 +2,15 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useApiRequest } from 'src/api/useApiRequest'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
+import Form from 'src/components/FormElements/Form'
+import FormHeader from 'src/components/FormElements/FormHeader'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import SettingsBottomButtonBar from 'src/components/BottomButtonBar/SettingsBottomButtonBar'
 import { SignupPageUiText } from 'src/pages/Signup/uiText'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import col = EmotionCommon.col
 import React, {
   useCallback,
   useEffect,
@@ -48,7 +49,7 @@ import RootRoute = AppRoutes.RootRoute
 import params = RouteBuilder.params
 import full = RouteBuilder.full
 import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiText
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
 import userDefaultValues = SignupPageValidation.userDefaultValues
 import GenderEnum = UserApi.GenderEnum
@@ -198,15 +199,11 @@ const SignupPage = () => {
   
   
   return <>
-    <Page
-      ref={pageRef}
-    >
+    <Page ref={pageRef}>
       
       <Form onSubmit={onFormSubmitCallback}>
         
-        <h3 css={formHeader}>
-          {uiText.registration[0].text}
-        </h3>
+        <FormHeader>{uiText.registration[0].text}</FormHeader>
         
         
         
@@ -309,28 +306,14 @@ const SignupPage = () => {
       />
     </PageScrollbarOverlayFrame>
     
-    <SettingsBottomButtonBar />
+    <BottomButtonBar settingsBtn />
     
     
   </>
 }
-export default ReactMemoTyped(SignupPage)
+export default Mem(SignupPage)
 
 
 
 
 
-
-const Form = styled.form`
-  max-width: 500px;
-  width: 100%;
-  ${col};
-  gap: 16px;
-`
-
-const formHeader = (t: Themes.Theme) => css`
-  font: 500 28px/150% Roboto;
-  letter-spacing: 0.05em;
-  color: ${t.page.text[0]};
-  align-self: center;
-`

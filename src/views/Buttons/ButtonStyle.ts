@@ -200,6 +200,14 @@ export namespace ButtonStyle {
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
   export const icon = (t:Theme) => css`
     &.rrainuiButton {
       //min-height: 50px;
@@ -213,6 +221,7 @@ export namespace ButtonStyle {
       
       background: ${t.button.primary.bgc[0]};
       color: ${t.button.primary.text[0]};
+      --color: ${t.button.primary.text[0]};
       
       .rrainuiRippleFrame {
         --ripple-color: ${t.button.primary.ripple[0]};
@@ -245,7 +254,6 @@ export namespace ButtonStyle {
   `
   
   
-  // todo separate theme subobject for icon transparent
   export const iconTransparent = (t:Theme) => css`
     ${icon(t)};
     &.rrainuiButton {
@@ -253,9 +261,36 @@ export namespace ButtonStyle {
       
       background: none;
       color: ${t.button.secondary.bgc[0]};
+      --color: ${t.button.secondary.bgc[0]};
 
       .rrainuiIcon {
         --icon-color: ${t.button.secondary.bgc[0]};
+      }
+      
+      .rrainuiRippleFrame {
+        --ripple-color: ${t.input.ripple[0]};
+        --ripple-mode: center;
+      }
+
+      :focus-visible {
+        background: ${t.input.iconActive[0]};
+      }
+      ${onHover(css`
+        background: ${t.input.iconHover[0]};
+      `)};
+    }
+  `
+  
+  
+  export const iconTranslucent = (t:Theme) => css`
+    ${icon(t)};
+    &.rrainuiButton {
+
+      background: ${t.button.primary.disabled.bgc[0]};
+      color: ${t.button.primary.disabled.text[0]};
+
+      .rrainuiIcon {
+        --icon-color: ${t.button.primary.disabled.text[0]};
       }
       
       .rrainuiRippleFrame {
