@@ -2,7 +2,9 @@
 import React from "react"
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import col = EmotionCommon.col
+import Mem = ReactUtils.Mem
 
 
 
@@ -22,4 +24,4 @@ const Card = React.forwardRef<HTMLDivElement,CardProps>(
   >
   </div>
 })
-export default Card
+export default Mem(Card)

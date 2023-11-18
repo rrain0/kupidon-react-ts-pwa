@@ -10,7 +10,8 @@ import css from 'src/views/Ripple/Ripple.module.scss'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import { ReactUtils } from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.Mem
+import { RippleStyle } from 'src/views/Ripple/RippleStyle'
+import Mem = ReactUtils.Mem
 
 
 
@@ -52,7 +53,7 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
           const mode = function(){
             const modes = ['center','cursor']
             let mode: any = ElementProps(rippleFrame)
-              .cssPropValue('--ripple-mode')
+              .cssPropValue(RippleStyle.Prop.mode)
             if (!modes.includes(mode)) mode = props.mode
             if (!ev) mode = 'center'
             if (!modes.includes(mode)) mode = 'center'
@@ -112,7 +113,7 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
           const dur = props.rippleDuration ?? 500
           
           const style = rippleFrame.style
-          props.rippleColor && style.setProperty('--ripple-color', props.rippleColor)
+          props.rippleColor && style.setProperty(RippleStyle.Prop.color, props.rippleColor)
           style.setProperty(
             '--ripple-animation-duration',
             Math.max(400, dur * ripple.radius/200) + 'ms'
@@ -172,12 +173,12 @@ const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
     return <div
       {...restProps}
       ref={rippleFrameRef}
-      className={classNames(css.rippleFrame, className, 'rrainuiRippleFrame')}
+      className={classNames(css.rippleFrame, className, RippleStyle.El.frameClassName)}
     >
       <div
         ref={rippleViewRef}
-        className={classNames(css.rippleView, 'rrainuiRippleView')}
+        className={classNames(css.rippleView, RippleStyle.El.viewClassName)}
       />
     </div>
   })
-export default ReactMemoTyped(Ripple)
+export default Mem(Ripple)

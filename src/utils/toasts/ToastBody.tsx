@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import React from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
 import SpinnerCircleQuarterIc = SimpleSvgIcons.SpinnerCircleQuarterIc
 import InfoToastifyIc = SimpleSvgIcons.InfoToastifyIc
 import CheckmarkCircleToastifyIc = SimpleSvgIcons.CheckmarkCircleToastifyIc
@@ -13,8 +14,8 @@ import CrossIc = SimpleSvgIcons.CrossIc
 import row = EmotionCommon.row
 import resetButton = EmotionCommon.resetButton
 import center = EmotionCommon.center
-import onHover = EmotionCommon.onHover
 import Txt = EmotionCommon.Txt
+import hoverable = EmotionCommon.hoverable
 
 
 
@@ -40,8 +41,8 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        --icon-color: ${t.toast.loading.accent[0]};
-        --accent-color: ${t.toast.loading.accent[1]};
+        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.loading.accent[0]};
+        ${SimpleSvgIconsStyle.Prop.accentColor}: ${t.toast.loading.accent[1]};
       `}
     />}
     
@@ -57,7 +58,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        --icon-color: ${t.toast.ok.accent[0]};
+        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.ok.accent[0]};
       `}
     />}
     
@@ -65,7 +66,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        --icon-color: ${t.toast.warn.accent[0]};
+        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.warn.accent[0]};
       `}
     />}
     
@@ -73,7 +74,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        --icon-color: ${t.toast.danger.accent[0]};
+        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.danger.accent[0]};
       `}
     />}
     
@@ -122,15 +123,16 @@ const CloseButton = styled.button`
   padding: 7px;
   ${center};
   cursor: pointer;
-  
-  .rrainuiIcon {
+
+  >${SimpleSvgIconsStyle.El.iconClass} {
     width: 100%;
     height: 100%;
-    --icon-color: ${p=>p.theme.toast.normal.content[1]};
+    ${SimpleSvgIconsStyle.Prop.color}: ${p=>p.theme.toast.normal.content[1]};
   }
-  ${p=>onHover(css`
-    .rrainuiIcon {
-      --icon-color: ${p.theme.toast.normal.content[2]};
+  
+  ${hoverable}{
+    :hover>${SimpleSvgIconsStyle.El.iconClass} {
+      ${SimpleSvgIconsStyle.Prop.color}: ${p=>p.theme.toast.normal.content[2]};
     }
-  `)}
+  }
 `

@@ -3,120 +3,197 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
-import onHover = EmotionCommon.onHover
 import bgcBorderMask = EmotionCommon.bgcBorderMask
 import PartialUndef = TypeUtils.PartialUndef
 import Txt = EmotionCommon.Txt
+import hoverable = EmotionCommon.hoverable
 
 
 
 export namespace InputStyle {
   
   
-  export const inputNormal = (t:Theme) => css`
-    &.rrainuiFrame {
-      border-radius: 15px;
-      background: ${t.input.bgc};
-      /*& .rrainuiInput[data-error] {
-        background: ${t.input.error.bgc};
-      }*/
-      // todo not supported by firefox
-      :has(.rrainuiInput[data-error]){
-        background: ${t.input.error.bgc};
-      }
-    }
-    >.rrainuiInput {
-      width: 100%;
-      min-height: 50px;
-      padding-right: 16px;
-      padding-left: 16px;
-      ${Txt.large2};
-      color: ${t.input.text};
-
-      ::placeholder {
-        color: ${t.input.placeholder};
-      }
-      ${onHover(css``)}
-      :active, :focus-visible, :focus {}
-      &[data-error]{}
-      :read-only { }
-      :disabled {
-        cursor: auto;
-        color: ${t.input.text};
-      }
-    }
+  export namespace Attr {
+    export const errorName = 'data-error'
     
-    >.rrainuiBorder {
-      border: 2px solid transparent;
-      background-image: linear-gradient(
-        to right,
-        ${t.input.border[0]},
-        ${t.input.border[1]},
-        ${t.input.border[2]}
-      );
-      background-origin: border-box;
-      background-size: 200% 100%;
-      background-position: 100% 0;
-      transition: background-position 0.8s ease-out;
-      ${bgcBorderMask};
-    }
-
-    ${onHover(css`
-      >.rrainuiInput:hover ~ .rrainuiBorder {
+    export const error = `[${errorName}]`
+  }
+  export namespace El {
+    export const frameClassName = 'rrainuiFrame'
+    export const inputClassName = 'rrainuiInput'
+    export const borderClassName = 'rrainuiBorder'
+    
+    export const frameClass = '.'+frameClassName
+    export const inputClass = '.'+inputClassName
+    export const borderClass = '.'+borderClassName
+    
+    export const frame = '&'+frameClass
+    export const frameError = frame+`:has(>${inputClass}${Attr.error})`
+    
+    export const input = frame+'>'+inputClass
+    export const inputHover = frame+'>'+inputClass+':hover'
+    export const inputActive = frame+'>'+inputClass+':active'
+    export const inputFocus = frame+'>'+inputClass+':focus'
+    export const inputFocusVisible = frame+'>'+inputClass+':focus-visible'
+    export const inputReadOnly = frame+'>'+inputClass+':read-only'
+    export const inputDisabled = frame+'>'+inputClass+':disabled'
+    export const inputError = frame+'>'+inputClass+Attr.error
+    
+    export const border = frame+'>'+borderClass
+    export const borderHover = inputHover+'~'+borderClass
+    export const borderActive = inputActive+'~'+borderClass
+    export const borderFocus = inputFocus+'~'+borderClass
+    export const borderFocusVisible = inputFocusVisible+'~'+borderClass
+    export const borderReadOnly = inputReadOnly+'~'+borderClass
+    export const borderDisabled = inputDisabled+'~'+borderClass
+    export const borderError = inputError+'~'+borderClass
+  }
+  export namespace Prop {
+    export const color = '--color'
+  }
+  
+  
+  
+  namespace Shape {
+    export const normal = css`
+      // normal
+      ${El.frame} {
+        border-radius: 15px;
+      }
+      ${El.input} {
+        width: 100%;
+        min-height: 50px;
+        padding-right: 16px;
+        padding-left: 16px;
+        ${Txt.large2};
+      }
+      ${El.border} {
+        border: 2px solid transparent;
+        background-origin: border-box;
+        background-size: 200% 100%;
+        background-position: 100% 0;
+        transition: background-position 0.8s ease-out;
+        ${bgcBorderMask};
+      }
+      
+      // hover
+      ${hoverable}{
+        ${El.inputHover} {}
+        ${El.borderHover} {
+          background-position: 0 0;
+        }
+      }
+      
+      // active
+      ${El.inputActive} {}
+      ${El.borderActive} {}
+      
+      // focus
+      ${El.inputFocus} {}
+      ${El.borderFocus} {
         background-position: 0 0;
       }
-    `)}
-    >.rrainuiInput:active ~ .rrainuiBorder {}
-    >.rrainuiInput:focus-visible ~ .rrainuiBorder {
-      background-position: 0 0;
-    }
-    >.rrainuiInput:focus ~ .rrainuiBorder {
-      background-position: 0 0;
-    }
-    >.rrainuiInput[data-error] ~ .rrainuiBorder{
+
+      // focus-visible
+      ${El.inputFocusVisible} {}
+      ${El.borderFocusVisible} {
+        background-position: 0 0;
+      }
+
+      // read-only
+      ${El.inputReadOnly} {}
+      ${El.borderReadOnly} {}
+
+      // disabled
+      ${El.inputDisabled} {
+        cursor: auto;
+      }
+
+      // error
+      ${El.frameError}{}
+      ${El.inputError} {}
+      ${El.borderError} {}
+    `
     
-    }
-    >.rrainuiInput:disabled ~ .rrainuiBorder{
-      border-color: ${t.input.text};
-    }
+    export const small = css`
+      ${normal};
+      ${El.input} {
+        width: 100%;
+        min-height: 40px;
+        padding: 4px 12px;
+        ${Txt.large1};
+      }
+      ${El.border} {
+        border-width: 1px;
+      }
+    `
+  }
+  
+  
+  namespace Color {
+    export const normal = (t:Theme)=>css`
+      // normal
+      ${El.frame} {
+        background: ${t.input.bgc[0]};
+      }
+      ${El.input} {
+        color: ${t.input.text[0]};
+        ${Prop.color}: ${t.input.text[0]};
+  
+        ::placeholder {
+          color: ${t.input.placeholder[0]};
+        }
+      }
+      ${El.border} {
+        background-image: linear-gradient(
+          to right,
+          ${t.input.border[0]},
+          ${t.input.border[1]},
+          ${t.input.border[2]}
+        );
+      }
+
+      // disabled
+      ${El.inputDisabled} {
+        color: ${t.input.text[0]};
+        ${Prop.color}: ${t.input.text[0]};
+      }
+      ${El.borderDisabled} {
+        border-color: ${t.input.text[0]};
+      }
+
+      // error
+      ${El.frameError}{
+        background: ${t.input.error.bgc[0]};
+      }
+    `
+    
+    /* background-image: linear-gradient(
+         to right,
+         ${t.input.error.border[0]},
+         ${t.input.error.border[0]},
+         ${t.input.error.border[0]}
+       );
+     */
+  }
+  
+  
+  
+  
+  
+  export const inputNormal = (t:Theme)=>css`
+    ${Shape.normal};
+    ${Color.normal(t)};
   `
-  /* background-image: linear-gradient(
-   to right,
-   ${t.input.error.border[0]},
-   ${t.input.error.border[0]},
-   ${t.input.error.border[0]}
-   ); */
-  
-  
-  
-  
-  
-  const small = (t:Theme) => css`
-    &.rrainuiFrame {
-    }
-    >.rrainuiInput {
-      width: 100%;
-      min-height: 40px;
-      padding: 4px 12px;
-      ${Txt.large1};
-    }
-    >.rrainuiBorder {
-      border-width: 1px;
-    }
-  `
-  
-  
-  export const inputSmall = (t:Theme) => css`
-    ${inputNormal(t)};
-    ${small(t)};
+  export const inputSmall = (t:Theme)=>css`
+    ${Shape.small};
+    ${Color.normal(t)};
   `
   
   
   export const clickable = css`
-    >.rrainuiInput {
-      :read-only {
-        cursor: pointer;
-      }
+    ${El.input},${El.inputReadOnly},${El.inputDisabled} {
+      cursor: pointer;
     }
   `
   
@@ -135,10 +212,10 @@ export namespace InputStyle {
     
     ${inputNormal(t)};
     ${{
-      'small': small(t),
+      'small': Shape.small,
     }[props?.size??'normal']};
     
-    >.rrainuiInput {
+    ${El.input} {
       ${{
         'normal': Txt.large2,
         'small': Txt.large1,
@@ -147,12 +224,12 @@ export namespace InputStyle {
     }
     
     ${props?.static && css`
-      &.rrainuiFrame {
+      ${El.frame} {
         cursor: auto;
-        color: ${t.input.text};
+        color: ${t.input.text[0]};
       }
 
-      >.rrainuiBorder {
+      ${El.border} {
         border-color: ${t.page.text[0]};
       }
     `}

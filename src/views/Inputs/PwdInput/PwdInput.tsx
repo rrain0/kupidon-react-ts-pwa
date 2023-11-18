@@ -1,25 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
 import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
 import React from "react"
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import {SimpleSvgIcons} from "src/views/icons/SimpleSvgIcons"
 import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc
 import EyeIc = SimpleSvgIcons.EyeIc
 import Ripple from "src/views/Ripple/Ripple"
-import { useRecoilValue } from 'recoil'
-import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { RippleStyle } from 'src/views/Ripple/RippleStyle'
 import center = EmotionCommon.center
 import centerAll = EmotionCommon.centerAll
 import resetButton = EmotionCommon.resetButton
+import hoverable = EmotionCommon.hoverable
 
 
 
-const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'children'>>((
+const PwdInput = React.forwardRef<
+  HTMLInputElement, Omit<InputProps,'type'|'children'>
+>((
   { ...props}, forwardedRef
 ) => {
   const { ...restProps } = props
@@ -28,7 +31,6 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
   
   const eyeRef = useRef<HTMLButtonElement>(null)
   
-  const themeObj = useRecoilValue(ThemeRecoil)!
   
   return <Input
     {...restProps}
@@ -49,8 +51,10 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
           <Ripple
             targetElement={eyeRef}
             css={t=>css`
-              --ripple-mode: center;
-              --ripple-color: ${t.input.ripple[0]};
+              ${RippleStyle.El.frame}{
+                ${RippleStyle.Prop.mode}: center;
+                ${RippleStyle.Prop.color}: ${t.input.ripple[0]};
+              }
             `}
           />
         </RippleFrame2>
@@ -64,7 +68,7 @@ const PwdInput = React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'chil
     </EyeWrap>
   </Input>
 })
-export default ReactMemoTyped(PwdInput)
+export default Mem(PwdInput)
 
 
 
@@ -74,8 +78,10 @@ const EyeWrap = styled.button`
   height: 100%;
   padding: 0 14px 0 0;
   cursor: pointer;
-  --icon-color: ${p=>p.theme.input.text[0]};
-  --icon-size: 24px;
+  >${SimpleSvgIconsStyle.El.iconClass}{
+    ${SimpleSvgIconsStyle.Prop.size}: 24px;
+    ${SimpleSvgIconsStyle.Prop.color}: ${p=>p.theme.input.text[0]};
+  }
 `
 EyeWrap.defaultProps = { type: 'button' }
 
@@ -95,10 +101,8 @@ const RippleFrame2 = styled.div`
   *:focus > * > & {
     background: ${p=>p.theme.input.iconActive[0]};
   }
-  @media not (hover: none) {
-    :hover {
-      background: ${p=>p.theme.input.iconHover[0]};
-    }
-  }
+  ${hoverable}{ :hover {
+    background: ${p=>p.theme.input.iconHover[0]};
+  } }
 `
 

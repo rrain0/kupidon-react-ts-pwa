@@ -6,24 +6,29 @@ import { ReactUtils } from "src/utils/common/ReactUtils"
 import Mem = ReactUtils.Mem
 import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
+import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
 import styled from 'styled-components'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import empty = TypeUtils.empty
 import trueOrUndef = CastUtils.trueOrUndef
 import abs = EmotionCommon.abs
 import resetButton = EmotionCommon.resetButton
 import row = EmotionCommon.row
-import onHover = EmotionCommon.onHover
+import PartialUndef = TypeUtils.PartialUndef
+import hoverable = EmotionCommon.hoverable
 
 
 
 
-export type ButtonLightCherryProps = JSX.IntrinsicElements['button'] & {
-  hasError?: boolean|empty
-  rippleMode?: RippleProps['mode']
-  rippleDuration?: RippleProps['rippleDuration']
-}
+const Attr = ButtonStyle.Attr
+
+
+export type ButtonLightCherryProps = JSX.IntrinsicElements['button'] &
+  PartialUndef<{
+    hasError: boolean
+    rippleMode: RippleProps['mode']
+    rippleDuration: RippleProps['rippleDuration']
+  }>
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
   props, forwardedRef
@@ -37,9 +42,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
   
   
   return <Button_ css={button_Style}
-    { ...restProps }
+    {...{[Attr.errorName]: hasError}}
+    {...restProps}
     ref={buttonRef}
-    data-error={hasError}
   >
     { children }
     <Border css={borderStyle}>
@@ -63,13 +68,13 @@ export default Mem(Button)
 
 
 
-type Button_Props = {
-  'data-error'?: boolean|empty
-}
+type Button_Props = PartialUndef<{
+  [Attr.errorName]: boolean
+}>
 const Button_ = styled.button.attrs<Button_Props>(p=>({
-  className:    classNames(p.className,'rrainuiButton'),
-  'data-error': trueOrUndef(p['data-error']),
-  type:         p.type || 'button',
+  className:        classNames(p.className,ButtonStyle.El.btnClassName),
+  [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
+  type:             p.type || 'button',
 }))<Button_Props>``
 const button_Style = css`
   ${resetButton};
@@ -81,9 +86,9 @@ const button_Style = css`
   :active, :focus-visible {
     cursor: pointer;
   }
-  ${onHover(css`
+  ${hoverable}{ :hover {
     cursor: pointer;
-  `)}
+  } }
   :disabled {
     cursor: auto;
   }
@@ -92,7 +97,7 @@ const button_Style = css`
 
 
 const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiBorder'),
+  className: classNames(p.className,ButtonStyle.El.borderClassName),
 }))``
 const borderStyle = css`
   ${abs};

@@ -70,6 +70,8 @@ import { ReactComponent as Spinner8LinesSvg } from 'src/res/icon/spinner-8-lines
 import { ReactComponent as SpinnerCircleQuarterSvg } from 'src/res/icon/spinner-circle-quarter.svg'
 
 import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-triangle-toastify.svg'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
 
 
 
@@ -79,12 +81,13 @@ export namespace SimpleSvgIcons {
 
   // Base interface for simple svg icons
   
+  import PartialUndef = TypeUtils.PartialUndef
   type SvgProps = React.SVGProps<SVGSVGElement> & { title?: string }
-  type CustomIconProps = {
-    iconColor?: string|undefined
-    accentColor?: string|undefined
-    size?: number|string|undefined
-  }
+  type CustomIconProps = PartialUndef<{
+    iconColor: string
+    accentColor: string
+    size: number|string
+  }>
   type SvgElement = {
     SvgComponent: React.FunctionComponent<React.SVGProps<SVGSVGElement> & { title?: string }>
   }
@@ -102,15 +105,16 @@ export namespace SimpleSvgIcons {
       
       return <SvgComponent
         css={css`
-          width: ${size ?? 'var(--icon-size)'};
-          height: ${size ?? 'var(--icon-size)'};
+          width: ${size ?? `var(${SimpleSvgIconsStyle.Prop.size})`};
+          height: ${size ?? `var(${SimpleSvgIconsStyle.Prop.size})`};
           max-width: 100%;
           max-height: 100%;
-          fill: ${iconColor ?? 'var(--icon-color, black)'};
-          stroke: ${iconColor ?? 'var(--icon-color, black)'};
-          --accent-color: ${accentColor ?? 'var(--accent-color, gray)'}
+          fill: ${iconColor ?? `var(${SimpleSvgIconsStyle.Prop.color}, black)`};
+          stroke: ${iconColor ?? `var(${SimpleSvgIconsStyle.Prop.color}, black)`};
+          ${SimpleSvgIconsStyle.Prop.accentColor}:
+                  ${accentColor ?? `var(${SimpleSvgIconsStyle.Prop.accentColor}, gray)`}
         `}
-        className={classNames(className,'rrainuiIcon')}
+        className={classNames(className,SimpleSvgIconsStyle.El.iconClassName)}
         {...restProps}
       />
     }

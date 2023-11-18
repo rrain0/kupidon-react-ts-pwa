@@ -1,7 +1,8 @@
 import { css } from '@emotion/react'
 import { Themes } from 'src/utils/theme/Themes'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import onHover = EmotionCommon.onHover
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { RippleStyle } from 'src/views/Ripple/RippleStyle'
 import Theme = Themes.Theme
 import col = EmotionCommon.col
 import Txt = EmotionCommon.Txt
@@ -11,13 +12,21 @@ import hoverable = EmotionCommon.hoverable
 
 export namespace ButtonStyle {
   
+  export namespace Attr {
+    export const errorName = 'data-error'
+    
+    export const error = `[${errorName}]`
+  }
   export namespace El {
-    export const btnClass = '.rrainuiButton'
-    export const borderClass = '.rrainuiBorder'
-    // todo extract to ripple
-    export const rippleFrameClass = '.rrainuiRippleFrame'
-    // todo extract to icon
-    export const iconClass = '.rrainuiIcon'
+    export const btnClassName = 'rrainuiButton'
+    export const borderClassName = 'rrainuiBorder'
+    export const rippleFrameClassName = RippleStyle.El.frameClassName
+    export const iconClassName = SimpleSvgIconsStyle.El.iconClassName
+    
+    export const btnClass = '.'+btnClassName
+    export const borderClass = '.'+borderClassName
+    export const rippleFrameClass = '.'+rippleFrameClassName
+    export const iconClass = '.'+iconClassName
     
     export const btn = '&'+btnClass
     export const btnHover = btn+':hover'
@@ -26,7 +35,7 @@ export namespace ButtonStyle {
     export const btnFocusVisible = btn+':focus-visible'
     export const btnActiveFocusVisible = btnActive+','+btnFocusVisible
     export const btnDisabled = btn+':disabled'
-    export const btnError = btn+'[data-error]'
+    export const btnError = btn+Attr.error
     
     export const border = btn+'>'+borderClass
     export const borderDisabled = btnDisabled+'>'+borderClass
@@ -40,12 +49,10 @@ export namespace ButtonStyle {
   }
   export namespace Prop {
     export const color = '--color'
-    // todo extract to ripple
-    export const rippleColor = '--ripple-color'
-    export const rippleMode = '--ripple-mode'
-    // todo extract to icon
-    export const iconColor = '--icon-color'
-    export const iconSize = '--icon-size'
+    export const rippleMode = RippleStyle.Prop.mode
+    export const rippleColor = RippleStyle.Prop.color
+    export const iconSize = SimpleSvgIconsStyle.Prop.size
+    export const iconColor = SimpleSvgIconsStyle.Prop.color
   }
   
   
@@ -111,11 +118,9 @@ export namespace ButtonStyle {
       }
       
       // hover
-      ${hoverable(css`
-        ${El.btnHover} {
-          background: ${t.button.primary.hover[0]};
-        }
-      `)}
+      ${hoverable}{ ${El.btnHover} {
+        background: ${t.button.primary.hover[0]};
+      }}
       
       // active
       ${El.btnActive} {}
@@ -153,9 +158,9 @@ export namespace ButtonStyle {
       }
 
       // hover
-      ${hoverable(css`${El.btnHover} {
+      ${hoverable}{ ${El.btnHover} {
         background: ${t.element.normal.bgc[1]};
-      }`)}
+      }}
 
       // focus-visible
       ${El.btnFocusVisible} {
@@ -181,11 +186,11 @@ export namespace ButtonStyle {
       ${El.ripple} {
         ${Prop.rippleColor}: ${t.ambience.bgc[0]};
       }
-
+      
       // hover
-      ${hoverable(css`${El.btnHover} {
+      ${hoverable}{ ${El.btnHover} {
         background: ${t.element.danger.bgc[1]};
-      }`)}
+      }}
       
       // focus-visible
       ${El.btnFocusVisible} {
@@ -287,18 +292,18 @@ export namespace ButtonStyle {
       ${Prop.color}: ${t.button.primary.text[0]};
     }
     ${El.ripple} {
-      ${Prop.rippleColor}: ${t.button.primary.ripple[0]};
       ${Prop.rippleMode}: center;
+      ${Prop.rippleColor}: ${t.button.primary.ripple[0]};
     }
     ${El.icon} {
-      ${Prop.iconColor}: ${t.button.primary.text[0]};
       ${Prop.iconSize}: 100%;
+      ${Prop.iconColor}: ${t.button.primary.text[0]};
     }
     
     // hover
-    ${hoverable(css`${El.btnHover} {
+    ${hoverable}{ ${El.btnHover} {
       background: ${t.button.primary.hover[0]};
-    }`)}
+    }}
 
     // focus-visible
     ${El.btnFocusVisible} {
@@ -334,9 +339,9 @@ export namespace ButtonStyle {
     }
 
     // hover
-    ${hoverable(css`${El.btnHover} {
+    ${hoverable}{ ${El.btnHover} {
       background: ${t.input.iconHover[0]};
-    }`)}
+    }}
 
     // focus-visible
     ${El.btnFocusVisible} {
@@ -379,32 +384,30 @@ export namespace ButtonStyle {
       a.active & {
         color: ${t.nav.button.selected.text[0]};
         ${Prop.color}: ${t.nav.button.selected.text[0]};
-        
       }
       a.active & ${El.iconClass} {
         ${Prop.iconColor}: ${t.nav.button.selected.text[0]};
       }
     }
     ${El.ripple} {
-      ${Prop.rippleColor}: ${t.nav.button.ripple[0]};
       ${Prop.rippleMode}: center;
+      ${Prop.rippleColor}: ${t.nav.button.ripple[0]};
     }
     ${El.icon} {
-      ${Prop.iconColor}: ${t.nav.button.text[0]};
       ${Prop.iconSize}: 100%;
+      ${Prop.iconColor}: ${t.nav.button.text[0]};
     }
     
     // hover
-    ${hoverable(css`${El.btnHover} {
+    ${hoverable}{ ${El.btnHover} {
       background: ${t.nav.button.hover[0]};
-    }`)}
+    }}
 
     // focus-visible
     ${El.btnFocusVisible} {
       background: ${t.nav.button.active[0]};
     }
-    
-  }`
+  `
   
   
   

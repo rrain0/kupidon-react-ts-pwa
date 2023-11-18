@@ -91,16 +91,14 @@ export namespace EmotionCommon {
   `
   
   
-  export const hoverable = (cssStyle: SerializedStyles)=>css`
-    @media (hover: hover) and (pointer: fine) {
+  
+  export const hoverable = '@media (hover: hover) and (pointer: fine)'
+  
+  export const onHover = (cssStyle: SerializedStyles)=>css`
+    ${hoverable}{ :hover {
       ${cssStyle};
-    }
+    } }
   `
-  export const onHover = (cssStyle: SerializedStyles)=>hoverable(css`
-    :hover {
-      ${cssStyle};
-    }
-  `)
   
   export const mobileWidth = (cssStyle: SerializedStyles)=>css`
     @media only screen and (max-width: 480px) {

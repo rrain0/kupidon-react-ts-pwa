@@ -2,25 +2,28 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
+import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
 import styled from "styled-components"
 import React, { useImperativeHandle, useRef } from 'react'
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import empty = TypeUtils.empty
 import trueOrUndef = CastUtils.trueOrUndef
 import row = EmotionCommon.row
 import abs = EmotionCommon.abs
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
+const Attr = DataFieldStyle.Attr
 
 
-export type DataFieldProps = JSX.IntrinsicElements['div'] & {
-  hasError?: boolean|empty
-  children?: React.ReactNode
-}
+export type DataFieldProps = JSX.IntrinsicElements['div'] &
+  PartialUndef<{
+    hasError: boolean
+    children: React.ReactNode
+  }>
 
 const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   props, forwardedRef
@@ -37,7 +40,7 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   
   
   return <Frame css={frameStyle}
-    data-error={hasError}
+    {...{[Attr.errorName]: hasError}}
     {...restProps}
     ref={labelRef}
   >
@@ -48,16 +51,16 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
     
   </Frame>
 })
-export default ReactMemoTyped(DataField)
+export default Mem(DataField)
 
 
 
-type FrameProps = {
-  'data-error'?: boolean | empty
-}
+type FrameProps = PartialUndef<{
+  [Attr.errorName]: boolean
+}>
 const Frame = styled.div.attrs<FrameProps>(p=>({
-  className: classNames(p.className,'rrainuiFrame'),
-  'data-error': trueOrUndef(p['data-error']),
+  className: classNames(p.className,DataFieldStyle.El.frameClassName),
+  [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
 }))<FrameProps>``
 const frameStyle = css`
   ${row};
@@ -70,7 +73,7 @@ const frameStyle = css`
 
 
 const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiBorder'),
+  className: classNames(p.className,DataFieldStyle.El.borderClassName),
 }))``
 const borderStyle = css`
   ${abs};

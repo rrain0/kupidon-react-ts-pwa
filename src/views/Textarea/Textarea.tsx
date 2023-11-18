@@ -3,31 +3,35 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
 import { ElementProps } from 'src/utils/common/GetDimensions'
+import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import styled from "styled-components"
-import React, { useImperativeHandle, useRef, useState } from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import { ReactUtils } from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import empty = TypeUtils.empty
 import trueOrUndef = CastUtils.trueOrUndef
 import row = EmotionCommon.row
-import onHover = EmotionCommon.onHover
 import abs = EmotionCommon.abs
 import resetTextarea = EmotionCommon.resetTextarea
+import PartialUndef = TypeUtils.PartialUndef
+import hoverable = EmotionCommon.hoverable
 
 
 
 
+const Attr = TextareaStyle.Attr
 
 
-export type InputProps = JSX.IntrinsicElements['textarea'] & {
-  hasError?: boolean|empty
-  startViews?: React.ReactNode
-  endViews?: React.ReactNode
-  children?: React.ReactNode
-  childrenPosition?: 'start'|'end'|empty
-}
+
+export type InputProps = JSX.IntrinsicElements['textarea'] &
+  PartialUndef<{
+    hasError: boolean
+    startViews: React.ReactNode
+    endViews: React.ReactNode
+    children: React.ReactNode
+    childrenPosition: 'start'|'end'
+  }>
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
   props, forwardedRef
@@ -58,7 +62,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
     <Textarea_
       css={textarea_Style}
       {...restProps}
-      data-error={hasError}
+      {...{[Attr.errorName]: hasError}}
       ref={textareaRef}
       
       onScroll={ev=>{
@@ -74,12 +78,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
     
   </Frame>
 })
-export default ReactMemoTyped(Textarea)
+export default Mem(Textarea)
 
 
 
 const Frame = styled.label.attrs(p=>({
-  className: classNames(p.className,'rrainuiFrame')
+  className: classNames(p.className,TextareaStyle.El.frameClassName)
 }))``
 const frameStyle = css`
   ${row};
@@ -89,12 +93,12 @@ const frameStyle = css`
 `
 
 
-type Textarea_Props = {
-  'data-error'?: boolean | empty
-}
+type Textarea_Props = PartialUndef<{
+  [Attr.errorName]: boolean
+}>
 const Textarea_ = styled.textarea.attrs<Textarea_Props>(p=>({
-  className: classNames(p.className,'rrainuiTextarea'),
-  'data-error': trueOrUndef(p['data-error'])
+  className: classNames(p.className,TextareaStyle.El.textareaClassName),
+  [Attr.errorName]: trueOrUndef(p[Attr.errorName])
 }))<Textarea_Props>``
 const textarea_Style = css`
   ${resetTextarea};
@@ -102,14 +106,14 @@ const textarea_Style = css`
   flex: 1;
   border-radius: inherit;
 
-  ${onHover(css`
+  ${hoverable}{ :hover {
     cursor: text;
-  `)}
+  } }
 `
 
 
 const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiBorder')
+  className: classNames(p.className,TextareaStyle.El.borderClassName)
 }))``
 const borderStyle = css`
   ${abs};

@@ -29,7 +29,7 @@ import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
-import PwdInput from 'src/views/Inputs/Input/PwdInput'
+import PwdInput from 'src/views/Inputs/PwdInput/PwdInput'
 import col = EmotionCommon.col
 import Page = Pages.Page
 import Mem = ReactUtils.Mem

@@ -11,7 +11,6 @@ import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { SignupPageUiText } from 'src/pages/Signup/uiText'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
 import React, {
   useCallback,
   useEffect,
@@ -35,8 +34,7 @@ import Input from 'src/views/Inputs/Input/Input'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Button from 'src/views/Buttons/Button'
-import PwdInput from 'src/views/Inputs/Input/PwdInput'
-import { Themes } from 'src/utils/theme/Themes'
+import PwdInput from 'src/views/Inputs/PwdInput/PwdInput'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputGroupStyle } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'

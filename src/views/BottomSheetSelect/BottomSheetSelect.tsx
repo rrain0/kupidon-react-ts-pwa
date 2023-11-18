@@ -1,7 +1,5 @@
-
-
-
-
+import { ReactUtils } from 'src/utils/common/ReactUtils'
+import Mem = ReactUtils.Mem
 
 
 export type BottomSheetSelectProps = {
@@ -13,4 +11,4 @@ const BottomSheetSelect = (props: BottomSheetSelectProps)=>{
   
   return <></>
 }
-export default BottomSheetSelect
+export default Mem(BottomSheetSelect)
