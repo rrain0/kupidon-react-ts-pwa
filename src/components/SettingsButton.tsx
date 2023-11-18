@@ -10,11 +10,12 @@ import Mem = ReactUtils.Mem
 
 
 
+
 export type SettingsButtonProps = {
   onClick?: (()=>void) | undefined
 }
 const SettingsButton = (props: SettingsButtonProps)=>{
-  return <Button css={ButtonStyle.iconTransparentBig}
+  return <Button css={ButtonStyle.iconBigTransparent}
     onClick={props.onClick}
     //disabled
   >

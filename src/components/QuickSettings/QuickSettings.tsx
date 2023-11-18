@@ -18,6 +18,7 @@ import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
@@ -189,7 +190,7 @@ const QuickSettings = (props: SettingsProps)=>{
                 value={opt.value}
                 key={opt.value}
                 onChange={ev => {
-                  if (opt.value === 'system') setLangSettings({
+                  if (opt.value==='system') setLangSettings({
                     ...langSettings,
                     setting: 'system',
                   })
@@ -242,9 +243,8 @@ const QuickSettings = (props: SettingsProps)=>{
             </Link>
             
             {app.canInstall && <Button css={normalIconRoundButton}
-              onClick={async () => {
+              onClick={async()=>{
                 const installed = await promptInstall()
-                console.log('installed', installed)
               }}
             >
               <AddModuleIc css={icon}/>
@@ -301,15 +301,15 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  &.rrainuiIcon {
+  ${SimpleSvgIconsStyle.El.icon} {
     height: 1.3em;
     width: 1.333em;
-    --icon-color: var(--color);
+    ${SimpleSvgIconsStyle.Prop.color}: var(${ButtonStyle.Prop.color});
   }
 `
 const iconSmall = (t:Theme)=>css`
   ${icon(t)};
-  &.rrainuiIcon {
+  ${SimpleSvgIconsStyle.El.icon} {
     height: 1.25em;
   }
 `
@@ -320,7 +320,7 @@ const RoundButtonsContainer = styled.div`
 `
 const normalIconRoundButton = (t:Theme)=>css`
   ${ButtonStyle.roundedNormal(t)};
-  &.rrainuiButton {
+  ${ButtonStyle.El.btn} {
     min-width: 90px;
     gap: 0.6em;
   }

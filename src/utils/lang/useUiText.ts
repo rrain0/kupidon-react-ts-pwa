@@ -13,7 +13,7 @@ export const useUiTextArr = <T>
   const langs = useRecoilValue(LangRecoil).lang
   
   const preparedUiText = useMemo(
-    ()=>prepareUiOptions(uiText??[], langs),
+    ()=>prepareUiText(uiText??[], langs),
     [langs, uiText]
   )
   
@@ -31,7 +31,7 @@ export const useUiTextContainer = <T extends UiTextContainer>
     ()=>{
       const preparedUiText = {...uiText}
       for (const option in preparedUiText) {
-        preparedUiText[option] = prepareUiOptions(preparedUiText[option], langs)
+        preparedUiText[option] = prepareUiText(preparedUiText[option], langs)
       }
       return preparedUiText
     },
@@ -43,11 +43,11 @@ export const useUiTextContainer = <T extends UiTextContainer>
 
 
 
-function prepareUiOptions<T>
-(uiOptions: readonly UiText<T>[], langs: Lang[])
+function prepareUiText<T>
+(uiText: readonly UiText<T>[], langs: string[])
 : UiText<T>[] {
   const used = new Set<T>()
-  return uiOptions
+  return uiText
     .toSorted((a,b)=>{
       if (a.value===b.value) {
         let langIdxA = langs.findIndex(it=>it===a.lang)

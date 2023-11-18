@@ -79,6 +79,7 @@ export namespace ButtonStyle {
         min-height: 50px;
         border-radius: 15px;
         padding: 8px 4px;
+        ${Txt.large2};
       }
     `
     export const smallRect = css`
@@ -88,6 +89,7 @@ export namespace ButtonStyle {
         border-radius: 10px;
         padding: 4px 6px;
         gap: 4px;
+        ${Txt.normal1};
       }
     `
     
@@ -97,6 +99,7 @@ export namespace ButtonStyle {
         min-height: 40px;
         border-radius: 1000000px;
         padding: 8px 20px;
+        ${Txt.small1};
       }
     `
     
@@ -204,8 +207,6 @@ export namespace ButtonStyle {
         ${Prop.color}: ${t.element.disabled.text[0]};
       }
     `
-    
-    
   }
   
   
@@ -213,19 +214,16 @@ export namespace ButtonStyle {
   export const bigRectPrimary = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${Txt.large2};
     ${Color.primary(t)};
   `
   export const bigRectNormal = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${Txt.large2};
     ${Color.normal(t)};
   `
   export const bigRectDanger = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${Txt.large2};
     ${Color.danger(t)};
   `
   
@@ -233,7 +231,6 @@ export namespace ButtonStyle {
   export const smallRectNormal = (t:Theme) => css`
     ${common};
     ${Shape.smallRect};
-    ${Txt.normal1};
     ${Color.normal(t)};
   `
   
@@ -241,7 +238,6 @@ export namespace ButtonStyle {
   export const roundedNormal = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${Txt.small1};
     ${Color.normal(t)};
     ${El.btn} {
       color: ${t.element.normal.text2[0]};
@@ -252,14 +248,12 @@ export namespace ButtonStyle {
   export const roundedDanger = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${Txt.small1};
     ${Color.danger(t)};
   `
   
   export const roundedSecondary = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${Txt.small1};
     ${Color.normal(t)};
     ${El.btn} {
       color: ${t.element.normal.text2[0]};
@@ -350,7 +344,7 @@ export namespace ButtonStyle {
   `
   
   
-  export const iconTransparentBig = (t:Theme) => css`
+  export const iconBigTransparent = (t:Theme) => css`
     ${iconTransparent(t)};
     ${El.btn} {
       padding: 11px;

@@ -22,6 +22,7 @@ import Spinner8LinesIc = SimpleSvgIcons.Spinner8LinesIc
 import Theme = Themes.Theme
 import ClearTrashIc = SimpleSvgIcons.ClearTrashIc
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
 import Setter = TypeUtils.Setter
 import Txt = EmotionCommon.Txt
 import Mem = ReactUtils.Mem
@@ -130,20 +131,21 @@ export default Mem(ClearSiteConfirmation)
 
 
 
+
 const icon = (t:Theme)=>css`
-  &.rrainuiIcon {
+  ${SimpleSvgIconsStyle.El.icon} {
     height: 1.333em;
     width: 1.333em;
-    --icon-color: ${t.page.text[0]};
+    ${SimpleSvgIconsStyle.Prop.color}: ${t.page.text[0]};
   }
 `
 const iconOnDanger = (t:Theme)=>css`
-  &.rrainuiIcon {
-    --icon-color: ${t.element.danger.text[0]};
+  ${SimpleSvgIconsStyle.El.icon} {
+    ${SimpleSvgIconsStyle.Prop.color}: ${t.element.danger.text[0]};
   }
 `
 const button = (t:Theme)=>css`
-  &.rrainuiButton {
+  ${ButtonStyle.El.btn} {
     min-width: 90px;
     gap: 0.3em;
   }

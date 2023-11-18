@@ -61,7 +61,7 @@ export namespace UserApi {
   }
   export const create = async(user: UserToCreate) =>
     handleResponse<CreateSuccessData,CreateErrorData>
-    (ax.post(r.userCreate,user))
+    (ax.post(r.userCreate,user,{ params: { a: 1, lang: 'en-US' } }))
   
   
   

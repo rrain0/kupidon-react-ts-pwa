@@ -4,12 +4,14 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { LangSettingsUiText } from 'src/components/LangSettings/uiText'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
@@ -20,6 +22,8 @@ import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = Themes.Theme
 import BrowserIc = SimpleSvgIcons.BrowserIc
+import Mem = ReactUtils.Mem
+
 
 
 
@@ -143,7 +147,7 @@ const LangSettings = (props: SettingsProps)=>{
     </BottomSheetBasic>}
   </>
 }
-export default LangSettings
+export default Mem(LangSettings)
 
 
 
@@ -163,8 +167,8 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  &.rrainuiIcon {
+  ${SimpleSvgIconsStyle.El.icon} {
     width: 1.333em;
-    --icon-color: ${t.page.text[0]};
+    ${SimpleSvgIconsStyle.Prop.color}: ${t.page.text[0]};
   }
 `

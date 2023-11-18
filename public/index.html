@@ -6,6 +6,7 @@
     <meta charset="utf-8" />
     
     <script>
+      /** @type {'development'|'production'|'test'} */
       const NODE_ENV = "%NODE_ENV%"
       const PUBLIC_URL = "%PUBLIC_URL%"
     </script>
@@ -46,28 +47,41 @@
     
     
     
-    <!--<script src="%PUBLIC_URL%/setup-app.js"></script>-->
     <script>
       //console.log('setup app script: start setup')
       
+      /** @type {readonly ('en-US'|'ru-RU')[]} */
+      const AppLangs = ['en-US','ru-RU']
       
       
-      let _htmlProps = {
-        // eslint-disable-next-line no-undef
-        nodeEnv: NODE_ENV,
-        // eslint-disable-next-line no-undef
-        publicUrl: PUBLIC_URL,
-        lang: "en-US",
-        title: "Kupidon",
-        description: "Kupidon date app",
-      }
       
+      /**
+       * @param {AppLangs | string[]} langs
+       * @returns {void}
+       */
       function setHtmlTags(langs){
-        if (langs?.[0]) {
-          _htmlProps.lang = langs[0]
+        /**
+         * @type {{
+         *  nodeEnv: 'development'|'production'|'test',
+         *  publicUrl: string,
+         *  description: string,
+         *  lang: string,
+         *  title: string
+         * }}
+         */
+        const htmlProps = {
+          nodeEnv: NODE_ENV,
+          publicUrl: PUBLIC_URL,
+          lang: "en-US",
+          title: "Kupidon",
+          description: "Kupidon date app",
+        }
+        if (AppLangs.includes(langs?.[0])) {
+          htmlProps.lang = langs[0]
           
-          const textPrefix = _htmlProps.nodeEnv==='development' ? 'Dev ' : ''
+          const textPrefix = htmlProps.nodeEnv==='development' ? 'Dev ' : ''
           
+          /** @type {UiText<'kupidon'>[]} */
           const AppTitles = [
             {
               value: 'kupidon',
@@ -79,6 +93,7 @@
               text: 'Купидон',
             },
           ]
+          /** @type {UiText<'kupidonDescription'>[]} */
           const AppDescriptions = [
             {
               value: 'kupidonDescription',
@@ -91,9 +106,15 @@
             },
           ]
           
-          const prepareUiOptions = function(uiOptions, langs){
+          /**
+           * @template T
+           * @param {readonly UiText<T>[]} uiText
+           * @param {string[]} langs
+           * @returns {UiText<T>[]}
+           */
+          const prepareUiText = function(uiText, langs){
             const used = new Set()
-            return [...uiOptions]
+            return [...uiText]
               .sort((a,b)=>{
                 if (a.value===b.value) {
                   let langIdxA = langs.findIndex(it=>it===a.lang)
@@ -111,26 +132,26 @@
               })
           }
           
-          const titles = prepareUiOptions(AppTitles,langs)
-          const descriptions = prepareUiOptions(AppDescriptions,langs)
+          const titles = prepareUiText(AppTitles,langs)
+          const descriptions = prepareUiText(AppDescriptions,langs)
           
-          _htmlProps.title = textPrefix + titles[0].text
-          _htmlProps.description = textPrefix + descriptions[0].text
+          htmlProps.title = textPrefix + titles[0].text
+          htmlProps.description = textPrefix + descriptions[0].text
         }
         
         const html = document.documentElement
-        html.lang = _htmlProps.lang
+        html.lang = htmlProps.lang
         
-        document.title = _htmlProps.title
+        document.title = htmlProps.title
         
         const htmlDescription = document.querySelector('html head meta[name=description]')
-        htmlDescription.content = _htmlProps.description
+        htmlDescription.content = htmlProps.description
         
         const manifestSearchParams = new URLSearchParams({
-          nodeEnv: _htmlProps.nodeEnv,
-          lang: _htmlProps.lang,
+          nodeEnv: htmlProps.nodeEnv,
+          lang: htmlProps.lang,
         }).toString()
-        let manifestUrl = _htmlProps.publicUrl + "/manifest.json"
+        let manifestUrl = htmlProps.publicUrl + "/manifest.json"
         if (manifestSearchParams) manifestUrl += '?' + manifestSearchParams
         
         const linkManifest = document.querySelector('html head link[rel=manifest]')
@@ -141,7 +162,6 @@
       
       
       const langSettingsName = 'langSettings'
-      const AppLangs = ['en-US','ru-RU']
       {
         
         const langSettings = JSON.parse(localStorage.getItem(langSettingsName))
@@ -149,6 +169,7 @@
           setHtmlTags(langSettings.manualSetting)
         } else {
           
+          /** @returns {string[]} */
           const getLangs = function(){
             let browserLangs = navigator.languages
             if ((!browserLangs || !browserLangs.length) && navigator.language)

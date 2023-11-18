@@ -55,9 +55,7 @@ function ProfilePage(){
   
   
   return <>
-    <Page
-      ref={pageRef}
-    >
+    <Page ref={pageRef}>
       
       <ProfileContent
         setCanSubmit={setCanSubmit}
