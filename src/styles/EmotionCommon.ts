@@ -213,40 +213,40 @@ export namespace EmotionCommon {
   export namespace Txt {
     
     export const large3 = css`
-      font-weight: 500;
+      font-weight: 400;
       font-size: 24px;
       line-height: 150%;
       letter-spacing: 0.05em;
     `
     
     export const large2 = css`
-      font-weight: 500;
+      font-weight: 400;
       font-size: 18px;
       line-height: 150%;
       letter-spacing: 0.05em;
     `
     
     export const large1 = css`
-      font-weight: 500;
+      font-weight: 400;
       font-size: 16px;
       line-height: 129%;
       letter-spacing: 0.05em;
     `
     
     export const normal1 = css`
-      font-weight: 400;
+      font-weight: 300;
       font-size: 16px;
       line-height: 129%;
     `
     
     export const small1 = css`
-      font-weight: 400;
+      font-weight: 300;
       font-size: 15px;
       line-height: 129%;
     `
     
     export const small2 = css`
-      font-weight: 400;
+      font-weight: 300;
       font-size: 14px;
       line-height: 129%;
     `
@@ -254,7 +254,7 @@ export namespace EmotionCommon {
     
     
     export const small5 = css`
-      font-weight: 400;
+      font-weight: 300;
       font-size: 10px;
       line-height: 129%;
     `

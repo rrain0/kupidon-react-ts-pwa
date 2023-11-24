@@ -14,15 +14,15 @@ export namespace AppRoutes {
   const test = buildRoute({
     [path]: 'test',
     scrollbar: buildPath('scrollbar'),
-    bottomSheet: buildPath('bottomSheet'),
-    resizeObserver: buildPath('resizeObserver'),
-    moveElementToAnotherView: buildPath('moveElementToAnotherView'),
+    bottomSheet: buildPath('bottom-sheet'),
+    resizeObserver: buildPath('resize-observer'),
+    moveElementToAnotherView: buildPath('move-element-to-another-view'),
   })
   
   
   
   const findPairs = buildRoute({
-    [path]: 'findPairs'
+    [path]: 'find-pairs'
   })
   
   
@@ -30,7 +30,7 @@ export namespace AppRoutes {
   const login = buildRoute({
     [path]: 'login',
     [params]: {
-      returnPath: 'returnPath',
+      returnPath: 'return-path',
     }
   })
   
@@ -39,7 +39,7 @@ export namespace AppRoutes {
   const signup = buildRoute({
     [path]: 'signup',
     [params]: {
-      returnPath: 'returnPath',
+      returnPath: 'return-path',
     }
   })
   
@@ -60,7 +60,7 @@ export namespace AppRoutes {
     [path]: 'settings',
     account: buildPath('account'),
     app: buildPath('app'),
-    pwdChange: buildPath('pwdChange'),
+    pwdChange: buildPath('pwd-change'),
   })
   
   

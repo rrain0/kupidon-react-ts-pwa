@@ -202,7 +202,8 @@ export namespace Themes {
     },
     
     page: {
-      bgc: ['#ffaeba','#f0f0f0'],
+      //bgc: ['#ffaeba','#f0f0f0','#ffb6c1'],
+      bgc: ['#f5f5f5','#f5f5f5','#ffffff'],
       bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
       bgc3: ['#fff','#8b8b8b'],
       bgcPinkGradients: [
@@ -214,7 +215,8 @@ export namespace Themes {
     },
     
     nav: {
-      bgc: ['#f6d6db'], //#e8809a
+      //bgc: ['#f6d6db'], //#e8809a
+      bgc: ['#ffffff'],
       button: {
         bgc: ['#BB2649'],
         text: ['#333'],
@@ -259,7 +261,8 @@ export namespace Themes {
       iconActive: ['#00000011'],
       iconHover: ['#00000011'],
       placeholder: ['#777777'],
-      border: ['#00a8f3', '#9c20aa', '#fb3570'],
+      //border: ['#00a8f3', '#9c20aa', '#fb3570'],
+      border: ['#9c20aa', '#fb3570', '#fb3570'],
       error: {
         bgc: ['#ffced2'],
         border: ['#ff0000'],
@@ -340,7 +343,9 @@ export namespace Themes {
     },
     
     page: {
-      bgc: ['#992c46','#282c34'],
+      //bgc: ['#992c46','#282c34','#992c46'],
+      //bgc: ['#1d1e22','#1d1e22','#992c46'],
+      bgc: ['#18191b','#18191b','#984559'],
       bgc2: ['#992c46','#282c34','#994500'],
       bgc3: ['#121212','#8b8b8b'],
       bgcPinkGradients: [
@@ -366,7 +371,7 @@ export namespace Themes {
         '#282c34','#992c46','#282c34',
         '#992c46','#282c34','#992c46'
       ],
-      text: ['#bdbdbd'],
+      text: ['#bdbdbd','#ffffff'],
     },
     
     nav: {
@@ -415,7 +420,8 @@ export namespace Themes {
       iconActive: ['#fff2'],
       iconHover: ['#fff2'],
       placeholder: ['#7b7b7b'],
-      border: ['#00a8f3', '#9c20aa', '#fb3570'],
+      //border: ['#00a8f3', '#9c20aa', '#fb3570'],
+      border: ['#2393c6', '#b32e56', '#b32e56'],
       error: {
         bgc: ['#5e252c'],
         border: ['#cc221f'],

@@ -94,8 +94,8 @@ const ProfileContent = (props: ProfileContentProps)=>{
   })
   
   const {
-    request, isLoading,
-    isSuccess, isError,
+    request,
+    isLoading, isSuccess, isError, isImmediate,
     response, resetResponse,
   } = useApiRequest({
     values: formValues,
@@ -216,9 +216,9 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   
   
-  /* useEffect(()=>{
+  useEffect(()=>{
     console.log('PROFILE_CONTENT_FAILURES',failures)
-  },[failures]) */
+  },[failures])
   
   
   

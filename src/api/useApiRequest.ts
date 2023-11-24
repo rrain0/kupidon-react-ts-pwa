@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ApiUtils } from 'src/api/ApiUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
+import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import Values = ValidationCore.Values
 import ApiResponse = ApiUtils.ApiResponse
 import ResponseError = ApiUtils.ResponseError
@@ -38,11 +39,13 @@ export const useApiRequest =
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [isError, setIsError] = useState(false)
+  const [isImmediate, setIsImmediate] = useState(false)
   const resetResponse = useCallback(
     ()=>{
       setIsSuccess(false)
       setIsError(false)
       setResponse(undefined)
+      setIsImmediate(false)
     },
     []
   )
@@ -81,22 +84,30 @@ export const useApiRequest =
         }
       } finally {
         setIsLoading(false)
+        setIsImmediate(true)
       }
     },
     [isLoading, resetResponse, prepareAndRequest, values, failedFields]
   )
   
   
+  const tryRequestEffectEvent = useEffectEvent(()=>void tryRequest())
   useEffect(
     ()=>{
       if (doRequest){
         setDoRequest(false)
-        void tryRequest()
+        tryRequestEffectEvent()
       }
     },
-    [doRequest, tryRequest]
+    [doRequest]
   )
   
+  
+  
+  useEffect(
+    ()=>setIsImmediate(false),
+    [isImmediate]
+  )
   
   
   
@@ -106,6 +117,7 @@ export const useApiRequest =
     isSuccess,
     isError,
     response,
+    isImmediate,
     resetResponse,
   } as const
 }

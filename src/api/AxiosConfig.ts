@@ -4,7 +4,7 @@ import Axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios'
-import { ApiRoutes } from 'src/api-routes/ApiRoutes'
+import { ApiRoutes } from 'src/api/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus"
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'

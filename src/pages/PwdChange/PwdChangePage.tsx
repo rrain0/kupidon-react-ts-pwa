@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
@@ -65,7 +65,7 @@ const PwdChangePage = ()=>{
   
   const {
     request, isLoading,
-    isSuccess, isError,
+    isSuccess, isError, isImmediate,
     response, resetResponse,
   } = useApiRequest({
     values: formValues,
@@ -106,7 +106,9 @@ const PwdChangePage = ()=>{
   
   useEffect(
     ()=>{
-      if (isSuccess && response && 'data' in response){
+      if (isSuccess && isImmediate
+        && response && 'data' in response
+      ){
         const used = response.usedValues
         if ('pwd' in used){
           if (formValues.currentPwd===used.currentPwd)

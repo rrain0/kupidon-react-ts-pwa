@@ -375,10 +375,10 @@ export namespace ButtonStyle {
       
       ${Txt.small5};
       
-      a.active & {
+      /* a.active & {
         color: ${t.nav.button.selected.text[0]};
         ${Prop.color}: ${t.nav.button.selected.text[0]};
-      }
+      } */
       a.active & ${El.iconClass} {
         ${Prop.iconColor}: ${t.nav.button.selected.text[0]};
       }

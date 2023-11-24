@@ -228,8 +228,11 @@ export class DateTime {
 
 // месяц, день, час, минута, секунда могут быть в одно-или-двухсимвольном формате
 // разделителем является не цифра в любом количестве
-const dd_MM_yyyy_pattern = /(?<day>\d{1,2})\D+(?<month>\d{1,2})\D+(?<year>\d{4})/
-const yyyy_MM_dd_hh_mm_pattern = /(?<year>\d{4})\D+(?<month>\d{1,2})\D+(?<day>\d{1,2})\D+(?<hour>\d{1,2})\D+(?<minute>\d{1,2})/
-const yyyy_MM_dd_pattern = /(?<year>\d{4})\D+(?<month>\d{1,2})\D+(?<day>\d{1,2})/
+const dd_MM_yyyy_pattern =
+  /^\D*(?<day>\d{1,2})\D+(?<month>\d{1,2})\D+(?<year>\d{4})\D*$/
+const yyyy_MM_dd_hh_mm_pattern =
+  /^\D*(?<year>\d{4})\D+(?<month>\d{1,2})\D+(?<day>\d{1,2})\D+(?<hour>\d{1,2})\D+(?<minute>\d{1,2})\D*$/
+const yyyy_MM_dd_pattern =
+  /^\D*(?<year>\d{4})\D+(?<month>\d{1,2})\D+(?<day>\d{1,2})\D*$/
 
 

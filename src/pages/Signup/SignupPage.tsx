@@ -17,10 +17,11 @@ import React, {
   useMemo,
   useRef,
 } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
+import { LangRecoil } from 'src/recoil/state/LangRecoil'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
@@ -65,6 +66,7 @@ const SignupPage = () => {
   const navigate = useNavigate()
   
   const setAuth = useSetRecoilState(AuthRecoil)
+  const lang = useRecoilValue(LangRecoil)
   
   const uiText = useUiTextContainer(SignupPageUiText)
   
@@ -83,11 +85,8 @@ const SignupPage = () => {
   
   const {
     request,
-    isLoading,
-    isSuccess,
-    isError,
-    response,
-    resetResponse,
+    isLoading, isSuccess, isError, isImmediate,
+    response, resetResponse,
   } = useApiRequest({
     values: formValues,
     failedFields,
@@ -102,9 +101,9 @@ const SignupPage = () => {
           name: values.name,
           gender: values.gender as GenderEnum,
           birthDate: birthDateTime,
-        })
+        }, lang.lang[0])
       },
-      []
+      [lang.lang]
     )
   })
   

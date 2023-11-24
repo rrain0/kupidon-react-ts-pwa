@@ -1,6 +1,6 @@
 import { ApiUtils } from 'src/api/ApiUtils'
 import { AxiosConfig } from '../AxiosConfig'
-import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
+import { ApiRoutes as r } from 'src/api/ApiRoutes'
 import { UserApi } from './UserApi'
 import ax = AxiosConfig.ax
 import CurrentUser = UserApi.CurrentUser

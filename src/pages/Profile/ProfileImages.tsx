@@ -30,7 +30,7 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
       / 1fr 1fr 1fr
       ;
       place-items: stretch;
-      gap: 6px;
+      gap: 12px;
     `}>
       {images.map((im,i) => <div
           
@@ -58,7 +58,7 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
           css={css`
             grid-area: im${i+1};
             ${center};
-            border-radius: 6px;
+            border-radius: 12px;
             overflow: hidden;
           `}
         >

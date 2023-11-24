@@ -1,7 +1,7 @@
 import { ApiUtils } from 'src/api/ApiUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { AxiosConfig } from '../AxiosConfig'
-import { ApiRoutes as r } from 'src/api-routes/ApiRoutes'
+import { ApiRoutes as r } from 'src/api/ApiRoutes'
 import axAccess = AxiosConfig.axAccess
 import ax = AxiosConfig.ax
 import handleResponse = ApiUtils.handleResponse
@@ -59,9 +59,9 @@ export namespace UserApi {
     gender: "MALE"|"FEMALE",
     birthDate: string, // '2005-11-10T00:00:00.000+08:00'
   }
-  export const create = async(user: UserToCreate) =>
+  export const create = async(user: UserToCreate, lang: string) =>
     handleResponse<CreateSuccessData,CreateErrorData>
-    (ax.post(r.userCreate,user,{ params: { a: 1, lang: 'en-US' } }))
+    (ax.post(r.userCreate, user, { params: { lang } }))
   
   
   
