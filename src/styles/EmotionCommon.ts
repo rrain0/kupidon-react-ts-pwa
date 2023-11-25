@@ -119,6 +119,8 @@ export namespace EmotionCommon {
 
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+    
+    background-origin: border-box;
   `
   
   

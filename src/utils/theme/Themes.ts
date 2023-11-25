@@ -62,7 +62,7 @@ export namespace Themes {
       }
     }
     
-    toast:{
+    toast: {
       normal: ToastTheme
       loading: ToastTheme
       info: ToastTheme
@@ -79,6 +79,9 @@ export namespace Themes {
       bgc3: string[]
       bgcPinkGradients: string[]
       text: string[]
+    }
+    statusBar: {
+      bgc: string[]
     }
     nav: {
       bgc: string[]
@@ -203,7 +206,7 @@ export namespace Themes {
     
     page: {
       //bgc: ['#ffaeba','#f0f0f0','#ffb6c1'],
-      bgc: ['#f5f5f5','#f5f5f5','#ffffff'],
+      bgc: ['#f5f5f5','#f5f5f5'],
       bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
       bgc3: ['#fff','#8b8b8b'],
       bgcPinkGradients: [
@@ -212,6 +215,10 @@ export namespace Themes {
         '#e35d4d','#e5bed3','#ed4d2b'
       ],
       text: ['#000000'],
+    },
+    
+    statusBar: {
+      bgc: ['#ffffff'],
     },
     
     nav: {
@@ -345,7 +352,7 @@ export namespace Themes {
     page: {
       //bgc: ['#992c46','#282c34','#992c46'],
       //bgc: ['#1d1e22','#1d1e22','#992c46'],
-      bgc: ['#18191b','#18191b','#984559'],
+      bgc: ['#18191b','#18191b'],
       bgc2: ['#992c46','#282c34','#994500'],
       bgc3: ['#121212','#8b8b8b'],
       bgcPinkGradients: [
@@ -374,6 +381,10 @@ export namespace Themes {
       text: ['#bdbdbd','#ffffff'],
     },
     
+    statusBar: {
+      bgc: ['#984559'],
+    },
+    
     nav: {
       bgc: ['#282c34'], // #b06772
       button: {
@@ -383,7 +394,8 @@ export namespace Themes {
         active: ['#2e3440'],
         hover: ['#2e3440'],
         selected: {
-          text: ['#d92a54'],
+          //text: ['#d92a54'],
+          text: ['#984559'],
         }
       }
     },
