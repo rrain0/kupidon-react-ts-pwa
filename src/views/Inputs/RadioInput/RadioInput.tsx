@@ -2,13 +2,14 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
+import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import empty = TypeUtils.empty
 import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
 import RadioActiveIc = SimpleSvgIcons.RadioActiveIc
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
@@ -17,20 +18,24 @@ import trueOrUndef = CastUtils.trueOrUndef
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
 import row = EmotionCommon.row
+import El = RadioInputStyle.El
+import Attr = RadioInputStyle.Attr
+import Prop = RadioInputStyle.Prop
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
 
 
 
-export type RadioInputProps = JSX.IntrinsicElements['input'] & {
-  hasError?: boolean|empty
-  startViews?: React.ReactNode
-  endViews?: React.ReactNode
-  children?: React.ReactNode
-  childrenPosition?: 'start'|'end'|empty
-  rippleMode?: RippleProps['mode']
-}
+export type RadioInputProps = JSX.IntrinsicElements['input'] & PartialUndef<{
+  hasError: boolean
+  startViews: React.ReactNode
+  endViews: React.ReactNode
+  children: React.ReactNode
+  childrenPosition: 'start'|'end'
+  rippleMode: RippleProps['mode']
+}>
 
 const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
   props, forwardedRef
@@ -56,8 +61,8 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     style={style}
   >
     
-    <Input_
-      css={input_Style}
+    <Input_ css={input_Style}
+      {...{[Attr.errorName]: hasError}}
       aria-checked={restProps.checked}
       role='radio'
       {...restProps}
@@ -87,12 +92,12 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     
   </Frame>
 })
-export default ReactMemoTyped(RadioInput)
+export default Mem(RadioInput)
 
 
 
 const Frame = styled.label.attrs(p=>({
-  className: classNames(p.className,'rrainuiFrame')
+  className: classNames(p.className,El.frameClassName)
 }))``
 const frameStyle = css`
   position: relative;
@@ -103,13 +108,13 @@ const frameStyle = css`
 `
 
 
-type Input_Props = {
-  'data-error'?: boolean | empty
-}
+type Input_Props = PartialUndef<{
+  [Attr.errorName]: boolean
+}>
 const Input_ = styled.input.attrs<Input_Props>(p=>({
-  className: classNames(p.className,'rrainuiInput'),
+  className: classNames(p.className,El.inputClassName),
   type: 'radio',
-  'data-error': trueOrUndef(p['data-error'])
+  [Attr.errorName]: trueOrUndef(p['data-error'])
 }))<Input_Props>``
 const input_Style = css`
   ${resetInput};
@@ -120,30 +125,30 @@ const input_Style = css`
 
 
 const ActiveIcWrap = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiIconWrap')
+  className: classNames(p.className,El.iconWrapClassName)
 }))``
 const activeIcWrapStyle = css`
   display: none;
   input:checked ~ & { display: flex; }
-  .rrainuiIcon {
-    --icon-color: var(--active-icon-color)
+  ${SimpleSvgIconsStyle.El.iconClass} {
+    ${SimpleSvgIconsStyle.Prop.color}: var(${Prop.activeIconColor})
   }
 `
 
 const InactiveIcWrap = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiIconWrap')
+  className: classNames(p.className,El.iconWrapClassName)
 }))``
 const inactiveIcWrapStyle = css`
   display: flex;
   input:checked ~ & { display: none }
-  .rrainuiIcon {
-    --icon-color: var(--inactive-icon-color)
+  ${SimpleSvgIconsStyle.El.iconClass} {
+    ${SimpleSvgIconsStyle.Prop.color}: var(${Prop.inactiveIconColor})
   }
 `
 
 
 const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiBorder')
+  className: classNames(p.className,El.borderClassName)
 }))``
 const borderStyle = css`
   ${abs};

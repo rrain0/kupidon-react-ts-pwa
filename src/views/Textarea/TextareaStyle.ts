@@ -4,12 +4,11 @@ import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
 import bgcInBorder = EmotionCommon.bgcInBorder
 import Txt = EmotionCommon.Txt
+import hoverable = EmotionCommon.hoverable
 
 
 
 export namespace TextareaStyle {
-  
-  import hoverable = EmotionCommon.hoverable
   export namespace Attr {
     export const errorName = 'data-error'
     

@@ -6,18 +6,24 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
+import {
+  RadioInputGroupStyle,
+} from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
 import styled from 'styled-components'
 import reset = EmotionCommon.reset
 import trueOrUndef = CastUtils.trueOrUndef
 import abs = EmotionCommon.abs
-import empty = TypeUtils.empty
+import PartialUndef = TypeUtils.PartialUndef
+import El = RadioInputGroupStyle.El
+import Attr = RadioInputGroupStyle.Attr
+import Prop = RadioInputGroupStyle.Prop
 
 
 
-export type RadioInputGroupProps = JSX.IntrinsicElements['div'] & {
-  hasError?: boolean|empty
-  children?: React.ReactNode
-}
+export type RadioInputGroupProps = JSX.IntrinsicElements['div'] & PartialUndef<{
+  hasError: boolean
+  children: React.ReactNode
+}>
 export const RadioInputGroup = React.forwardRef<HTMLDivElement, RadioInputGroupProps>((
   props, forwardedRef
 )=>{
@@ -29,6 +35,7 @@ export const RadioInputGroup = React.forwardRef<HTMLDivElement, RadioInputGroupP
   
   
   return <RadioGroup css={radioGroupStyle}
+    {...{[Attr.errorName]: hasError}}
     {...restProps}
     data-error={hasError}
     ref={ref}
@@ -44,12 +51,12 @@ export const RadioInputGroup = React.forwardRef<HTMLDivElement, RadioInputGroupP
 
 
 
-type RadioGroupProps = {
-  'data-error'?: boolean | empty
-}
+type RadioGroupProps = PartialUndef<{
+  [Attr.errorName]: boolean
+}>
 const RadioGroup = styled.div.attrs<RadioGroupProps>(p=>({
-  className: classNames(p.className,'rrainuiRadioGroup'),
-  'data-error': trueOrUndef(p['data-error']),
+  className: classNames(p.className,El.radioGroupClassName),
+  [Attr.errorName]: trueOrUndef(p['data-error']),
   // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/radiogroup_role
   role: 'radiogroup',
 }))``
@@ -66,7 +73,7 @@ const radioGroupStyle = (t: Themes.Theme) => css`
 
 
 const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,'rrainuiBorder')
+  className: classNames(p.className,El.borderClassName)
 }))``
 const borderStyle = css`
   ${abs};
