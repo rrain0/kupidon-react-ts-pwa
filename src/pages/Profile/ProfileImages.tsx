@@ -8,7 +8,7 @@ import Card from 'src/views/Card'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
-import bgcBorderMask = EmotionCommon.bgcBorderMask
+import bgcBorderMask = EmotionCommon.bgcInBorder
 import Mem = ReactUtils.Mem
 
 
@@ -114,11 +114,11 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
                 initial-value: #8B8B8B;
                 inherits: false;
               }
-              ${bgcBorderMask};
               background-image: conic-gradient(
                       var(--grad-color) 0turn var(--rotation),
                       transparent var(--rotation) 1turn
               );
+              ${bgcBorderMask};
               ${pressedIdx===i && css`
                 animation: ${radialGradKfs} 0.5s linear forwards;
               `}

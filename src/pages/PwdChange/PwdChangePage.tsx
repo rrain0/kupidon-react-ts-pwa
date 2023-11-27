@@ -225,7 +225,7 @@ const PwdChangePage = ()=>{
         
         
         <div css={notInCard}>
-          <Button css={ButtonStyle.bigRectPrimary}
+          <Button css={ButtonStyle.bigRectMain}
             type='submit'
           >
             {uiText.doChangePwd[0].text}
@@ -233,7 +233,7 @@ const PwdChangePage = ()=>{
         </div>
         
         <div css={notInCard}>
-          <Button css={ButtonStyle.bigRectNormal}
+          <Button css={ButtonStyle.bigRectAccent}
             disabled
           >
             {uiText.pwdRecovery[0].text}
@@ -260,7 +260,7 @@ const PwdChangePage = ()=>{
       />
     </PageScrollbarOverlayFrame>
     
-    <BottomButtonBar/>
+    <BottomButtonBar settingsBtn/>
     
     
   </>

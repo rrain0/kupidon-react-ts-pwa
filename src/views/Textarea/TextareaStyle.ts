@@ -2,8 +2,7 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
-import onHover = EmotionCommon.onHover
-import bgcBorderMask = EmotionCommon.bgcBorderMask
+import bgcInBorder = EmotionCommon.bgcInBorder
 import Txt = EmotionCommon.Txt
 
 
@@ -80,15 +79,14 @@ export namespace TextareaStyle {
       border: 2px solid transparent;
       background-image: linear-gradient(
               to right,
-              ${t.input.border[0]},
-              ${t.input.border[1]},
-              ${t.input.border[2]}
+              ${t.input.hover.border[0]},
+              ${t.input.normal.border[0]},
+              ${t.input.normal.border[1]}
       );
-      background-origin: border-box;
       background-size: 200% 100%;
       background-position: 100% 0;
       transition: background-position 0.8s ease-out;
-      ${bgcBorderMask};
+      ${bgcInBorder};
     }
     
     // hover

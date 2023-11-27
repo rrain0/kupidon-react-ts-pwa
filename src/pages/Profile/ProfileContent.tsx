@@ -483,7 +483,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
     
     
     <div css={notInCard}>
-      <Button css={ButtonStyle.bigRectPrimary}
+      <Button css={ButtonStyle.bigRectMain}
         onClick={resetAuth}
       >
         {uiText.signOut[0].text}

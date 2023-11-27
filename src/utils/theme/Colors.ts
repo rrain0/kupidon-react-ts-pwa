@@ -4,6 +4,9 @@
 
 export const Colors = {
   
+  red: {
+    red1: '#ef3c34',
+  },
   
   purpleRed: {
     lightCherry1: '#d93b5f',
@@ -12,10 +15,16 @@ export const Colors = {
   
   
   pink: {
-    norm1: '#f37190',
-    norm2: '#ff6086',
+    norm1: '#ee7894',
+    norm2: '#f37190',
+    norm3: '#ff6086',
   } as const,
   
+  
+  yellow: {
+    yellow1: '#fff200',
+    darkYellow1: '#d0cb5d',
+  } as const,
   
 } as const
 

@@ -3,6 +3,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
 import onHover = EmotionCommon.onHover
 import rowWrap = EmotionCommon.rowWrap
+import col = EmotionCommon.col
 
 
 
@@ -10,7 +11,6 @@ export namespace RadioInputGroupStyle {
   
   
   
-  import col = EmotionCommon.col
   export const rowGroup = (t: Themes.Theme) => css`
     &.rrainuiRadioGroup {
       min-height: 50px;

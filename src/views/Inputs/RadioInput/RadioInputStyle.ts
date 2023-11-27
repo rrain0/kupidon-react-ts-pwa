@@ -11,8 +11,8 @@ export namespace RadioInputStyle {
   
   export const radio = (t: Themes.Theme) => css`
     &.rrainuiFrame {
-      --active-icon-color: ${t.button.primary.bgc}
-      --inactive-icon-color: ${t.button.primary.bgc}
+      --active-icon-color: ${t.element.main.a.bgc[0]};
+      --inactive-icon-color: ${t.element.main.a.bgc[0]};
       
       border-radius: 15px;
       padding: 8px 6px;

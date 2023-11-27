@@ -330,7 +330,7 @@ const RoundButtonsContainer = styled.div`
   gap: 10px;
 `
 const normalIconRoundButton = (t:Theme)=>css`
-  ${ButtonStyle.roundedNormal(t)};
+  ${ButtonStyle.roundedAccent(t)};
   &.rrainuiButton {
     min-width: 90px;
     gap: 0.6em;

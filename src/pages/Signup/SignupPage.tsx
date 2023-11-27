@@ -278,7 +278,7 @@ const SignupPage = () => {
         
         
         <Button
-          css={ButtonStyle.bigRectPrimary}
+          css={ButtonStyle.bigRectMain}
           type='submit'
         >
           {uiText.signup[0].text}

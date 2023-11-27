@@ -3,7 +3,6 @@ import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import ObjectValues = ObjectUtils.ObjectValues
-import ObjectValuesType = ObjectUtils.ObjectValuesType
 import ObjectKeysType = ObjectUtils.ObjectKeysType
 import ObjectEntries = ObjectUtils.ObjectEntries
 import ObjectKeys = ObjectUtils.ObjectKeys
@@ -174,8 +173,8 @@ export namespace RouteBuilder {
     (
       this:R,
       applyParams?: empty | (
-        (R)[typeof params] extends object
-          ? { [Path in ObjectKeysType<(R)[typeof params]>]: string | empty }
+        R[typeof params] extends object
+          ? { [Path in ObjectKeysType<R[typeof params]>]: string | empty }
           : never
       )
     )

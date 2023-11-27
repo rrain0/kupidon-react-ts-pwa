@@ -319,14 +319,14 @@ const AccountSettingsPage = ()=>{
         
         <div css={notInCard}>
           <Link to={RootRoute.settings.pwdChange[full]()}>
-            <Button css={ButtonStyle.bigRectNormal}>
+            <Button css={ButtonStyle.bigRectAccent}>
               {uiText.changePwd[0].text}
             </Button>
           </Link>
         </div>
         
         <div css={notInCard}>
-          <Button css={ButtonStyle.bigRectPrimary}
+          <Button css={ButtonStyle.bigRectMain}
             onClick={resetAuth}
           >
             {uiText.signOut[0].text}

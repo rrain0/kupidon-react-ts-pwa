@@ -109,20 +109,20 @@ export namespace ButtonStyle {
   
   namespace Color {
     
-    export const primary = (t:Theme) => css`
+    export const main = (t:Theme) => css`
       // normal
       ${El.btn} {
-        background: ${t.button.primary.bgc[0]};
-        color: ${t.button.primary.text[0]};
-        ${Prop.color}: ${t.button.primary.text[0]};
+        background: ${t.element.main.a.bgc[0]};
+        color: ${t.element.main.a.content[0]};
+        ${Prop.color}: ${t.element.main.a.content[0]};
       }
       ${El.ripple} {
-        ${Prop.rippleColor}: ${t.button.primary.ripple[0]};
+        ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
       }
       
       // hover
       ${hoverable}{ ${El.btnHover} {
-        background: ${t.button.primary.hover[0]};
+        background: ${t.element.main.aFocus.bgc[0]};
       }}
       
       // active
@@ -133,14 +133,14 @@ export namespace ButtonStyle {
       
       // focus-visible
       ${El.btnFocusVisible} {
-        background: ${t.button.primary.active[0]};
+        background: ${t.element.main.aFocus.bgc[0]};
       }
       
       // disabled
       ${El.btnDisabled} {
-        background: ${t.button.primary.disabled.bgc[0]};
-        color: ${t.button.primary.disabled.text[0]};
-        ${Prop.color}: ${t.button.primary.disabled.text[0]};
+        background: ${t.element.disabled.a.bgc[0]};
+        color: ${t.element.disabled.a.content[0]};
+        ${Prop.color}: ${t.element.disabled.a.content[0]};
       }
       
       // error
@@ -149,32 +149,32 @@ export namespace ButtonStyle {
     
     
     
-    export const normal = (t:Theme) => css`
+    export const accent = (t:Theme) => css`
       // normal
       ${El.btn} {
-        background: ${t.element.normal.bgc[0]};
-        color: ${t.element.normal.text[0]};
-        ${Prop.color}: ${t.element.normal.text[0]};
+        background: ${t.element.accent.a.bgc[0]};
+        color: ${t.element.accent.a.content[0]};
+        ${Prop.color}: ${t.element.accent.a.content[0]};
       }
       ${El.ripple} {
-        ${Prop.rippleColor}: ${t.ambience.bgc[0]};
+        ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
       }
 
       // hover
       ${hoverable}{ ${El.btnHover} {
-        background: ${t.element.normal.bgc[1]};
+        background: ${t.element.accent.aFocus.bgc[0]};
       }}
 
       // focus-visible
       ${El.btnFocusVisible} {
-        background: ${t.element.normal.bgc[1]};
+        background: ${t.element.accent.aFocus.bgc[0]};
       }
 
       // disabled
       ${El.btnDisabled} {
-        background: ${t.element.disabled.bgc[0]};
-        color: ${t.element.disabled.text[0]};
-        ${Prop.color}: ${t.element.disabled.text[0]};
+        background: ${t.element.disabled.a.bgc[0]};
+        color: ${t.element.disabled.a.content[0]};
+        ${Prop.color}: ${t.element.disabled.a.content[0]};
       }
     `
     
@@ -182,44 +182,44 @@ export namespace ButtonStyle {
     export const danger = (t:Theme) => css`
       // normal
       ${El.btn} {
-        background: ${t.element.danger.bgc[0]};
-        color: ${t.element.danger.text[0]};
-        ${Prop.color}: ${t.element.danger.text[0]};
+        background: ${t.element.danger.a.bgc[0]};
+        color: ${t.element.danger.a.content[0]};
+        ${Prop.color}: ${t.element.danger.a.content[0]};
       }
       ${El.ripple} {
-        ${Prop.rippleColor}: ${t.ambience.bgc[0]};
+        ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
       }
       
       // hover
       ${hoverable}{ ${El.btnHover} {
-        background: ${t.element.danger.bgc[1]};
+        background: ${t.element.danger.aFocus.bgc[0]};
       }}
       
       // focus-visible
       ${El.btnFocusVisible} {
-        background: ${t.element.danger.bgc[1]};
+        background: ${t.element.danger.aFocus.bgc[0]};
       }
       
       // disabled
       ${El.btnDisabled} {
-        background: ${t.element.disabled.bgc[0]};
-        color: ${t.element.disabled.text[0]};
-        ${Prop.color}: ${t.element.disabled.text[0]};
+        background: ${t.element.disabled.a.bgc[0]};
+        color: ${t.element.disabled.a.content[0]};
+        ${Prop.color}: ${t.element.disabled.a.content[0]};
       }
     `
   }
   
   
   
-  export const bigRectPrimary = (t:Theme) => css`
+  export const bigRectMain = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${Color.primary(t)};
+    ${Color.main(t)};
   `
-  export const bigRectNormal = (t:Theme) => css`
+  export const bigRectAccent = (t:Theme) => css`
     ${common};
     ${Shape.bigRect};
-    ${Color.normal(t)};
+    ${Color.accent(t)};
   `
   export const bigRectDanger = (t:Theme) => css`
     ${common};
@@ -228,20 +228,20 @@ export namespace ButtonStyle {
   `
   
   
-  export const smallRectNormal = (t:Theme) => css`
+  export const smallRectAccent = (t:Theme) => css`
     ${common};
     ${Shape.smallRect};
-    ${Color.normal(t)};
+    ${Color.accent(t)};
   `
   
   
-  export const roundedNormal = (t:Theme) => css`
+  export const roundedAccent = (t:Theme) => css`
     ${common};
     ${Shape.rounded};
-    ${Color.normal(t)};
+    ${Color.accent(t)};
     ${El.btn} {
-      color: ${t.element.normal.text2[0]};
-      ${Prop.color}: ${t.element.normal.text2[0]};
+      color: ${t.element.accent.e.content[0]};
+      ${Prop.color}: ${t.element.accent.e.content[0]};
     }
   `
   
@@ -249,16 +249,6 @@ export namespace ButtonStyle {
     ${common};
     ${Shape.rounded};
     ${Color.danger(t)};
-  `
-  
-  export const roundedSecondary = (t:Theme) => css`
-    ${common};
-    ${Shape.rounded};
-    ${Color.normal(t)};
-    ${El.btn} {
-      color: ${t.element.normal.text2[0]};
-      ${Prop.color}: ${t.element.normal.text2[0]};
-    }
   `
   
   
@@ -281,37 +271,37 @@ export namespace ButtonStyle {
       border-radius: 50%;
       padding: 14px;
       
-      background: ${t.button.primary.bgc[0]};
-      color: ${t.button.primary.text[0]};
-      ${Prop.color}: ${t.button.primary.text[0]};
+      background: ${t.element.main.a.bgc[0]};
+      color: ${t.element.main.a.content[0]};
+      ${Prop.color}: ${t.element.main.a.content[0]};
     }
     ${El.ripple} {
       ${Prop.rippleMode}: center;
-      ${Prop.rippleColor}: ${t.button.primary.ripple[0]};
+      ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
     }
     ${El.icon} {
       ${Prop.iconSize}: 100%;
-      ${Prop.iconColor}: ${t.button.primary.text[0]};
+      ${Prop.iconColor}: ${t.element.main.a.content[0]};
     }
     
     // hover
     ${hoverable}{ ${El.btnHover} {
-      background: ${t.button.primary.hover[0]};
+      background: ${t.element.main.aFocus.bgc[0]};
     }}
 
     // focus-visible
     ${El.btnFocusVisible} {
-      background: ${t.button.primary.active[0]};
+      background: ${t.element.main.aFocus.bgc[0]};
     }
     
     // disabled
     ${El.btnDisabled} {
-      background: ${t.button.primary.disabled.bgc[0]};
-      color: ${t.button.primary.disabled.text[0]};
-      ${Prop.color}: ${t.button.primary.disabled.text[0]};
+      background: ${t.element.disabled.a.bgc[0]};
+      color: ${t.element.disabled.a.content[0]};
+      ${Prop.color}: ${t.element.disabled.a.content[0]};
     }
     ${El.iconDisabled} {
-      ${Prop.iconColor}: ${t.button.primary.disabled.text[0]};
+      ${Prop.iconColor}: ${t.element.disabled.a.content[0]};
     }
   `
   
@@ -322,14 +312,14 @@ export namespace ButtonStyle {
     // normal
     ${El.btn} {
       background: none;
-      color: ${t.button.secondary.bgc[0]};
-      ${Prop.color}: ${t.button.secondary.bgc[0]};
+      color: ${t.element.accent.a.bgc[0]};
+      ${Prop.color}: ${t.element.accent.a.bgc[0]};
     }
     ${El.ripple} {
-      ${Prop.rippleColor}: ${t.input.ripple[0]};
+      ${Prop.rippleColor}: ${t.element.accent.c.content[0]};
     }
     ${El.icon} {
-      ${Prop.iconColor}: ${t.button.secondary.bgc[0]};
+      ${Prop.iconColor}: ${t.element.accent.a.bgc[0]};
     }
 
     // hover

@@ -180,7 +180,7 @@ const LoginPage = () => {
         
         
         <Button
-          css={ButtonStyle.bigRectPrimary}
+          css={ButtonStyle.bigRectMain}
           type="submit"
         >
           {uiText.doLogin[0].text}
@@ -188,7 +188,7 @@ const LoginPage = () => {
         
         
         <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
-          <Button css={ButtonStyle.bigRectNormal}>
+          <Button css={ButtonStyle.bigRectAccent}>
             {uiText.signup[0].text}
           </Button>
         </Link>

@@ -85,7 +85,7 @@ const ClearSiteConfirmation = (props:{
             `}
           >
             
-            <Button css={[ButtonStyle.roundedNormal, button]}
+            <Button css={[ButtonStyle.roundedAccent, button]}
               onClick={props.setClosing}
             >
               {uiText.no[0].text}
@@ -141,7 +141,7 @@ const icon = (t:Theme)=>css`
 `
 const iconOnDanger = (t:Theme)=>css`
   ${SimpleSvgIconsStyle.El.icon} {
-    ${SimpleSvgIconsStyle.Prop.color}: ${t.element.danger.text[0]};
+    ${SimpleSvgIconsStyle.Prop.color}: ${t.element.danger.a.content[0]};
   }
 `
 const button = (t:Theme)=>css`

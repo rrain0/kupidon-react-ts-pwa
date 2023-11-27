@@ -1,4 +1,6 @@
-import { Colors2 } from 'src/utils/theme/Colors'
+
+
+
 
 
 export namespace Themes {
@@ -23,6 +25,29 @@ export namespace Themes {
     // accentContent: string[]
   }
   
+  export type ViewTheme = Partial<{
+    hover: {},
+    active: {},
+    focus: {},
+    focusVisible: {},
+    readOnly: {},
+    disabled: {},
+    error: {},
+  }>
+  
+  // Цвета в массиве для градиентов
+  // Если нужен повариант, то лучше создать отдельный объект
+  export interface BgcContent {
+    // various bgc colors
+    bgc: string[]
+    // various applicable content (text) colors
+    // content[i] is made for bgc[i]
+    content: string[]
+  }
+  export type BgcContentVariants<T extends object> = {
+    [Prop in keyof T]: BgcContent
+  }
+  
   
   export interface Theme {
     type: ThemeType
@@ -30,36 +55,23 @@ export namespace Themes {
     
     // окружение
     ambience: {
-      // [0]: contrast bgc / ripple
-      // [1]: main bgc
-      bgc: string[],
-      // [0]: secondary bgc
-      bgc2: string[],
+      normal: BgcContentVariants<{ a, b }>
+      accent: BgcContentVariants<{ a }>
     }
     element: {
-      primary?: {
-        bgc: string[]
-        text: string[]
-      }
-      normal: {
-        // [0]: usual bgc
-        // [1]: active / hover bgc
-        bgc: string[]
-        text: string[]
-        text2: string[]
-      }
-      secondary?: {
-        bgc: string[]
-        text: string[]
-      }
-      disabled: {
-        bgc: string[]
-        text: string[]
-      }
-      danger: {
-        bgc: string[]
-        text: string[]
-      }
+      //highlight?: BgcContentVariants<{ a }>
+      
+      //primary?: BgcContentVariants<{ a }>
+      //secondary?: BgcContentVariants<{ a }>
+      
+      
+      // a - button primary
+      main:     BgcContentVariants<{ a, aFocus }>
+      // a - button secondary
+      accent:   BgcContentVariants<{ a, aFocus, c, e }>
+      ripple:   BgcContentVariants<{ a }>
+      disabled: BgcContentVariants<{ a }>
+      danger:   BgcContentVariants<{ a, aFocus }>
     }
     
     toast: {
@@ -77,7 +89,6 @@ export namespace Themes {
       bgc: string[]
       bgc2: string[]
       bgc3: string[]
-      bgcPinkGradients: string[]
       text: string[]
     }
     statusBar: {
@@ -96,30 +107,6 @@ export namespace Themes {
         }
       }
     }
-    button: {
-      primary: {
-        bgc: string[]
-        text: string[]
-        ripple: string[]
-        active: string[]
-        hover: string[]
-        disabled: {
-          bgc: string[]
-          text: string[]
-        }
-      }
-      secondary: {
-        bgc: string[]
-        text: string[]
-        ripple: string[]
-        active: string[]
-        hover: string[]
-        disabled: {
-          bgc: string[]
-          text: string[]
-        }
-      }
-    }
     input: {
       bgc: string[]
       text: string[]
@@ -127,7 +114,12 @@ export namespace Themes {
       iconActive: string[]
       iconHover: string[]
       placeholder: string[]
-      border: string[]
+      normal: {
+        border: string[]
+      }
+      hover: {
+        border: string[]
+      }
       error: {
         bgc: string[]
         border: string[]
@@ -136,12 +128,6 @@ export namespace Themes {
     scrollbar: {
       track: string[]
       thumb: string[]
-    }
-    icon: {
-      warning: {
-        bgc: string[]
-        color: string[]
-      }
     }
   }
   
@@ -152,55 +138,67 @@ export namespace Themes {
     name: 'Light Pink',
     
     ambience: {
-      bgc: ['#ffffff','#f0f0f0'],
-      bgc2: ['#ffaeba'],
+      normal: {
+        a: { bgc: ['#ffffff'], content: ['#000000'] },
+        b: { bgc: ['#f0f0f0'], content: ['#000000'] },
+      },
+      accent: {
+        a: { bgc: ['#ffaeba'], content: ['#000000'] },
+      },
     },
     element: {
-      normal: {
-        bgc: ['#f37190','#ffa4ba'],
-        text: ['#F8F8F8'],
-        text2: ['#000000'],
+      main: {
+        a:      { bgc: ['#BB2649'], content: ['#F8F8F8'] },
+        aFocus: { bgc: ['#d93b5f'], content: ['#F8F8F8'] },
+      },
+      accent: {
+        a:      { bgc: ['#f37190'], content: ['#F8F8F8'] },
+        aFocus: { bgc: ['#ffa4ba'], content: ['#F8F8F8'] },
+        c:      { bgc: ['transparent'], content: ['#00000088'] },
+        e:      { bgc: ['#f37190'], content: ['#000000'] },
+      },
+      ripple: {
+        a: { bgc: ['#000000'], content: ['#ffffff'] },
       },
       disabled: {
-        bgc: ['#DCDCDC'],
-        text: ['#555']
+        a: { bgc: ['#DCDCDC'], content: ['#555555'] },
       },
       danger: {
-        bgc: ['#ef3c34','#ff5047'],
-        text: ['#F8F8F8'],
+        a:      { bgc: ['#dc362e'], content: ['#F8F8F8'] },
+        aFocus: { bgc: ['#ef3c34'], content: ['#F8F8F8'] },
       }
     },
     
     toast:{
       normal: {
-        bgc: [Colors2.toastLightBgc],
-        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
-        accent: [Colors2.toastNormalBgc],
+        bgc: ['#ffffff'],
+        content: ['#757575', '#b2b2b2', '#000000'],
+        accent: ['#bb86fc'],
       },
       loading: {
-        bgc: [Colors2.toastLightBgc],
-        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
-        accent: [Colors2.toastLoadingBgc, Colors2.toastLoadingBgcAccent],
+        bgc: ['#ffffff'],
+        content: ['#757575', '#b2b2b2', '#000000'],
+        accent: ['#e0e0e0', '#616161'],
       },
       info: {
-        bgc: [Colors2.toastLightBgc],
-        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
-        accent: [Colors2.toastInfoBgc],
+        bgc: ['#ffffff'],
+        content: ['#757575', '#b2b2b2', '#000000'],
+        accent: ['#3498db'],
       },
       ok: {
-        bgc: [Colors2.toastLightBgc],
-        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
-        accent: [Colors2.toastOkBgc],
+        bgc: ['#ffffff'],
+        content: ['#757575', '#b2b2b2', '#000000'],
+        accent: ['#07bc0c'],
       },
       warn: {
-        bgc: [Colors2.toastLightBgc],
-        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
-        accent: [Colors2.toastWarnBgc],
+        bgc: ['#ffffff'],
+        content: ['#757575', '#b2b2b2', '#000000'],
+        accent: ['#f1c40f'],
       },
       danger: {
-        bgc: [Colors2.toastLightBgc],
-        content: [Colors2.toastLightContent, Colors2.toastLightContent2, Colors2.toastLightContent3],
-        accent: [Colors2.toastDangerBgc],
+        bgc: ['#ffffff'],
+        content: ['#757575', '#b2b2b2', '#000000'],
+        accent: ['#e74c3c'],
       },
     },
     
@@ -209,11 +207,6 @@ export namespace Themes {
       bgc: ['#f5f5f5','#f5f5f5'],
       bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
       bgc3: ['#fff','#8b8b8b'],
-      bgcPinkGradients: [
-        '#f39aba','#dfc0d2','#e3d8f6',
-        '#dfa4b8','#ee4723','#dd8499',
-        '#e35d4d','#e5bed3','#ed4d2b'
-      ],
       text: ['#000000'],
     },
     
@@ -226,8 +219,8 @@ export namespace Themes {
       bgc: ['#ffffff'],
       button: {
         bgc: ['#BB2649'],
-        text: ['#333'],
-        ripple: ['#fff'],
+        text: ['#333333'],
+        ripple: ['#ffffff'],
         active: ['#fabfc9'],
         hover: ['#fabfc9'],
         selected: {
@@ -236,40 +229,20 @@ export namespace Themes {
       },
     },
     
-    button: {
-      primary: {
-        bgc: ['#BB2649'],
-        text: ['#F8F8F8'],
-        ripple: ['#fff'],
-        active: ['#d93b5f'],
-        hover: ['#d93b5f'],
-        disabled: {
-          bgc: ['#DCDCDC'],
-          text: ['#555']
-        }
-      },
-      secondary: {
-        bgc: ['#f37190'],
-        text: ['#F8F8F8'],
-        ripple: ['#fff'],
-        active: ['#ff6086'],
-        hover: ['#ff6086'],
-        disabled: {
-          bgc: ['#DCDCDC'],
-          text: ['#555']
-        }
-      }
-    },
-    
     input: {
       bgc: ['#F8F8F8'],
-      text: ['#000'],
+      text: ['#000000'],
       ripple: ['#0008'],
       iconActive: ['#00000011'],
       iconHover: ['#00000011'],
       placeholder: ['#777777'],
       //border: ['#00a8f3', '#9c20aa', '#fb3570'],
-      border: ['#9c20aa', '#fb3570', '#fb3570'],
+      normal: {
+        border: ['#fb3570','#fb3570'],
+      },
+      hover: {
+        border: ['#9c20aa'],
+      },
       error: {
         bgc: ['#ffced2'],
         border: ['#ff0000'],
@@ -279,13 +252,6 @@ export namespace Themes {
     scrollbar: {
       track: ['#25283622'],
       thumb: ['#25283644'],
-    },
-    
-    icon: {
-      warning: {
-        bgc: ['#000000'],
-        color: ['#fff200'],
-      }
     },
   }
   
@@ -297,55 +263,67 @@ export namespace Themes {
     name: 'Dark',
     
     ambience: {
-      bgc: ['#000000','#282c34'],
-      bgc2: ['#992c46'],
+      normal: {
+        a: { bgc: ['#000000'], content: ['#bdbdbd'] },
+        b: { bgc: ['#282c34'], content: ['#bdbdbd'] },
+      },
+      accent: {
+        a: { bgc: ['#992c46'], content: ['#bdbdbd'] },
+      },
     },
     element: {
-      normal: {
-        bgc: ['#d16780','#e58ea2'],
-        text: ['#cdcdcd'],
-        text2: ['#000000'],
+      main: {
+        a:      { bgc: ['#971f3b'], content: ['#bdbdbd'] },
+        aFocus: { bgc: ['#c6294e'], content: ['#bdbdbd'] },
+      },
+      accent: {
+        a:      { bgc: ['#d16780'], content: ['#cdcdcd'] },
+        aFocus: { bgc: ['#e58ea2'], content: ['#cdcdcd'] },
+        c:      { bgc: ['transparent'], content: ['#ffffff88'] },
+        e:      { bgc: ['#d16780'], content: ['#000000'] },
+      },
+      ripple: {
+        a: { bgc: ['#ffffff'], content: ['#000000'] },
       },
       disabled: {
-        bgc: ['#DCDCDC'],
-        text: ['#555']
+        a: { bgc: ['#DCDCDC'], content: ['#555555'] },
       },
       danger: {
-        bgc: ['#ac2c26','#c43730'],
-        text: ['#bdbdbd'],
+        a:      { bgc: ['#ac2c26'], content: ['#bdbdbd'] },
+        aFocus: { bgc: ['#c43730'], content: ['#bdbdbd'] },
       }
     },
     
     toast:{
       normal: {
-        bgc: [Colors2.toastDarkBgc],
-        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
-        accent: [Colors2.toastNormalBgc],
+        bgc: ['#121212'],
+        content: ['#ffffff', '#b8b8b8', '#ffffff'],
+        accent: ['#bb86fc'],
       },
       loading: {
-        bgc: [Colors2.toastDarkBgc],
-        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
-        accent: [Colors2.toastLoadingBgc, Colors2.toastLoadingBgcAccent],
+        bgc: ['#121212'],
+        content: ['#ffffff', '#b8b8b8', '#ffffff'],
+        accent: ['#e0e0e0', '#616161'],
       },
       info: {
-        bgc: [Colors2.toastDarkBgc],
-        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
-        accent: [Colors2.toastInfoBgc],
+        bgc: ['#121212'],
+        content: ['#ffffff', '#b8b8b8', '#ffffff'],
+        accent: ['#3498db'],
       },
       ok: {
-        bgc: [Colors2.toastDarkBgc],
-        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
-        accent: [Colors2.toastOkBgc],
+        bgc: ['#121212'],
+        content: ['#ffffff', '#b8b8b8', '#ffffff'],
+        accent: ['#07bc0c'],
       },
       warn: {
-        bgc: [Colors2.toastDarkBgc],
-        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
-        accent: [Colors2.toastWarnBgc],
+        bgc: ['#121212'],
+        content: ['#ffffff', '#b8b8b8', '#ffffff'],
+        accent: ['#f1c40f'],
       },
       danger: {
-        bgc: [Colors2.toastDarkBgc],
-        content: [Colors2.toastDarkContent, Colors2.toastDarkContent2, Colors2.toastDarkContent3],
-        accent: [Colors2.toastDangerBgc],
+        bgc: ['#121212'],
+        content: ['#ffffff', '#b8b8b8', '#ffffff'],
+        accent: ['#e74c3c'],
       },
     },
     
@@ -355,29 +333,6 @@ export namespace Themes {
       bgc: ['#18191b','#18191b'],
       bgc2: ['#992c46','#282c34','#994500'],
       bgc3: ['#121212','#8b8b8b'],
-      bgcPinkGradients: [
-        '#f39aba','#dfc0d2','#e3d8f6',
-        '#dfa4b8','#ee4723','#dd8499',
-        '#e35d4d','#e5bed3','#ed4d2b'
-      ],
-      //@ts-ignore
-      bgcPinkGradients: [
-        '#992c46','#bc8245','#992c46',
-        '#bb8396','#992c46','#975492',
-        '#992c46','#3e5175','#992c46'
-      ],
-      //@ts-ignore
-      bgcPinkGradients: [
-        '#992c46','#282c34','#992c46',
-        '#282c34','#992c46','#282c34',
-        '#992c46','#282c34','#992c46'
-      ],
-      //@ts-ignore
-      bgcPinkGradients: [
-        '#992c46','#bc8245','#992c46',
-        '#282c34','#992c46','#282c34',
-        '#992c46','#282c34','#992c46'
-      ],
       text: ['#bdbdbd','#ffffff'],
     },
     
@@ -400,31 +355,6 @@ export namespace Themes {
       }
     },
     
-    button: {
-      primary: {
-        bgc: ['#971f3b'],
-        text: ['#bdbdbd'],
-        ripple: ['#000'],
-        active: ['#c6294e'],
-        hover: ['#c6294e'],
-        disabled: {
-          bgc: ['#DCDCDC'],
-          text: ['#555']
-        }
-      },
-      secondary: {
-        bgc: ['#d16780'],
-        text: ['#cdcdcd'],
-        ripple: ['#000'],
-        active: ['#ee7894'],
-        hover: ['#ee7894'],
-        disabled: {
-          bgc: ['#DCDCDC'],
-          text: ['#555'],
-        }
-      }
-    },
-    
     input: {
       bgc: ['#282c34'],
       text: ['#bdbdbd'],
@@ -433,7 +363,12 @@ export namespace Themes {
       iconHover: ['#fff2'],
       placeholder: ['#7b7b7b'],
       //border: ['#00a8f3', '#9c20aa', '#fb3570'],
-      border: ['#2393c6', '#b32e56', '#b32e56'],
+      normal: {
+        border: ['#b32e56','#b32e56'],
+      },
+      hover: {
+        border: ['#2393c6'],
+      },
       error: {
         bgc: ['#5e252c'],
         border: ['#cc221f'],
@@ -443,13 +378,6 @@ export namespace Themes {
     scrollbar: {
       track: ['#F8F8F822'],
       thumb: ['#F8F8F844'],
-    },
-    
-    icon: {
-      warning: {
-        bgc: ['#d0cb5d'],
-        color: ['#000000'],
-      }
     },
   }
   
@@ -462,19 +390,26 @@ export namespace Themes {
     type: 'light',
     name: 'Light Pink 2',
     
-    input: {
-      ...LightPink.input,
-      border: ['#00a8f3', '#ef7b7d', '#fb3570'],
+    element: {
+      ...LightPink.element,
+      main: {
+        ...LightPink.element.main,
+        a: {
+          ...LightPink.element.main.a,
+          bgc: ['#f95c67']
+        }
+      }
     },
     
-    button: {
-      ...LightPink.button,
-      primary: {
-        ...LightPink.button.primary,
-        bgc: ['#f95c67'],
-      }
-    }
-    
+    input: {
+      ...LightPink.input,
+      normal: {
+        border: ['#ef7b7d', '#fb3570'],
+      },
+      hover: {
+        border: ['#00a8f3'],
+      },
+    },
   }
   
   
@@ -485,16 +420,24 @@ export namespace Themes {
     type: 'dark',
     name: 'Dark 2',
     
-    input: {
-      ...Dark.input,
-      border: ['#00a8f3', '#ef7b7d', '#fb3570'],
+    element: {
+      ...Dark.element,
+      main: {
+        ...Dark.element.main,
+        a: {
+          ...Dark.element.main.a,
+          bgc: ['#d9816f']
+        }
+      }
     },
     
-    button: {
-      ...Dark.button,
-      primary: {
-        ...Dark.button.primary,
-        bgc: ['#d9816f'],
+    input: {
+      ...Dark.input,
+      normal: {
+        border: ['#ef7b7d', '#fb3570'],
+      },
+      hover: {
+        border: ['#00a8f3'],
       },
     },
   }

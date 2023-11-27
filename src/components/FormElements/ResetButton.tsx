@@ -13,7 +13,7 @@ import Mem = ReactUtils.Mem
 
 const ResetButton =
 ({text,onClick}: { text: string, onClick: ()=>void }) =>{
-  return <Button css={ButtonStyle.smallRectNormal}
+  return <Button css={ButtonStyle.smallRectAccent}
     onClick={onClick}
   >
     <ArrowReloadIc css={resetButtonIcon}/>

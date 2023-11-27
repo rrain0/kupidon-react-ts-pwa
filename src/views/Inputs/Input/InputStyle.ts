@@ -3,7 +3,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
-import bgcBorderMask = EmotionCommon.bgcBorderMask
+import bgcInBorder = EmotionCommon.bgcInBorder
 import PartialUndef = TypeUtils.PartialUndef
 import Txt = EmotionCommon.Txt
 import hoverable = EmotionCommon.hoverable
@@ -69,11 +69,10 @@ export namespace InputStyle {
       }
       ${El.border} {
         border: 2px solid transparent;
-        background-origin: border-box;
         background-size: 200% 100%;
         background-position: 100% 0;
         transition: background-position 0.8s ease-out;
-        ${bgcBorderMask};
+        ${bgcInBorder};
       }
       
       // hover
@@ -147,9 +146,9 @@ export namespace InputStyle {
       ${El.border} {
         background-image: linear-gradient(
           to right,
-          ${t.input.border[0]},
-          ${t.input.border[1]},
-          ${t.input.border[2]}
+          ${t.input.hover.border[0]},
+          ${t.input.normal.border[0]},
+          ${t.input.normal.border[1]}
         );
       }
 

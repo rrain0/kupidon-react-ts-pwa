@@ -319,7 +319,7 @@ const RoundButtonsContainer = styled.div`
   gap: 10px;
 `
 const normalIconRoundButton = (t:Theme)=>css`
-  ${ButtonStyle.roundedNormal(t)};
+  ${ButtonStyle.roundedAccent(t)};
   ${ButtonStyle.El.btn} {
     min-width: 90px;
     gap: 0.6em;
