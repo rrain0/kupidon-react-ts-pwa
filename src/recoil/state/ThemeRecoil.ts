@@ -18,8 +18,8 @@ export const ThemeSettingsRecoil = atom<ThemeSettingsStateType>({
   default: {
     setting: 'system',
     manualSetting: 'light',
-    light: Themes.defaultLight,
-    dark: Themes.defaultDark,
+    light: Themes.DefaultLightTheme.name,
+    dark: Themes.DefaultDarkTheme.name,
   },
   effects: [localStorageEffect2({ removeWhen: ['reset'] })],
 })
@@ -32,7 +32,7 @@ export type ThemeRecoilType = {
 export const ThemeRecoil = atom<ThemeRecoilType>({
   key: 'theme',
   default: {
-    theme: Themes.LightPink,
+    theme: Themes.DefaultTheme,
     systemThemeAvailable: undefined,
   },
 })
