@@ -80,14 +80,17 @@ const QuickSettings = (props: SettingsProps)=>{
         {
           value: 'system',
           text: uiText.systemTheme[0].text,
+          icon: <DayNightIc css={icon}/>,
         },{
           value: 'light',
           text: uiText.lightTheme[0].text,
+          icon: <DayIc css={icon}/>,
         },{
           value: 'dark',
           text: uiText.darkTheme[0].text,
+          icon: <MoonIc css={iconSmall}/>,
         }
-      ] satisfies { value: ThemeType|'system', text: string }[]
+      ] satisfies { value: ThemeType|'system', [prop: string]: any }[]
       if (!theme.systemThemeAvailable) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
@@ -104,18 +107,22 @@ const QuickSettings = (props: SettingsProps)=>{
   
   const languageOptions = useMemo(
     ()=>{
+      
       let opts = [
         {
           value: 'system',
           text: uiText.systemLanguage[0].text,
+          icon: <BrowserIc css={icon}/>,
         },{
           value: 'ru-RU',
           text: uiText.russian[0].text,
+          icon: <Flag src={CountryFlag['ru-RU']}/>,
         },{
           value: 'en-US',
           text: uiText.english[0].text,
+          icon: <Flag src={CountryFlag['en-US']}/>,
         }
-      ] satisfies { value: Lang|'system', text: string }[]
+      ] satisfies { value: Lang|'system', [prop: string]: any }[]
       if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
@@ -168,9 +175,7 @@ const QuickSettings = (props: SettingsProps)=>{
                 }}
               >
                 <OptionContainer>
-                  {opt.value === 'system' && <DayNightIc css={icon}/>}
-                  {opt.value === 'light' && <DayIc css={icon}/>}
-                  {opt.value === 'dark' && <MoonIc css={iconSmall}/>}
+                  {opt.icon}
                   {opt.text}
                 </OptionContainer>
               </RadioInput>)
@@ -203,8 +208,7 @@ const QuickSettings = (props: SettingsProps)=>{
                 }}
               >
                 <OptionContainer>
-                  {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
-                  {opt.value === 'system' && <BrowserIc css={icon}/>}
+                  {opt.icon}
                   {opt.text}
                 </OptionContainer>
               </RadioInput>)

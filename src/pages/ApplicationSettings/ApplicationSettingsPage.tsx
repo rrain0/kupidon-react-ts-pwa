@@ -22,6 +22,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { AllThemes } from 'src/utils/theme/ThemeCollection'
 import { Themes } from 'src/utils/theme/Themes'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -56,24 +57,15 @@ import Mem = ReactUtils.Mem
 
 
 const ApplicationSettingsPage = ()=>{
-  
-  
-  
-  
   const app = useRecoilValue(AppRecoil)
   const lang = useRecoilValue(LangRecoil)
   const theme = useRecoilValue(ThemeRecoil)
   const [themeSettings, setThemeSettings] = useRecoilState(ThemeSettingsRecoil)
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
+  const uiText = useUiTextContainer(ApplicationSettingsUiText)
   
   const [clearSite, setClearSite] = useState(false)
-  
-  
-  
-  
-  
-  const uiOptions = useUiTextContainer(ApplicationSettingsUiText)
   
   
   
@@ -82,19 +74,22 @@ const ApplicationSettingsPage = ()=>{
       let opts = [
         {
           value: 'system',
-          text: uiOptions.systemTheme[0].text,
+          text: uiText.systemTheme[0].text,
+          icon: <DayNightIc css={icon}/>,
         },{
           value: 'light',
-          text: uiOptions.lightTheme[0].text,
+          text: uiText.lightTheme[0].text,
+          icon: <DayIc css={icon}/>,
         },{
           value: 'dark',
-          text: uiOptions.darkTheme[0].text,
+          text: uiText.darkTheme[0].text,
+          icon: <MoonIc css={iconSmall}/>,
         }
-      ] satisfies { value: ThemeType|'system', text: string }[]
+      ] satisfies { value: ThemeType|'system', [prop: string]: any }[]
       if (!theme.systemThemeAvailable) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
-    [uiOptions, theme.systemThemeAvailable]
+    [uiText, theme.systemThemeAvailable]
   )
   const themeOptionChecked = useCallback(
     function (value: ThemeType|'system') {
@@ -111,19 +106,22 @@ const ApplicationSettingsPage = ()=>{
       let opts = [
         {
           value: 'system',
-          text: uiOptions.systemLanguage[0].text,
+          text: uiText.systemLanguage[0].text,
+          icon: <BrowserIc css={icon}/>,
         },{
           value: 'ru-RU',
-          text: uiOptions.russian[0].text,
+          text: uiText.russian[0].text,
+          icon: <Flag src={CountryFlag['ru-RU']}/>,
         },{
           value: 'en-US',
-          text: uiOptions.english[0].text,
+          text: uiText.english[0].text,
+          icon: <Flag src={CountryFlag['en-US']}/>,
         }
-      ] satisfies { value: Lang|'system', text: string }[]
+      ] satisfies { value: Lang|'system', [prop: string]: any }[]
       if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
-    [uiOptions, lang.availableSystemLangs]
+    [uiText, lang.availableSystemLangs]
   )
   const languageOptionChecked = useCallback(
     function (value: Lang|'system') {
@@ -134,24 +132,50 @@ const ApplicationSettingsPage = ()=>{
   )
   
   
+  const lightThemeOptions = useMemo(
+    ()=>{
+      let opts = AllThemes
+        .filter(t=>t.type==='light')
+        .map(t=>({
+          value: t.name,
+          text: t.name, // TODO
+          icon: <div></div>, // TODO
+        }))
+      return opts
+    },
+    [uiText]
+  )
+  const darkThemeOptions = useMemo(
+    ()=>{
+      let opts = AllThemes
+        .filter(t=>t.type==='dark')
+        .map(t=>({
+          value: t.name,
+          text: t.name, // TODO
+          icon: <div></div>, // TODO
+        }))
+      return opts
+    },
+    [uiText]
+  )
+  
+  
+  
   
   const pageRef = useRef<HTMLElement>(null)
   
   return <>
     
-    
     <Page ref={pageRef}>
       <Content>
         
-        <FormHeader>{uiOptions.appSettings[0].text}</FormHeader>
+        <FormHeader>{uiText.appSettings[0].text}</FormHeader>
         
         
         
         <Card>
-          
-          
           <OptionHeader>
-            {uiOptions.theme[0].text}
+            {uiText.theme[0].text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -170,24 +194,78 @@ const ApplicationSettingsPage = ()=>{
                 }}
               >
                 <OptionContainer>
-                  {opt.value === 'system' && <DayNightIc css={icon}/>}
-                  {opt.value === 'light' && <DayIc css={icon}/>}
-                  {opt.value === 'dark' && <MoonIc css={iconSmall}/>}
+                  {opt.icon}
                   {opt.text}
                 </OptionContainer>
               </RadioInput>)
             }
           </RadioInputGroup>
+        </Card>
         
         
+        
+        <Card>
+          <OptionHeader>
+            {/* TODO */}
+            {'Предпочитаемая светлая тема'}
+          </OptionHeader>
+          <RadioInputGroup>
+            {
+              lightThemeOptions.map(opt => <RadioInput
+                css={RadioInputStyle.radio}
+                childrenPosition="start"
+                checked={opt.value===themeSettings.light}
+                value={opt.value}
+                key={opt.value}
+                onChange={ev => {
+                  setThemeSettings(s => ({
+                    ...s,
+                    light: opt.value,
+                  }))
+                }}
+              >
+                <OptionContainer>
+                  {opt.icon}
+                  {opt.text}
+                </OptionContainer>
+              </RadioInput>)
+            }
+          </RadioInputGroup>
         </Card>
         
         <Card>
-          
-          
-          
           <OptionHeader>
-            {uiOptions.language[0].text}
+            {/* TODO */}
+            {'Предпочитаемая тёмная тема'}
+          </OptionHeader>
+          <RadioInputGroup>
+            {
+              darkThemeOptions.map(opt => <RadioInput
+                css={RadioInputStyle.radio}
+                childrenPosition="start"
+                checked={opt.value===themeSettings.dark}
+                value={opt.value}
+                key={opt.value}
+                onChange={ev => {
+                  setThemeSettings(s => ({
+                    ...s,
+                    dark: opt.value,
+                  }))
+                }}
+              >
+                <OptionContainer>
+                  {opt.icon}
+                  {opt.text}
+                </OptionContainer>
+              </RadioInput>)
+            }
+          </RadioInputGroup>
+        </Card>
+        
+        
+        <Card>
+          <OptionHeader>
+            {uiText.language[0].text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -211,8 +289,7 @@ const ApplicationSettingsPage = ()=>{
                 }}
               >
                 <OptionContainer>
-                  {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
-                  {opt.value === 'system' && <BrowserIc css={icon}/>}
+                  {opt.icon}
                   {opt.text}
                 </OptionContainer>
               </RadioInput>)
@@ -233,13 +310,13 @@ const ApplicationSettingsPage = ()=>{
             }}
           >
             <AddModuleIc css={icon}/>
-            {uiOptions.installApp[0].text}
+            {uiText.installApp[0].text}
           </Button>}
           
           <Button css={ButtonStyle.roundedDanger}
             onClick={() => setClearSite(true)}
           >
-            {uiOptions.clearAppData[0].text}
+            {uiText.clearAppData[0].text}
           </Button>
         
         </RoundButtonsContainer>
