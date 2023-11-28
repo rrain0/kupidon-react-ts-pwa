@@ -66,12 +66,12 @@ const TestPage = () => {
             height: 200px;
             padding: 10px;
             border-radius: 16px;
-            background: ${t.ambience.normal.a.bgc[0]};
-            color:      ${t.ambience.normal.a.content[0]};
+            background: ${t.containerNormal.bgc[0]};
+            color:      ${t.containerNormal.content[0]};
           `}
         >
           Контент.<br/>
-          Theme.ambience.normal.a
+          Theme.containerNormal
         </div>
         
         <div
@@ -80,12 +80,12 @@ const TestPage = () => {
             height: 200px;
             padding: 10px;
             border-radius: 16px;
-            background: ${t.ambience.normal.b.bgc[0]};
-            color:      ${t.ambience.normal.b.content[0]};
+            background: ${t.containerNormal.bgc2[0]};
+            color:      ${t.containerNormal.content[0]};
           `}
         >
           Контент.<br/>
-          Theme.ambience.normal.b
+          Theme.containerNormal2
         </div>
         
         <div
@@ -94,15 +94,12 @@ const TestPage = () => {
             height: 200px;
             padding: 10px;
             border-radius: 16px;
-            background: ${t.ambience.accent.a.bgc[0]};
-            color:      ${t.ambience.accent.a.content[0]};
-            ::after {
-              content: 'after'
-            }
+            background: ${t.containerAccent.bgc[0]};
+            color:      ${t.containerAccent.content[0]};
           `}
         >
           Контент.<br/>
-          Theme.ambience.accent.a
+          Theme.containerAccent
         </div>
         
         

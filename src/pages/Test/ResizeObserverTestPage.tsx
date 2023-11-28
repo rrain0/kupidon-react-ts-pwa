@@ -84,10 +84,19 @@ const ResizeObserverTestPage = ()=>{
           ${col};
           gap: 20px;
           padding: 20px;
-          background: linear-gradient(to bottom right,
-          ${t.page.bgc2[0]} 0%,
-          ${t.page.bgc2[1]} 50%,
-          ${t.page.bgc2[2]} 100%);
+          ${(()=>{
+            const bgcLight = ['#ffb6c1','#f5f5f5','#d8701a']
+            const bgcDark =  ['#992c46','#282c34','#994500']
+            const bgc = t.type==='dark' ? bgcDark : bgcLight
+            return css`
+                background: linear-gradient(
+                        to bottom right,
+                        ${bgc[0]} 0%,
+                        ${bgc[1]} 50%,
+                        ${bgc[2]} 100%
+                );
+              `
+          })()};
           overflow: auto;
         `}
         ref={container1Ref}
@@ -116,10 +125,19 @@ const ResizeObserverTestPage = ()=>{
           ${col};
           gap: 20px;
           padding: 20px;
-          background: linear-gradient(to bottom right,
-          ${t.page.bgc2[0]} 0%,
-          ${t.page.bgc2[1]} 50%,
-          ${t.page.bgc2[2]} 100%);
+          ${(()=>{
+            const bgcLight = ['#ffb6c1','#f5f5f5','#d8701a']
+            const bgcDark =  ['#992c46','#282c34','#994500']
+            const bgc = t.type==='dark' ? bgcDark : bgcLight
+            return css`
+                background: linear-gradient(
+                        to bottom right,
+                        ${bgc[0]} 0%,
+                        ${bgc[1]} 50%,
+                        ${bgc[2]} 100%
+                );
+              `
+          })()};
         `}
         ref={container2Ref}
       >

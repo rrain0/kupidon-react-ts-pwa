@@ -107,8 +107,8 @@ const ClearSiteConfirmation = (props:{
       css={t => css`
         ${fixed};
         z-index: 40;
-        background: ${t.page.bgc[1]}9a;
-        color: ${t.page.text[0]};
+        background: ${t.page.bgc[0]}9a;
+        color: ${t.page.content[0]};
         ${Txt.large2};
         ${center};
       `}
@@ -136,7 +136,7 @@ const icon = (t:Theme)=>css`
   ${SvgIcStyle.El.icon} {
     height: 1.333em;
     width: 1.333em;
-    ${SvgIcStyle.Prop.color}: ${t.page.text[0]};
+    ${SvgIcStyle.Prop.color}: ${t.page.content[0]};
   }
 `
 const iconOnDanger = (t:Theme)=>css`

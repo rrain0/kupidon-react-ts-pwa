@@ -24,7 +24,7 @@ export namespace Pages {
     padding: var(--page-vertical-padding) 12px;
     padding-bottom: var(--bottom-page-inset);
     ${p=>SimpleGradientBgc(p.theme)};
-    color: ${p=>p.theme.page.text[0]};
+    color: ${p=>p.theme.page.content[0]};
   `
   
   
@@ -43,8 +43,8 @@ export namespace Pages {
     ${center};
     padding: var(--page-vertical-padding) 12px;
     padding-bottom: var(--bottom-page-inset);
-    background: ${p=>p.theme.page.bgc2[1]};
-    color: ${p=>p.theme.page.text[0]};
+    background: ${p=>p.theme.page.bgc[0]};
+    color: ${p=>p.theme.page.content[0]};
   `
   
   

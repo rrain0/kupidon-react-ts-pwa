@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import React, { useMemo, useRef, useState } from 'react'
+import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -17,6 +19,7 @@ import rowWrap = EmotionCommon.rowWrap
 import Setter = TypeUtils.Setter
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
+import Mem = ReactUtils.Mem
 
 
 
@@ -112,7 +115,7 @@ const BottomSheetTestPage = ()=>{
             width: 200px;
             height: 50px;
             border-radius: 16px;
-            border: 2px solid ${t.page.text[0]};
+            border: 2px solid ${t.page.content[0]};
             ${row};
             padding: 0 10px;
             align-items: center;
@@ -169,9 +172,9 @@ const BottomSheetTestPage = ()=>{
       <div // Header Component
         // Must be without margins!!!
         css={t=>css`
-            background: ${t.page.bgc3[0]};
+            background: ${t.bottomSheet.bgc[0]};
             border-radius: 16px 16px 0 0;
-            color: ${t.page.text[0]};
+            color: ${t.page.content[0]};
             padding: 10px;
             ${col};
             align-items: center;
@@ -184,8 +187,8 @@ const BottomSheetTestPage = ()=>{
               width: 60px;
               height: 4px;
               border-radius: 2px;
-              background: ${t.page.bgc3[1]};
-              ${state==='dragging' && css`background: ${t.page.text[0]};`}
+              background: ${t.bottomSheet.handle[0]};
+              ${state==='dragging' && css`background: ${t.page.content[0]};`}
             `}
         />
         <div>Header</div>
@@ -197,8 +200,8 @@ const BottomSheetTestPage = ()=>{
             display: flex;
             place-items: center;
             overflow: hidden;
-            background: ${t.page.bgc3[0]};
-            color: ${t.page.text[0]};
+            background: ${t.bottomSheet.bgc[0]};
+            color: ${t.page.content[0]};
           `}
       >
         <OverflowWrapper
@@ -255,7 +258,7 @@ const BottomSheetTestPage = ()=>{
     
   </>
 }
-export default BottomSheetTestPage
+export default Mem(BottomSheetTestPage)
 
 
 
@@ -272,134 +275,140 @@ const BottomSheetControlOverlay = (props:{
   itemsCnt: number
   setItemsCnt: Setter<number>
 })=>{
-  return <div
-    css={t=>css`
+  return <>
+    
+    <div
+      css={t => css`
       position: fixed;
       top: 0; left: 0;
       z-index: 40;
       ${col};
       background: ${t.page.bgc[0]}88;
+      color: ${t.page.content[0]};
     `}
-  >
-    
-    <div
-      css={css`
+    >
+      
+      <div
+        css={css`
         ${rowWrap};
         column-gap: 6px;
       `}
-    >
-      <OverlayButton
-        onClick={()=>{
-          props.setState('open')
-          props.setSnapIdx(props.openSnapIdx)
-        }}
       >
-        Open
-      </OverlayButton>
-      { props.snapPoints.map((sp, i)=><OverlayButton
-        key={sp}
-        onClick={() => {
-          props.setState('snap')
-          props.setSnapIdx(i)
-        }}
-      >
-        Snap to {sp}
-      </OverlayButton> )}
-      <OverlayButton
-        onClick={()=>props.setState('close')}
-      >
-        Close
-      </OverlayButton>
-    </div>
-    
-    
-    <div
-      css={css`
+        <OverlayButton
+          onClick={() => {
+            props.setState('open')
+            props.setSnapIdx(props.openSnapIdx)
+          }}
+        >
+          Open
+        </OverlayButton>
+        {props.snapPoints.map((sp, i) => <OverlayButton
+          key={sp}
+          onClick={() => {
+            props.setState('snap')
+            props.setSnapIdx(i)
+          }}
+        >
+          Snap to {sp}
+        </OverlayButton>)}
+        <OverlayButton
+          onClick={() => props.setState('close')}
+        >
+          Close
+        </OverlayButton>
+      </div>
+      
+      
+      <div
+        css={css`
         ${rowWrap};
         column-gap: 6px;
       `}
-    >
-      <OverlayButton
-        onClick={()=>{
-          props.setState('opening')
-          props.setSnapIdx(props.openSnapIdx)
-        }}
       >
-        Anim Open
-      </OverlayButton>
-      { props.snapPoints.map((sp, i)=><OverlayButton
-        key={sp}
-        onClick={() => {
-          props.setState('snapping')
-          props.setSnapIdx(i)
-        }}
-      >
-        Anim Snap to {sp}
-      </OverlayButton> )}
-      <OverlayButton
-        onClick={()=>props.setState('closing')}
-      >
-        Anim Close
-      </OverlayButton>
-    </div>
-    
-    
-    <div
-      css={css`
+        <OverlayButton
+          onClick={() => {
+            props.setState('opening')
+            props.setSnapIdx(props.openSnapIdx)
+          }}
+        >
+          Anim Open
+        </OverlayButton>
+        {props.snapPoints.map((sp, i) => <OverlayButton
+          key={sp}
+          onClick={() => {
+            props.setState('snapping')
+            props.setSnapIdx(i)
+          }}
+        >
+          Anim Snap to {sp}
+        </OverlayButton>)}
+        <OverlayButton
+          onClick={() => props.setState('closing')}
+        >
+          Anim Close
+        </OverlayButton>
+      </div>
+      
+      
+      <div
+        css={css`
         ${rowWrap};
         gap: 10px;
       `}
-    >
-      
-      <div
-        css={css`
+      >
+        
+        <div
+          css={css`
           ${row};
           gap: 10px;
         `}
-      >
-        <div>Animation duration ms:</div>
-        <OverlayInput
-          value={props.animationDuration}
-          onChange={ev=>{
-            props.setAnimationDuration(
-              intOrDefault(ev.target.value,400)
-            )
-          }}
-        />
-      </div>
-      
-      <div
-        css={css`
+        >
+          <div>Animation duration ms:</div>
+          <OverlayInput
+            value={props.animationDuration}
+            onChange={ev => {
+              props.setAnimationDuration(
+                intOrDefault(ev.target.value, 400),
+              )
+            }}
+          />
+        </div>
+        
+        <div
+          css={css`
           ${row};
           gap: 10px;
         `}
-      >
-        <div>Number of items:</div>
-        <OverlayInput
-          value={props.itemsCnt}
-          onChange={ev=>{
-            props.setItemsCnt(
-              intOrDefault(ev.target.value,12)
-            )
-          }}
-        />
+        >
+          <div>Number of items:</div>
+          <OverlayInput
+            value={props.itemsCnt}
+            onChange={ev => {
+              props.setItemsCnt(
+                intOrDefault(ev.target.value, 12),
+              )
+            }}
+          />
+        </div>
       </div>
-    </div>
-    
-    
       
-    <div
-      css={css`
+      
+      <div
+        css={css`
         ${row};
         gap: 10px;
       `}
-    >
-      <div>State:</div>
-      <div>{props.state}</div>
+      >
+        <div>State:</div>
+        <div>{props.state}</div>
+      </div>
+    
+    
     </div>
-  
-  
-  </div>
+    
+    <BottomButtonBar settingsBtn/>
+    
+  </>
 }
 
 const OverlayButton = styled.button`
@@ -407,9 +416,9 @@ const OverlayButton = styled.button`
   min-width: 60px;
   height: 30px;
   font: 500 10px/129% Roboto;
-  color: ${p=>p.theme.page.text[0]};
+  color: ${p=>p.theme.page.content[0]};
 `
 const OverlayInput = styled.input`
   font: 500 10px/129% Roboto;
-  color: ${p=>p.theme.page.text[0]};
+  color: ${p=>p.theme.page.content[0]};
 `

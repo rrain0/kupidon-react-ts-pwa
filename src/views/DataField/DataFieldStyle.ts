@@ -105,7 +105,7 @@ export namespace DataFieldStyle {
       ${Prop.color}: ${t.input.content[0]};
     }
     ${El.border} {
-      border: 2px solid ${t.page.text[0]};
+      border: 2px solid ${t.page.content[0]};
     }
   `
   

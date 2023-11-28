@@ -78,7 +78,7 @@ export const useThemeSetup = ()=>{
           'html head meta[name=background-color]'
         ) as NodeListOf<HTMLMetaElement>
       metaBackgroundColorElements
-        .forEach(meta=>meta.content=t.page.bgc[1])
+        .forEach(meta=>meta.content=t.page.bgc[0])
     }
   },[theme.theme])
   

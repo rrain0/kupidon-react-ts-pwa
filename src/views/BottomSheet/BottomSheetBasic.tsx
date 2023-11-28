@@ -44,9 +44,9 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
     <div // Header Component
       // Must be without margins!!!
       css={t=>css`
-        background: ${t.page.bgc3[0]};
+        background: ${t.bottomSheet.bgc[0]};
         border-radius: 16px 16px 0 0;
-        color: ${t.page.text[0]};
+        color: ${t.page.content[0]};
         padding: 10px;
         ${col};
         align-items: center;
@@ -61,8 +61,8 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
           width: 44px;
           height: 4px;
           border-radius: 2px;
-          background: ${t.page.bgc3[1]};
-          ${state==='dragging' && css`background: ${t.page.text[0]};`}
+          background: ${t.bottomSheet.handle[0]};
+          ${state==='dragging' && css`background: ${t.page.content[0]};`}
           will-change: background;
         `}
       />
@@ -79,8 +79,8 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
         display: flex;
         place-items: center;
         overflow: hidden;
-        background: ${t.page.bgc3[0]};
-        color: ${t.page.text[0]};
+        background: ${t.bottomSheet.bgc[0]};
+        color: ${t.page.content[0]};
       `}
     >
       <OverflowWrapper

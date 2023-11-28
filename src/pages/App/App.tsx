@@ -31,7 +31,7 @@ function App() {
     <Global styles={t=>css`
       body {
         // will be WINDOW background
-        background: ${t.page.bgc2[1]};
+        background: ${t.page.bgc[0]};
       }
     `}/>
     

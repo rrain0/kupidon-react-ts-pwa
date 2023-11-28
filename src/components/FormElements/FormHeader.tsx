@@ -12,7 +12,7 @@ const FormHeader = styled.h3`
   font-size: 28px;
   line-height: 150%;
   letter-spacing: 0.05em;
-  color: ${p=>p.theme.page.text[1]};
+  color: ${p=>p.theme.page.content[1]};
   align-self: center;
   text-align: center;
 `

@@ -28,13 +28,26 @@ export namespace Themes {
     type: Type
     name: string
     
-    // окружение
-    ambience: {
-      normal: BgcContentVariants<{ a, b }>
-      accent: BgcContentVariants<{ a }>
+    
+    element?: {
+      //highlight?: {}
+      //primary?: {}
+      //secondary?: {}
+      //normal?: {}
     }
-    
-    
+    // окружение
+    /* ambience: {
+      normal: BgcContentVariants<{ a, b }>
+    } */
+    containerNormal: {
+      bgc:     string[]
+      bgc2:    string[]
+      content: string[]
+    },
+    containerAccent: {
+      bgc:     string[]
+      content: string[]
+    },
     
     // main button (submit button)
     // radio input
@@ -42,18 +55,24 @@ export namespace Themes {
       bgc:      string[]
       bgcFocus: string[]
       content:  string[]
-    },
+    }
     // just colorful button that drags some attention
     buttonAccent: {
       bgc:       string[]
       bgcFocus:  string[]
       content:   string[]
       content2:  string[]
-    },
+    }
     // transparent icon button
     buttonTransparent: {
       bgcFocus: string[],
-    },
+    }
+    buttonNav: {
+      bgcFocus:      string[]
+      content:       string[]
+      contentAccent: string[]
+    }
+    
     // input, dataField, textarea, radioInput, radioGroup
     input: {
       bgc:           string[]
@@ -62,60 +81,42 @@ export namespace Themes {
       border:        string[]
       borderHover:   string[]
       bgcError:      string[]
-    },
+    }
     
     // disabledButton
     elementDisabled: {
       bgc:     string[]
       content: string[]
-    },
+    }
     // dangerButton
     elementDanger: {
       bgc:      string[]
       bgcFocus: string[]
       content:  string[]
-    },
+    }
     
     ripple: {
       content:              string[]
       contentOnTransparent: string[]
-    },
-    
-    
-    
-    element?: {
-      //highlight?: {}
-      //primary?: {}
-      //secondary?: {}
-      //normal?: {}
     }
     
-    
-    
+    bottomSheet: {
+      bgc:    string[]
+      handle: string[]
+    }
     
     page: {
-      // bgc[0] - theme color
-      // bgc[1] - background color
-      bgc: string[]
-      bgc2: string[]
-      bgc3: string[]
-      text: string[]
+      bgc:         string[]
+      bgcGradient: string[]
+      //bgc3:        string[]
+      content:     string[]
     }
+    
     statusBar: {
       bgc: string[]
     }
     nav: {
       bgc: string[]
-      button: {
-        bgc: string[]
-        text: string[]
-        ripple: string[]
-        active: string[]
-        hover: string[]
-        selected: {
-          text: string[]
-        }
-      }
     }
     
     toast: {
@@ -143,14 +144,14 @@ export namespace Themes {
     type: 'light',
     name: 'Light Pink',
     
-    ambience: {
-      normal: {
-        a: { bgc: ['#ffffff'], content: ['#000000'] },
-        b: { bgc: ['#f0f0f0'], content: ['#000000'] },
-      },
-      accent: {
-        a: { bgc: ['#ffaeba'], content: ['#000000'] },
-      },
+    containerNormal: {
+      bgc:     ['#ffffff'],
+      bgc2:    ['#f0f0f0'],
+      content: ['#000000'],
+    },
+    containerAccent: {
+      bgc:     ['#ffaeba'],
+      content: ['#000000'],
     },
     
     buttonMain: {
@@ -165,7 +166,12 @@ export namespace Themes {
       content2:  ['#000000'],
     },
     buttonTransparent: {
-      bgcFocus: ['#00000011'], // /input.iconHover | /input.iconActive
+      bgcFocus: ['#00000011'],
+    },
+    buttonNav: {
+      bgcFocus:      ['#fabfc9'],
+      content:       ['#333333'],
+      contentAccent: ['#BB2649'],
     },
     
     input: {
@@ -192,31 +198,22 @@ export namespace Themes {
       contentOnTransparent: ['#00000088'],
     },
     
+    bottomSheet: {
+      bgc:    ['#ffffff'],
+      handle: ['#8b8b8b'],
+    },
+    
     page: {
-      //bgc: ['#ffaeba','#f0f0f0','#ffb6c1'],
-      bgc: ['#f5f5f5','#f5f5f5'],
-      bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
-      bgc3: ['#fff','#8b8b8b'],
-      text: ['#000000'],
+      bgc:         ['#f5f5f5'],
+      bgcGradient: ['#f5f5f5','#f5f5f5','#f5f5f5'],
+      content:     ['#000000'],
     },
     
     statusBar: {
       bgc: ['#ffffff'],
     },
-    
     nav: {
-      //bgc: ['#f6d6db'], //#e8809a
       bgc: ['#ffffff'],
-      button: {
-        bgc: ['#BB2649'],
-        text: ['#333333'],
-        ripple: ['#ffffff'],
-        active: ['#fabfc9'],
-        hover: ['#fabfc9'],
-        selected: {
-          text: ['#BB2649'],
-        },
-      },
     },
     
     toast: {
@@ -245,14 +242,14 @@ export namespace Themes {
     type: 'dark',
     name: 'Dark',
     
-    ambience: {
-      normal: {
-        a: { bgc: ['#000000'], content: ['#bdbdbd'] },
-        b: { bgc: ['#282c34'], content: ['#bdbdbd'] },
-      },
-      accent: {
-        a: { bgc: ['#992c46'], content: ['#bdbdbd'] },
-      },
+    containerNormal: {
+      bgc:     ['#000000'], // a.bgc
+      bgc2:    ['#282c34'], // b.bgc
+      content: ['#bdbdbd'], // a/b.content
+    },
+    containerAccent: {
+      bgc:     ['#992c46'],
+      content: ['#bdbdbd'],
     },
     
     buttonMain: {
@@ -267,17 +264,21 @@ export namespace Themes {
       content2:  ['#000000'],
     },
     buttonTransparent: {
-      bgcFocus: ['#ffffff22'], // /input.iconHover | /input.iconActive
+      bgcFocus: ['#ffffff22'],
     },
-    // input
-    // element.input
+    buttonNav: {
+      bgcFocus:      ['#2e3440'],
+      content:       ['#bdbdbd'],
+      contentAccent: ['#984559'],
+    },
+    
     input: {
-      bgc:           ['#282c34'], // a.bgc
-      content:       ['#cdcdcd'], // a.content
-      placeholder:   ['#7b7b7b'], // aPlaceholder.content
-      border:        ['#b32e56','#b32e56'], // aBorder.bgc
-      borderHover:   ['#2393c6'], // aBorderHover.bgc
-      bgcError:      ['#5e252c'], // /input.error.bgc
+      bgc:           ['#282c34'],
+      content:       ['#cdcdcd'],
+      placeholder:   ['#7b7b7b'],
+      border:        ['#b32e56','#b32e56'],
+      borderHover:   ['#2393c6'],
+      bgcError:      ['#5e252c'],
     },
     
     elementDisabled: {
@@ -295,32 +296,22 @@ export namespace Themes {
       contentOnTransparent: ['#ffffff88'],
     },
     
+    bottomSheet: {
+      bgc:    ['#121212'],
+      handle: ['#8b8b8b'],
+    },
+    
     page: {
-      //bgc: ['#992c46','#282c34','#992c46'],
-      //bgc: ['#1d1e22','#1d1e22','#992c46'],
-      bgc: ['#18191b','#18191b'],
-      bgc2: ['#992c46','#282c34','#994500'],
-      bgc3: ['#121212','#8b8b8b'],
-      text: ['#bdbdbd','#ffffff'],
+      bgc:         ['#18191b'],
+      bgcGradient: ['#18191b','#18191b','#18191b'],
+      content:     ['#bdbdbd','#ffffff'],
     },
     
     statusBar: {
       bgc: ['#984559'],
     },
-    
     nav: {
-      bgc: ['#282c34'], // #b06772
-      button: {
-        bgc: ['#971f3b'],
-        text: ['#bdbdbd'],
-        ripple: ['#000'],
-        active: ['#2e3440'],
-        hover: ['#2e3440'],
-        selected: {
-          //text: ['#d92a54'],
-          text: ['#984559'],
-        }
-      }
+      bgc: ['#282c34'],
     },
     
     toast: {
@@ -348,7 +339,6 @@ export namespace Themes {
   
   export const LightPink2: Theme = {
     ...LightPink,
-    type: 'light',
     name: 'Light Pink 2',
     
     buttonMain: {
@@ -365,10 +355,8 @@ export namespace Themes {
   
   
   
-  
   export const Dark2: Theme = {
     ...Dark,
-    type: 'dark',
     name: 'Dark 2',
     
     buttonMain: {
@@ -385,10 +373,48 @@ export namespace Themes {
   
   
   
+  export const LightPinkGradient: Theme = {
+    ...LightPink,
+    name: 'Light Pink Gradient',
+    
+    page: {
+      ...LightPink.page,
+      bgcGradient: ['#ffaeba','#f0f0f0','#f0f0f0'],
+      //bgc: ['#ffb6c1','#f5f5f5','#d8701a'],
+    },
+    nav: {
+      ...LightPink.nav,
+      bgc: ['#f6d6db'],
+    }
+  }
+  
+  
+  export const DarkGradient: Theme = {
+    ...Dark,
+    name: 'Dark Gradient',
+    
+    page: {
+      ...Dark.page,
+      bgcGradient: ['#992c46','#282c34','#282c34'],
+      //bgc: ['#992c46','#282c34','#994500'],
+    },
+    buttonNav: {
+      ...Dark.buttonNav,
+      contentAccent: ['#d92a54'],
+    },
+    nav: {
+      ...Dark.nav,
+      bgc: ['#b06772'],
+    }
+  }
+  
+  
+  
   
   export const allThemes = [
     LightPink, Dark,
     LightPink2, Dark2,
+    LightPinkGradient, DarkGradient,
   ] as const
   export const themeByName = (themeName: string)=>{
     return allThemes.find(t=>t.name===themeName) ?? LightPink
@@ -400,92 +426,4 @@ export namespace Themes {
   
 }
 
-
-
-
-
-const LightPink = {
-  type: 'light',
-  name: 'Light Pink',
-  
-  
-  // ambience.normal
-  containerNormal: {
-    bgc1:     ['#ffffff'], // a.bgc
-    bgc2:     ['#f0f0f0'], // b.bgc
-    contentA: ['#000000'], // a/b.content
-  },
-  // ambience.accent
-  containerAccent: {
-    bgc:     ['#ffaeba'], // a.bgc
-    content: ['#000000'], // a.content
-  },
-  
-  //elementNormal: {},
-  
-  
-  // input
-  // element.input
-  input: {
-    bgc:           ['#F8F8F8'], // a.bgc
-    content:       ['#000000'], // a.content
-    placeholder:   ['#777777'], // aPlaceholder.content
-    border:        ['#fb3570','#fb3570'], // aBorder.bgc
-    borderHover:   ['#9c20aa'], // aBorderHover.bgc
-    bgcIconActive: ['#00000011'], // /input.iconActive
-    bgcIconHover:  ['#00000011'], // /input.iconHover
-    bgcError:      ['#ffced2'], // /input.error.bgc
-  },
-  
-  
-  
-  
-  
-  element: {
-    ripple: {
-      a: { bgc: ['#000000'], content: ['#ffffff'] },
-      b: { bgc: ['transparent'], content: ['#00000088'] },
-    },
-    disabled: {
-      a: { bgc: ['#DCDCDC'], content: ['#555555'] },
-    },
-    danger: {
-      a:      { bgc: ['#dc362e'], content: ['#ffffff'] },
-      aFocus: { bgc: ['#e74c3c'], content: ['#ffffff'] },
-    }
-  },
-  
-  page: {
-    //bgc: ['#ffaeba','#f0f0f0','#ffb6c1'],
-    bgc: ['#f5f5f5','#f5f5f5'],
-    bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
-    bgc3: ['#fff','#8b8b8b'],
-    text: ['#000000'],
-  },
-  
-  
-  statusBar: {
-    bgc: ['#ffffff'],
-  },
-  
-  nav: {
-    //bgc: ['#f6d6db'], //#e8809a
-    bgc: ['#ffffff'],
-    button: {
-      bgc: ['#BB2649'],
-      text: ['#333333'],
-      ripple: ['#ffffff'],
-      active: ['#fabfc9'],
-      hover: ['#fabfc9'],
-      selected: {
-        text: ['#BB2649'],
-      },
-    },
-  },
-  
-  scrollbar: {
-    track: ['#25283622'],
-    thumb: ['#25283644'],
-  },
-}
 

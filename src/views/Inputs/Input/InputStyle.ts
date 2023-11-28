@@ -227,7 +227,7 @@ export namespace InputStyle {
       }
 
       ${El.border} {
-        border-color: ${t.page.text[0]};
+        border-color: ${t.page.content[0]};
       }
     `}
   `

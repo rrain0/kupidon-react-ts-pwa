@@ -154,6 +154,9 @@ export namespace EmotionCommon {
     :hover {
       cursor: text;
     }
+    &[type=radio]:hover {
+      cursor: pointer;
+    }
     ::placeholder {
       opacity: 1;
     }

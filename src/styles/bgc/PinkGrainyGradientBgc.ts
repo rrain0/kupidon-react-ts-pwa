@@ -6,7 +6,7 @@ import ThemeType = Themes.Type
 
 
 export const PinkGrainyGradientBgc = (t: Themes.Theme) => css`
-  background-color: ${t.page.bgc[1]};
+  background-color: ${t.page.bgc[0]};
   
   background-image: url(${noise}),
     radial-gradient(circle at 1000px 0px, ${getGrainyGradientColors(t.type)[0]} 0% 200px, transparent 300px 100%),

@@ -17,7 +17,7 @@ const Card = React.forwardRef<HTMLDivElement,CardProps>(
       gap: inherit;
       padding: 12px;
       border-radius: 16px;
-      background: ${t.page.bgc[1]}77;
+      background: ${t.page.bgc[0]}77;
     `}
     {...props}
     ref={forwardedRef}

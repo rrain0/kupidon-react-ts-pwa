@@ -9,6 +9,6 @@ import Txt = EmotionCommon.Txt
 const ItemLabel = styled.label`
   padding-left: 12px;
   ${Txt.normal1};
-  color: ${p=>p.theme.page.text[0]}
+  color: ${p=>p.theme.page.content[0]}
 `
 export default Mem(ItemLabel)

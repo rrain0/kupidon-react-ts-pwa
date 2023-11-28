@@ -361,36 +361,33 @@ export namespace ButtonStyle {
       gap: 2px;
       padding: 6px 0 2px;
 
-      color: ${t.nav.button.text[0]};
-      ${Prop.color}: ${t.nav.button.text[0]};
+      background: none;
+      color: ${t.buttonNav.content[0]};
+      ${Prop.color}: ${t.buttonNav.content[0]};
       
       ${Txt.small5};
       
-      /* a.active & {
-        color: ${t.nav.button.selected.text[0]};
-        ${Prop.color}: ${t.nav.button.selected.text[0]};
-      } */
       a.active & ${El.iconClass} {
-        ${Prop.iconColor}: ${t.nav.button.selected.text[0]};
+        ${Prop.iconColor}: ${t.buttonNav.contentAccent[0]};
       }
     }
     ${El.ripple} {
       ${Prop.rippleMode}: center;
-      ${Prop.rippleColor}: ${t.nav.button.ripple[0]};
+      ${Prop.rippleColor}: ${t.ripple.content[0]};
     }
     ${El.icon} {
       ${Prop.iconSize}: 100%;
-      ${Prop.iconColor}: ${t.nav.button.text[0]};
+      ${Prop.iconColor}: ${t.buttonNav.content[0]};
     }
     
     // hover
     ${hoverable}{ ${El.btnHover} {
-      background: ${t.nav.button.hover[0]};
+      background: ${t.buttonNav.bgcFocus[0]};
     }}
 
     // focus-visible
     ${El.btnFocusVisible} {
-      background: ${t.nav.button.active[0]};
+      background: ${t.buttonNav.bgcFocus[0]};
     }
   `
   

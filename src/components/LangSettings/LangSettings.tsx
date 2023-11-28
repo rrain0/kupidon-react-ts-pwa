@@ -169,6 +169,6 @@ const Flag = styled.img`
 const icon = (t:Theme)=>css`
   ${SvgIcStyle.El.icon} {
     width: 1.333em;
-    ${SvgIcStyle.Prop.color}: ${t.page.text[0]};
+    ${SvgIcStyle.Prop.color}: ${t.page.content[0]};
   }
 `
