@@ -78,11 +78,15 @@ const Frame = styled.label.attrs(p=>({
   className: classNames(p.className,InputStyle.El.frameClassName)
 }))``
 const frameStyle = css`
+  container: input / size;
   ${row};
   align-items: center;
   width: 100%;
+  // min-height not works for stretch children while display: flex
+  height: 50px;
   position: relative;
 `
+
 
 
 type Input_Props = PartialUndef<{
@@ -94,15 +98,11 @@ const Input_ = styled.input.attrs<Input_Props>(p=>({
 }))<Input_Props>``
 const input_Style = css`
   ${resetInput};
-
   flex: 1;
-  height: 100%;
+  align-self: stretch;
   border-radius: inherit;
-
-  ${hoverable}{ :hover {
-    cursor: text;
-  } }
 `
+
 
 
 const Border = styled.div.attrs(p=>({
@@ -113,3 +113,4 @@ const borderStyle = css`
   pointer-events: none;
   border-radius: inherit;
 `
+

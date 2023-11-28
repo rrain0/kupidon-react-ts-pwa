@@ -113,17 +113,17 @@ export namespace ButtonStyle {
     export const main = (t:Theme) => css`
       // normal
       ${El.btn} {
-        background: ${t.element.main.a.bgc[0]};
-        color: ${t.element.main.a.content[0]};
-        ${Prop.color}: ${t.element.main.a.content[0]};
+        background: ${t.buttonMain.bgc[0]};
+        color: ${t.buttonMain.content[0]};
+        ${Prop.color}: ${t.buttonMain.content[0]};
       }
       ${El.ripple} {
-        ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
+        ${Prop.rippleColor}: ${t.ripple.content[0]};
       }
       
       // hover
       ${hoverable}{ ${El.btnHover} {
-        background: ${t.element.main.aFocus.bgc[0]};
+        background: ${t.buttonMain.bgcFocus[0]};
       }}
       
       // active
@@ -134,14 +134,14 @@ export namespace ButtonStyle {
       
       // focus-visible
       ${El.btnFocusVisible} {
-        background: ${t.element.main.aFocus.bgc[0]};
+        background: ${t.buttonMain.bgcFocus[0]};
       }
       
       // disabled
       ${El.btnDisabled} {
-        background: ${t.element.disabled.a.bgc[0]};
-        color: ${t.element.disabled.a.content[0]};
-        ${Prop.color}: ${t.element.disabled.a.content[0]};
+        background: ${t.elementDisabled.bgc[0]};
+        color: ${t.elementDisabled.content[0]};
+        ${Prop.color}: ${t.elementDisabled.content[0]};
       }
       
       // error
@@ -153,29 +153,29 @@ export namespace ButtonStyle {
     export const accent = (t:Theme) => css`
       // normal
       ${El.btn} {
-        background: ${t.element.accent.a.bgc[0]};
-        color: ${t.element.accent.a.content[0]};
-        ${Prop.color}: ${t.element.accent.a.content[0]};
+        background: ${t.buttonAccent.bgc[0]};
+        color: ${t.buttonAccent.content[0]};
+        ${Prop.color}: ${t.buttonAccent.content[0]};
       }
       ${El.ripple} {
-        ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
+        ${Prop.rippleColor}: ${t.ripple.content[0]};
       }
 
       // hover
       ${hoverable}{ ${El.btnHover} {
-        background: ${t.element.accent.aFocus.bgc[0]};
+        background: ${t.buttonAccent.bgcFocus[0]};
       }}
 
       // focus-visible
       ${El.btnFocusVisible} {
-        background: ${t.element.accent.aFocus.bgc[0]};
+        background: ${t.buttonAccent.bgcFocus[0]};
       }
 
       // disabled
       ${El.btnDisabled} {
-        background: ${t.element.disabled.a.bgc[0]};
-        color: ${t.element.disabled.a.content[0]};
-        ${Prop.color}: ${t.element.disabled.a.content[0]};
+        background: ${t.elementDisabled.bgc[0]};
+        color: ${t.elementDisabled.content[0]};
+        ${Prop.color}: ${t.elementDisabled.content[0]};
       }
     `
     
@@ -183,29 +183,29 @@ export namespace ButtonStyle {
     export const danger = (t:Theme) => css`
       // normal
       ${El.btn} {
-        background: ${t.element.danger.a.bgc[0]};
-        color: ${t.element.danger.a.content[0]};
-        ${Prop.color}: ${t.element.danger.a.content[0]};
+        background: ${t.elementDanger.bgc[0]};
+        color: ${t.elementDanger.content[0]};
+        ${Prop.color}: ${t.elementDanger.content[0]};
       }
       ${El.ripple} {
-        ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
+        ${Prop.rippleColor}: ${t.ripple.content[0]};
       }
       
       // hover
       ${hoverable}{ ${El.btnHover} {
-        background: ${t.element.danger.aFocus.bgc[0]};
+        background: ${t.elementDanger.bgcFocus[0]};
       }}
       
       // focus-visible
       ${El.btnFocusVisible} {
-        background: ${t.element.danger.aFocus.bgc[0]};
+        background: ${t.elementDanger.bgcFocus[0]};
       }
       
       // disabled
       ${El.btnDisabled} {
-        background: ${t.element.disabled.a.bgc[0]};
-        color: ${t.element.disabled.a.content[0]};
-        ${Prop.color}: ${t.element.disabled.a.content[0]};
+        background: ${t.elementDisabled.bgc[0]};
+        color: ${t.elementDisabled.content[0]};
+        ${Prop.color}: ${t.elementDisabled.content[0]};
       }
     `
   }
@@ -241,8 +241,8 @@ export namespace ButtonStyle {
     ${Shape.rounded};
     ${Color.accent(t)};
     ${El.btn} {
-      color: ${t.element.accent.b.content[0]};
-      ${Prop.color}: ${t.element.accent.b.content[0]};
+      color: ${t.buttonAccent.content2[0]};
+      ${Prop.color}: ${t.buttonAccent.content2[0]};
     }
   `
   
@@ -272,37 +272,37 @@ export namespace ButtonStyle {
       border-radius: 50%;
       padding: 14px;
       
-      background: ${t.element.main.a.bgc[0]};
-      color: ${t.element.main.a.content[0]};
-      ${Prop.color}: ${t.element.main.a.content[0]};
+      background: ${t.buttonMain.bgc[0]};
+      color: ${t.buttonMain.content[0]};
+      ${Prop.color}: ${t.buttonMain.content[0]};
     }
     ${El.ripple} {
       ${Prop.rippleMode}: center;
-      ${Prop.rippleColor}: ${t.element.ripple.a.content[0]};
+      ${Prop.rippleColor}: ${t.ripple.content[0]};
     }
     ${El.icon} {
       ${Prop.iconSize}: 100%;
-      ${Prop.iconColor}: ${t.element.main.a.content[0]};
+      ${Prop.iconColor}: ${t.buttonMain.content[0]};
     }
     
     // hover
     ${hoverable}{ ${El.btnHover} {
-      background: ${t.element.main.aFocus.bgc[0]};
+      background: ${t.buttonMain.bgcFocus[0]};
     }}
 
     // focus-visible
     ${El.btnFocusVisible} {
-      background: ${t.element.main.aFocus.bgc[0]};
+      background: ${t.buttonMain.bgcFocus[0]};
     }
     
     // disabled
     ${El.btnDisabled} {
-      background: ${t.element.disabled.a.bgc[0]};
-      color: ${t.element.disabled.a.content[0]};
-      ${Prop.color}: ${t.element.disabled.a.content[0]};
+      background: ${t.elementDisabled.bgc[0]};
+      color: ${t.elementDisabled.content[0]};
+      ${Prop.color}: ${t.elementDisabled.content[0]};
     }
     ${El.iconDisabled} {
-      ${Prop.iconColor}: ${t.element.disabled.a.content[0]};
+      ${Prop.iconColor}: ${t.elementDisabled.content[0]};
     }
   `
   
@@ -313,24 +313,24 @@ export namespace ButtonStyle {
     // normal
     ${El.btn} {
       background: none;
-      color: ${t.element.accent.a.bgc[0]};
-      ${Prop.color}: ${t.element.accent.a.bgc[0]};
+      color: ${t.buttonAccent.bgc[0]};
+      ${Prop.color}: ${t.buttonAccent.bgc[0]};
     }
     ${El.ripple} {
-      ${Prop.rippleColor}: ${t.element.ripple.b.content[0]};
+      ${Prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
     }
     ${El.icon} {
-      ${Prop.iconColor}: ${t.element.accent.a.bgc[0]};
+      ${Prop.iconColor}: ${t.buttonAccent.bgc[0]};
     }
 
     // hover
     ${hoverable}{ ${El.btnHover} {
-      background: ${t.input.iconHover[0]};
+      background: ${t.buttonTransparent.bgcFocus[0]};
     }}
 
     // focus-visible
     ${El.btnFocusVisible} {
-      background: ${t.input.iconActive[0]};
+      background: ${t.buttonTransparent.bgcFocus[0]};
     }
   `
   

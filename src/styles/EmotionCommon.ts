@@ -126,20 +126,20 @@ export namespace EmotionCommon {
   
   
   
-  
+  const _reset = css`
+    box-sizing: border-box;
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  `
   export const reset = css`
-    &, &::before, &::after {
-      box-sizing: border-box;
-      background: none;
-      border: none;
-      outline: none;
-      box-shadow: none;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      //min-width: 0;
-      //min-height: 0;
-    }
+    ${_reset};
+    ::before { ${_reset}; }
+    ::after { ${_reset}; }
   `
   
   
@@ -150,6 +150,9 @@ export namespace EmotionCommon {
       outline: none;
       box-shadow: none;
       border: none;
+    }
+    :hover {
+      cursor: text;
     }
     ::placeholder {
       opacity: 1;

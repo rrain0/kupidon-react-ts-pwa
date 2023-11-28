@@ -42,7 +42,7 @@ import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import Mem = ReactUtils.Mem
 import MoonIc = SvgIcons.MoonIc
-import ThemeType = Themes.ThemeType
+import ThemeType = Themes.Type
 import resetH = EmotionCommon.resetH
 
 

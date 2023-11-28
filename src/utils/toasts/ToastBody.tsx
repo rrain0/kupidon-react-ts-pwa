@@ -41,8 +41,8 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.loading.accent[0]};
-        ${SvgIcStyle.Prop.accentColor}: ${t.toast.loading.accent[1]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.accentLoadingBgc[0]};
+        ${SvgIcStyle.Prop.accentColor}: ${t.toast.accentLoadingContent[0]};
       `}
     />}
     
@@ -50,7 +50,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        --icon-color: ${t.toast.info.accent[0]};
+        --icon-color: ${t.toast.accentInfo[0]};
       `}
     />}
     
@@ -58,7 +58,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.ok.accent[0]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.accentOk[0]};
       `}
     />}
     
@@ -66,7 +66,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.warn.accent[0]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.accentWarn[0]};
       `}
     />}
     
@@ -74,7 +74,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.danger.accent[0]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.accentDanger[0]};
       `}
     />}
     
@@ -103,13 +103,13 @@ const Body = styled.div`
   ${row};
   gap: 10px;
   align-items: center;
-  background: ${p=>p.theme.toast.normal.bgc[0]};
+  background: ${p=>p.theme.toast.bgc[0]};
 `
 
 const Content = styled.div`
   ${row};
   flex: 1;
-  color: ${p=>p.theme.toast.normal.content[0]};
+  color: ${p=>p.theme.toast.content[0]};
   white-space: break-spaces;
   ${Txt.small2};
 `
@@ -124,15 +124,15 @@ const CloseButton = styled.button`
   ${center};
   cursor: pointer;
 
-  >${SvgIcStyle.El.iconClass} {
+  &>${SvgIcStyle.El.iconClass} {
     width: 100%;
     height: 100%;
-    ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.normal.content[1]};
+    ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.content2[0]};
   }
   
   ${hoverable}{
     :hover>${SvgIcStyle.El.iconClass} {
-      ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.normal.content[2]};
+      ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.content3[0]};
     }
   }
 `

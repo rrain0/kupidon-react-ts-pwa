@@ -59,13 +59,11 @@ export namespace InputStyle {
     export const normal = css`
       // normal
       ${El.frame} {
+        height: 50px;
         border-radius: 15px;
       }
       ${El.input} {
-        width: 100%;
-        min-height: 50px;
-        padding-right: 16px;
-        padding-left: 16px;
+        padding: 4px 16px;
         ${Txt.large2};
       }
       ${El.border} {
@@ -115,9 +113,10 @@ export namespace InputStyle {
     
     export const small = css`
       ${normal};
+      ${El.frame} {
+        height: 40px;
+      }
       ${El.input} {
-        width: 100%;
-        min-height: 40px;
         padding: 4px 12px;
         ${Txt.large1};
       }
@@ -132,37 +131,37 @@ export namespace InputStyle {
     export const normal = (t:Theme)=>css`
       // normal
       ${El.frame} {
-        background: ${t.element.input.a.bgc[0]};
+        background: ${t.input.bgc[0]};
       }
       ${El.input} {
-        color: ${t.element.input.a.content[0]};
-        ${Prop.color}: ${t.element.input.a.content[0]};
+        color: ${t.input.content[0]};
+        ${Prop.color}: ${t.input.content[0]};
   
         ::placeholder {
-          color: ${t.element.input.aPlaceholder.content[0]};
+          color: ${t.input.placeholder[0]};
         }
       }
       ${El.border} {
         background-image: linear-gradient(
           to right,
-          ${t.element.input.aBorderHover.bgc[0]},
-          ${t.element.input.aBorder.bgc[0]},
-          ${t.element.input.aBorder.bgc[1]}
+          ${t.input.borderHover[0]},
+          ${t.input.border[0]},
+          ${t.input.border[1]}
         );
       }
 
       // disabled
       ${El.inputDisabled} {
-        color: ${t.element.input.a.content[0]};
-        ${Prop.color}: ${t.element.input.a.content[0]};
+        color: ${t.input.content[0]};
+        ${Prop.color}: ${t.input.content[0]};
       }
       ${El.borderDisabled} {
-        border-color: ${t.element.input.a.content[0]};
+        border-color: ${t.input.content[0]};
       }
 
       // error
       ${El.frameError}{
-        background: ${t.input.error.bgc[0]};
+        background: ${t.input.bgcError[0]};
       }
     `
     
@@ -224,7 +223,7 @@ export namespace InputStyle {
     ${props?.static && css`
       ${El.frame} {
         cursor: auto;
-        color: ${t.element.input.a.content[0]};
+        color: ${t.input.content[0]};
       }
 
       ${El.border} {

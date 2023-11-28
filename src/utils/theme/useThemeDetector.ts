@@ -1,6 +1,6 @@
 import { Themes } from 'src/utils/theme/Themes'
 import { useMedia } from 'src/utils/react/media/useMedia'
-import ThemeType = Themes.ThemeType
+import ThemeType = Themes.Type
 
 
 /*

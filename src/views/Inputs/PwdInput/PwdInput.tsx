@@ -53,7 +53,7 @@ const PwdInput = React.forwardRef<
             css={t=>css`
               ${RippleStyle.El.frame}{
                 ${RippleStyle.Prop.mode}: center;
-                ${RippleStyle.Prop.color}: ${t.element.ripple.b.content[0]};
+                ${RippleStyle.Prop.color}: ${t.ripple.contentOnTransparent[0]};
               }
             `}
           />
@@ -76,11 +76,12 @@ const EyeWrap = styled.button`
   ${resetButton};
   ${centerAll};
   height: 100%;
-  padding: 0 14px 0 0;
+  padding-right: 28cqh;
   cursor: pointer;
+  --icon-size: 24px;
   >${SvgIcStyle.El.iconClass}{
-    ${SvgIcStyle.Prop.size}: 24px;
-    ${SvgIcStyle.Prop.color}: ${p=>p.theme.element.input.a.content[0]};
+    ${SvgIcStyle.Prop.size}: var(--icon-size);
+    ${SvgIcStyle.Prop.color}: ${p=>p.theme.input.content[0]};
   }
 `
 EyeWrap.defaultProps = { type: 'button' }
@@ -89,20 +90,20 @@ EyeWrap.defaultProps = { type: 'button' }
 
 const RippleFrame1 = styled.div`
   ${center};
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 999999px;
 `
 const RippleFrame2 = styled.div`
-  width: 190%;
-  height: 190%;
+  width: min(190%, 90cqh);
+  height: min(190%, 90cqh);
   border-radius: inherit;
   position: relative;
   *:focus > * > & {
-    background: ${p=>p.theme.input.iconActive[0]};
+    background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
   }
   ${hoverable}{ :hover {
-    background: ${p=>p.theme.input.iconHover[0]};
+    background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
   } }
 `
 

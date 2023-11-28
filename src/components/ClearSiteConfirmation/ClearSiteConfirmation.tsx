@@ -141,7 +141,7 @@ const icon = (t:Theme)=>css`
 `
 const iconOnDanger = (t:Theme)=>css`
   ${SvgIcStyle.El.icon} {
-    ${SvgIcStyle.Prop.color}: ${t.element.danger.a.content[0]};
+    ${SvgIcStyle.Prop.color}: ${t.elementDanger.content[0]};
   }
 `
 const button = (t:Theme)=>css`

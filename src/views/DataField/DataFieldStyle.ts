@@ -41,7 +41,7 @@ export namespace DataFieldStyle {
     ${El.frame} {
       cursor: pointer;
       border-radius: 15px;
-      background: ${t.element.input.a.bgc[0]};
+      background: ${t.input.bgc[0]};
       min-width: 0;
       width: 100%;
       min-height: 50px;
@@ -49,16 +49,16 @@ export namespace DataFieldStyle {
 
       overflow-wrap: anywhere;
       ${Txt.large2};
-      color: ${t.element.input.a.content[0]};
-      ${Prop.color}: ${t.element.input.a.content[0]};
+      color: ${t.input.content[0]};
+      ${Prop.color}: ${t.input.content[0]};
     }
     ${El.border} {
       border: 2px solid transparent;
       background-image: linear-gradient(
         to right,
-        ${t.element.input.aBorderHover.bgc[0]},
-        ${t.element.input.aBorder.bgc[0]},
-        ${t.element.input.aBorder.bgc[1]}
+        ${t.input.borderHover[0]},
+        ${t.input.border[0]},
+        ${t.input.border[1]}
       );
       background-size: 200% 100%;
       background-position: 100% 0;
@@ -75,7 +75,7 @@ export namespace DataFieldStyle {
     
     // error
     ${El.frameError}{
-      background: ${t.input.error.bgc[0]};
+      background: ${t.input.bgcError[0]};
     }
   `
   
@@ -101,8 +101,8 @@ export namespace DataFieldStyle {
     ${interactive(t)};
     ${El.frame} {
       cursor: auto;
-      color: ${t.element.input.a.content[0]};
-      ${Prop.color}: ${t.element.input.a.content[0]};
+      color: ${t.input.content[0]};
+      ${Prop.color}: ${t.input.content[0]};
     }
     ${El.border} {
       border: 2px solid ${t.page.text[0]};

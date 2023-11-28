@@ -5,35 +5,10 @@
 
 export namespace Themes {
   
-  export type ThemeType = 'light'|'dark'
+  export type Type = 'light'|'dark'
   
   
   
-  export type ToastTheme = {
-    // bgc[0]: main bgc
-    bgc: string[]
-    
-    // content[0]: text
-    // content[1]: close button
-    // content[2]: close button hovered
-    content: string[]
-    
-    // accent[0]: info icon / progress bar
-    accent: string[]
-    
-    // accentContent[0]: some content on accent color
-    // accentContent: string[]
-  }
-  
-  export type ViewTheme = Partial<{
-    hover: {},
-    active: {},
-    focus: {},
-    focusVisible: {},
-    readOnly: {},
-    disabled: {},
-    error: {},
-  }>
   
   // Цвета в массиве для градиентов
   // Если нужен повариант, то лучше создать отдельный объект
@@ -50,7 +25,7 @@ export namespace Themes {
   
   
   export interface Theme {
-    type: ThemeType
+    type: Type
     name: string
     
     // окружение
@@ -58,30 +33,65 @@ export namespace Themes {
       normal: BgcContentVariants<{ a, b }>
       accent: BgcContentVariants<{ a }>
     }
-    element: {
-      //highlight?: BgcContentVariants<{ a }>
-      //primary?: BgcContentVariants<{ a }>
-      //secondary?: BgcContentVariants<{ a }>
-      
-      main:     BgcContentVariants<{ a, aFocus }>
-      accent:   BgcContentVariants<{ a, aFocus, b }>
-      normal?:  any
-      input:    BgcContentVariants<{
-        a, aPlaceholder, aBorder, aBorderHover
-      }>
-      ripple:   BgcContentVariants<{ a, b }>
-      disabled: BgcContentVariants<{ a }>
-      danger:   BgcContentVariants<{ a, aFocus }>
+    
+    
+    
+    // main button (submit button)
+    // radio input
+    buttonMain: {
+      bgc:      string[]
+      bgcFocus: string[]
+      content:  string[]
+    },
+    // just colorful button that drags some attention
+    buttonAccent: {
+      bgc:       string[]
+      bgcFocus:  string[]
+      content:   string[]
+      content2:  string[]
+    },
+    // transparent icon button
+    buttonTransparent: {
+      bgcFocus: string[],
+    },
+    // input, dataField, textarea, radioInput, radioGroup
+    input: {
+      bgc:           string[]
+      content:       string[]
+      placeholder:   string[]
+      border:        string[]
+      borderHover:   string[]
+      bgcError:      string[]
+    },
+    
+    // disabledButton
+    elementDisabled: {
+      bgc:     string[]
+      content: string[]
+    },
+    // dangerButton
+    elementDanger: {
+      bgc:      string[]
+      bgcFocus: string[]
+      content:  string[]
+    },
+    
+    ripple: {
+      content:              string[]
+      contentOnTransparent: string[]
+    },
+    
+    
+    
+    element?: {
+      //highlight?: {}
+      //primary?: {}
+      //secondary?: {}
+      //normal?: {}
     }
     
-    toast: {
-      normal: ToastTheme
-      loading: ToastTheme
-      info: ToastTheme
-      ok: ToastTheme
-      warn: ToastTheme
-      danger: ToastTheme
-    }
+    
+    
     
     page: {
       // bgc[0] - theme color
@@ -90,13 +100,6 @@ export namespace Themes {
       bgc2: string[]
       bgc3: string[]
       text: string[]
-    }
-    input: {
-      iconActive: string[]
-      iconHover: string[]
-      error: {
-        bgc: string[]
-      }
     }
     statusBar: {
       bgc: string[]
@@ -113,6 +116,20 @@ export namespace Themes {
           text: string[]
         }
       }
+    }
+    
+    toast: {
+      bgc:                  string[]
+      content:              string[]
+      content2:             string[]
+      content3:             string[]
+      accentNormal:         string[]
+      accentLoadingBgc:     string[]
+      accentLoadingContent: string[]
+      accentInfo:           string[]
+      accentOk:             string[]
+      accentWarn:           string[]
+      accentDanger:         string[]
     }
     scrollbar: {
       track: string[]
@@ -135,66 +152,44 @@ export namespace Themes {
         a: { bgc: ['#ffaeba'], content: ['#000000'] },
       },
     },
-    element: {
-      main: {
-        a:      { bgc: ['#BB2649'], content: ['#F8F8F8'] },
-        aFocus: { bgc: ['#d93b5f'], content: ['#F8F8F8'] },
-      },
-      accent: {
-        a:      { bgc: ['#f37190'], content: ['#F8F8F8'] },
-        aFocus: { bgc: ['#ffa4ba'], content: ['#F8F8F8'] },
-        b:      { bgc: ['#f37190'], content: ['#000000'] },
-      },
-      input: {
-        a:            { bgc: ['#F8F8F8'], content: ['#000000'] },
-        aBorder:      { bgc: ['#fb3570','#fb3570'], content: [] },
-        aPlaceholder: { bgc: ['#F8F8F8'], content: ['#777777'] },
-        aBorderHover: { bgc: ['#9c20aa'], content: [] },
-      },
-      ripple: {
-        a: { bgc: ['#000000'], content: ['#ffffff'] },
-        b: { bgc: ['transparent'], content: ['#00000088'] },
-      },
-      disabled: {
-        a: { bgc: ['#DCDCDC'], content: ['#555555'] },
-      },
-      danger: {
-        a:      { bgc: ['#dc362e'], content: ['#ffffff'] },
-        aFocus: { bgc: ['#e74c3c'], content: ['#ffffff'] },
-      }
+    
+    buttonMain: {
+      bgc:      ['#BB2649'],
+      bgcFocus: ['#d93b5f'],
+      content:  ['#F8F8F8'],
+    },
+    buttonAccent: {
+      bgc:       ['#f37190'],
+      bgcFocus:  ['#ff8eaa'],
+      content:   ['#F8F8F8'],
+      content2:  ['#000000'],
+    },
+    buttonTransparent: {
+      bgcFocus: ['#00000011'], // /input.iconHover | /input.iconActive
     },
     
-    toast:{
-      normal: {
-        bgc: ['#ffffff'],
-        content: ['#757575', '#b2b2b2', '#000000'],
-        accent: ['#bb86fc'],
-      },
-      loading: {
-        bgc: ['#ffffff'],
-        content: ['#757575', '#b2b2b2', '#000000'],
-        accent: ['#e0e0e0', '#616161'],
-      },
-      info: {
-        bgc: ['#ffffff'],
-        content: ['#757575', '#b2b2b2', '#000000'],
-        accent: ['#3498db'],
-      },
-      ok: {
-        bgc: ['#ffffff'],
-        content: ['#757575', '#b2b2b2', '#000000'],
-        accent: ['#07bc0c'],
-      },
-      warn: {
-        bgc: ['#ffffff'],
-        content: ['#757575', '#b2b2b2', '#000000'],
-        accent: ['#f1c40f'],
-      },
-      danger: {
-        bgc: ['#ffffff'],
-        content: ['#757575', '#b2b2b2', '#000000'],
-        accent: ['#e74c3c'],
-      },
+    input: {
+      bgc:           ['#F8F8F8'],
+      content:       ['#000000'],
+      placeholder:   ['#777777'],
+      border:        ['#fb3570','#fb3570'],
+      borderHover:   ['#9c20aa'],
+      bgcError:      ['#ffced2'],
+    },
+    
+    elementDisabled: {
+      bgc:     ['#DCDCDC'],
+      content: ['#555555'],
+    },
+    elementDanger: {
+      bgc:      ['#dc362e'],
+      bgcFocus: ['#e74c3c'],
+      content:  ['#ffffff'],
+    },
+    
+    ripple: {
+      content:              ['#ffffff'],
+      contentOnTransparent: ['#00000088'],
     },
     
     page: {
@@ -203,16 +198,6 @@ export namespace Themes {
       bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
       bgc3: ['#fff','#8b8b8b'],
       text: ['#000000'],
-    },
-    
-    input: {
-      iconActive: ['#00000011'],
-      iconHover: ['#00000011'],
-      // [hover, normal, normal]
-      // input border: ['#00a8f3', '#9c20aa', '#fb3570'],
-      error: {
-        bgc: ['#ffced2'],
-      }
     },
     
     statusBar: {
@@ -234,6 +219,19 @@ export namespace Themes {
       },
     },
     
+    toast: {
+      bgc:                  ['#ffffff'], // <any>.bgc
+      content:              ['#757575'], // <any>.content[0]
+      content2:             ['#b2b2b2'], // <any>.content[1]
+      content3:             ['#000000'], // <any>.content[2]
+      accentNormal:         ['#bb86fc'], // normal.accent
+      accentLoadingBgc:     ['#e0e0e0'], // loading.accent[0]
+      accentLoadingContent: ['#616161'], // loading.accent[1]
+      accentInfo:           ['#3498db'], // info.accent
+      accentOk:             ['#07bc0c'], // ok.accent
+      accentWarn:           ['#f1c40f'], // warn.accent
+      accentDanger:         ['#e74c3c'], // danger.accent
+    },
     scrollbar: {
       track: ['#25283622'],
       thumb: ['#25283644'],
@@ -256,66 +254,45 @@ export namespace Themes {
         a: { bgc: ['#992c46'], content: ['#bdbdbd'] },
       },
     },
-    element: {
-      main: {
-        a:      { bgc: ['#971f3b'], content: ['#bdbdbd'] },
-        aFocus: { bgc: ['#c6294e'], content: ['#bdbdbd'] },
-      },
-      accent: {
-        a:      { bgc: ['#d16780'], content: ['#cdcdcd'] },
-        aFocus: { bgc: ['#e58ea2'], content: ['#cdcdcd'] },
-        b:      { bgc: ['#d16780'], content: ['#000000'] },
-      },
-      input: {
-        a:            { bgc: ['#282c34'], content: ['#bdbdbd'] },
-        aBorder:      { bgc: ['#b32e56','#b32e56'], content: [] },
-        aPlaceholder: { bgc: ['#282c34'], content: ['#7b7b7b'] },
-        aBorderHover: { bgc: ['#2393c6'], content: [] },
-      },
-      ripple: {
-        a: { bgc: ['#ffffff'], content: ['#000000'] },
-        b: { bgc: ['transparent'], content: ['#ffffff88'] },
-      },
-      disabled: {
-        a: { bgc: ['#DCDCDC'], content: ['#555555'] },
-      },
-      danger: {
-        a:      { bgc: ['#ac2c26'], content: ['#bdbdbd'] },
-        aFocus: { bgc: ['#c43730'], content: ['#bdbdbd'] },
-      }
+    
+    buttonMain: {
+      bgc:      ['#971f3b'],
+      bgcFocus: ['#c6294e'],
+      content:  ['#bdbdbd'],
+    },
+    buttonAccent: {
+      bgc:       ['#d16780'],
+      bgcFocus:  ['#da5474'],
+      content:   ['#cdcdcd'],
+      content2:  ['#000000'],
+    },
+    buttonTransparent: {
+      bgcFocus: ['#ffffff22'], // /input.iconHover | /input.iconActive
+    },
+    // input
+    // element.input
+    input: {
+      bgc:           ['#282c34'], // a.bgc
+      content:       ['#cdcdcd'], // a.content
+      placeholder:   ['#7b7b7b'], // aPlaceholder.content
+      border:        ['#b32e56','#b32e56'], // aBorder.bgc
+      borderHover:   ['#2393c6'], // aBorderHover.bgc
+      bgcError:      ['#5e252c'], // /input.error.bgc
     },
     
-    toast:{
-      normal: {
-        bgc: ['#121212'],
-        content: ['#ffffff', '#b8b8b8', '#ffffff'],
-        accent: ['#bb86fc'],
-      },
-      loading: {
-        bgc: ['#121212'],
-        content: ['#ffffff', '#b8b8b8', '#ffffff'],
-        accent: ['#e0e0e0', '#616161'],
-      },
-      info: {
-        bgc: ['#121212'],
-        content: ['#ffffff', '#b8b8b8', '#ffffff'],
-        accent: ['#3498db'],
-      },
-      ok: {
-        bgc: ['#121212'],
-        content: ['#ffffff', '#b8b8b8', '#ffffff'],
-        accent: ['#07bc0c'],
-      },
-      warn: {
-        bgc: ['#121212'],
-        content: ['#ffffff', '#b8b8b8', '#ffffff'],
-        accent: ['#f1c40f'],
-      },
-      danger: {
-        bgc: ['#121212'],
-        content: ['#ffffff', '#b8b8b8', '#ffffff'],
-        accent: ['#e74c3c'],
-      },
+    elementDisabled: {
+      bgc:     ['#DCDCDC'],
+      content: ['#555555'],
+    },
+    elementDanger: {
+      bgc:      ['#ac2c26'],
+      bgcFocus: ['#c43730'],
+      content:  ['#bdbdbd'],
+    },
+    
+    ripple: {
+      content:              ['#000000'],
+      contentOnTransparent: ['#ffffff88'],
     },
     
     page: {
@@ -325,16 +302,6 @@ export namespace Themes {
       bgc2: ['#992c46','#282c34','#994500'],
       bgc3: ['#121212','#8b8b8b'],
       text: ['#bdbdbd','#ffffff'],
-    },
-    
-    input: {
-      iconActive: ['#ffffff22'],
-      iconHover: ['#ffffff22'],
-      // [hover, normal, normal]
-      // input border: ['#00a8f3', '#9c20aa', '#fb3570'],
-      error: {
-        bgc: ['#5e252c'],
-      }
     },
     
     statusBar: {
@@ -356,6 +323,19 @@ export namespace Themes {
       }
     },
     
+    toast: {
+      bgc:                  ['#121212'], // <any>.bgc
+      content:              ['#ffffff'], // <any>.content[0]
+      content2:             ['#b8b8b8'], // <any>.content[1]
+      content3:             ['#ffffff'], // <any>.content[2]
+      accentNormal:         ['#bb86fc'], // normal.accent
+      accentLoadingBgc:     ['#e0e0e0'], // loading.accent[0]
+      accentLoadingContent: ['#616161'], // loading.accent[1]
+      accentInfo:           ['#3498db'], // info.accent
+      accentOk:             ['#07bc0c'], // ok.accent
+      accentWarn:           ['#f1c40f'], // warn.accent
+      accentDanger:         ['#e74c3c'], // danger.accent
+    },
     scrollbar: {
       track: ['#F8F8F822'],
       thumb: ['#F8F8F844'],
@@ -371,20 +351,15 @@ export namespace Themes {
     type: 'light',
     name: 'Light Pink 2',
     
-    element: {
-      ...LightPink.element,
-      main: {
-        ...LightPink.element.main,
-        a: {
-          ...LightPink.element.main.a,
-          bgc: ['#f95c67']
-        },
-      },
-      input: {
-        ...LightPink.element.input,
-        aBorder: { bgc: ['#ef7b7d','#fb3570'], content: [] },
-        aBorderHover: { bgc: ['#00a8f3'], content: [] },
-      },
+    buttonMain: {
+      ...LightPink.buttonMain,
+      bgc: ['#f95c67'],
+    },
+    
+    input: {
+      ...LightPink.input,
+      border:      ['#ef7b7d','#fb3570'],
+      borderHover: ['#00a8f3'],
     },
   }
   
@@ -396,20 +371,15 @@ export namespace Themes {
     type: 'dark',
     name: 'Dark 2',
     
-    element: {
-      ...Dark.element,
-      main: {
-        ...Dark.element.main,
-        a: {
-          ...Dark.element.main.a,
-          bgc: ['#d9816f']
-        }
-      },
-      input: {
-        ...Dark.element.input,
-        aBorder: { bgc: ['#ef7b7d','#fb3570'], content: [] },
-        aBorderHover: { bgc: ['#00a8f3'], content: [] },
-      },
+    buttonMain: {
+      ...LightPink.buttonMain,
+      bgc: ['#d9816f'],
+    },
+    
+    input: {
+      ...LightPink.input,
+      border:      ['#ef7b7d','#fb3570'],
+      borderHover: ['#00a8f3'],
     },
   }
   
@@ -430,4 +400,92 @@ export namespace Themes {
   
 }
 
+
+
+
+
+const LightPink = {
+  type: 'light',
+  name: 'Light Pink',
+  
+  
+  // ambience.normal
+  containerNormal: {
+    bgc1:     ['#ffffff'], // a.bgc
+    bgc2:     ['#f0f0f0'], // b.bgc
+    contentA: ['#000000'], // a/b.content
+  },
+  // ambience.accent
+  containerAccent: {
+    bgc:     ['#ffaeba'], // a.bgc
+    content: ['#000000'], // a.content
+  },
+  
+  //elementNormal: {},
+  
+  
+  // input
+  // element.input
+  input: {
+    bgc:           ['#F8F8F8'], // a.bgc
+    content:       ['#000000'], // a.content
+    placeholder:   ['#777777'], // aPlaceholder.content
+    border:        ['#fb3570','#fb3570'], // aBorder.bgc
+    borderHover:   ['#9c20aa'], // aBorderHover.bgc
+    bgcIconActive: ['#00000011'], // /input.iconActive
+    bgcIconHover:  ['#00000011'], // /input.iconHover
+    bgcError:      ['#ffced2'], // /input.error.bgc
+  },
+  
+  
+  
+  
+  
+  element: {
+    ripple: {
+      a: { bgc: ['#000000'], content: ['#ffffff'] },
+      b: { bgc: ['transparent'], content: ['#00000088'] },
+    },
+    disabled: {
+      a: { bgc: ['#DCDCDC'], content: ['#555555'] },
+    },
+    danger: {
+      a:      { bgc: ['#dc362e'], content: ['#ffffff'] },
+      aFocus: { bgc: ['#e74c3c'], content: ['#ffffff'] },
+    }
+  },
+  
+  page: {
+    //bgc: ['#ffaeba','#f0f0f0','#ffb6c1'],
+    bgc: ['#f5f5f5','#f5f5f5'],
+    bgc2: ['#ffb6c1','#f5f5f5','#d8701a'],
+    bgc3: ['#fff','#8b8b8b'],
+    text: ['#000000'],
+  },
+  
+  
+  statusBar: {
+    bgc: ['#ffffff'],
+  },
+  
+  nav: {
+    //bgc: ['#f6d6db'], //#e8809a
+    bgc: ['#ffffff'],
+    button: {
+      bgc: ['#BB2649'],
+      text: ['#333333'],
+      ripple: ['#ffffff'],
+      active: ['#fabfc9'],
+      hover: ['#fabfc9'],
+      selected: {
+        text: ['#BB2649'],
+      },
+    },
+  },
+  
+  scrollbar: {
+    track: ['#25283622'],
+    thumb: ['#25283644'],
+  },
+}
 

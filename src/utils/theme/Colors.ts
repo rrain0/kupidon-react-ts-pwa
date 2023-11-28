@@ -22,6 +22,8 @@ export const Colors = {
     norm1: '#ee7894',
     norm2: '#f37190',
     norm3: '#ff6086',
+    norm4: '#ffa4ba',
+    norm5: '#e58ea2',
   } as const,
   
   

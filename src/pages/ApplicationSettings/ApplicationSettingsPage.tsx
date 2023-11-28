@@ -34,7 +34,7 @@ import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import col = EmotionCommon.col
 import Page = Pages.Page
-import ThemeType = Themes.ThemeType
+import ThemeType = Themes.Type
 import BrowserIc = SvgIcons.BrowserIc
 import DayNightIc = SvgIcons.DayNightIc
 import DayIc = SvgIcons.DayIc

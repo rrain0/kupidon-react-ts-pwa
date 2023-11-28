@@ -72,14 +72,14 @@ export namespace RadioInputGroupStyle {
     
     // error
     ${El.radioGroupError} {
-      background: ${t.input.error.bgc[0]};
+      background: ${t.input.bgcError[0]};
     }
     ${El.borderError} {
       background-image: linear-gradient(
               to right,
-              ${t.element.input.aBorderHover.bgc[0]},
-              ${t.element.input.aBorder.bgc[0]},
-              ${t.element.input.aBorder.bgc[1]}
+              ${t.input.borderHover[0]},
+              ${t.input.border[0]},
+              ${t.input.border[1]}
       );
     }
   `
@@ -119,14 +119,14 @@ export namespace RadioInputGroupStyle {
     
     // error
     ${El.radioGroupError} {
-      background: ${t.input.error.bgc[0]};
+      background: ${t.input.bgcError[0]};
     }
     ${El.borderError} {
       background-image: linear-gradient(
               to right,
-              ${t.element.input.aBorderHover.bgc[0]},
-              ${t.element.input.aBorder.bgc[0]},
-              ${t.element.input.aBorder.bgc[1]}
+              ${t.input.borderHover[0]},
+              ${t.input.border[0]},
+              ${t.input.border[1]}
       );
     }
   `

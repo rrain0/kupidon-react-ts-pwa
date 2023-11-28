@@ -82,25 +82,25 @@ export namespace RadioInputStyle {
       ${Prop.color}: ${t.page.text[0]};
     }
     ${El.ripple}{
-      ${Prop.rippleColor}: ${t.element.ripple.b.content[0]};
+      ${Prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
     }
     ${El.iconWrap}{
       width: 26px;
       height: 26px;
-      ${Prop.activeIconColor}: ${t.element.main.a.bgc[0]};
-      ${Prop.inactiveIconColor}: ${t.element.main.a.bgc[0]};
+      ${Prop.activeIconColor}: ${t.buttonMain.bgc[0]};
+      ${Prop.inactiveIconColor}: ${t.buttonMain.bgc[0]};
     }
     
     // hover
     ${hoverable}{
       ${El.borderHover}{
-        background: ${t.input.iconHover[0]};
+        background: ${t.buttonTransparent.bgcFocus[0]};
       }
     }
     
     // focus-visible
     ${El.borderFocusVisible}{
-      background: ${t.input.iconHover[0]};
+      background: ${t.buttonTransparent.bgcFocus[0]};
     }
   `
   
