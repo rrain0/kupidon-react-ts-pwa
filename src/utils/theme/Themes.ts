@@ -1,11 +1,4 @@
-import { DarkPink } from 'src/utils/theme/themes/DarkPink'
-import { LightPink } from 'src/utils/theme/themes/LightPink'
-import {
-  DarkGradient,
-  DarkOrange,
-  LightOrange,
-  LightPinkGradient,
-} from 'src/utils/theme/themes/draft'
+
 
 
 export namespace Themes {
@@ -33,17 +26,14 @@ export namespace Themes {
     type: Type
     name: string
     
-    
+    // окружение
+    // ambience?: {}
     element?: {
       //highlight?: {}
       //primary?: {}
       //secondary?: {}
       //normal?: {}
     }
-    // окружение
-    /* ambience: {
-      normal: BgcContentVariants<{ a, b }>
-    } */
     containerNormal: {
       bgc:     string[]
       bgc2:    string[]
@@ -113,7 +103,6 @@ export namespace Themes {
     page: {
       bgc:         string[]
       bgcGradient: string[]
-      //bgc3:        string[]
       content:     string[]
     }
     
@@ -144,28 +133,6 @@ export namespace Themes {
   }
   
   
-  
-  
-  
-  
-  
-  export const DefaultLightTheme = LightPink
-  export const DefaultDarkTheme = DarkPink
-  export const DefaultTheme = DefaultLightTheme
-  
-  
-  
-  
-  export const AllThemes = [
-    LightPink,           DarkPink,
-    LightOrange,         DarkOrange,
-    LightPinkGradient,   DarkGradient,
-  ] as const
-  
-  
-  export const themeByName = (themeName: string): Theme => {
-    return AllThemes.find(t=>t.name===themeName) ?? DefaultTheme
-  }
   
   
 }

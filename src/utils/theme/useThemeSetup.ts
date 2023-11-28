@@ -1,7 +1,7 @@
 import { useLayoutEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
-import { Themes } from 'src/utils/theme/Themes'
+import { themeByName } from 'src/utils/theme/ThemeCollection'
 import { useThemeDetector } from 'src/utils/theme/useThemeDetector'
 
 
@@ -34,12 +34,12 @@ export const useThemeSetup = ()=>{
         if (systemThemeType==='light')
           setTheme(s=>({
             ...s,
-            theme: Themes.themeByName(themeSettings.light)
+            theme: themeByName(themeSettings.light)
           }))
         else if (systemThemeType==='dark')
           setTheme(s=>({
             ...s,
-            theme: Themes.themeByName(themeSettings.dark)
+            theme: themeByName(themeSettings.dark)
           }))
         else setThemeSettings(s=>({
             ...s,
@@ -50,12 +50,12 @@ export const useThemeSetup = ()=>{
         if (themeSettings.manualSetting==='light')
           setTheme(s=>({
             ...s,
-            theme: Themes.themeByName(themeSettings.light)
+            theme: themeByName(themeSettings.light)
           }))
         else if (themeSettings.manualSetting==='dark')
           setTheme(s=>({
             ...s,
-            theme: Themes.themeByName(themeSettings.dark)
+            theme: themeByName(themeSettings.dark)
           }))
       }
     },
