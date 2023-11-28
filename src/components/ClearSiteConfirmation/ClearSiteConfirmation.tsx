@@ -13,16 +13,16 @@ import { Themes } from 'src/utils/theme/Themes'
 import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
 import col = EmotionCommon.col
 import fixed = EmotionCommon.fixed
 import center = EmotionCommon.center
 import row = EmotionCommon.row
-import Spinner8LinesIc = SimpleSvgIcons.Spinner8LinesIc
+import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
 import Theme = Themes.Theme
-import ClearTrashIc = SimpleSvgIcons.ClearTrashIc
+import ClearTrashIc = SvgIcons.ClearTrashIc
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Setter = TypeUtils.Setter
 import Txt = EmotionCommon.Txt
 import Mem = ReactUtils.Mem
@@ -133,15 +133,15 @@ export default Mem(ClearSiteConfirmation)
 
 
 const icon = (t:Theme)=>css`
-  ${SimpleSvgIconsStyle.El.icon} {
+  ${SvgIcStyle.El.icon} {
     height: 1.333em;
     width: 1.333em;
-    ${SimpleSvgIconsStyle.Prop.color}: ${t.page.text[0]};
+    ${SvgIcStyle.Prop.color}: ${t.page.text[0]};
   }
 `
 const iconOnDanger = (t:Theme)=>css`
-  ${SimpleSvgIconsStyle.El.icon} {
-    ${SimpleSvgIconsStyle.Prop.color}: ${t.element.danger.a.content[0]};
+  ${SvgIcStyle.El.icon} {
+    ${SvgIcStyle.Prop.color}: ${t.element.danger.a.content[0]};
   }
 `
 const button = (t:Theme)=>css`

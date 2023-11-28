@@ -17,8 +17,8 @@ import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import FloppyDisk1Ic = SvgIcons.FloppyDisk1Ic
 
 
 

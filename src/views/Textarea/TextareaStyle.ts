@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
+import { CommonStyle } from 'src/views/CommonStyle'
 import Theme = Themes.Theme
 import bgcInBorder = EmotionCommon.bgcInBorder
 import Txt = EmotionCommon.Txt
@@ -46,7 +47,7 @@ export namespace TextareaStyle {
     export const borderError = textareaError+'~'+borderClass
   }
   export namespace Prop {
-    export const color = '--color'
+    export const color = CommonStyle.Prop.color
   }
   
   
@@ -56,7 +57,7 @@ export namespace TextareaStyle {
     // normal
     ${El.frame} {
       border-radius: 15px;
-      background: ${t.input.bgc[0]};
+      background: ${t.element.input.a.bgc[0]};
     }
     ${El.textarea} {
       width: 100%;
@@ -67,20 +68,20 @@ export namespace TextareaStyle {
       overflow: hidden;
       padding: 8px 16px;
       ${Txt.large2};
-      color: ${t.input.text[0]};
-      ${Prop.color}: ${t.input.text[0]};
+      color: ${t.element.input.a.content[0]};
+      ${Prop.color}: ${t.element.input.a.content[0]};
 
       ::placeholder {
-        color: ${t.input.placeholder[0]};
+        color: ${t.element.input.aPlaceholder.content[0]};
       }
     }
     ${El.border} {
       border: 2px solid transparent;
       background-image: linear-gradient(
               to right,
-              ${t.input.hover.border[0]},
-              ${t.input.normal.border[0]},
-              ${t.input.normal.border[1]}
+              ${t.element.input.aBorderHover.bgc[0]},
+              ${t.element.input.aBorder.bgc[0]},
+              ${t.element.input.aBorder.bgc[1]}
       );
       background-size: 200% 100%;
       background-position: 100% 0;
@@ -108,11 +109,11 @@ export namespace TextareaStyle {
     // disabled
     ${El.frameDisabled} {
       cursor: auto;
-      color: ${t.input.text[0]};
-      ${Prop.color}: ${t.input.text[0]};
+      color: ${t.element.input.a.content[0]};
+      ${Prop.color}: ${t.element.input.a.content[0]};
     }
     ${El.borderDisabled} {
-      border-color: ${t.input.text[0]};
+      border-color: ${t.element.input.a.content[0]};
     }
     
     // error

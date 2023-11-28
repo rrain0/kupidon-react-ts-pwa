@@ -1,7 +1,8 @@
 import { css } from '@emotion/react'
 import { Themes } from 'src/utils/theme/Themes'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { CommonStyle } from 'src/views/CommonStyle'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
 import Theme = Themes.Theme
 import col = EmotionCommon.col
@@ -21,7 +22,7 @@ export namespace ButtonStyle {
     export const btnClassName = 'rrainuiButton'
     export const borderClassName = 'rrainuiBorder'
     export const rippleFrameClassName = RippleStyle.El.frameClassName
-    export const iconClassName = SimpleSvgIconsStyle.El.iconClassName
+    export const iconClassName = SvgIcStyle.El.iconClassName
     
     export const btnClass = '.'+btnClassName
     export const borderClass = '.'+borderClassName
@@ -48,11 +49,11 @@ export namespace ButtonStyle {
     export const iconDisabled = btnDisabled+'>'+iconClass
   }
   export namespace Prop {
-    export const color = '--color'
+    export const color = CommonStyle.Prop.color
     export const rippleMode = RippleStyle.Prop.mode
     export const rippleColor = RippleStyle.Prop.color
-    export const iconSize = SimpleSvgIconsStyle.Prop.size
-    export const iconColor = SimpleSvgIconsStyle.Prop.color
+    export const iconSize = SvgIcStyle.Prop.size
+    export const iconColor = SvgIcStyle.Prop.color
   }
   
   
@@ -240,8 +241,8 @@ export namespace ButtonStyle {
     ${Shape.rounded};
     ${Color.accent(t)};
     ${El.btn} {
-      color: ${t.element.accent.e.content[0]};
-      ${Prop.color}: ${t.element.accent.e.content[0]};
+      color: ${t.element.accent.b.content[0]};
+      ${Prop.color}: ${t.element.accent.b.content[0]};
     }
   `
   
@@ -316,7 +317,7 @@ export namespace ButtonStyle {
       ${Prop.color}: ${t.element.accent.a.bgc[0]};
     }
     ${El.ripple} {
-      ${Prop.rippleColor}: ${t.element.accent.c.content[0]};
+      ${Prop.rippleColor}: ${t.element.ripple.b.content[0]};
     }
     ${El.icon} {
       ${Prop.iconColor}: ${t.element.accent.a.bgc[0]};

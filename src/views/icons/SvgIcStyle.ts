@@ -4,7 +4,7 @@ import Theme = Themes.Theme
 
 
 
-export namespace SimpleSvgIconsStyle {
+export namespace SvgIcStyle {
   
   export namespace El {
     export const iconClassName = 'rrainuiIcon'

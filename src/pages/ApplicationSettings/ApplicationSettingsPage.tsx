@@ -26,21 +26,23 @@ import { Themes } from 'src/utils/theme/Themes'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { CommonStyle } from 'src/views/CommonStyle'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import col = EmotionCommon.col
 import Page = Pages.Page
 import ThemeType = Themes.ThemeType
-import BrowserIc = SimpleSvgIcons.BrowserIc
-import DayNightIc = SimpleSvgIcons.DayNightIc
-import DayIc = SimpleSvgIcons.DayIc
-import MoonIc = SimpleSvgIcons.MoonIc
+import BrowserIc = SvgIcons.BrowserIc
+import DayNightIc = SvgIcons.DayNightIc
+import DayIc = SvgIcons.DayIc
+import MoonIc = SvgIcons.MoonIc
 import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
 import Theme = Themes.Theme
-import AddModuleIc = SimpleSvgIcons.AddModuleIc
+import AddModuleIc = SvgIcons.AddModuleIc
 import Txt = EmotionCommon.Txt
 import Mem = ReactUtils.Mem
 
@@ -312,15 +314,15 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  &.rrainuiIcon {
+  ${SvgIcStyle.El.icon} {
     height: 1.333em;
     width: 1.333em;
-    --icon-color: var(--color);
+    ${SvgIcStyle.Prop.color}: var(${CommonStyle.Prop.color});
   }
 `
 const iconSmall = (t:Theme)=>css`
   ${icon(t)};
-  &.rrainuiIcon {
+  ${SvgIcStyle.El.icon} {
     height: 1.25em;
   }
 `
@@ -331,7 +333,7 @@ const RoundButtonsContainer = styled.div`
 `
 const normalIconRoundButton = (t:Theme)=>css`
   ${ButtonStyle.roundedAccent(t)};
-  &.rrainuiButton {
+  ${ButtonStyle.El.btn} {
     min-width: 90px;
     gap: 0.6em;
   }

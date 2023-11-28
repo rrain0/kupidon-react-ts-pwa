@@ -36,10 +36,10 @@ import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
 import DataField from 'src/views/DataField/DataField'
 import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
-import FloppyDisk1Ic = SimpleSvgIcons.FloppyDisk1Ic
+import FloppyDisk1Ic = SvgIcons.FloppyDisk1Ic
 import col = EmotionCommon.col
 import Page = Pages.Page
 import Mem = ReactUtils.Mem

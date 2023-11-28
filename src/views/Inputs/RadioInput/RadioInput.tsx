@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
@@ -10,10 +10,10 @@ import {ReactUtils} from "src/utils/common/ReactUtils"
 import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import RadioActiveIc = SimpleSvgIcons.RadioActiveIc
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import RadioActiveIc = SvgIcons.RadioActiveIc
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
-import RadioInactiveIc = SimpleSvgIcons.RadioInactiveIc
+import RadioInactiveIc = SvgIcons.RadioInactiveIc
 import trueOrUndef = CastUtils.trueOrUndef
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
@@ -130,8 +130,8 @@ const ActiveIcWrap = styled.div.attrs(p=>({
 const activeIcWrapStyle = css`
   display: none;
   input:checked ~ & { display: flex; }
-  ${SimpleSvgIconsStyle.El.iconClass} {
-    ${SimpleSvgIconsStyle.Prop.color}: var(${Prop.activeIconColor})
+  ${SvgIcStyle.El.iconClass} {
+    ${SvgIcStyle.Prop.color}: var(${Prop.activeIconColor})
   }
 `
 
@@ -141,8 +141,8 @@ const InactiveIcWrap = styled.div.attrs(p=>({
 const inactiveIcWrapStyle = css`
   display: flex;
   input:checked ~ & { display: none }
-  ${SimpleSvgIconsStyle.El.iconClass} {
-    ${SimpleSvgIconsStyle.Prop.color}: var(${Prop.inactiveIconColor})
+  ${SvgIcStyle.El.iconClass} {
+    ${SvgIcStyle.Prop.color}: var(${Prop.inactiveIconColor})
   }
 `
 

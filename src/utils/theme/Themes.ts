@@ -60,16 +60,16 @@ export namespace Themes {
     }
     element: {
       //highlight?: BgcContentVariants<{ a }>
-      
       //primary?: BgcContentVariants<{ a }>
       //secondary?: BgcContentVariants<{ a }>
       
-      
-      // a - button primary
       main:     BgcContentVariants<{ a, aFocus }>
-      // a - button secondary
-      accent:   BgcContentVariants<{ a, aFocus, c, e }>
-      ripple:   BgcContentVariants<{ a }>
+      accent:   BgcContentVariants<{ a, aFocus, b }>
+      normal?:  any
+      input:    BgcContentVariants<{
+        a, aPlaceholder, aBorder, aBorderHover
+      }>
+      ripple:   BgcContentVariants<{ a, b }>
       disabled: BgcContentVariants<{ a }>
       danger:   BgcContentVariants<{ a, aFocus }>
     }
@@ -91,6 +91,13 @@ export namespace Themes {
       bgc3: string[]
       text: string[]
     }
+    input: {
+      iconActive: string[]
+      iconHover: string[]
+      error: {
+        bgc: string[]
+      }
+    }
     statusBar: {
       bgc: string[]
     }
@@ -105,24 +112,6 @@ export namespace Themes {
         selected: {
           text: string[]
         }
-      }
-    }
-    input: {
-      bgc: string[]
-      text: string[]
-      ripple: string[]
-      iconActive: string[]
-      iconHover: string[]
-      placeholder: string[]
-      normal: {
-        border: string[]
-      }
-      hover: {
-        border: string[]
-      }
-      error: {
-        bgc: string[]
-        border: string[]
       }
     }
     scrollbar: {
@@ -154,18 +143,24 @@ export namespace Themes {
       accent: {
         a:      { bgc: ['#f37190'], content: ['#F8F8F8'] },
         aFocus: { bgc: ['#ffa4ba'], content: ['#F8F8F8'] },
-        c:      { bgc: ['transparent'], content: ['#00000088'] },
-        e:      { bgc: ['#f37190'], content: ['#000000'] },
+        b:      { bgc: ['#f37190'], content: ['#000000'] },
+      },
+      input: {
+        a:            { bgc: ['#F8F8F8'], content: ['#000000'] },
+        aBorder:      { bgc: ['#fb3570','#fb3570'], content: [] },
+        aPlaceholder: { bgc: ['#F8F8F8'], content: ['#777777'] },
+        aBorderHover: { bgc: ['#9c20aa'], content: [] },
       },
       ripple: {
         a: { bgc: ['#000000'], content: ['#ffffff'] },
+        b: { bgc: ['transparent'], content: ['#00000088'] },
       },
       disabled: {
         a: { bgc: ['#DCDCDC'], content: ['#555555'] },
       },
       danger: {
-        a:      { bgc: ['#dc362e'], content: ['#F8F8F8'] },
-        aFocus: { bgc: ['#ef3c34'], content: ['#F8F8F8'] },
+        a:      { bgc: ['#dc362e'], content: ['#ffffff'] },
+        aFocus: { bgc: ['#e74c3c'], content: ['#ffffff'] },
       }
     },
     
@@ -210,6 +205,16 @@ export namespace Themes {
       text: ['#000000'],
     },
     
+    input: {
+      iconActive: ['#00000011'],
+      iconHover: ['#00000011'],
+      // [hover, normal, normal]
+      // input border: ['#00a8f3', '#9c20aa', '#fb3570'],
+      error: {
+        bgc: ['#ffced2'],
+      }
+    },
+    
     statusBar: {
       bgc: ['#ffffff'],
     },
@@ -227,26 +232,6 @@ export namespace Themes {
           text: ['#BB2649'],
         },
       },
-    },
-    
-    input: {
-      bgc: ['#F8F8F8'],
-      text: ['#000000'],
-      ripple: ['#0008'],
-      iconActive: ['#00000011'],
-      iconHover: ['#00000011'],
-      placeholder: ['#777777'],
-      //border: ['#00a8f3', '#9c20aa', '#fb3570'],
-      normal: {
-        border: ['#fb3570','#fb3570'],
-      },
-      hover: {
-        border: ['#9c20aa'],
-      },
-      error: {
-        bgc: ['#ffced2'],
-        border: ['#ff0000'],
-      }
     },
     
     scrollbar: {
@@ -279,11 +264,17 @@ export namespace Themes {
       accent: {
         a:      { bgc: ['#d16780'], content: ['#cdcdcd'] },
         aFocus: { bgc: ['#e58ea2'], content: ['#cdcdcd'] },
-        c:      { bgc: ['transparent'], content: ['#ffffff88'] },
-        e:      { bgc: ['#d16780'], content: ['#000000'] },
+        b:      { bgc: ['#d16780'], content: ['#000000'] },
+      },
+      input: {
+        a:            { bgc: ['#282c34'], content: ['#bdbdbd'] },
+        aBorder:      { bgc: ['#b32e56','#b32e56'], content: [] },
+        aPlaceholder: { bgc: ['#282c34'], content: ['#7b7b7b'] },
+        aBorderHover: { bgc: ['#2393c6'], content: [] },
       },
       ripple: {
         a: { bgc: ['#ffffff'], content: ['#000000'] },
+        b: { bgc: ['transparent'], content: ['#ffffff88'] },
       },
       disabled: {
         a: { bgc: ['#DCDCDC'], content: ['#555555'] },
@@ -336,6 +327,16 @@ export namespace Themes {
       text: ['#bdbdbd','#ffffff'],
     },
     
+    input: {
+      iconActive: ['#ffffff22'],
+      iconHover: ['#ffffff22'],
+      // [hover, normal, normal]
+      // input border: ['#00a8f3', '#9c20aa', '#fb3570'],
+      error: {
+        bgc: ['#5e252c'],
+      }
+    },
+    
     statusBar: {
       bgc: ['#984559'],
     },
@@ -352,26 +353,6 @@ export namespace Themes {
           //text: ['#d92a54'],
           text: ['#984559'],
         }
-      }
-    },
-    
-    input: {
-      bgc: ['#282c34'],
-      text: ['#bdbdbd'],
-      ripple: ['#fff8'],
-      iconActive: ['#fff2'],
-      iconHover: ['#fff2'],
-      placeholder: ['#7b7b7b'],
-      //border: ['#00a8f3', '#9c20aa', '#fb3570'],
-      normal: {
-        border: ['#b32e56','#b32e56'],
-      },
-      hover: {
-        border: ['#2393c6'],
-      },
-      error: {
-        bgc: ['#5e252c'],
-        border: ['#cc221f'],
       }
     },
     
@@ -397,17 +378,12 @@ export namespace Themes {
         a: {
           ...LightPink.element.main.a,
           bgc: ['#f95c67']
-        }
-      }
-    },
-    
-    input: {
-      ...LightPink.input,
-      normal: {
-        border: ['#ef7b7d', '#fb3570'],
+        },
       },
-      hover: {
-        border: ['#00a8f3'],
+      input: {
+        ...LightPink.element.input,
+        aBorder: { bgc: ['#ef7b7d','#fb3570'], content: [] },
+        aBorderHover: { bgc: ['#00a8f3'], content: [] },
       },
     },
   }
@@ -428,16 +404,11 @@ export namespace Themes {
           ...Dark.element.main.a,
           bgc: ['#d9816f']
         }
-      }
-    },
-    
-    input: {
-      ...Dark.input,
-      normal: {
-        border: ['#ef7b7d', '#fb3570'],
       },
-      hover: {
-        border: ['#00a8f3'],
+      input: {
+        ...Dark.element.input,
+        aBorder: { bgc: ['#ef7b7d','#fb3570'], content: [] },
+        aBorderHover: { bgc: ['#00a8f3'], content: [] },
       },
     },
   }

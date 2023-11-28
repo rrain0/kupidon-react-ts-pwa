@@ -2,6 +2,7 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
+import { CommonStyle } from 'src/views/CommonStyle'
 import Theme = Themes.Theme
 import bgcInBorder = EmotionCommon.bgcInBorder
 import PartialUndef = TypeUtils.PartialUndef
@@ -49,7 +50,7 @@ export namespace InputStyle {
     export const borderError = inputError+'~'+borderClass
   }
   export namespace Prop {
-    export const color = '--color'
+    export const color = CommonStyle.Prop.color
   }
   
   
@@ -89,9 +90,7 @@ export namespace InputStyle {
       
       // focus
       ${El.inputFocus} {}
-      ${El.borderFocus} {
-        background-position: 0 0;
-      }
+      ${El.borderFocus} {}
 
       // focus-visible
       ${El.inputFocusVisible} {}
@@ -133,32 +132,32 @@ export namespace InputStyle {
     export const normal = (t:Theme)=>css`
       // normal
       ${El.frame} {
-        background: ${t.input.bgc[0]};
+        background: ${t.element.input.a.bgc[0]};
       }
       ${El.input} {
-        color: ${t.input.text[0]};
-        ${Prop.color}: ${t.input.text[0]};
+        color: ${t.element.input.a.content[0]};
+        ${Prop.color}: ${t.element.input.a.content[0]};
   
         ::placeholder {
-          color: ${t.input.placeholder[0]};
+          color: ${t.element.input.aPlaceholder.content[0]};
         }
       }
       ${El.border} {
         background-image: linear-gradient(
           to right,
-          ${t.input.hover.border[0]},
-          ${t.input.normal.border[0]},
-          ${t.input.normal.border[1]}
+          ${t.element.input.aBorderHover.bgc[0]},
+          ${t.element.input.aBorder.bgc[0]},
+          ${t.element.input.aBorder.bgc[1]}
         );
       }
 
       // disabled
       ${El.inputDisabled} {
-        color: ${t.input.text[0]};
-        ${Prop.color}: ${t.input.text[0]};
+        color: ${t.element.input.a.content[0]};
+        ${Prop.color}: ${t.element.input.a.content[0]};
       }
       ${El.borderDisabled} {
-        border-color: ${t.input.text[0]};
+        border-color: ${t.element.input.a.content[0]};
       }
 
       // error
@@ -225,7 +224,7 @@ export namespace InputStyle {
     ${props?.static && css`
       ${El.frame} {
         cursor: auto;
-        color: ${t.input.text[0]};
+        color: ${t.element.input.a.content[0]};
       }
 
       ${El.border} {

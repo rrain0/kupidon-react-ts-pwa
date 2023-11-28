@@ -10,8 +10,8 @@ import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
@@ -21,7 +21,7 @@ import Setter = TypeUtils.Setter
 import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = Themes.Theme
-import BrowserIc = SimpleSvgIcons.BrowserIc
+import BrowserIc = SvgIcons.BrowserIc
 import Mem = ReactUtils.Mem
 
 
@@ -167,8 +167,8 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  ${SimpleSvgIconsStyle.El.icon} {
+  ${SvgIcStyle.El.icon} {
     width: 1.333em;
-    ${SimpleSvgIconsStyle.Prop.color}: ${t.page.text[0]};
+    ${SvgIcStyle.Prop.color}: ${t.page.text[0]};
   }
 `

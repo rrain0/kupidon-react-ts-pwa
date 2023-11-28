@@ -11,12 +11,12 @@ import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useBoolState } from 'src/utils/react/useBoolState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
 import fixedBottom = EmotionCommon.fixedBottom
 import row = EmotionCommon.row
 import Mem = ReactUtils.Mem
-import Arrow5FwdIc = SimpleSvgIcons.Arrow5FwdIc
-import ArrowReloadIc = SimpleSvgIcons.ArrowReloadIc
+import Arrow5FwdIc = SvgIcons.Arrow5FwdIc
+import ArrowReloadIc = SvgIcons.ArrowReloadIc
 import rotateKfs = EmotionCommon.rotateKfs
 import fixedTop = EmotionCommon.fixedTop
 

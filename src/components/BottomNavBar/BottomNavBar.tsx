@@ -12,16 +12,16 @@ import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import row = EmotionCommon.row
-import CardsHeartIc = SimpleSvgIcons.CardsHeartIc
-import ProfileIc = SimpleSvgIcons.ProfileIc
-import Gear2Ic = SimpleSvgIcons.Gear2Ic
+import CardsHeartIc = SvgIcons.CardsHeartIc
+import ProfileIc = SvgIcons.ProfileIc
+import Gear2Ic = SvgIcons.Gear2Ic
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
-import ChatRoundIc = SimpleSvgIcons.ChatRoundIc
-import HelpIc = SimpleSvgIcons.HelpIc
+import ChatRoundIc = SvgIcons.ChatRoundIc
+import HelpIc = SvgIcons.HelpIc
 import fixedBottom = EmotionCommon.fixedBottom
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import Mem = ReactUtils.Mem

@@ -4,8 +4,8 @@ import React from 'react'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import GearIc = SimpleSvgIcons.GearIc
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import GearIc = SvgIcons.GearIc
 import Mem = ReactUtils.Mem
 
 

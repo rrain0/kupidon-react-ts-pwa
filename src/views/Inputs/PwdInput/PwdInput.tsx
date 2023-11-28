@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
 import React from "react"
 import {ReactUtils} from "src/utils/common/ReactUtils"
 import Mem = ReactUtils.Mem
-import {SimpleSvgIcons} from "src/views/icons/SimpleSvgIcons"
-import EyeCrossedOutIc = SimpleSvgIcons.EyeCrossedOutIc
-import EyeIc = SimpleSvgIcons.EyeIc
+import {SvgIcons} from "src/views/icons/SvgIcons"
+import EyeCrossedOutIc = SvgIcons.EyeCrossedOutIc
+import EyeIc = SvgIcons.EyeIc
 import Ripple from "src/views/Ripple/Ripple"
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -53,7 +53,7 @@ const PwdInput = React.forwardRef<
             css={t=>css`
               ${RippleStyle.El.frame}{
                 ${RippleStyle.Prop.mode}: center;
-                ${RippleStyle.Prop.color}: ${t.input.ripple[0]};
+                ${RippleStyle.Prop.color}: ${t.element.ripple.b.content[0]};
               }
             `}
           />
@@ -78,9 +78,9 @@ const EyeWrap = styled.button`
   height: 100%;
   padding: 0 14px 0 0;
   cursor: pointer;
-  >${SimpleSvgIconsStyle.El.iconClass}{
-    ${SimpleSvgIconsStyle.Prop.size}: 24px;
-    ${SimpleSvgIconsStyle.Prop.color}: ${p=>p.theme.input.text[0]};
+  >${SvgIcStyle.El.iconClass}{
+    ${SvgIcStyle.Prop.size}: 24px;
+    ${SvgIcStyle.Prop.color}: ${p=>p.theme.element.input.a.content[0]};
   }
 `
 EyeWrap.defaultProps = { type: 'button' }

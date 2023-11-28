@@ -8,6 +8,10 @@ export const Colors = {
     red1: '#ef3c34',
   },
   
+  darkRed: {
+    darkRed1: '#cc221f'
+  },
+  
   purpleRed: {
     lightCherry1: '#d93b5f',
     norm1: '#BB2649',

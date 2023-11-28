@@ -17,8 +17,8 @@ import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
@@ -30,18 +30,18 @@ import Setter = TypeUtils.Setter
 import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = Themes.Theme
-import BrowserIc = SimpleSvgIcons.BrowserIc
-import DayIc = SimpleSvgIcons.DayIc
-import DayNightIc = SimpleSvgIcons.DayNightIc
-import AddModuleIc = SimpleSvgIcons.AddModuleIc
+import BrowserIc = SvgIcons.BrowserIc
+import DayIc = SvgIcons.DayIc
+import DayNightIc = SvgIcons.DayNightIc
+import AddModuleIc = SvgIcons.AddModuleIc
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
-import LockIc = SimpleSvgIcons.LockIc
-import GearIc = SimpleSvgIcons.GearIc
+import LockIc = SvgIcons.LockIc
+import GearIc = SvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import Mem = ReactUtils.Mem
-import MoonIc = SimpleSvgIcons.MoonIc
+import MoonIc = SvgIcons.MoonIc
 import ThemeType = Themes.ThemeType
 import resetH = EmotionCommon.resetH
 
@@ -243,9 +243,7 @@ const QuickSettings = (props: SettingsProps)=>{
             </Link>
             
             {app.canInstall && <Button css={normalIconRoundButton}
-              onClick={async()=>{
-                const installed = await promptInstall()
-              }}
+              onClick={async()=>await promptInstall()}
             >
               <AddModuleIc css={icon}/>
               {uiText.installApp[0].text}
@@ -301,15 +299,15 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  ${SimpleSvgIconsStyle.El.icon} {
+  ${SvgIcStyle.El.icon} {
     height: 1.3em;
     width: 1.333em;
-    ${SimpleSvgIconsStyle.Prop.color}: var(${ButtonStyle.Prop.color});
+    ${SvgIcStyle.Prop.color}: var(${ButtonStyle.Prop.color});
   }
 `
 const iconSmall = (t:Theme)=>css`
   ${icon(t)};
-  ${SimpleSvgIconsStyle.El.icon} {
+  ${SvgIcStyle.El.icon} {
     height: 1.25em;
   }
 `

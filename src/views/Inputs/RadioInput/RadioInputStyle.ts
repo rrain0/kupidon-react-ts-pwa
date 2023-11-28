@@ -1,7 +1,8 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { CommonStyle } from 'src/views/CommonStyle'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
 import Txt = EmotionCommon.Txt
 import hoverable = EmotionCommon.hoverable
@@ -19,7 +20,7 @@ export namespace RadioInputStyle {
     export const frameClassName = 'rrainuiFrame'
     export const inputClassName = 'rrainuiInput'
     export const iconWrapClassName = 'rrainuiIconWrap'
-    export const iconClassName = SimpleSvgIconsStyle.El.iconClassName
+    export const iconClassName = SvgIcStyle.El.iconClassName
     export const borderClassName = 'rrainuiBorder'
     export const rippleFrameClassName = RippleStyle.El.frameClassName
     
@@ -61,7 +62,7 @@ export namespace RadioInputStyle {
     export const rippleDisabled = inputDisabled+'~*>'+rippleFrameClass
   }
   export namespace Prop {
-    export const color = '--color'
+    export const color = CommonStyle.Prop.color
     export const activeIconColor = '--active-icon-color'
     export const inactiveIconColor = '--inactive-icon-color'
     export const rippleColor = RippleStyle.Prop.color
@@ -81,7 +82,7 @@ export namespace RadioInputStyle {
       ${Prop.color}: ${t.page.text[0]};
     }
     ${El.ripple}{
-      ${Prop.rippleColor}: ${t.input.ripple[0]};
+      ${Prop.rippleColor}: ${t.element.ripple.b.content[0]};
     }
     ${El.iconWrap}{
       width: 26px;

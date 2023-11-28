@@ -1,6 +1,7 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
+import { CommonStyle } from 'src/views/CommonStyle'
 import rowWrap = EmotionCommon.rowWrap
 import col = EmotionCommon.col
 
@@ -8,6 +9,8 @@ import col = EmotionCommon.col
 
 export namespace RadioInputGroupStyle {
   
+  import bgcInBorder = EmotionCommon.bgcInBorder
+  import hoverable = EmotionCommon.hoverable
   export namespace Attr {
     export const errorName = 'data-error'
     
@@ -21,13 +24,17 @@ export namespace RadioInputGroupStyle {
     export const borderClass = '.'+borderClassName
     
     export const radioGroup = '&'+radioGroupClass
+    export const radioGroupHover = radioGroup+':hover'
+    export const radioGroupFocusVisible = radioGroup+':focus-visible'
     export const radioGroupError = radioGroup+Attr.error
     
     export const border = radioGroup+'>'+borderClass
+    export const borderHover = radioGroupHover+'>'+borderClass
+    export const borderFocusVisible = radioGroupFocusVisible+'>'+borderClass
     export const borderError = radioGroupError+'>'+borderClass
   }
   export namespace Prop {
-    export const color = '--color'
+    export const color = CommonStyle.Prop.color
   }
   
   
@@ -42,13 +49,38 @@ export namespace RadioInputGroupStyle {
       align-items: center;
       border-radius: 15px;
     }
+    ${El.border} {
+      border: 2px solid transparent;
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      transition: background-position 0.8s ease-out;
+      ${bgcInBorder};
+    }
+    
+    // hover
+    ${hoverable}{
+      ${El.borderHover} {
+        background-position: 0 0;
+      }
+    }
+
+    // focus-visible
+    // правда фокус оно всё равно не ловит
+    ${El.borderFocusVisible} {
+      background-position: 0 0;
+    }
     
     // error
     ${El.radioGroupError} {
       background: ${t.input.error.bgc[0]};
     }
     ${El.borderError} {
-      border: 2px solid ${t.input.error.border[0]};
+      background-image: linear-gradient(
+              to right,
+              ${t.element.input.aBorderHover.bgc[0]},
+              ${t.element.input.aBorder.bgc[0]},
+              ${t.element.input.aBorder.bgc[1]}
+      );
     }
   `
   
@@ -64,13 +96,38 @@ export namespace RadioInputGroupStyle {
       align-items: stretch;
       border-radius: 15px;
     }
+    ${El.border} {
+      border: 2px solid transparent;
+      background-size: 200% 100%;
+      background-position: 100% 0;
+      transition: background-position 0.8s ease-out;
+      ${bgcInBorder};
+    }
 
+    // hover
+    ${hoverable}{
+      ${El.borderHover} {
+        background-position: 0 0;
+      }
+    }
+
+    // focus-visible
+    // правда фокус оно всё равно не ловит
+    ${El.borderFocusVisible} {
+      background-position: 0 0;
+    }
+    
     // error
     ${El.radioGroupError} {
       background: ${t.input.error.bgc[0]};
     }
     ${El.borderError} {
-      border: 2px solid ${t.input.error.border[0]};
+      background-image: linear-gradient(
+              to right,
+              ${t.element.input.aBorderHover.bgc[0]},
+              ${t.element.input.aBorder.bgc[0]},
+              ${t.element.input.aBorder.bgc[1]}
+      );
     }
   `
   

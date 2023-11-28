@@ -128,22 +128,24 @@ export namespace EmotionCommon {
   
   
   export const reset = css`
-    box-sizing: border-box;
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    //min-width: 0;
-    //min-height: 0;
+    &, &::before, &::after {
+      box-sizing: border-box;
+      background: none;
+      border: none;
+      outline: none;
+      box-shadow: none;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      //min-width: 0;
+      //min-height: 0;
+    }
   `
   
   
   
   export const resetInput = css`
-    ${reset}
+    ${reset};
     :hover, :active, :focus-visible, :focus {
       outline: none;
       box-shadow: none;
@@ -154,7 +156,8 @@ export namespace EmotionCommon {
     }
   `
   export const resetButton = css`
-    ${reset}
+    ${reset};
+    cursor: pointer;
     :hover, :active, :focus-visible, :focus {
       outline: none;
       box-shadow: none;
@@ -163,7 +166,7 @@ export namespace EmotionCommon {
   `
   
   export const resetTextarea = css`
-    ${reset}
+    ${reset};
     :hover, :active, :focus-visible, :focus {
       outline: none;
       box-shadow: none;
@@ -176,6 +179,7 @@ export namespace EmotionCommon {
   export const resetUl = css`
     ${reset};
     ${col};
+    // when using it, you must include <ul role="list"> in html
     list-style: none;
   `
   export const resetPseudoElement = css`

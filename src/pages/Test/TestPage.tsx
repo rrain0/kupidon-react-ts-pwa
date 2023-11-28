@@ -6,6 +6,7 @@ import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { Pages } from 'src/components/Page/Pages'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -13,6 +14,7 @@ import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
+import Mem = ReactUtils.Mem
 
 
 
@@ -94,6 +96,9 @@ const TestPage = () => {
             border-radius: 16px;
             background: ${t.ambience.accent.a.bgc[0]};
             color:      ${t.ambience.accent.a.content[0]};
+            ::after {
+              content: 'after'
+            }
           `}
         >
           Контент.<br/>
@@ -117,7 +122,7 @@ const TestPage = () => {
     
   </>
 }
-export default TestPage
+export default Mem(TestPage)
 
 
 

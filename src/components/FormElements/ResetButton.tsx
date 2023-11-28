@@ -4,8 +4,8 @@ import styled from '@emotion/styled'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import ArrowReloadIc = SimpleSvgIcons.ArrowReloadIc
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import ArrowReloadIc = SvgIcons.ArrowReloadIc
 import Mem = ReactUtils.Mem
 
 

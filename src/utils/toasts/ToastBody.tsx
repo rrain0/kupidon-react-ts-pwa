@@ -3,14 +3,14 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { SimpleSvgIcons } from 'src/views/icons/SimpleSvgIcons'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
-import SpinnerCircleQuarterIc = SimpleSvgIcons.SpinnerCircleQuarterIc
-import InfoToastifyIc = SimpleSvgIcons.InfoToastifyIc
-import CheckmarkCircleToastifyIc = SimpleSvgIcons.CheckmarkCircleToastifyIc
-import WarnTriangleToastifyIc = SimpleSvgIcons.WarnTriangleToastifyIc
-import DangerRoundToastifyIc = SimpleSvgIcons.DangerRoundToastifyIc
-import CrossIc = SimpleSvgIcons.CrossIc
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
+import SpinnerCircleQuarterIc = SvgIcons.SpinnerCircleQuarterIc
+import InfoToastifyIc = SvgIcons.InfoToastifyIc
+import CheckmarkCircleToastifyIc = SvgIcons.CheckmarkCircleToastifyIc
+import WarnTriangleToastifyIc = SvgIcons.WarnTriangleToastifyIc
+import DangerRoundToastifyIc = SvgIcons.DangerRoundToastifyIc
+import CrossIc = SvgIcons.CrossIc
 import row = EmotionCommon.row
 import resetButton = EmotionCommon.resetButton
 import center = EmotionCommon.center
@@ -41,8 +41,8 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.loading.accent[0]};
-        ${SimpleSvgIconsStyle.Prop.accentColor}: ${t.toast.loading.accent[1]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.loading.accent[0]};
+        ${SvgIcStyle.Prop.accentColor}: ${t.toast.loading.accent[1]};
       `}
     />}
     
@@ -58,7 +58,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.ok.accent[0]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.ok.accent[0]};
       `}
     />}
     
@@ -66,7 +66,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.warn.accent[0]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.warn.accent[0]};
       `}
     />}
     
@@ -74,7 +74,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SimpleSvgIconsStyle.Prop.color}: ${t.toast.danger.accent[0]};
+        ${SvgIcStyle.Prop.color}: ${t.toast.danger.accent[0]};
       `}
     />}
     
@@ -124,15 +124,15 @@ const CloseButton = styled.button`
   ${center};
   cursor: pointer;
 
-  >${SimpleSvgIconsStyle.El.iconClass} {
+  >${SvgIcStyle.El.iconClass} {
     width: 100%;
     height: 100%;
-    ${SimpleSvgIconsStyle.Prop.color}: ${p=>p.theme.toast.normal.content[1]};
+    ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.normal.content[1]};
   }
   
   ${hoverable}{
-    :hover>${SimpleSvgIconsStyle.El.iconClass} {
-      ${SimpleSvgIconsStyle.Prop.color}: ${p=>p.theme.toast.normal.content[2]};
+    :hover>${SvgIcStyle.El.iconClass} {
+      ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.normal.content[2]};
     }
   }
 `

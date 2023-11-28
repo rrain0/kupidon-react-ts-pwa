@@ -71,13 +71,13 @@ import { ReactComponent as SpinnerCircleQuarterSvg } from 'src/res/icon/spinner-
 
 import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-triangle-toastify.svg'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { SimpleSvgIconsStyle } from 'src/views/icons/SimpleSvgIconsStyle'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 
 
 
 
 
-export namespace SimpleSvgIcons {
+export namespace SvgIcons {
 
   // Base interface for simple svg icons
   
@@ -105,16 +105,16 @@ export namespace SimpleSvgIcons {
       
       return <SvgComponent
         css={css`
-          width: ${size ?? `var(${SimpleSvgIconsStyle.Prop.size})`};
-          height: ${size ?? `var(${SimpleSvgIconsStyle.Prop.size})`};
+          width: ${size ?? `var(${SvgIcStyle.Prop.size})`};
+          height: ${size ?? `var(${SvgIcStyle.Prop.size})`};
           max-width: 100%;
           max-height: 100%;
-          fill: ${iconColor ?? `var(${SimpleSvgIconsStyle.Prop.color}, black)`};
-          stroke: ${iconColor ?? `var(${SimpleSvgIconsStyle.Prop.color}, black)`};
-          ${SimpleSvgIconsStyle.Prop.accentColor}:
-                  ${accentColor ?? `var(${SimpleSvgIconsStyle.Prop.accentColor}, gray)`}
+          fill: ${iconColor ?? `var(${SvgIcStyle.Prop.color}, black)`};
+          stroke: ${iconColor ?? `var(${SvgIcStyle.Prop.color}, black)`};
+          ${SvgIcStyle.Prop.accentColor}:
+                  ${accentColor ?? `var(${SvgIcStyle.Prop.accentColor}, gray)`}
         `}
-        className={classNames(className,SimpleSvgIconsStyle.El.iconClassName)}
+        className={classNames(className,SvgIcStyle.El.iconClassName)}
         {...restProps}
       />
     }
