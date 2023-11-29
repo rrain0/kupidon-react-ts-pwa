@@ -8,7 +8,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import center = EmotionCommon.center
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 
 
 
@@ -106,4 +106,4 @@ const BottomSheetBasic = (props: BottomSheetBasicProps)=>{
     </div>
   </BottomSheet>
 }
-export default ReactMemoTyped(BottomSheetBasic)
+export default Mem(BottomSheetBasic)

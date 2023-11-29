@@ -3,6 +3,7 @@ import { css, keyframes } from '@emotion/react'
 import React, { useState } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
 import Card from 'src/views/Card'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -98,7 +99,7 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
           </div>
           <div
             onAnimationEnd={ev=>console.log("onAnimationEnd: ",ev)}
-            css={css`
+            css={t=>css`
               pointer-events: none;
               ${abs};
               inset: -7px;
@@ -111,7 +112,7 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
               }
               @property --grad-color {
                 syntax: '<color>';
-                initial-value: #8B8B8B;
+                initial-value: ${t.photos.highlightFrameBgc};
                 inherits: false;
               }
               background-image: conic-gradient(
@@ -120,7 +121,7 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
               );
               ${bgcBorderMask};
               ${pressedIdx===i && css`
-                animation: ${radialGradKfs} 0.5s linear forwards;
+                animation: ${radialGradKfs(t)} 0.5s linear forwards;
               `}
             `}
           />
@@ -133,22 +134,22 @@ export default Mem(ProfileImages)
 
 
 
-const radialGradKfs = keyframes`
+const radialGradKfs = (t:Themes.Theme)=>keyframes`
   0% {
     --rotation: 0turn;
-    --grad-color: #8B8B8B;
+    --grad-color: ${t.photos.highlightFrameBgc};
   }
   13% {
     --rotation: 0turn;
-    --grad-color: #8B8B8B;
+    --grad-color: ${t.photos.highlightFrameBgc};
   }
   99%   {
     --rotation: 1.001turn;
-    --grad-color: #8B8B8B;
+    --grad-color: ${t.photos.highlightFrameBgc};
   }
   100%   {
     --rotation: 1.001turn;
-    --grad-color: #ffffff;
+    --grad-color: ${t.photos.highlightFrameAccentBgc};
   }
 `
 

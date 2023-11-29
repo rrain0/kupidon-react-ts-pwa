@@ -496,6 +496,28 @@ export const CommonUiText = {
       text: 'Тёмная тема',
     },
   ] satisfies UiText<'darkTheme'>[],
+  preferredLightTheme: [
+    {
+      value: 'preferredLightTheme',
+      lang: 'en-US',
+      text: 'Preferred light theme',
+    },{
+      value: 'preferredLightTheme',
+      lang: 'ru-RU',
+      text: 'Предпочитаемая светлая тема',
+    },
+  ] satisfies UiText<'preferredLightTheme'>[],
+  preferredDarkTheme: [
+    {
+      value: 'preferredDarkTheme',
+      lang: 'en-US',
+      text: 'Preferred dark theme',
+    },{
+      value: 'preferredDarkTheme',
+      lang: 'ru-RU',
+      text: 'Предпочитаемая тёмная тема',
+    },
+  ] satisfies UiText<'preferredDarkTheme'>[],
   
   
   language: [

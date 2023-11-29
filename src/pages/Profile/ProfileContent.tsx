@@ -288,6 +288,28 @@ const ProfileContent = (props: ProfileContentProps)=>{
       
       <ItemContainer>
         <ItemTitleContainer>
+          <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
+          { !fieldIsInitial('aboutMe')
+            && <ResetButton
+              text={uiText.reset[0].text}
+              onClick={()=>resetField('aboutMe')}
+            />
+          }
+        </ItemTitleContainer>
+        <ValidationComponentWrap {...validationProps}
+          fieldName='aboutMe'
+          render={props =>
+            <Textarea css={TextareaStyle.textareaSmall}
+              {...props.inputProps}
+              hasError={props.highlight}
+            />
+          }
+        />
+      </ItemContainer>
+      
+      
+      <ItemContainer>
+        <ItemTitleContainer>
           <ItemLabel>{uiText.name[0].text}</ItemLabel>
           { !fieldIsInitial('name')
             && <ResetButton
@@ -393,28 +415,6 @@ const ProfileContent = (props: ProfileContentProps)=>{
           }
         />
         
-      </ItemContainer>
-      
-      
-      <ItemContainer>
-        <ItemTitleContainer>
-          <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
-          { !fieldIsInitial('aboutMe')
-            && <ResetButton
-              text={uiText.reset[0].text}
-              onClick={()=>resetField('aboutMe')}
-            />
-          }
-        </ItemTitleContainer>
-        <ValidationComponentWrap {...validationProps}
-          fieldName='aboutMe'
-          render={props =>
-            <Textarea css={TextareaStyle.textareaSmall}
-              {...props.inputProps}
-              hasError={props.highlight}
-            />
-          }
-        />
       </ItemContainer>
       
     </Card>

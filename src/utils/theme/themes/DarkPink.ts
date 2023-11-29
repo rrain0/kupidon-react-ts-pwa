@@ -1,11 +1,18 @@
+import styled from '@emotion/styled'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
+import themeIconCss = Themes.themeIconCss
 
 
 
-export const DarkPink: Theme = {
+export const DarkPink = {
   type: 'dark',
-  name: 'Dark Pink',
+  name: 'Dark Pink' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: '#d16780',
+    bgcColor1: '#18191b',
+    bgcColor2: '#18191b',
+  })),
   
   containerNormal: {
     bgc:     ['#000000'],
@@ -27,6 +34,9 @@ export const DarkPink: Theme = {
     bgcFocus:  ['#da5474'],
     content:   ['#cdcdcd'],
     content2:  ['#000000'],
+  },
+  inputRadio: {
+    bgcFocus:  ['#d16780']
   },
   buttonTransparent: {
     bgcFocus: ['#ffffff22'],
@@ -61,14 +71,22 @@ export const DarkPink: Theme = {
     contentOnTransparent: ['#ffffff88'],
   },
   
+  photos: {
+    highlightFrameBgc:       ['#8B8B8B'],
+    highlightFrameAccentBgc: ['#ffffff'],
+  },
+  
   bottomSheet: {
     bgc:    ['#121212'],
     handle: ['#8b8b8b'],
   },
   
+  card: {
+    bgc: ['#00000000'],
+  },
   page: {
     bgc:         ['#18191b'],
-    bgcGradient: ['#18191b','#18191b','#18191b'],
+    bgcGradient: ['#282c34','#282c34','#282c34'],
     content:     ['#bdbdbd','#ffffff'],
   },
   
@@ -96,4 +114,4 @@ export const DarkPink: Theme = {
     track: ['#F8F8F822'],
     thumb: ['#F8F8F844'],
   },
-}
+} satisfies Theme

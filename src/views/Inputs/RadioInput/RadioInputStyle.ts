@@ -87,8 +87,8 @@ export namespace RadioInputStyle {
     ${El.iconWrap}{
       width: 26px;
       height: 26px;
-      ${Prop.activeIconColor}: ${t.buttonMain.bgc[0]};
-      ${Prop.inactiveIconColor}: ${t.buttonMain.bgc[0]};
+      ${Prop.activeIconColor}: ${t.inputRadio.bgcFocus[0]};
+      ${Prop.inactiveIconColor}: ${t.inputRadio.bgcFocus[0]};
     }
     
     // hover

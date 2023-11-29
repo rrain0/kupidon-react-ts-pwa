@@ -269,7 +269,7 @@ export namespace ButtonStyle {
     ${El.btn} {
       height: 50px;
       width: 50px;
-      border-radius: 50%;
+      border-radius: 26%;
       padding: 14px;
       
       background: ${t.buttonMain.bgc[0]};
@@ -373,7 +373,7 @@ export namespace ButtonStyle {
     }
     ${El.ripple} {
       ${Prop.rippleMode}: center;
-      ${Prop.rippleColor}: ${t.ripple.content[0]};
+      ${Prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
     }
     ${El.icon} {
       ${Prop.iconSize}: 100%;

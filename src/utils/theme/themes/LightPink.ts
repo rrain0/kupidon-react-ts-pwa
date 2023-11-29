@@ -1,11 +1,21 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
+import themeIconCss = Themes.themeIconCss
 
 
 
-export const LightPink: Theme = {
+
+export const LightPink = {
   type: 'light',
-  name: 'Light Pink',
+  name: 'Light Pink' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: '#ff8ea9',
+    bgcColor1: '#f5f5f5',
+    bgcColor2: '#f5f5f5',
+  })),
   
   containerNormal: {
     bgc:     ['#ffffff'],
@@ -23,16 +33,19 @@ export const LightPink: Theme = {
     content:  ['#F8F8F8'],
   },
   buttonAccent: {
-    bgc:       ['#f37190'],
-    bgcFocus:  ['#ff8eaa'],
+    bgc:       ['#ff8ea9'],
+    bgcFocus:  ['#f17492'],
     content:   ['#F8F8F8'],
     content2:  ['#000000'],
+  },
+  inputRadio: {
+    bgcFocus:  ['#f37190']
   },
   buttonTransparent: {
     bgcFocus: ['#00000011'],
   },
   buttonNav: {
-    bgcFocus:      ['#fabfc9'],
+    bgcFocus:      ['#ffeaee'],
     content:       ['#333333'],
     contentAccent: ['#BB2649'],
   },
@@ -51,7 +64,7 @@ export const LightPink: Theme = {
     content: ['#555555'],
   },
   elementDanger: {
-    bgc:      ['#dc362e'],
+    bgc:      ['#de4f48'],
     bgcFocus: ['#e74c3c'],
     content:  ['#ffffff'],
   },
@@ -61,11 +74,19 @@ export const LightPink: Theme = {
     contentOnTransparent: ['#00000088'],
   },
   
+  photos: {
+    highlightFrameBgc:       ['#8B8B8B'],
+    highlightFrameAccentBgc: ['#000000'],
+  },
+  
   bottomSheet: {
     bgc:    ['#ffffff'],
     handle: ['#8b8b8b'],
   },
   
+  card: {
+    bgc: ['#ffffff00'],
+  },
   page: {
     bgc:         ['#f5f5f5'],
     bgcGradient: ['#f5f5f5','#f5f5f5','#f5f5f5'],
@@ -96,5 +117,5 @@ export const LightPink: Theme = {
     track: ['#25283622'],
     thumb: ['#25283644'],
   },
-}
+} satisfies Theme
 

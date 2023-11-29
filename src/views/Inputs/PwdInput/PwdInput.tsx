@@ -76,11 +76,11 @@ const EyeWrap = styled.button`
   ${resetButton};
   ${centerAll};
   height: 100%;
-  padding-right: 28cqh;
+  //padding-right: 28cqh;
+  padding-right: 12px;
   cursor: pointer;
-  --icon-size: 24px;
   >${SvgIcStyle.El.iconClass}{
-    ${SvgIcStyle.Prop.size}: var(--icon-size);
+    ${SvgIcStyle.Prop.size}: 24px;
     ${SvgIcStyle.Prop.color}: ${p=>p.theme.input.content[0]};
   }
 `
@@ -90,13 +90,15 @@ EyeWrap.defaultProps = { type: 'button' }
 
 const RippleFrame1 = styled.div`
   ${center};
-  width: var(--icon-size);
-  height: var(--icon-size);
+  width: 24px;
+  height: 24px;
   border-radius: 999999px;
 `
 const RippleFrame2 = styled.div`
-  width: min(190%, 90cqh);
-  height: min(190%, 90cqh);
+  //width: min(190%, 90cqh);
+  //height: min(190%, 90cqh);
+  width: 170%;
+  height: 170%;
   border-radius: inherit;
   position: relative;
   *:focus > * > & {

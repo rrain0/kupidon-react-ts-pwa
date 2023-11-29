@@ -19,6 +19,7 @@ import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ThemeNameUiText } from 'src/utils/app/ui-value/ThemeNameUiText'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
@@ -44,7 +45,6 @@ import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
 import Theme = Themes.Theme
 import AddModuleIc = SvgIcons.AddModuleIc
-import Txt = EmotionCommon.Txt
 import Mem = ReactUtils.Mem
 
 
@@ -64,6 +64,7 @@ const ApplicationSettingsPage = ()=>{
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
   const uiText = useUiTextContainer(ApplicationSettingsUiText)
+  const themeNameUiText = useUiTextContainer(ThemeNameUiText)
   
   const [clearSite, setClearSite] = useState(false)
   
@@ -138,12 +139,12 @@ const ApplicationSettingsPage = ()=>{
         .filter(t=>t.type==='light')
         .map(t=>({
           value: t.name,
-          text: t.name, // TODO
-          icon: <div></div>, // TODO
+          text: themeNameUiText[t.name][0].text,
+          icon: <t.icon css={divIcon}/>,
         }))
       return opts
     },
-    [uiText]
+    [themeNameUiText]
   )
   const darkThemeOptions = useMemo(
     ()=>{
@@ -151,16 +152,27 @@ const ApplicationSettingsPage = ()=>{
         .filter(t=>t.type==='dark')
         .map(t=>({
           value: t.name,
-          text: t.name, // TODO
-          icon: <div></div>, // TODO
+          text: themeNameUiText[t.name][0].text,
+          icon: <t.icon css={divIcon}/>,
         }))
       return opts
     },
-    [uiText]
+    [themeNameUiText]
   )
   
   
-  
+  const elem = function (){
+    switch (Math.random()) {
+      case 0.5: return <span></span>
+      default: return <div/>
+    }
+  }()
+  const comp = function (){
+    switch (Math.random()) {
+      case 0.5: return styled.span``
+      default: return styled.div``
+    }
+  }()
   
   const pageRef = useRef<HTMLElement>(null)
   
@@ -206,8 +218,7 @@ const ApplicationSettingsPage = ()=>{
         
         <Card>
           <OptionHeader>
-            {/* TODO */}
-            {'Предпочитаемая светлая тема'}
+            {uiText.preferredLightTheme[0].text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -235,8 +246,7 @@ const ApplicationSettingsPage = ()=>{
         
         <Card>
           <OptionHeader>
-            {/* TODO */}
-            {'Предпочитаемая тёмная тема'}
+            {uiText.preferredDarkTheme[0].text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -396,6 +406,10 @@ const icon = (t:Theme)=>css`
     width: 1.333em;
     ${SvgIcStyle.Prop.color}: var(${CommonStyle.Prop.color});
   }
+`
+const divIcon = css`
+  height: 1.6em;
+  width: 1.6em;
 `
 const iconSmall = (t:Theme)=>css`
   ${icon(t)};

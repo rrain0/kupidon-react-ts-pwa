@@ -14,7 +14,6 @@ import row = EmotionCommon.row
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
 import PartialUndef = TypeUtils.PartialUndef
-import hoverable = EmotionCommon.hoverable
 
 
 
@@ -78,7 +77,7 @@ const Frame = styled.label.attrs(p=>({
   className: classNames(p.className,InputStyle.El.frameClassName)
 }))``
 const frameStyle = css`
-  container: input / size;
+  //container: input / size;
   ${row};
   align-items: center;
   width: 100%;

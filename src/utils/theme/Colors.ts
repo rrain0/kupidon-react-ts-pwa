@@ -17,6 +17,10 @@ export const Colors = {
     norm1: '#BB2649',
   } as const,
   
+  orangeRed: {
+    v1: '#f95c67',
+    v2: '#f95c67',
+  },
   
   pink: {
     norm1: '#ee7894',

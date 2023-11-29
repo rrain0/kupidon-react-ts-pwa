@@ -1,4 +1,4 @@
-import { CommonUiText } from 'src/utils/app/CommonUiText'
+import { CommonUiText } from 'src/utils/app/ui-value/CommonUiText'
 import { UiTextContainer } from 'src/utils/lang/UiText'
 
 
@@ -13,6 +13,8 @@ export const ApplicationSettingsUiText = {
   systemTheme: CommonUiText.systemTheme,
   lightTheme: CommonUiText.lightTheme,
   darkTheme: CommonUiText.darkTheme,
+  preferredLightTheme: CommonUiText.preferredLightTheme,
+  preferredDarkTheme: CommonUiText.preferredDarkTheme,
   
   
   

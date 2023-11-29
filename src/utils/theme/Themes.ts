@@ -1,4 +1,5 @@
-
+import { css } from '@emotion/react'
+import styled, { StyledComponent } from '@emotion/styled'
 
 
 export namespace Themes {
@@ -8,23 +9,10 @@ export namespace Themes {
   
   
   
-  // Цвета в массиве для градиентов
-  // Если нужен повариант, то лучше создать отдельный объект
-  export interface BgcContent {
-    // various bgc colors
-    bgc: string[]
-    // various applicable content (text) colors
-    // content[i] is made for bgc[i]
-    content: string[]
-  }
-  export type BgcContentVariants<T extends object> = {
-    [Prop in keyof T]: BgcContent
-  }
-  
-  
   export interface Theme {
     type: Type
     name: string
+    icon: StyledComponent<any>
     
     // окружение
     // ambience?: {}
@@ -45,7 +33,6 @@ export namespace Themes {
     },
     
     // main button (submit button)
-    // radio input
     buttonMain: {
       bgc:      string[]
       bgcFocus: string[]
@@ -57,6 +44,10 @@ export namespace Themes {
       bgcFocus:  string[]
       content:   string[]
       content2:  string[]
+    }
+    // radio input color
+    inputRadio: {
+      bgcFocus: string[]
     }
     // transparent icon button
     buttonTransparent: {
@@ -95,11 +86,19 @@ export namespace Themes {
       contentOnTransparent: string[]
     }
     
+    photos: {
+      highlightFrameBgc:       string[]
+      highlightFrameAccentBgc: string[]
+    }
+    
     bottomSheet: {
       bgc:    string[]
       handle: string[]
     }
     
+    card: {
+      bgc: string[]
+    }
     page: {
       bgc:         string[]
       bgcGradient: string[]
@@ -133,6 +132,24 @@ export namespace Themes {
   }
   
   
+  
+  export type ThemeIconCssProps = {
+    accentColor: string,
+    bgcColor1: string,
+    bgcColor2: string,
+  }
+  export const themeIconCss = (props: ThemeIconCssProps)=>css`
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 999999px;
+    border: 3.5px solid;
+    border-color: ${props.accentColor};
+    background: linear-gradient(
+            to bottom right,
+            ${props.bgcColor1} 0% 50%,
+            ${props.bgcColor2} 50% 100%
+    );
+  `
   
   
 }
