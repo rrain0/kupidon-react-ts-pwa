@@ -23,13 +23,9 @@ export const AllThemes = [
 
 
 
-export type AllThemeNamesType =
-  | (typeof LightPink)['name']
-  | (typeof DarkPink)['name']
-  | (typeof LightPinkGradient)['name']
-  | (typeof DarkPinkGradient)['name']
-  | (typeof LightOrange)['name']
-  | (typeof DarkOrange)['name']
+export type AllThemeNamesType = typeof AllThemes[number]['name']
+
+
 
 
 export const themeByName = (themeName: string): Theme => {

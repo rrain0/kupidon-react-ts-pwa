@@ -358,8 +358,8 @@ export namespace ButtonStyle {
       flex: 1;
       ${col};
       align-items: center;
-      gap: 2px;
-      padding: 6px 0 2px;
+      gap: 3px;
+      padding: 5px 0 2px;
 
       background: none;
       color: ${t.buttonNav.content[0]};

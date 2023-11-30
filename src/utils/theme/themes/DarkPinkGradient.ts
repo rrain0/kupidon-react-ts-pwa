@@ -8,8 +8,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const DarkPinkGradient = {
-  ...DarkPink,
+export const DarkPinkGradient = { ...DarkPink,
   name: 'Dark Pink Gradient' as const,
   icon: styled.div(themeIconCss({
     accentColor: '#d16780',

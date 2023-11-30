@@ -6,11 +6,11 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import mobileWidth = EmotionCommon.mobileWidth
 import center = EmotionCommon.center
-import ReactMemoTyped = ReactUtils.Mem
+import Mem = ReactUtils.Mem
 
 
 
-const ToastifySetup = React.memo(()=>{
+const ToastifySetup = ()=>{
   
   return <div
     css={css`
@@ -70,8 +70,8 @@ const ToastifySetup = React.memo(()=>{
     />
   </div>
   
-})
-export default ReactMemoTyped(ToastifySetup)
+}
+export default Mem(ToastifySetup)
 
 
 

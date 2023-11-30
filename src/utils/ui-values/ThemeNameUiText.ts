@@ -86,5 +86,4 @@ export const ThemeNameUiText = {
   
   
   
-  
-} satisfies Record< AllThemeNamesType,UiText<AllThemeNamesType>[]>
+} satisfies Record<AllThemeNamesType, UiText<AllThemeNamesType>[]>

@@ -1,4 +1,4 @@
-import { CommonUiText } from 'src/utils/app/ui-value/CommonUiText'
+import { CommonUiText } from 'src/utils/ui-values/CommonUiText'
 import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
 
 
