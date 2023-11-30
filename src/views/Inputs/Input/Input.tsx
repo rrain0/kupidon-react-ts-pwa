@@ -77,7 +77,7 @@ const Frame = styled.label.attrs(p=>({
   className: classNames(p.className,InputStyle.El.frameClassName)
 }))``
 const frameStyle = css`
-  //container: input / size;
+  container: input / size;
   ${row};
   align-items: center;
   width: 100%;

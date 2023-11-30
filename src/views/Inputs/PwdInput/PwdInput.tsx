@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Themes } from 'src/utils/theme/Themes'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
@@ -37,75 +38,67 @@ const PwdInput = React.forwardRef<
     ref={forwardedRef}
     type={pwdHidden ? 'password' : 'text'}
   >
-    <EyeWrap
-      ref={eyeRef}
-      tabIndex={0}
-      onClick={()=>setPwdHidden(!pwdHidden)}
-      onPointerDown={ev=>{
-        ev.preventDefault() // prevents focus
-      }}
-    >
-  
-      <RippleFrame1>
-        <RippleFrame2>
-          <Ripple
-            targetElement={eyeRef}
-            css={t=>css`
-              ${RippleStyle.El.frame}{
-                ${RippleStyle.Prop.mode}: center;
-                ${RippleStyle.Prop.color}: ${t.ripple.contentOnTransparent[0]};
-              }
-            `}
-          />
-        </RippleFrame2>
-      </RippleFrame1>
+    <EyeFrame>
+      <EyeWrap
+        ref={eyeRef}
+        tabIndex={0}
+        onClick={() => setPwdHidden(!pwdHidden)}
+        onPointerDown={ev => {
+          ev.preventDefault() // prevents focus
+        }}
+      >
+        
+        <Ripple
+          targetElement={eyeRef}
+          css={rippleCss}
+        />
+        
+        {pwdHidden
+          ? <EyeCrossedOutIc css={iconCss}/>
+          : <EyeIc css={iconCss}/>
+        }
       
-      { pwdHidden
-        ? <EyeCrossedOutIc/>
-        : <EyeIc/>
-      }
-      
-    </EyeWrap>
+      </EyeWrap>
+    </EyeFrame>
   </Input>
 })
 export default Mem(PwdInput)
 
 
 
+const EyeFrame = styled.div`
+  width: min(50px, 100cqh);
+  height: min(50px, 100cqh);
+  padding: 2px;
+`
+
 const EyeWrap = styled.button`
   ${resetButton};
-  ${centerAll};
+  width: 100%;
   height: 100%;
-  //padding-right: 28cqh;
-  padding-right: 12px;
-  cursor: pointer;
-  >${SvgIcStyle.El.iconClass}{
-    ${SvgIcStyle.Prop.size}: 24px;
-    ${SvgIcStyle.Prop.color}: ${p=>p.theme.input.content[0]};
-  }
-`
-EyeWrap.defaultProps = { type: 'button' }
-
-
-
-const RippleFrame1 = styled.div`
-  ${center};
-  width: 24px;
-  height: 24px;
   border-radius: 999999px;
-`
-const RippleFrame2 = styled.div`
-  //width: min(190%, 90cqh);
-  //height: min(190%, 90cqh);
-  width: 170%;
-  height: 170%;
-  border-radius: inherit;
+  cursor: pointer;
+  ${center};
   position: relative;
-  *:focus > * > & {
+  :focus-visible {
     background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
   }
   ${hoverable}{ :hover {
     background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
   } }
 `
+EyeWrap.defaultProps = { type: 'button' }
 
+
+const iconCss = (t:Themes.Theme)=>css`
+  ${SvgIcStyle.El.icon}{
+    ${SvgIcStyle.Prop.size}: 24px;
+    ${SvgIcStyle.Prop.color}: ${t.input.content[0]};
+  }
+`
+const rippleCss = (t:Themes.Theme)=>css`
+  ${RippleStyle.El.frame}{
+    ${RippleStyle.Prop.mode}: center;
+    ${RippleStyle.Prop.color}: ${t.ripple.contentOnTransparent[0]};
+  }
+`

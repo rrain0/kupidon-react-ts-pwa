@@ -38,11 +38,12 @@ const MoveElementToAnotherView = ()=>{
       
       <Container ref={container2}></Container>
       
+      {/* if container changes - then content recreated !!! */}
       { container1.current && container2.current &&
-        createPortal(
+        <>createPortal(
           <Rectange/>,
           position===0 ? container1.current! : container2.current!
-        ) as React.ReactNode
+        )</>
       }
     
     </SimpleContent>

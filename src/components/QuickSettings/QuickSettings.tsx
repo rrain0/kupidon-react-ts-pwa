@@ -5,6 +5,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
+import ModalPortal from 'src/components/ModalPortal/ModalPortal'
 import { QuickSettingsUiText } from 'src/components/QuickSettings/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
@@ -149,7 +150,7 @@ const QuickSettings = (props: SettingsProps)=>{
       setOpen={setOpen}
       snapPoints={sheetSnaps}
       openIdx={sheetOpenIdx}
-      render={props => open && <BottomSheetBasic
+      render={props => open && <ModalPortal><BottomSheetBasic
         {...props.sheetProps}
         header={uiText.settings[0].text}
       >
@@ -195,7 +196,7 @@ const QuickSettings = (props: SettingsProps)=>{
                 value={opt.value}
                 key={opt.value}
                 onChange={ev => {
-                  if (opt.value==='system') setLangSettings({
+                  if (opt.value === 'system') setLangSettings({
                     ...langSettings,
                     setting: 'system',
                   })
@@ -247,7 +248,7 @@ const QuickSettings = (props: SettingsProps)=>{
             </Link>
             
             {app.canInstall && <Button css={normalIconRoundButton}
-              onClick={async()=>await promptInstall()}
+              onClick={async () => await promptInstall()}
             >
               <AddModuleIc css={icon}/>
               {uiText.installApp[0].text}
@@ -267,7 +268,7 @@ const QuickSettings = (props: SettingsProps)=>{
         
         
         </Content>
-      </BottomSheetBasic>}
+      </BottomSheetBasic></ModalPortal>}
     />
     
     

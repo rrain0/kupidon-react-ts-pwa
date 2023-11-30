@@ -8,7 +8,7 @@ import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import ProfileContent from 'src/pages/Profile/ProfileContent'
-import { useRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
@@ -26,7 +26,7 @@ import FloppyDisk1Ic = SvgIcons.FloppyDisk1Ic
 
 function ProfilePage(){
   
-  const [,setAuth] = useRecoilState(AuthRecoil)
+  const setAuth = useSetRecoilState(AuthRecoil)
   
   
   const fetchUser = async() => {

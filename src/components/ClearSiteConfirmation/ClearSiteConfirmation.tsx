@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ClearSiteConfirmationUiText
 } from 'src/components/ClearSiteConfirmation/uiText'
+import ModalPortal from 'src/components/ModalPortal/ModalPortal'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
@@ -67,9 +68,9 @@ const ClearSiteConfirmation = (props:{
       setOpen={setOpen}
       snapPoints={sheetSnaps}
       openIdx={sheetOpenIdx}
-      render={props => open && <BottomSheetBasic
+      render={props => open && <ModalPortal><BottomSheetBasic
         {...props.sheetProps}
-        header={uiText.clearAppData[0].text+'?'}
+        header={uiText.clearAppData[0].text + '?'}
       >
         <div
           css={css`
@@ -92,15 +93,15 @@ const ClearSiteConfirmation = (props:{
             </Button>
             
             <Button css={[ButtonStyle.roundedDanger, button]}
-              onClick={()=>setDoClear(true)}
+              onClick={() => setDoClear(true)}
             >
-              <ClearTrashIc css={[icon,iconOnDanger]}/>
+              <ClearTrashIc css={[icon, iconOnDanger]}/>
               {uiText.yes[0].text}
             </Button>
-            
+          
           </div>
         </div>
-      </BottomSheetBasic> }
+      </BottomSheetBasic></ModalPortal> }
     />
     
     { doClear && <div

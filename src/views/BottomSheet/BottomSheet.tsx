@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
@@ -12,6 +13,7 @@ import Mem = ReactUtils.Mem
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import Setter = TypeUtils.Setter
+import fixed = EmotionCommon.fixed
 
 
 
@@ -131,8 +133,7 @@ const BottomSheet = (props: BottomSheetProps) => {
   
   return <div // Frame
     css={css`
-      position: fixed;
-      inset: 0;
+      ${fixed};
       z-index: 30;
       background: none;
       pointer-events: none;
