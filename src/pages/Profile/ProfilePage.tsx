@@ -82,16 +82,15 @@ function ProfilePage(){
     </PageScrollbarOverlayFrame>
     
     
-    <BottomButtonBar>
-      
-      <Button css={ButtonStyle.icon}
-        onClick={submitCallback}
-        disabled={!canSubmit}
-      >
-        <FloppyDisk1Ic />
-      </Button>
-    
-    </BottomButtonBar>
+    <BottomButtonBar
+      rightChildren={
+        canSubmit && <Button css={[ButtonStyle.icon, css`margin-right: 8px;`]}
+          onClick={submitCallback}
+        >
+          <FloppyDisk1Ic />
+        </Button>
+      }
+    />
     
   
   </>

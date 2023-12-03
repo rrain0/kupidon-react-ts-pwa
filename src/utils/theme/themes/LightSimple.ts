@@ -8,11 +8,11 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const LightPink = {
+export const LightSimpe = {
   type: 'light',
-  name: 'Light Pink' as const,
+  name: 'Light Simple' as const,
   icon: styled.div(themeIconCss({
-    accentColor: '#ff8ea9',
+    accentColor: '#bbbbbb',
     bgcColor1:   '#f5f5f5',
     bgcColor2:   '#f5f5f5',
   })),
@@ -25,39 +25,39 @@ export const LightPink = {
     content3:  ['#7b7b7b'],
   },
   containerAccent: {
-    bgc:     ['#ffaeba'],
+    bgc:     ['#bbbbbb'],
     content: ['#000000'],
   },
   
   buttonMain: {
-    bgc:      ['#BB2649'],
-    bgcFocus: ['#d93b5f'],
+    bgc:      ['#7b7b7b'],
+    bgcFocus: ['#aaaaaa'],
     content:  ['#F8F8F8'],
   },
   buttonAccent: {
-    bgc:       ['#ff8ea9'],
-    bgcFocus:  ['#f17492'],
+    bgc:       ['#bbbbbb'],
+    bgcFocus:  ['#999999'],
     content:   ['#F8F8F8'],
     content2:  ['#000000'],
   },
   inputRadio: {
-    bgcFocus:  ['#f37190']
+    bgcFocus:  ['#7b7b7b']
   },
   buttonTransparent: {
     bgcFocus: ['#00000011'],
   },
   buttonNav: {
     bgcFocus:      ['#ffeaee'],
-    content:       ['#333333'],
-    contentAccent: ['#BB2649'],
+    content:       ['#7b7b7b'],
+    contentAccent: ['#333333'],
   },
   
   input: {
     bgc:           ['#F8F8F8'],
     content:       ['#000000'],
     placeholder:   ['#777777'],
-    border:        ['#fb3570','#fb3570'],
-    borderHover:   ['#9c20aa'],
+    border:        ['#7b7b7b','#7b7b7b'],
+    borderHover:   ['#7b7b7b'],
     bgcError:      ['#ffced2'],
   },
   
@@ -66,8 +66,8 @@ export const LightPink = {
     content: ['#555555'],
   },
   elementDanger: {
-    bgc:      ['#de4f48'],
-    bgcFocus: ['#e74c3c'],
+    bgc:      ['#7b7b7b'],
+    bgcFocus: ['#999999'],
     content:  ['#ffffff'],
   },
   

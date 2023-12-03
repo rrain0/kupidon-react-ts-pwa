@@ -3,6 +3,7 @@ import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 import classNames from 'classnames'
 import React from 'react'
+import { CastUtils } from 'src/utils/common/CastUtils'
 import {ReactUtils} from "src/utils/common/ReactUtils"
 import Mem = ReactUtils.Mem
 
@@ -12,6 +13,7 @@ import { ReactComponent as Arrow2ForwardSvg } from 'src/res/icon/arrow-2-forward
 import { ReactComponent as Arrow3UpRightSvg } from 'src/res/icon/arrow-3-up-right.svg'
 import { ReactComponent as Arrow4DownSvg } from 'src/res/icon/arrow-4-down.svg'
 import { ReactComponent as Arrow5FwdSvg } from 'src/res/icon/arrow-5-fwd.svg'
+import { ReactComponent as Arrow6NextSvg } from 'src/res/icon/arrow-6-next.svg'
 import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
 
 import { ReactComponent as BrowserSvg } from 'src/res/icon/browser.svg'
@@ -43,6 +45,7 @@ import { ReactComponent as FloppyDisk3Svg } from 'src/res/icon/floppy-disk-3.svg
 import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
 import { ReactComponent as Gear2Svg } from 'src/res/icon/gear-2.svg'
 import { ReactComponent as GearInSquareSvg } from 'src/res/icon/gear-in-square.svg'
+import { ReactComponent as GenderSvg } from 'src/res/icon/gender.svg'
 
 import { ReactComponent as HeartSvg } from 'src/res/icon/heart.svg'
 import { ReactComponent as HelpSvg } from 'src/res/icon/help.svg'
@@ -66,12 +69,14 @@ import { ReactComponent as RadioInactiveSvg } from 'src/res/icon/radio-inactive.
 import { ReactComponent as RingingBellSvg } from 'src/res/icon/ringing-bell.svg'
 
 import { ReactComponent as SearchSvg } from 'src/res/icon/search.svg'
+import { ReactComponent as Search2Svg } from 'src/res/icon/search-2.svg'
 import { ReactComponent as Spinner8LinesSvg } from 'src/res/icon/spinner-8-lines.svg'
 import { ReactComponent as SpinnerCircleQuarterSvg } from 'src/res/icon/spinner-circle-quarter.svg'
 
 import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-triangle-toastify.svg'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
@@ -81,10 +86,10 @@ export namespace SvgIcons {
 
   // Base interface for simple svg icons
   
-  import PartialUndef = TypeUtils.PartialUndef
+  import falsishToUndef = CastUtils.falsishToUndef
   type SvgProps = React.SVGProps<SVGSVGElement> & { title?: string }
   type CustomIconProps = PartialUndef<{
-    iconColor: string
+    color: string
     accentColor: string
     size: number|string
   }>
@@ -94,26 +99,33 @@ export namespace SvgIcons {
   
   
   export type SimpleSvgIconProps = CustomIconProps & SvgProps & SvgElement
+  
   export const SimpleSvgIcon = Mem(
     (props: SimpleSvgIconProps) => {
-      let {
+      const {
         className,
-        iconColor, accentColor, size,
+        color, accentColor,
+        size, width, height,
         SvgComponent,
         ...restProps
       } = props
       
+      const w = width ?? size
+      const h = height ?? size
+      
       return <SvgComponent
         css={css`
-          width: ${size ?? `var(${SvgIcStyle.Prop.size})`};
-          height: ${size ?? `var(${SvgIcStyle.Prop.size})`};
+          width: ${falsishToUndef(!w) && `var(${SvgIcStyle.Prop.size})`};
+          height: ${falsishToUndef(!h) && `var(${SvgIcStyle.Prop.size})`};
           max-width: 100%;
           max-height: 100%;
-          fill: ${iconColor ?? `var(${SvgIcStyle.Prop.color}, black)`};
-          stroke: ${iconColor ?? `var(${SvgIcStyle.Prop.color}, black)`};
+          fill: ${color ?? `var(${SvgIcStyle.Prop.color}, black)`};
+          stroke: ${color ?? `var(${SvgIcStyle.Prop.color}, black)`};
           ${SvgIcStyle.Prop.accentColor}:
                   ${accentColor ?? `var(${SvgIcStyle.Prop.accentColor}, gray)`}
         `}
+        width={w}
+        height={h}
         className={classNames(className,SvgIcStyle.El.iconClassName)}
         {...restProps}
       />
@@ -156,6 +168,11 @@ export namespace SvgIcons {
   export const Arrow5FwdIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={Arrow5FwdSvg} />
+  )
+  
+  export const Arrow6NextIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={Arrow6NextSvg} />
   )
   
   export const ArrowReloadIc = Mem(
@@ -291,6 +308,11 @@ export namespace SvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={GearInSquareSvg} />
   )
   
+  export const GenderIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={GenderSvg} />
+  )
+  
   
   
   export const HeartIc = Mem(
@@ -376,6 +398,11 @@ export namespace SvgIcons {
   export const SearchIc = Mem(
     (props: IconProps) =>
       <SimpleSvgIcon {...props} SvgComponent={SearchSvg} />
+  )
+  
+  export const Search2Ic = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={Search2Svg} />
   )
   
   export const Spinner8LinesIc = Mem(function(){

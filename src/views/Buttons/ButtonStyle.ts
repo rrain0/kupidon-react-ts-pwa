@@ -269,7 +269,8 @@ export namespace ButtonStyle {
     ${El.btn} {
       height: 50px;
       width: 50px;
-      border-radius: 26%;
+      //border-radius: 26%;
+      border-radius: 999999px;
       padding: 14px;
       
       background: ${t.buttonMain.bgc[0]};
@@ -312,6 +313,7 @@ export namespace ButtonStyle {
     ${icon(t)};
     // normal
     ${El.btn} {
+      border-radius: 999999px;
       background: none;
       color: ${t.buttonAccent.bgc[0]};
       ${Prop.color}: ${t.buttonAccent.bgc[0]};

@@ -3,6 +3,7 @@ import { css, keyframes } from '@emotion/react'
 import React, { useState } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { eventBuilder } from 'src/utils/react/buildEvents'
 import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
 import Card from 'src/views/Card'
@@ -78,11 +79,19 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
               border-radius: 14px;
               overflow: hidden;
               cursor: pointer;
+              user-select: none;
             `}
-            onPointerDown={()=>setPressedIdx(i)}
+            {...eventBuilder()
+              .events('onPointerDown')
+              .handlers(()=>setPressedIdx(i))
+              .events('onPointerCancel','onPointerUp','onPointerOut')
+              .handlers(()=>setPressedIdx(undefined))
+              .build()
+            }
+            /* onPointerDown={()=>setPressedIdx(i)}
             onPointerCancel={()=>setPressedIdx(undefined)}
             onPointerUp={()=>setPressedIdx(undefined)}
-            onPointerOut={()=>setPressedIdx(undefined)}
+            onPointerOut={()=>setPressedIdx(undefined)} */
           >
             <img
               src={im}

@@ -25,6 +25,7 @@ const ModalOutlet = ()=>{
     css={css`
       ${fixed};
       pointer-events: none;
+      user-select: none;
       background: none;
     `}
   />

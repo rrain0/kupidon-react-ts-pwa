@@ -11,6 +11,7 @@ import ItemLabel from 'src/components/FormElements/ItemLabel'
 import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
 import ResetButton from 'src/components/FormElements/ResetButton'
 import ModalPortal from 'src/components/ModalPortal/ModalPortal'
+import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
@@ -34,6 +35,8 @@ import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
+import Card2 from 'src/views/Card2'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
@@ -51,6 +54,9 @@ import Mem = ReactUtils.Mem
 import userDefaultValues = ProfilePageValidation.userDefaultValues
 import ObjectKeys = ObjectUtils.ObjectKeys
 import GenderEnum = UserApi.GenderEnum
+import GenderIc = SvgIcons.GenderIc
+import Arrow6NextIc = SvgIcons.Arrow6NextIc
+import Search2Ic = SvgIcons.Search2Ic
 
 
 
@@ -73,7 +79,6 @@ const ProfileContent = (props: ProfileContentProps)=>{
   
   const reactId = useId()
   const [auth,setAuth] = useRecoilState(AuthRecoil)
-  const resetAuth = useResetRecoilState(AuthRecoil)
   
   const uiText = useUiTextContainer(ProfileUiText)
   
@@ -354,67 +359,130 @@ const ProfileContent = (props: ProfileContentProps)=>{
         />
       </ItemContainer>
       
+    </Card>
+    
+    
+    
+    
+    <Card>
       
-      <ItemContainer>
-        <ItemTitleContainer>
-          <ItemLabel
-            id={`gender-select-${reactId}`}
-          >{uiText.gender[0].text}</ItemLabel>
-          { !fieldIsInitial('gender')
-            && <ResetButton
-              text={uiText.reset[0].text}
-              onClick={()=>resetField('gender')}
+      
+      <ValidationComponentWrap
+        {...validationProps}
+        fieldName='gender'
+        render={validProps =>
+          <UseBool render={boolProps=>
+            <UseModalSheet
+              open={boolProps.value}
+              setOpen={boolProps.setValue}
+              snapPoints={sheetSnaps}
+              openIdx={sheetOpenIdx}
+              render={sheetProps =>
+                <>
+                  
+                  <OptionItem
+                    icon={<GenderIc css={css`height: 50%`}/>}
+                    title={uiText.gender[0].text}
+                    value={genderOptions.find(opt=>opt.value===validProps.value)?.text ?? ''}
+                    nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
+                    onClick={boolProps.setTrue}
+                  />
+                  
+                  { boolProps.value && <ModalPortal>
+                    <BottomSheetBasic
+                      {...sheetProps.sheetProps}
+                      header={uiText.gender[0].text}
+                      aria-modal
+                    >
+                      <div css={selectItemsContainer}
+                        role="radiogroup"
+                        tabIndex={0}
+                      >
+                        {genderOptions.map(opt => <RadioInput
+                          css={RadioInputStyle.radio}
+                          id={`gender-option-${opt.value}-${reactId}`}
+                          childrenPosition="start"
+                          role="radio"
+                          aria-checked={validProps.checked(opt.value)}
+                          checked={validProps.checked(opt.value)}
+                          value={opt.value}
+                          key={opt.value}
+                          onChange={validProps.inputProps.onChange}
+                          onClick={sheetProps.setClosing}
+                        >
+                          <div css={selectItemText}>
+                            {opt.text}
+                          </div>
+                        </RadioInput> ) }
+                      
+                      </div>
+                    </BottomSheetBasic>
+                  </ModalPortal> }
+                  
+                </>
+              }
             />
-          }
-        </ItemTitleContainer>
+          }/>
+        }
+      />
+      
+      
+      
+      <OptionItem
+        icon={<Search2Ic css={css`height: 50%`}/>}
+        title={uiText.imLookingFor[0].text}
+        value={preferredPeopleOptions.find(it=>it.value==='notSelected')!.text}
+        nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
+      />
+      
+      
+      
+      
+    </Card>
+    
+    
+    
+    <Card>
+      <Card2>
         
-        <ValidationComponentWrap {...validationProps}
-          fieldName='gender'
+        
+        <ValidationComponentWrap
+          {...validationProps}
+          fieldName="gender"
           render={validProps =>
-            <UseBool render={boolProps=>
+            <UseBool render={boolProps =>
               <UseModalSheet
                 open={boolProps.value}
                 setOpen={boolProps.setValue}
                 snapPoints={sheetSnaps}
                 openIdx={sheetOpenIdx}
                 render={sheetProps =>
-                  <Input
-                    css={InputStyle.input({ size: 'small', clickable: true })}
-                    readOnly
-                    role='listbox'
-                    aria-activedescendant={`gender-option-${formValues.gender}-${reactId}`}
-                    aria-owns={genderOptions
-                      .map(it=>`gender-option-${it.value}-${reactId}`)
-                      .join(' ')
-                    }
-                    tabIndex={0}
-                    /* frameProps={{
-                      role: 'listbox',
-                      'aria-activedescendant': `gender-option-${formValues.gender}-${reactId}`,
-                      'aria-owns': genderOptions
-                        .map(it=>`gender-option-${it.value}-${reactId}`)
-                        .join(' '),
-                      tabIndex: 0,
-                    }} */
-                    onClick={boolProps.setTrue}
-                    value={genderOptions.find(opt=>opt.value===validProps.value)?.text ?? ''}
-                    hasError={validProps.highlight}
-                  >
+                  <>
                     
+                    <OptionItem
+                      icon={<GenderIc css={css`height: 50%`}/>}
+                      title={uiText.gender[0].text}
+                      value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
+                      nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
+                      onClick={boolProps.setTrue}
+                    />
                     
-                    { boolProps.value && <ModalPortal>
+                    {boolProps.value && <ModalPortal>
                       <BottomSheetBasic
                         {...sheetProps.sheetProps}
                         header={uiText.gender[0].text}
                         aria-modal
                       >
-                        <div css={selectItemsContainer}>
+                        <div css={selectItemsContainer}
+                          role="radiogroup"
+                          tabIndex={0}
+                        >
                           {genderOptions.map(opt => <RadioInput
                             css={RadioInputStyle.radio}
-                            childrenPosition="start"
-                            role="option"
                             id={`gender-option-${opt.value}-${reactId}`}
-                            aria-selected={validProps.checked(opt.value)}
+                            childrenPosition="start"
+                            role="radio"
+                            aria-checked={validProps.checked(opt.value)}
                             checked={validProps.checked(opt.value)}
                             value={opt.value}
                             key={opt.value}
@@ -424,26 +492,107 @@ const ProfileContent = (props: ProfileContentProps)=>{
                             <div css={selectItemText}>
                               {opt.text}
                             </div>
-                          </RadioInput> ) }
+                          </RadioInput>)}
                         
                         </div>
                       </BottomSheetBasic>
-                    </ModalPortal> }
+                    </ModalPortal>}
                   
-                  </Input>
+                  </>
                 }
               />
             }/>
           }
         />
         
-      </ItemContainer>
+        
+        <OptionItem
+          icon={<Search2Ic css={css`height: 50%`}/>}
+          title={uiText.imLookingFor[0].text}
+          value={preferredPeopleOptions.find(it => it.value === 'notSelected')!.text}
+          nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
+        />
       
+      
+      </Card2>
     </Card>
     
     
     
-    <Card>
+    
+    {/* <ItemContainer>
+     <ItemTitleContainer>
+     <ItemLabel
+     id={`gender-select-${reactId}`}
+     >{uiText.gender[0].text}</ItemLabel>
+     { !fieldIsInitial('gender')
+     && <ResetButton
+     text={uiText.reset[0].text}
+     onClick={()=>resetField('gender')}
+     />
+     }
+     </ItemTitleContainer>
+     
+     <ValidationComponentWrap {...validationProps}
+     fieldName='gender'
+     render={validProps =>
+     <UseBool render={boolProps=>
+     <UseModalSheet
+     open={boolProps.value}
+     setOpen={boolProps.setValue}
+     snapPoints={sheetSnaps}
+     openIdx={sheetOpenIdx}
+     render={sheetProps =>
+     <Input
+     css={InputStyle.input({ size: 'small', clickable: true })}
+     readOnly
+     tabIndex={0}
+     onClick={boolProps.setTrue}
+     value={genderOptions.find(opt=>opt.value===validProps.value)?.text ?? ''}
+     hasError={validProps.highlight}
+     >
+     
+     { boolProps.value && <ModalPortal>
+     <BottomSheetBasic
+     {...sheetProps.sheetProps}
+     header={uiText.gender[0].text}
+     aria-modal
+     >
+     <div css={selectItemsContainer}
+     role="radiogroup"
+     tabIndex={0}
+     >
+     {genderOptions.map(opt => <RadioInput
+     css={RadioInputStyle.radio}
+     id={`gender-option-${opt.value}-${reactId}`}
+     childrenPosition="start"
+     role="radio"
+     aria-checked={validProps.checked(opt.value)}
+     checked={validProps.checked(opt.value)}
+     value={opt.value}
+     key={opt.value}
+     onChange={validProps.inputProps.onChange}
+     onClick={sheetProps.setClosing}
+     >
+     <div css={selectItemText}>
+     {opt.text}
+     </div>
+     </RadioInput> ) }
+     
+     </div>
+     </BottomSheetBasic>
+     </ModalPortal> }
+     
+     </Input>
+     }
+     />
+     }/>
+     }
+     />
+     
+     </ItemContainer> */}
+    
+    {/* <Card>
       
       <ItemContainer>
         <ItemLabel>{uiText.imLookingFor[0].text}</ItemLabel>
@@ -499,17 +648,7 @@ const ProfileContent = (props: ProfileContentProps)=>{
       
       </ItemContainer>
     
-    </Card>
-    
-    
-    
-    <div css={notInCard}>
-      <Button css={ButtonStyle.bigRectMain}
-        onClick={resetAuth}
-      >
-        {uiText.signOut[0].text}
-      </Button>
-    </div>
+    </Card> */}
   
     
   </Form>

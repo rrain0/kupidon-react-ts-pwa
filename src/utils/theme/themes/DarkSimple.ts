@@ -5,56 +5,56 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const DarkPink = {
+export const DarkSimple = {
   type: 'dark',
-  name: 'Dark Pink' as const,
+  name: 'Dark Simple' as const,
   icon: styled.div(themeIconCss({
-    accentColor: '#d16780',
+    accentColor: '#999999',
     bgcColor1: '#18191b',
     bgcColor2: '#18191b',
   })),
   
   containerNormal: {
-    bgc:       ['#000000'],
+    bgc:       ['#24272d'],
     bgc2:      ['#282c34'],
     content:   ['#bdbdbd'],
     content2:  ['#999999'],
     content3:  ['#7b7b7b'],
   },
   containerAccent: {
-    bgc:     ['#992c46'],
+    bgc:     ['#aaaaaa'],
     content: ['#bdbdbd'],
   },
   
   buttonMain: {
-    bgc:      ['#971f3b'],
-    bgcFocus: ['#c6294e'],
-    content:  ['#bdbdbd'],
+    bgc:      ['#aaaaaa'],
+    bgcFocus: ['#bbbbbb'],
+    content:  ['#000000'],
   },
   buttonAccent: {
-    bgc:       ['#d16780'],
-    bgcFocus:  ['#da5474'],
-    content:   ['#cdcdcd'],
+    bgc:       ['#999999'],
+    bgcFocus:  ['#7b7b7b'],
+    content:   ['#000000'],
     content2:  ['#000000'],
   },
   inputRadio: {
-    bgcFocus:  ['#d16780']
+    bgcFocus:  ['#aaaaaa']
   },
   buttonTransparent: {
     bgcFocus: ['#ffffff22'],
   },
   buttonNav: {
     bgcFocus:      ['#2e3440'],
-    content:       ['#bdbdbd'],
-    contentAccent: ['#984559'],
+    content:       ['#7b7b7b'],
+    contentAccent: ['#bdbdbd'],
   },
   
   input: {
     bgc:           ['#282c34'],
     content:       ['#cdcdcd'],
     placeholder:   ['#7b7b7b'],
-    border:        ['#b32e56','#b32e56'],
-    borderHover:   ['#2393c6'],
+    border:        ['#7b7b7b','#7b7b7b'],
+    borderHover:   ['#7b7b7b'],
     bgcError:      ['#5e252c'],
   },
   
@@ -63,9 +63,9 @@ export const DarkPink = {
     content: ['#555555'],
   },
   elementDanger: {
-    bgc:      ['#ac2c26'],
-    bgcFocus: ['#c43730'],
-    content:  ['#bdbdbd'],
+    bgc:      ['#bbbbbb'],
+    bgcFocus: ['#cccccc'],
+    content:  ['#000000'],
   },
   
   ripple: {
@@ -93,7 +93,7 @@ export const DarkPink = {
   },
   
   statusBar: {
-    bgc: ['#984559'],
+    bgc: ['#282c34'],
   },
   nav: {
     bgc: ['#282c34'],

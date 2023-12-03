@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React from 'react'
+import React, { useLayoutEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
@@ -21,6 +21,49 @@ import Mem = ReactUtils.Mem
 
 const TestPage = () => {
   const [searchParams] = useSearchParams()
+  
+  
+  useLayoutEffect(
+    ()=>{
+      const onLoad = (ev: Event)=>{
+        console.log('page was loaded', ev)
+        // @ts-ignore
+        console.log('document.wasDiscarded',document.wasDiscarded)
+      }
+      const onFreeze = (ev: any)=>{
+        console.log('page was frozen',ev)
+      }
+      const onResume = (ev: any)=>{
+        console.log('page was resumed',ev)
+      }
+      const onVisibility = (ev: Event)=>{
+        switch (document.visibilityState){
+          case 'visible':
+            console.log('page is visible',ev)
+            break
+          case 'hidden':
+            console.log('page was hidden',ev)
+            /* fetch('https://dev.kupidon.rrain.ydns.eu:50040/ktor/hello',{
+              method: 'GET', mode: 'cors', cache: 'no-cache', credentials: 'same-origin',
+            })
+              .then(resp=>resp.text())
+              .then(text=>console.log('response',text)) */
+            break
+        }
+      }
+      document.addEventListener('load',onLoad)
+      document.addEventListener('visibilitychange',onVisibility)
+      document.addEventListener('freeze',onFreeze)
+      document.addEventListener('resume',onResume)
+      return ()=>{
+        document.addEventListener('load',onLoad)
+        document.removeEventListener('freeze',onFreeze)
+        document.removeEventListener('resume',onResume)
+        document.addEventListener('visibilitychange',onVisibility)
+      }
+    },
+    []
+  )
   
   
   return <>
@@ -62,8 +105,8 @@ const TestPage = () => {
         
         <div
           css={t=>css`
-            width: 400px;
-            height: 200px;
+            width: 300px;
+            height: 150px;
             padding: 10px;
             border-radius: 16px;
             background: ${t.containerNormal.bgc[0]};
@@ -76,8 +119,8 @@ const TestPage = () => {
         
         <div
           css={t=>css`
-            width: 400px;
-            height: 200px;
+            width: 300px;
+            height: 150px;
             padding: 10px;
             border-radius: 16px;
             background: ${t.containerNormal.bgc2[0]};
@@ -90,8 +133,8 @@ const TestPage = () => {
         
         <div
           css={t=>css`
-            width: 400px;
-            height: 200px;
+            width: 300px;
+            height: 150px;
             padding: 10px;
             border-radius: 16px;
             background: ${t.containerAccent.bgc[0]};

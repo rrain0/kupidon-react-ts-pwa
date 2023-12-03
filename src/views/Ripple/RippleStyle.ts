@@ -14,7 +14,10 @@ export namespace RippleStyle {
     export const frameClass = '.'+frameClassName
     export const viewClass = '.'+viewClassName
     
+    export const framePath = frameClass
     export const frame = '&'+frameClass
+    
+    export const viewPath = framePath+'>'+viewClass
     export const view = frame+'>'+viewClass
   }
   export namespace Prop {

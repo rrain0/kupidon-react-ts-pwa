@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { eventBuilder } from 'src/utils/react/buildEvents'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState, useBottomSheet } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
@@ -158,12 +159,19 @@ const BottomSheet = (props: BottomSheetProps) => {
   >
     <div // Pointer & Wheel events consumer
       css={css`display: contents;`}
-      onPointerDown={ev=>ev.stopPropagation()}
+      {...eventBuilder()
+        .events('onPointerDown','onPointerMove','onPointerUp','onPointerCancel'
+          ,'onClick','onWheel'
+        )
+        .handlers(ev=>ev.stopPropagation())
+        .build()
+      }
+      /* onPointerDown={ev=>ev.stopPropagation()}
       onPointerMove={ev=>ev.stopPropagation()}
       onPointerUp={ev=>ev.stopPropagation()}
       onPointerCancel={ev=>ev.stopPropagation()}
       onClick={ev=>ev.stopPropagation()}
-      onWheel={ev=>ev.stopPropagation()}
+      onWheel={ev=>ev.stopPropagation()} */
     >
       <div // Bottom Sheet
         css={css`

@@ -23,9 +23,11 @@ export namespace Themes {
       //normal?: {}
     }
     containerNormal: {
-      bgc:     string[]
-      bgc2:    string[]
-      content: string[]
+      bgc:       string[]
+      bgc2:      string[]
+      content:   string[]
+      content2:  string[]
+      content3:  string[]
     },
     containerAccent: {
       bgc:     string[]

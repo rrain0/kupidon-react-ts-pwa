@@ -86,7 +86,7 @@ export const AccountSettingsUiText = {
   unknownError: CommonUiText.unknownError,
   
   changePwd: CommonUiText.changePwd,
-  signOut: CommonUiText.signOut,
+  logOutFromAccount: CommonUiText.logOutFromAccount,
   deleteAccount: CommonUiText.deleteAccount,
   
   

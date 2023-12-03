@@ -51,7 +51,6 @@ export const ProfileUiText = {
   ofGuysAndGirls: CommonUiText.ofGuysAndGirls,
   
   
-  signOut: CommonUiText.signOut,
   update: CommonUiText.update,
   updated: CommonUiText.updated,
   

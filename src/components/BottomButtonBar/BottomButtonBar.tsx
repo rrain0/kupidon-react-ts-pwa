@@ -27,7 +27,9 @@ import RefreshBtn = ButtonBarComponents.RefreshBtn
 
 export type BottomButtonBarProps = JSX.IntrinsicElements['section']
   & PartialUndef<{
-    children: ReactNode
+    children: React.ReactNode
+    leftChildren: React.ReactNode
+    rightChildren: React.ReactNode
     backBtn: boolean
     settingsBtn: boolean
     settingsBtnLeft: boolean
@@ -59,19 +61,18 @@ const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBa
         <LeftButtonsContainer>
           {props.backBtn && <BackBtn/>}
           {props.settingsBtnLeft && <SettingsBtn/>}
+          {props.leftChildren}
         </LeftButtonsContainer>
         
         
         <CenterButtonsContainer>
-          
           {props.children}
-          
           {props.settingsBtn && <SettingsBtn/>}
-          
         </CenterButtonsContainer>
         
         
         <RightButtonsContainer>
+          {props.rightChildren}
           {props.refreshBtn && <RefreshBtn/>}
         </RightButtonsContainer>
         

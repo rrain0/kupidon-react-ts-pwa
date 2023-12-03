@@ -273,17 +273,17 @@ export const CommonUiText = {
   ] satisfies UiText<'pwdRecovery'>[],
   
   
-  signOut: [
+  logOutFromAccount: [
     {
-      value: 'signOut',
+      value: 'logOutFromAccount',
       lang: 'en-US',
-      text: 'Sign Out',
+      text: 'Log out of your account',
     },{
-      value: 'signOut',
+      value: 'logOutFromAccount',
       lang: 'ru-RU',
-      text: 'Выйти',
+      text: 'Выйти из аккаунта',
     },
-  ] satisfies UiText<'signOut'>[],
+  ] satisfies UiText<'logOutFromAccount'>[],
   
   
   deleteAccount: [

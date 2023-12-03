@@ -3,7 +3,7 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
-import { ToastMsg, ToastMsgData, useToasts } from 'src/utils/toasts/useToasts'
+import { ToastMsg, ToastMsgData, useToasts } from 'src/components/Toasts/useToasts'
 import Failure = ValidationCore.Failure
 import Values = ValidationCore.Values
 import awaitDelay = ValidationActions.awaitDelay

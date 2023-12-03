@@ -326,10 +326,10 @@ const AccountSettingsPage = ()=>{
         </div>
         
         <div css={notInCard}>
-          <Button css={ButtonStyle.bigRectMain}
+          <Button css={ButtonStyle.bigRectAccent}
             onClick={resetAuth}
           >
-            {uiText.signOut[0].text}
+            {uiText.logOutFromAccount[0].text}
           </Button>
         </div>
         
@@ -362,23 +362,15 @@ const AccountSettingsPage = ()=>{
     </PageScrollbarOverlayFrame>
     
     
-    <BottomButtonBar settingsBtnLeft>
-      
-      {/* <Button css={ButtonStyle.icon}
-       onClick={fetchUser}
-       disabled={false}
-       >
-       <ArrowReload />
-       </Button> */}
-      
-      <Button css={ButtonStyle.icon}
-        onClick={submit}
-        disabled={!canSubmit}
-      >
-        <FloppyDisk1Ic />
-      </Button>
-    
-    </BottomButtonBar>
+    <BottomButtonBar settingsBtn
+      rightChildren={
+        canSubmit && <Button css={ButtonStyle.icon}
+          onClick={submit}
+        >
+          <FloppyDisk1Ic />
+        </Button>
+      }
+    />
     
   </>
 }

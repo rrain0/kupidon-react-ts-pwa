@@ -85,5 +85,31 @@ export const ThemeNameUiText = {
   ] satisfies UiText<'Dark Orange'>[],
   
   
+  'Light Simple': [
+    {
+      value: 'Light Simple',
+      lang: 'en-US',
+      text: 'Light Simple',
+    },{
+      value: 'Light Simple',
+      lang: 'ru-RU',
+      text: 'Светлая Обычная',
+    },
+  ] satisfies UiText<'Light Simple'>[],
+  
+  
+  'Dark Simple': [
+    {
+      value: 'Dark Simple',
+      lang: 'en-US',
+      text: 'Dark Simple',
+    },{
+      value: 'Dark Simple',
+      lang: 'ru-RU',
+      text: 'Тёмная Обычная',
+    },
+  ] satisfies UiText<'Dark Simple'>[],
+  
+  
   
 } satisfies Record<AllThemeNamesType, UiText<AllThemeNamesType>[]>
