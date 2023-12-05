@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { useApiRequest } from 'src/api/useApiRequest'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
@@ -52,7 +53,6 @@ import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiText
 import Mem = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
 import userDefaultValues = SignupPageValidation.userDefaultValues
-import GenderEnum = UserApi.GenderEnum
 
 
 

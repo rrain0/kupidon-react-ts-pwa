@@ -9,14 +9,14 @@ import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { useAppInstallationSetup } from 'src/utils/app/useAppInstallationSetup'
 import { useLangSetup } from 'src/utils/lang/useLangSetup'
 import { useThemeSetup } from 'src/utils/theme/useThemeSetup'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.Mem
 
 
 
 
 
-function App() {
+const App =
+React.memo(
+()=>{
   useAppInstallationSetup()
   useLangSetup()
   useThemeSetup()
@@ -43,8 +43,8 @@ function App() {
     <ToastifySetup/>
     
   </ThemeProvider>
-}
-export default ReactMemoTyped(App)
+})
+export default App
 
 
 

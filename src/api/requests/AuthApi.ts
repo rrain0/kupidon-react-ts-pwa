@@ -1,9 +1,8 @@
 import { ApiUtils } from 'src/api/ApiUtils'
+import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { AxiosConfig } from '../AxiosConfig'
 import { ApiRoutes as r } from 'src/api/ApiRoutes'
-import { UserApi } from './UserApi'
 import ax = AxiosConfig.ax
-import CurrentUser = UserApi.CurrentUser
 import handleResponse = ApiUtils.handleResponse
 import NoUserResponseError = ApiUtils.NoUserResponseError
 import TechnicalError = ApiUtils.TechnicalError

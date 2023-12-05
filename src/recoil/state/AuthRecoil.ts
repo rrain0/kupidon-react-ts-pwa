@@ -1,7 +1,6 @@
 import { atom } from 'recoil'
+import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { emptyValOrObj, localStorageEffect2 } from '../RecoilPersist'
-import { UserApi } from 'src/api/requests/UserApi'
-import CurrentUser = UserApi.CurrentUser
 
 
 

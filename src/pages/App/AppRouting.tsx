@@ -1,6 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
+import {
+  createBrowserRouter,
+  Navigate,
+  Route, RouterProvider,
+  Routes,
+  useSearchParams,
+} from 'react-router-dom'
 import BottomNavBarRouting from 'src/components/BottomNavBar/routing'
 import FindPairsRouting from 'src/pages/FindPairs/routing'
 import LoginRouting from 'src/pages/Login/routing'
@@ -11,27 +17,38 @@ import SettingRouting from 'src/pages/Settings/routing'
 import SignupRouting from 'src/pages/Signup/routing'
 import TestRouting from 'src/pages/Test/routing'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.Mem
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 
-function AppRouting(){
+
+
+const router = createBrowserRouter([
+  { path: '*', Component: ()=><>
+      <PageRouting/>
+      <BottomNavBarRouting/>
+    </>
+  }
+])
+
+
+
+const AppRouting =
+React.memo(
+()=>{
   
-  return <>
-    <PageRouting/>
-    <BottomNavBarRouting/>
-  </>
-}
-export default ReactMemoTyped(AppRouting)
+  return <RouterProvider router={router} />
+})
+export default AppRouting
 
 
 
 
-const PageRouting = ReactMemoTyped(()=>{
+const PageRouting =
+React.memo(
+()=>{
   const [searchParams] = useSearchParams()
   
   
@@ -48,11 +65,11 @@ const PageRouting = ReactMemoTyped(()=>{
     <Route path={RootRoute.profile[path]+'/*'}
       element={<ProfileRouting/>}
     />
-    {/* There will be Chat Routing */}
+    There will be Chat Routing
     <Route path={RootRoute.findPairs[path]+'/*'}
       element={<FindPairsRouting/>}
     />
-    {/* There will be Advices Routing */}
+    There will be Advices Routing
     <Route path={RootRoute.test[path]+'/*'}
       element={<TestRouting/>}
     />

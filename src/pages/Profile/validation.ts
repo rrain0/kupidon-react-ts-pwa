@@ -1,3 +1,4 @@
+import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { DateTime } from 'src/utils/DateTime'
@@ -6,7 +7,6 @@ import { UiText } from 'src/utils/lang/UiText'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
 import UpdateUserErrorData = UserApi.UpdateUserErrorData
-import GenderEnum = UserApi.GenderEnum
 
 
 

@@ -10,7 +10,6 @@ import * as serviceWorkerRegistration from 'src/serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { RecoilRoot } from 'recoil'
 import RecoilNexus from 'recoil-nexus' // access recoil state from not react component
-import { BrowserRouter } from 'react-router-dom'
 
 
 
@@ -24,12 +23,15 @@ root.render(
   <React.StrictMode>
     <RecoilRoot>
       <RecoilNexus />
-      <BrowserRouter>
-        <App/>
-      </BrowserRouter>
+      <App/>
     </RecoilRoot>
   </React.StrictMode>
 )
+
+
+
+
+
 //navigator.serviceWorker.ready.then(()=>{})
 
 

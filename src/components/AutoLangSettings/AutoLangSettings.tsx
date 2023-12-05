@@ -1,13 +1,14 @@
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import LangSettings from 'src/components/LangSettings/LangSettings'
 import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Mem = ReactUtils.Mem
 
 
 
-const AutoLangSettings = ()=>{
+const AutoLangSettings =
+React.memo(
+()=>{
   const langSettings = useRecoilValue(LangSettingsRecoil)
   //const lang = useRecoilValue(LangRecoil)
   
@@ -24,6 +25,6 @@ const AutoLangSettings = ()=>{
   
   
   return <LangSettings open={open} setOpen={setOpen} />
-}
-export default Mem(AutoLangSettings)
+})
+export default AutoLangSettings
 

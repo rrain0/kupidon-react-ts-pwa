@@ -1,4 +1,5 @@
 import { ApiUtils } from 'src/api/ApiUtils'
+import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { AxiosConfig } from '../AxiosConfig'
 import { ApiRoutes as r } from 'src/api/ApiRoutes'
@@ -9,26 +10,13 @@ import TechnicalError = ApiUtils.TechnicalError
 import handleAuthenticatedResponse = ApiUtils.handleAuthenticatedResponse
 import AuthenticationError = ApiUtils.AuthenticationError
 import NoUserResponseError = ApiUtils.NoUserResponseError
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
 export namespace UserApi {
   
   
-  import PartialUndef = TypeUtils.PartialUndef
-  export type GenderEnum = "MALE"|"FEMALE"
-  export type CurrentUser = {
-    id: string
-    email: string
-    emailVerified: boolean
-    roles: string[]
-    created: string
-    updated: string
-    name: string
-    birthDate: string
-    gender: GenderEnum
-    aboutMe: string
-  }
   export type CurrentUserSuccessData = {
     user: CurrentUser
   }

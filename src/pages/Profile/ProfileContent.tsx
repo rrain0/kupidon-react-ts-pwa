@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import Form from 'src/components/FormElements/Form'
@@ -13,7 +14,6 @@ import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
 import Modal from 'src/components/Modal/Modal'
 import ModalPortal from 'src/components/Modal/ModalPortal'
 import OptionItem from 'src/components/OptionItem/OptionItem'
-import { Pages } from 'src/components/Page/Pages'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/UseBrowserBack'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
@@ -36,8 +36,6 @@ import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card2 from 'src/views/Card2'
-import DataField from 'src/views/DataField/DataField'
-import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
@@ -53,15 +51,11 @@ import UserToUpdate = UserApi.UserToUpdate
 import mapFailureCodeToUiText = ProfilePageValidation.mapFailureCodeToUiText
 import userDefaultValues = ProfilePageValidation.userDefaultValues
 import ObjectKeys = ObjectUtils.ObjectKeys
-import GenderEnum = UserApi.GenderEnum
 import GenderIc = SvgIcons.GenderIc
 import Arrow6NextIc = SvgIcons.Arrow6NextIc
 import Search2Ic = SvgIcons.Search2Ic
 import fixedTop = EmotionCommon.fixedTop
-import fixed = EmotionCommon.fixed
-import center = EmotionCommon.center
 import row = EmotionCommon.row
-import fixedBottom = EmotionCommon.fixedBottom
 import NameCardIc = SvgIcons.NameCardIc
 import GiftBoxIc = SvgIcons.GiftBoxIc
 
