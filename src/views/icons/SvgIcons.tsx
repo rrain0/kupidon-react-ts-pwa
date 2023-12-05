@@ -46,6 +46,7 @@ import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
 import { ReactComponent as Gear2Svg } from 'src/res/icon/gear-2.svg'
 import { ReactComponent as GearInSquareSvg } from 'src/res/icon/gear-in-square.svg'
 import { ReactComponent as GenderSvg } from 'src/res/icon/gender.svg'
+import { ReactComponent as GiftBoxSvg } from 'src/res/icon/gift-box.svg'
 
 import { ReactComponent as HeartSvg } from 'src/res/icon/heart.svg'
 import { ReactComponent as HelpSvg } from 'src/res/icon/help.svg'
@@ -58,6 +59,7 @@ import { ReactComponent as LockSvg } from 'src/res/icon/lock.svg'
 import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
 import { ReactComponent as MoonSvg } from 'src/res/icon/moon.svg'
 
+import { ReactComponent as NameCardSvg } from 'src/res/icon/name-card.svg'
 import { ReactComponent as NightSvg } from 'src/res/icon/night.svg'
 
 import { ReactComponent as PencilWriteSvg } from 'src/res/icon/pencil-write.svg'
@@ -313,6 +315,11 @@ export namespace SvgIcons {
       <SimpleSvgIcon {...props} SvgComponent={GenderSvg} />
   )
   
+  export const GiftBoxIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={GiftBoxSvg} />
+  )
+  
   
   
   export const HeartIc = Mem(
@@ -357,6 +364,11 @@ export namespace SvgIcons {
   )
   
   
+  
+  export const NameCardIc = Mem(
+    (props: IconProps) =>
+      <SimpleSvgIcon {...props} SvgComponent={NameCardSvg} />
+  )
   
   export const NightIc = Mem(
     (props: IconProps) =>

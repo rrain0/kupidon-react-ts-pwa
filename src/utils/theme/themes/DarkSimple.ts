@@ -37,6 +37,11 @@ export const DarkSimple = {
     content:   ['#000000'],
     content2:  ['#000000'],
   },
+  buttonSecondary: {
+    bgc:       ['transparent'],
+    bgcFocus:  ['#7b7b7b88'],
+    content:   ['#999999'],
+  },
   inputRadio: {
     bgcFocus:  ['#aaaaaa']
   },
@@ -66,6 +71,9 @@ export const DarkSimple = {
     bgc:      ['#bbbbbb'],
     bgcFocus: ['#cccccc'],
     content:  ['#000000'],
+  },
+  elementError: {
+    bgc:      ['#5e252c'],
   },
   
   ripple: {

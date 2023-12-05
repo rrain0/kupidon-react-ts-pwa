@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ClearSiteConfirmationUiText
 } from 'src/components/ClearSiteConfirmation/uiText'
-import ModalPortal from 'src/components/ModalPortal/ModalPortal'
+import ModalPortal from 'src/components/Modal/ModalPortal'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { ReactUtils } from 'src/utils/common/ReactUtils'

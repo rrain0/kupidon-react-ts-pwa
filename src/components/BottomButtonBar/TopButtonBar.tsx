@@ -9,7 +9,6 @@ import React, {
 import { ButtonBarComponents } from 'src/components/BottomButtonBar/components'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import Mem = ReactUtils.Mem
 import PartialUndef = TypeUtils.PartialUndef
 import ButtonsContainer = ButtonBarComponents.ButtonsContainer
 import LeftButtonsContainer = ButtonBarComponents.LeftButtonsContainer
@@ -25,18 +24,25 @@ import TopButtonBarFrame = ButtonBarComponents.TopButtonBarFrame
 
 
 
-export type TopButtonBarProps = JSX.IntrinsicElements['section']
-  & PartialUndef<{
-    children: ReactNode
-    backBtn: boolean
-    settingsBtn: boolean
-    refreshBtn: boolean
-  }>
-const TopButtonBar = React.forwardRef<HTMLTableSectionElement, TopButtonBarProps>(
-  (props, forwardedRef)=>{
+export type TopButtonBarCustomProps = PartialUndef<{
+  children: ReactNode
+  leftChildren: ReactNode
+  rightChildren: ReactNode
+  backBtn: boolean
+  settingsBtn: boolean
+  refreshBtn: boolean
+}>
+export type ForwardRefProps = JSX.IntrinsicElements['section']
+type RefElement = HTMLDivElement
+
+export type TopButtonBarProps = TopButtonBarCustomProps & ForwardRefProps
+const TopButtonBar =
+React.memo(
+React.forwardRef<RefElement, TopButtonBarProps>(
+(props, forwardedRef)=>{
   
-  const thisRef = useRef<HTMLTableSectionElement>(null)
-  useImperativeHandle(forwardedRef, ()=>thisRef.current!,[])
+  const elemRef = useRef<RefElement>(null)
+  useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
   return <>
@@ -51,12 +57,13 @@ const TopButtonBar = React.forwardRef<HTMLTableSectionElement, TopButtonBarProps
     
     <TopButtonBarFrame
       {...props}
-      ref={thisRef}
+      ref={elemRef}
     >
       <ButtonsContainer>
         
         <LeftButtonsContainer>
           {props.backBtn && <BackBtn/>}
+          {props.leftChildren}
         </LeftButtonsContainer>
         
         
@@ -70,6 +77,7 @@ const TopButtonBar = React.forwardRef<HTMLTableSectionElement, TopButtonBarProps
         
         
         <RightButtonsContainer>
+          {props.rightChildren}
           {props.refreshBtn && <RefreshBtn/>}
         </RightButtonsContainer>
         
@@ -77,8 +85,8 @@ const TopButtonBar = React.forwardRef<HTMLTableSectionElement, TopButtonBarProps
     </TopButtonBarFrame>
     
   </>
-})
-export default Mem(TopButtonBar)
+}))
+export default TopButtonBar
 
 
 

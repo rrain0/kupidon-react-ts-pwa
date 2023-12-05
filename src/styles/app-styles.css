@@ -4,20 +4,34 @@
 :root{
   --page-vertical-padding: 50px;
   
-  --top-button-bar-height: 0px;
   --bottom-button-bar-height: 0px;
   --bottom-nav-height: 0px;
+  
+  --top-button-bar-height: 0px;
+  --top-nav-height: 0px;
   
   
   
   --bottom-bars-inset: calc(
     var(--bottom-nav-height)
   );
-  
   --bottom-page-inset: calc(
     var(--bottom-nav-height) +
     max(
       var(--bottom-button-bar-height),
+      var(--page-vertical-padding)
+    )
+  );
+  
+  
+  
+  --top-bars-inset: calc(
+    var(--top-nav-height)
+  );
+  --top-page-inset: calc(
+    var(--top-nav-height) +
+    max(
+      var(--top-button-bar-height),
       var(--page-vertical-padding)
     )
   );

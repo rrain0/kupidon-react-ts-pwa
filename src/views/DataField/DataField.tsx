@@ -6,7 +6,6 @@ import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
 import styled from "styled-components"
 import React, { useImperativeHandle, useRef } from 'react'
 import {ReactUtils} from "src/utils/common/ReactUtils"
-import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import trueOrUndef = CastUtils.trueOrUndef
@@ -19,15 +18,18 @@ import PartialUndef = TypeUtils.PartialUndef
 const Attr = DataFieldStyle.Attr
 
 
-export type DataFieldProps = JSX.IntrinsicElements['div'] &
-  PartialUndef<{
-    hasError: boolean
-    children: React.ReactNode
-  }>
+export type DataFieldCustomProps = PartialUndef<{
+  hasError: boolean
+  children: React.ReactNode
+}>
+export type ForwardRefProps = JSX.IntrinsicElements['div']
+type RefElement = HTMLDivElement
 
-const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
-  props, forwardedRef
-) => {
+export type DataFieldProps = DataFieldCustomProps & ForwardRefProps
+const DataField =
+React.memo(
+React.forwardRef<RefElement, DataFieldProps>(
+(props, forwardedRef) => {
   let {
     hasError,
     children,
@@ -35,14 +37,14 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
   } = props
   
   
-  const labelRef = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, ()=>labelRef.current!,[])
+  const elemRef = useRef<RefElement>(null)
+  useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
   return <Frame css={frameStyle}
     {...{[Attr.errorName]: hasError}}
     {...restProps}
-    ref={labelRef}
+    ref={elemRef}
   >
     
     { children }
@@ -50,15 +52,15 @@ const DataField = React.forwardRef<HTMLDivElement, DataFieldProps>((
     <Border css={borderStyle}/>
     
   </Frame>
-})
-export default Mem(DataField)
+}))
+export default DataField
 
 
 
 type FrameProps = PartialUndef<{
   [Attr.errorName]: boolean
 }>
-const Frame = styled.div.attrs<FrameProps>(p=>({
+const Frame = styled.article.attrs<FrameProps>(p=>({
   className: classNames(p.className,DataFieldStyle.El.frameClassName),
   [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
 }))<FrameProps>``

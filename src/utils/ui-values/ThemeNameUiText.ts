@@ -89,11 +89,11 @@ export const ThemeNameUiText = {
     {
       value: 'Light Simple',
       lang: 'en-US',
-      text: 'Light Simple',
+      text: 'Light',
     },{
       value: 'Light Simple',
       lang: 'ru-RU',
-      text: 'Светлая Обычная',
+      text: 'Светлая',
     },
   ] satisfies UiText<'Light Simple'>[],
   
@@ -102,11 +102,11 @@ export const ThemeNameUiText = {
     {
       value: 'Dark Simple',
       lang: 'en-US',
-      text: 'Dark Simple',
+      text: 'Dark',
     },{
       value: 'Dark Simple',
       lang: 'ru-RU',
-      text: 'Тёмная Обычная',
+      text: 'Тёмная',
     },
   ] satisfies UiText<'Dark Simple'>[],
   

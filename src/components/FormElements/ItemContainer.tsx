@@ -10,6 +10,6 @@ import Mem = ReactUtils.Mem
 
 const ItemContainer = styled.div`
   ${col};
-  gap: 4px;
+  gap: 8px;
 `
 export default Mem(ItemContainer)

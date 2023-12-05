@@ -123,11 +123,12 @@ export namespace TextareaStyle {
   `
   
   
-  const small = (t:Theme)=>css`
+  export const small = (t:Theme)=>css`
+    ${normal(t)};
     ${El.textarea} {
       width: 100%;
       padding: 8px 12px;
-      ${Txt.large1};
+      ${Txt.small1};
     }
     ${El.border} {
       border-width: 1px;
@@ -135,8 +136,4 @@ export namespace TextareaStyle {
   `
   
   
-  export const textareaSmall = (t:Theme)=>css`
-    ${normal(t)};
-    ${small(t)};
-  `
 }

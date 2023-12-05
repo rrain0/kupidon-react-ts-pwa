@@ -1,11 +1,13 @@
 import styled from '@emotion/styled'
 import { Themes } from 'src/utils/theme/Themes'
+import { DarkSimple } from 'src/utils/theme/themes/DarkSimple'
 import Theme = Themes.Theme
 import themeIconCss = Themes.themeIconCss
 
 
 
 export const DarkPink = {
+  ...DarkSimple,
   type: 'dark',
   name: 'Dark Pink' as const,
   icon: styled.div(themeIconCss({
@@ -14,42 +16,42 @@ export const DarkPink = {
     bgcColor2: '#18191b',
   })),
   
-  containerNormal: {
+  containerNormal: { ...DarkSimple.containerNormal,
     bgc:       ['#000000'],
     bgc2:      ['#282c34'],
     content:   ['#bdbdbd'],
     content2:  ['#999999'],
     content3:  ['#7b7b7b'],
   },
-  containerAccent: {
+  containerAccent: { ...DarkSimple.containerAccent,
     bgc:     ['#992c46'],
     content: ['#bdbdbd'],
   },
   
-  buttonMain: {
+  buttonMain: { ...DarkSimple.buttonMain,
     bgc:      ['#971f3b'],
     bgcFocus: ['#c6294e'],
     content:  ['#bdbdbd'],
   },
-  buttonAccent: {
+  buttonAccent: { ...DarkSimple.buttonAccent,
     bgc:       ['#d16780'],
     bgcFocus:  ['#da5474'],
     content:   ['#cdcdcd'],
     content2:  ['#000000'],
   },
-  inputRadio: {
+  inputRadio: { ...DarkSimple.inputRadio,
     bgcFocus:  ['#d16780']
   },
-  buttonTransparent: {
+  buttonTransparent: { ...DarkSimple.buttonTransparent,
     bgcFocus: ['#ffffff22'],
   },
-  buttonNav: {
+  buttonNav: { ...DarkSimple.buttonNav,
     bgcFocus:      ['#2e3440'],
     content:       ['#bdbdbd'],
     contentAccent: ['#984559'],
   },
   
-  input: {
+  input: { ...DarkSimple.input,
     bgc:           ['#282c34'],
     content:       ['#cdcdcd'],
     placeholder:   ['#7b7b7b'],
@@ -58,48 +60,48 @@ export const DarkPink = {
     bgcError:      ['#5e252c'],
   },
   
-  elementDisabled: {
+  elementDisabled: { ...DarkSimple.elementDisabled,
     bgc:     ['#DCDCDC'],
     content: ['#555555'],
   },
-  elementDanger: {
+  elementDanger: { ...DarkSimple.elementDanger,
     bgc:      ['#ac2c26'],
     bgcFocus: ['#c43730'],
     content:  ['#bdbdbd'],
   },
   
-  ripple: {
+  ripple: { ...DarkSimple.ripple,
     content:              ['#000000'],
     contentOnTransparent: ['#ffffff88'],
   },
   
-  photos: {
+  photos: { ...DarkSimple.photos,
     highlightFrameBgc:       ['#8B8B8B'],
     highlightFrameAccentBgc: ['#ffffff'],
   },
   
-  bottomSheet: {
+  bottomSheet: { ...DarkSimple.bottomSheet,
     bgc:    ['#121212'],
     handle: ['#8b8b8b'],
   },
   
-  card: {
+  card: { ...DarkSimple.card,
     bgc: ['#00000000'],
   },
-  page: {
+  page: { ...DarkSimple.page,
     bgc:         ['#18191b'],
     bgcGradient: ['#282c34','#282c34','#282c34'],
     content:     ['#bdbdbd','#ffffff'],
   },
   
-  statusBar: {
+  statusBar: { ...DarkSimple.statusBar,
     bgc: ['#984559'],
   },
-  nav: {
+  nav: { ...DarkSimple.nav,
     bgc: ['#282c34'],
   },
   
-  toast: {
+  toast: { ...DarkSimple.toast,
     bgc:                  ['#121212'],
     content:              ['#ffffff'],
     content2:             ['#b8b8b8'],
@@ -112,7 +114,7 @@ export const DarkPink = {
     accentWarn:           ['#f1c40f'],
     accentDanger:         ['#e74c3c'],
   },
-  scrollbar: {
+  scrollbar: { ...DarkSimple.scrollbar,
     track: ['#F8F8F822'],
     thumb: ['#F8F8F844'],
   },

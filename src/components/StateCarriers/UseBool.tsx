@@ -8,6 +8,7 @@ import SetterOrUpdater = TypeUtils.SetterOrUpdater
 
 export type UseBoolRenderProps = {
   value: boolean
+  notValue: boolean
   setValue: SetterOrUpdater<boolean>
   setTrue: ()=>void
   setFalse: ()=>void
@@ -27,10 +28,16 @@ const UseBool = (props: UseBoolProps)=>{
     []
   )
   const setFalse = useCallback(
-    ()=>setValue(true),
+    ()=>setValue(false),
     []
   )
   
-  return props.render?.({ value, setValue, setTrue, setFalse })
+  return props.render?.({
+    value,
+    notValue: !value,
+    setValue,
+    setTrue,
+    setFalse
+  })
 }
 export default Mem(UseBool)

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
@@ -40,6 +39,11 @@ export const LightSimpe = {
     content:   ['#F8F8F8'],
     content2:  ['#000000'],
   },
+  buttonSecondary: {
+    bgc:       ['transparent'],
+    bgcFocus:  ['#99999988'],
+    content:   ['#bbbbbb'],
+  },
   inputRadio: {
     bgcFocus:  ['#7b7b7b']
   },
@@ -69,6 +73,9 @@ export const LightSimpe = {
     bgc:      ['#7b7b7b'],
     bgcFocus: ['#999999'],
     content:  ['#ffffff'],
+  },
+  elementError: {
+    bgc:      ['#ffced2'],
   },
   
   ripple: {

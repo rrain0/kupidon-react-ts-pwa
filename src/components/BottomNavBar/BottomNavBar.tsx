@@ -30,7 +30,9 @@ import Mem = ReactUtils.Mem
 
 
 
-const BottomNavBar = ()=>{
+const BottomNavBar =
+React.memo(
+()=>{
   
   const uiOptions = useUiTextContainer(BottomNavBarUiText)
   
@@ -91,8 +93,8 @@ const BottomNavBar = ()=>{
     </Frame>
     
   </>
-}
-export default Mem(BottomNavBar)
+})
+export default BottomNavBar
 
 
 

@@ -104,6 +104,16 @@ export namespace ButtonStyle {
       }
     `
     
+    export const roundedSmall = css`
+      ${El.btn} {
+        width: fit-content;
+        min-height: 30px;
+        border-radius: 1000000px;
+        padding: 4px 16px;
+        ${Txt.small1};
+      }
+    `
+    
   }
   
   
@@ -180,6 +190,40 @@ export namespace ButtonStyle {
     `
     
     
+    export const secondary = (t:Theme)=>css`
+      // normal
+      ${El.btn} {
+        background: ${t.buttonSecondary.bgc[0]};
+        color: ${t.buttonSecondary.content[0]};
+        ${Prop.color}: ${t.buttonSecondary.content[0]};
+      }
+      ${El.border} {
+        border: 1px solid;
+        border-color: ${t.buttonSecondary.content[0]};
+      }
+      ${El.ripple} {
+        ${Prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
+      }
+
+      // hover
+      ${hoverable}{ ${El.btnHover} {
+        background: ${t.buttonSecondary.bgcFocus[0]};
+      }}
+
+      // focus-visible
+      ${El.btnFocusVisible} {
+        background: ${t.buttonSecondary.bgcFocus[0]};
+      }
+
+      // disabled
+      ${El.btnDisabled} {
+        background: ${t.elementDisabled.bgc[0]};
+        color: ${t.elementDisabled.content[0]};
+        ${Prop.color}: ${t.elementDisabled.content[0]};
+      }
+    `
+    
+    
     export const danger = (t:Theme) => css`
       // normal
       ${El.btn} {
@@ -244,6 +288,20 @@ export namespace ButtonStyle {
       color: ${t.buttonAccent.content2[0]};
       ${Prop.color}: ${t.buttonAccent.content2[0]};
     }
+  `
+  export const roundedSmallAccent = (t:Theme) => css`
+    ${common};
+    ${Shape.roundedSmall};
+    ${Color.accent(t)};
+    ${El.btn} {
+      color: ${t.buttonAccent.content2[0]};
+      ${Prop.color}: ${t.buttonAccent.content2[0]};
+    }
+  `
+  export const roundedSmallSecondary = (t:Theme) => css`
+    ${common};
+    ${Shape.roundedSmall};
+    ${Color.secondary(t)};
   `
   
   export const roundedDanger = (t:Theme) => css`

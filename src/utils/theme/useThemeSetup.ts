@@ -34,12 +34,14 @@ export const useThemeSetup = ()=>{
         if (systemThemeType==='light')
           setTheme(s=>({
             ...s,
-            theme: themeByName(themeSettings.light)
+            theme: themeByName(themeSettings.light),
+            themeIsReady: true,
           }))
         else if (systemThemeType==='dark')
           setTheme(s=>({
             ...s,
-            theme: themeByName(themeSettings.dark)
+            theme: themeByName(themeSettings.dark),
+            themeIsReady: true,
           }))
         else setThemeSettings(s=>({
             ...s,
@@ -50,12 +52,14 @@ export const useThemeSetup = ()=>{
         if (themeSettings.manualSetting==='light')
           setTheme(s=>({
             ...s,
-            theme: themeByName(themeSettings.light)
+            theme: themeByName(themeSettings.light),
+            themeIsReady: true,
           }))
         else if (themeSettings.manualSetting==='dark')
           setTheme(s=>({
             ...s,
-            theme: themeByName(themeSettings.dark)
+            theme: themeByName(themeSettings.dark),
+            themeIsReady: true,
           }))
       }
     },

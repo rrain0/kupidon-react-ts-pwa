@@ -1,14 +1,17 @@
 import styled from '@emotion/styled'
+import React from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Mem = ReactUtils.Mem
 import Txt = EmotionCommon.Txt
 
 
 
-const ItemLabel = styled.label`
+const ItemLabel =
+React.memo(
+styled.label`
   padding-left: 12px;
-  ${Txt.normal1};
+  ${Txt.large1};
+  font-weight: 700;
   color: ${p=>p.theme.page.content[0]}
-`
-export default Mem(ItemLabel)
+`)
+export default ItemLabel

@@ -8,10 +8,6 @@ import Mem = ReactUtils.Mem
 
 const ItemTitleContainer = styled.div`
   width: 100%;
-  height: 30px;
-  ${row};
-  align-items: center;
-  justify-content: space-between;
-  gap: 4px;
+  height: auto;
 `
 export default Mem(ItemTitleContainer)

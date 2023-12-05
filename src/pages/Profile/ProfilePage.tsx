@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
+import { css, Global } from '@emotion/react'
+import styled from '@emotion/styled'
 import React, { useEffect, useRef, useState } from 'react'
-import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
-import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
@@ -11,20 +10,19 @@ import ProfileContent from 'src/pages/Profile/ProfileContent'
 import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Mem = ReactUtils.Mem
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
-import Button from 'src/views/Buttons/Button'
-import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
-import FloppyDisk1Ic = SvgIcons.FloppyDisk1Ic
 
 
 
 
 
-function ProfilePage(){
+const ProfilePage =
+React.memo(
+()=>{
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
@@ -43,12 +41,6 @@ function ProfilePage(){
   )
   
   
-  const [canSubmit, setCanSubmit] = useState(false)
-  const [submitCallback, setSubmitCallback] = useState(
-    undefined as (()=>()=>void) | undefined
-  )
-  
-  
   const pageRef = useRef<HTMLElement>(null)
   
   
@@ -57,15 +49,13 @@ function ProfilePage(){
   return <>
     <Page ref={pageRef}>
       
-      <ProfileContent
-        setCanSubmit={setCanSubmit}
-        setSubmitCallback={setSubmitCallback}
-      />
+      <ProfileContent/>
       
     </Page>
     
     
-    <TopButtonBar/>
+    
+    
     
     <PageScrollbarOverlayFrame>
       <UseScrollbars
@@ -82,7 +72,7 @@ function ProfilePage(){
     </PageScrollbarOverlayFrame>
     
     
-    <BottomButtonBar
+    {/* <BottomButtonBar
       rightChildren={
         canSubmit && <Button css={[ButtonStyle.icon, css`margin-right: 8px;`]}
           onClick={submitCallback}
@@ -90,13 +80,12 @@ function ProfilePage(){
           <FloppyDisk1Ic />
         </Button>
       }
-    />
+    /> */}
     
   
   </>
-}
-export default Mem(ProfilePage)
-
+})
+export default ProfilePage
 
 
 

@@ -47,6 +47,11 @@ export namespace Themes {
       content:   string[]
       content2:  string[]
     }
+    buttonSecondary: {
+      bgc:       string[]
+      bgcFocus:  string[]
+      content:   string[]
+    }
     // radio input color
     inputRadio: {
       bgcFocus: string[]
@@ -82,6 +87,10 @@ export namespace Themes {
       bgcFocus: string[]
       content:  string[]
     }
+    // element with error
+    elementError: {
+      bgc:      string[]
+    },
     
     ripple: {
       content:              string[]

@@ -5,6 +5,7 @@ import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { CommonStyle } from 'src/views/CommonStyle'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Ripple from 'src/views/Ripple/Ripple'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
@@ -20,7 +21,7 @@ export type OptionItemCustomProps = PartialUndef<{
   title: React.ReactNode
   value: React.ReactNode
   nextIcon: React.ReactNode
-}>
+}> & CommonStyle.Attr.errorType
 export type ForwardRefProps = JSX.IntrinsicElements['article']
 type RefElement = HTMLDivElement
 
@@ -84,6 +85,10 @@ const Frame = styled.article`
   }}
   :focus-visible {
     background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
+  }
+  
+  ${CommonStyle.Attr.errorThis}{
+    background: ${p=>p.theme.input.bgcError[0]};
   }
 `
 

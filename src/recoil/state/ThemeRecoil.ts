@@ -27,12 +27,14 @@ export const ThemeSettingsRecoil = atom<ThemeSettingsStateType>({
 
 export type ThemeRecoilType = {
   theme: Theme
+  themeIsReady: boolean
   systemThemeAvailable: boolean | undefined
 }
 export const ThemeRecoil = atom<ThemeRecoilType>({
   key: 'theme',
   default: {
     theme: DefaultTheme,
+    themeIsReady: false,
     systemThemeAvailable: undefined,
   },
 })

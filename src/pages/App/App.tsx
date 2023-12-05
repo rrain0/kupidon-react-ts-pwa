@@ -2,7 +2,7 @@
 import { css, Global, ThemeProvider } from '@emotion/react'
 import { useRecoilValue } from 'recoil'
 import React from 'react'
-import ModalOutlet from 'src/components/ModalPortal/ModalOutlet'
+import ModalOutlet from 'src/components/Modal/ModalOutlet'
 import AppFrame from 'src/pages/App/AppFrame'
 import ToastifySetup from 'src/components/Toasts/ToastifySetup'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
@@ -26,7 +26,7 @@ function App() {
   
   
   
-  
+  if (!theme.themeIsReady) return <></>
   return <ThemeProvider theme={theme.theme}>
     
     <Global styles={t=>css`

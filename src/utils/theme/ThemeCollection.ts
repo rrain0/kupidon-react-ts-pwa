@@ -11,13 +11,16 @@ import { LightSimpe } from 'src/utils/theme/themes/LightSimple'
 
 
 
-export const DefaultLightTheme = LightPink
-export const DefaultDarkTheme = DarkPink
+export const DefaultLightTheme = LightSimpe
+export const DefaultDarkTheme = DarkSimple
 export const DefaultTheme = DefaultLightTheme
 
 
 
 export const AllThemes = [
+  LightSimpe,
+  DarkSimple,
+  
   LightPink,
   DarkPink,
   
@@ -26,9 +29,6 @@ export const AllThemes = [
   
   LightOrange,
   DarkOrange,
-  
-  LightSimpe,
-  DarkSimple,
 ] as const
 
 
