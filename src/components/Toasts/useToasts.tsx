@@ -7,7 +7,7 @@ import { UiText } from 'src/utils/lang/UiText'
 import { useUiTextArr } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastBody, ToastType } from 'src/components/Toasts/ToastBody'
-import falseable = TypeUtils.falseable
+import falseable = TypeUtils.falsish
 import ReactMemoTyped = ReactUtils.Mem
 
 

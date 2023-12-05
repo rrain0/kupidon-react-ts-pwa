@@ -15,6 +15,7 @@ import ModalPortal from 'src/components/Modal/ModalPortal'
 import OptionItem from 'src/components/OptionItem/OptionItem'
 import { Pages } from 'src/components/Page/Pages'
 import UseBool from 'src/components/StateCarriers/UseBool'
+import UseBrowserBack from 'src/components/UseBrowserBack'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfileImages from 'src/pages/Profile/ProfileImages'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
@@ -348,45 +349,55 @@ React.memo(
                   onClick={boolProps.setTrue}
                 />
                 
-                { boolProps.value && <Modal
-                  onClick={boolProps.setFalse}
-                >
-                  <div css={css`
-                  width: 100%;
-                  height: 100%;
-                  padding: 20px;
-                  padding-bottom: 140px;
-                  display: grid;
-                  place-items: end center;
-                `}>
-                    
-                    <Card2 css={css`
-                    min-width: 220px;
-                    width: 100%;
-                    max-width: 500px;
-                    gap: 10px;
-                  `}
-                      onClick={ev=>ev.stopPropagation()}
+                { boolProps.value &&
+                  /* <UseBrowserBack
+                    onBack={boolProps.setFalse}
+                  > */
+                    <Modal
+                      onClick={boolProps.setFalse}
                     >
-                      <ItemLabel>{uiText.name[0].text}</ItemLabel>
-                      <Input css={InputStyle.inputSmall}
-                        autoFocus
-                        placeholder={uiText.name[0].text.toLowerCase()}
-                        {...props.inputProps}
-                        hasError={props.highlight}
-                      />
                       <div css={css`
-                      ${row};
-                      gap: 10px;
-                      justify-content: end;
-                    `}>
-                        <Button css={ButtonStyle.roundedSmallSecondary}
-                          onClick={boolProps.setFalse}
-                        >Ок</Button>
+                        width: 100%;
+                        height: 100%;
+                        padding: 20px;
+                        padding-bottom: 140px;
+                        display: grid;
+                        place-items: end center;
+                      `}>
+                        
+                        <Card2 css={css`
+                          min-width: 220px;
+                          width: 100%;
+                          max-width: 500px;
+                          gap: 10px;
+                        `}
+                          onClick={ev => ev.stopPropagation()}
+                        >
+                          <ItemLabel>{uiText.name[0].text}</ItemLabel>
+                          <Input css={InputStyle.inputSmall}
+                            autoFocus
+                            placeholder={uiText.name[0].text.toLowerCase()}
+                            {...props.inputProps}
+                            hasError={props.highlight}
+                            onBlur={ev => {
+                              ev.currentTarget.focus()
+                              props.inputProps.onBlur()
+                            }}
+                          />
+                          <div css={css`
+                            ${row};
+                            gap: 10px;
+                            justify-content: end;
+                          `}>
+                            <Button css={ButtonStyle.roundedSmallSecondary}
+                              onClick={boolProps.setFalse}
+                            >Ок</Button>
+                          </div>
+                        </Card2>
                       </div>
-                    </Card2>
-                  </div>
-                </Modal>}
+                    </Modal>
+                  /* </UseBrowserBack> */
+                }
               
               </>
           }/>}/>
@@ -435,6 +446,10 @@ React.memo(
                         placeholder={uiText.birthDatePlaceholder[0].text.toLowerCase()}
                         {...props.inputProps}
                         hasError={props.highlight}
+                        onBlur={ev=>{
+                          ev.currentTarget.focus()
+                          props.inputProps.onBlur()
+                        }}
                       />
                       <div css={css`
                       ${row};

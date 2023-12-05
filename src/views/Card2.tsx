@@ -6,7 +6,6 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import PartialUndef = TypeUtils.PartialUndef
-import Mem = ReactUtils.Mem
 import col = EmotionCommon.col
 
 
@@ -49,5 +48,4 @@ const Frame = styled.article`
   padding: 16px 12px;
   border-radius: 16px;
   background: ${p=>p.theme.containerNormal.bgc[0]};
-  //box-shadow: 0px 0px 6px #cccccc;
 `
