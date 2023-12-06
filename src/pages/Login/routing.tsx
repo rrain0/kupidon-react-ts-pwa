@@ -1,30 +1,16 @@
-import React from 'react'
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
-import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-import RootRoute = AppRoutes.RootRoute
+import { RouteObject } from 'react-router-dom'
+import { clearUnknownPathEnding } from 'src/app-routes/ReactRouterDomUtils'
 import LoginPage from './LoginPage'
 
 
 
-function LoginRouting(){
-  //console.log('login / <check here>')
-  const [searchParams] = useSearchParams()
-  
-  return <Routes>
-    <Route path=''
-      element={<LoginPage/>}
-    />
-    <Route path='*'
-      element={
-        <Navigate
-          to={RootRoute.login[fullAnySearchParams](searchParams)}
-          replace={true}
-        />
-      }
-    />
-  </Routes>
-}
-export default LoginRouting
+// path: 'login / <check here>'
+export const loginRouting: RouteObject[] = [
+  {
+    path: '',
+    Component: LoginPage,
+  },
+  clearUnknownPathEnding,
+]
+
 

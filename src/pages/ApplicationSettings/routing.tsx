@@ -1,30 +1,18 @@
-import React from 'react'
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
+import { RouteObject } from 'react-router-dom'
+import { clearUnknownPathEnding } from 'src/app-routes/ReactRouterDomUtils'
 import ApplicationSettingsPage from 'src/pages/ApplicationSettings/ApplicationSettingsPage'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import Mem = ReactUtils.Mem
-import fullAnySearchParams = RouteBuilder.fullAnySearchParams
-import RootRoute = AppRoutes.RootRoute
 
 
 
 
 
-const SettingsApplicationRouting = ()=>{
-  //console.log('settings / app / <check here>')
-  const [searchParams] = useSearchParams()
-  
-  return <Routes>
-    <Route path=''
-      element={<ApplicationSettingsPage/>}
-    />
-    <Route path='*'
-      element={<Navigate to={RootRoute.settings.app[fullAnySearchParams](searchParams)}
-        replace={true}
-      />}
-    />
-  </Routes>
-}
-export default Mem(SettingsApplicationRouting)
+
+
+// path: 'settings / app / <check here>'
+export const settingsApplicationRouting: RouteObject[] = [
+  {
+    path: '',
+    Component: ApplicationSettingsPage,
+  },
+  clearUnknownPathEnding,
+]

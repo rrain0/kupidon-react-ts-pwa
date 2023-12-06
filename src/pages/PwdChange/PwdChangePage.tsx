@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
@@ -18,8 +18,6 @@ import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { PwdChangeUiText } from 'src/pages/PwdChange/uiText'
 import { PwdChangePageValidation } from 'src/pages/PwdChange/validation'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
@@ -32,9 +30,6 @@ import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import PwdInput from 'src/views/Inputs/PwdInput/PwdInput'
 import col = EmotionCommon.col
 import Page = Pages.Page
-import Mem = ReactUtils.Mem
-import UserToUpdate = UserApi.UserToUpdate
-import ObjectKeys = ObjectUtils.ObjectKeys
 import defaultValues = PwdChangePageValidation.defaultValues
 import validators = PwdChangePageValidation.validators
 import FormValues = PwdChangePageValidation.FormValues
@@ -47,7 +42,9 @@ import mapFailureCodeToUiText = PwdChangePageValidation.mapFailureCodeToUiText
 
 
 
-const PwdChangePage = ()=>{
+const PwdChangePage =
+React.memo(
+()=>{
   
   const uiText = useUiTextContainer(PwdChangeUiText)
   
@@ -264,8 +261,8 @@ const PwdChangePage = ()=>{
     
     
   </>
-}
-export default Mem(PwdChangePage)
+})
+export default PwdChangePage
 
 
 

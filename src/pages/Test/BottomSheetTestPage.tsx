@@ -19,13 +19,14 @@ import rowWrap = EmotionCommon.rowWrap
 import Setter = TypeUtils.Setter
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
-import Mem = ReactUtils.Mem
 
 
 
 
 
-const BottomSheetTestPage = ()=>{
+const BottomSheetTestPage =
+React.memo(
+()=>{
   
   
   const bottomSheetFrameRef = useRef<HTMLDivElement>(null)
@@ -257,8 +258,8 @@ const BottomSheetTestPage = ()=>{
     />
     
   </>
-}
-export default Mem(BottomSheetTestPage)
+})
+export default BottomSheetTestPage
 
 
 

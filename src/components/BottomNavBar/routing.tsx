@@ -1,15 +1,17 @@
+import React from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomNavBar from 'src/components/BottomNavBar/BottomNavBar'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
-import Mem = ReactUtils.Mem
 
 
 
-const BottomNavBarRouting = ()=>{
+
+const BottomNavBarRouting =
+React.memo(
+()=>{
   
   return <Routes>
     {
@@ -30,5 +32,5 @@ const BottomNavBarRouting = ()=>{
         />)
     }
   </Routes>
-}
-export default Mem(BottomNavBarRouting)
+})
+export default BottomNavBarRouting

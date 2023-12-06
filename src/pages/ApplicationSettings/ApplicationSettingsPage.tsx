@@ -56,7 +56,9 @@ import Mem = ReactUtils.Mem
 
 
 
-const ApplicationSettingsPage = ()=>{
+const ApplicationSettingsPage =
+React.memo(
+()=>{
   const app = useRecoilValue(AppRecoil)
   const lang = useRecoilValue(LangRecoil)
   const theme = useRecoilValue(ThemeRecoil)
@@ -360,8 +362,8 @@ const ApplicationSettingsPage = ()=>{
     
     
   </>
-}
-export default Mem(ApplicationSettingsPage)
+})
+export default ApplicationSettingsPage
 
 
 

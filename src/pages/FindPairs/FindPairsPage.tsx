@@ -8,14 +8,15 @@ import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOver
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import Page = Pages.Page
 import SimpleContent = Pages.SimpleContent
-import Mem = ReactUtils.Mem
 
 
 
-function FindPairsPage(){
+
+const FindPairsPage =
+React.memo(
+()=>{
   
   
   const pageRef = useRef<HTMLElement>(null)
@@ -52,6 +53,6 @@ function FindPairsPage(){
     <BottomButtonBar />
     
   </>
-}
-export default Mem(FindPairsPage)
+})
+export default FindPairsPage
 

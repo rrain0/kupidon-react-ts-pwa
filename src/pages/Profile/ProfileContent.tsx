@@ -344,9 +344,9 @@ React.memo(
                 />
                 
                 { boolProps.value &&
-                  /* <UseBrowserBack
+                  <UseBrowserBack
                     onBack={boolProps.setFalse}
-                  > */
+                  >
                     <Modal
                       onClick={boolProps.setFalse}
                     >
@@ -390,7 +390,7 @@ React.memo(
                         </Card2>
                       </div>
                     </Modal>
-                  /* </UseBrowserBack> */
+                  </UseBrowserBack>
                 }
               
               </>

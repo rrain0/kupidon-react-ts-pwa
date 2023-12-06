@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
+import React from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useRef, useState } from 'react'
 import { Pages } from 'src/components/Page/Pages'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import center = EmotionCommon.center
-import { createPortal } from 'react-dom'
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
 

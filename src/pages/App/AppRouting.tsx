@@ -1,21 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import {
   createBrowserRouter,
-  Navigate,
-  Route, RouterProvider,
-  Routes,
+  Navigate, Outlet,
+  RouteObject,
+  RouterProvider,
   useSearchParams,
 } from 'react-router-dom'
 import BottomNavBarRouting from 'src/components/BottomNavBar/routing'
-import FindPairsRouting from 'src/pages/FindPairs/routing'
-import LoginRouting from 'src/pages/Login/routing'
-import ProfileRouting from 'src/pages/Profile/routing'
+import { findPairsRouting } from 'src/pages/FindPairs/routing'
+import { loginRouting } from 'src/pages/Login/routing'
 import React from 'react'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import SettingRouting from 'src/pages/Settings/routing'
-import SignupRouting from 'src/pages/Signup/routing'
-import TestRouting from 'src/pages/Test/routing'
+import { profileRouting } from 'src/pages/Profile/routing'
+import { settingRouting } from 'src/pages/Settings/routing'
+import { signupRouting } from 'src/pages/Signup/routing'
+import { testRouting } from 'src/pages/Test/routing'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
@@ -24,69 +23,86 @@ import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 
 
 
+const Any =
+React.memo(
+()=>{
+  return <>
+    {/* Это место, где будут рендериться children */}
+    <Outlet/>
+    <BottomNavBarRouting/>
+  </>
+})
 
-const router = createBrowserRouter([
-  { path: '*', Component: ()=><>
-      <PageRouting/>
-      <BottomNavBarRouting/>
-    </>
-  }
-])
+
+
+const AnyAny =
+React.memo(
+()=>{
+  const [searchParams] = useSearchParams()
+  return <Navigate
+    to={RootRoute.findPairs[fullAnySearchParams](searchParams)}
+    replace={true}
+  />
+})
+
+
+
+// path: '/ <check here>'
+const rootRoutes: RouteObject[] = [
+  {
+    path: '*',
+    Component: Any,
+    children: [
+      {
+        path: RootRoute.login[path]+'/*',
+        children: loginRouting,
+      },
+      {
+        path: RootRoute.signup[path]+'/*',
+        children: signupRouting,
+      },
+      
+      
+      
+      {
+        path: RootRoute.findPairs[path]+'/*',
+        children: findPairsRouting,
+      },
+      {
+        path: RootRoute.profile[path]+'/*',
+        children: profileRouting,
+      },
+      
+      
+      
+      {
+        path: RootRoute.test[path]+'/*',
+        children: testRouting,
+      },
+      {
+        path: RootRoute.settings[path]+'/*',
+        children: settingRouting,
+      },
+      
+      
+      
+      {
+        path: '*',
+        Component: AnyAny,
+      }
+    ]
+  },
+]
+const router = createBrowserRouter(rootRoutes)
+
 
 
 
 const AppRouting =
 React.memo(
 ()=>{
-  
   return <RouterProvider router={router} />
 })
 export default AppRouting
 
 
-
-
-const PageRouting =
-React.memo(
-()=>{
-  const [searchParams] = useSearchParams()
-  
-  
-  return <Routes>
-    
-    <Route path={RootRoute.login[path]+'/*'}
-      element={<LoginRouting/>}
-    />
-    <Route path={RootRoute.signup[path]+'/*'}
-      element={<SignupRouting/>}
-    />
-    
-    
-    <Route path={RootRoute.profile[path]+'/*'}
-      element={<ProfileRouting/>}
-    />
-    There will be Chat Routing
-    <Route path={RootRoute.findPairs[path]+'/*'}
-      element={<FindPairsRouting/>}
-    />
-    There will be Advices Routing
-    <Route path={RootRoute.test[path]+'/*'}
-      element={<TestRouting/>}
-    />
-    <Route path={RootRoute.settings[path]+'/*'}
-      element={<SettingRouting/>}
-    />
-    
-    
-    
-    <Route path='*'
-      element={
-        <Navigate
-          to={RootRoute.findPairs[fullAnySearchParams](searchParams)}
-          replace={true}
-        />
-      }
-    />
-    
-  </Routes>
-})

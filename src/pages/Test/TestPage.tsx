@@ -14,12 +14,13 @@ import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
-import Mem = ReactUtils.Mem
 
 
 
 
-const TestPage = () => {
+const TestPage =
+React.memo(
+()=>{
   const [searchParams] = useSearchParams()
   
   
@@ -161,8 +162,8 @@ const TestPage = () => {
     
     
   </>
-}
-export default Mem(TestPage)
+})
+export default TestPage
 
 
 

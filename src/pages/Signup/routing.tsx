@@ -1,31 +1,16 @@
-import React from 'react'
-import { Navigate, Route, Routes, useSearchParams } from 'react-router-dom'
-import { AppRoutes } from 'src/app-routes/AppRoutes'
-import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import RootRoute = AppRoutes.RootRoute
-import fullAnySearchParams = RouteBuilder.fullAnySearchParams
+import { RouteObject } from 'react-router-dom'
+import { clearUnknownPathEnding } from 'src/app-routes/ReactRouterDomUtils'
 import SignupPage from './SignupPage'
 
 
 
-function SignupRouting(){
-  //console.log('signup / <check here>')
-  const [searchParams] = useSearchParams()
-  
-  return <Routes>
-    <Route path=''
-      element={<SignupPage/>}
-    />
-    <Route path='*'
-      element={
-        <Navigate
-          to={RootRoute.signup[fullAnySearchParams](searchParams)}
-          replace={true}
-        />
-      }
-    />
-  </Routes>
-}
-export default SignupRouting
 
+// path: 'signup / <check here>'
+export const signupRouting: RouteObject[] = [
+  {
+    path: '',
+    Component: SignupPage,
+  },
+  clearUnknownPathEnding,
+]
 
