@@ -14,12 +14,13 @@ React.memo(
 ()=>{
   
   const squareRef = useRef<HTMLDivElement>(null)
+  const square2Ref = useRef<HTMLDivElement>(null)
   const textDivRef = useRef<HTMLDivElement>(null)
   const [pressed, setPressed] = useState(false)
   
   
   
-  useEffect(
+  /* useEffect(
     ()=>{
       const square = squareRef.current
       if (square){
@@ -35,6 +36,28 @@ React.memo(
       }
     },
     [squareRef.current]
+  ) */
+  
+  
+  
+  useEffect(
+    ()=>{
+      const square = squareRef.current
+      if (square){
+        const onPointerDown = ()=>{}
+        square.addEventListener('pointerdown',onPointerDown)
+        return ()=>{
+          square.removeEventListener('pointerdown',onPointerDown)
+        }
+      }
+    },
+    [squareRef.current]
+  )
+  
+  
+  useEffect(
+    ()=>{},
+    undefined
   )
   
   
@@ -47,7 +70,7 @@ React.memo(
         width: 200px;
         height: 200px;
         ${pressed && css`background: lightgreen;`}
-        touch-action: none;
+        //touch-action: none;
       `}
         ref={squareRef}
         onClick={ev=>{
@@ -69,18 +92,59 @@ React.memo(
           setPressed(false)
           if (textDivRef.current) textDivRef.current.innerHTML += 'pointer up<br/>'
         }}
-        onTouchStart={ev=>{
+        // onTouchStart={ev=>{
+        //   setPressed(true)
+        //   if (textDivRef.current) textDivRef.current.innerHTML += 'touch start<br/>'
+        // }}
+        // onTouchCancel={ev=>{
+        //   setPressed(false)
+        //   if (textDivRef.current) textDivRef.current.innerHTML += 'touch cancel<br/>'
+        // }}
+        // onTouchEnd={ev=>{
+        //   setPressed(false)
+        //   if (textDivRef.current) textDivRef.current.innerHTML += 'touch end<br/>'
+        // }}
+      />
+      
+      <div css={css`
+        background: skyblue;
+        width: 200px;
+        height: 200px;
+        ${pressed && css`background: lightgreen;`}
+        //touch-action: none;
+      `}
+        ref={square2Ref}
+        onClick={ev=>{
+          if (textDivRef.current) textDivRef.current.innerHTML += 'click<br/>'
+        }}
+        onPointerDown={ev=>{
           setPressed(true)
-          if (textDivRef.current) textDivRef.current.innerHTML += 'touch start<br/>'
+          if (textDivRef.current) textDivRef.current.innerHTML += 'pointer down<br/>'
         }}
-        onTouchCancel={ev=>{
+        onPointerCancel={ev=>{
           setPressed(false)
-          if (textDivRef.current) textDivRef.current.innerHTML += 'touch cancel<br/>'
+          if (textDivRef.current) textDivRef.current.innerHTML += 'pointer cancel<br/>'
         }}
-        onTouchEnd={ev=>{
+        onPointerOut={ev=>{
           setPressed(false)
-          if (textDivRef.current) textDivRef.current.innerHTML += 'touch end<br/>'
+          if (textDivRef.current) textDivRef.current.innerHTML += 'pointer out<br/>'
         }}
+        onPointerUp={ev=>{
+          setPressed(false)
+          if (textDivRef.current) textDivRef.current.innerHTML += 'pointer up<br/>'
+        }}
+        // onTouchStart={ev=>{
+        //   setPressed(true)
+        //   if (textDivRef.current) textDivRef.current.innerHTML += 'touch start<br/>'
+        // }}
+        // onTouchCancel={ev=>{
+        //   setPressed(false)
+        //   if (textDivRef.current) textDivRef.current.innerHTML += 'touch cancel<br/>'
+        // }}
+        // onTouchEnd={ev=>{
+        //   setPressed(false)
+        //   if (textDivRef.current) textDivRef.current.innerHTML += 'touch end<br/>'
+        // }}
       />
       
       <div css={t=>css`

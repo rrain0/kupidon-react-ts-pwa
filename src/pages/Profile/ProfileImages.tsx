@@ -3,6 +3,7 @@ import { css, keyframes } from '@emotion/react'
 import React, { useState } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { eventBuilder } from 'src/utils/react/buildEvents'
+import UseFakePointerRef from 'src/utils/react/UseFakePointerRef'
 import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -79,9 +80,8 @@ React.memo(
         `}
       >
         
-        
-        <div
-          css={css`
+        <UseFakePointerRef render={({ ref })=>
+          <div css={css`
             width: 100%;
             aspect-ratio: 1;
             border-radius: 14px;
@@ -93,28 +93,29 @@ React.memo(
             //user-select: auto;
             //touch-action: none;
           `}
-          // TODO maybe use touch events???
-          {...eventBuilder()
-            .events('onPointerDown')
-            .handlers(()=>setPressedIdx(i))
-            .events('onPointerCancel','onPointerUp','onPointerOut')
-            .handlers(()=>setPressedIdx(undefined))
-            .build()
-          }
-          /* onPointerDown={()=>setPressedIdx(i)}
-          onPointerCancel={()=>setPressedIdx(undefined)}
-          onPointerUp={()=>setPressedIdx(undefined)}
-          onPointerOut={()=>setPressedIdx(undefined)} */
-        >
-          
-          
-          {/* <img
-            src={im}
-            alt={`Profile photo ${i+1}`}
-            css={css`
+            // TODO maybe use touch events???
+            {...eventBuilder()
+              .events('onPointerDown')
+              .handlers(()=>setPressedIdx(i))
+              .events('onPointerCancel','onPointerUp','onPointerOut')
+              .handlers(()=>setPressedIdx(undefined))
+              .build()
+            }
+            ref={ref as any}
+            /* onPointerDown={()=>setPressedIdx(i)}
+             onPointerCancel={()=>setPressedIdx(undefined)}
+             onPointerUp={()=>setPressedIdx(undefined)}
+             onPointerOut={()=>setPressedIdx(undefined)} */
+          >
+            
+            
+            <img
+              src={im}
+              alt={`Profile photo ${i+1}`}
+              css={css`
               // todo restore ability of save photos
               
-              pointer-events: none;
+              //pointer-events: none;
               user-select: none;
               //touch-action: none;
               
@@ -123,40 +124,30 @@ React.memo(
               object-position: center;
               object-fit: cover;
             `}
-          /> */}
-          <div css={css`
-            background: darkseagreen;
-            //pointer-events: none;
-            //user-select: none;
-            //touch-action: none;
-
-            width: 100%;
-            aspect-ratio: 1;
-            object-position: center;
-            object-fit: cover;
-          `}
-          />
-          <div css={css`
-            ${abs};
-            border-radius: inherit;
-            pointer-events: auto;
-            //user-select: auto;
-            //touch-action: none;
-          `}
-            // TODO maybe use touch events???
-            {...eventBuilder()
-              .events('onPointerDown')
-              .handlers(ev=>{
-                setPressedIdx(i)
-              })
-              .events('onPointerCancel','onPointerUp','onPointerOut')
-              .handlers(()=>setPressedIdx(undefined))
-              .build()
-            }
-          />
+            />
+            {/* <div css={css`
+             ${abs};
+             border-radius: inherit;
+             pointer-events: auto;
+             //user-select: auto;
+             //touch-action: none;
+             `}
+             // TODO maybe use touch events???
+             {...eventBuilder()
+             .events('onPointerDown')
+             .handlers(ev=>{
+             setPressedIdx(i)
+             })
+             .events('onPointerCancel','onPointerUp','onPointerOut')
+             .handlers(()=>setPressedIdx(undefined))
+             .build()
+             }
+             /> */}
           
           
-        </div>
+          </div>
+        }/>
+        
         
         
         <div
