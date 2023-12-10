@@ -23,7 +23,7 @@ export const DarkSimple = {
   },
   containerAccent: {
     bgc:     ['#aaaaaa'],
-    content: ['#bdbdbd'],
+    content: ['#000000'],
   },
   
   buttonMain: {

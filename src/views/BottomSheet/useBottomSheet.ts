@@ -430,7 +430,7 @@ export const useBottomSheet = (
   )
   
   
-  // You MUST use css 'touch-state: none;' while dragging
+  // You MUST use css 'touch-action: none;' while dragging
   // to prevent browser gesture handling on mobile devices
   const onPointerMove = useCallback(
     function(this: HTMLElement, ev: PointerEvent){

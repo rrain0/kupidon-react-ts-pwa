@@ -13,6 +13,7 @@ import ItemLabel from 'src/components/FormElements/ItemLabel'
 import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
 import Modal from 'src/components/Modal/Modal'
 import ModalPortal from 'src/components/Modal/ModalPortal'
+import { ModalStyle } from 'src/components/Modal/ModalStyle'
 import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/UseBrowserBack'
@@ -222,11 +223,11 @@ React.memo(
   
   
   
-  
+  /*
   useEffect(()=>{
     console.log('PROFILE_CONTENT_FAILURES',failures)
   },[failures])
-  
+   */
   
   
   
@@ -347,7 +348,7 @@ React.memo(
                   <UseBrowserBack
                     onBack={boolProps.setFalse}
                   >
-                    <Modal
+                    <ModalPortal><Modal css={ModalStyle.modal}
                       onClick={boolProps.setFalse}
                     >
                       <div css={css`
@@ -389,7 +390,7 @@ React.memo(
                           </div>
                         </Card2>
                       </div>
-                    </Modal>
+                    </Modal></ModalPortal>
                   </UseBrowserBack>
                 }
               
@@ -413,7 +414,7 @@ React.memo(
                   onClick={boolProps.setTrue}
                 />
                 
-                { boolProps.value && <Modal
+                { boolProps.value && <ModalPortal><Modal css={ModalStyle.modal}
                   onClick={boolProps.setFalse}
                 >
                   <div css={css`
@@ -456,7 +457,7 @@ React.memo(
                       </div>
                     </Card2>
                   </div>
-                </Modal>}
+                </Modal></ModalPortal>}
               
               </>
             }/>}/>

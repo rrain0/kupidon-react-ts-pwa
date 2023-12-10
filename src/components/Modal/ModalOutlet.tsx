@@ -1,17 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { useId, useLayoutEffect } from 'react'
+import React, { useId, useLayoutEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Mem = ReactUtils.Mem
-import fixed = EmotionCommon.fixed
 
 
 
 
-const ModalOutlet = ()=>{
+const ModalOutlet =
+React.memo(
+()=>{
   const reactId = useId()
   const id = `modal-outlet-${reactId}`
   const setAppState = useSetRecoilState(AppRecoil)
@@ -21,13 +19,8 @@ const ModalOutlet = ()=>{
   )
   
   return <div
+    css={css`display: contents;`}
     id={id}
-    css={css`
-      ${fixed};
-      pointer-events: none;
-      user-select: none;
-      background: none;
-    `}
   />
-}
-export default Mem(ModalOutlet)
+})
+export default ModalOutlet

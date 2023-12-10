@@ -1,273 +1,271 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
-
-  <head>
-    <meta charset="utf-8" />
+<head>
+  <meta charset="utf-8" />
+  
+  <script>
+    /** @type {'development'|'production'|'test'} */
+    const NODE_ENV = "%NODE_ENV%"
+    /** @type {string} */
+    const PUBLIC_URL = "%PUBLIC_URL%"
+  </script>
+  
+  
+  <title>Kupidon</title>
+  <meta name="description" content="Kupidon date app" />
+  
+  <meta name="viewport"
+    content="width=device-width, height=device-height, viewport-fit=cover,
+      interactive-widget=resizes-content,
+      initial-scale=1, maximum-scale=1, user-scalable=0"
+  />
+  
+  <link rel="icon" href="%PUBLIC_URL%/logo64.png" />
+  <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+  
+  <!--
+    manifest.json provides metadata used when your web app is installed on a
+    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+  -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  
+  
+  
+  <!-- Used as color of mobile browser toolbar in site mode -->
+  <!-- Do not set it if use media="(prefers-color-scheme: ...)" -->
+  <!--<meta name="theme-color" content="green" />-->
+  
+  <!-- works on site in mobile Chrome -->
+  <!-- works in app on desktop Edge -->
+  <!-- works in app on mobile Chrome -->
+  <meta name="theme-color" content="#ffaeba" media="(prefers-color-scheme: light)" />
+  <!-- NOT works on site in mobile Chrome -->
+  <!-- works in app on desktop Edge -->
+  <!-- works in app on mobile Chrome -->
+  <meta name="theme-color" content="#992c46" media="(prefers-color-scheme: dark)" />
+  
+  
+  
+  
+  
+  <script>
+    //console.log('setup app script: start setup')
     
-    <script>
-      /** @type {'development'|'production'|'test'} */
-      const NODE_ENV = "%NODE_ENV%"
-      const PUBLIC_URL = "%PUBLIC_URL%"
-    </script>
     
-    
-    <title>Kupidon</title>
-    <meta name="description" content="Kupidon date app" />
-    
-    <meta name="viewport"
-      content="width=device-width, height=device-height, viewport-fit=cover,
-        interactive-widget=resizes-content,
-        initial-scale=1, maximum-scale=1, user-scalable=0"
-    />
-    
-    <link rel="icon" href="%PUBLIC_URL%/logo64.png" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    /** @type {readonly ('en-US'|'ru-RU')[]} */
+    const AppLangs = ['en-US','ru-RU']
     
     
     
-    <!-- Used as color of mobile browser toolbar in site mode -->
-    <!-- Do not set it if use media="(prefers-color-scheme: ...)" -->
-    <!--<meta name="theme-color" content="green" />-->
-    
-    <!-- works on site in mobile Chrome -->
-    <!-- works in app on desktop Edge -->
-    <!-- works in app on mobile Chrome -->
-    <meta name="theme-color" content="#ffaeba" media="(prefers-color-scheme: light)" />
-    <!-- NOT works on site in mobile Chrome -->
-    <!-- works in app on desktop Edge -->
-    <!-- works in app on mobile Chrome -->
-    <meta name="theme-color" content="#992c46" media="(prefers-color-scheme: dark)" />
-    
-    
-    
-    
-    
-    <script>
-      //console.log('setup app script: start setup')
-      
-      
-      /** @type {readonly ('en-US'|'ru-RU')[]} */
-      const AppLangs = ['en-US','ru-RU']
-      
-      
-      
+    /**
+     * @param {AppLangs | string[]} langs
+     * @returns {void}
+     */
+    function setHtmlTags(langs){
       /**
-       * @param {AppLangs | string[]} langs
-       * @returns {void}
+       * @type {{
+       *  nodeEnv: 'development'|'production'|'test',
+       *  publicUrl: string,
+       *  description: string,
+       *  lang: string,
+       *  title: string
+       * }}
        */
-      function setHtmlTags(langs){
+      const htmlProps = {
+        nodeEnv: NODE_ENV,
+        publicUrl: PUBLIC_URL,
+        lang: "en-US",
+        title: "Kupidon",
+        description: "Kupidon date app",
+      }
+      if (AppLangs.includes(langs?.[0])) {
+        htmlProps.lang = langs[0]
+        
+        const textPrefix = htmlProps.nodeEnv==='development' ? 'Dev ' : ''
+        
+        /** @type {UiText<'kupidon'>[]} */
+        const AppTitles = [
+          {
+            value: 'kupidon',
+            lang: 'en-US',
+            text: 'Kupidon',
+          },{
+            value: 'kupidon',
+            lang: 'ru-RU',
+            text: 'Купидон',
+          },
+        ]
+        /** @type {UiText<'kupidonDescription'>[]} */
+        const AppDescriptions = [
+          {
+            value: 'kupidonDescription',
+            lang: 'en-US',
+            text: 'Kupidon date app',
+          },{
+            value: 'kupidonDescription',
+            lang: 'ru-RU',
+            text: 'Купидон - приложение для свидания',
+          },
+        ]
+        
         /**
-         * @type {{
-         *  nodeEnv: 'development'|'production'|'test',
-         *  publicUrl: string,
-         *  description: string,
-         *  lang: string,
-         *  title: string
-         * }}
+         * @template T
+         * @param {readonly UiText<T>[]} uiText
+         * @param {string[]} langs
+         * @returns {UiText<T>[]}
          */
-        const htmlProps = {
-          nodeEnv: NODE_ENV,
-          publicUrl: PUBLIC_URL,
-          lang: "en-US",
-          title: "Kupidon",
-          description: "Kupidon date app",
-        }
-        if (AppLangs.includes(langs?.[0])) {
-          htmlProps.lang = langs[0]
-          
-          const textPrefix = htmlProps.nodeEnv==='development' ? 'Dev ' : ''
-          
-          /** @type {UiText<'kupidon'>[]} */
-          const AppTitles = [
-            {
-              value: 'kupidon',
-              lang: 'en-US',
-              text: 'Kupidon',
-            },{
-              value: 'kupidon',
-              lang: 'ru-RU',
-              text: 'Купидон',
-            },
-          ]
-          /** @type {UiText<'kupidonDescription'>[]} */
-          const AppDescriptions = [
-            {
-              value: 'kupidonDescription',
-              lang: 'en-US',
-              text: 'Kupidon date app',
-            },{
-              value: 'kupidonDescription',
-              lang: 'ru-RU',
-              text: 'Купидон - приложение для свидания',
-            },
-          ]
-          
-          /**
-           * @template T
-           * @param {readonly UiText<T>[]} uiText
-           * @param {string[]} langs
-           * @returns {UiText<T>[]}
-           */
-          const prepareUiText = function(uiText, langs){
-            const used = new Set()
-            return [...uiText]
-              .sort((a,b)=>{
-                if (a.value===b.value) {
-                  let langIdxA = langs.findIndex(it=>it===a.lang)
-                  let langIdxB = langs.findIndex(it=>it===b.lang)
-                  if (langIdxA===-1) langIdxA = langs.length
-                  if (langIdxB===-1) langIdxB = langs.length
-                  return langIdxA - langIdxB
-                }
-                return 0
-              })
-              .filter(it=>{
-                if (used.has(it.value)) return false
-                used.add(it.value)
-                return true
-              })
-          }
-          
-          const titles = prepareUiText(AppTitles,langs)
-          const descriptions = prepareUiText(AppDescriptions,langs)
-          
-          htmlProps.title = textPrefix + titles[0].text
-          htmlProps.description = textPrefix + descriptions[0].text
-        }
-        
-        const html = document.documentElement
-        html.lang = htmlProps.lang
-        
-        document.title = htmlProps.title
-        
-        const htmlDescription = document.querySelector('html head meta[name=description]')
-        htmlDescription.content = htmlProps.description
-        
-        const manifestSearchParams = new URLSearchParams({
-          nodeEnv: htmlProps.nodeEnv,
-          lang: htmlProps.lang,
-        }).toString()
-        let manifestUrl = htmlProps.publicUrl + "/manifest.json"
-        if (manifestSearchParams) manifestUrl += '?' + manifestSearchParams
-        
-        const linkManifest = document.querySelector('html head link[rel=manifest]')
-        linkManifest.href = manifestUrl
-      }
-      
-      
-      
-      
-      const langSettingsName = 'langSettings'
-      {
-        
-        const langSettings = JSON.parse(localStorage.getItem(langSettingsName))
-        if (langSettings?.setting==='manual' && langSettings.manualSetting){
-          setHtmlTags(langSettings.manualSetting)
-        } else {
-          
-          /** @returns {string[]} */
-          const getLangs = function(){
-            let browserLangs = navigator.languages
-            if ((!browserLangs || !browserLangs.length) && navigator.language)
-              browserLangs = [navigator.language]
-            if (!browserLangs || !browserLangs.length) browserLangs = undefined
-            browserLangs = browserLangs?.map(it=>{
-              if (it.startsWith('en')) return 'en-US'
-              if (it.startsWith('ru')) return 'ru-RU'
-              return it
+        const prepareUiText = function(uiText, langs){
+          const used = new Set()
+          return [...uiText]
+            .sort((a,b)=>{
+              if (a.value===b.value) {
+                let langIdxA = langs.findIndex(it=>it===a.lang)
+                let langIdxB = langs.findIndex(it=>it===b.lang)
+                if (langIdxA===-1) langIdxA = langs.length
+                if (langIdxB===-1) langIdxB = langs.length
+                return langIdxA - langIdxB
+              }
+              return 0
             })
-            return browserLangs
-          }
-          
-          let langs = getLangs().filter(it=>AppLangs.includes(it))
-          langs = [...langs,'en-US']
-          
-          setHtmlTags(langs)
+            .filter(it=>{
+              if (used.has(it.value)) return false
+              used.add(it.value)
+              return true
+            })
         }
         
+        const titles = prepareUiText(AppTitles,langs)
+        const descriptions = prepareUiText(AppDescriptions,langs)
         
+        htmlProps.title = textPrefix + titles[0].text
+        htmlProps.description = textPrefix + descriptions[0].text
+      }
+      
+      const html = document.documentElement
+      html.lang = htmlProps.lang
+      
+      document.title = htmlProps.title
+      
+      const htmlDescription = document.querySelector('html head meta[name=description]')
+      htmlDescription.content = htmlProps.description
+      
+      const manifestSearchParams = new URLSearchParams({
+        nodeEnv: htmlProps.nodeEnv,
+        lang: htmlProps.lang,
+      }).toString()
+      let manifestUrl = htmlProps.publicUrl + "/manifest.json"
+      if (manifestSearchParams) manifestUrl += '?' + manifestSearchParams
+      
+      const linkManifest = document.querySelector('html head link[rel=manifest]')
+      linkManifest.href = manifestUrl
+    }
+    
+    
+    
+    
+    const langSettingsName = 'langSettings'
+    {
+      
+      const langSettings = JSON.parse(localStorage.getItem(langSettingsName))
+      if (langSettings?.setting==='manual' && langSettings.manualSetting){
+        setHtmlTags(langSettings.manualSetting)
+      } else {
+        
+        /** @returns {string[]} */
+        const getLangs = function(){
+          let browserLangs = navigator.languages
+          if ((!browserLangs || !browserLangs.length) && navigator.language)
+            browserLangs = [navigator.language]
+          if (!browserLangs || !browserLangs.length) browserLangs = undefined
+          browserLangs = browserLangs?.map(it=>{
+            if (it.startsWith('en')) return 'en-US'
+            if (it.startsWith('ru')) return 'ru-RU'
+            return it
+          })
+          return browserLangs
+        }
+        
+        let langs = getLangs().filter(it=>AppLangs.includes(it))
+        langs = [...langs,'en-US']
+        
+        setHtmlTags(langs)
       }
       
       
-      
-      
-      /*
-      https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/How_to/Trigger_install_prompt
-      BeforeInstallEvent отправляется браузером, если он определил, что сайт можно установить как PWA.
-      При первой отправке эвента, браузер показывает свой UI с предолжением установки (его отключаем ev.preventDefault()).
-      Запрос на установку из эвента можно вызвать только 1 раз, дальше нужен новый эвент.
-      При отклонении запроса на установку, браузер сразу же отправляет новый эвент.
-      */
-      let beforeInstallPromptEvent
-      let onBeforeInstallPromptEvent
-      const setBeforeInstallPromptEvent = ev=>{
-        beforeInstallPromptEvent = ev
-        onBeforeInstallPromptEvent?.(beforeInstallPromptEvent)
-      }
-      const promptInstall = ()=>{
-        const ev = beforeInstallPromptEvent
-        setBeforeInstallPromptEvent(undefined)
-        return ev?.prompt()
-      }
-      window.addEventListener('beforeinstallprompt', async ev=>{
-        // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getInstalledRelatedApps
-        const relatedApps = await navigator.getInstalledRelatedApps() // => { id, platform, url, version }[]
-        // Search for a specific installed platform-specific app
-        ev.preventDefault()
-        if (!relatedApps?.length) setBeforeInstallPromptEvent(ev)
-      })
-      window.addEventListener('appinstalled', ev=>{
-        setBeforeInstallPromptEvent(undefined)
-      })
-      
-      
-      
-      
-      //console.log('setup app script: end setup')
-    </script>
+    }
     
     
     
     
+    /*
+    https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/How_to/Trigger_install_prompt
+    BeforeInstallEvent отправляется браузером, если он определил, что сайт можно установить как PWA.
+    При первой отправке эвента, браузер показывает свой UI с предолжением установки (его отключаем ev.preventDefault()).
+    Запрос на установку из эвента можно вызвать только 1 раз, дальше нужен новый эвент.
+    При отклонении запроса на установку, браузер сразу же отправляет новый эвент.
+    */
+    let beforeInstallPromptEvent
+    let onBeforeInstallPromptEvent
+    const setBeforeInstallPromptEvent = ev=>{
+      beforeInstallPromptEvent = ev
+      onBeforeInstallPromptEvent?.(beforeInstallPromptEvent)
+    }
+    const promptInstall = ()=>{
+      const ev = beforeInstallPromptEvent
+      setBeforeInstallPromptEvent(undefined)
+      return ev?.prompt()
+    }
+    window.addEventListener('beforeinstallprompt', async ev=>{
+      // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getInstalledRelatedApps
+      const relatedApps = await navigator.getInstalledRelatedApps() // => { id, platform, url, version }[]
+      // Search for a specific installed platform-specific app
+      ev.preventDefault()
+      if (!relatedApps?.length) setBeforeInstallPromptEvent(ev)
+    })
+    window.addEventListener('appinstalled', ev=>{
+      setBeforeInstallPromptEvent(undefined)
+    })
     
     
     
     
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    
-    
-  </head>
+    //console.log('setup app script: end setup')
+  </script>
   
   
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+  
+  
+  
+  
+  
+  
+  <!--
+    Notice the use of %PUBLIC_URL% in the tags above.
+    It will be replaced with the URL of the `public` folder during the build.
+    Only files inside the `public` folder can be referenced from the HTML.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+    work correctly both with client-side routing and a non-root public URL.
+    Learn how to configure a non-root public URL by running `npm run build`.
+  -->
+  
+  
+</head>
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
 
 
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"></div>
+  <!--
+    This HTML file is a template.
+    If you open it directly in the browser, you will see an empty page.
+
+    You can add webfonts, meta tags, or analytics to this file.
+    The build step will place the bundled scripts into the <body> tag.
+
+    To begin the development, run `npm start` or `yarn start`.
+    To create a production bundle, use `npm run build` or `yarn build`.
+  -->
+</body>
 </html>

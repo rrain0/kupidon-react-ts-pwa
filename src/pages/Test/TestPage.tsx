@@ -87,6 +87,9 @@ React.memo(
         <Link to={RootRoute.test.moveElementToAnotherView[fullAnySearchParams](searchParams)}>
           <Button css={ButtonStyle.bigRectMain}>Move to another view</Button>
         </Link>
+        <Link to={RootRoute.test.pointer[fullAnySearchParams](searchParams)}>
+          <Button css={ButtonStyle.bigRectMain}>Pointer test</Button>
+        </Link>
         
         
         {/* <button

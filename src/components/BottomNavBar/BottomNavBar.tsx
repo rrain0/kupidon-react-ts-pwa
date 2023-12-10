@@ -2,13 +2,11 @@
 import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import classNames from 'classnames'
-import React, { useState } from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { BottomNavBarUiText } from 'src/components/BottomNavBar/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
-import UseBrowserBack from 'src/components/UseBrowserBack'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
@@ -25,7 +23,6 @@ import ChatRoundIc = SvgIcons.ChatRoundIc
 import HelpIc = SvgIcons.HelpIc
 import fixedBottom = EmotionCommon.fixedBottom
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
-import Mem = ReactUtils.Mem
 
 
 

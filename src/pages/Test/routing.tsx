@@ -1,6 +1,7 @@
 import { RouteObject } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { clearUnknownPathEnding } from 'src/app-routes/ReactRouterDomUtils'
+import PointerTest from 'src/pages/Test/PointerTest'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
@@ -13,7 +14,7 @@ import MoveElementToAnotherView from 'src/pages/Test/MoveElementToAnotherView'
 
 
 // path: 'test / scrollbar / <check here>'
-const scrollbarTestPageRouting: RouteObject[] = [
+const testScrollbarTestPageRouting: RouteObject[] = [
   {
     path: '',
     Component: ScrollbarTestPage,
@@ -21,7 +22,7 @@ const scrollbarTestPageRouting: RouteObject[] = [
   clearUnknownPathEnding,
 ]
 // path: 'test / resizeObserver / <check here>'
-const resizeObserverTestPageRouting: RouteObject[] = [
+const testResizeObserverTestPageRouting: RouteObject[] = [
   {
     path: '',
     Component: ResizeObserverTestPage,
@@ -29,7 +30,7 @@ const resizeObserverTestPageRouting: RouteObject[] = [
   clearUnknownPathEnding,
 ]
 // path: 'test / bottomSheet / <check here>'
-const bottomSheetTestPageRouting: RouteObject[] = [
+const testBottomSheetTestPageRouting: RouteObject[] = [
   {
     path: '',
     Component: BottomSheetTestPage,
@@ -37,10 +38,18 @@ const bottomSheetTestPageRouting: RouteObject[] = [
   clearUnknownPathEnding,
 ]
 // path: 'test / moveElementToAnotherView / <check here>'
-const moveElementToAnotherViewRouting: RouteObject[] = [
+const testMoveElementToAnotherViewRouting: RouteObject[] = [
   {
     path: '',
     Component: MoveElementToAnotherView,
+  },
+  clearUnknownPathEnding,
+]
+// path: 'test / pointer / <check here>'
+const testPointerRouting: RouteObject[] = [
+  {
+    path: '',
+    Component: PointerTest,
   },
   clearUnknownPathEnding,
 ]
@@ -55,19 +64,23 @@ export const testRouting: RouteObject[] = [
   },
   {
     path: RootRoute.test.scrollbar[path]+'/*',
-    children: scrollbarTestPageRouting,
+    children: testScrollbarTestPageRouting,
   },
   {
     path: RootRoute.test.resizeObserver[path]+'/*',
-    children: resizeObserverTestPageRouting,
+    children: testResizeObserverTestPageRouting,
   },
   {
     path: RootRoute.test.bottomSheet[path]+'/*',
-    children: bottomSheetTestPageRouting,
+    children: testBottomSheetTestPageRouting,
   },
   {
     path: RootRoute.test.moveElementToAnotherView[path]+'/*',
-    children: moveElementToAnotherViewRouting,
+    children: testMoveElementToAnotherViewRouting,
+  },
+  {
+    path: RootRoute.test.pointer[path]+'/*',
+    children: testPointerRouting,
   },
   clearUnknownPathEnding,
 ]

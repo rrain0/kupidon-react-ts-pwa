@@ -2,16 +2,13 @@
 import { css, keyframes } from '@emotion/react'
 import React, { useState } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { eventBuilder } from 'src/utils/react/buildEvents'
 import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
-import Card from 'src/views/Card'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
-import Mem = ReactUtils.Mem
 
 
 
@@ -20,8 +17,10 @@ export type ProfileImagesProps = {
   images: string[]
   setImages: Setter<string[]>
 }
-const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
-  
+const ProfileImages =
+React.memo(
+(props: ProfileImagesProps)=>{
+  const { images, setImages } = props
   
   const [pressedIdx, setPressedIdx] = useState(undefined as number|undefined)
   
@@ -39,6 +38,10 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
     ;
     place-items: stretch;
     gap: 12px;
+
+    //pointer-events: none;
+    //user-select: none;
+    //touch-action: none;
   `}>
     {images.map((im,i) => {
       
@@ -69,8 +72,14 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
           grid-area: im${i+1};
           position: relative;
           ${center};
+
+          //pointer-events: none;
+          //user-select: none;
+          //touch-action: none;
         `}
       >
+        
+        
         <div
           css={css`
             width: 100%;
@@ -78,8 +87,13 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
             border-radius: 14px;
             overflow: hidden;
             cursor: pointer;
-            user-select: none;
+            position: relative;
+            
+            //pointer-events: auto;
+            //user-select: auto;
+            //touch-action: none;
           `}
+          // TODO maybe use touch events???
           {...eventBuilder()
             .events('onPointerDown')
             .handlers(()=>setPressedIdx(i))
@@ -92,23 +106,67 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
           onPointerUp={()=>setPressedIdx(undefined)}
           onPointerOut={()=>setPressedIdx(undefined)} */
         >
-          <img
+          
+          
+          {/* <img
             src={im}
             alt={`Profile photo ${i+1}`}
             css={css`
-              /* todo restore ability of save photos */
+              // todo restore ability of save photos
+              
               pointer-events: none;
+              user-select: none;
+              //touch-action: none;
+              
               width: 100%;
               aspect-ratio: 1;
               object-position: center;
               object-fit: cover;
             `}
+          /> */}
+          <div css={css`
+            background: darkseagreen;
+            //pointer-events: none;
+            //user-select: none;
+            //touch-action: none;
+
+            width: 100%;
+            aspect-ratio: 1;
+            object-position: center;
+            object-fit: cover;
+          `}
           />
+          <div css={css`
+            ${abs};
+            border-radius: inherit;
+            pointer-events: auto;
+            //user-select: auto;
+            //touch-action: none;
+          `}
+            // TODO maybe use touch events???
+            {...eventBuilder()
+              .events('onPointerDown')
+              .handlers(ev=>{
+                setPressedIdx(i)
+              })
+              .events('onPointerCancel','onPointerUp','onPointerOut')
+              .handlers(()=>setPressedIdx(undefined))
+              .build()
+            }
+          />
+          
+          
         </div>
+        
+        
         <div
           onAnimationEnd={ev=>console.log("onAnimationEnd: ",ev)}
           css={t=>css`
+            
             pointer-events: none;
+            //user-select: none;
+            //touch-action: none;
+            
             ${abs};
             inset: -7px;
             border: 3px solid transparent;
@@ -133,11 +191,13 @@ const ProfileImages = ({ images, setImages }: ProfileImagesProps)=>{
             `}
           `}
         />
+        
+        
       </div>
     })}
   </div>
-}
-export default Mem(ProfileImages)
+})
+export default ProfileImages
 
 
 

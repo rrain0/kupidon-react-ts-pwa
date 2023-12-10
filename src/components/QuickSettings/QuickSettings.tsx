@@ -10,7 +10,6 @@ import { QuickSettingsUiText } from 'src/components/QuickSettings/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { Themes } from 'src/utils/theme/Themes'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
@@ -41,7 +40,6 @@ import LockIc = SvgIcons.LockIc
 import GearIc = SvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
-import Mem = ReactUtils.Mem
 import MoonIc = SvgIcons.MoonIc
 import ThemeType = Themes.Type
 import resetH = EmotionCommon.resetH
@@ -53,11 +51,14 @@ const sheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
 const sheetOpenIdx = 3
 
 
+
 export type SettingsProps = {
   open: boolean
   setOpen: Setter<boolean>
 }
-const QuickSettings = (props: SettingsProps)=>{
+const QuickSettings =
+React.memo(
+(props: SettingsProps)=>{
   const { open, setOpen } = props
   
   const auth = useRecoilValue(AuthRecoil)
@@ -274,8 +275,8 @@ const QuickSettings = (props: SettingsProps)=>{
     
     
   </>
-}
-export default Mem(QuickSettings)
+})
+export default QuickSettings
 
 
 

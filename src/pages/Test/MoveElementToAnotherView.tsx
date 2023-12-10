@@ -3,6 +3,7 @@ import React from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { Pages } from 'src/components/Page/Pages'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import center = EmotionCommon.center
@@ -40,10 +41,10 @@ const MoveElementToAnotherView = ()=>{
       
       {/* if container changes - then content recreated !!! */}
       { container1.current && container2.current &&
-        <>createPortal(
+        <>{createPortal(
           <Rectange/>,
           position===0 ? container1.current! : container2.current!
-        )</>
+        )}</>
       }
     
     </SimpleContent>

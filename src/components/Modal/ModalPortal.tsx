@@ -1,19 +1,19 @@
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useRecoilValue } from 'recoil'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { findFirstFocusableElement } from 'src/utils/element/findFirstFocusableElement'
-import Mem = ReactUtils.Mem
 import PartialUndef = TypeUtils.PartialUndef
+
 
 
 
 export type ModalPortalProps = PartialUndef<{
   children: React.ReactNode
 }>
-const ModalPortal = (props: ModalPortalProps)=>{
+const ModalPortal =
+React.memo(
+(props: ModalPortalProps)=>{
   const modalId = useRecoilValue(AppRecoil).modalOutletId
   const modalView = useMemo(
     ()=>modalId ? document.getElementById(modalId) : undefined,
@@ -41,5 +41,5 @@ const ModalPortal = (props: ModalPortalProps)=>{
     {/* or maybe simply place it to the 'document.body' ... */}
     { modalView && createPortal(props.children, modalView) }
   </>
-}
-export default Mem(ModalPortal)
+})
+export default ModalPortal

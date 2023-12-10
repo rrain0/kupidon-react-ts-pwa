@@ -9,8 +9,6 @@ import React, {
   useMemo,
   useState,
 } from 'react'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Mem = ReactUtils.Mem
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import Setter = TypeUtils.Setter
@@ -38,8 +36,10 @@ export type BottomSheetOptionsProps = {
   setSnapPointsPx?: Setter<number[]> | empty
 }
 export type BottomSheetProps = BottomSheetRefsProps & BottomSheetOptionsProps
-const BottomSheet = (props: BottomSheetProps) => {
-  let {
+const BottomSheet =
+React.memo(
+(props: BottomSheetProps) => {
+  const {
     state,
     setState,
     animationDuration,
@@ -194,5 +194,5 @@ const BottomSheet = (props: BottomSheetProps) => {
       </div>
     </div>
   </div>
-}
-export default Mem(BottomSheet)
+})
+export default BottomSheet
