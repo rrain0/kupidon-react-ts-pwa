@@ -68,7 +68,7 @@ const frameStyle = css`
   ${row};
   align-items: center;
   width: 100%;
-  position: relative;
+  position: relative;\
 `
 
 

@@ -1,15 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes } from '@emotion/react'
-import React, { useState } from 'react'
+import React, { useLayoutEffect, useMemo, useState } from 'react'
+import { useRecoilValue } from 'recoil'
+import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { CastUtils } from 'src/utils/common/CastUtils'
 import { eventBuilder } from 'src/utils/react/buildEvents'
 import UseFakePointerRef from 'src/utils/react/UseFakePointerRef'
+import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
+import isPresent = CastUtils.isPresent
 
 
 
@@ -22,9 +27,31 @@ const ProfileImages =
 React.memo(
 (props: ProfileImagesProps)=>{
   const { images, setImages } = props
+  const theme = useRecoilValue(ThemeRecoil).theme
+  
+  const progressAnim = useMemo(
+    ()=>radialGradKfs(theme),
+    [theme]
+  )
   
   const [pressedIdx, setPressedIdx] = useState(undefined as number|undefined)
+  const [playProgressAnim, setPlayProgressAnim] = useState(false)
   
+  useLayoutEffect(
+    ()=>{
+      if (isPresent(pressedIdx)){
+        const timerId = setTimeout(
+          ()=>{ setPlayProgressAnim(true) },
+          150
+        )
+        return ()=>clearTimeout(timerId)
+      }
+    },
+    [pressedIdx]
+  )
+  
+  
+  useNoSelect(isPresent(playProgressAnim) && playProgressAnim)
   
   return <div css={t=>css`
     display: grid;
@@ -47,36 +74,11 @@ React.memo(
     {images.map((im,i) => {
       
       return <div
-        /*
-        draggable
-        onDragStart={ev => {
-          ev.dataTransfer.setData('text/plain', im)
-        }}
-        
-        onDragOver={ev => {
-          ev.preventDefault()
-          ev.dataTransfer.dropEffect = 'move'
-        }}
-        onDrop={ev => {
-          ev.preventDefault()
-          const data = ev.dataTransfer.getData('text/plain')
-          const thisImIdx = images.findIndex(val => val === im)
-          const droppedImIdx = images.findIndex(val => val === data)
-          const newImages = [...images]
-          newImages[thisImIdx] = data
-          newImages[droppedImIdx] = im
-          setImages(newImages)
-        }}
-        */
         key={im}
         css={css`
           grid-area: im${i+1};
           position: relative;
           ${center};
-
-          //pointer-events: none;
-          //user-select: none;
-          //touch-action: none;
         `}
       >
         
@@ -88,17 +90,18 @@ React.memo(
             overflow: hidden;
             cursor: pointer;
             position: relative;
-            
-            //pointer-events: auto;
-            //user-select: auto;
-            //touch-action: none;
           `}
-            // TODO maybe use touch events???
             {...eventBuilder()
               .events('onPointerDown')
-              .handlers(()=>setPressedIdx(i))
-              .events('onPointerCancel','onPointerUp','onPointerOut')
-              .handlers(()=>setPressedIdx(undefined))
+              .handlers(ev=>{
+                ev.currentTarget.setPointerCapture(ev.pointerId)
+                setPressedIdx(i)
+              })
+              .events('onPointerCancel','onPointerUp')
+              .handlers(()=>{
+                setPressedIdx(undefined)
+                setPlayProgressAnim(false)
+              })
               .build()
             }
             ref={ref as any}
@@ -115,8 +118,8 @@ React.memo(
               css={css`
               // todo restore ability of save photos
               
-              //pointer-events: none;
-              user-select: none;
+              pointer-events: none;
+              //user-select: none;
               //touch-action: none;
               
               width: 100%;
@@ -125,26 +128,8 @@ React.memo(
               object-fit: cover;
             `}
             />
-            {/* <div css={css`
-             ${abs};
-             border-radius: inherit;
-             pointer-events: auto;
-             //user-select: auto;
-             //touch-action: none;
-             `}
-             // TODO maybe use touch events???
-             {...eventBuilder()
-             .events('onPointerDown')
-             .handlers(ev=>{
-             setPressedIdx(i)
-             })
-             .events('onPointerCancel','onPointerUp','onPointerOut')
-             .handlers(()=>setPressedIdx(undefined))
-             .build()
-             }
-             /> */}
-          
-          
+            
+            
           </div>
         }/>
         
@@ -155,8 +140,6 @@ React.memo(
           css={t=>css`
             
             pointer-events: none;
-            //user-select: none;
-            //touch-action: none;
             
             ${abs};
             inset: -7px;
@@ -177,8 +160,8 @@ React.memo(
                     transparent var(--rotation) 1turn
             );
             ${bgcBorderMask};
-            ${pressedIdx===i && css`
-              animation: ${radialGradKfs(t)} 0.5s linear forwards;
+            ${pressedIdx===i && playProgressAnim && css`
+              animation: ${progressAnim} 0.4s linear forwards;
             `}
           `}
         />
@@ -197,11 +180,7 @@ const radialGradKfs = (t:Themes.Theme)=>keyframes`
     --rotation: 0turn;
     --grad-color: ${t.photos.highlightFrameBgc};
   }
-  13% {
-    --rotation: 0turn;
-    --grad-color: ${t.photos.highlightFrameBgc};
-  }
-  99%   {
+  99.999%   {
     --rotation: 1.001turn;
     --grad-color: ${t.photos.highlightFrameBgc};
   }

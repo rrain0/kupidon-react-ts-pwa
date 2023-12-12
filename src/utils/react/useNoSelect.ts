@@ -1,7 +1,7 @@
-import React, { useLayoutEffect } from 'react'
+import { useLayoutEffect } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
-import cmcss from 'src/styles/common.module.scss'
+import commonCss from 'src/styles/common.module.scss'
 
 
 
@@ -11,10 +11,18 @@ export const useNoSelect = (
   deps?: any[]|empty
 )=>{
   useLayoutEffect(()=>{
-    const root = document.querySelector('html')!
+    const root = document.documentElement // get html
+    //const all = document.querySelectorAll('*')
     if (lock){
-      root.classList.add(cmcss.noSelect)
-      return ()=>root.classList.remove(cmcss.noSelect)
-    } else root.classList.remove(cmcss.noSelect)
+      root.classList.add(commonCss.noSelect)
+      //all.forEach(it=>it.classList.add(commonCss.noTouchAction))
+      return ()=>{
+        root.classList.remove(commonCss.noSelect)
+        //all.forEach(it=>it.classList.remove(commonCss.noTouchAction))
+      }
+    } else {
+      root.classList.remove(commonCss.noSelect)
+      //all.forEach(it=>it.classList.remove(commonCss.noTouchAction))
+    }
   },[lock, ...(deps??[])])
 }

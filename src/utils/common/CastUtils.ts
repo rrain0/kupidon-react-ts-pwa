@@ -5,8 +5,10 @@
 export namespace CastUtils {
   
   
+  
   export const trueOrUndef = (value: any): true|undefined => value ? true : undefined
   export const falsishToUndef = <T>(value: T) => value ? value : undefined
+  
   
   
   /**
@@ -16,6 +18,7 @@ export namespace CastUtils {
   export function isPresent<T extends {}|null|undefined>(value: T): value is T & {} {
     return value!==null && value!==undefined
   }
+  
   
   
 }
