@@ -77,7 +77,7 @@ export const DarkPink = {
   
   photos: { ...DarkSimple.photos,
     highlightFrameBgc:       ['#8B8B8B'],
-    highlightFrameAccentBgc: ['#ffffff'],
+    highlightFrameAccentBgc: ['#ffe1e1'],
   },
   
   bottomSheet: { ...DarkSimple.bottomSheet,

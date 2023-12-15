@@ -17,7 +17,7 @@ export namespace ArrayUtils {
   
   
   export const arrIndices = (len = 0): number[] => {
-    return [...Array(len).keys()]
+    return Array(len).fill(undefined).map((_,i)=>i)
   }
   
   

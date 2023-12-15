@@ -80,7 +80,7 @@ export const LightPink = {
   
   photos: { ...LightSimple.photos,
     highlightFrameBgc:       ['#8B8B8B'],
-    highlightFrameAccentBgc: ['#000000'],
+    highlightFrameAccentBgc: ['#ffbaba'],
   },
   
   bottomSheet: { ...LightSimple.bottomSheet,

@@ -7,8 +7,11 @@ import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 're
 import { useRecoilValue } from 'recoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { CastUtils } from 'src/utils/common/CastUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { eventBuilder } from 'src/utils/react/buildEvents'
+import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import UseFakePointerRef from 'src/utils/react/UseFakePointerRef'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { useNoTouchAction } from 'src/utils/react/useNoTouchAction'
@@ -20,16 +23,18 @@ import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
 import isPresent = CastUtils.isPresent
+import combineRefs = ReactUtils.combineRefs
+import arrIndices = ArrayUtils.arrIndices
 
 
 
 
 const springStyle =
-(dragIdx: number|undefined = undefined, active = false, x = 0, y = 0) =>
+(dragIdx: number|undefined = undefined, active = false, dx = 0, dy = 0) =>
 (index: number/* , ctrl: Controller */) => {
   if (dragIdx===index && active) return {
-    x,
-    y,
+    x: dx,
+    y: dy,
     opacity: 0.4,
     //scale: index===0 ? 0.5 : 1,
     zIndex: 1,
@@ -66,16 +71,37 @@ React.memo(
     [theme]
   )
   
-  const [pointerOverIdx, setPointerOverIdx] = useState(undefined as number|undefined)
+  const [swap, setSwap] = useState(undefined as undefined|[number,number])
   const [pressedIdx, setPressedIdx] = useState(undefined as number|undefined)
   const [playingProgressAnim, setPlayingProgressAnim] = useState(false)
   const [isDragging, setIsDragging, isDraggingRef] = useStateAndRef(false)
   
   
-  useNoSelect(isPresent(pressedIdx))
-  useNoTouchAction(isDragging)
+  useNoSelect(isPresent(pressedIdx)) // forbid content selection
+  useNoTouchAction(isDragging) // forbid gesture interception by browser
   
   
+  // swaps photos
+  const swapPhotosEffectEvent = useEffectEvent(
+    (swap: [number,number])=>{
+      const newImages = [...images]
+      newImages[swap[0]] = images[swap[1]]
+      newImages[swap[1]] = images[swap[0]]
+      setImages(newImages)
+    }
+  )
+  useEffect(
+    ()=>{
+      if (!isDragging && swap){
+        swapPhotosEffectEvent(swap)
+        setSwap(undefined)
+      }
+    },
+    [isDragging, swap]
+  )
+  
+  
+  // starts selection animation after timeout
   useLayoutEffect(
     ()=>{
       if (isPresent(pressedIdx)){
@@ -89,24 +115,49 @@ React.memo(
     [pressedIdx]
   )
   
+  
+  const photosGrid = useRef<HTMLDivElement>(null)
+  const photoFrameRefs = useRef<Array<Element|null>>(arrIndices(6).map(i=>null))
+  
+  
   const [springs, springApi] = useSprings(images.length, springStyle(), images)
   const applyDragRef = useRef<()=>void>()
   const drag = useDrag(
-    ({ args: [index], active, movement: [x,y], ...restState})=>{
-      console.log(
+    ({
+       args: [index],
+       active,
+       movement: [dx,dy],
+       values: [vpx,vpy], // viewport x, viewport y
+       ...restState
+    })=>{
+      /* console.log(
         'idx:', index,
         'active:', active,
-        'dragging:', restState.dragging,
-        'hovering:', restState.hovering,
-      )
-      const applyDrag =
-        ()=>springApi.start(springStyle(index, isDraggingRef.current && active, x, y))
-      applyDragRef.current = applyDrag
+        //'dragging:', restState.dragging,
+        //'hovering:', restState.hovering,
+        'values', values // coordinates relative to viewport
+      ) */
+      const applyDrag = applyDragRef.current = ()=>{
+        springApi.start(springStyle(index, isDraggingRef.current && active, dx, dy))
+        if (active){
+          const hoveredElements = document.elementsFromPoint(vpx,vpy)
+          //console.log('hoveredElements',hoveredElements)
+          if (!hoveredElements.includes(photosGrid.current as any)) {
+            setSwap(undefined)
+          } else {
+            const otherIdx = photoFrameRefs.current.findIndex((el,i)=>{
+              return hoveredElements.includes(el as any)
+            })
+            if (otherIdx==-1) {}
+            else if (index!==otherIdx) setSwap([index,otherIdx])
+            else setSwap(undefined)
+          }
+        }
+      }
       applyDrag()
       if (!active) {
-        setPressedIdx(undefined)
-        setPlayingProgressAnim(false)
         setIsDragging(false)
+        setPressedIdx(undefined)
       }
     }
   )
@@ -115,23 +166,6 @@ React.memo(
     [isDragging]
   )
   
-  const hover = useHover(
-    ({ args: [index], active, movement: [x,y], ...restState})=>{
-      console.log(
-        'idx:', index,
-        'active:', active,
-        'dragging:', restState.dragging,
-        'hovering:', restState.hovering,
-      )
-    }
-  )
-  
-  useEffect(
-    ()=>{
-      console.log('pointerOverIdx',pointerOverIdx)
-    },
-    [pointerOverIdx]
-  )
   
   
   return <div css={t=>css`
@@ -152,46 +186,43 @@ React.memo(
     //user-select: none;
     //touch-action: none;
   `}
+    ref={photosGrid}
   >
     {springs.map((springStyle,i) => {
       
-      return <div
-        key={images[i]}
+      return <UseFakePointerRef key={images[i]} render={({ ref, ref2, ref3, ref4 })=><div
         css={css`
           grid-area: im${i+1};
           position: relative;
           ${center};
         `}
+        ref={(value)=>photoFrameRefs.current[i]=value}
       >
         
-        <UseFakePointerRef render={({ ref })=>
           <div css={css`
             display: contents;
           `}
             ref={ref as any}
-            {...eventBuilder<HTMLDivElement>()
-              .events('onPointerDown')
-              .handlers(ev=>{
+            {...function(){
+              const onPointerDown = (ev: React.PointerEvent)=>{
                 ev.currentTarget.releasePointerCapture(ev.pointerId)
                 setPressedIdx(i)
-              })
-              .events('onPointerCancel','onPointerUp','onPointerOut')
-              .handlers(()=>{
+              }
+              const onPointerRemove = ()=>{
                 if (!isDragging){
                   setPressedIdx(undefined)
                   setPlayingProgressAnim(false)
                 }
-              })
-              .build()
-            }
-            //onPointerLeave={ev=>setPointerOverIdx(undefined)}
-            //onPointerOver={ev=>setPointerOverIdx(i)}
-            /* onPointerDown={()=>setPressedIdx(i)}
-             onPointerCancel={()=>setPressedIdx(undefined)}
-             onPointerUp={()=>setPressedIdx(undefined)}
-             onPointerOut={()=>setPressedIdx(undefined)} */
+              }
+              return {
+                onPointerDown,
+                onPointerCancel: onPointerRemove,
+                onPointerUp: onPointerRemove,
+                onPointerOut: onPointerRemove,
+              }
+            }()}
           >
-            <UseFakePointerRef render={({ ref })=>
+            
               <animated.div css={css`
                 width: 100%;
                 aspect-ratio: 1;
@@ -199,9 +230,9 @@ React.memo(
                 overflow: hidden;
                 cursor: pointer;
               `}
-                ref={ref as any}
-                {...drag(i)}
                 style={springStyle}
+                {...drag(i)}
+                ref={ref3 as any}
               >
                 
                 
@@ -224,9 +255,7 @@ React.memo(
                 
                 
               </animated.div>
-            }/>
           </div>
-        }/>
         
         
         
@@ -252,30 +281,39 @@ React.memo(
             }
             @property --grad-color {
               syntax: '<color>';
-              initial-value: ${t.photos.highlightFrameBgc};
+              initial-value: ${t.photos.highlightFrameBgc[0]};
               inherits: false;
             }
-            
-            ${pressedIdx===i && playingProgressAnim && css`
-              animation: ${progressAnim} 0.4s linear forwards;
-            `}
-            ${pressedIdx===i && isDragging && css`
-              --rotation: 1.001turn;
-              --grad-color: ${t.photos.highlightFrameAccentBgc};
-            `}
-            
+
+            ${bgcBorderMask};
             background-image: conic-gradient(
                     var(--grad-color) 0turn var(--rotation),
                     transparent var(--rotation) 1turn
             );
-            ${bgcBorderMask};
+            
+            ${pressedIdx===i && playingProgressAnim && css`
+              animation: ${progressAnim} 0.4s linear forwards;
+            `}
+            ${pressedIdx===i && !swap && isDragging && css`
+              background-image: linear-gradient(
+                      to bottom right,
+                      ${t.photos.highlightFrameAccentBgc[0]} 0% 100%
+              );
+            `}
+            ${swap?.[1]===i && css`
+              background-image: linear-gradient(
+                      to bottom right,
+                      ${t.photos.highlightFrameAccentBgc[0]} 0% 100%
+              );
+            `}
           `}
         />
         
         
       </div>
-    })}
+    }/> })}
   </div>
+  
 })
 export default ProfileImages
 
@@ -284,11 +322,11 @@ export default ProfileImages
 const radialGradKfs = (t:Themes.Theme)=>keyframes`
   0% {
     --rotation: 0turn;
-    --grad-color: ${t.photos.highlightFrameBgc};
+    --grad-color: ${t.photos.highlightFrameBgc[0]};
   }
   100% {
     --rotation: 1.001turn;
-    --grad-color: ${t.photos.highlightFrameBgc};
+    --grad-color: ${t.photos.highlightFrameBgc[0]};
   }
 `
 

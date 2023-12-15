@@ -1,41 +1,53 @@
 import React, { useEffect, useRef } from 'react'
-import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import PartialUndef = TypeUtils.PartialUndef
-import fitRange = MathUtils.fitRange
-import arrIndices = ArrayUtils.arrIndices
 
 
 
 export type UseFakePointerRefRenderProps = {
   ref: React.RefObject<Element>
+  ref2: React.RefObject<Element>
+  ref3: React.RefObject<Element>
+  ref4: React.RefObject<Element>
 }
 export type UseFakePointerRefProps = PartialUndef<{
-  cnt: number
   render: (props: UseFakePointerRefRenderProps)=>React.ReactNode
 }>
 const UseFakePointerRef =
 React.memo(
 (props: UseFakePointerRefProps)=>{
   
-  const cnt = fitRange(1, props.cnt ?? 1, Number.MAX_SAFE_INTEGER)
-  const refs = useRef<Array<Element | null>>(arrIndices(cnt).map(i=>null))
+  const elemRef1 = useRef<Element>(null)
+  const elemRef2 = useRef<Element>(null)
+  const elemRef3 = useRef<Element>(null)
+  const elemRef4 = useRef<Element>(null)
   
-  const elemRef = useRef<Element>(null)
   useEffect(
     ()=>{
-      const elem = elemRef.current
-      if (elem){
-        const onPointerDown = ()=>{}
-        elem.addEventListener('pointerdown',onPointerDown)
+      const elements =
+        [elemRef1.current, elemRef2.current, elemRef3.current, elemRef4.current]
+        .filter(it=>it) as Element[]
+      
+      if (elements.length){
+        const onPointerDown = ()=>{
+          //console.log('onPointerDown check')
+        }
+        elements.forEach(it=>it.addEventListener('pointerdown',onPointerDown))
         return ()=>{
-          elem.removeEventListener('pointerdown',onPointerDown)
+          elements.forEach(it=>it.removeEventListener('pointerdown',onPointerDown))
         }
       }
     },
-    [elemRef.current]
+    [elemRef1.current, elemRef2.current, elemRef3.current, elemRef4.current]
   )
-  return props.render?.({ ref: elemRef })
+  return props.render?.({
+    ref: elemRef1,
+    ref2: elemRef2,
+    ref3: elemRef3,
+    ref4: elemRef4,
+  })
 })
 export default UseFakePointerRef
+
+
+
