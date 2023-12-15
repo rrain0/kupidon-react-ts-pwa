@@ -38,6 +38,11 @@
 }
 
 
+/*
+html {
+  user-select: none;
+}
+*/
 
 
 @keyframes NoAnimation {

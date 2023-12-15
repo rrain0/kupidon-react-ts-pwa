@@ -16,6 +16,11 @@ export namespace ArrayUtils {
   }
   
   
+  export const arrIndices = (len = 0): number[] => {
+    return [...Array(len).keys()]
+  }
+  
+  
   
   /**
    * Проверка является ли переданное значение массивом

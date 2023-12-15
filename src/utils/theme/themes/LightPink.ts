@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Themes } from 'src/utils/theme/Themes'
-import { LightSimpe } from 'src/utils/theme/themes/LightSimple'
+import { LightSimple } from 'src/utils/theme/themes/LightSimple'
 import Theme = Themes.Theme
 import themeIconCss = Themes.themeIconCss
 
@@ -10,7 +10,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 export const LightPink = {
-  ...LightSimpe,
+  ...LightSimple,
   type: 'light',
   name: 'Light Pink' as const,
   icon: styled.div(themeIconCss({
@@ -19,42 +19,42 @@ export const LightPink = {
     bgcColor2:   '#f5f5f5',
   })),
   
-  containerNormal: { ...LightSimpe.containerNormal,
+  containerNormal: { ...LightSimple.containerNormal,
     bgc:       ['#ffffff'],
     bgc2:      ['#f0f0f0'],
     content:   ['#000000'],
     content2:  ['#555555'],
     content3:  ['#7b7b7b'],
   },
-  containerAccent: { ...LightSimpe.containerAccent,
+  containerAccent: { ...LightSimple.containerAccent,
     bgc:     ['#ffaeba'],
     content: ['#000000'],
   },
   
-  buttonMain: { ...LightSimpe.buttonMain,
+  buttonMain: { ...LightSimple.buttonMain,
     bgc:      ['#BB2649'],
     bgcFocus: ['#d93b5f'],
     content:  ['#F8F8F8'],
   },
-  buttonAccent: { ...LightSimpe.buttonAccent,
+  buttonAccent: { ...LightSimple.buttonAccent,
     bgc:       ['#ff8ea9'],
     bgcFocus:  ['#f17492'],
     content:   ['#F8F8F8'],
     content2:  ['#000000'],
   },
-  inputRadio: { ...LightSimpe.inputRadio,
+  inputRadio: { ...LightSimple.inputRadio,
     bgcFocus:  ['#f37190']
   },
-  buttonTransparent: { ...LightSimpe.buttonTransparent,
+  buttonTransparent: { ...LightSimple.buttonTransparent,
     bgcFocus: ['#00000011'],
   },
-  buttonNav: { ...LightSimpe.buttonNav,
+  buttonNav: { ...LightSimple.buttonNav,
     bgcFocus:      ['#ffeaee'],
     content:       ['#333333'],
     contentAccent: ['#BB2649'],
   },
   
-  input: { ...LightSimpe.input,
+  input: { ...LightSimple.input,
     bgc:           ['#F8F8F8'],
     content:       ['#000000'],
     placeholder:   ['#777777'],
@@ -63,48 +63,48 @@ export const LightPink = {
     bgcError:      ['#ffced2'],
   },
   
-  elementDisabled: { ...LightSimpe.elementDisabled,
+  elementDisabled: { ...LightSimple.elementDisabled,
     bgc:     ['#DCDCDC'],
     content: ['#555555'],
   },
-  elementDanger: { ...LightSimpe.elementDanger,
+  elementDanger: { ...LightSimple.elementDanger,
     bgc:      ['#de4f48'],
     bgcFocus: ['#e74c3c'],
     content:  ['#ffffff'],
   },
   
-  ripple: { ...LightSimpe.ripple,
+  ripple: { ...LightSimple.ripple,
     content:              ['#ffffff'],
     contentOnTransparent: ['#00000088'],
   },
   
-  photos: { ...LightSimpe.photos,
+  photos: { ...LightSimple.photos,
     highlightFrameBgc:       ['#8B8B8B'],
     highlightFrameAccentBgc: ['#000000'],
   },
   
-  bottomSheet: { ...LightSimpe.bottomSheet,
+  bottomSheet: { ...LightSimple.bottomSheet,
     bgc:    ['#ffffff'],
     handle: ['#8b8b8b'],
   },
   
-  card: { ...LightSimpe.card,
+  card: { ...LightSimple.card,
     bgc: ['#ffffff00'],
   },
-  page: { ...LightSimpe.page,
+  page: { ...LightSimple.page,
     bgc:         ['#f5f5f5'],
     bgcGradient: ['#f5f5f5','#f5f5f5','#f5f5f5'],
     content:     ['#000000'],
   },
   
-  statusBar: { ...LightSimpe.statusBar,
+  statusBar: { ...LightSimple.statusBar,
     bgc: ['#ffffff'],
   },
-  nav: { ...LightSimpe.nav,
+  nav: { ...LightSimple.nav,
     bgc: ['#ffffff'],
   },
   
-  toast: { ...LightSimpe.toast,
+  toast: { ...LightSimple.toast,
     bgc:                  ['#ffffff'],
     content:              ['#757575'],
     content2:             ['#b2b2b2'],
@@ -117,7 +117,7 @@ export const LightPink = {
     accentWarn:           ['#f1c40f'],
     accentDanger:         ['#e74c3c'],
   },
-  scrollbar: { ...LightSimpe.scrollbar,
+  scrollbar: { ...LightSimple.scrollbar,
     track: ['#25283622'],
     thumb: ['#25283644'],
   },

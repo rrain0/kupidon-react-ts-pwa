@@ -7,18 +7,18 @@ import { DarkSimple } from 'src/utils/theme/themes/DarkSimple'
 import { LightOrange } from 'src/utils/theme/themes/LightOrange'
 import { LightPink } from 'src/utils/theme/themes/LightPink'
 import { LightPinkGradient } from 'src/utils/theme/themes/LightPinkGradient'
-import { LightSimpe } from 'src/utils/theme/themes/LightSimple'
+import { LightSimple } from 'src/utils/theme/themes/LightSimple'
 
 
 
-export const DefaultLightTheme = LightSimpe
+export const DefaultLightTheme = LightSimple
 export const DefaultDarkTheme = DarkSimple
 export const DefaultTheme = DefaultLightTheme
 
 
 
 export const AllThemes = [
-  LightSimpe,
+  LightSimple,
   DarkSimple,
   
   LightPink,

@@ -7,7 +7,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const LightSimpe = {
+export const LightSimple = {
   type: 'light',
   name: 'Light Simple' as const,
   icon: styled.div(themeIconCss({
@@ -51,7 +51,7 @@ export const LightSimpe = {
     bgcFocus: ['#00000011'],
   },
   buttonNav: {
-    bgcFocus:      ['#ffeaee'],
+    bgcFocus:      ['#f0f0f0'],
     content:       ['#7b7b7b'],
     contentAccent: ['#333333'],
   },
