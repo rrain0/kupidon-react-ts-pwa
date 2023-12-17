@@ -5,6 +5,11 @@ import { css, keyframes, SerializedStyles } from '@emotion/react'
 
 export namespace EmotionCommon {
   
+  export const contents = css`
+    display: contents;
+  `
+  
+  
   export const abs = css`
     position: absolute;
     inset: 0; // top: 0; right: 0; bottom: 0; left: 0;
@@ -203,6 +208,13 @@ export namespace EmotionCommon {
     font-size: inherit;
   `
   
+  
+  
+  export const hiddenFileInput = css`
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  `
   
   
   

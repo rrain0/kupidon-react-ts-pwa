@@ -28,6 +28,8 @@ import isPresent = CastUtils.isPresent
 import combineRefs = ReactUtils.combineRefs
 import arrIndices = ArrayUtils.arrIndices
 import PlusIc = SvgIcons.PlusIc
+import hiddenFileInput = EmotionCommon.hiddenFileInput
+import contents = EmotionCommon.contents
 
 
 
@@ -77,11 +79,11 @@ React.memo(
     [theme]
   )
   
-  const [swap, setSwap] = useState(undefined as undefined|[number,number])
   const [pressedIdx, setPressedIdx] = useState(undefined as number|undefined)
   const [playingProgressAnim, setPlayingProgressAnim] = useState(false)
   const [isDragging, setIsDragging, isDraggingRef] = useStateAndRef(false)
-  
+  const [swap, setSwap] = useState(undefined as undefined|[number,number])
+  const [canSelectFiles, setCanSelectFiles] = useState(true)
   
   useNoSelect(isPresent(pressedIdx)) // forbid content selection
   useNoTouchAction(isDragging) // forbid gesture interception by browser
@@ -196,7 +198,9 @@ React.memo(
   >
     {springs.map((springStyle,i) => {
       const im = images[i]
-      return <UseFakePointerRef key={im} render={({ ref, ref2, ref3, ref4 })=><div
+      return <div css={contents} key={im??i}>
+      <UseFakePointerRef render={({ ref, ref2, ref3, ref4 })=>
+      <div
         css={css`
           grid-area: im${i+1};
           position: relative;
@@ -205,14 +209,13 @@ React.memo(
         ref={(value)=>photoFrameRefs.current[i]=value}
       >
         
-          <div css={css`
-            display: contents;
-          `}
+          <div css={contents}
             ref={ref as any}
             {...function(){
               const onPointerDown = (ev: React.PointerEvent)=>{
                 ev.currentTarget.releasePointerCapture(ev.pointerId)
                 setPressedIdx(i)
+                setCanSelectFiles(true)
               }
               const onPointerRemove = ()=>{
                 if (!isDragging){
@@ -229,17 +232,24 @@ React.memo(
             }()}
           >
             
-              <animated.div css={css`
+              <animated.label css={css`
                 width: 100%;
                 aspect-ratio: 1;
                 border-radius: 14px;
                 overflow: hidden;
                 cursor: pointer;
+                position: relative;
               `}
                 style={springStyle}
                 {...drag(i)}
-                ref={ref3 as any}
+                ref={ref2 as any}
               >
+                
+                <input css={css`${hiddenFileInput};`}
+                  type={canSelectFiles ? 'file' : 'none'}
+                  multiple
+                  tabIndex={-1}
+                />
                 
                 { im
                   ? <img css={css`
@@ -275,7 +285,7 @@ React.memo(
                 
                 
                 
-              </animated.div>
+              </animated.label>
           </div>
         
         
@@ -285,6 +295,7 @@ React.memo(
             if (ev.animationName===progressAnim.name) {
               setIsDragging(true)
               setPlayingProgressAnim(false)
+              setCanSelectFiles(false)
             }
           }}
           css={t=>css`
@@ -332,7 +343,9 @@ React.memo(
         
         
       </div>
-    }/> })}
+      }/>
+      </div>
+    })}
   </div>
   
 })
