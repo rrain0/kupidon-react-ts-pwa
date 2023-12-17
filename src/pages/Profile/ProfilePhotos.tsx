@@ -19,12 +19,15 @@ import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { SvgIcons } from 'src/views/icons/SvgIcons'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
 import isPresent = CastUtils.isPresent
 import combineRefs = ReactUtils.combineRefs
 import arrIndices = ArrayUtils.arrIndices
+import PlusIc = SvgIcons.PlusIc
 
 
 
@@ -54,15 +57,18 @@ const springStyle =
 
 
 
+export type ProfilePhoto = string|undefined
+export interface ProfilePhotoArr extends Array<ProfilePhoto> { length: 6 }
 
 
-export type ProfileImagesProps = {
-  images: string[]
-  setImages: Setter<string[]>
+
+export type ProfilePhotosProps = {
+  images:ProfilePhotoArr
+  setImages: Setter<ProfilePhotoArr>
 }
-const ProfileImages =
+const ProfilePhotos =
 React.memo(
-(props: ProfileImagesProps)=>{
+(props: ProfilePhotosProps)=>{
   const { images, setImages } = props
   const theme = useRecoilValue(ThemeRecoil).theme
   
@@ -84,7 +90,7 @@ React.memo(
   // swaps photos
   const swapPhotosEffectEvent = useEffectEvent(
     (swap: [number,number])=>{
-      const newImages = [...images]
+      const newImages = [...images] as ProfilePhotoArr
       newImages[swap[0]] = images[swap[1]]
       newImages[swap[1]] = images[swap[0]]
       setImages(newImages)
@@ -145,10 +151,10 @@ React.memo(
           if (!hoveredElements.includes(photosGrid.current as any)) {
             setSwap(undefined)
           } else {
-            const otherIdx = photoFrameRefs.current.findIndex((el,i)=>{
+            const otherIdx = photoFrameRefs.current.findIndex(el=>{
               return hoveredElements.includes(el as any)
             })
-            if (otherIdx==-1) {}
+            if (otherIdx==-1) {/* nothing to do */}
             else if (index!==otherIdx) setSwap([index,otherIdx])
             else setSwap(undefined)
           }
@@ -189,8 +195,8 @@ React.memo(
     ref={photosGrid}
   >
     {springs.map((springStyle,i) => {
-      
-      return <UseFakePointerRef key={images[i]} render={({ ref, ref2, ref3, ref4 })=><div
+      const im = images[i]
+      return <UseFakePointerRef key={im} render={({ ref, ref2, ref3, ref4 })=><div
         css={css`
           grid-area: im${i+1};
           position: relative;
@@ -235,23 +241,38 @@ React.memo(
                 ref={ref3 as any}
               >
                 
+                { im
+                  ? <img css={css`
+                      // todo restore ability of save photos
+                      
+                      pointer-events: none;
+                      //user-select: none;
+                      //touch-action: none;
+                      
+                      width: 100%;
+                      aspect-ratio: 1;
+                      object-position: center;
+                      object-fit: cover;
+                    `}
+                      src={im}
+                      alt={`Profile photo ${i+1}`}
+                    />
+                  : <div css={t=>css`
+                      pointer-events: none;
+                      width: 100%;
+                      aspect-ratio: 1;
+                      background: ${t.photos.bgc[0]};
+                      ${center};
+                    `}>
+                      <PlusIc css={t=>css`
+                        ${SvgIcStyle.El.icon}{
+                          ${SvgIcStyle.Prop.color}: ${t.photos.content[0]};
+                          ${SvgIcStyle.Prop.size}: 30%;
+                        }
+                      `}/>
+                    </div>
+                }
                 
-                <img
-                  src={images[i]}
-                  alt={`Profile photo ${i+1}`}
-                  css={css`
-                  // todo restore ability of save photos
-                  
-                  pointer-events: none;
-                  //user-select: none;
-                  //touch-action: none;
-                  
-                  width: 100%;
-                  aspect-ratio: 1;
-                  object-position: center;
-                  object-fit: cover;
-                `}
-                />
                 
                 
               </animated.div>
@@ -315,7 +336,7 @@ React.memo(
   </div>
   
 })
-export default ProfileImages
+export default ProfilePhotos
 
 
 

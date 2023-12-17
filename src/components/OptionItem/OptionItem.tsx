@@ -3,13 +3,11 @@ import { css } from '@emotion/react'
 import React, { useImperativeHandle, useRef } from 'react'
 import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { CommonStyle } from 'src/views/CommonStyle'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Ripple from 'src/views/Ripple/Ripple'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
-import Mem = ReactUtils.Mem
 import PartialUndef = TypeUtils.PartialUndef
 import hoverable = EmotionCommon.hoverable
 
@@ -26,7 +24,9 @@ export type ForwardRefProps = JSX.IntrinsicElements['article']
 type RefElement = HTMLDivElement
 
 export type OptionItemProps = OptionItemCustomProps & ForwardRefProps
-const OptionItem = React.forwardRef<RefElement, OptionItemProps>(
+const OptionItem =
+React.memo(
+React.forwardRef<RefElement, OptionItemProps>(
 (props, forwardedRef)=>{
   const {
     icon, title, value, nextIcon,
@@ -52,9 +52,8 @@ const OptionItem = React.forwardRef<RefElement, OptionItemProps>(
     <ValueFrame>{value}</ValueFrame>
     <NextIconFrame>{nextIcon}</NextIconFrame>
   </Frame>
-}
-)
-export default Mem(OptionItem)
+}))
+export default OptionItem
 
 
 

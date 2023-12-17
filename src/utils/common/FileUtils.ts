@@ -6,15 +6,15 @@ export namespace FileUtils {
   
   
   /**
-   * Операция получение по файлу его DataURL
+   * Чтение файла в DataUrl
    * @param file Файл для получения DataURL
    * @returns {Promise<string>}
    */
-  export const readToDataUrl = async (file: Blob) =>
-    new Promise<string>((resolve, reject) => {
+  export const readToDataUrl = async (file: Blob): Promise<string> =>
+    new Promise((resolve, reject) => {
       const reader = new FileReader()
-      reader.onload = (ev) => resolve(ev.target?.result as string)
-      reader.onerror = (ev) => reject(ev)
+      reader.onload = ev=>resolve(ev.target?.result as string)
+      reader.onerror = ev=>reject(ev)
       
       //reader.readAsArrayBuffer(file)
       

@@ -82,9 +82,12 @@ export const DarkSimple = {
   },
   
   photos: {
+    bgc:                     ['#ffeeee'],
+    content:                 ['#291f1d'],
     highlightFrameBgc:       ['#8B8B8B'],
-    //highlightFrameAccentBgc: ['#ffffff'], // todo move to pink theme
-    highlightFrameAccentBgc: ['#ffe1e1'],
+    
+    //highlightFrameAccentBgc: ['#ffffff'],
+    highlightFrameAccentBgc: ['#ffe1e1'], // todo move to pink theme
   },
   
   bottomSheet: {

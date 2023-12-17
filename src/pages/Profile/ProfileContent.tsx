@@ -18,7 +18,7 @@ import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/UseBrowserBack'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
-import ProfileImages from 'src/pages/Profile/ProfileImages'
+import ProfilePhotos, { ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
@@ -234,7 +234,10 @@ React.memo(
   
   
   
-  const [images, setImages] = useState(ProfileMockData.userImages)
+  const [images, setImages] = useState<ProfilePhotoArr>(
+    ProfileMockData.userImages
+      .map((it,i)=>i===3 ? undefined : it) as ProfilePhotoArr
+  )
   
   
   
@@ -292,7 +295,7 @@ React.memo(
       `}>
         
         
-        <ProfileImages
+        <ProfilePhotos
           images={images}
           setImages={setImages}
         />

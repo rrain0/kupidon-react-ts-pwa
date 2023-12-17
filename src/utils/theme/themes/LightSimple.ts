@@ -84,9 +84,12 @@ export const LightSimple = {
   },
   
   photos: {
+    bgc:                     ['#ffeeee'],
+    content:                 ['#291f1d'],
     highlightFrameBgc:       ['#8B8B8B'],
-    //highlightFrameAccentBgc: ['#000000'], // todo move to pink theme
-    highlightFrameAccentBgc: ['#ffbaba'],
+    
+    //highlightFrameAccentBgc: ['#000000'],
+    highlightFrameAccentBgc: ['#ffbaba'], // todo move to pink theme
   },
   
   bottomSheet: {

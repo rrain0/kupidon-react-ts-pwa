@@ -98,6 +98,8 @@ export namespace Themes {
     }
     
     photos: {
+      bgc:                     string[]
+      content:                 string[]
       highlightFrameBgc:       string[]
       highlightFrameAccentBgc: string[]
     }
