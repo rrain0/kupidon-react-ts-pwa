@@ -15,6 +15,8 @@ export namespace CommonStyle {
   }
   export namespace Prop {
     export const color = '--color'
+    
+    export const colorVar = `var(${color})`
   }
   
 }

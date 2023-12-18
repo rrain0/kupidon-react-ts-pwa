@@ -137,7 +137,7 @@ export namespace SvgIcons {
       `}
       width={w}
       height={h}
-      className={classNames(className,SvgIcStyle.El.iconClassName)}
+      className={classNames(className,SvgIcStyle.El.iconClass)}
       {...restProps}
       ref={forwardedRef}
     />

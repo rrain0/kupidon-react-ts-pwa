@@ -167,7 +167,7 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  ${SvgIcStyle.El.icon} {
+  ${SvgIcStyle.El.iconThis} {
     width: 1.333em;
     ${SvgIcStyle.Prop.color}: ${t.page.content[0]};
   }

@@ -7,23 +7,30 @@ import Theme = Themes.Theme
 export namespace SvgIcStyle {
   
   export namespace El {
-    export const iconClassName = 'rrainuiIcon'
+    export const iconClass = 'rrainuiIcon'
     
-    export const iconClass = '.'+iconClassName
+    export const iconDotClass = '.'+iconClass
     
-    export const icon = '&'+iconClass
+    export const icon = iconDotClass
+    
+    export const iconThis = '&'+iconDotClass
   }
   export namespace Prop {
     export const size = '--icon-size'
+    export const sizeVar = `var(${size})`
+    
     export const color = '--icon-color'
+    export const colorVar = `var(${color})`
+    
     export const accentColor = '--icon-accent-color'
+    export const accentColorVar = `var(${accentColor})`
   }
   
   
   
   
   export const normal = (t:Theme)=>css`
-    ${El.icon} {
+    ${El.iconThis} {
       ${Prop.size}: auto;
       ${Prop.color}: 'black';
     }

@@ -36,6 +36,14 @@ export const Colors = {
     darkYellow1: '#d0cb5d',
   } as const,
   
+  
+  pack1: {
+    fucused: '#2196f3',
+    accepted: '#00e676',
+    rejected: '#ff1744',
+  } as const,
+  
+  
 } as const
 
 

@@ -2,16 +2,17 @@
 import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Controller } from '@react-spring/core'
-import { config, useSprings, animated, UseSpringProps, Lookup } from '@react-spring/web'
+import { config, useSprings, animated, UseSpringProps } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import Dropzone from 'react-dropzone'
 import { useRecoilValue } from 'recoil'
 import ModalPortal from 'src/components/Modal/ModalPortal'
 import UseElemRef from 'src/components/StateCarriers/UseElemRef'
+import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -22,10 +23,7 @@ import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import { Themes } from 'src/utils/theme/Themes'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import BottomSheetBasic, {
-  BasicSheetOpenIdx,
-  BasicSheetSnaps,
-} from 'src/views/BottomSheet/BottomSheetBasic'
+import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -34,7 +32,6 @@ import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
-import isPresent = CastUtils.isPresent
 import arrIndices = ArrayUtils.arrIndices
 import PlusIc = SvgIcons.PlusIc
 import hiddenFileInput = EmotionCommon.hiddenFileInput
@@ -42,7 +39,6 @@ import contents = EmotionCommon.contents
 import row = EmotionCommon.row
 import col = EmotionCommon.col
 import CrossInCircleIc = SvgIcons.CrossInCircleIc
-import iconBigTransparent = ButtonStyle.iconBigTransparent
 import resetH = EmotionCommon.resetH
 import ArrowRefreshCwIc = SvgIcons.ArrowRefreshCwIc
 import Txt = EmotionCommon.Txt
@@ -93,7 +89,8 @@ const ProfilePhotos =
 React.memo(
 (props: ProfilePhotosProps)=>{
   const { images, setImages } = props
-  const theme = useRecoilValue(ThemeRecoil).theme
+  const { theme } = useRecoilValue(ThemeRecoil)
+  const { isDraggingFiles } = useRecoilValue(AppRecoil)
   const actionUiValues = useUiTextContainer(ActionUiText)
   
   
@@ -200,11 +197,11 @@ React.memo(
     }
   )
   useEffect(
-    ()=>{
-      if (dragState==='dragging') applyDragRef.current?.()
-    },
+    ()=>{ if (dragState==='dragging') applyDragRef.current?.() },
     [dragState]
   )
+  
+  
   
   
   
@@ -225,62 +222,82 @@ React.memo(
           ref={(value)=>photoFrameRefs.current[i]=value}
         >
           
-            <div css={contents}
-              ref={ref as any}
-              {...function(){
-                const onPointerDown = (ev: React.PointerEvent)=>{
-                  ev.currentTarget.releasePointerCapture(ev.pointerId)
-                  setLastIdx(i)
-                  setDragState('initialDelay')
-                  setCanClick(true)
+          <div css={contents}
+            ref={ref as any}
+            {...function(){
+              const onPointerDown = (ev: React.PointerEvent)=>{
+                ev.currentTarget.releasePointerCapture(ev.pointerId)
+                setLastIdx(i)
+                setDragState('initialDelay')
+                setCanClick(true)
+              }
+              const onPointerRemove = ()=>{
+                if (dragState!=='dragging'){
+                  setDragState(undefined)
                 }
-                const onPointerRemove = ()=>{
-                  if (dragState!=='dragging'){
-                    setDragState(undefined)
-                  }
-                }
-                return {
-                  onPointerDown,
-                  onPointerCancel: onPointerRemove,
-                  onPointerUp: onPointerRemove,
-                  onPointerOut: onPointerRemove,
-                }
-              }()}
-              onClick={ev=>{
-                if (canClick && im) setMenuOpen(true)
-              }}
+              }
+              return {
+                onPointerDown,
+                onPointerCancel: onPointerRemove,
+                onPointerUp: onPointerRemove,
+                onPointerOut: onPointerRemove,
+              }
+            }()}
+            onClick={ev=>{
+              if (canClick && im) setMenuOpen(true)
+            }}
+          >
+            
+            <Dropzone
+              onDrop={(files, rejectedFiles, ev)=>console.log('files',files)}
+              noClick={!!im || !canClick}
+              useFsAccessApi={false}
             >
-              
-                <animated.label css={photoDraggableBox}
-                  style={springStyle}
-                  {...drag(i)}
-                  ref={ref2 as any}
-                >
-                  
-                  <input css={css`${hiddenFileInput};`}
-                    type={canClick && !im ? 'file' : 'hidden'}
-                    multiple
-                    // it uses strange image pickers that doesn't work normally
-                    //accept='image/*'
-                    tabIndex={-1}
-                    onChange={ev=>{
-                      console.log(i,ev.currentTarget.files)
-                    }}
-                  />
-                  
-                  { im
-                    ? <img css={photoImgStyle}
-                        src={im}
-                        alt={`Profile photo ${i+1}`}
-                      />
-                    : <div css={photoPlaceholderStyle}>
-                        <PlusIc css={photoPlaceholderIconStyle}/>
-                      </div>
-                  }
-                  
-                </animated.label>
-              
-            </div>
+            {({getRootProps, getInputProps, isDragAccept}) => {
+              //console.log('getInputProps()',getInputProps())
+              //console.log('isDragAccept',isDragAccept)
+              return <div css={contents} {...getRootProps()}>
+              <input {...getInputProps()} />
+              <animated.label css={photoDraggableBox}
+                style={springStyle}
+                {...drag(i)}
+                ref={ref2 as any}
+              >
+                
+                { im
+                  ? <img css={photoImgStyle}
+                      src={im}
+                      alt={`Profile photo ${i+1}`}
+                    />
+                  : <div css={photoPlaceholderStyle}>
+                      <PlusIc css={photoPlaceholderIconStyle}/>
+                    </div>
+                }
+                
+                { isDraggingFiles &&
+                  <div css={t=>css`
+                    ${abs};
+                    border-radius: inherit;
+                    overflow: hidden;
+                    background: #00000022;
+                    ${ isDragAccept && css`background: #00000099;` }
+                    ::after {
+                      ${abs};
+                      content: '';
+                      inset: -4px;
+                      border-radius: calc(14px + 4px);
+                      border: 10px dashed;
+                      border-color: ${t.photos.content[0]};
+                    }
+                  `}/>
+                }
+                
+              </animated.label>
+              </div>
+            }}
+          </Dropzone>
+          
+          </div>
           
           
           
@@ -338,6 +355,10 @@ React.memo(
     </div>
     
     
+    
+    
+    
+    
     <UseModalSheetState
       open={isMenuOpen}
       onClosed={()=>setMenuOpen(false)}
@@ -366,7 +387,7 @@ React.memo(
           <Button css={ButtonStyle.bigRectTransparent}
             onClick={ev=>ref.current?.click()}
           >
-            <input css={css`${hiddenFileInput};`}
+            <input css={hiddenFileInput}
               ref={ref}
               type={'file'}
               multiple
@@ -375,6 +396,9 @@ React.memo(
               tabIndex={-1}
               onChange={ev=>{
                 console.log(ev.currentTarget.files)
+              }}
+              onClick={ev=>{
+                //console.log('click')
               }}
             />
             <OptionContainer>
@@ -385,6 +409,8 @@ React.memo(
             </OptionContainer>
           </Button>
           }/>
+          
+          {/* TODO download */}
           
         </OptionsContent>
       </BottomSheetBasic>
@@ -467,7 +493,7 @@ const photoPlaceholderStyle = (t:Themes.Theme)=>css`
   ${center};
 `
 const photoPlaceholderIconStyle = (t:Themes.Theme)=>css`
-  ${SvgIcStyle.El.icon}{
+  ${SvgIcStyle.El.iconThis}{
     ${SvgIcStyle.Prop.color}: ${t.photos.content[0]};
     ${SvgIcStyle.Prop.size}: 30%;
   }
@@ -501,7 +527,7 @@ const optionIconBoxStyle = css`
   ${center};
   height: 1.3em;
   width: 1.333em;
-  >${SvgIcStyle.El.iconClassName}{
-    ${SvgIcStyle.Prop.color}: var(${ButtonStyle.Prop.color});
+  >${SvgIcStyle.El.iconDotClass}{
+    ${SvgIcStyle.Prop.color}: ${ButtonStyle.Prop.colorVar};
   }
 `

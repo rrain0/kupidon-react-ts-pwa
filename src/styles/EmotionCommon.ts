@@ -212,7 +212,8 @@ export namespace EmotionCommon {
   
   export const hiddenFileInput = css`
     position: absolute;
-    opacity: 0;
+    //opacity: 0;
+    display: none;
     pointer-events: none;
   `
   

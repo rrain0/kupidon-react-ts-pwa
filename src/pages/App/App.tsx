@@ -5,6 +5,7 @@ import React from 'react'
 import ModalOutlet from 'src/components/Modal/ModalOutlet'
 import AppFrame from 'src/pages/App/AppFrame'
 import ToastifySetup from 'src/components/Toasts/ToastifySetup'
+import DragDetector from 'src/pages/App/DragDetector'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { useAppInstallationSetup } from 'src/utils/app/useAppInstallationSetup'
 import { useLangSetup } from 'src/utils/lang/useLangSetup'
@@ -36,7 +37,9 @@ React.memo(
       }
     `}/>
     
-    <AppFrame/>
+    <DragDetector>
+      <AppFrame/>
+    </DragDetector>
     
     <ModalOutlet/>
     

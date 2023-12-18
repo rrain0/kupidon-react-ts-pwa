@@ -136,19 +136,19 @@ export default ClearSiteConfirmation
 
 
 const icon = (t:Theme)=>css`
-  ${SvgIcStyle.El.icon} {
+  ${SvgIcStyle.El.iconThis} {
     height: 1.333em;
     width: 1.333em;
     ${SvgIcStyle.Prop.color}: ${t.page.content[0]};
   }
 `
 const iconOnDanger = (t:Theme)=>css`
-  ${SvgIcStyle.El.icon} {
+  ${SvgIcStyle.El.iconThis} {
     ${SvgIcStyle.Prop.color}: ${t.elementDanger.content[0]};
   }
 `
 const button = (t:Theme)=>css`
-  ${ButtonStyle.El.btn} {
+  ${ButtonStyle.El.btnThis} {
     min-width: 90px;
     gap: 0.3em;
   }

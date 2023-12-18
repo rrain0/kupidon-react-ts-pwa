@@ -236,7 +236,7 @@ React.memo(
   
   const [images, setImages] = useState<ProfilePhotoArr>(
     ProfileMockData.userImages
-      .map((it,i)=>/* i===3 ? undefined : */ it) as ProfilePhotoArr
+      .map((it,i)=>i===4 ? undefined : it) as ProfilePhotoArr
   )
   
   
@@ -308,9 +308,9 @@ React.memo(
               /* onClick={ev=>{
                 setImages([images[5],images[0],images[1],images[2],images[3],images[4]])
               }} */
-              onClick={ev=>{
+              /* onClick={ev=>{
                 setImages([images[0],undefined,images[2],images[3],images[4],images[5]])
-              }}
+              }} */
             >{uiText.aboutMe[0].text}</ItemLabel>
           </ItemTitleContainer>
           <ValidationComponentWrap {...validationProps}

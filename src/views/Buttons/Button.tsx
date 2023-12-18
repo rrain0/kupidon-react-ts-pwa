@@ -73,7 +73,7 @@ type Button_Props = PartialUndef<{
   [Attr.errorName]: boolean
 }>
 const Button_ = styled.button.attrs<Button_Props>(p=>({
-  className:        classNames(p.className,ButtonStyle.El.btnClassName),
+  className:        classNames(p.className,ButtonStyle.El.btnClass),
   [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
   type:             p.type || 'button',
 }))<Button_Props>``
@@ -98,7 +98,7 @@ const button_Style = css`
 
 
 const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,ButtonStyle.El.borderClassName),
+  className: classNames(p.className,ButtonStyle.El.borderClass),
 }))``
 const borderStyle = css`
   ${abs};

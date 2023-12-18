@@ -91,7 +91,7 @@ EyeWrap.defaultProps = { type: 'button' }
 
 
 const iconCss = (t:Themes.Theme)=>css`
-  ${SvgIcStyle.El.icon}{
+  ${SvgIcStyle.El.iconThis}{
     ${SvgIcStyle.Prop.size}: 24px;
     ${SvgIcStyle.Prop.color}: ${t.input.content[0]};
   }

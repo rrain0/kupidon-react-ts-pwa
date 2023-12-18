@@ -124,14 +124,14 @@ const CloseButton = styled.button`
   ${center};
   cursor: pointer;
 
-  &>${SvgIcStyle.El.iconClass} {
+  &>${SvgIcStyle.El.iconDotClass} {
     width: 100%;
     height: 100%;
     ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.content2[0]};
   }
   
   ${hoverable}{
-    :hover>${SvgIcStyle.El.iconClass} {
+    :hover>${SvgIcStyle.El.iconDotClass} {
       ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.content3[0]};
     }
   }

@@ -22,7 +22,10 @@ export namespace RippleStyle {
   }
   export namespace Prop {
     export const mode = '--ripple-mode'
+    export const modeVar = `var(${mode})`
+    
     export const color = '--ripple-color'
+    export const colorVar = `var(${color})`
   }
   
   

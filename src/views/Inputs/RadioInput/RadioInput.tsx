@@ -130,7 +130,7 @@ const ActiveIcWrap = styled.div.attrs(p=>({
 const activeIcWrapStyle = css`
   display: none;
   input:checked ~ & { display: flex; }
-  ${SvgIcStyle.El.iconClass} {
+  ${SvgIcStyle.El.iconDotClass} {
     ${SvgIcStyle.Prop.color}: var(${Prop.activeIconColor})
   }
 `
@@ -141,7 +141,7 @@ const InactiveIcWrap = styled.div.attrs(p=>({
 const inactiveIcWrapStyle = css`
   display: flex;
   input:checked ~ & { display: none }
-  ${SvgIcStyle.El.iconClass} {
+  ${SvgIcStyle.El.iconDotClass} {
     ${SvgIcStyle.Prop.color}: var(${Prop.inactiveIconColor})
   }
 `

@@ -14,6 +14,7 @@ export const useThemeSetup = ()=>{
   
   useLayoutEffect(
     ()=>{
+      //console.log('systemTheme',systemThemeType)
       if (systemThemeType) setTheme(s=>({
         ...s,
         systemThemeAvailable: true,
@@ -43,10 +44,17 @@ export const useThemeSetup = ()=>{
             theme: themeByName(themeSettings.dark),
             themeIsReady: true,
           }))
-        else setThemeSettings(s=>({
+        else {
+          /* setThemeSettings(s=>({
             ...s,
             setting: 'manual',
+          })) */
+          setTheme(s=>({
+            ...s,
+            theme: themeByName(themeSettings.light),
+            themeIsReady: true,
           }))
+        }
       }
       else if (setting==='manual'){
         if (themeSettings.manualSetting==='light')

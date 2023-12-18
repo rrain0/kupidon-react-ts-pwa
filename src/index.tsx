@@ -1,6 +1,4 @@
 import React from 'react'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import ReactDOM from 'react-dom/client'
 import 'src/styles/reset.css'
 import 'src/styles/fonts.css'
@@ -25,9 +23,7 @@ root.render(
   <React.StrictMode>
     <RecoilRoot>
       <RecoilNexus />
-      <DndProvider backend={HTML5Backend}>
-        <App/>
-      </DndProvider>
+      <App/>
     </RecoilRoot>
   </React.StrictMode>
 )
