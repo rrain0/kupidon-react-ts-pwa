@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
+import { BasicSheetOpenIdx, BasicSheetSnaps } from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
-import Mem = ReactUtils.Mem
 import Setter = TypeUtils.Setter
+import Callback = TypeUtils.Callback
+import PartialUndef = TypeUtils.PartialUndef
+
 
 
 
@@ -20,44 +22,51 @@ export type UseModalSheetRenderProps = {
 }
 export type UseModalSheetProps = {
   open: boolean
-  setOpen: Setter<boolean>
+  onClosed: Callback
+  render: (props: UseModalSheetRenderProps)=>React.ReactNode
+} & PartialUndef<{
   openIdx: number
   snapPoints: SheetSnapPoints
-  render: (props: UseModalSheetRenderProps)=>React.ReactNode
-}
-const UseModalSheet = (props: UseModalSheetProps)=>{
+}>
+const UseModalSheet =
+React.memo(
+(props: UseModalSheetProps)=>{
   const {
     open,
-    setOpen,
-    openIdx,
-    snapPoints,
+    onClosed,
+    openIdx = BasicSheetOpenIdx,
+    snapPoints = BasicSheetSnaps,
   } = props
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState(openIdx)
+  const [snapIdx,setSnapIdx] = useState<number>(openIdx)
   
   const setClosing = useCallback(
     ()=>setSheetState('closing'),
     []
   )
   
-  const openEffectEvent = useEffectEvent((open: boolean)=>{
-    if (open){
-      setSheetState('opening')
-      setSnapIdx(openIdx)
+  const openEffectEvent = useEffectEvent(
+    (open: boolean)=>{
+      if (open){
+        setSheetState('opening')
+        setSnapIdx(openIdx)
+      }
     }
-  })
+  )
   useEffect(
     ()=>openEffectEvent(open),
     [open]
   )
+  
+  const onClosedEffectEvent = useEffectEvent(onClosed)
   useEffect(
     ()=>{
       if (sheetState==='closed'){
-        setOpen(false)
+        onClosedEffectEvent()
       }
     },
-    [setOpen, sheetState]
+    [sheetState]
   )
   
   
@@ -73,9 +82,10 @@ const UseModalSheet = (props: UseModalSheetProps)=>{
   )
   
   
+  if (!open) return undefined
   return props.render({
     setClosing,
     sheetProps: bottomSheetProps
   })
-}
-export default Mem(UseModalSheet)
+})
+export default UseModalSheet

@@ -15,7 +15,6 @@ export type UseFakePointerRefProps = PartialUndef<{
   render: (props: UseFakePointerRefRenderProps)=>React.ReactNode
 }>
 const UseFakePointerRef =
-React.memo(
 (props: UseFakePointerRefProps)=>{
   
   const elemRef1 = useRef<Element>(null)
@@ -47,7 +46,7 @@ React.memo(
     ref3: elemRef3,
     ref4: elemRef4,
   })
-})
+}
 export default UseFakePointerRef
 
 

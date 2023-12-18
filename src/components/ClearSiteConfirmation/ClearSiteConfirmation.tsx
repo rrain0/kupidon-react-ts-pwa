@@ -7,7 +7,6 @@ import {
 import ModalPortal from 'src/components/Modal/ModalPortal'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Themes } from 'src/utils/theme/Themes'
@@ -22,24 +21,27 @@ import row = EmotionCommon.row
 import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
 import Theme = Themes.Theme
 import ClearTrashIc = SvgIcons.ClearTrashIc
-import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
+import BottomSheetBasic, {
+  BasicSheetOpenIdx,
+  BasicSheetSnaps,
+} from 'src/views/BottomSheet/BottomSheetBasic'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Setter = TypeUtils.Setter
 import Txt = EmotionCommon.Txt
-import Mem = ReactUtils.Mem
 
 
 
 
 
-const sheetSnaps = [0,'fit-content','50%']
-const sheetOpenIdx = 1
 
 
-const ClearSiteConfirmation = (props:{
+export type ClearSiteConfirmationProps = {
   open: boolean
   setOpen: Setter<boolean>
-})=>{
+}
+const ClearSiteConfirmation =
+React.memo(
+(props: ClearSiteConfirmationProps)=>{
   const { open, setOpen } = props
   
   const uiText = useUiTextContainer(ClearSiteConfirmationUiText)
@@ -65,9 +67,9 @@ const ClearSiteConfirmation = (props:{
     
     <UseModalSheetState
       open={open}
-      setOpen={setOpen}
-      snapPoints={sheetSnaps}
-      openIdx={sheetOpenIdx}
+      onClosed={()=>setOpen(false)}
+      snapPoints={BasicSheetSnaps}
+      openIdx={BasicSheetOpenIdx}
       render={props => open && <ModalPortal><BottomSheetBasic
         {...props.sheetProps}
         header={uiText.clearAppData[0].text + '?'}
@@ -127,8 +129,8 @@ const ClearSiteConfirmation = (props:{
     </div> }
   
   </>
-}
-export default Mem(ClearSiteConfirmation)
+})
+export default ClearSiteConfirmation
 
 
 

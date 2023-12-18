@@ -7,7 +7,7 @@ export namespace CastUtils {
   
   
   export const trueOrUndef = (value: any): true|undefined => value ? true : undefined
-  export const falsishToUndef = <T>(value: T) => value ? value : undefined
+  export const falsyToUndef = <T>(value: T) => value ? value : undefined
   
   
   

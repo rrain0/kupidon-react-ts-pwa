@@ -2,8 +2,6 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CastUtils } from 'src/utils/common/CastUtils'
-import { ReactUtils } from "src/utils/common/ReactUtils"
-import Mem = ReactUtils.Mem
 import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -23,20 +21,23 @@ import hoverable = EmotionCommon.hoverable
 const Attr = ButtonStyle.Attr
 
 
-export type ButtonLightCherryProps = JSX.IntrinsicElements['button'] &
-  PartialUndef<{
-    hasError: boolean
-    rippleMode: RippleProps['mode']
-    rippleDuration: RippleProps['rippleDuration']
-  }>
+export type ButtonCustomProps = PartialUndef<{
+  hasError: boolean
+  rippleMode: RippleProps['mode']
+  rippleDuration: RippleProps['rippleDuration']
+}>
+export type ForwardRefProps = JSX.IntrinsicElements['button']
+type RefElement = HTMLButtonElement
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
-  props, forwardedRef
-) => {
+export type ButtonProps = ButtonCustomProps & ForwardRefProps
+const Button =
+React.memo(
+React.forwardRef<RefElement, ButtonProps>(
+(props, forwardedRef) => {
   let { hasError, children, rippleMode, rippleDuration, ...restProps } = props
   rippleMode ??= 'cursor'
   
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const buttonRef = useRef<RefElement>(null)
   useImperativeHandle(forwardedRef, ()=>buttonRef.current!,[])
   
   
@@ -63,8 +64,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonLightCherryProps>((
       />
     </Border>
   </Button_>
-})
-export default Mem(Button)
+}))
+export default Button
 
 
 

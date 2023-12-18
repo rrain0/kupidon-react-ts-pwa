@@ -18,7 +18,7 @@ import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOver
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import UseBrowserBack from 'src/components/UseBrowserBack'
+import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { AccountSettingsUiText } from 'src/pages/AccountSettings/uiText'
 import { AccountSettingsPageValidation } from 'src/pages/AccountSettings/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'

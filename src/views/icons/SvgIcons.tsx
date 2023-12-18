@@ -12,6 +12,7 @@ import { ReactComponent as Arrow3UpRightSvg } from 'src/res/icon/arrow-3-up-righ
 import { ReactComponent as Arrow4DownSvg } from 'src/res/icon/arrow-4-down.svg'
 import { ReactComponent as Arrow5FwdSvg } from 'src/res/icon/arrow-5-fwd.svg'
 import { ReactComponent as Arrow6NextSvg } from 'src/res/icon/arrow-6-next.svg'
+import { ReactComponent as ArrowRefreshCwSvg } from 'src/res/icon/arrow-refresh-cw.svg'
 import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
 
 import { ReactComponent as BrowserSvg } from 'src/res/icon/browser.svg'
@@ -25,6 +26,7 @@ import { ReactComponent as ClearTrashSvg } from 'src/res/icon/clear-trash.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
 import { ReactComponent as CrossSvg } from 'src/res/icon/cross.svg'
 import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
+import { ReactComponent as CrossInCircleSvg } from 'src/res/icon/cross-in-circle.svg'
 
 import { ReactComponent as DangerRoundToastifySvg } from 'src/res/icon/danger-round-toastify.svg'
 import { ReactComponent as DaySvg } from 'src/res/icon/day.svg'
@@ -79,7 +81,7 @@ import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-tri
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import PartialUndef = TypeUtils.PartialUndef
-import falsishToUndef = CastUtils.falsishToUndef
+import falsishToUndef = CastUtils.falsyToUndef
 import isPresent = CastUtils.isPresent
 
 
@@ -126,8 +128,8 @@ export namespace SvgIcons {
       css={css`
         width:  ${falsishToUndef(!isPresent(w)) && `var(${SvgIcStyle.Prop.size})`};
         height: ${falsishToUndef(!isPresent(h)) && `var(${SvgIcStyle.Prop.size})`};
-        max-width: 100%;
-        max-height: 100%;
+        //max-width: 100%;
+        //max-height: 100%;
         fill: ${color ?? `var(${SvgIcStyle.Prop.color}, black)`};
         stroke: ${color ?? `var(${SvgIcStyle.Prop.color}, black)`};
         ${SvgIcStyle.Prop.accentColor}:
@@ -198,6 +200,13 @@ export namespace SvgIcons {
   React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
   (props, forwardedRef) =>
     <BaseSimpleSvgIcon {...props} SvgComponent={Arrow6NextSvg} ref={forwardedRef} />
+  ))
+  
+  export const ArrowRefreshCwIc =
+  React.memo(
+  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
+  (props, forwardedRef) =>
+    <BaseSimpleSvgIcon {...props} SvgComponent={ArrowRefreshCwSvg} ref={forwardedRef} />
   ))
   
   export const ArrowReloadIc =
@@ -275,6 +284,13 @@ export namespace SvgIcons {
   React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
   (props, forwardedRef) =>
     <BaseSimpleSvgIcon {...props} SvgComponent={Cross2Svg} ref={forwardedRef} />
+  ))
+  
+  export const CrossInCircleIc =
+  React.memo(
+  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
+  (props, forwardedRef) =>
+    <BaseSimpleSvgIcon {...props} SvgComponent={CrossInCircleSvg} ref={forwardedRef} />
   ))
   
   

@@ -79,7 +79,7 @@ export namespace ButtonStyle {
         width: 100%;
         min-height: 50px;
         border-radius: 15px;
-        padding: 8px 4px;
+        padding: 8px 6px;
         ${Txt.large2};
       }
     `
@@ -224,6 +224,41 @@ export namespace ButtonStyle {
     `
     
     
+    
+    export const transparent = (t:Theme)=>css`
+      // normal
+      ${El.btn} {
+        background: transparent;
+        color: ${t.page.content[0]};
+        ${Prop.color}: ${t.page.content[0]};
+      }
+      ${El.border} {
+        border: 1px solid;
+        border-color: transparent;
+      }
+      ${El.ripple} {
+        ${Prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
+      }
+
+      // hover
+      ${hoverable}{ ${El.btnHover} {
+        background: ${t.buttonTransparent.bgcFocus[0]};
+      }}
+
+      // focus-visible
+      ${El.btnFocusVisible} {
+        background: ${t.buttonTransparent.bgcFocus[0]};
+      }
+
+      // disabled
+      ${El.btnDisabled} {
+        background: ${t.elementDisabled.bgc[0]};
+        color: ${t.elementDisabled.content[0]};
+        ${Prop.color}: ${t.elementDisabled.content[0]};
+      }
+    `
+    
+    
     export const danger = (t:Theme) => css`
       // normal
       ${El.btn} {
@@ -265,6 +300,11 @@ export namespace ButtonStyle {
     ${common};
     ${Shape.bigRect};
     ${Color.accent(t)};
+  `
+  export const bigRectTransparent = (t:Theme) => css`
+    ${common};
+    ${Shape.bigRect};
+    ${Color.transparent(t)};
   `
   export const bigRectDanger = (t:Theme) => css`
     ${common};

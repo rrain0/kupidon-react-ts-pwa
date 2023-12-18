@@ -16,7 +16,7 @@ import ModalPortal from 'src/components/Modal/ModalPortal'
 import { ModalStyle } from 'src/components/Modal/ModalStyle'
 import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
-import UseBrowserBack from 'src/components/UseBrowserBack'
+import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
 import ProfilePhotos, { ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
@@ -236,7 +236,7 @@ React.memo(
   
   const [images, setImages] = useState<ProfilePhotoArr>(
     ProfileMockData.userImages
-      .map((it,i)=>i===3 ? undefined : it) as ProfilePhotoArr
+      .map((it,i)=>/* i===3 ? undefined : */ it) as ProfilePhotoArr
   )
   
   
@@ -304,13 +304,14 @@ React.memo(
         
         <ItemContainer>
           <ItemTitleContainer>
-            <ItemLabel>{uiText.aboutMe[0].text}</ItemLabel>
-            {/* {!fieldIsInitial('aboutMe')
-              && <ResetButton
-                text={uiText.reset[0].text}
-                onClick={() => resetField('aboutMe')}
-              />
-            } */}
+            <ItemLabel
+              /* onClick={ev=>{
+                setImages([images[5],images[0],images[1],images[2],images[3],images[4]])
+              }} */
+              onClick={ev=>{
+                setImages([images[0],undefined,images[2],images[3],images[4],images[5]])
+              }}
+            >{uiText.aboutMe[0].text}</ItemLabel>
           </ItemTitleContainer>
           <ValidationComponentWrap {...validationProps}
             fieldName="aboutMe"
@@ -473,7 +474,7 @@ React.memo(
               <UseBool render={boolProps =>
                 <UseModalSheet
                   open={boolProps.value}
-                  setOpen={boolProps.setValue}
+                  onClosed={boolProps.setFalse}
                   snapPoints={sheetSnaps}
                   openIdx={sheetOpenIdx}
                   render={sheetProps =>

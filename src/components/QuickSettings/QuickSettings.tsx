@@ -148,11 +148,12 @@ React.memo(
   return <>
     <UseModalSheetState
       open={open}
-      setOpen={setOpen}
+      onClosed={()=>setOpen(false)}
       snapPoints={sheetSnaps}
       openIdx={sheetOpenIdx}
-      render={props => open && <ModalPortal><BottomSheetBasic
-        {...props.sheetProps}
+      render={props => open &&
+      <ModalPortal>
+      <BottomSheetBasic {...props.sheetProps}
         header={uiText.settings[0].text}
       >
         <Content>
@@ -161,27 +162,26 @@ React.memo(
             {uiText.theme[0].text}:
           </OptionHeader>
           <RadioInputGroup>
-            {
-              themeOptions.map(opt => <RadioInput
-                css={RadioInputStyle.radio}
-                childrenPosition="start"
-                checked={isThemeOptionChecked(opt.value)}
-                value={opt.value}
-                key={opt.value}
-                onChange={ev => {
-                  setThemeSettings(s => ({
-                    ...s,
-                    setting: opt.value === 'system' ? 'system' : 'manual',
-                    manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
-                  }))
-                }}
-              >
-                <OptionContainer>
-                  {opt.icon}
-                  {opt.text}
-                </OptionContainer>
-              </RadioInput>)
-            }
+            { themeOptions.map(opt =>
+            <RadioInput css={RadioInputStyle.radio}
+              childrenPosition="start"
+              checked={isThemeOptionChecked(opt.value)}
+              value={opt.value}
+              key={opt.value}
+              onChange={ev => {
+                setThemeSettings(s => ({
+                  ...s,
+                  setting: opt.value === 'system' ? 'system' : 'manual',
+                  manualSetting: opt.value === 'system' ? s.manualSetting : opt.value,
+                }))
+              }}
+            >
+              <OptionContainer>
+                {opt.icon}
+                {opt.text}
+              </OptionContainer>
+            </RadioInput>)
+          }
           </RadioInputGroup>
           
           
@@ -189,32 +189,32 @@ React.memo(
             {uiText.language[0].text}:
           </OptionHeader>
           <RadioInputGroup>
-            {
-              languageOptions.map(opt => <RadioInput
-                css={RadioInputStyle.radio}
-                childrenPosition="start"
-                checked={isLanguageOptionChecked(opt.value)}
-                value={opt.value}
-                key={opt.value}
-                onChange={ev => {
-                  if (opt.value === 'system') setLangSettings({
-                    ...langSettings,
-                    setting: 'system',
+            { languageOptions.map(opt =>
+            <RadioInput
+              css={RadioInputStyle.radio}
+              childrenPosition="start"
+              checked={isLanguageOptionChecked(opt.value)}
+              value={opt.value}
+              key={opt.value}
+              onChange={ev => {
+                if (opt.value === 'system') setLangSettings({
+                  ...langSettings,
+                  setting: 'system',
+                })
+                else {
+                  setLangSettings({
+                    setting: 'manual',
+                    manualSetting: [opt.value],
                   })
-                  else {
-                    setLangSettings({
-                      setting: 'manual',
-                      manualSetting: [opt.value],
-                    })
-                  }
-                }}
-              >
-                <OptionContainer>
-                  {opt.icon}
-                  {opt.text}
-                </OptionContainer>
-              </RadioInput>)
-            }
+                }
+              }}
+            >
+              <OptionContainer>
+                {opt.icon}
+                {opt.text}
+              </OptionContainer>
+            </RadioInput>
+            )}
           </RadioInputGroup>
           
           <RoundButtonsContainer>
@@ -269,7 +269,9 @@ React.memo(
         
         
         </Content>
-      </BottomSheetBasic></ModalPortal>}
+      </BottomSheetBasic>
+      </ModalPortal>
+      }
     />
     
     

@@ -1,7 +1,5 @@
-import { useCallback, useState } from 'react'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
+import React, { useCallback, useState } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import Mem = ReactUtils.Mem
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 
 
@@ -17,7 +15,9 @@ export type UseBoolProps = {
   initial?: boolean | undefined
   render?: ((props: UseBoolRenderProps)=>React.ReactNode) | undefined
 }
-const UseBool = (props: UseBoolProps)=>{
+const UseBool =
+React.memo(
+(props: UseBoolProps)=>{
   const {
     initial = false,
   } = props
@@ -39,5 +39,5 @@ const UseBool = (props: UseBoolProps)=>{
     setTrue,
     setFalse
   })
-}
-export default Mem(UseBool)
+})
+export default UseBool
