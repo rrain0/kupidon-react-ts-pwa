@@ -100,6 +100,7 @@ export namespace Themes {
     photos: {
       bgc:                     string[]
       content:                 string[]
+      borderDrag:              string[]
       highlightFrameBgc:       string[]
       highlightFrameAccentBgc: string[]
     }

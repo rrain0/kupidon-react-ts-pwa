@@ -10,7 +10,7 @@ export const useEffectEvent =
     ()=>{ ref.current = callback }
   )
   const runCallback = useCallback(
-    (args: Parameters<F>)=>ref.current(args),
+    (...args: Parameters<F>)=>ref.current(...args),
     []
   ) as F
   return runCallback

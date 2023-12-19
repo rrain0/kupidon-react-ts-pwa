@@ -84,6 +84,7 @@ export const DarkSimple = {
   photos: {
     bgc:                     ['#ffeeee'],
     content:                 ['#291f1d'],
+    borderDrag:              ['#1F8DCD'],
     highlightFrameBgc:       ['#8B8B8B'],
     
     //highlightFrameAccentBgc: ['#ffffff'],

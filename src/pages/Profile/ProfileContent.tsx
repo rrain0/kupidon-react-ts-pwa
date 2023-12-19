@@ -18,7 +18,7 @@ import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { ProfileMockData } from 'src/pages/Profile/MockData'
-import ProfilePhotos, { ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
+import ProfilePhotos, { ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
@@ -59,6 +59,7 @@ import fixedTop = EmotionCommon.fixedTop
 import row = EmotionCommon.row
 import NameCardIc = SvgIcons.NameCardIc
 import GiftBoxIc = SvgIcons.GiftBoxIc
+import * as uuid from 'uuid'
 
 
 
@@ -235,8 +236,20 @@ React.memo(
   
   
   const [images, setImages] = useState<ProfilePhotoArr>(
-    ProfileMockData.userImages
-      .map((it,i)=>i===4 ? undefined : it) as ProfilePhotoArr
+    ()=>ProfileMockData.userImages
+      .map((it,i)=>{
+        if (i===4) return undefined
+        /* if (i===5) return {
+          id: uuid.v4(),
+          state: 'reading',
+          url: undefined,
+        } */
+        return {
+          id: uuid.v4(),
+          state: 'ready',
+          url: it,
+        }
+      }) as ProfilePhotoArr
   )
   
   

@@ -4,15 +4,15 @@ import styled from '@emotion/styled'
 import { Controller } from '@react-spring/core'
 import { config, useSprings, animated, UseSpringProps } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { useRecoilValue } from 'recoil'
 import ModalPortal from 'src/components/Modal/ModalPortal'
-import UseElemRef from 'src/components/StateCarriers/UseElemRef'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import { FileUtils } from 'src/utils/common/FileUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -34,7 +34,6 @@ import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
 import arrIndices = ArrayUtils.arrIndices
 import PlusIc = SvgIcons.PlusIc
-import hiddenFileInput = EmotionCommon.hiddenFileInput
 import contents = EmotionCommon.contents
 import row = EmotionCommon.row
 import col = EmotionCommon.col
@@ -42,6 +41,9 @@ import CrossInCircleIc = SvgIcons.CrossInCircleIc
 import resetH = EmotionCommon.resetH
 import ArrowRefreshCwIc = SvgIcons.ArrowRefreshCwIc
 import Txt = EmotionCommon.Txt
+import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
+import * as uuid from 'uuid'
+import readToDataUrl = FileUtils.readToDataUrl
 
 
 
@@ -76,7 +78,11 @@ const springStyle =
 
 
 
-export type ProfilePhoto = string|undefined
+export type ProfilePhoto = undefined | {
+  id: string
+  state: 'ready'|'reading'
+  url: string|undefined
+}
 export interface ProfilePhotoArr extends Array<ProfilePhoto> { length: 6 }
 
 
@@ -203,6 +209,63 @@ React.memo(
   
   
   
+  const replacePhotoEffectEvent = useEffectEvent(
+    (newPhoto: ProfilePhoto, oldPhoto: ProfilePhoto)=>{
+      if (oldPhoto===undefined) return
+      let found = false
+      const newImages = images.map(it=>{
+        if (it===oldPhoto) {
+          found = true
+          return newPhoto
+        }
+        return it
+      }) as ProfilePhotoArr
+      
+      console.log({
+        newPhoto,
+        oldPhoto,
+        images,
+        found,
+      })
+      if (found) setImages(newImages)
+    }
+  )
+  const onPhotoFiles = useCallback(
+    (files: File[])=>{
+      /* console.log({
+        images: images,
+        lastIdx: lastIdx,
+        files: files,
+      }) */
+      const imgFile = files.find(it=>it.type.startsWith('image/'))
+      if (imgFile){
+        const readingPhoto: ProfilePhoto = {
+          id: uuid.v4(),
+          state: 'reading',
+          url: undefined
+        }
+        const newImages = [...images] as ProfilePhotoArr
+        newImages[lastIdx] = readingPhoto
+        setImages(newImages)
+        readToDataUrl(imgFile)
+        .then(imgDataUrl=>{
+          const newPhoto: ProfilePhoto = {
+            id: uuid.v4(),
+            state: 'ready',
+            url: imgDataUrl
+          }
+          replacePhotoEffectEvent(newPhoto, readingPhoto)
+          setMenuOpen(false)
+        })
+        .catch(()=>{
+          replacePhotoEffectEvent(undefined, readingPhoto)
+        })
+      }
+    },
+    [images, lastIdx, setImages]
+  )
+  
+  
   
   
   return <>
@@ -212,7 +275,7 @@ React.memo(
     >
       {springs.map((springStyle,i) => {
         const im = images[i]
-        return <div css={contents} key={im??i}>
+        return <div css={contents} key={im?.id??i}>
         <UseFakePointerRef render={({ ref, ref2, ref3, ref4 })=>
         <div css={css`
           grid-area: im${i+1};
@@ -249,7 +312,8 @@ React.memo(
           >
             
             <Dropzone
-              onDrop={(files, rejectedFiles, ev)=>console.log('files',files)}
+              onDrop={(files, rejectedFiles, ev)=>onPhotoFiles(files)}
+              onDragOver={()=>setLastIdx(i)}
               noClick={!!im || !canClick}
               useFsAccessApi={false}
             >
@@ -266,7 +330,7 @@ React.memo(
                 
                 { im
                   ? <img css={photoImgStyle}
-                      src={im}
+                      src={im!.url!}
                       alt={`Profile photo ${i+1}`}
                     />
                   : <div css={photoPlaceholderStyle}>
@@ -274,12 +338,18 @@ React.memo(
                     </div>
                 }
                 
+                { im?.state==='reading' &&
+                  <div css={photoPlaceholderStyle}>
+                    <Spinner8LinesIc css={photoPlaceholderIconStyle}/>
+                  </div>
+                }
+                
                 { isDraggingFiles &&
                   <div css={t=>css`
                     ${abs};
                     border-radius: inherit;
                     overflow: hidden;
-                    background: #00000022;
+                    //background: #00000022;
                     ${ isDragAccept && css`background: #00000099;` }
                     ::after {
                       ${abs};
@@ -287,7 +357,7 @@ React.memo(
                       inset: -4px;
                       border-radius: calc(14px + 4px);
                       border: 10px dashed;
-                      border-color: ${t.photos.content[0]};
+                      border-color: ${t.photos.borderDrag[0]};
                     }
                   `}/>
                 }
@@ -383,34 +453,30 @@ React.memo(
             </OptionContainer>
           </Button>
           
-          <UseElemRef<HTMLInputElement> render={ref=>
-          <Button css={ButtonStyle.bigRectTransparent}
-            onClick={ev=>ref.current?.click()}
+          <Dropzone
+            onDrop={(files, rejectedFiles, ev)=>onPhotoFiles(files)}
+            noDrag
+            useFsAccessApi={false}
           >
-            <input css={hiddenFileInput}
-              ref={ref}
-              type={'file'}
-              multiple
-              // it uses strange image pickers that doesn't work normally
-              //accept='image/*'
-              tabIndex={-1}
-              onChange={ev=>{
-                console.log(ev.currentTarget.files)
-              }}
-              onClick={ev=>{
-                //console.log('click')
-              }}
-            />
-            <OptionContainer>
-              <OptionTitle>{actionUiValues.replace[0].text}</OptionTitle>
-              <div css={optionIconBoxStyle}>
-                <ArrowRefreshCwIc/>
-              </div>
-            </OptionContainer>
-          </Button>
-          }/>
+            {({getRootProps, getInputProps}) =>
+            <div css={contents} {...getRootProps()}>
+              <input {...getInputProps()}/>
+              <Button css={ButtonStyle.bigRectTransparent}>
+                
+                <OptionContainer>
+                  <OptionTitle>{actionUiValues.replace[0].text}</OptionTitle>
+                  <div css={optionIconBoxStyle}>
+                    <ArrowRefreshCwIc/>
+                  </div>
+                </OptionContainer>
+              </Button>
+            </div>
+            }
+          </Dropzone>
           
-          {/* TODO download */}
+          
+          {/* TODO download button*/}
+          
           
         </OptionsContent>
       </BottomSheetBasic>
@@ -478,7 +544,7 @@ const photoImgStyle = css`
   //touch-action: none;
 
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1;
   object-position: center;
   object-fit: cover;
 `
@@ -486,9 +552,8 @@ const photoImgStyle = css`
 
 
 const photoPlaceholderStyle = (t:Themes.Theme)=>css`
+  ${abs};
   pointer-events: none;
-  width: 100%;
-  height: 100%;
   background: ${t.photos.bgc[0]};
   ${center};
 `
