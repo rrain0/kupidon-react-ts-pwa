@@ -1,20 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { css, Global } from '@emotion/react'
+import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useEffect, useRef, useState } from 'react'
-import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
-import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import React, { useEffect, useRef } from 'react'
+import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
 import ProfileContent from 'src/pages/Profile/ProfileContent'
 import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
-import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { Pages } from 'src/components/Page/Pages'
 import Page = Pages.Page
-import { SvgIcons } from 'src/views/icons/SvgIcons'
 
 
 
@@ -54,22 +48,8 @@ React.memo(
     </Page>
     
     
+    <PageScrollbars pageRef={pageRef} />
     
-    
-    
-    <PageScrollbarOverlayFrame>
-      <UseScrollbars
-        containerIsWindow={true}
-        contentRef={pageRef}
-        render={(
-          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />}
-      />
-    </PageScrollbarOverlayFrame>
     
     
     {/* <BottomButtonBar

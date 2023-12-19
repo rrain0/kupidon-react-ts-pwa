@@ -37,13 +37,6 @@ html {
   color-scheme: light dark;
 }
 
-/* hide default window scrollbars on desktop*/
-html {
-  scrollbar-width: none;
-}
-html::-webkit-scrollbar {
-  display: none;
-}
 
 
 

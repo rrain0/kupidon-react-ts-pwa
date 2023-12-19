@@ -7,10 +7,7 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
-import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
-import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
 import { SignupPageUiText } from 'src/pages/Signup/uiText'
 import React, {
   useCallback,
@@ -292,19 +289,7 @@ const SignupPage = () => {
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbarOverlayFrame>
-      <UseScrollbars
-        containerIsWindow={true}
-        contentRef={pageRef}
-        render={(
-          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />}
-      />
-    </PageScrollbarOverlayFrame>
+    <PageScrollbars pageRef={pageRef} />
     
     <BottomButtonBar settingsBtn/>
     

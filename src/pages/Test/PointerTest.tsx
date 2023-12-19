@@ -6,7 +6,6 @@ import { Pages } from 'src/components/Page/Pages'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
-import wait = AsyncUtils.wait
 
 
 

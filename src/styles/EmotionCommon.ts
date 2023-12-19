@@ -226,6 +226,11 @@ export namespace EmotionCommon {
       display: none;
     }
   `
+  export const hideWindowScrollbar = css`
+    html {
+      ${hideScrollbar}
+    }
+  `
   
   
   

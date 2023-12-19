@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useResetRecoilState } from 'recoil'
 import { UserApi } from 'src/api/requests/UserApi'
@@ -14,17 +14,12 @@ import FormHeader from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
 import { Pages } from 'src/components/Page/Pages'
-import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
-import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
-import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
+import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
 import { AccountSettingsUiText } from 'src/pages/AccountSettings/uiText'
 import { AccountSettingsPageValidation } from 'src/pages/AccountSettings/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
@@ -43,7 +38,6 @@ import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import FloppyDisk1Ic = SvgIcons.FloppyDisk1Ic
 import col = EmotionCommon.col
 import Page = Pages.Page
-import Mem = ReactUtils.Mem
 import FormValues = AccountSettingsPageValidation.FormValues
 import UserToUpdate = UserApi.UserToUpdate
 import userDefaultValues = AccountSettingsPageValidation.userDefaultValues
@@ -350,19 +344,7 @@ React.memo(
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbarOverlayFrame>
-      <UseScrollbars
-        containerIsWindow={true}
-        contentRef={pageRef}
-        render={(
-          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />}
-      />
-    </PageScrollbarOverlayFrame>
+    <PageScrollbars pageRef={pageRef}/>
     
     
     <BottomButtonBar settingsBtn

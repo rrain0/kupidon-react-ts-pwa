@@ -11,10 +11,7 @@ import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
 import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
 import { Pages } from 'src/components/Page/Pages'
-import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
-import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
 import { PwdChangeUiText } from 'src/pages/PwdChange/uiText'
 import { PwdChangePageValidation } from 'src/pages/PwdChange/validation'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -243,19 +240,7 @@ React.memo(
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbarOverlayFrame>
-      <UseScrollbars
-        containerIsWindow={true}
-        contentRef={pageRef}
-        render={(
-          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />}
-      />
-    </PageScrollbarOverlayFrame>
+    <PageScrollbars pageRef={pageRef} />
     
     <BottomButtonBar settingsBtn/>
     

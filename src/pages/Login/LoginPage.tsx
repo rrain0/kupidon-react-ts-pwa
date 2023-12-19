@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { Global } from '@emotion/react'
 import React, { useCallback, useEffect, useRef} from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { useSetRecoilState } from 'recoil'
@@ -8,10 +9,7 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
-import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
-import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
 import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
@@ -201,19 +199,7 @@ const LoginPage = () => {
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbarOverlayFrame>
-      <UseScrollbars
-        containerIsWindow={true}
-        contentRef={pageRef}
-        render={(
-          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />}
-      />
-    </PageScrollbarOverlayFrame>
+    <PageScrollbars pageRef={pageRef} />
     
     <BottomButtonBar settingsBtn/>
     

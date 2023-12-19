@@ -8,10 +8,7 @@ import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import { Pages } from 'src/components/Page/Pages'
-import { PageScrollbarOverlayFrame } from 'src/components/Page/PageScrollbarOverlayFrame'
-import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
-import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
+import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
 import {
   ApplicationSettingsUiText
 } from 'src/pages/ApplicationSettings/uiText'
@@ -20,7 +17,6 @@ import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoi
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ThemeNameUiText } from 'src/utils/lang/ui-values/ThemeNameUiText'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { AllThemes } from 'src/utils/theme/ThemeCollection'
@@ -45,7 +41,6 @@ import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
 import Theme = Themes.Theme
 import AddModuleIc = SvgIcons.AddModuleIc
-import Mem = ReactUtils.Mem
 
 
 
@@ -341,19 +336,7 @@ React.memo(
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbarOverlayFrame>
-      <UseScrollbars
-        containerIsWindow={true}
-        contentRef={pageRef}
-        render={(
-          { canScrollVertical, canScrollHorizontal, ...scrollbarProps }
-        )=><ScrollbarOverlay css={ScrollbarOverlayStyle.page}
-          {...scrollbarProps}
-          showVertical={canScrollVertical}
-          showHorizontal={canScrollHorizontal}
-        />}
-      />
-    </PageScrollbarOverlayFrame>
+    <PageScrollbars pageRef={pageRef}/>
     
     <BottomButtonBar />
     
