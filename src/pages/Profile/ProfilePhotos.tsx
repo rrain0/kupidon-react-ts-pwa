@@ -13,6 +13,7 @@ import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { FileUtils } from 'src/utils/common/FileUtils'
+import { ImageUtils } from 'src/utils/common/ImageUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -44,6 +45,7 @@ import Txt = EmotionCommon.Txt
 import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
 import * as uuid from 'uuid'
 import readToDataUrl = FileUtils.readToDataUrl
+import SetterOrUpdater = TypeUtils.SetterOrUpdater
 
 
 
@@ -78,10 +80,10 @@ const springStyle =
 
 
 
-export type ProfilePhoto = undefined | {
+export type ProfilePhoto = {
   id: string
-  state: 'ready'|'reading'
-  url: string|undefined
+  state: 'ready'|'empty'|'preparing'
+  url: string
 }
 export interface ProfilePhotoArr extends Array<ProfilePhoto> { length: 6 }
 
@@ -89,7 +91,7 @@ export interface ProfilePhotoArr extends Array<ProfilePhoto> { length: 6 }
 
 export type ProfilePhotosProps = {
   images:ProfilePhotoArr
-  setImages: Setter<ProfilePhotoArr>
+  setImages: SetterOrUpdater<ProfilePhotoArr>
 }
 const ProfilePhotos =
 React.memo(
@@ -211,55 +213,70 @@ React.memo(
   
   const replacePhotoEffectEvent = useEffectEvent(
     (newPhoto: ProfilePhoto, oldPhoto: ProfilePhoto)=>{
-      if (oldPhoto===undefined) return
-      let found = false
-      const newImages = images.map(it=>{
-        if (it===oldPhoto) {
-          found = true
-          return newPhoto
-        }
-        return it
-      }) as ProfilePhotoArr
-      
-      console.log({
-        newPhoto,
-        oldPhoto,
-        images,
-        found,
+      setImages(images=>{
+        let found = false
+        const newImages = images.map(it=>{
+          if (it===oldPhoto) {
+            found = true
+            return newPhoto
+          }
+          return it
+        }) as ProfilePhotoArr
+        if (found) return newImages
+        return images
       })
-      if (found) setImages(newImages)
     }
   )
   const onPhotoFiles = useCallback(
     (files: File[])=>{
-      /* console.log({
-        images: images,
-        lastIdx: lastIdx,
-        files: files,
-      }) */
-      const imgFile = files.find(it=>it.type.startsWith('image/'))
-      if (imgFile){
-        const readingPhoto: ProfilePhoto = {
-          id: uuid.v4(),
-          state: 'reading',
-          url: undefined
-        }
-        const newImages = [...images] as ProfilePhotoArr
-        newImages[lastIdx] = readingPhoto
-        setImages(newImages)
-        readToDataUrl(imgFile)
-        .then(imgDataUrl=>{
-          const newPhoto: ProfilePhoto = {
-            id: uuid.v4(),
-            state: 'ready',
-            url: imgDataUrl
+      const imgFiles = files.filter(it=>it.type.startsWith('image/'))
+      if (imgFiles.length){
+        const emptyCnt = images
+          .filter((im,i)=>i===lastIdx || (i>=lastIdx && im.state==='empty')).length
+        let filesI = 0
+        const newImages = images.map((it,i)=>{
+          if (filesI < imgFiles.length &&
+            (i===lastIdx ||
+              (i>=lastIdx &&
+              (imgFiles.length<=emptyCnt ? it.state==='empty' : true)
+              )
+            )
+          ){
+            const preparingPhoto: ProfilePhoto = {
+              id: uuid.v4(),
+              state: 'preparing',
+              url: '',
+            }
+            const file = imgFiles[filesI++]
+            
+            ;(async()=>{
+              try {
+                const compressedFile = await ImageUtils.compress(file)
+                const imgDataUrl = await readToDataUrl(compressedFile)
+                const newPhoto: ProfilePhoto = {
+                  id: uuid.v4(),
+                  state: 'ready',
+                  url: imgDataUrl
+                }
+                replacePhotoEffectEvent(newPhoto, preparingPhoto)
+              }
+              catch (ex) {
+                const emptyPhoto: ProfilePhoto = {
+                  id: uuid.v4(),
+                  state: 'empty',
+                  url: '',
+                }
+                replacePhotoEffectEvent(emptyPhoto, preparingPhoto)
+              }
+            })()
+            
+            return preparingPhoto
           }
-          replacePhotoEffectEvent(newPhoto, readingPhoto)
-          setMenuOpen(false)
-        })
-        .catch(()=>{
-          replacePhotoEffectEvent(undefined, readingPhoto)
-        })
+          
+          return it
+        }) as ProfilePhotoArr
+        setImages(newImages)
+        setMenuOpen(false)
       }
     },
     [images, lastIdx, setImages]
@@ -275,7 +292,7 @@ React.memo(
     >
       {springs.map((springStyle,i) => {
         const im = images[i]
-        return <div css={contents} key={im?.id??i}>
+        return <div css={contents} key={im.id}>
         <UseFakePointerRef render={({ ref, ref2, ref3, ref4 })=>
         <div css={css`
           grid-area: im${i+1};
@@ -307,14 +324,14 @@ React.memo(
               }
             }()}
             onClick={ev=>{
-              if (canClick && im) setMenuOpen(true)
+              if (canClick && im.state!=='empty') setMenuOpen(true)
             }}
           >
             
             <Dropzone
               onDrop={(files, rejectedFiles, ev)=>onPhotoFiles(files)}
               onDragOver={()=>setLastIdx(i)}
-              noClick={!!im || !canClick}
+              noClick={im.state!=='empty' || !canClick}
               useFsAccessApi={false}
             >
             {({getRootProps, getInputProps, isDragAccept}) => {
@@ -328,28 +345,26 @@ React.memo(
                 ref={ref2 as any}
               >
                 
-                { im
-                  ? <img css={photoImgStyle}
-                      src={im!.url!}
-                      alt={`Profile photo ${i+1}`}
-                    />
-                  : <div css={photoPlaceholderStyle}>
-                      <PlusIc css={photoPlaceholderIconStyle}/>
-                    </div>
+                { im.state==='ready' &&
+                  <img css={photoImgStyle}
+                    src={im!.url!}
+                    alt={`Profile photo ${i+1}`}
+                  />
                 }
-                
-                { im?.state==='reading' &&
+                { im.state==='preparing' &&
                   <div css={photoPlaceholderStyle}>
                     <Spinner8LinesIc css={photoPlaceholderIconStyle}/>
                   </div>
                 }
+                { im.state==='empty' &&
+                  <div css={photoPlaceholderStyle}>
+                    <PlusIc css={photoPlaceholderIconStyle}/>
+                  </div>
+                }
                 
                 { isDraggingFiles &&
-                  <div css={t=>css`
-                    ${abs};
-                    border-radius: inherit;
-                    overflow: hidden;
-                    //background: #00000022;
+                  <div css={t=>[photoPlaceholderStyle(t),css`
+                    background: none;
                     ${ isDragAccept && css`background: #00000099;` }
                     ::after {
                       ${abs};
@@ -359,7 +374,7 @@ React.memo(
                       border: 10px dashed;
                       border-color: ${t.photos.borderDrag[0]};
                     }
-                  `}/>
+                  `]}/>
                 }
                 
               </animated.label>
@@ -440,7 +455,11 @@ React.memo(
           <Button css={ButtonStyle.bigRectTransparent}
             onClick={()=>{
               const newImages = [...images] as ProfilePhotoArr
-              newImages[lastIdx] = undefined
+              newImages[lastIdx] = {
+                id: uuid.v4(),
+                state: 'empty',
+                url: '',
+              }
               setImages(newImages)
               sheet.setClosing()
             }}
@@ -554,6 +573,8 @@ const photoImgStyle = css`
 const photoPlaceholderStyle = (t:Themes.Theme)=>css`
   ${abs};
   pointer-events: none;
+  border-radius: inherit;
+  overflow: hidden;
   background: ${t.photos.bgc[0]};
   ${center};
 `

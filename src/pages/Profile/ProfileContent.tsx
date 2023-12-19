@@ -238,7 +238,11 @@ React.memo(
   const [images, setImages] = useState<ProfilePhotoArr>(
     ()=>ProfileMockData.userImages
       .map((it,i)=>{
-        if (i===4) return undefined
+        if (i===4) return {
+          id: uuid.v4(),
+          state: 'empty',
+          url: '',
+        }
         /* if (i===5) return {
           id: uuid.v4(),
           state: 'reading',
