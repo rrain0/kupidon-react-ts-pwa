@@ -98,8 +98,9 @@ export namespace SvgIcons {
   }>
   
   type SvgProps = React.SVGProps<SVGSVGElement> & { title?: string }
+  type SvgComponentType = React.FunctionComponent<SvgProps>
   type BaseSimpleSvgIconSvgComponentProp = {
-    SvgComponent: React.FunctionComponent<SvgProps>
+    SvgComponent: SvgComponentType
   }
   
   type BaseSimpleSvgIconForwardRefProps = JSX.IntrinsicElements['svg']
@@ -126,18 +127,18 @@ export namespace SvgIcons {
     
     return <SvgComponent
       css={css`
-        width:  ${falsishToUndef(!isPresent(w)) && `var(${SvgIcStyle.Prop.size})`};
-        height: ${falsishToUndef(!isPresent(h)) && `var(${SvgIcStyle.Prop.size})`};
+        width:  ${falsishToUndef(!isPresent(w)) && SvgIcStyle.Prop.varr.size};
+        height: ${falsishToUndef(!isPresent(h)) && SvgIcStyle.Prop.varr.size};
         //max-width: 100%;
         //max-height: 100%;
-        fill: ${color ?? `var(${SvgIcStyle.Prop.color}, black)`};
-        stroke: ${color ?? `var(${SvgIcStyle.Prop.color}, black)`};
-        ${SvgIcStyle.Prop.accentColor}:
-                ${accentColor ?? `var(${SvgIcStyle.Prop.accentColor}, gray)`}
+        fill: ${color ?? SvgIcStyle.Prop.vard.color('black')};
+        stroke: ${color ?? SvgIcStyle.Prop.vard.color('black')};
+        ${SvgIcStyle.Prop.prop.accentColor}:
+                ${accentColor ?? SvgIcStyle.Prop.vard.accentColor('gray')}
       `}
       width={w}
       height={h}
-      className={classNames(className,SvgIcStyle.El.iconClass)}
+      className={classNames(className,SvgIcStyle.El.clazz.icon)}
       {...restProps}
       ref={forwardedRef}
     />
@@ -146,416 +147,105 @@ export namespace SvgIcons {
   
   
   
+  export type SimpleSvgIconProps = BaseSimpleSvgIconCustomProps & BaseSimpleSvgIconForwardRefProps
+  function generateSimpleSvgIcon(SvgComponent: SvgComponentType){
+    return (
+    React.memo(
+    React.forwardRef<BaseSimpleSvgIconRefElement, SimpleSvgIconProps>(
+      (props, forwardedRef) =>
+        <BaseSimpleSvgIcon {...props} SvgComponent={SvgComponent} ref={forwardedRef}/>
+    )))
+  }
+  
+  
+  
   // Icons
   
-  export type SvgIcProps = BaseSimpleSvgIconCustomProps & BaseSimpleSvgIconForwardRefProps
-  
-  
-  
-  
-  export const AddModuleIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={AddModuleSvg} ref={forwardedRef}/>
-  ))
-  
-  export const Arrow1DownIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Arrow1DownSvg} ref={forwardedRef}/>
-  ))
-  
-  export const Arrow2ForwardIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Arrow2ForwardSvg} ref={forwardedRef} />
-  ))
-  
-  export const Arrow3UpRightIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Arrow3UpRightSvg} ref={forwardedRef} />
-  ))
-  
-  export const Arrow4DownIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Arrow4DownSvg} ref={forwardedRef} />
-  ))
-  
-  export const Arrow5FwdIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Arrow5FwdSvg} ref={forwardedRef} />
-  ))
-  
-  export const Arrow6NextIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Arrow6NextSvg} ref={forwardedRef} />
-  ))
-  
-  export const ArrowRefreshCwIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={ArrowRefreshCwSvg} ref={forwardedRef} />
-  ))
-  
-  export const ArrowReloadIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={ArrowReloadSvg} ref={forwardedRef} />
-  ))
-  
-  export const BrowserIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={BrowserSvg} ref={forwardedRef} />
-  ))
-  
-  export const CardsHeartIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={CardsHeartSvg} ref={forwardedRef} />
-  ))
-  
-  export const CautionIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={CautionSvg} ref={forwardedRef} />
-  ))
-  
-  export const ChatRoundIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={ChatRoundSvg} ref={forwardedRef} />
-  ))
-  
-  export const CheckmarkIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={CheckmarkSvg} ref={forwardedRef} />
-  ))
-  
-  export const CheckmarkCircleToastifyIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={CheckmarkCircleToastifySvg} ref={forwardedRef} />
-  ))
-  
-  export const ClearTrashIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={ClearTrashSvg} ref={forwardedRef} />
-  ))
-  
-  export const ClipIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={ClipSvg} ref={forwardedRef} />
-  ))
-  
-  export const CrossIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={CrossSvg} ref={forwardedRef} />
-  ))
-  
-  export const Cross2Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Cross2Svg} ref={forwardedRef} />
-  ))
-  
-  export const CrossInCircleIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={CrossInCircleSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const DangerRoundToastifyIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={DangerRoundToastifySvg} ref={forwardedRef} />
-  ))
-  
-  export const DayIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={DaySvg} ref={forwardedRef} />
-  ))
-  
-  export const DayNightIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={DayNightSvg} ref={forwardedRef} />
-  ))
-  
-  export const DoubleCheckmarkIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={DoubleCheckmarkSvg} ref={forwardedRef} />
-  ))
-  
-  export const Download1Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Download1Svg} ref={forwardedRef} />
-  ))
-  
-  export const Download2RoundIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Download2RoundSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const EyeIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={EyeSvg} ref={forwardedRef} />
-  ))
-  
-  export const EyeCrossedOutIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={EyeCrossedOutSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const FloppyDisk1Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={FloppyDisk1Svg} ref={forwardedRef} />
-  ))
-  
-  export const FloppyDisk2Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={FloppyDisk2Svg} ref={forwardedRef} />
-  ))
-  
-  export const FloppyDisk3Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={FloppyDisk3Svg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const GearIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={GearSvg} ref={forwardedRef} />
-  ))
-  
-  export const Gear2Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Gear2Svg} ref={forwardedRef} />
-  ))
-  
-  export const GearInSquareIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={GearInSquareSvg} ref={forwardedRef} />
-  ))
-  
-  export const GenderIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={GenderSvg} ref={forwardedRef} />
-  ))
-  
-  export const GiftBoxIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={GiftBoxSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const HeartIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={HeartSvg} ref={forwardedRef} />
-  ))
-  
-  export const HelpIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={HelpSvg} ref={forwardedRef} />
-  ))
-  
-  export const HomeIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={HomeSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const InfoToastifyIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={InfoToastifySvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const LockIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={LockSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const MailIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={MailSvg} ref={forwardedRef} />
-  ))
-  
-  export const MoonIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={MoonSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const NameCardIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={NameCardSvg} ref={forwardedRef} />
-  ))
-  
-  export const NightIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={NightSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const PencilWriteIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={PencilWriteSvg} ref={forwardedRef} />
-  ))
-  
-  export const Plane1Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Plane1Svg} ref={forwardedRef} />
-  ))
-  
-  export const PlusIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={PlusSvg} ref={forwardedRef} />
-  ))
-  
-  export const ProfileIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={ProfileSvg} ref={forwardedRef} />
-  ))
-  
-  export const RadioActiveIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={RadioActiveSvg} ref={forwardedRef} />
-  ))
-  
-  export const RadioInactiveIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={RadioInactiveSvg} ref={forwardedRef} />
-  ))
-  
-  export const RingingBellIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={RingingBellSvg} ref={forwardedRef} />
-  ))
-  
-  
-  
-  export const SearchIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={SearchSvg} ref={forwardedRef} />
-  ))
-  
-  export const Search2Ic =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={Search2Svg} ref={forwardedRef} />
-  ))
+  export const AddModuleIc = generateSimpleSvgIcon(AddModuleSvg)
+  export const Arrow1DownIc = generateSimpleSvgIcon(Arrow1DownSvg)
+  export const Arrow2ForwardIc = generateSimpleSvgIcon(Arrow2ForwardSvg)
+  export const Arrow3UpRightIc = generateSimpleSvgIcon(Arrow3UpRightSvg)
+  export const Arrow4DownIc = generateSimpleSvgIcon(Arrow4DownSvg)
+  export const Arrow5FwdIc = generateSimpleSvgIcon(Arrow5FwdSvg)
+  export const Arrow6NextIc = generateSimpleSvgIcon(Arrow6NextSvg)
+  export const ArrowRefreshCwIc = generateSimpleSvgIcon(ArrowRefreshCwSvg)
+  export const ArrowReloadIc = generateSimpleSvgIcon(ArrowReloadSvg)
   
+  
+  export const BrowserIc = generateSimpleSvgIcon(BrowserSvg)
+  
+  
+  export const CardsHeartIc = generateSimpleSvgIcon(CardsHeartSvg)
+  export const CautionIc = generateSimpleSvgIcon(CautionSvg)
+  export const ChatRoundIc = generateSimpleSvgIcon(ChatRoundSvg)
+  export const CheckmarkIc = generateSimpleSvgIcon(CheckmarkSvg)
+  export const CheckmarkCircleToastifyIc = generateSimpleSvgIcon(CheckmarkCircleToastifySvg)
+  export const ClearTrashIc = generateSimpleSvgIcon(ClearTrashSvg)
+  export const ClipIc = generateSimpleSvgIcon(ClipSvg)
+  export const CrossIc = generateSimpleSvgIcon(CrossSvg)
+  export const Cross2Ic = generateSimpleSvgIcon(Cross2Svg)
+  export const CrossInCircleIc = generateSimpleSvgIcon(CrossInCircleSvg)
+  
+  
+  export const DangerRoundToastifyIc = generateSimpleSvgIcon(DangerRoundToastifySvg)
+  export const DayIc = generateSimpleSvgIcon(DaySvg)
+  export const DayNightIc = generateSimpleSvgIcon(DayNightSvg)
+  export const DoubleCheckmarkIc = generateSimpleSvgIcon(DoubleCheckmarkSvg)
+  export const Download1Ic = generateSimpleSvgIcon(Download1Svg)
+  export const Download2RoundIc = generateSimpleSvgIcon(Download2RoundSvg)
+  
+  
+  export const EyeIc = generateSimpleSvgIcon(EyeSvg)
+  export const EyeCrossedOutIc = generateSimpleSvgIcon(EyeCrossedOutSvg)
+  
+  
+  export const FloppyDisk1Ic = generateSimpleSvgIcon(FloppyDisk1Svg)
+  export const FloppyDisk2Ic = generateSimpleSvgIcon(FloppyDisk2Svg)
+  export const FloppyDisk3Ic = generateSimpleSvgIcon(FloppyDisk3Svg)
+  
+  
+  export const GearIc = generateSimpleSvgIcon(GearSvg)
+  export const Gear2Ic = generateSimpleSvgIcon(Gear2Svg)
+  export const GearInSquareIc = generateSimpleSvgIcon(GearInSquareSvg)
+  export const GenderIc = generateSimpleSvgIcon(GenderSvg)
+  export const GiftBoxIc = generateSimpleSvgIcon(GiftBoxSvg)
+  
+  
+  export const HeartIc = generateSimpleSvgIcon(HeartSvg)
+  export const HelpIc = generateSimpleSvgIcon(HelpSvg)
+  export const HomeIc = generateSimpleSvgIcon(HomeSvg)
+  
+  
+  export const InfoToastifyIc = generateSimpleSvgIcon(InfoToastifySvg)
+  
+  
+  export const LockIc = generateSimpleSvgIcon(LockSvg)
+  
+  
+  export const MailIc = generateSimpleSvgIcon(MailSvg)
+  export const MoonIc = generateSimpleSvgIcon(MoonSvg)
+  
+  
+  export const NameCardIc = generateSimpleSvgIcon(NameCardSvg)
+  export const NightIc = generateSimpleSvgIcon(NightSvg)
+  
+  
+  export const PencilWriteIc = generateSimpleSvgIcon(PencilWriteSvg)
+  export const Plane1Ic = generateSimpleSvgIcon(Plane1Svg)
+  export const PlusIc = generateSimpleSvgIcon(PlusSvg)
+  export const ProfileIc = generateSimpleSvgIcon(ProfileSvg)
+  
+  
+  export const RadioActiveIc = generateSimpleSvgIcon(RadioActiveSvg)
+  export const RadioInactiveIc = generateSimpleSvgIcon(RadioInactiveSvg)
+  export const RingingBellIc = generateSimpleSvgIcon(RingingBellSvg)
+  
+  
+  export const SearchIc = generateSimpleSvgIcon(SearchSvg)
+  export const Search2Ic = generateSimpleSvgIcon(Search2Svg)
   export const Spinner8LinesIc =
   React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
+  React.forwardRef<BaseSimpleSvgIconRefElement, SimpleSvgIconProps>(
   function(){
     const rotation = keyframes`
       100% { rotate: 1turn }
@@ -567,10 +257,9 @@ export namespace SvgIcons {
       <BaseSimpleSvgIcon {...props} SvgComponent={Spinner8Lines_} ref={forwardedRef} />
   }()
   ))
-  
   export const SpinnerCircleQuarterIc =
   React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
+  React.forwardRef<BaseSimpleSvgIconRefElement, SimpleSvgIconProps>(
   function(){
     const rotation = keyframes`
       100% { rotate: 1turn }
@@ -584,13 +273,7 @@ export namespace SvgIcons {
   ))
   
   
-  
-  export const WarnTriangleToastifyIc =
-  React.memo(
-  React.forwardRef<BaseSimpleSvgIconRefElement, SvgIcProps>(
-  (props, forwardedRef) =>
-    <BaseSimpleSvgIcon {...props} SvgComponent={WarnTriangleToastifySvg} ref={forwardedRef} />
-  ))
+  export const WarnTriangleToastifyIc = generateSimpleSvgIcon(WarnTriangleToastifySvg)
   
   
   

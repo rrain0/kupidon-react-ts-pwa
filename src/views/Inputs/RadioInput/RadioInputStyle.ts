@@ -20,7 +20,7 @@ export namespace RadioInputStyle {
     export const frameClassName = 'rrainuiFrame'
     export const inputClassName = 'rrainuiInput'
     export const iconWrapClassName = 'rrainuiIconWrap'
-    export const iconClassName = SvgIcStyle.El.iconClass
+    export const iconClassName = SvgIcStyle.El.clazz.icon
     export const borderClassName = 'rrainuiBorder'
     export const rippleFrameClassName = RippleStyle.El.frameClassName
     
@@ -62,7 +62,7 @@ export namespace RadioInputStyle {
     export const rippleDisabled = inputDisabled+'~*>'+rippleFrameClass
   }
   export namespace Prop {
-    export const color = CommonStyle.Prop.color
+    export const color = CommonStyle.Prop.prop.color
     export const activeIconColor = '--active-icon-color'
     export const inactiveIconColor = '--inactive-icon-color'
     export const rippleColor = RippleStyle.Prop.color

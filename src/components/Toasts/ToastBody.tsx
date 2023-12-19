@@ -41,8 +41,8 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.accentLoadingBgc[0]};
-        ${SvgIcStyle.Prop.accentColor}: ${t.toast.accentLoadingContent[0]};
+        ${SvgIcStyle.Prop.prop.color}: ${t.toast.accentLoadingBgc[0]};
+        ${SvgIcStyle.Prop.prop.accentColor}: ${t.toast.accentLoadingContent[0]};
       `}
     />}
     
@@ -58,7 +58,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.accentOk[0]};
+        ${SvgIcStyle.Prop.prop.color}: ${t.toast.accentOk[0]};
       `}
     />}
     
@@ -66,7 +66,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.accentWarn[0]};
+        ${SvgIcStyle.Prop.prop.color}: ${t.toast.accentWarn[0]};
       `}
     />}
     
@@ -74,7 +74,7 @@ export const ToastBody = React.memo((props: ToastBodyProps)=>{
       css={t=>css`
         width: 20px;
         height: 20px;
-        ${SvgIcStyle.Prop.color}: ${t.toast.accentDanger[0]};
+        ${SvgIcStyle.Prop.prop.color}: ${t.toast.accentDanger[0]};
       `}
     />}
     
@@ -124,15 +124,15 @@ const CloseButton = styled.button`
   ${center};
   cursor: pointer;
 
-  &>${SvgIcStyle.El.iconDotClass} {
+  &>${SvgIcStyle.El.el.icon} {
     width: 100%;
     height: 100%;
-    ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.content2[0]};
+    ${SvgIcStyle.Prop.prop.color}: ${p=>p.theme.toast.content2[0]};
   }
   
   ${hoverable}{
-    :hover>${SvgIcStyle.El.iconDotClass} {
-      ${SvgIcStyle.Prop.color}: ${p=>p.theme.toast.content3[0]};
+    :hover>${SvgIcStyle.El.el.icon} {
+      ${SvgIcStyle.Prop.prop.color}: ${p=>p.theme.toast.content3[0]};
     }
   }
 `

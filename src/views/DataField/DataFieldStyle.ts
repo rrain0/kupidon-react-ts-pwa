@@ -32,7 +32,7 @@ export namespace DataFieldStyle {
     export const borderError = frameError+'>'+borderClass
   }
   export namespace Prop {
-    export const color = CommonStyle.Prop.color
+    export const color = CommonStyle.Prop.prop.color
   }
   
   

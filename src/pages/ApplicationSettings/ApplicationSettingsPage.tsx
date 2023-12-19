@@ -403,10 +403,10 @@ const Flag = styled.img`
   vertical-align: middle;
 `
 const icon = (t:Theme)=>css`
-  ${SvgIcStyle.El.iconThis} {
+  ${SvgIcStyle.El.thiz.icon} {
     height: 1.333em;
     width: 1.333em;
-    ${SvgIcStyle.Prop.color}: var(${CommonStyle.Prop.color});
+    ${SvgIcStyle.Prop.prop.color}: ${CommonStyle.Prop.varr.color};
   }
 `
 const divIcon = css`
@@ -415,7 +415,7 @@ const divIcon = css`
 `
 const iconSmall = (t:Theme)=>css`
   ${icon(t)};
-  ${SvgIcStyle.El.iconThis} {
+  ${SvgIcStyle.El.thiz.icon} {
     height: 1.25em;
   }
 `
@@ -426,7 +426,7 @@ const RoundButtonsContainer = styled.div`
 `
 const normalIconRoundButton = (t:Theme)=>css`
   ${ButtonStyle.roundedAccent(t)};
-  ${ButtonStyle.El.btnThis} {
+  ${ButtonStyle.El.thiz.btn} {
     min-width: 90px;
     gap: 0.6em;
   }

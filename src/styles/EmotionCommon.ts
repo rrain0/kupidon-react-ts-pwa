@@ -132,6 +132,7 @@ export namespace EmotionCommon {
   
   
   const _reset = css`
+    // appearance: none;
     box-sizing: border-box;
     background: none;
     border: none;

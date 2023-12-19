@@ -91,9 +91,9 @@ EyeWrap.defaultProps = { type: 'button' }
 
 
 const iconCss = (t:Themes.Theme)=>css`
-  ${SvgIcStyle.El.iconThis}{
-    ${SvgIcStyle.Prop.size}: 24px;
-    ${SvgIcStyle.Prop.color}: ${t.input.content[0]};
+  ${SvgIcStyle.El.thiz.icon}{
+    ${SvgIcStyle.Prop.prop.size}: 24px;
+    ${SvgIcStyle.Prop.prop.color}: ${t.input.content[0]};
   }
 `
 const rippleCss = (t:Themes.Theme)=>css`

@@ -19,21 +19,21 @@ export type OptionItemCustomProps = PartialUndef<{
   title: React.ReactNode
   value: React.ReactNode
   nextIcon: React.ReactNode
-}> & CommonStyle.Attr.errorType
-export type ForwardRefProps = JSX.IntrinsicElements['article']
-type RefElement = HTMLDivElement
+}> & CommonStyle.Attr.errorJsxProp
+export type OptionItemForwardRefProps = JSX.IntrinsicElements['article']
+export type OptionItemRefElement = HTMLDivElement
 
-export type OptionItemProps = OptionItemCustomProps & ForwardRefProps
+export type OptionItemProps = OptionItemCustomProps & OptionItemForwardRefProps
 const OptionItem =
 React.memo(
-React.forwardRef<RefElement, OptionItemProps>(
+React.forwardRef<OptionItemRefElement, OptionItemProps>(
 (props, forwardedRef)=>{
   const {
     icon, title, value, nextIcon,
     ...restProps
   } = props
   
-  const elemRef = useRef<RefElement>(null)
+  const elemRef = useRef<OptionItemRefElement>(null)
   useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
@@ -86,7 +86,7 @@ const Frame = styled.article`
     background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
   }
   
-  ${CommonStyle.Attr.errorThis}{
+  ${CommonStyle.Attr.selThis.error}{
     background: ${p=>p.theme.input.bgcError[0]};
   }
 `
@@ -99,7 +99,7 @@ const IconFrame = styled.div`
   display: grid;
   place-items: center center;
 
-  ${SvgIcStyle.Prop.color}: ${p=>p.theme.containerNormal.content3[0]};
+  ${SvgIcStyle.Prop.prop.color}: ${p=>p.theme.containerNormal.content3[0]};
 `
 const TitleFrame = styled.div`
   grid-area: title;
@@ -123,5 +123,5 @@ const NextIconFrame = styled.div`
   display: grid;
   place-items: center end;
 
-  ${SvgIcStyle.Prop.color}: ${p=>p.theme.containerNormal.content3[0]};
+  ${SvgIcStyle.Prop.prop.color}: ${p=>p.theme.containerNormal.content3[0]};
 `

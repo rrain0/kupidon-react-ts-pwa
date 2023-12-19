@@ -6,7 +6,6 @@ import React, { useImperativeHandle, useRef } from "react"
 import classNames from "classnames"
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
-import styled from 'styled-components'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import trueOrUndef = CastUtils.trueOrUndef
 import abs = EmotionCommon.abs
@@ -18,66 +17,68 @@ import hoverable = EmotionCommon.hoverable
 
 
 
-const Attr = ButtonStyle.Attr
-
 
 export type ButtonCustomProps = PartialUndef<{
   hasError: boolean
   rippleMode: RippleProps['mode']
   rippleDuration: RippleProps['rippleDuration']
 }>
-export type ForwardRefProps = JSX.IntrinsicElements['button']
-type RefElement = HTMLButtonElement
+export type ButtonForwardRefProps = JSX.IntrinsicElements['button']
+export type ButtonRefElement = HTMLButtonElement
 
-export type ButtonProps = ButtonCustomProps & ForwardRefProps
+export type ButtonProps = ButtonCustomProps & ButtonForwardRefProps
 const Button =
 React.memo(
-React.forwardRef<RefElement, ButtonProps>(
+React.forwardRef<ButtonRefElement, ButtonProps>(
 (props, forwardedRef) => {
-  let { hasError, children, rippleMode, rippleDuration, ...restProps } = props
-  rippleMode ??= 'cursor'
+  const {
+    hasError, className, type,
+    rippleMode, rippleDuration,
+    children,
+    ...restProps
+  } = props
   
-  const buttonRef = useRef<RefElement>(null)
+  const buttonProps = {
+    [ButtonStyle.Attr.attr.error]: trueOrUndef(hasError),
+    className: classNames(className, ButtonStyle.El.clazz.btn),
+    type: type ?? 'button',
+    ...restProps
+  }
+  
+  const rippleProps = {
+    mode: rippleMode ?? 'cursor',
+    rippleDuration,
+  }
+  
+  const buttonRef = useRef<ButtonRefElement>(null)
   useImperativeHandle(forwardedRef, ()=>buttonRef.current!,[])
   
   
   
-  return <Button_ css={button_Style}
-    {...{[Attr.errorName]: hasError}}
-    {...restProps}
+  return <button css={buttonStyle}
+    {...buttonProps}
     ref={buttonRef}
   >
+    
     { children }
-    <Border css={borderStyle}>
+    
+    <div css={borderStyle}
+      className={ButtonStyle.El.clazz.border}
+    >
       <Ripple
         targetElement={buttonRef}
-        mode={rippleMode}
-        rippleDuration={rippleDuration}
-        
-        // and IT IS WORKING !!!
-        /* css={css`
-          .rrainuiButton:disabled>*>&.rrainuiRippleFrame {
-            display: none;
-          }
-        `} */
-        
+        {...rippleProps}
       />
-    </Border>
-  </Button_>
+    </div>
+    
+  </button>
 }))
 export default Button
 
 
 
-type Button_Props = PartialUndef<{
-  [Attr.errorName]: boolean
-}>
-const Button_ = styled.button.attrs<Button_Props>(p=>({
-  className:        classNames(p.className,ButtonStyle.El.btnClass),
-  [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
-  type:             p.type || 'button',
-}))<Button_Props>``
-const button_Style = css`
+
+const buttonStyle = css`
   ${resetButton};
   position: relative;
   ${row};
@@ -97,9 +98,6 @@ const button_Style = css`
 
 
 
-const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,ButtonStyle.El.borderClass),
-}))``
 const borderStyle = css`
   ${abs};
   place-self: stretch;

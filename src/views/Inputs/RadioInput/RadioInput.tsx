@@ -6,8 +6,6 @@ import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
-import {ReactUtils} from "src/utils/common/ReactUtils"
-import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
@@ -27,8 +25,7 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
-
-export type RadioInputProps = JSX.IntrinsicElements['input'] & PartialUndef<{
+export type RadioInputCustomProps = PartialUndef<{
   hasError: boolean
   startViews: React.ReactNode
   endViews: React.ReactNode
@@ -36,10 +33,15 @@ export type RadioInputProps = JSX.IntrinsicElements['input'] & PartialUndef<{
   childrenPosition: 'start'|'end'
   rippleMode: RippleProps['mode']
 }>
+export type ForwardRefProps = JSX.IntrinsicElements['input']
+type RefElement = HTMLInputElement
 
-const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
-  props, forwardedRef
-) => {
+export type RadioInputProps = RadioInputCustomProps & ForwardRefProps
+
+const RadioInput = 
+React.memo(
+React.forwardRef<RefElement, RadioInputProps>
+((props, forwardedRef)=> {
   let {
     hasError,
     startViews, endViews, children, childrenPosition,
@@ -50,7 +52,7 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
   rippleMode ??= 'cursor'
   
   
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<RefElement>(null)
   useImperativeHandle(forwardedRef, ()=>inputRef.current!,[])
   
   
@@ -91,8 +93,8 @@ const RadioInput = React.forwardRef<HTMLInputElement, RadioInputProps>((
     </Border>
     
   </Frame>
-})
-export default Mem(RadioInput)
+}))
+export default RadioInput
 
 
 
@@ -130,8 +132,8 @@ const ActiveIcWrap = styled.div.attrs(p=>({
 const activeIcWrapStyle = css`
   display: none;
   input:checked ~ & { display: flex; }
-  ${SvgIcStyle.El.iconDotClass} {
-    ${SvgIcStyle.Prop.color}: var(${Prop.activeIconColor})
+  ${SvgIcStyle.El.el.icon} {
+    ${SvgIcStyle.Prop.prop.color}: var(${Prop.activeIconColor})
   }
 `
 
@@ -141,8 +143,8 @@ const InactiveIcWrap = styled.div.attrs(p=>({
 const inactiveIcWrapStyle = css`
   display: flex;
   input:checked ~ & { display: none }
-  ${SvgIcStyle.El.iconDotClass} {
-    ${SvgIcStyle.Prop.color}: var(${Prop.inactiveIconColor})
+  ${SvgIcStyle.El.el.icon} {
+    ${SvgIcStyle.Prop.prop.color}: var(${Prop.inactiveIconColor})
   }
 `
 

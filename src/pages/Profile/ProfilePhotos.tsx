@@ -493,9 +493,9 @@ const photoPlaceholderStyle = (t:Themes.Theme)=>css`
   ${center};
 `
 const photoPlaceholderIconStyle = (t:Themes.Theme)=>css`
-  ${SvgIcStyle.El.iconThis}{
-    ${SvgIcStyle.Prop.color}: ${t.photos.content[0]};
-    ${SvgIcStyle.Prop.size}: 30%;
+  ${SvgIcStyle.El.thiz.icon}{
+    ${SvgIcStyle.Prop.prop.color}: ${t.photos.content[0]};
+    ${SvgIcStyle.Prop.prop.size}: 30%;
   }
 `
 
@@ -527,7 +527,7 @@ const optionIconBoxStyle = css`
   ${center};
   height: 1.3em;
   width: 1.333em;
-  >${SvgIcStyle.El.iconDotClass}{
-    ${SvgIcStyle.Prop.color}: ${ButtonStyle.Prop.colorVar};
+  >${SvgIcStyle.El.el.icon}{
+    ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.varr.color};
   }
 `
