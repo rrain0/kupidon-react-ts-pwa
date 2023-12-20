@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global, ThemeProvider } from '@emotion/react'
-import { isBrowser } from 'react-device-detect'
 import { useRecoilValue } from 'recoil'
 import React from 'react'
 import ModalOutlet from 'src/components/Modal/ModalOutlet'

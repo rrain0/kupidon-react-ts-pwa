@@ -30,7 +30,6 @@ import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
-import Setter = TypeUtils.Setter
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
 import arrIndices = ArrayUtils.arrIndices
@@ -164,23 +163,23 @@ React.memo(
   const [springs, springApi] = useSprings(images.length, springStyle(), [images])
   const applyDragRef = useRef<()=>void>()
   const drag = useDrag(
-    ({
-       args: [index],
-       active, last,
-       movement: [dx,dy],
-       xy: [vpx,vpy], // viewport x, viewport y
-       ...restState
-    })=>{
+    gesture=>{
+      const [i] = gesture.args as [number]
+      const {
+        active, last,
+        movement: [dx,dy],
+        xy: [vpx,vpy], // viewport x, viewport y
+      } = gesture
       /* console.log(
-        'idx:', index,
+        'idx:', i,
         'active:', active,
-        //'dragging:', restState.dragging,
-        //'hovering:', restState.hovering,
-        'last', restState.last,
+        //'dragging:', gesture.dragging,
+        //'hovering:', gesture.hovering,
+        'last', gesture.last,
       ) */
       const applyDrag = ()=>{
         const isDragging = dragStateRef.current==='dragging' && active
-        springApi.start(springStyle(index, isDragging, dx, dy))
+        springApi.start(springStyle(i, isDragging, dx, dy))
         if (isDragging){
           const hoveredElements = document.elementsFromPoint(vpx,vpy)
           //console.log('hoveredElements',hoveredElements)
@@ -191,7 +190,7 @@ React.memo(
               return hoveredElements.includes(el as any)
             })
             if (otherIdx==-1) {/* nothing to do */}
-            else if (index!==otherIdx) setSwap([index,otherIdx])
+            else if (i!==otherIdx) setSwap([i,otherIdx])
             else setSwap(undefined)
           }
         }
@@ -306,10 +305,12 @@ React.memo(
             ref={ref as any}
             {...function(){
               const onPointerDown = (ev: React.PointerEvent)=>{
-                ev.currentTarget.releasePointerCapture(ev.pointerId)
-                setLastIdx(i)
-                setDragState('initialDelay')
-                setCanClick(true)
+                if (ev.buttons===1){
+                  ev.currentTarget.releasePointerCapture(ev.pointerId)
+                  setLastIdx(i)
+                  setDragState('initialDelay')
+                  setCanClick(true)
+                }
               }
               const onPointerRemove = ()=>{
                 if (dragState!=='dragging'){

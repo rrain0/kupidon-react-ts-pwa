@@ -10,6 +10,7 @@ import React, {
 } from 'react'
 import classNames from "classnames"
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { CastUtils } from 'src/utils/common/CastUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { ElementProps } from 'src/utils/common/GetDimensions'
@@ -19,8 +20,13 @@ import fitRange = MathUtils.fitRange
 import { ScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import reset = EmotionCommon.reset
 import PartialUndef = TypeUtils.PartialUndef
+import hoverable = EmotionCommon.hoverable
+import trueOrUndef = CastUtils.trueOrUndef
 
 
+
+// useScroll from use-spring - BUT it is broken when child 'display: contents;'
+// todo use @use-gesture/react and refs instead of state
 
 // maybe it is worth to do min scrollbar width
 
@@ -95,6 +101,7 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
         else return v/trackProps.width*scrollProps.scrollWidth
     }
   },[direction, scrollProps, trackProps])
+  
   
   const thumbBoxProps = useMemo(()=>{
     switch (direction){
@@ -177,7 +184,7 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
       }
     },
     [
-      direction, thumbBoxRef.current, trackRef.current, scrollProps,
+      direction, scrollProps,
       thumbBoxProps, setContainerScroll, toScrollScale
     ]
   )
@@ -246,20 +253,27 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
   
   
   return <ScrollbarTrack
+    // todo Style
     className={classNames(className,'rrainuiScrollbarTrack')}
     {...restProps}
+    // todo Style
     data-direction={direction}
+    // todo Style
+    data-active={trueOrUndef(dragStart)}
     ref={trackRef}
   >
-    <ScrollbarThumbBox
+    <div
+      css={scrollbarThumbBox}
+      // todo Style
       className={'rrainuiScrollbarThumbBox'}
       ref={thumbBoxRef}
       style={thumbBoxProps}
     >
       <ScrollbarThumb
+        // todo Style
         className={'rrainuiScrollbarThumb'}
       />
-    </ScrollbarThumbBox>
+    </div>
   </ScrollbarTrack>
 }))
 export default Scrollbar
@@ -267,33 +281,35 @@ export default Scrollbar
 
 
 type ScrollbarTrackProps = {
-  // TODO Style
+  // todo Style
   'data-direction': ScrollDirection
+  'data-active': true|undefined
 }
 const ScrollbarTrack = styled.div<ScrollbarTrackProps>`
   ${reset};
   position: relative;
   touch-action: none; // To prevent browser gesture handling on mobile devices
 
-  // TODO Style
+  // todo Style
   &[data-direction=vertical]{ width: 10px; height: 100%; }
-  // TODO Style
+  // todo Style
   &[data-direction=horizontal]{ width: 100%; height: 10px; }
-  // TODO Style
+  // todo Style
   background: rgba(248,248,248,0.35);
+  // todo Style
   border-radius: 50%;
 `
 
 
 
-const ScrollbarThumbBox = styled.div`
+const scrollbarThumbBox = css`
   position: absolute;
-  // TODO Style
+  // todo Style
   [data-direction=vertical]>&{
     will-change: top, height;
     left: 0; right: 0; top: 0; height: 0;
   }
-  // TODO Style
+  // todo Style
   [data-direction=horizontal]>&{
     will-change: left, width;
     top: 0; bottom: 0; left: 0; width: 0;
@@ -307,7 +323,8 @@ const ScrollbarThumb = styled.div`
   width: 100%; height: 100%;
   //pointer-events: none;
 
-  // TODO Style
+  // todo Style
   background: rgba(248,248,248,0.5);
+  // todo Style
   border-radius: 27px;
 `

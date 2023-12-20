@@ -1,5 +1,7 @@
 import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Themes } from 'src/utils/theme/Themes'
+import hoverable = EmotionCommon.hoverable
 
 
 
@@ -21,10 +23,21 @@ export namespace ScrollbarStyle {
         >.rrainuiScrollbarThumb {
           border-radius: 27px;
           background: ${t.scrollbar.thumb};
+          
           //opacity: 0.5;
           //background: #F8F8F8;
         }
       }
+      
+      :active>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
+        background: #999999;
+      }
+      &[data-active]>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
+        background: #999999;
+      }
+      ${hoverable} { :hover>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
+        background: #999999;
+      }}
     }
   `
   
