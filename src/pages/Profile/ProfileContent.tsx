@@ -303,7 +303,8 @@ React.memo(
   return <>
     <Form onSubmit={onFormSubmitCallback}>
       
-      <FormHeader>{uiText.profile[0].text}</FormHeader>
+      {/* <FormHeader>{uiText.profile[0].text}</FormHeader> */}
+      <FormHeader>{formValues.name}</FormHeader>
       
       
       <div css={css`

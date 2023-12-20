@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import React, {
   useCallback, useEffect,
   useImperativeHandle,
@@ -9,18 +10,15 @@ import React, {
 } from 'react'
 import classNames from "classnames"
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { ElementProps } from 'src/utils/common/GetDimensions'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import inRange = MathUtils.inRange
 import fitRange = MathUtils.fitRange
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import ReactMemoTyped = ReactUtils.Mem
-import styled from 'styled-components'
-import { TypeUtils } from 'src/utils/common/TypeUtils'
-import empty = TypeUtils.empty
 import { ScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import reset = EmotionCommon.reset
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
@@ -28,24 +26,32 @@ import reset = EmotionCommon.reset
 
 export type ScrollDirection = 'horizontal'|'vertical'
 
-export type ScrollbarProps = JSX.IntrinsicElements['div'] & {
-  direction?: ScrollDirection|empty
+export type ScrollbarCustomProps = {
   scrollProps: ScrollProps
   setContainerScroll: (scroll: ScrollToOptions)=>void
-}
-export type HorizontalScrollbarRef = HTMLDivElement
+} & PartialUndef<{
+  direction: ScrollDirection
+}>
+export type ScrollbarForwardRefProps = JSX.IntrinsicElements['div']
+export type ScrollbarRefElement = HTMLDivElement
 
-const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
+export type ScrollbarProps = ScrollbarCustomProps & ScrollbarForwardRefProps
+
+
+const Scrollbar =
+React.memo(
+React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
 (props, forwardedRef) => {
   const {
-    direction: _direction,
+    direction = 'vertical',
     scrollProps,
     setContainerScroll,
+    className,
     ...restProps
   } = props
-  const direction = _direction ?? 'vertical'
   
-  const trackRef = useRef<HorizontalScrollbarRef>(null)
+  
+  const trackRef = useRef<ScrollbarRefElement>(null)
   useImperativeHandle(forwardedRef, ()=>trackRef.current!, [])
   const thumbBoxRef = useRef<HTMLDivElement>(null)
   
@@ -240,57 +246,54 @@ const Scrollbar = React.forwardRef<HorizontalScrollbarRef, ScrollbarProps>(
   
   
   return <ScrollbarTrack
+    className={classNames(className,'rrainuiScrollbarTrack')}
     {...restProps}
-    css={ScrollbarTrackStyle}
     data-direction={direction}
     ref={trackRef}
   >
     <ScrollbarThumbBox
-      css={scrollbarThumbBoxStyle}
+      className={'rrainuiScrollbarThumbBox'}
       ref={thumbBoxRef}
       style={thumbBoxProps}
     >
-      <ScrollbarThumb css={scrollbarThumbStyle}/>
+      <ScrollbarThumb
+        className={'rrainuiScrollbarThumb'}
+      />
     </ScrollbarThumbBox>
   </ScrollbarTrack>
-})
-export default ReactMemoTyped(Scrollbar)
+}))
+export default Scrollbar
 
 
 
 type ScrollbarTrackProps = {
+  // TODO Style
   'data-direction': ScrollDirection
 }
-const ScrollbarTrack = ReactMemoTyped(
-  styled.div.attrs<ScrollbarTrackProps>(p=>({
-    className: classNames(p.className,'rrainuiScrollbarTrack'),
-    'data-direction': p['data-direction'],
-  }))<ScrollbarTrackProps>``
-)
-const ScrollbarTrackStyle = css`
+const ScrollbarTrack = styled.div<ScrollbarTrackProps>`
   ${reset};
   position: relative;
   touch-action: none; // To prevent browser gesture handling on mobile devices
 
+  // TODO Style
   &[data-direction=vertical]{ width: 10px; height: 100%; }
+  // TODO Style
   &[data-direction=horizontal]{ width: 100%; height: 10px; }
+  // TODO Style
   background: rgba(248,248,248,0.35);
   border-radius: 50%;
 `
 
 
 
-const ScrollbarThumbBox = ReactMemoTyped(
-  styled.div.attrs(p=>({
-    className: classNames(p.className,'rrainuiScrollbarThumbBox')
-  }))``
-)
-const scrollbarThumbBoxStyle = css`
+const ScrollbarThumbBox = styled.div`
   position: absolute;
+  // TODO Style
   [data-direction=vertical]>&{
     will-change: top, height;
     left: 0; right: 0; top: 0; height: 0;
   }
+  // TODO Style
   [data-direction=horizontal]>&{
     will-change: left, width;
     top: 0; bottom: 0; left: 0; width: 0;
@@ -299,15 +302,12 @@ const scrollbarThumbBoxStyle = css`
 
 
 
-const ScrollbarThumb = ReactMemoTyped(
-  styled.div.attrs(p=>({
-    className: classNames(p.className,'rrainuiScrollbarThumb')
-  }))``
-)
-const scrollbarThumbStyle = css`
+
+const ScrollbarThumb = styled.div`
   width: 100%; height: 100%;
   //pointer-events: none;
 
+  // TODO Style
   background: rgba(248,248,248,0.5);
   border-radius: 27px;
 `

@@ -2,13 +2,13 @@
 import { css } from '@emotion/react'
 import React from 'react'
 import {
-  ContainerScrollStateOptions,
+  UseContainerScrollStateProps,
   useContainerScrollState,
 } from 'src/views/Scrollbar/useContainerScrollState'
 
 
 
-export type UseScrollbarsProps = ContainerScrollStateOptions & {
+export type UseScrollbarsProps = UseContainerScrollStateProps & {
   render: (props: ReturnType<typeof useContainerScrollState>)=>React.ReactNode
 }
 const UseScrollbars =

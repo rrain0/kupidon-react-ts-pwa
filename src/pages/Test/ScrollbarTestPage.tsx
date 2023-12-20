@@ -45,8 +45,8 @@ const ScrollbarTest = (
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const {
-    canScrollHorizontal,
-    canScrollVertical,
+    canScrollHorizontally,
+    canScrollVertically,
     ...scrollbarProps
   } = useContainerScrollState({
     containerRef, contentRef
@@ -62,8 +62,8 @@ const ScrollbarTest = (
     
     <div>Scrollbar Test: {
       ['vertical','horizontal'].filter(it=>{
-        if (it==='vertical' && props.showVertical && canScrollVertical) return true
-        if (it==='horizontal' && props.showHorizontal && canScrollHorizontal) return true
+        if (it==='vertical' && props.showVertical && canScrollVertically) return true
+        if (it==='horizontal' && props.showHorizontal && canScrollHorizontally) return true
         return false
       }).join(' & ')
     }
@@ -131,7 +131,7 @@ const ScrollbarTest = (
                / 1fr auto;
         `}
       >
-        { props.showVertical && canScrollVertical && <Scrollbar
+        { props.showVertical && canScrollVertically && <Scrollbar
           css={[ScrollbarStyle.scrollbar, css`
             &.rrainuiScrollbarTrack {
               grid-area: vs;
@@ -145,7 +145,7 @@ const ScrollbarTest = (
           {...scrollbarProps}
           direction='vertical'
         /> }
-        { props.showHorizontal && canScrollHorizontal && <Scrollbar
+        { props.showHorizontal && canScrollHorizontally && <Scrollbar
           css={[ScrollbarStyle.scrollbar, css`
             &.rrainuiScrollbarTrack {
               grid-area: hs;

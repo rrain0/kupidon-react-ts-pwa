@@ -3,7 +3,9 @@ import { Themes } from 'src/utils/theme/Themes'
 import Theme = Themes.Theme
 
 
-export namespace ScrollbarOverlayStyle {
+
+
+export namespace ScrollbarsOverlayStyle {
   
   export const page = (t:Theme) => css`
     &.rrainuiScrollbarOverflow {

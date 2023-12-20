@@ -14,7 +14,7 @@ import FormHeader from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
 import { Pages } from 'src/components/Page/Pages'
-import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
+import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import { AccountSettingsUiText } from 'src/pages/AccountSettings/uiText'
 import { AccountSettingsPageValidation } from 'src/pages/AccountSettings/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
@@ -220,11 +220,10 @@ React.memo(
   
   
   
-  const pageRef = useRef<HTMLElement>(null)
   
   return <>
     
-    <Page ref={pageRef}>
+    <Page>
       <Form onSubmit={formSubmitPreventDefault}>
         
         <FormHeader>{uiText.account[0].text}</FormHeader>
@@ -340,12 +339,13 @@ React.memo(
         </div>
       
       </Form>
+      
+      
+      <PageScrollbars />
     </Page>
     
+    
     <TopButtonBar backBtn/>
-    
-    <PageScrollbars pageRef={pageRef}/>
-    
     
     <BottomButtonBar settingsBtn
       rightChildren={

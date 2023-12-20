@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useEffect, useRef } from 'react'
-import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
+import React, { useEffect  } from 'react'
+import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import ProfileContent from 'src/pages/Profile/ProfileContent'
 import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
@@ -25,7 +25,7 @@ React.memo(
     const resp = await UserApi.current()
     if (resp.success)
       setAuth(curr=>({ ...curr!, user: resp.data.user }))
-    else console.warn('unsuccessful fetch user:', resp)
+    else console.warn('failed to fetch user:', resp)
   }
   
   
@@ -35,20 +35,16 @@ React.memo(
   )
   
   
-  const pageRef = useRef<HTMLElement>(null)
-  
-  
-  
   
   return <>
-    <Page ref={pageRef}>
+    <Page>
       
       <ProfileContent/>
       
+      <PageScrollbars />
     </Page>
     
     
-    <PageScrollbars pageRef={pageRef} />
     
     
     

@@ -8,7 +8,7 @@ import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import ClearSiteConfirmation from 'src/components/ClearSiteConfirmation/ClearSiteConfirmation'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import { Pages } from 'src/components/Page/Pages'
-import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
+import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import {
   ApplicationSettingsUiText
 } from 'src/pages/ApplicationSettings/uiText'
@@ -171,11 +171,11 @@ React.memo(
     }
   }()
   
-  const pageRef = useRef<HTMLElement>(null)
+  
   
   return <>
     
-    <Page ref={pageRef}>
+    <Page>
       <Content>
         
         <FormHeader>{uiText.appSettings[0].text}</FormHeader>
@@ -305,7 +305,7 @@ React.memo(
         </Card>
         
         
-        {/* TODO: Добавить настройки звука в приложении */}
+        {/* todo: Добавить настройки звука в приложении */}
         
         
         <RoundButtonsContainer>
@@ -331,12 +331,13 @@ React.memo(
         
       
       </Content>
+      
+      
+      <PageScrollbars />
     </Page>
     
     
     <TopButtonBar backBtn/>
-    
-    <PageScrollbars pageRef={pageRef}/>
     
     <BottomButtonBar />
     

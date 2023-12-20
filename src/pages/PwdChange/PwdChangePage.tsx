@@ -11,7 +11,7 @@ import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
 import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
 import { Pages } from 'src/components/Page/Pages'
-import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
+import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import { PwdChangeUiText } from 'src/pages/PwdChange/uiText'
 import { PwdChangePageValidation } from 'src/pages/PwdChange/validation'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
@@ -142,11 +142,10 @@ React.memo(
   
   
   
-  const pageRef = useRef<HTMLElement>(null)
   
   return <>
     
-    <Page ref={pageRef}>
+    <Page>
       <Form onSubmit={onFormSubmitCallback}>
         
         <FormHeader>{uiText.changePwd[0].text}</FormHeader>
@@ -235,12 +234,13 @@ React.memo(
         </div>
       
       </Form>
+      
+      
+      <PageScrollbars />
     </Page>
     
     
     <TopButtonBar backBtn/>
-    
-    <PageScrollbars pageRef={pageRef} />
     
     <BottomButtonBar settingsBtn/>
     

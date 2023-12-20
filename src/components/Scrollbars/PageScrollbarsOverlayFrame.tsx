@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 
 
 
-export const PageScrollbarOverlayFrame = styled.div`
+export const PageScrollbarsOverlayFrame = styled.div`
   position: fixed;
   right: 0;
   left: 0;

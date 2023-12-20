@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Global } from '@emotion/react'
-import React, { useCallback, useEffect, useRef} from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { useSetRecoilState } from 'recoil'
 import { useApiRequest } from 'src/api/useApiRequest'
@@ -9,11 +8,10 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
-import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
+import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
@@ -34,7 +32,6 @@ import full = RouteBuilder.full
 import RootRoute = AppRoutes.RootRoute
 import fullAllowedNameParams = RouteBuilder.fullAllowedNameParams
 import params = RouteBuilder.params
-import Mem = ReactUtils.Mem
 import mapFailureCodeToUiOption = LoginPageValidation.mapFailureCodeToUiText
 import defaultValues = LoginPageValidation.defaultValues
 import userDefaultValues = LoginPageValidation.userDefaultValues
@@ -46,7 +43,9 @@ import userDefaultValues = LoginPageValidation.userDefaultValues
 
 
 
-const LoginPage = () => {
+const LoginPage =
+React.memo(
+() => {
   
   const [searchParams] = useSearchParams()
   const returnPath = searchParams.get(RootRoute.login[params].returnPath) ?? undefined
@@ -136,7 +135,6 @@ const LoginPage = () => {
   
   
   
-  const pageRef = useRef<HTMLElement>(null)
   
   useEffect(()=>{
     if (isSuccess) {
@@ -147,7 +145,7 @@ const LoginPage = () => {
   
   
   return <>
-    <Page ref={pageRef}>
+    <Page>
   
       <Form onSubmit={onFormSubmitCallback}>
         
@@ -192,18 +190,17 @@ const LoginPage = () => {
         </Link>
       
       </Form>
-    
-    
+      
+      
+      <PageScrollbars />
     </Page>
     
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbars pageRef={pageRef} />
-    
     <BottomButtonBar settingsBtn/>
     
   </>
-}
-export default Mem(LoginPage)
+})
+export default LoginPage
 

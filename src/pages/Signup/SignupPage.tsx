@@ -7,7 +7,7 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
-import PageScrollbars from 'src/components/Page/PageScrollbars/PageScrollbars'
+import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import { SignupPageUiText } from 'src/pages/Signup/uiText'
 import React, {
   useCallback,
@@ -20,7 +20,6 @@ import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { UserApi } from 'src/api/requests/UserApi'
 import { LangRecoil } from 'src/recoil/state/LangRecoil'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
@@ -47,7 +46,6 @@ import RootRoute = AppRoutes.RootRoute
 import params = RouteBuilder.params
 import full = RouteBuilder.full
 import mapFailureCodeToUiOption = SignupPageValidation.mapFailureCodeToUiText
-import Mem = ReactUtils.Mem
 import defaultValues = SignupPageValidation.defaultValues
 import userDefaultValues = SignupPageValidation.userDefaultValues
 
@@ -56,7 +54,9 @@ import userDefaultValues = SignupPageValidation.userDefaultValues
 
 
 
-const SignupPage = () => {
+const SignupPage =
+React.memo(
+() => {
   
   const [searchParams] = useSearchParams()
   const returnPath = searchParams.get(RootRoute.signup[params].returnPath) ?? undefined
@@ -194,7 +194,7 @@ const SignupPage = () => {
   
   
   return <>
-    <Page ref={pageRef}>
+    <Page>
       
       <Form onSubmit={onFormSubmitCallback}>
         
@@ -283,20 +283,20 @@ const SignupPage = () => {
         
       </Form>
       
+      
+      <PageScrollbars />
     </Page>
     
     
     
     <TopButtonBar backBtn/>
     
-    <PageScrollbars pageRef={pageRef} />
-    
     <BottomButtonBar settingsBtn/>
     
     
   </>
-}
-export default Mem(SignupPage)
+})
+export default SignupPage
 
 
 
