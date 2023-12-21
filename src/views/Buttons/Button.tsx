@@ -44,7 +44,9 @@ React.forwardRef<ButtonRefElement, ButtonProps>(
     type: type ?? 'button',
     ...restProps
   }
-  
+  const borderProps = {
+    className: ButtonStyle.El.clazz.border
+  }
   const rippleProps = {
     mode: rippleMode ?? 'cursor',
     rippleDuration,
@@ -63,7 +65,7 @@ React.forwardRef<ButtonRefElement, ButtonProps>(
     { children }
     
     <div css={borderStyle}
-      className={ButtonStyle.El.clazz.border}
+      {...borderProps}
     >
       <Ripple
         targetElement={buttonRef}

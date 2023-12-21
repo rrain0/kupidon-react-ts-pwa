@@ -4,10 +4,12 @@ import Theme = Themes.Theme
 import { DarkPink } from 'src/utils/theme/themes/DarkPink'
 import { DarkPinkGradient } from 'src/utils/theme/themes/DarkPinkGradient'
 import { DarkSimple } from 'src/utils/theme/themes/DarkSimple'
+import { DarkSimplePink } from 'src/utils/theme/themes/DarkSimplePink'
 import { LightOrange } from 'src/utils/theme/themes/LightOrange'
 import { LightPink } from 'src/utils/theme/themes/LightPink'
 import { LightPinkGradient } from 'src/utils/theme/themes/LightPinkGradient'
 import { LightSimple } from 'src/utils/theme/themes/LightSimple'
+import { LightSimplePink } from 'src/utils/theme/themes/LightSimplePink'
 
 
 
@@ -20,6 +22,9 @@ export const DefaultTheme = DefaultLightTheme
 export const AllThemes = [
   LightSimple,
   DarkSimple,
+  
+  LightSimplePink,
+  DarkSimplePink,
   
   LightPink,
   DarkPink,

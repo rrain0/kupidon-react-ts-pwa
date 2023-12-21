@@ -44,7 +44,7 @@ React.memo(
   
   
   return <>
-    { true && <>
+    { isBrowser && <>
       <Global styles={hideWindowScrollbar}/>
       <PageScrollbarsOverlayFrame ref={frameRef}>
         <UseScrollbars

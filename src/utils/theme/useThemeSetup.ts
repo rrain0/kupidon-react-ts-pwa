@@ -6,6 +6,7 @@ import { useThemeDetector } from 'src/utils/theme/useThemeDetector'
 
 
 
+
 export const useThemeSetup = ()=>{
   const [themeSettings,setThemeSettings] = useRecoilState(ThemeSettingsRecoil)
   const [theme,setTheme] = useRecoilState(ThemeRecoil)

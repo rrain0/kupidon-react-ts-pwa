@@ -8,14 +8,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const DarkPinkGradient = { ...DarkPink,
-  name: 'Dark Pink Gradient' as const,
-  icon: styled.div(themeIconCss({
-    accentColor: '#d16780',
-    bgcColor1: '#992c46',
-    bgcColor2: '#18191b',
-  })),
-  
+const DarkPinkGradientProps = { ...DarkPink,
   page: {
     ...DarkPink.page,
     bgcGradient: ['#992c46','#282c34','#282c34'],
@@ -41,6 +34,18 @@ export const DarkPinkGradient = { ...DarkPink,
     ...DarkPink.nav,
     bgc: ['#282c34'],
   }
+}
+
+
+
+export const DarkPinkGradient = {
+  ...DarkPinkGradientProps,
+  name: 'Dark Pink Gradient' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: DarkPinkGradientProps.buttonAccent.bgc[0],
+    bgcColor1:   DarkPinkGradientProps.containerAccent.bgc[0],
+    bgcColor2:   DarkPinkGradientProps.page.bgc[0],
+  })),
 } satisfies Theme
 
 

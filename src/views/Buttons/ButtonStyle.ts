@@ -28,6 +28,27 @@ export namespace ButtonStyle {
     export const selThis = generateAttrThisSelector(select)
   }
   export namespace El {
+    const elements = {
+      btn: {
+        name: 'btn',
+        clazz: 'rrainuiButton',
+        
+        elements: {
+          border: {
+            name: 'border',
+            clazz: 'rrainuiBorder',
+          },
+          ripple: {
+            name: 'ripple',
+            clazz: RippleStyle.El.frameClassName,
+          }
+        }
+        
+      }
+    }
+    
+    
+    
     export const clazz = {
       btn:    'rrainuiButton',
       border: 'rrainuiBorder',

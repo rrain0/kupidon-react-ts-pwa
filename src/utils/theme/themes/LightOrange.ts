@@ -7,14 +7,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const LightOrange = { ...LightPink,
-  name: 'Light Orange' as const,
-  icon: styled.div(themeIconCss({
-    accentColor: '#fbb027',
-    bgcColor1: '#f5f5f5',
-    bgcColor2: '#f5f5f5',
-  })),
-  
+const LightOrangeProps = { ...LightPink,
   containerAccent: { ...LightPink.containerAccent,
     bgc:     ['#fdca6d'],
   },
@@ -50,4 +43,16 @@ export const LightOrange = { ...LightPink,
   nav: { ...LightPink.nav,
     bgc: ['#ffdb99'],
   },
+}
+
+
+
+export const LightOrange = {
+  ...LightOrangeProps,
+  name: 'Light Orange' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: LightOrangeProps.buttonAccent.bgc[0],
+    bgcColor1:   LightOrangeProps.page.bgc[0],
+    bgcColor2:   LightOrangeProps.page.bgc[0],
+  })),
 } satisfies Theme

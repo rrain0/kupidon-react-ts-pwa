@@ -7,6 +7,58 @@ import { AllThemeNamesType } from 'src/utils/theme/ThemeCollection'
 export const ThemeNameUiText = {
   
   
+  'Light Simple': [
+    {
+      value: 'Light Simple',
+      lang: 'en-US',
+      text: 'Light',
+    },{
+      value: 'Light Simple',
+      lang: 'ru-RU',
+      text: 'Светлая',
+    },
+  ] satisfies UiText<'Light Simple'>[],
+  
+  
+  'Dark Simple': [
+    {
+      value: 'Dark Simple',
+      lang: 'en-US',
+      text: 'Dark',
+    },{
+      value: 'Dark Simple',
+      lang: 'ru-RU',
+      text: 'Тёмная',
+    },
+  ] satisfies UiText<'Dark Simple'>[],
+  
+  
+  'Light Simple Pink': [
+    {
+      value: 'Light Simple Pink',
+      lang: 'en-US',
+      text: 'Light Simple Pink',
+    },{
+      value: 'Light Simple Pink',
+      lang: 'ru-RU',
+      text: 'Светлая с розовым',
+    },
+  ] satisfies UiText<'Light Simple Pink'>[],
+  
+  
+  'Dark Simple Pink': [
+    {
+      value: 'Dark Simple Pink',
+      lang: 'en-US',
+      text: 'Dark Simple Pink',
+    },{
+      value: 'Dark Simple Pink',
+      lang: 'ru-RU',
+      text: 'Тёмная с розовым',
+    },
+  ] satisfies UiText<'Dark Simple Pink'>[],
+  
+  
   'Light Pink': [
     {
       value: 'Light Pink',
@@ -83,32 +135,6 @@ export const ThemeNameUiText = {
       text: 'Тёмная Оранжевая',
     },
   ] satisfies UiText<'Dark Orange'>[],
-  
-  
-  'Light Simple': [
-    {
-      value: 'Light Simple',
-      lang: 'en-US',
-      text: 'Light',
-    },{
-      value: 'Light Simple',
-      lang: 'ru-RU',
-      text: 'Светлая',
-    },
-  ] satisfies UiText<'Light Simple'>[],
-  
-  
-  'Dark Simple': [
-    {
-      value: 'Dark Simple',
-      lang: 'en-US',
-      text: 'Dark',
-    },{
-      value: 'Dark Simple',
-      lang: 'ru-RU',
-      text: 'Тёмная',
-    },
-  ] satisfies UiText<'Dark Simple'>[],
   
   
   

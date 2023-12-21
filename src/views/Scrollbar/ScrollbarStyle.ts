@@ -30,13 +30,20 @@ export namespace ScrollbarStyle {
       }
       
       :active>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: #999999;
+        background: ${t.scrollbar.thumbActive};
       }
       &[data-active]>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: #999999;
+        background: ${t.scrollbar.thumbActive};
       }
+      // it has same specifity that selectors above
+      /*
+      &.rrainuiScrollbarTrack:where(:active,&[data-active])>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
+        background: red;
+      }
+      */
+      
       ${hoverable} { :hover>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: #999999;
+        background: ${t.scrollbar.thumbActive};
       }}
     }
   `

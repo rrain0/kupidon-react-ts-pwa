@@ -7,15 +7,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const LightSimple = {
-  type: 'light',
-  name: 'Light Simple' as const,
-  icon: styled.div(themeIconCss({
-    accentColor: '#bbbbbb',
-    bgcColor1:   '#f5f5f5',
-    bgcColor2:   '#f5f5f5',
-  })),
-  
+const LightSimpleProps = {
   containerNormal: {
     bgc:       ['#ffffff'],
     bgc2:      ['#f0f0f0'],
@@ -88,9 +80,7 @@ export const LightSimple = {
     content:                 ['#291f1d'],
     borderDrag:              ['#1F8DCD'],
     highlightFrameBgc:       ['#8B8B8B'],
-    
-    //highlightFrameAccentBgc: ['#000000'],
-    highlightFrameAccentBgc: ['#ffbaba'], // todo move to pink theme
+    highlightFrameAccentBgc: ['#000000'],
   },
   
   bottomSheet: {
@@ -128,8 +118,22 @@ export const LightSimple = {
     accentDanger:         ['#e74c3c'],
   },
   scrollbar: {
-    track: ['#25283622'],
-    thumb: ['#25283644'],
+    track:       ['#25283622'],
+    thumb:       ['#25283644'],
+    thumbActive: ['#999999'],
   },
+}
+
+
+
+export const LightSimple = {
+  ...LightSimpleProps,
+  type: 'light',
+  name: 'Light Simple' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: LightSimpleProps.buttonAccent.bgc[0],
+    bgcColor1:   LightSimpleProps.page.bgc[0],
+    bgcColor2:   LightSimpleProps.page.bgc[0],
+  })),
 } satisfies Theme
 

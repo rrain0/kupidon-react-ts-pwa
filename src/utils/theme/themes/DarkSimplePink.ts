@@ -1,53 +1,54 @@
 import styled from '@emotion/styled'
 import { Themes } from 'src/utils/theme/Themes'
+import { DarkSimple } from 'src/utils/theme/themes/DarkSimple'
 import Theme = Themes.Theme
 import themeIconCss = Themes.themeIconCss
 
 
 
 
-const DarkSimpleProps = {
-  containerNormal: {
+const DarkSimpleProps = { ...DarkSimple,
+  containerNormal: { ...DarkSimple.containerNormal,
     bgc:       ['#24272d'],
     bgc2:      ['#282c34'],
     content:   ['#bdbdbd'],
     content2:  ['#999999'],
     content3:  ['#7b7b7b'],
   },
-  containerAccent: {
+  containerAccent: { ...DarkSimple.containerAccent,
     bgc:     ['#aaaaaa'],
     content: ['#000000'],
   },
   
-  buttonMain: {
+  buttonMain: { ...DarkSimple.buttonMain,
     bgc:      ['#aaaaaa'],
     bgcFocus: ['#bbbbbb'],
     content:  ['#000000'],
   },
-  buttonAccent: {
+  buttonAccent: { ...DarkSimple.buttonAccent,
     bgc:       ['#999999'],
     bgcFocus:  ['#7b7b7b'],
     content:   ['#000000'],
     content2:  ['#000000'],
   },
-  buttonSecondary: {
+  buttonSecondary: { ...DarkSimple.buttonSecondary,
     bgc:       ['transparent'],
     bgcFocus:  ['#7b7b7b88'],
     content:   ['#999999'],
   },
-  inputRadio: {
+  inputRadio: { ...DarkSimple.inputRadio,
     bgcFocus:  ['#aaaaaa']
   },
-  buttonTransparent: {
+  buttonTransparent: { ...DarkSimple.buttonNav,
     bgcFocus: ['#ffffff22'],
   },
-  buttonNav: {
+  buttonNav: { ...DarkSimple.buttonNav,
     bgcFocus:      ['#2e3440'],
     content:       ['#7b7b7b'],
     contentAccent: ['#bdbdbd'],
   },
   
-  input: {
+  input: { ...DarkSimple.input,
     bgc:           ['#282c34'],
     content:       ['#cdcdcd'],
     placeholder:   ['#7b7b7b'],
@@ -56,54 +57,54 @@ const DarkSimpleProps = {
     bgcError:      ['#5e252c'],
   },
   
-  elementDisabled: {
+  elementDisabled: { ...DarkSimple.elementDisabled,
     bgc:     ['#DCDCDC'],
     content: ['#555555'],
   },
-  elementDanger: {
+  elementDanger: { ...DarkSimple.elementDanger,
     bgc:      ['#bbbbbb'],
     bgcFocus: ['#cccccc'],
     content:  ['#000000'],
   },
-  elementError: {
+  elementError: { ...DarkSimple.elementError,
     bgc:      ['#5e252c'],
   },
   
-  ripple: {
+  ripple: { ...DarkSimple.ripple,
     content:              ['#000000'],
     contentOnTransparent: ['#ffffff88'],
   },
   
-  photos: {
+  photos: { ...DarkSimple.photos,
     bgc:                     ['#ffeeee'],
     content:                 ['#291f1d'],
     borderDrag:              ['#1F8DCD'],
     highlightFrameBgc:       ['#8B8B8B'],
-    highlightFrameAccentBgc: ['#ffffff'],
+    highlightFrameAccentBgc: ['#ffe1e1'],
   },
   
-  bottomSheet: {
+  bottomSheet: { ...DarkSimple.bottomSheet,
     bgc:    ['#121212'],
     handle: ['#8b8b8b'],
   },
   
-  card: {
+  card: { ...DarkSimple.card,
     bgc: ['#00000000'],
   },
-  page: {
+  page: { ...DarkSimple.page,
     bgc:         ['#18191b'],
     bgcGradient: ['#282c34','#282c34','#282c34'],
     content:     ['#bdbdbd','#ffffff'],
   },
   
-  statusBar: {
+  statusBar: { ...DarkSimple.statusBar,
     bgc: ['#282c34'],
   },
-  nav: {
+  nav: { ...DarkSimple.nav,
     bgc: ['#282c34'],
   },
   
-  toast: {
+  toast: { ...DarkSimple.toast,
     bgc:                  ['#121212'],
     content:              ['#ffffff'],
     content2:             ['#b8b8b8'],
@@ -116,7 +117,7 @@ const DarkSimpleProps = {
     accentWarn:           ['#f1c40f'],
     accentDanger:         ['#e74c3c'],
   },
-  scrollbar: {
+  scrollbar: { ...DarkSimple.scrollbar,
     track:       ['#F8F8F822'],
     thumb:       ['#F8F8F844'],
     thumbActive: ['#999999'],
@@ -125,13 +126,14 @@ const DarkSimpleProps = {
 
 
 
-export const DarkSimple = {
+export const DarkSimplePink = {
+  ...DarkSimpleProps,
   type: 'dark',
-  name: 'Dark Simple' as const,
+  name: 'Dark Simple Pink' as const,
   icon: styled.div(themeIconCss({
-    accentColor: DarkSimpleProps.buttonAccent.bgc[0],
+    accentColor: '#ffe1e1',
     bgcColor1:   DarkSimpleProps.page.bgc[0],
     bgcColor2:   DarkSimpleProps.page.bgc[0],
   })),
-  ...DarkSimpleProps,
 } satisfies Theme
+

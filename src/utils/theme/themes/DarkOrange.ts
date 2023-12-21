@@ -7,14 +7,7 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const DarkOrange = { ...DarkPink,
-  name: 'Dark Orange' as const,
-  icon: styled.div(themeIconCss({
-    accentColor: '#dd8f2f',
-    bgcColor1: '#18191b',
-    bgcColor2: '#18191b',
-  })),
-  
+const DarkOrangeProps = { ...DarkPink,
   containerAccent: { ...DarkPink.containerAccent,
     bgc:     ['#dd7b39'],
   },
@@ -51,4 +44,16 @@ export const DarkOrange = { ...DarkPink,
   nav: { ...DarkPink.nav,
     bgc: ['#282c34'],
   },
+}
+
+
+
+export const DarkOrange = {
+  ...DarkOrangeProps,
+  name: 'Dark Orange' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: DarkOrangeProps.buttonAccent.bgc[0],
+    bgcColor1:   DarkOrangeProps.page.bgc[0],
+    bgcColor2:   DarkOrangeProps.page.bgc[0],
+  })),
 } satisfies Theme

@@ -6,33 +6,34 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const LightPinkGradient = { ...LightPink,
-  name: 'Light Pink Gradient' as const,
-  icon: styled.div(themeIconCss({
-    accentColor: '#ff8ea9',
-    bgcColor1: '#ffaeba',
-    bgcColor2: '#f0f0f0',
-  })),
-  
-  page: {
-    ...LightPink.page,
+
+const LightPinkGradientProps = { ...LightPink,
+  page: { ...LightPink.page,
     bgcGradient: ['#ffaeba','#f0f0f0','#f0f0f0'],
     //bgc: ['#ffb6c1','#f5f5f5','#d8701a'],
   },
-  inputRadio: {
-    ...LightPink.buttonMain,
+  inputRadio: { ...LightPink.buttonMain,
     bgcFocus:  ['#f37190'],
   },
-  card: {
-    ...LightPink.card,
+  card: { ...LightPink.card,
     bgc: ['#f5f5f577'],
   },
-  statusBar: {
-    ...LightPink.statusBar,
+  statusBar: { ...LightPink.statusBar,
     bgc: ['#ffaeba'],
   },
-  nav: {
-    ...LightPink.nav,
+  nav: { ...LightPink.nav,
     bgc: ['#f6d6db'],
   }
+}
+
+
+
+export const LightPinkGradient = {
+  ...LightPinkGradientProps,
+  name: 'Light Pink Gradient' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: LightPinkGradientProps.buttonAccent.bgc[0],
+    bgcColor1:   LightPinkGradientProps.containerAccent.bgc[0],
+    bgcColor2:   LightPinkGradientProps.containerNormal.bgc2[0],
+  })),
 } satisfies Theme

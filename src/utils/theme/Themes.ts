@@ -2,6 +2,8 @@ import { css } from '@emotion/react'
 import styled, { StyledComponent } from '@emotion/styled'
 
 
+
+
 export namespace Themes {
   
   export type Type = 'light'|'dark'
@@ -140,8 +142,9 @@ export namespace Themes {
       accentDanger:         string[]
     }
     scrollbar: {
-      track: string[]
-      thumb: string[]
+      track:       string[]
+      thumb:       string[]
+      thumbActive: string[]
     }
   }
   

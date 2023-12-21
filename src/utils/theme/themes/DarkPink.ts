@@ -6,16 +6,8 @@ import themeIconCss = Themes.themeIconCss
 
 
 
-export const DarkPink = {
-  ...DarkSimple,
-  type: 'dark',
-  name: 'Dark Pink' as const,
-  icon: styled.div(themeIconCss({
-    accentColor: '#d16780',
-    bgcColor1: '#18191b',
-    bgcColor2: '#18191b',
-  })),
-  
+
+const DarkPinkProps = { ...DarkSimple,
   containerNormal: { ...DarkSimple.containerNormal,
     bgc:       ['#000000'],
     bgc2:      ['#282c34'],
@@ -38,6 +30,9 @@ export const DarkPink = {
     bgcFocus:  ['#da5474'],
     content:   ['#cdcdcd'],
     content2:  ['#000000'],
+  },
+  buttonSecondary: { ...DarkSimple.buttonSecondary,
+  
   },
   inputRadio: { ...DarkSimple.inputRadio,
     bgcFocus:  ['#d16780']
@@ -68,6 +63,9 @@ export const DarkPink = {
     bgc:      ['#ac2c26'],
     bgcFocus: ['#c43730'],
     content:  ['#bdbdbd'],
+  },
+  elementError: { ...DarkSimple.elementError,
+  
   },
   
   ripple: { ...DarkSimple.ripple,
@@ -118,4 +116,18 @@ export const DarkPink = {
     track: ['#F8F8F822'],
     thumb: ['#F8F8F844'],
   },
+}
+
+
+
+export const DarkPink = {
+  ...DarkPinkProps,
+  type: 'dark',
+  name: 'Dark Pink' as const,
+  icon: styled.div(themeIconCss({
+    accentColor: DarkPinkProps.buttonAccent.bgc[0],
+    bgcColor1:   DarkPinkProps.page.bgc[0],
+    bgcColor2:   DarkPinkProps.page.bgc[0],
+  })),
 } satisfies Theme
+
