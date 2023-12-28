@@ -243,6 +243,13 @@ export namespace EmotionCommon {
   
   export namespace Txt {
     
+    export const large4 = css`
+      font-weight: 500;
+      font-size: 28px;
+      line-height: 150%;
+      letter-spacing: 0.05em;
+    `
+    
     export const large3 = css`
       font-weight: 400;
       font-size: 24px;

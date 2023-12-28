@@ -1,4 +1,3 @@
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
@@ -6,7 +5,7 @@ import ObjectValues = ObjectUtils.ObjectValues
 import ObjectKeysType = ObjectUtils.ObjectKeysType
 import ObjectEntries = ObjectUtils.ObjectEntries
 import ObjectKeys = ObjectUtils.ObjectKeys
-import isPresent = CastUtils.isPresent
+import exists = TypeUtils.exists
 
 
 
@@ -120,32 +119,32 @@ export namespace RouteBuilder {
       if (applyParam) switch (type){
         case 'allowedSearchParams':
           applyParam.forEach((v,n)=>{
-            if (allowedParamPaths.includes(n) && isPresent(v)) newParams[n]=v
+            if (allowedParamPaths.includes(n) && exists(v)) newParams[n]=v
           })
           break
         case 'allowedNameParams':
           ObjectEntries(applyParam).forEach(([n,v])=>{
-            if (allowedParamNames.includes(n) && isPresent(v)) newParams[this[params]![n]]=v
+            if (allowedParamNames.includes(n) && exists(v)) newParams[this[params]![n]]=v
           })
           break
         case 'allowedPathParams':
           ObjectEntries(applyParam).forEach(([n,v])=>{
-            if (allowedParamPaths.includes(n) && isPresent(v)) newParams[n]=v
+            if (allowedParamPaths.includes(n) && exists(v)) newParams[n]=v
           })
           break
         case 'anySearchParams':
           applyParam.forEach((v,n)=>{
-            if (isPresent(v)) newParams[n]=v
+            if (exists(v)) newParams[n]=v
           })
           break
         case 'anyNameParams':
           ObjectEntries(applyParam).forEach(([n,v])=>{
-            if (isPresent(v)) newParams[this[params]![n]]=v
+            if (exists(v)) newParams[this[params]![n]]=v
           })
           break
         case 'anyPathParams':
           ObjectEntries(applyParam).forEach(([n,v])=>{
-            if (isPresent(v)) newParams[n]=v
+            if (exists(v)) newParams[n]=v
           })
           break
       }

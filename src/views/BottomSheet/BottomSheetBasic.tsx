@@ -12,7 +12,7 @@ import center = EmotionCommon.center
 
 
 
-export const BasicSheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
+export const BasicSheetSnaps = [0,'15%'/*200*/,'free','fit-content','free','50%','free','80%']
 export const BasicSheetOpenIdx = 3
 
 

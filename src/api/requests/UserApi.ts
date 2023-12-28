@@ -1,5 +1,6 @@
 import { ApiUtils } from 'src/api/ApiUtils'
 import { CurrentUser } from 'src/api/entity/CurrentUser'
+import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { AxiosConfig } from '../AxiosConfig'
 import { ApiRoutes as r } from 'src/api/ApiRoutes'
@@ -11,6 +12,7 @@ import handleAuthenticatedResponse = ApiUtils.handleAuthenticatedResponse
 import AuthenticationError = ApiUtils.AuthenticationError
 import NoUserResponseError = ApiUtils.NoUserResponseError
 import PartialUndef = TypeUtils.PartialUndef
+
 
 
 
@@ -64,9 +66,15 @@ export namespace UserApi {
   export type UserToUpdate = PartialUndef<{
     name: string
     birthDate: string // '2005-11-10T00:00:00.000+08:00'
+    gender: GenderEnum
     aboutMe: string
     currentPwd: string
     pwd: string
+    photos: {
+      remove: string[]
+      replace: Array<{ id: string, index: number}>
+      add: Array<{ index: number, name: string, dataUrl: string }>
+    }
   }>
   export const update = async(user: UserToUpdate) =>
     handleAuthenticatedResponse<UpdateUserSuccessData, UpdateUserErrorData>

@@ -32,7 +32,7 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
-import arrIndices = ArrayUtils.arrIndices
+import arrIndices = ArrayUtils.ofIndices
 import PlusIc = SvgIcons.PlusIc
 import contents = EmotionCommon.contents
 import row = EmotionCommon.row
@@ -45,6 +45,8 @@ import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
 import * as uuid from 'uuid'
 import readToDataUrl = FileUtils.readToDataUrl
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
+import trimExtension = FileUtils.trimExtension
+import Download1Ic = SvgIcons.Download1Ic
 
 
 
@@ -82,9 +84,13 @@ const springStyle =
 export type ProfilePhoto = {
   id: string
   state: 'ready'|'empty'|'preparing'
+  index: number
+  name: string
+  mimeType: string
   url: string
+  isNew: boolean
 }
-export interface ProfilePhotoArr extends Array<ProfilePhoto> { length: 6 }
+export interface ProfilePhotoArr extends Array<ProfilePhoto> { /* length: 6 */ }
 
 
 
@@ -124,7 +130,7 @@ React.memo(
   // swaps photos
   const swapPhotosEffectEvent = useEffectEvent(
     (swap: [number,number])=>{
-      const newImages = [...images] as ProfilePhotoArr
+      const newImages = [...images]
       newImages[swap[0]] = images[swap[1]]
       newImages[swap[1]] = images[swap[0]]
       setImages(newImages)
@@ -220,7 +226,7 @@ React.memo(
             return newPhoto
           }
           return it
-        }) as ProfilePhotoArr
+        })
         if (found) return newImages
         return images
       })
@@ -244,18 +250,28 @@ React.memo(
             const preparingPhoto: ProfilePhoto = {
               id: uuid.v4(),
               state: 'preparing',
+              index: lastIdx,
+              name: '',
+              mimeType: '',
               url: '',
+              isNew: false,
             }
             const file = imgFiles[filesI++]
             
             ;(async()=>{
               try {
                 const compressedFile = await ImageUtils.compress(file)
+                //console.log('file',file)
                 const imgDataUrl = await readToDataUrl(compressedFile)
+                //console.log('imgDataUrl',imgDataUrl)
                 const newPhoto: ProfilePhoto = {
                   id: uuid.v4(),
                   state: 'ready',
-                  url: imgDataUrl
+                  index: lastIdx,
+                  name: trimExtension(file.name),
+                  mimeType: 'image/webp',
+                  url: imgDataUrl,
+                  isNew: true,
                 }
                 replacePhotoEffectEvent(newPhoto, preparingPhoto)
               }
@@ -263,7 +279,11 @@ React.memo(
                 const emptyPhoto: ProfilePhoto = {
                   id: uuid.v4(),
                   state: 'empty',
+                  index: lastIdx,
+                  name: '',
+                  mimeType: '',
                   url: '',
+                  isNew: false,
                 }
                 replacePhotoEffectEvent(emptyPhoto, preparingPhoto)
               }
@@ -273,7 +293,7 @@ React.memo(
           }
           
           return it
-        }) as ProfilePhotoArr
+        })
         setImages(newImages)
         setMenuOpen(false)
       }
@@ -348,8 +368,8 @@ React.memo(
                 
                 { im.state==='ready' &&
                   <img css={photoImgStyle}
-                    src={im!.url!}
-                    alt={`Profile photo ${i+1}`}
+                    src={im.url}
+                    alt={im.name}
                   />
                 }
                 { im.state==='preparing' &&
@@ -455,11 +475,15 @@ React.memo(
           
           <Button css={ButtonStyle.bigRectTransparent}
             onClick={()=>{
-              const newImages = [...images] as ProfilePhotoArr
+              const newImages = [...images]
               newImages[lastIdx] = {
                 id: uuid.v4(),
                 state: 'empty',
+                index: lastIdx,
+                name: '',
+                mimeType: '',
                 url: '',
+                isNew: false,
               }
               setImages(newImages)
               sheet.setClosing()

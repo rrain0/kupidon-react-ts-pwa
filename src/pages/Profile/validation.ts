@@ -1,9 +1,12 @@
 import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
+import { ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import { UiText } from 'src/utils/lang/UiText'
+import * as uuid from 'uuid'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
 import UpdateUserErrorData = UserApi.UpdateUserErrorData
@@ -13,6 +16,7 @@ import UpdateUserErrorData = UserApi.UpdateUserErrorData
 export namespace ProfilePageValidation {
   
   
+  import arrIndices = ArrayUtils.ofIndices
   type SeverErrorCode = UpdateUserErrorData['code']
   
   
@@ -33,6 +37,8 @@ export namespace ProfilePageValidation {
     | 'about-me-not-changed'
     | 'about-me-is-too-long'
     
+    | 'photos-not-changed'
+    
     | 'NO_USER'
     | 'connection-error'
     | 'unknown-error'
@@ -52,6 +58,7 @@ export namespace ProfilePageValidation {
     'gender-required': ProfileUiText.genderIsNotChosen,
     'about-me-not-changed': [],
     'about-me-is-too-long': ProfileUiText.descriptionMaxLenIs2000,
+    'photos-not-changed': [],
     'NO_USER': ProfileUiText.noUserWithSuchId,
     'connection-error': ProfileUiText.connectionError,
     'unknown-error': ProfileUiText.unknownError,
@@ -64,6 +71,7 @@ export namespace ProfilePageValidation {
     birthDate: string
     gender: GenderEnum|''
     aboutMe: string
+    photos: ProfilePhotoArr
   }
   export type FromServerValue = {
     values: UserValues // значения, отправленные на сервердля проверки
@@ -85,6 +93,15 @@ export namespace ProfilePageValidation {
     birthDate: '',
     gender: '',
     aboutMe: '',
+    photos: arrIndices(6).map(i=>({
+      id: uuid.v4(),
+      state: 'empty',
+      index: i,
+      name: '',
+      mimeType: '',
+      url: '',
+      isNew: false,
+    }))
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
     fromServer: undefined,
@@ -227,6 +244,22 @@ export namespace ProfilePageValidation {
       })
     }],
     
+    
+    
+    [['photos','initialValues'], (values)=>{
+      const [v,ivs] = values as [FormValues['photos'],FormValues['initialValues']]
+      if (v.every((it,i)=>{
+          if (it.state==='empty' && ivs.photos[i].state==='empty') return true
+          if (it.id===ivs.photos[i].id) return true
+          return false
+        })
+      ) return new PartialFailureData({
+        code: 'photos-not-changed' satisfies FailureCode,
+        msg: 'Photos are not changed',
+        type: 'initial',
+        errorFields: ['photos'],
+      })
+    }],
     
     
     

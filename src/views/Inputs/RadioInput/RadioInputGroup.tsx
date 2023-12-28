@@ -3,7 +3,6 @@ import { css } from '@emotion/react'
 import classNames from 'classnames'
 import React, { useImperativeHandle, useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { Themes } from 'src/utils/theme/Themes'
 import {
@@ -11,12 +10,13 @@ import {
 } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
 import styled from 'styled-components'
 import reset = EmotionCommon.reset
-import trueOrUndef = CastUtils.trueOrUndef
 import abs = EmotionCommon.abs
 import PartialUndef = TypeUtils.PartialUndef
 import El = RadioInputGroupStyle.El
 import Attr = RadioInputGroupStyle.Attr
 import Prop = RadioInputGroupStyle.Prop
+import trueOrUndef = TypeUtils.trueOrUndef
+
 
 
 

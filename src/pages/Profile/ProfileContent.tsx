@@ -17,7 +17,9 @@ import { ModalStyle } from 'src/components/Modal/ModalStyle'
 import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
-import { ProfileMockData } from 'src/pages/Profile/MockData'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { ImagesMockData } from 'src/utils/mock-data/ImagesMockData'
 import ProfilePhotos, { ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
@@ -59,14 +61,10 @@ import fixedTop = EmotionCommon.fixedTop
 import row = EmotionCommon.row
 import NameCardIc = SvgIcons.NameCardIc
 import GiftBoxIc = SvgIcons.GiftBoxIc
-import * as uuid from 'uuid'
+import Exists = TypeUtils.Exists
 
 
 
-
-
-const sheetSnaps: SheetSnapPoints = [0,200,'fit-content','50%','80%']
-const sheetOpenIdx = 2
 
 
 
@@ -102,15 +100,47 @@ React.memo(
     values: formValues,
     failedFields,
     prepareAndRequest: useCallback(
-      (values: FormValues,failedFields: (keyof FormValues)[])=>{
+      (values: FormValues, failedFields: (keyof FormValues)[])=>{
         const userToUpdate: UserToUpdate = {}
-        ObjectKeys(userDefaultValues).forEach(fName=>{
-          if (!failedFields.includes(fName)) userToUpdate[fName] = values[fName]
-        })
-        if (userToUpdate.birthDate) userToUpdate.birthDate =
-          DateTime.from_yyyy_MM_dd(userToUpdate.birthDate)!
-          .set({ timezone: DateTime.fromDate(new Date()).timezone })
-          .to_yyyy_MM_dd_HH_mm_ss_SSS_XXX()
+        if (!failedFields.includes('name')){
+          userToUpdate.name = values.name
+        }
+        if (!failedFields.includes('birthDate')){
+          userToUpdate.birthDate =
+            DateTime.from_yyyy_MM_dd(values.birthDate)!
+              .set({ timezone: DateTime.fromDate(new Date()).timezone })
+              .to_yyyy_MM_dd_HH_mm_ss_SSS_XXX()
+        }
+        if (!failedFields.includes('gender')){
+          userToUpdate.gender = values.gender as GenderEnum
+        }
+        if (!failedFields.includes('aboutMe')){
+          userToUpdate.aboutMe = values.aboutMe
+        }
+        if (!failedFields.includes('photos')){
+          const [fwd,back] = ArrayUtils.diff(
+            values.initialValues.photos, values.photos,
+            (a,b)=>a.state==='empty' && b.state==='empty' || a.id===b.id
+          )
+          userToUpdate.photos = {
+            remove: fwd
+              .map((to,from)=>({ to, from }))
+              .filter(it=>it.to===undefined && values.initialValues.photos[it.from].state==='ready')
+              .map(it=>values.initialValues.photos[it.from].id),
+            replace: fwd
+              .map((to,from)=>({ to, from }))
+              .filter(it=>it.to!==undefined && values.initialValues.photos[it.from].state==='ready')
+              .map(it=>({ id: values.initialValues.photos[it.from].id, index: it.to as number })),
+            add: values.photos
+              .filter((it,i)=>it.isNew && it.state==='ready')
+              .map((it,i)=>({
+                  index: i,
+                  name: it.name,
+                  dataUrl: it.url,
+                })
+              ),
+          }
+        }
         return UserApi.update(userToUpdate)
       },
       []
@@ -177,9 +207,30 @@ React.memo(
       newValues.initialValues.aboutMe = u.aboutMe
       
       ObjectKeys(userDefaultValues).forEach(fName=>{
-        if (fieldIsInitial(fName) && fName in u)
+        if (fieldIsInitial(fName) && fName in u && fName!=='photos')
           newValues[fName] = u[fName] as any
       })
+      
+      newValues.initialValues.photos = [...s.initialValues.photos]
+      u.photos.forEach(it=>{
+        if (newValues.initialValues.photos[it.index].id!==it.id)
+          newValues.initialValues.photos[it.index] = {
+            id: it.id,
+            state: 'ready',
+            index: it.index,
+            name: it.name,
+            mimeType: it.mimeType,
+            url: it.url,
+            isNew: false,
+          }
+      })
+      
+      
+      newValues.photos = s.photos.map((it,i)=>{
+        if (it.isNew) return it
+        else return newValues.initialValues.photos[i]
+      })
+      
       return newValues
     })
   })
@@ -234,28 +285,37 @@ React.memo(
   
   
   
-  
+  /*
   const [images, setImages] = useState<ProfilePhotoArr>(
-    ()=>ProfileMockData.userImages
+    ()=>ImagesMockData.sixImages
       .map((it,i)=>{
         if (i===4) return {
           id: uuid.v4(),
           state: 'empty',
+          index: i,
+          name: '',
+          mimeType: '',
           url: '',
         }
-        /* if (i===5) return {
-          id: uuid.v4(),
-          state: 'reading',
-          url: undefined,
-        } */
+        // if (i===5) return {
+        //   id: uuid.v4(),
+        //   state: 'reading',
+        //   index: i,
+        //   name: '',
+        //   mimeType: '',
+        //   url: '',
+        // }
         return {
           id: uuid.v4(),
           state: 'ready',
+          index: i,
+          name: '',
+          mimeType: '',
           url: it,
         }
-      }) as ProfilePhotoArr
+      })
   )
-  
+   */
   
   
   
@@ -312,10 +372,14 @@ React.memo(
         gap: 0px;
       `}>
         
-        
-        <ProfilePhotos
-          images={images}
-          setImages={setImages}
+        <ValidationComponentWrap {...validationProps}
+          fieldName="photos"
+          render={props =>
+          <ProfilePhotos
+            images={props.value}
+            setImages={props.setValue}
+          />
+          }
         />
         
         <div css={{ height: 24 }}/>
@@ -485,61 +549,55 @@ React.memo(
             }/>}/>
           
           
-          <ValidationComponentWrap
-            {...validationProps}
+          <ValidationComponentWrap {...validationProps}
             fieldName="gender"
             render={validProps =>
               <UseBool render={boolProps =>
-                <UseModalSheet
-                  open={boolProps.value}
-                  onClosed={boolProps.setFalse}
-                  snapPoints={sheetSnaps}
-                  openIdx={sheetOpenIdx}
-                  render={sheetProps =>
-                    <>
-                      
-                      <OptionItem
-                        icon={<GenderIc css={css`height: 50%`}/>}
-                        title={uiText.gender[0].text}
-                        value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
-                        nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
-                        onClick={boolProps.setTrue}
-                      />
-                      
-                      {boolProps.value && <ModalPortal>
-                        <BottomSheetBasic
-                          {...sheetProps.sheetProps}
-                          header={uiText.gender[0].text}
-                          aria-modal
+                <>
+                  <OptionItem
+                    icon={<GenderIc css={css`height: 50%`}/>}
+                    title={uiText.gender[0].text}
+                    value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
+                    nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
+                    onClick={boolProps.setTrue}
+                  />
+                  <UseModalSheet
+                    open={boolProps.value}
+                    onClosed={boolProps.setFalse}
+                    render={sheetProps =>
+                    <ModalPortal>
+                      <BottomSheetBasic
+                        {...sheetProps.sheetProps}
+                        header={uiText.gender[0].text}
+                        aria-modal
+                      >
+                        <div css={selectItemsContainer}
+                          role="radiogroup"
+                          tabIndex={0}
                         >
-                          <div css={selectItemsContainer}
-                            role="radiogroup"
-                            tabIndex={0}
+                          {genderOptions.map(opt => <RadioInput
+                            css={RadioInputStyle.radio}
+                            id={`gender-option-${opt.value}-${reactId}`}
+                            childrenPosition="start"
+                            role="radio"
+                            aria-checked={validProps.checked(opt.value)}
+                            checked={validProps.checked(opt.value)}
+                            value={opt.value}
+                            key={opt.value}
+                            onChange={validProps.inputProps.onChange}
+                            onClick={sheetProps.setClosing}
                           >
-                            {genderOptions.map(opt => <RadioInput
-                              css={RadioInputStyle.radio}
-                              id={`gender-option-${opt.value}-${reactId}`}
-                              childrenPosition="start"
-                              role="radio"
-                              aria-checked={validProps.checked(opt.value)}
-                              checked={validProps.checked(opt.value)}
-                              value={opt.value}
-                              key={opt.value}
-                              onChange={validProps.inputProps.onChange}
-                              onClick={sheetProps.setClosing}
-                            >
-                              <div css={selectItemText}>
-                                {opt.text}
-                              </div>
-                            </RadioInput>)}
-                          
-                          </div>
-                        </BottomSheetBasic>
-                      </ModalPortal>}
-                    
-                    </>
-                  }
-                />
+                            <div css={selectItemText}>
+                              {opt.text}
+                            </div>
+                          </RadioInput>)}
+                        
+                        </div>
+                      </BottomSheetBasic>
+                    </ModalPortal>
+                    }
+                  />
+                </>
               }/>
             }
           />

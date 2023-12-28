@@ -1,4 +1,3 @@
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -16,12 +15,12 @@ import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import Failures = ValidationCore.Failures
 import updateFailures = ValidationActions.updateFailures
 import awaitDelay = ValidationActions.awaitDelay
-import trueOrUndef = CastUtils.trueOrUndef
 import Values = ValidationCore.Values
-import Setter = TypeUtils.Setter
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
-import Mem = ReactUtils.Mem
 import ObjectValuesType = ObjectUtils.ObjectValuesType
+import ValueOrUpdater = TypeUtils.ValueOrUpdater
+import Mem = ReactUtils.Mem
+import trueOrUndef = TypeUtils.trueOrUndef
 
 
 
@@ -33,7 +32,7 @@ export type ValidationComponentWrapRenderProps
 > = {
   value: Vs[F]
   highlight: true | undefined
-  setValue: Setter<Vs[F]>
+  setValue: SetterOrUpdater<Vs[F]>
   onBlur: ()=>void
   checked: (value: ObjectValuesType<Vs>)=>boolean
   inputProps: {
@@ -52,9 +51,12 @@ export type ValidationComponentWrapProps
   fieldName: F
   failures: Failures<Vs>
   setFailures: SetterOrUpdater<Failures<Vs>>
-  setValues: (values: Vs)=>void
+  setValues: SetterOrUpdater<Vs>
   render: (props: ValidationComponentWrapRenderProps<Vs,F>)=>React.ReactNode
 }
+
+
+
 const ValidationComponentWrap =
 <
   Vs extends Values,
@@ -99,24 +101,34 @@ const ValidationComponentWrap =
   },[failures, fieldName, value, values])
   
   
-  const setValueEffectEvent = useEffectEvent((value: Vs[F])=>{
-    setFailures(f=>{
-      const update = f.filter(f=>(f.notify || f.highlight)
-        && f.errorFields.includes(fieldName)
-      )
-      if (update.length>0)
-        return updateFailures(
-          failures,
-          { failures: update, },
-          { notify: false, highlight: false, }
+  const setValueEffectEvent = useEffectEvent(
+    (value: ValueOrUpdater<Vs[F]>)=>{
+      setFailures(f=>{
+        const update = f.filter(f=>(f.notify || f.highlight)
+          && f.errorFields.includes(fieldName)
         )
-      return f
-    })
-    const newValues = { ...values, [fieldName]: value }
-    setValues(newValues)
-  })
+        if (update.length>0)
+          return updateFailures(
+            failures,
+            { failures: update, },
+            { notify: false, highlight: false, }
+          )
+        return f
+      })
+      setValues(s=>{
+        const newFieldValue = function(){
+          if (value instanceof Function) return value(s[fieldName])
+          return value
+        }()
+        return {
+          ...s,
+          [fieldName]: newFieldValue
+        }
+      })
+    }
+  )
   const setValue = useCallback(
-    (value: Vs[F])=>setValueEffectEvent(value),
+    (value: ValueOrUpdater<Vs[F]>)=>setValueEffectEvent(value),
     []
   )
   
@@ -165,7 +177,7 @@ const ValidationComponentWrap =
     inputProps,
   })
 }
-export default Mem(ValidationComponentWrap)
+export default React.memo(ValidationComponentWrap) as typeof ValidationComponentWrap
 
 
 

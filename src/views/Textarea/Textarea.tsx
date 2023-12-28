@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { ElementProps } from 'src/utils/common/GetDimensions'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import styled from "styled-components"
@@ -10,12 +9,12 @@ import { ReactUtils } from "src/utils/common/ReactUtils"
 import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import trueOrUndef = CastUtils.trueOrUndef
 import row = EmotionCommon.row
 import abs = EmotionCommon.abs
 import resetTextarea = EmotionCommon.resetTextarea
 import PartialUndef = TypeUtils.PartialUndef
 import hoverable = EmotionCommon.hoverable
+import trueOrUndef = TypeUtils.trueOrUndef
 
 
 

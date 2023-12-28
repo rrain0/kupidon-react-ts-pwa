@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import styled from "styled-components"
@@ -12,7 +11,6 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import RadioActiveIc = SvgIcons.RadioActiveIc
 import Ripple, { RippleProps } from 'src/views/Ripple/Ripple'
 import RadioInactiveIc = SvgIcons.RadioInactiveIc
-import trueOrUndef = CastUtils.trueOrUndef
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
 import row = EmotionCommon.row
@@ -20,6 +18,7 @@ import El = RadioInputStyle.El
 import Attr = RadioInputStyle.Attr
 import Prop = RadioInputStyle.Prop
 import PartialUndef = TypeUtils.PartialUndef
+import trueOrUndef = TypeUtils.trueOrUndef
 
 
 

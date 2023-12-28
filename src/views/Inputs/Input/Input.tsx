@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
@@ -9,11 +8,11 @@ import { ReactUtils } from "src/utils/common/ReactUtils"
 import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import trueOrUndef = CastUtils.trueOrUndef
 import row = EmotionCommon.row
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
 import PartialUndef = TypeUtils.PartialUndef
+import trueOrUndef = TypeUtils.trueOrUndef
 
 
 

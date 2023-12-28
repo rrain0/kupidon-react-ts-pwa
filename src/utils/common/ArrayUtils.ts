@@ -16,8 +16,33 @@ export namespace ArrayUtils {
   }
   
   
-  export const arrIndices = (len = 0): number[] => {
+  export const ofIndices = (len = 0): number[] => {
     return Array(len).fill(undefined).map((_,i)=>i)
+  }
+  
+  
+  
+  export const diff = <T1,T2>
+  (arr1: T1[], arr2: T2[],
+   comparator: ((a: T1, b: T2)=>boolean)|undefined = undefined
+  )=>{
+    const fwd: (number|undefined)[] = Array(arr1.length).fill(undefined)
+    const back: (number|undefined)[] = Array(arr2.length).fill(undefined)
+    arr1.forEach((one,i1)=>{
+      for (let i2 = 0; i2 < arr2.length; i2++) {
+        const two = arr2[i2]
+        if ((!fwd.includes(i2)) && (
+            (comparator && comparator(one,two)) ||
+            (!comparator && (one as any)===(two as any))
+          )
+        ){
+          fwd[i1] = i2
+          back[i2] = i1
+          break
+        }
+      }
+    })
+    return [fwd,back] as const
   }
   
   
@@ -51,5 +76,8 @@ export namespace ArrayUtils {
   export type ArrWithNonEmptyElements<A extends Array<E>, E = any> = A extends Array<infer E>
     ? Array<Exclude<E, null|undefined>>
     : never
+  
+  
+  
   
 }

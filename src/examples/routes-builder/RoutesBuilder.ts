@@ -1,8 +1,7 @@
-import { CastUtils } from 'src/utils/common/CastUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
-import isPresent = CastUtils.isPresent
+import exists = TypeUtils.exists
 import ObjectEntries = ObjectUtils.ObjectEntries
 import ObjectKeys = ObjectUtils.ObjectKeys
 import ObjectValues = ObjectUtils.ObjectValues
@@ -152,7 +151,7 @@ export namespace RoutesBuilder {
     if (params){
       const newParams: { [Param in Params]?: string } = {}
       if (this.params) ObjectEntries(this.params).forEach(([paramName,paramPath])=>{
-        if (isPresent(params[paramName])){
+        if (exists(params[paramName])){
           newParams[paramPath as any] = params[paramName]
         }
       })

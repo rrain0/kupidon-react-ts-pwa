@@ -23,4 +23,8 @@ export namespace FileUtils {
   
   
   
+  export const trimExtension = (fileName: string)=>
+    fileName.replace(/\.[^.]*$/,'')
+  
+  
 }

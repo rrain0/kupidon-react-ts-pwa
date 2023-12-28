@@ -3,7 +3,6 @@ import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
 import classNames from 'classnames'
 import React from 'react'
-import { CastUtils } from 'src/utils/common/CastUtils'
 
 import { ReactComponent as AddModuleSvg } from 'src/res/icon/add-module.svg'
 import { ReactComponent as Arrow1DownSvg } from 'src/res/icon/arrow-1-down.svg'
@@ -81,8 +80,8 @@ import { ReactComponent as WarnTriangleToastifySvg } from 'src/res/icon/warn-tri
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import PartialUndef = TypeUtils.PartialUndef
-import falsishToUndef = CastUtils.falsyToUndef
-import isPresent = CastUtils.isPresent
+import falsishToUndef = TypeUtils.falsyToUndef
+import exists = TypeUtils.exists
 
 
 
@@ -127,8 +126,8 @@ export namespace SvgIcons {
     
     return <SvgComponent
       css={css`
-        width:  ${falsishToUndef(!isPresent(w)) && SvgIcStyle.Prop.varr.size};
-        height: ${falsishToUndef(!isPresent(h)) && SvgIcStyle.Prop.varr.size};
+        width:  ${falsishToUndef(!exists(w)) && SvgIcStyle.Prop.varr.size};
+        height: ${falsishToUndef(!exists(h)) && SvgIcStyle.Prop.varr.size};
         //max-width: 100%;
         //max-height: 100%;
         fill: ${color ?? SvgIcStyle.Prop.vard.color('black')};

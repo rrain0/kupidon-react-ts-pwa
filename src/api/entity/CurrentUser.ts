@@ -2,6 +2,7 @@ import { GenderEnum } from 'src/api/entity/GenderEnum'
 
 
 
+
 export type CurrentUser = {
   id: string
   email: string
@@ -13,4 +14,11 @@ export type CurrentUser = {
   birthDate: string
   gender: GenderEnum
   aboutMe: string
+  photos: Array<{
+    id: string,
+    index: number,
+    name: string,
+    mimeType: string,
+    url: string,
+  }>
 }

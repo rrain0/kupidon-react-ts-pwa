@@ -28,27 +28,6 @@ export namespace ButtonStyle {
     export const selThis = generateAttrThisSelector(select)
   }
   export namespace El {
-    const elements = {
-      btn: {
-        name: 'btn',
-        clazz: 'rrainuiButton',
-        
-        elements: {
-          border: {
-            name: 'border',
-            clazz: 'rrainuiBorder',
-          },
-          ripple: {
-            name: 'ripple',
-            clazz: RippleStyle.El.frameClassName,
-          }
-        }
-        
-      }
-    }
-    
-    
-    
     export const clazz = {
       btn:    'rrainuiButton',
       border: 'rrainuiBorder',
@@ -63,34 +42,36 @@ export namespace ButtonStyle {
       btn: dotClazz.btn,
     } as const
     const elBasic = {
-      ...elMain,
       border: elMain.btn+'>'+dotClazz.border,
       ripple: elMain.btn+'>*>'+dotClazz.ripple,
       icon:   elMain.btn+'>'+dotClazz.icon,
     } as const
     const elMainStateSimple = {
-      ...elBasic,
-      btnHover:        elBasic.btn+':hover',
-      btnActive:       elBasic.btn+':active',
-      btnFocus:        elBasic.btn+':focus',
-      btnFocusVisible: elBasic.btn+':focus-visible',
-      btnDisabled:     elBasic.btn+':disabled',
-      btnError:        elBasic.btn+Attr.select.error,
+      btnHover:        elMain.btn+':hover',
+      btnActive:       elMain.btn+':active',
+      btnFocus:        elMain.btn+':focus',
+      btnFocusVisible: elMain.btn+':focus-visible',
+      btnDisabled:     elMain.btn+':disabled',
+      btnError:        elMain.btn+Attr.select.error,
     } as const
     const elMainStateComplex = {
-      ...elMainStateSimple,
       btnActiveFocusVisible: elMainStateSimple.btnActive+','+elMainStateSimple.btnFocusVisible,
     } as const
     const elBasicStateSimple = {
-      ...elMainStateComplex,
-      borderDisabled:     elMainStateComplex.btnDisabled+'>'+dotClazz.border,
-      borderError:        elMainStateComplex.btnError+'>'+dotClazz.border,
+      borderDisabled:     elMainStateSimple.btnDisabled+'>'+dotClazz.border,
+      borderError:        elMainStateSimple.btnError+'>'+dotClazz.border,
       
-      rippleDisabled:     elMainStateComplex.btnDisabled+'>*>'+dotClazz.ripple,
+      rippleDisabled:     elMainStateSimple.btnDisabled+'>*>'+dotClazz.ripple,
       
-      iconDisabled:       elMainStateComplex.btnDisabled+'>*>'+dotClazz.icon,
+      iconDisabled:       elMainStateSimple.btnDisabled+'>*>'+dotClazz.icon,
     } as const
-    export const el = {...elBasicStateSimple} as const
+    export const el = {
+      ...elBasic,
+      ...elMain,
+      ...elMainStateSimple,
+      ...elMainStateComplex,
+      ...elBasicStateSimple,
+    } as const
     
     export const thiz = generateElThis(el)
   }
