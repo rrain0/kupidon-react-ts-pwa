@@ -88,7 +88,14 @@ export const useFormToasts =
       if (serverFailure) return new ToastMsgData({
         type: 'danger',
         msg: <ToastMsg
-          uiOption={failureCodeToUiText?.[serverFailure.code]}
+          uiOption={
+            serverFailure.code==='unknown-error'
+            ? [{ value: '',
+                lang: 'en-US',
+                text: 'Unknown error: '+JSON.stringify(serverFailure.extra.error)
+              }]
+            : failureCodeToUiText?.[serverFailure.code]
+          }
           defaultText={serverFailure.msg}
         />,
         closeOnUnmount: true,

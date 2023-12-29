@@ -1,6 +1,6 @@
 import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
-import { ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
+import { ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { DateTime } from 'src/utils/DateTime'
@@ -95,7 +95,7 @@ export namespace ProfilePageValidation {
     aboutMe: '',
     photos: arrIndices(6).map(i=>({
       id: uuid.v4(),
-      state: 'empty',
+      state: 'none',
       index: i,
       name: '',
       mimeType: '',
@@ -113,6 +113,11 @@ export namespace ProfilePageValidation {
   }
   
   
+  
+  export const photosComparator = (a: ProfilePhoto, b: ProfilePhoto)=>
+    ['empty','none'].includes(a.state)
+    && ['empty','none'].includes(b.state)
+    || a.id===b.id
   
   const delay = 4000
   
@@ -248,17 +253,13 @@ export namespace ProfilePageValidation {
     
     [['photos','initialValues'], (values)=>{
       const [v,ivs] = values as [FormValues['photos'],FormValues['initialValues']]
-      if (v.every((it,i)=>{
-          if (it.state==='empty' && ivs.photos[i].state==='empty') return true
-          if (it.id===ivs.photos[i].id) return true
-          return false
+      if (v.every((it,i)=>photosComparator(it,ivs.photos[i])))
+        return new PartialFailureData({
+          code: 'photos-not-changed' satisfies FailureCode,
+          msg: 'Photos are not changed',
+          type: 'initial',
+          errorFields: ['photos'],
         })
-      ) return new PartialFailureData({
-        code: 'photos-not-changed' satisfies FailureCode,
-        msg: 'Photos are not changed',
-        type: 'initial',
-        errorFields: ['photos'],
-      })
     }],
     
     
@@ -284,12 +285,15 @@ export namespace ProfilePageValidation {
     }],
     [['fromServer'], (values)=>{
       const [v] = values as [FromServerValue]
-      if (v) return new PartialFailureData({
-        code: 'unknown-error' satisfies FailureCode,
-        msg: 'Неизвестная ошибка',
-        extra: v,
-        type: 'server',
-      })
+      if (v) {
+        console.log('Unknown error:',JSON.stringify(v.error))
+        return new PartialFailureData({
+          code: 'unknown-error' satisfies FailureCode,
+          msg: 'Unknown Error',
+          extra: v,
+          type: 'server',
+        })
+      }
     }],
     
   ]

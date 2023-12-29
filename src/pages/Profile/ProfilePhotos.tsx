@@ -13,7 +13,8 @@ import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { FileUtils } from 'src/utils/common/FileUtils'
-import { ImageUtils } from 'src/utils/common/ImageUtils'
+import { DataUrl } from 'src/utils/DataUrl'
+import { ImageUtils } from 'src/utils/image/ImageUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -46,7 +47,6 @@ import * as uuid from 'uuid'
 import readToDataUrl = FileUtils.readToDataUrl
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import trimExtension = FileUtils.trimExtension
-import Download1Ic = SvgIcons.Download1Ic
 
 
 
@@ -83,7 +83,11 @@ const springStyle =
 
 export type ProfilePhoto = {
   id: string
-  state: 'ready'|'empty'|'preparing'
+  state:
+    |'ready' // photo is ready to be shown
+    |'empty' // no photo
+    |'preparing' // photo is reading & compressing
+    |'none' // loading data from server
   index: number
   name: string
   mimeType: string
@@ -263,13 +267,15 @@ React.memo(
                 const compressedFile = await ImageUtils.compress(file)
                 //console.log('file',file)
                 const imgDataUrl = await readToDataUrl(compressedFile)
-                //console.log('imgDataUrl',imgDataUrl)
+                //console.log('imgDataUrl',imgDataUrl.length)
+                //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
+                const mimeType = new DataUrl(imgDataUrl).mimeType
                 const newPhoto: ProfilePhoto = {
                   id: uuid.v4(),
                   state: 'ready',
                   index: lastIdx,
                   name: trimExtension(file.name),
-                  mimeType: 'image/webp',
+                  mimeType: mimeType,
                   url: imgDataUrl,
                   isNew: true,
                 }
@@ -380,6 +386,11 @@ React.memo(
                 { im.state==='empty' &&
                   <div css={photoPlaceholderStyle}>
                     <PlusIc css={photoPlaceholderIconStyle}/>
+                  </div>
+                }
+                { im.state==='none' &&
+                  <div css={photoPlaceholderStyle}>
+                  
                   </div>
                 }
                 

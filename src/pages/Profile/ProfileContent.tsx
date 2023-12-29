@@ -18,14 +18,13 @@ import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { ImagesMockData } from 'src/utils/mock-data/ImagesMockData'
-import ProfilePhotos, { ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
+import ProfilePhotos from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { DataUrl } from 'src/utils/DataUrl'
 import { DateTime } from 'src/utils/DateTime'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
@@ -34,7 +33,6 @@ import ValidationComponentWrap from 'src/utils/form-validation/ValidationCompone
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { SheetSnapPoints } from 'src/views/BottomSheet/useBottomSheet'
 import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -46,6 +44,7 @@ import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import Textarea from 'src/views/Textarea/Textarea'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
+import * as uuid from 'uuid'
 import col = EmotionCommon.col
 import defaultValues = ProfilePageValidation.defaultValues
 import validators = ProfilePageValidation.validators
@@ -61,7 +60,7 @@ import fixedTop = EmotionCommon.fixedTop
 import row = EmotionCommon.row
 import NameCardIc = SvgIcons.NameCardIc
 import GiftBoxIc = SvgIcons.GiftBoxIc
-import Exists = TypeUtils.Exists
+import photosComparator = ProfilePageValidation.photosComparator
 
 
 
@@ -118,10 +117,8 @@ React.memo(
           userToUpdate.aboutMe = values.aboutMe
         }
         if (!failedFields.includes('photos')){
-          const [fwd,back] = ArrayUtils.diff(
-            values.initialValues.photos, values.photos,
-            (a,b)=>a.state==='empty' && b.state==='empty' || a.id===b.id
-          )
+          const [fwd,back] = ArrayUtils.diff
+          (values.initialValues.photos, values.photos, photosComparator)
           userToUpdate.photos = {
             remove: fwd
               .map((to,from)=>({ to, from }))
@@ -132,14 +129,17 @@ React.memo(
               .filter(it=>it.to!==undefined && values.initialValues.photos[it.from].state==='ready')
               .map(it=>({ id: values.initialValues.photos[it.from].id, index: it.to as number })),
             add: values.photos
-              .filter((it,i)=>it.isNew && it.state==='ready')
-              .map((it,i)=>({
-                  index: i,
-                  name: it.name,
-                  dataUrl: it.url,
+              .map((it,i)=>({ index: i, photo: it }))
+              .filter(it=>it.photo.isNew && it.photo.state==='ready')
+              .map(it=>({
+                  index: it.index,
+                  name: it.photo.name,
+                  dataUrl: it.photo.url,
                 })
               ),
           }
+          //console.log('update photos',userToUpdate.photos)
+          //userToUpdate.photos = undefined
         }
         return UserApi.update(userToUpdate)
       },
@@ -173,7 +173,13 @@ React.memo(
           accessToken: s?.accessToken ?? '',
           user: response.data!.user,
         }))
-        
+        setFormValues(s=>({
+          ...s,
+          photos: s.photos.map((it,i)=>it.isNew
+            ? s.initialValues.photos[i]
+            : it
+          )
+        }))
       }
     },
     [isSuccess, response, setAuth]
@@ -211,7 +217,19 @@ React.memo(
           newValues[fName] = u[fName] as any
       })
       
-      newValues.initialValues.photos = [...s.initialValues.photos]
+      newValues.initialValues.photos = s.initialValues.photos
+        .map(it=>{
+          if (it.state==='none') return {
+            id: uuid.v4(),
+            state: 'empty',
+            index: it.index,
+            name: '',
+            mimeType: '',
+            url: '',
+            isNew: false,
+          }
+          return it
+        })
       u.photos.forEach(it=>{
         if (newValues.initialValues.photos[it.index].id!==it.id)
           newValues.initialValues.photos[it.index] = {
@@ -281,41 +299,6 @@ React.memo(
   },[failures])
    */
   
-  
-  
-  
-  
-  /*
-  const [images, setImages] = useState<ProfilePhotoArr>(
-    ()=>ImagesMockData.sixImages
-      .map((it,i)=>{
-        if (i===4) return {
-          id: uuid.v4(),
-          state: 'empty',
-          index: i,
-          name: '',
-          mimeType: '',
-          url: '',
-        }
-        // if (i===5) return {
-        //   id: uuid.v4(),
-        //   state: 'reading',
-        //   index: i,
-        //   name: '',
-        //   mimeType: '',
-        //   url: '',
-        // }
-        return {
-          id: uuid.v4(),
-          state: 'ready',
-          index: i,
-          name: '',
-          mimeType: '',
-          url: it,
-        }
-      })
-  )
-   */
   
   
   
