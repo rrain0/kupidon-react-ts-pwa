@@ -55,6 +55,9 @@ import trimExtension = FileUtils.trimExtension
 // todo restore ability of download / save photos
 
 
+const progressAnimDuration = 400 // ms
+
+
 
 const springStyle =
 (dragIdx: number|undefined = undefined, active = false, dx = 0, dy = 0) =>
@@ -121,14 +124,17 @@ React.memo(
   const [dragState, setDragState, dragStateRef] = useStateAndRef(
     undefined as undefined|'initialDelay'|'progressAnim'|'dragging'
   )
+  const [progressAnimLockGestures, setProgressAnimLockGestures] = useState(false)
   const [swap, setSwap] = useState(undefined as undefined|[number,number])
   
   const [canClick, setCanClick] = useState(true)
   const [isMenuOpen,setMenuOpen] = useState(false)
   
   
-  useNoSelect(!!dragState) // forbid content selection
-  useNoTouchAction(dragState==='dragging') // forbid gesture interception by browser
+  // forbid content selection
+  useNoSelect(!!dragState)
+  // forbid gesture interception by browser
+  useNoTouchAction(dragState==='dragging' || progressAnimLockGestures)
   
   
   // swaps photos
@@ -161,6 +167,20 @@ React.memo(
         )
         return ()=>clearTimeout(timerId)
       }
+    },
+    [dragState]
+  )
+  
+  useLayoutEffect(
+    ()=>{
+      if (dragState==='progressAnim') {
+        const timerId = setTimeout(
+          ()=>setProgressAnimLockGestures(true),
+          progressAnimDuration - 150
+        )
+        return ()=>clearTimeout(timerId)
+      }
+      else setProgressAnimLockGestures(false)
     },
     [dragState]
   )
@@ -451,7 +471,7 @@ React.memo(
               );
               
               ${lastIdx===i && dragState==='progressAnim' && css`
-                animation: ${progressAnim} 0.4s linear forwards;
+                animation: ${progressAnim} ${progressAnimDuration}ms linear forwards;
               `}
               ${lastIdx===i && !swap && dragState==='dragging' && css`
                 background-image: none;
