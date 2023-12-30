@@ -1,4 +1,6 @@
 import { useLayoutEffect } from 'react'
+import commonCss from 'src/styles/common.module.scss'
+
 
 
 
@@ -24,12 +26,22 @@ export const useNoTouchAction = (
           window.removeEventListener('touchmove',onTouch)
         }
       } else {
-        return ()=>{
-          window.removeEventListener('touchstart',onTouch)
-          window.removeEventListener('touchmove',onTouch)
-        }
+        window.removeEventListener('touchstart',onTouch)
+        window.removeEventListener('touchmove',onTouch)
       }
     },
     [lock, ...deps]
   )
+  
+  useLayoutEffect(()=> {
+    const root = document.documentElement // get html
+    if (lock) {
+      root.classList.add(commonCss.noTouchAction)
+      return () => {
+        root.classList.remove(commonCss.noTouchAction)
+      }
+    } else {
+      root.classList.remove(commonCss.noTouchAction)
+    }
+  },[lock, ...deps])
 }

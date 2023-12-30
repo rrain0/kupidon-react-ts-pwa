@@ -176,7 +176,7 @@ React.memo(
       if (dragState==='progressAnim') {
         const timerId = setTimeout(
           ()=>setProgressAnimLockGestures(true),
-          progressAnimDuration - 150
+          progressAnimDuration - 300
         )
         return ()=>clearTimeout(timerId)
       }
