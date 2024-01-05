@@ -4,6 +4,7 @@ import { isSafari, isMobileSafari } from 'react-device-detect'
 import { FileUtils } from 'src/utils/common/FileUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import CallbackParam = TypeUtils.CallbackParam
+import trimExtension = FileUtils.trimExtension
 
 
 
@@ -12,17 +13,16 @@ export namespace ImageUtils {
   
   
   
-  import trimExtension = FileUtils.trimExtension
   export const compress =
   async(imgFile: File, onProgress?: CallbackParam<number>): Promise<File> => {
     //console.log('imgFile',imgFile)
     const progress = {
       stage: 0,
       stages: 1,
-      progress: 0, // 0..1
+      progress: 0, // 0..100
     }
     const notifyProgress = ()=>
-      onProgress?.((progress.stage+progress.progress) / progress.stages)
+      onProgress?.((progress.stage + progress.progress/100) / progress.stages * 100)
     
     
     if (['image/heic','image/heif'].includes(imgFile.type)){
@@ -52,7 +52,7 @@ export namespace ImageUtils {
     }
     if (onProgress){
       options.onProgress = (p: number)=>{
-        progress.progress = p/100
+        progress.progress = p
         notifyProgress()
       }
     }

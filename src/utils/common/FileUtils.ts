@@ -30,6 +30,14 @@ export namespace FileUtils {
   
   
   
+  export const dataUrlToBlob = async (dataUrl: string): Promise<Blob> => {
+    const response = await fetch(dataUrl)
+    const blob = await response.blob()
+    return blob
+  }
+  
+  
+  
   export const trimExtension = (fileName: string)=>
     fileName.replace(/\.[^.]*$/,'')
   

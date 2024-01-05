@@ -23,6 +23,7 @@ import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { useNoTouchAction } from 'src/utils/react/useNoTouchAction'
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
+import { useTimeout } from 'src/utils/react/useTimeout'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -34,6 +35,7 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import PieProgress from 'src/views/PieProgress/PieProgress'
 import { PieProgressStyle } from 'src/views/PieProgress/PieProgressStyle'
+import SparkingLoadingLine from 'src/views/SparkingLoadingLine/SparkingLoadingLine'
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
 import arrIndices = ArrayUtils.ofIndices
@@ -45,14 +47,13 @@ import CrossInCircleIc = SvgIcons.CrossInCircleIc
 import resetH = EmotionCommon.resetH
 import ArrowRefreshCwIc = SvgIcons.ArrowRefreshCwIc
 import Txt = EmotionCommon.Txt
-import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
 import * as uuid from 'uuid'
 import readToDataUrl = FileUtils.readToDataUrl
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import trimExtension = FileUtils.trimExtension
 import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
-import exists = TypeUtils.exists
+import inRangeExclusive = MathUtils.inRangeExclusive
 
 
 
@@ -91,17 +92,18 @@ const springStyle =
 
 export const DefaultProfilePhoto = {
   id: '',
-  state: 'none' as
-    |'ready' // photo is ready to be shown
-    |'empty' // no photo
-    |'preparing' // photo is reading & compressing
-    |'none', // loading data from server
+  state: 'empty' as
+    |'remote' // photo from server
+    |'local' // photo from local storage
+    |'empty', // no photo
   index: 0,
   name: '',
   mimeType: '',
-  url: '',
-  isNew: false,
-  progress: 0, // 0..1
+  remoteUrl: '',
+  dataUrl: '',
+  available: 0, // 0..100, when 100 - photo is ready to be shown
+  abort: ()=>{}, // callback to abort fetching or compressing
+  upload: null as number|null, // 0..100, null - now not uploading
 }
 export type ProfilePhoto = typeof DefaultProfilePhoto
 export interface ProfilePhotoArr extends Array<ProfilePhoto> { /* length: 6 */ }
@@ -124,6 +126,13 @@ React.memo(
   const progressAnim = useMemo(
     ()=>radialGradKfs(theme),
     [theme]
+  )
+  
+  const [canShowFetchProgress, setCanShowFetchProgress] = useState(false)
+  useTimeout(
+    3000,
+    ()=>setCanShowFetchProgress(true),
+    []
   )
   
   const [lastIdx, setLastIdx] = useState(0)
@@ -279,31 +288,28 @@ React.memo(
             )
           ){
             const preparingPhoto: ProfilePhoto = {
+              ...DefaultProfilePhoto,
               id: uuid.v4(),
-              state: 'preparing',
+              state: 'local',
               index: lastIdx,
-              name: '',
-              mimeType: '',
-              url: '',
-              isNew: false,
-              progress: 0,
+              available: 0,
             }
             const file = imgFiles[filesI++]
             
             ;(async()=>{
               try {
                 const onCompressProgress = (progress: number)=>{
-                  const progressPhoto = {
+                  const progressPhoto: ProfilePhoto = {
                     ...preparingPhoto,
-                    progress: mapRange(progress,[0,1],[0,0.9])
+                    available: mapRange(progress,[0,100],[0,90])
                   }
                   replacePhotoEffectEvent(progressPhoto, preparingPhoto)
                   //console.log('onCompressProgress',progress)
                 }
                 const onReadToDataUrlProgress = (progress: number|null)=>{
-                  const progressPhoto = {
+                  const progressPhoto: ProfilePhoto = {
                     ...preparingPhoto,
-                    progress: 0.9 + mapRange(progress??0,[0,1],[0,0.1])
+                    available: 90 + mapRange(progress??0,[0,100],[0,10])
                   }
                   replacePhotoEffectEvent(progressPhoto, preparingPhoto)
                   //console.log('onReadToDataUrlProgress',progress)
@@ -317,12 +323,12 @@ React.memo(
                 const newPhoto: ProfilePhoto = {
                   ...DefaultProfilePhoto,
                   id: uuid.v4(),
-                  state: 'ready',
+                  state: 'local',
                   index: lastIdx,
                   name: trimExtension(file.name),
                   mimeType: mimeType,
-                  url: imgDataUrl,
-                  isNew: true,
+                  dataUrl: imgDataUrl,
+                  available: 100,
                 }
                 replacePhotoEffectEvent(newPhoto, preparingPhoto)
               }
@@ -414,27 +420,31 @@ React.memo(
                 ref={ref2 as any}
               >
                 
-                { im.state==='ready' &&
+                { im.available===100 &&
                   <img css={photoImgStyle}
-                    src={im.url}
+                    src={im.dataUrl}
                     alt={im.name}
                   />
                 }
-                { im.state==='preparing' &&
+                { (!canShowFetchProgress && im.available<100) && im.state==='remote' &&
+                  <div css={photoPlaceholderStyle}>
+                    <SparkingLoadingLine/>
+                  </div>
+                }
+                { ((im.state==='local' && im.available<100)
+                  || (canShowFetchProgress && im.state==='remote'
+                       && inRangeExclusive(0, im.available, 100)
+                     )
+                  ) &&
                   <div css={photoPlaceholderStyle}>
                     <PieProgress css={profilePhotoPieProgress}
-                      progress={mapRange(im.progress,[0,1],[0.05,1])}
+                      progress={mapRange(im.available,[0,100],[5,100])}
                     />
                   </div>
                 }
                 { im.state==='empty' &&
                   <div css={photoPlaceholderStyle}>
                     <PlusIc css={photoPlaceholderIconStyle}/>
-                  </div>
-                }
-                { im.state==='none' &&
-                  <div css={photoPlaceholderStyle}>
-                  
                   </div>
                 }
                 
@@ -588,7 +598,7 @@ export default ProfilePhotos
 
 
 
-const radialGradKfs = (t:AppTheme.Theme)=>keyframes`
+const radialGradKfs = (t:Theme)=>keyframes`
   0% {
     --rotation: 0turn;
     --grad-color: ${t.photos.highlightFrameBgc[0]};

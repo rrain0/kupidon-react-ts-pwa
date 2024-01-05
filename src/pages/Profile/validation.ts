@@ -13,10 +13,10 @@ import UpdateUserErrorData = UserApi.UpdateUserErrorData
 
 
 
+
 export namespace ProfilePageValidation {
   
   
-  import arrIndices = ArrayUtils.ofIndices
   type SeverErrorCode = UpdateUserErrorData['code']
   
   
@@ -93,10 +93,12 @@ export namespace ProfilePageValidation {
     birthDate: '',
     gender: '',
     aboutMe: '',
-    photos: arrIndices(6).map(i=>({
+    photos: ArrayUtils.ofIndices(6).map(i=>({
       ...DefaultProfilePhoto,
       id: uuid.v4(),
+      state: 'remote',
       index: i,
+      progress: 0,
     }))
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
@@ -110,9 +112,10 @@ export namespace ProfilePageValidation {
   
   
   
-  export const photosComparator = (a: ProfilePhoto, b: ProfilePhoto)=>
-    ['empty','none'].includes(a.state)
-    && ['empty','none'].includes(b.state)
+  export const photosComparator = (a: ProfilePhoto, b: ProfilePhoto) =>
+    a.state==='empty' && b.state==='empty'
+    || a.state==='local' && a.available<100
+    || b.state==='local' && b.available<100
     || a.id===b.id
   
   const delay = 4000

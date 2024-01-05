@@ -24,7 +24,6 @@ import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
-import { DataUrl } from 'src/utils/DataUrl'
 import { DateTime } from 'src/utils/DateTime'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
@@ -32,6 +31,7 @@ import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
+import { useTimeout } from 'src/utils/react/useTimeout'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
@@ -117,24 +117,26 @@ React.memo(
           userToUpdate.aboutMe = values.aboutMe
         }
         if (!failedFields.includes('photos')){
-          const [fwd,back] = ArrayUtils.diff
-          (values.initialValues.photos, values.photos, photosComparator)
+          const [fwd,back] =
+            ArrayUtils.diff(values.initialValues.photos, values.photos, photosComparator)
           userToUpdate.photos = {
             remove: fwd
               .map((to,from)=>({ to, from }))
-              .filter(it=>it.to===undefined && values.initialValues.photos[it.from].state==='ready')
+              .filter(it=>it.to===undefined && values.initialValues.photos[it.from].state==='remote')
               .map(it=>values.initialValues.photos[it.from].id),
             replace: fwd
               .map((to,from)=>({ to, from }))
-              .filter(it=>it.to!==undefined && values.initialValues.photos[it.from].state==='ready')
+              .filter(it=>it.to!==undefined && it.to!==it.from
+                && values.initialValues.photos[it.from].state==='remote'
+              )
               .map(it=>({ id: values.initialValues.photos[it.from].id, index: it.to as number })),
             add: values.photos
               .map((it,i)=>({ index: i, photo: it }))
-              .filter(it=>it.photo.isNew && it.photo.state==='ready')
+              .filter(it=>it.photo.state==='local' && it.photo.available===100)
               .map(it=>({
                   index: it.index,
                   name: it.photo.name,
-                  dataUrl: it.photo.url,
+                  dataUrl: it.photo.dataUrl,
                 })
               ),
           }
@@ -168,21 +170,21 @@ React.memo(
   
   useEffect(
     ()=>{
-      if (isSuccess && response && Object.hasOwn(response,'data')){
+      if (isSuccess && response && 'data' in response){
         setAuth(s=>({
           accessToken: s?.accessToken ?? '',
           user: response.data!.user,
         }))
         setFormValues(s=>({
           ...s,
-          photos: s.photos.map((it,i)=>it.isNew
+          photos: s.photos.map((it,i)=>it.state==='local' && it.available===100
             ? s.initialValues.photos[i]
             : it
           )
         }))
       }
     },
-    [isSuccess, response, setAuth]
+    [isSuccess, response, setAuth, setFormValues]
   )
   
   
@@ -212,38 +214,36 @@ React.memo(
       newValues.initialValues.gender = u.gender
       newValues.initialValues.aboutMe = u.aboutMe
       
-      ObjectKeys(userDefaultValues).forEach(fName=>{
-        if (fieldIsInitial(fName) && fName in u && fName!=='photos')
-          newValues[fName] = u[fName] as any
-      })
+      if (fieldIsInitial('name')) newValues.name = u.name
+      if (fieldIsInitial('birthDate')) newValues.birthDate = u.birthDate
+      if (fieldIsInitial('gender')) newValues.gender = u.gender
+      if (fieldIsInitial('aboutMe')) newValues.aboutMe = u.aboutMe
       
-      newValues.initialValues.photos = s.initialValues.photos
-        .map(it=>{
-          if (it.state==='none') return {
-            ...DefaultProfilePhoto,
-            id: uuid.v4(),
-            state: 'empty',
-            index: it.index,
-          }
-          return it
-        })
+      newValues.initialValues.photos = ArrayUtils.ofIndices(6)
+        .map(i=>({
+          ...DefaultProfilePhoto,
+          id: uuid.v4(),
+          state: 'empty',
+          index: i,
+        }))
       u.photos.forEach(it=>{
         if (newValues.initialValues.photos[it.index].id!==it.id)
           newValues.initialValues.photos[it.index] = {
             ...DefaultProfilePhoto,
             id: it.id,
-            state: 'ready',
+            state: 'remote',
             index: it.index,
             name: it.name,
             mimeType: it.mimeType,
-            url: it.url,
-            isNew: false,
+            remoteUrl: it.url,
+            dataUrl: it.url,
+            available: 100,
           }
       })
       
       
       newValues.photos = s.photos.map((it,i)=>{
-        if (it.isNew) return it
+        if (it.state==='local') return it
         else return newValues.initialValues.photos[i]
       })
       
@@ -251,6 +251,7 @@ React.memo(
     })
   })
   useEffect(()=>updateValues(auth), [auth])
+  //useTimeout(3000, ()=>updateValues(auth), [auth])
   
   const resetField = useCallback(
     (fieldName: keyof FormValues)=>{

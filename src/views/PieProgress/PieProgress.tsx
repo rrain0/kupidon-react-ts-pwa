@@ -15,7 +15,7 @@ import Theme = AppTheme.Theme
 
 export type PieProgressCustomProps = PartialUndef<{
   progress: number
-  type: 'oneBased'|'percent'
+  type: 'percent'|'oneBased'
 }>
 export type PieProgressForwardRefProps = JSX.IntrinsicElements['div']
 export type PieProgressRefElement = HTMLDivElement
@@ -29,7 +29,7 @@ React.forwardRef<PieProgressRefElement, PieProgressProps>(
 (props, forwardedRef)=>{
   const {
     progress = 0,
-    type = 'oneBased',
+    type = 'percent',
     className,
     ...restProps
   } = props
