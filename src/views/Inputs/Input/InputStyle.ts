@@ -1,9 +1,9 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CommonStyle } from 'src/views/CommonStyle'
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import bgcInBorder = EmotionCommon.bgcInBorder
 import PartialUndef = TypeUtils.PartialUndef
 import Txt = EmotionCommon.Txt

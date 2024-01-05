@@ -1,15 +1,15 @@
 import { atom } from 'recoil'
 import { DefaultDarkTheme, DefaultLightTheme, DefaultTheme } from 'src/utils/theme/ThemeCollection'
 import { localStorageEffect2 } from '../RecoilPersist'
-import { Themes } from 'src/utils/theme/Themes'
-import Theme = Themes.Theme
+import { AppTheme } from 'src/utils/theme/AppTheme'
+import Theme = AppTheme.Theme
 
 
 
 
 export type ThemeSettingsStateType = {
   setting: 'manual'|'system',
-  manualSetting: Themes.Type,
+  manualSetting: AppTheme.Type,
   light: string,
   dark: string,
 }

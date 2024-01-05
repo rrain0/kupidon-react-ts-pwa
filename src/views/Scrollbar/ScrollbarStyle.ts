@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import hoverable = EmotionCommon.hoverable
 
 
@@ -8,7 +8,7 @@ import hoverable = EmotionCommon.hoverable
 export namespace ScrollbarStyle {
   
   
-  export const scrollbar = (t: Themes.Theme) => css`
+  export const scrollbar = (t: AppTheme.Theme) => css`
     &.rrainuiScrollbarTrack {
       border-radius: 15px;
       background: ${t.scrollbar.track};

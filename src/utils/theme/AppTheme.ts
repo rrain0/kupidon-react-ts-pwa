@@ -4,7 +4,7 @@ import styled, { StyledComponent } from '@emotion/styled'
 
 
 
-export namespace Themes {
+export namespace AppTheme {
   
   export type Type = 'light'|'dark'
   

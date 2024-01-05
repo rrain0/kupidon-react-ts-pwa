@@ -1,4 +1,4 @@
-import { RoutesBuilder } from 'src/examples/routes-builder/RoutesBuilder'
+import { RoutesBuilder } from 'src/examples/old/routes-builder/RoutesBuilder'
 
 
 

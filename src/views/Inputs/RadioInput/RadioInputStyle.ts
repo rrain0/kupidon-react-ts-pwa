@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CommonStyle } from 'src/views/CommonStyle'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
@@ -70,7 +70,7 @@ export namespace RadioInputStyle {
   
   
   
-  export const radio = (t: Themes.Theme) => css`
+  export const radio = (t: AppTheme.Theme) => css`
     // normal
     ${El.frame} {
       border-radius: 15px;

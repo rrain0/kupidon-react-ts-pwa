@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
-import { Themes } from 'src/utils/theme/Themes'
-import Theme = Themes.Theme
-import themeIconCss = Themes.themeIconCss
+import { AppTheme } from 'src/utils/theme/AppTheme'
+import Theme = AppTheme.Theme
+import themeIconCss = AppTheme.themeIconCss
 
 
 

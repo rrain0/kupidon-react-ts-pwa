@@ -11,7 +11,7 @@ import UseBool from 'src/components/StateCarriers/UseBool'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
@@ -29,7 +29,7 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
 import col = EmotionCommon.col
 import row = EmotionCommon.row
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import BrowserIc = SvgIcons.BrowserIc
 import DayIc = SvgIcons.DayIc
 import DayNightIc = SvgIcons.DayNightIc
@@ -41,7 +41,7 @@ import GearIc = SvgIcons.GearIc
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import MoonIc = SvgIcons.MoonIc
-import ThemeType = Themes.Type
+import ThemeType = AppTheme.Type
 import resetH = EmotionCommon.resetH
 
 

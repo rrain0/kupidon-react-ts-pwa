@@ -1,6 +1,6 @@
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { DarkOrange } from 'src/utils/theme/themes/DarkOrange'
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import { DarkPink } from 'src/utils/theme/themes/DarkPink'
 import { DarkPinkGradient } from 'src/utils/theme/themes/DarkPinkGradient'
 import { DarkSimple } from 'src/utils/theme/themes/DarkSimple'

@@ -89,6 +89,17 @@ export namespace MathUtils {
   
   
   
+  export const mapRange =
+  (value: number,
+   fromRange: [minInclusive: number, maxInclusive: number],
+   toRange: [minInclusive: number, maxInclusive: number]
+  )
+  : number => {
+    const progress = (value-fromRange[0]) / (fromRange[1]-fromRange[0])
+    return progress * (toRange[1]-toRange[0]) + toRange[0]
+  }
+  
+  
   
   // current+1 in range inclusive
   export const nextLooped = (min: number, curr: number, max: number) =>

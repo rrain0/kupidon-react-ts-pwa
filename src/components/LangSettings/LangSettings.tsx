@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { LangSettingsUiText } from 'src/components/LangSettings/uiText'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
@@ -20,7 +20,7 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Setter
 import col = EmotionCommon.col
 import row = EmotionCommon.row
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import BrowserIc = SvgIcons.BrowserIc
 import Mem = ReactUtils.Mem
 

@@ -1,5 +1,5 @@
 import '@emotion/react'
-import { Themes as LibTheme } from 'src/utils/theme/Themes';
+import { AppTheme as LibTheme } from 'src/utils/theme/AppTheme';
 
 declare module '@emotion/react' {
   export interface Theme extends LibTheme.Theme {}

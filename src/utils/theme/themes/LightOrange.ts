@@ -1,8 +1,8 @@
 import styled from '@emotion/styled'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { LightPink } from 'src/utils/theme/themes/LightPink'
-import Theme = Themes.Theme
-import themeIconCss = Themes.themeIconCss
+import Theme = AppTheme.Theme
+import themeIconCss = AppTheme.themeIconCss
 
 
 

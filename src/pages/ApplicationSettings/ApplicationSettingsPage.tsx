@@ -20,7 +20,7 @@ import { ThemeNameUiText } from 'src/utils/lang/ui-values/ThemeNameUiText'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { AllThemes } from 'src/utils/theme/ThemeCollection'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card from 'src/views/Card'
@@ -32,14 +32,14 @@ import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import col = EmotionCommon.col
 import Page = Pages.Page
-import ThemeType = Themes.Type
+import ThemeType = AppTheme.Type
 import BrowserIc = SvgIcons.BrowserIc
 import DayNightIc = SvgIcons.DayNightIc
 import DayIc = SvgIcons.DayIc
 import MoonIc = SvgIcons.MoonIc
 import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import AddModuleIc = SvgIcons.AddModuleIc
 
 

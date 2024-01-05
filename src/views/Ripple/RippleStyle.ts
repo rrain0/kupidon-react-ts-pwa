@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
-import { Themes } from 'src/utils/theme/Themes'
-import Theme = Themes.Theme
+import { AppTheme } from 'src/utils/theme/AppTheme'
+import Theme = AppTheme.Theme
 
 
 

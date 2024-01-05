@@ -1,10 +1,10 @@
 import { css } from '@emotion/react'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CommonStyle } from 'src/views/CommonStyle'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import col = EmotionCommon.col
 import Txt = EmotionCommon.Txt
 import hoverable = EmotionCommon.hoverable
@@ -66,8 +66,8 @@ export namespace ButtonStyle {
       iconDisabled:       elMainStateSimple.btnDisabled+'>*>'+dotClazz.icon,
     } as const
     export const el = {
-      ...elBasic,
       ...elMain,
+      ...elBasic,
       ...elMainStateSimple,
       ...elMainStateComplex,
       ...elBasicStateSimple,

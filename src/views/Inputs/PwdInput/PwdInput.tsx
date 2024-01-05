@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
@@ -90,13 +90,13 @@ const EyeWrap = styled.button`
 EyeWrap.defaultProps = { type: 'button' }
 
 
-const iconCss = (t:Themes.Theme)=>css`
+const iconCss = (t:AppTheme.Theme)=>css`
   ${SvgIcStyle.El.thiz.icon}{
     ${SvgIcStyle.Prop.prop.size}: 24px;
     ${SvgIcStyle.Prop.prop.color}: ${t.input.content[0]};
   }
 `
-const rippleCss = (t:Themes.Theme)=>css`
+const rippleCss = (t:AppTheme.Theme)=>css`
   ${RippleStyle.El.frame}{
     ${RippleStyle.Prop.mode}: center;
     ${RippleStyle.Prop.color}: ${t.ripple.contentOnTransparent[0]};

@@ -19,6 +19,7 @@ export namespace TypeUtils {
   export type ValueOrGenerator<T> = T | (()=>T)
   
   export type Callback = ()=>void
+  export type CallbackParam<T> = (value: T)=>void
   
   export type PartialUndef<O extends object> =
     { [Prop in keyof O]+?: O[Prop] | undefined }

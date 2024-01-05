@@ -1,6 +1,6 @@
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { useMedia } from 'src/utils/react/media/useMedia'
-import ThemeType = Themes.Type
+import ThemeType = AppTheme.Type
 
 
 /*

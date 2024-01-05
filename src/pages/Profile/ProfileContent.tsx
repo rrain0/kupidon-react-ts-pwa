@@ -18,7 +18,7 @@ import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import ProfilePhotos from 'src/pages/Profile/ProfilePhotos'
+import ProfilePhotos, { DefaultProfilePhoto } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
@@ -220,19 +220,17 @@ React.memo(
       newValues.initialValues.photos = s.initialValues.photos
         .map(it=>{
           if (it.state==='none') return {
+            ...DefaultProfilePhoto,
             id: uuid.v4(),
             state: 'empty',
             index: it.index,
-            name: '',
-            mimeType: '',
-            url: '',
-            isNew: false,
           }
           return it
         })
       u.photos.forEach(it=>{
         if (newValues.initialValues.photos[it.index].id!==it.id)
           newValues.initialValues.photos[it.index] = {
+            ...DefaultProfilePhoto,
             id: it.id,
             state: 'ready',
             index: it.index,

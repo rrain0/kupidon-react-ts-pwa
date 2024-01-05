@@ -13,6 +13,7 @@ import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { FileUtils } from 'src/utils/common/FileUtils'
+import { MathUtils } from 'src/utils/common/MathUtils'
 import { DataUrl } from 'src/utils/DataUrl'
 import { ImageUtils } from 'src/utils/image/ImageUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
@@ -22,7 +23,7 @@ import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { useNoTouchAction } from 'src/utils/react/useNoTouchAction'
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
@@ -31,6 +32,8 @@ import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
+import PieProgress from 'src/views/PieProgress/PieProgress'
+import { PieProgressStyle } from 'src/views/PieProgress/PieProgressStyle'
 import abs = EmotionCommon.abs
 import bgcBorderMask = EmotionCommon.bgcInBorder
 import arrIndices = ArrayUtils.ofIndices
@@ -47,6 +50,9 @@ import * as uuid from 'uuid'
 import readToDataUrl = FileUtils.readToDataUrl
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import trimExtension = FileUtils.trimExtension
+import mapRange = MathUtils.mapRange
+import Theme = AppTheme.Theme
+import exists = TypeUtils.exists
 
 
 
@@ -83,20 +89,21 @@ const springStyle =
 }
 
 
-
-export type ProfilePhoto = {
-  id: string
-  state:
+export const DefaultProfilePhoto = {
+  id: '',
+  state: 'none' as
     |'ready' // photo is ready to be shown
     |'empty' // no photo
     |'preparing' // photo is reading & compressing
-    |'none' // loading data from server
-  index: number
-  name: string
-  mimeType: string
-  url: string
-  isNew: boolean
+    |'none', // loading data from server
+  index: 0,
+  name: '',
+  mimeType: '',
+  url: '',
+  isNew: false,
+  progress: 0, // 0..1
 }
+export type ProfilePhoto = typeof DefaultProfilePhoto
 export interface ProfilePhotoArr extends Array<ProfilePhoto> { /* length: 6 */ }
 
 
@@ -245,7 +252,7 @@ React.memo(
       setImages(images=>{
         let found = false
         const newImages = images.map(it=>{
-          if (it===oldPhoto) {
+          if (it.id===oldPhoto.id) {
             found = true
             return newPhoto
           }
@@ -256,7 +263,7 @@ React.memo(
       })
     }
   )
-  const onPhotoFiles = useCallback(
+  const onFilesSelected = useCallback(
     (files: File[])=>{
       const imgFiles = files.filter(it=>it.type.startsWith('image/'))
       if (imgFiles.length){
@@ -279,18 +286,36 @@ React.memo(
               mimeType: '',
               url: '',
               isNew: false,
+              progress: 0,
             }
             const file = imgFiles[filesI++]
             
             ;(async()=>{
               try {
-                const compressedFile = await ImageUtils.compress(file)
+                const onCompressProgress = (progress: number)=>{
+                  const progressPhoto = {
+                    ...preparingPhoto,
+                    progress: mapRange(progress,[0,1],[0,0.9])
+                  }
+                  replacePhotoEffectEvent(progressPhoto, preparingPhoto)
+                  //console.log('onCompressProgress',progress)
+                }
+                const onReadToDataUrlProgress = (progress: number|null)=>{
+                  const progressPhoto = {
+                    ...preparingPhoto,
+                    progress: 0.9 + mapRange(progress??0,[0,1],[0,0.1])
+                  }
+                  replacePhotoEffectEvent(progressPhoto, preparingPhoto)
+                  //console.log('onReadToDataUrlProgress',progress)
+                }
+                const compressedFile = await ImageUtils.compress(file, onCompressProgress)
                 //console.log('file',file)
-                const imgDataUrl = await readToDataUrl(compressedFile)
+                const imgDataUrl = await readToDataUrl(compressedFile, onReadToDataUrlProgress)
                 //console.log('imgDataUrl',imgDataUrl.length)
                 //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
                 const mimeType = new DataUrl(imgDataUrl).mimeType
                 const newPhoto: ProfilePhoto = {
+                  ...DefaultProfilePhoto,
                   id: uuid.v4(),
                   state: 'ready',
                   index: lastIdx,
@@ -303,13 +328,10 @@ React.memo(
               }
               catch (ex) {
                 const emptyPhoto: ProfilePhoto = {
+                  ...DefaultProfilePhoto,
                   id: uuid.v4(),
                   state: 'empty',
                   index: lastIdx,
-                  name: '',
-                  mimeType: '',
-                  url: '',
-                  isNew: false,
                 }
                 replacePhotoEffectEvent(emptyPhoto, preparingPhoto)
               }
@@ -376,7 +398,7 @@ React.memo(
           >
             
             <Dropzone
-              onDrop={(files, rejectedFiles, ev)=>onPhotoFiles(files)}
+              onDrop={(files, rejectedFiles, ev)=>onFilesSelected(files)}
               onDragOver={()=>setLastIdx(i)}
               noClick={im.state!=='empty' || !canClick}
               useFsAccessApi={false}
@@ -400,7 +422,9 @@ React.memo(
                 }
                 { im.state==='preparing' &&
                   <div css={photoPlaceholderStyle}>
-                    <Spinner8LinesIc css={photoPlaceholderIconStyle}/>
+                    <PieProgress css={profilePhotoPieProgress}
+                      progress={mapRange(im.progress,[0,1],[0.05,1])}
+                    />
                   </div>
                 }
                 { im.state==='empty' &&
@@ -508,13 +532,10 @@ React.memo(
             onClick={()=>{
               const newImages = [...images]
               newImages[lastIdx] = {
+                ...DefaultProfilePhoto,
                 id: uuid.v4(),
                 state: 'empty',
                 index: lastIdx,
-                name: '',
-                mimeType: '',
-                url: '',
-                isNew: false,
               }
               setImages(newImages)
               sheet.setClosing()
@@ -529,7 +550,7 @@ React.memo(
           </Button>
           
           <Dropzone
-            onDrop={(files, rejectedFiles, ev)=>onPhotoFiles(files)}
+            onDrop={(files, rejectedFiles, ev)=>onFilesSelected(files)}
             noDrag
             useFsAccessApi={false}
           >
@@ -567,7 +588,7 @@ export default ProfilePhotos
 
 
 
-const radialGradKfs = (t:Themes.Theme)=>keyframes`
+const radialGradKfs = (t:AppTheme.Theme)=>keyframes`
   0% {
     --rotation: 0turn;
     --grad-color: ${t.photos.highlightFrameBgc[0]};
@@ -626,7 +647,7 @@ const photoImgStyle = css`
 
 
 
-const photoPlaceholderStyle = (t:Themes.Theme)=>css`
+const photoPlaceholderStyle = (t:AppTheme.Theme)=>css`
   ${abs};
   pointer-events: none;
   border-radius: inherit;
@@ -634,13 +655,20 @@ const photoPlaceholderStyle = (t:Themes.Theme)=>css`
   background: ${t.photos.bgc[0]};
   ${center};
 `
-const photoPlaceholderIconStyle = (t:Themes.Theme)=>css`
+const photoPlaceholderIconStyle = (t:AppTheme.Theme)=>css`
   ${SvgIcStyle.El.thiz.icon}{
     ${SvgIcStyle.Prop.prop.color}: ${t.photos.content[0]};
-    ${SvgIcStyle.Prop.prop.size}: 30%;
+    ${SvgIcStyle.Prop.prop.size}:  30%;
   }
 `
-
+const profilePhotoPieProgress = (t:Theme)=>css`
+  ${PieProgressStyle.El.thiz.pieProgress}{
+    ${PieProgressStyle.Prop.prop.progressColor}: transparent;
+    ${PieProgressStyle.Prop.prop.restColor}:     ${t.photos.content[0]};
+    height: 30%;
+    aspect-ratio: 1;
+  }
+`
 
 
 

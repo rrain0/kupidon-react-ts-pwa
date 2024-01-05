@@ -1,18 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { Pages } from 'src/components/Page/Pages'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { MathUtils } from 'src/utils/common/MathUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
+import PieProgress from 'src/views/PieProgress/PieProgress'
 import RootRoute = AppRoutes.RootRoute
 import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
+import center = EmotionCommon.center
+import mapRange = MathUtils.mapRange
 
 
 
@@ -66,6 +71,22 @@ React.memo(
   )
   
   
+  
+  const [progress, setProgress] = useState(0)
+  useEffect(
+    ()=>{
+      const id = setInterval(
+        ()=>setProgress(s=>s===0 ? 1 : 0),
+        3000
+      )
+      return ()=>clearInterval(id)
+    },
+    []
+  )
+  
+  
+  
+  
   return <>
       
     <SimplePage>
@@ -104,6 +125,24 @@ React.memo(
             height: 2000px;
           `}
         />*/}
+        
+        
+        <div
+          css={t=>css`
+            width: 200px;
+            height: 200px;
+            ${center};
+            border-radius: 16px;
+            background: ${t.containerNormal.bgc[0]};
+          `}
+        >
+          <PieProgress css={css`
+            height: 30%;
+            aspect-ratio: 1;
+          `}
+            progress={Math.min(0.95, progress)}
+          />
+        </div>
         
         
         <div

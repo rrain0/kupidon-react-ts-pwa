@@ -1,6 +1,6 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CommonStyle } from 'src/views/CommonStyle'
 import rowWrap = EmotionCommon.rowWrap
 import col = EmotionCommon.col
@@ -38,7 +38,7 @@ export namespace RadioInputGroupStyle {
   }
   
   
-  export const rowGroup = (t: Themes.Theme) => css`
+  export const rowGroup = (t: AppTheme.Theme) => css`
     // normal
     ${El.radioGroup} {
       min-height: 50px;
@@ -86,7 +86,7 @@ export namespace RadioInputGroupStyle {
   
   
   
-  export const colGroup = (t: Themes.Theme) => css`
+  export const colGroup = (t: AppTheme.Theme) => css`
     // normal
     ${El.radioGroup} {
       width: 100%;

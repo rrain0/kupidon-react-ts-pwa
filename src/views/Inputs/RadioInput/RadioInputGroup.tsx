@@ -4,7 +4,7 @@ import classNames from 'classnames'
 import React, { useImperativeHandle, useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import {
   RadioInputGroupStyle,
 } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
@@ -60,7 +60,7 @@ const RadioGroup = styled.div.attrs<RadioGroupProps>(p=>({
   // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/radiogroup_role
   role: 'radiogroup',
 }))``
-const radioGroupStyle = (t: Themes.Theme) => css`
+const radioGroupStyle = (t: AppTheme.Theme) => css`
   ${reset};
   position: relative;
 `

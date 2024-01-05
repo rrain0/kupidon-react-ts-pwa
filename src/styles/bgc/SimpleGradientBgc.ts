@@ -1,8 +1,8 @@
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { css } from '@emotion/react'
 
 
-export const SimpleGradientBgc = (t: Themes.Theme) => css`
+export const SimpleGradientBgc = (t: AppTheme.Theme) => css`
   background: linear-gradient(
     to bottom right,
     ${t.page.bgcGradient[0]} 0%,

@@ -1,8 +1,8 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CommonStyle } from 'src/views/CommonStyle'
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import bgcInBorder = EmotionCommon.bgcInBorder
 import Txt = EmotionCommon.Txt
 import hoverable = EmotionCommon.hoverable

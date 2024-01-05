@@ -9,7 +9,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
-import { Themes } from 'src/utils/theme/Themes'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -19,7 +19,7 @@ import fixed = EmotionCommon.fixed
 import center = EmotionCommon.center
 import row = EmotionCommon.row
 import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
-import Theme = Themes.Theme
+import Theme = AppTheme.Theme
 import ClearTrashIc = SvgIcons.ClearTrashIc
 import BottomSheetBasic, {
   BasicSheetOpenIdx,

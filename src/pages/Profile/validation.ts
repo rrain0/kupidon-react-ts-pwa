@@ -1,6 +1,6 @@
 import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
-import { ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
+import { DefaultProfilePhoto, ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { DateTime } from 'src/utils/DateTime'
@@ -94,13 +94,9 @@ export namespace ProfilePageValidation {
     gender: '',
     aboutMe: '',
     photos: arrIndices(6).map(i=>({
+      ...DefaultProfilePhoto,
       id: uuid.v4(),
-      state: 'none',
       index: i,
-      name: '',
-      mimeType: '',
-      url: '',
-      isNew: false,
     }))
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
