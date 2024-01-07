@@ -3,7 +3,7 @@ import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { BasicSheetOpenIdx, BasicSheetSnaps } from 'src/views/BottomSheet/BottomSheetBasic'
 import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
-import Setter = TypeUtils.Setter
+import Setter = TypeUtils.Callback1
 import Callback = TypeUtils.Callback
 import PartialUndef = TypeUtils.PartialUndef
 

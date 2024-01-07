@@ -18,18 +18,21 @@ import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import ProfilePhotos, { DefaultProfilePhoto } from 'src/pages/Profile/ProfilePhotos'
+import ProfilePhotos, { DefaultProfilePhoto, ProfilePhoto } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { DateTime } from 'src/utils/DateTime'
+import { FileUtils } from 'src/utils/file/FileUtils'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { Progress } from 'src/utils/Progress'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { useTimeout } from 'src/utils/react/useTimeout'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
@@ -61,6 +64,13 @@ import row = EmotionCommon.row
 import NameCardIc = SvgIcons.NameCardIc
 import GiftBoxIc = SvgIcons.GiftBoxIc
 import photosComparator = ProfilePageValidation.photosComparator
+import fetchToBlob = FileUtils.fetchToBlob
+import Callback = TypeUtils.Callback
+import blobToDataUrl = FileUtils.blobToDataUrl
+import exists = TypeUtils.exists
+import notExists = TypeUtils.notExists
+import findByAndReplaceTo = ArrayUtils.findByAndReplaceTo
+import findByAndMapTo = ArrayUtils.findByAndMapTo
 
 
 
@@ -117,31 +127,30 @@ React.memo(
           userToUpdate.aboutMe = values.aboutMe
         }
         if (!failedFields.includes('photos')){
-          const [fwd,back] =
+          const [fwd] =
             ArrayUtils.diff(values.initialValues.photos, values.photos, photosComparator)
           userToUpdate.photos = {
             remove: fwd
               .map((to,from)=>({ to, from }))
-              .filter(it=>it.to===undefined && values.initialValues.photos[it.from].state==='remote')
+              .filter(it=>notExists(it.to) && values.initialValues.photos[it.from].type==='remote')
               .map(it=>values.initialValues.photos[it.from].id),
             replace: fwd
               .map((to,from)=>({ to, from }))
-              .filter(it=>it.to!==undefined && it.to!==it.from
-                && values.initialValues.photos[it.from].state==='remote'
+              .filter(it=>exists(it.to) && it.to!==it.from
+                && values.initialValues.photos[it.from].type==='remote'
               )
               .map(it=>({ id: values.initialValues.photos[it.from].id, index: it.to as number })),
             add: values.photos
               .map((it,i)=>({ index: i, photo: it }))
-              .filter(it=>it.photo.state==='local' && it.photo.available===100)
+              .filter(it=>it.photo.type==='local' && it.photo.isReady)
               .map(it=>({
+                  id: it.photo.id,
                   index: it.index,
                   name: it.photo.name,
                   dataUrl: it.photo.dataUrl,
                 })
               ),
           }
-          //console.log('update photos',userToUpdate.photos)
-          //userToUpdate.photos = undefined
         }
         return UserApi.update(userToUpdate)
       },
@@ -175,9 +184,10 @@ React.memo(
           accessToken: s?.accessToken ?? '',
           user: response.data!.user,
         }))
+        // TODO make photos remote
         setFormValues(s=>({
           ...s,
-          photos: s.photos.map((it,i)=>it.state==='local' && it.available===100
+          photos: s.photos.map((it,i)=>it.type==='local' && it.isReady
             ? s.initialValues.photos[i]
             : it
           )
@@ -205,6 +215,8 @@ React.memo(
     [failures]
   )
   
+  
+  const [valuesWereUpdated, setValuesWereUpdated] = useState(false)
   const updateValues = useEffectEvent((auth: AuthStateType)=>{
     setFormValues(s=>{
       const u = auth!.user
@@ -220,37 +232,54 @@ React.memo(
       if (fieldIsInitial('aboutMe')) newValues.aboutMe = u.aboutMe
       
       newValues.initialValues.photos = ArrayUtils.ofIndices(6)
-        .map(i=>({
-          ...DefaultProfilePhoto,
-          id: uuid.v4(),
-          state: 'empty',
-          index: i,
-        }))
+      .map(i=>({
+        ...DefaultProfilePhoto,
+        id: uuid.v4(),
+        isEmpty: true,
+        index: i,
+      }))
       u.photos.forEach(it=>{
-        if (newValues.initialValues.photos[it.index].id!==it.id)
-          newValues.initialValues.photos[it.index] = {
-            ...DefaultProfilePhoto,
-            id: it.id,
-            state: 'remote',
-            index: it.index,
-            name: it.name,
-            mimeType: it.mimeType,
-            remoteUrl: it.url,
-            dataUrl: it.url,
-            available: 100,
-          }
+        newValues.initialValues.photos[it.index] = {
+          ...DefaultProfilePhoto,
+          id: it.id,
+          type: 'remote',
+          index: it.index,
+          name: it.name,
+          mimeType: it.mimeType,
+          remoteUrl: it.url,
+        }
+      })
+      ArrayUtils.diff(
+        s.initialValues.photos,
+        newValues.initialValues.photos,
+        photosComparator
+      )[0]
+      .forEach((to,from)=>{
+        const fromPhoto = s.initialValues.photos[from]
+        if (exists(to) && fromPhoto.isReady){
+          const toPhoto = newValues.initialValues.photos[to]
+          toPhoto.dataUrl = fromPhoto.dataUrl
+          toPhoto.isReady = true
+        }
       })
       
-      
+      // TODO если ячейка была опустошена пользователем
+      // TODO если перемистили фото и заменили одно из них
       newValues.photos = s.photos.map((it,i)=>{
-        if (it.state==='local') return it
-        else return newValues.initialValues.photos[i]
+        if (it.type==='local') return it
+        else return newValues.initialValues.photos[it.index]
       })
       
       return newValues
     })
   })
-  useEffect(()=>updateValues(auth), [auth])
+  useEffect(
+    ()=>{
+      updateValues(auth)
+      setValuesWereUpdated(true)
+    },
+    [auth]
+  )
   //useTimeout(3000, ()=>updateValues(auth), [auth])
   
   const resetField = useCallback(
@@ -290,13 +319,76 @@ React.memo(
   
   
   
-  
-  
   /*
   useEffect(()=>{
     console.log('PROFILE_CONTENT_FAILURES',failures)
   },[failures])
    */
+  
+  
+  
+  const updatePhotosEffectEvent = useEffectEvent(
+    ()=>{
+      const serverPhotos = formValues.initialValues.photos
+      serverPhotos.forEach(photo=>{
+        if (photo.type==='remote' && !photo.isReady){
+          
+          const setPhotos = (p: Partial<ProfilePhoto>)=>{
+            setFormValues(s=>({ ...s,
+              initialValues: { ...s.initialValues,
+                photos: findByAndMapTo(s.initialValues.photos,
+                  elem=>({...elem, ...p}),
+                  elem=>elem.id===photo.id
+                ),
+              },
+              photos: findByAndMapTo(s.photos,
+                elem=>({...elem, ...p}),
+                elem=>elem.id===photo.id
+              ),
+            }))
+          }
+          
+          const progress = new Progress(2,[90,10])
+          const onProgress = (p: number|null)=>{
+            progress.progress = p ?? 0
+            setPhotos({ processed: progress.value })
+            //console.log('progress', photo.id, total)
+          }
+          const abort = { abort: undefined as Callback|undefined }
+          
+          const abortWrapper = ()=>{ try { abort.abort?.() } catch (ex: unknown){} }
+          setPhotos({ isProcessing: true, abort: abortWrapper })
+          
+          ;(async()=>{
+            try {
+              // TODO 3 attempts
+              //onsole.log('start download id',photo.id)
+              const blob = await fetchToBlob(photo.remoteUrl, { onProgress, abort })
+              progress.stage++
+              const dataUrl = await blobToDataUrl(blob, { onProgress, abort })
+              //console.log('completed',photo.id)
+              setPhotos({ isReady: true, isProcessing: false, dataUrl, abort: undefined })
+            } catch (ex: unknown){
+              setPhotos({ isProcessing: false, abort: undefined })
+            }
+          })()
+        }
+      })
+    }
+  )
+  useEffect(
+    ()=>{
+      if (valuesWereUpdated){
+        console.log('updatePhotosEffectEvent')
+        setValuesWereUpdated(false)
+        updatePhotosEffectEvent()
+      }
+    },
+    [valuesWereUpdated]
+  )
+  
+  
+  
   
   
   

@@ -1,6 +1,6 @@
-import { FileUtils } from 'src/utils/common/FileUtils'
+import { FileUtils } from 'src/utils/file/FileUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import readToDataUrl = FileUtils.readToDataUrl
+import readToDataUrl = FileUtils.blobToDataUrl
 import empty = TypeUtils.empty
 
 

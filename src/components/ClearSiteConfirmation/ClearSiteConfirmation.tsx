@@ -26,7 +26,7 @@ import BottomSheetBasic, {
   BasicSheetSnaps,
 } from 'src/views/BottomSheet/BottomSheetBasic'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
-import Setter = TypeUtils.Setter
+import Setter = TypeUtils.Callback1
 import Txt = EmotionCommon.Txt
 
 

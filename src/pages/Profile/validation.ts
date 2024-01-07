@@ -96,10 +96,10 @@ export namespace ProfilePageValidation {
     photos: ArrayUtils.ofIndices(6).map(i=>({
       ...DefaultProfilePhoto,
       id: uuid.v4(),
-      state: 'remote',
+      type: 'remote',
+      isEmpty: true,
       index: i,
-      progress: 0,
-    }))
+    } satisfies ProfilePhoto))
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {
     fromServer: undefined,
@@ -113,12 +113,12 @@ export namespace ProfilePageValidation {
   
   
   export const photosComparator = (a: ProfilePhoto, b: ProfilePhoto) =>
-    a.state==='empty' && b.state==='empty'
-    || a.state==='local' && a.available<100
-    || b.state==='local' && b.available<100
+    a.isEmpty && b.isEmpty
     || a.id===b.id
   
   const delay = 4000
+  
+  
   
   export const validators: Validators<FormValues> = [
     

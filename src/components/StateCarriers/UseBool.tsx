@@ -1,6 +1,10 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { useBoolState } from 'src/utils/react/useBoolState'
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
+import PartialUndef = TypeUtils.PartialUndef
+import ValueOrGenerator = TypeUtils.ValueOrGenerator
+
 
 
 
@@ -11,28 +15,21 @@ export type UseBoolRenderProps = {
   setTrue: ()=>void
   setFalse: ()=>void
 }
-export type UseBoolProps = {
-  initial?: boolean | undefined
-  render?: ((props: UseBoolRenderProps)=>React.ReactNode) | undefined
-}
+export type UseBoolProps = PartialUndef<{
+  initial: ValueOrGenerator<boolean>
+  render: ((props: UseBoolRenderProps)=>React.ReactNode)
+}>
 const UseBool =
 React.memo(
 (props: UseBoolProps)=>{
   const {
     initial = false,
+    render
   } = props
   
-  const [value, setValue] = useState(initial)
-  const setTrue = useCallback(
-    ()=>setValue(true),
-    []
-  )
-  const setFalse = useCallback(
-    ()=>setValue(false),
-    []
-  )
+  const [value, setTrue, setFalse, setValue] = useBoolState(initial)
   
-  return props.render?.({
+  return render?.({
     value,
     notValue: !value,
     setValue,

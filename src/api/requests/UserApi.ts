@@ -73,7 +73,7 @@ export namespace UserApi {
     photos: {
       remove: string[]
       replace: Array<{ id: string, index: number}>
-      add: Array<{ index: number, name: string, dataUrl: string }>
+      add: Array<{ id: string, index: number, name: string, dataUrl: string }>
     }
   }>
   export const update = async(user: UserToUpdate) =>

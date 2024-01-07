@@ -1,17 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import SettingsButton from 'src/components/SettingsButton'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useBoolState } from 'src/utils/react/useBoolState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
+import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import fixedBottom = EmotionCommon.fixedBottom
 import row = EmotionCommon.row
 import Mem = ReactUtils.Mem
@@ -27,6 +29,8 @@ export namespace ButtonBarComponents {
   
   
   
+  import PartialUndef = TypeUtils.PartialUndef
+  import Callback = TypeUtils.Callback
   export const TopButtonBarFrame = styled.section`
     pointer-events: none;
     ${fixedTop};
@@ -94,7 +98,9 @@ export namespace ButtonBarComponents {
   
   
   
-  export const SettingsBtn = Mem(()=>{
+  export const SettingsBtn =
+  React.memo(
+  ()=>{
     return <UseBool render={props=><>
       <SettingsButton onClick={props.setTrue}/>
       <QuickSettings open={props.value} setOpen={props.setValue}/>
@@ -117,9 +123,12 @@ export namespace ButtonBarComponents {
   })
   
   
-  export const RefreshBtn = Mem(()=>{
+  
+  export const RefreshPageBtn =
+  React.memo(
+  ()=>{
     
-    const [isReloading, , doReloading] = useBoolState(false)
+    const [isReloading, reload] = useBoolState(false)
     
     useEffect(
       ()=>{
@@ -130,12 +139,49 @@ export namespace ButtonBarComponents {
     
     
     return <Button css={ButtonStyle.iconTransparent}
-      onClick={doReloading}
+      onClick={reload}
     >
-      <ArrowReloadIc css={isReloading && css`&.rrainuiIcon {
-      animation: ${rotateKfs} 650ms linear infinite;
-    }`}/>
+      <ArrowReloadIc css={isReloading && css`
+        ${SvgIcStyle.El.thiz.icon} {
+          animation: ${rotateKfs} 650ms linear infinite;
+        }
+      `}
+      />
     </Button>
   })
+  
+  
+  
+  export type SoftRefreshBtnProps = PartialUndef<{
+    isLoading: boolean
+    refresh: Callback
+  }>
+  export const SoftRefreshBtn =
+  React.memo(
+  (props: SoftRefreshBtnProps)=>{
+    
+    const [isAnimating, animate, finishAnimate] = useBoolState(false)
+    
+    useLayoutEffect(
+      ()=>{ if (props.isLoading) animate() },
+      [props.isLoading]
+    )
+    
+    return <Button css={ButtonStyle.iconTransparent}
+      onClick={props.refresh}
+    >
+      <ArrowReloadIc css={isAnimating && css`
+        ${SvgIcStyle.El.thiz.icon} {
+          animation: ${rotateKfs} 650ms linear infinite;
+        }
+      `}
+        onAnimationIteration={ev=>{
+          if (ev.animationName===rotateKfs.name && !props.isLoading) finishAnimate()
+        }}
+      />
+    </Button>
+  })
+  
+  
   
 }

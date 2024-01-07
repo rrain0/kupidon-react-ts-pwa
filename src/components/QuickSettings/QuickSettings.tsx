@@ -26,7 +26,7 @@ import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoi
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import Setter = TypeUtils.Setter
+import Setter = TypeUtils.Callback1
 import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = AppTheme.Theme

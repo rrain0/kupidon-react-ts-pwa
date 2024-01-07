@@ -1,9 +1,9 @@
 import imageCompression, { Options } from 'browser-image-compression'
 import heic2any from 'heic2any'
 import { isSafari, isMobileSafari } from 'react-device-detect'
-import { FileUtils } from 'src/utils/common/FileUtils'
+import { FileUtils } from 'src/utils/file/FileUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import CallbackParam = TypeUtils.CallbackParam
+import CallbackParam = TypeUtils.Callback1
 import trimExtension = FileUtils.trimExtension
 
 

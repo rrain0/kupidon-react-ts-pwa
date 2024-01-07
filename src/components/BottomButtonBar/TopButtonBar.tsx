@@ -16,7 +16,7 @@ import BackBtn = ButtonBarComponents.BackBtn
 import CenterButtonsContainer = ButtonBarComponents.CenterButtonsContainer
 import SettingsBtn = ButtonBarComponents.SettingsBtn
 import RightButtonsContainer = ButtonBarComponents.RightButtonsContainer
-import RefreshBtn = ButtonBarComponents.RefreshBtn
+import RefreshBtn = ButtonBarComponents.RefreshPageBtn
 import TopButtonBarFrame = ButtonBarComponents.TopButtonBarFrame
 
 

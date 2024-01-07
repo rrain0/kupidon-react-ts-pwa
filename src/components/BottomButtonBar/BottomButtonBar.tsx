@@ -2,14 +2,11 @@
 import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, {
-  ReactNode,
   useImperativeHandle,
   useRef,
 } from 'react'
 import { ButtonBarComponents } from 'src/components/BottomButtonBar/components'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import Mem = ReactUtils.Mem
 import PartialUndef = TypeUtils.PartialUndef
 import BottomButtonBarFrame = ButtonBarComponents.BottomButtonBarFrame
 import ButtonsContainer = ButtonBarComponents.ButtonsContainer
@@ -18,7 +15,7 @@ import BackBtn = ButtonBarComponents.BackBtn
 import CenterButtonsContainer = ButtonBarComponents.CenterButtonsContainer
 import SettingsBtn = ButtonBarComponents.SettingsBtn
 import RightButtonsContainer = ButtonBarComponents.RightButtonsContainer
-import RefreshBtn = ButtonBarComponents.RefreshBtn
+import RefreshBtn = ButtonBarComponents.RefreshPageBtn
 
 
 
@@ -33,10 +30,15 @@ export type BottomButtonBarProps = JSX.IntrinsicElements['section']
     backBtn: boolean
     settingsBtn: boolean
     settingsBtnLeft: boolean
-    refreshBtn: boolean
+    refreshPageBtn: boolean
   }>
-const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBarProps>(
-  (props, forwardedRef)=>{
+
+
+
+const BottomButtonBar =
+React.memo(
+React.forwardRef<HTMLTableSectionElement, BottomButtonBarProps>(
+(props, forwardedRef)=>{
   
   const thisRef = useRef<HTMLTableSectionElement>(null)
   useImperativeHandle(forwardedRef, ()=>thisRef.current!,[])
@@ -73,15 +75,15 @@ const BottomButtonBar = React.forwardRef<HTMLTableSectionElement, BottomButtonBa
         
         <RightButtonsContainer>
           {props.rightChildren}
-          {props.refreshBtn && <RefreshBtn/>}
+          {props.refreshPageBtn && <RefreshBtn/>}
         </RightButtonsContainer>
         
       </ButtonsContainer>
     </BottomButtonBarFrame>
     
   </>
-})
-export default Mem(BottomButtonBar)
+}))
+export default BottomButtonBar
 
 
 

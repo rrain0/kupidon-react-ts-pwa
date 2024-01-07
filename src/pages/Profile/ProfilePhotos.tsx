@@ -12,12 +12,13 @@ import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { FileUtils } from 'src/utils/common/FileUtils'
+import { FileUtils } from 'src/utils/file/FileUtils'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { DataUrl } from 'src/utils/DataUrl'
-import { ImageUtils } from 'src/utils/image/ImageUtils'
+import { ImageUtils } from 'src/utils/file/ImageUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { Progress } from 'src/utils/Progress'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
@@ -48,12 +49,14 @@ import resetH = EmotionCommon.resetH
 import ArrowRefreshCwIc = SvgIcons.ArrowRefreshCwIc
 import Txt = EmotionCommon.Txt
 import * as uuid from 'uuid'
-import readToDataUrl = FileUtils.readToDataUrl
+import blobToDataUrl = FileUtils.blobToDataUrl
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import trimExtension = FileUtils.trimExtension
 import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
 import inRangeExclusive = MathUtils.inRangeExclusive
+import Callback = TypeUtils.Callback
+import findByAndReplaceTo = ArrayUtils.findByAndReplaceTo
 
 
 
@@ -92,21 +95,28 @@ const springStyle =
 
 export const DefaultProfilePhoto = {
   id: '',
-  state: 'empty' as
+  type: 'remote' as
     |'remote' // photo from server
-    |'local' // photo from local storage
-    |'empty', // no photo
+    |'local', // photo from local storage
   index: 0,
+  
+  isEmpty: false,
+  isReady: false,
+  isProcessing: false,
+  isUploading: false,
+  processed: 0, // 0..100
+  uploaded: 0, // 0..100
+  
+  // TODO
+  abort: undefined as Callback|undefined, // callback to abort fetching or compressing
+  
   name: '',
   mimeType: '',
   remoteUrl: '',
   dataUrl: '',
-  available: 0, // 0..100, when 100 - photo is ready to be shown
-  abort: ()=>{}, // callback to abort fetching or compressing
-  upload: null as number|null, // 0..100, null - now not uploading
 }
 export type ProfilePhoto = typeof DefaultProfilePhoto
-export interface ProfilePhotoArr extends Array<ProfilePhoto> { /* length: 6 */ }
+export type ProfilePhotoArr = ProfilePhoto[]
 
 
 
@@ -256,90 +266,77 @@ React.memo(
   
   
   
-  const replacePhotoEffectEvent = useEffectEvent(
-    (newPhoto: ProfilePhoto, oldPhoto: ProfilePhoto)=>{
-      setImages(images=>{
-        let found = false
-        const newImages = images.map(it=>{
-          if (it.id===oldPhoto.id) {
-            found = true
-            return newPhoto
-          }
-          return it
-        })
-        if (found) return newImages
-        return images
-      })
-    }
-  )
   const onFilesSelected = useCallback(
     (files: File[])=>{
       const imgFiles = files.filter(it=>it.type.startsWith('image/'))
       if (imgFiles.length){
         const emptyCnt = images
-          .filter((im,i)=>i===lastIdx || (i>=lastIdx && im.state==='empty')).length
+          .filter((im,i)=>i===lastIdx || (i>=lastIdx && im.isEmpty)).length
         let filesI = 0
         const newImages = images.map((it,i)=>{
           if (filesI < imgFiles.length &&
             (i===lastIdx ||
               (i>=lastIdx &&
-              (imgFiles.length<=emptyCnt ? it.state==='empty' : true)
+                (imgFiles.length<=emptyCnt ? it.isEmpty : true)
               )
             )
           ){
-            const preparingPhoto: ProfilePhoto = {
-              ...DefaultProfilePhoto,
-              id: uuid.v4(),
-              state: 'local',
-              index: lastIdx,
-              available: 0,
-            }
+            const originalPhoto = images[lastIdx]
+            const preparingPhoto = {
+              ...originalPhoto,
+              isReady: false,
+              isProcessing: true,
+              processed: 0,
+            } satisfies ProfilePhoto
             const file = imgFiles[filesI++]
             
             ;(async()=>{
               try {
-                const onCompressProgress = (progress: number)=>{
-                  const progressPhoto: ProfilePhoto = {
+                const progress = new Progress(2,[90,10])
+                const onProgress = (p: number|null)=>{
+                  progress.progress = p??0
+                  console.log('progress',progress.value)
+                  const progressPhoto = {
                     ...preparingPhoto,
-                    available: mapRange(progress,[0,100],[0,90])
-                  }
-                  replacePhotoEffectEvent(progressPhoto, preparingPhoto)
-                  //console.log('onCompressProgress',progress)
+                    processed: progress.value
+                  } satisfies ProfilePhoto
+                  setImages(s=>findByAndReplaceTo(s,
+                    progressPhoto,
+                    elem=>elem.id===preparingPhoto.id
+                  ))
                 }
-                const onReadToDataUrlProgress = (progress: number|null)=>{
-                  const progressPhoto: ProfilePhoto = {
-                    ...preparingPhoto,
-                    available: 90 + mapRange(progress??0,[0,100],[0,10])
-                  }
-                  replacePhotoEffectEvent(progressPhoto, preparingPhoto)
-                  //console.log('onReadToDataUrlProgress',progress)
-                }
-                const compressedFile = await ImageUtils.compress(file, onCompressProgress)
+                
+                const compressedFile = await ImageUtils.compress(file, onProgress)
                 //console.log('file',file)
-                const imgDataUrl = await readToDataUrl(compressedFile, onReadToDataUrlProgress)
+                progress.stage++
+                const imgDataUrl = await blobToDataUrl(
+                  compressedFile,
+                  { onProgress: onProgress }
+                )
                 //console.log('imgDataUrl',imgDataUrl.length)
                 //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
                 const mimeType = new DataUrl(imgDataUrl).mimeType
-                const newPhoto: ProfilePhoto = {
+                const newPhoto = {
                   ...DefaultProfilePhoto,
                   id: uuid.v4(),
-                  state: 'local',
+                  type: 'local',
                   index: lastIdx,
+                  isReady: true,
                   name: trimExtension(file.name),
                   mimeType: mimeType,
                   dataUrl: imgDataUrl,
-                  available: 100,
-                }
-                replacePhotoEffectEvent(newPhoto, preparingPhoto)
+                } satisfies ProfilePhoto
+                setImages(s=>findByAndReplaceTo(s,
+                  newPhoto,
+                  elem=>elem.id===preparingPhoto.id
+                ))
               }
               catch (ex) {
-                const emptyPhoto: ProfilePhoto = {
-                  ...DefaultProfilePhoto,
-                  id: uuid.v4(),
-                  state: 'empty',
-                  index: lastIdx,
-                }
-                replacePhotoEffectEvent(emptyPhoto, preparingPhoto)
+                // TODO notify about error
+                setImages(s=>findByAndReplaceTo(s,
+                  originalPhoto,
+                  elem=>elem.id===originalPhoto.id
+                ))
               }
             })()
             
@@ -355,6 +352,14 @@ React.memo(
     [images, lastIdx, setImages]
   )
   
+  
+  
+  /* useEffect(
+    ()=>{
+      console.log('images[0]',images[0])
+    },
+    [images[0]]
+  ) */
   
   
   
@@ -399,14 +404,14 @@ React.memo(
               }
             }()}
             onClick={ev=>{
-              if (canClick && im.state!=='empty') setMenuOpen(true)
+              if (canClick && !im.isEmpty) setMenuOpen(true)
             }}
           >
             
             <Dropzone
               onDrop={(files, rejectedFiles, ev)=>onFilesSelected(files)}
               onDragOver={()=>setLastIdx(i)}
-              noClick={im.state!=='empty' || !canClick}
+              noClick={!im.isEmpty || !canClick}
               useFsAccessApi={false}
             >
             {({getRootProps, getInputProps, isDragAccept}) => {
@@ -420,31 +425,30 @@ React.memo(
                 ref={ref2 as any}
               >
                 
-                { im.available===100 &&
+                { im.isEmpty &&
+                  <div css={photoPlaceholderStyle}>
+                    <PlusIc css={photoPlaceholderIconStyle}/>
+                  </div>
+                }
+                { im.isReady &&
                   <img css={photoImgStyle}
                     src={im.dataUrl}
                     alt={im.name}
                   />
                 }
-                { (!canShowFetchProgress && im.available<100) && im.state==='remote' &&
+                
+                { !canShowFetchProgress && im.type==='remote' && !im.isReady &&
                   <div css={photoPlaceholderStyle}>
                     <SparkingLoadingLine/>
                   </div>
                 }
-                { ((im.state==='local' && im.available<100)
-                  || (canShowFetchProgress && im.state==='remote'
-                       && inRangeExclusive(0, im.available, 100)
-                     )
+                { im.isProcessing && (
+                    im.type==='local' || (canShowFetchProgress && im.type==='remote')
                   ) &&
                   <div css={photoPlaceholderStyle}>
                     <PieProgress css={profilePhotoPieProgress}
-                      progress={mapRange(im.available,[0,100],[5,100])}
+                      progress={mapRange(im.processed,[0,100],[5,100])}
                     />
-                  </div>
-                }
-                { im.state==='empty' &&
-                  <div css={photoPlaceholderStyle}>
-                    <PlusIc css={photoPlaceholderIconStyle}/>
                   </div>
                 }
                 
@@ -544,9 +548,10 @@ React.memo(
               newImages[lastIdx] = {
                 ...DefaultProfilePhoto,
                 id: uuid.v4(),
-                state: 'empty',
+                type: 'local',
+                isEmpty: true,
                 index: lastIdx,
-              }
+              } satisfies ProfilePhoto
               setImages(newImages)
               sheet.setClosing()
             }}
@@ -582,6 +587,8 @@ React.memo(
           
           
           {/* TODO download button*/}
+          {/* TODO cancel button */}
+          {/* TODO show fullscreen button */}
           
           
         </OptionsContent>

@@ -5,6 +5,12 @@ import empty = TypeUtils.empty
 export namespace ArrayUtils {
   
   
+  import ComparatorEq = TypeUtils.ComparatorEq
+  import exists = TypeUtils.exists
+  import defaultComparatorEq = TypeUtils.defaultComparatorEq
+  import Predicate = TypeUtils.Predicate
+  import defaultPredicate = TypeUtils.defaultPredicate
+  import Mapper = TypeUtils.Mapper
   export const eq = (arr1: any[] | empty, arr2: any[] | empty): boolean => {
     if (arr1===arr2) return true
     if (!arr1 || !arr2) return false
@@ -59,6 +65,61 @@ export namespace ArrayUtils {
     if (arr?.length) return [arr[0] as T]
     return []
   }
+  
+  
+  
+  export const findAndReplaceTo =
+  <T>(arr: T[], elem: T, comparator: ComparatorEq<T> = defaultComparatorEq): T[] => {
+    let elemIdx = undefined as number|undefined
+    for (let i = 0; i < arr.length; i++) {
+      if (comparator(arr[i],elem)){
+        elemIdx = i
+        break
+      }
+    }
+    if (exists(elemIdx)) {
+      const newArr = [...arr]
+      newArr[elemIdx] = elem
+      return newArr
+    }
+    return arr
+  }
+  
+  
+  
+  export const findByAndReplaceTo =
+  <T>(arr: T[], elem: T, predicate: Predicate<T> = defaultPredicate): T[] => {
+    let elemIdx = undefined as number|undefined
+    for (let i = 0; i < arr.length; i++) {
+      if (predicate(arr[i])){
+        elemIdx = i
+        break
+      }
+    }
+    if (exists(elemIdx)) {
+      const newArr = [...arr]
+      newArr[elemIdx] = elem
+      return newArr
+    }
+    return arr
+  }
+  export const findByAndMapTo =
+  <T>(arr: T[], mapper: Mapper<T>, predicate: Predicate<T> = defaultPredicate): T[] => {
+    let elemIdx = undefined as number|undefined
+    for (let i = 0; i < arr.length; i++) {
+      if (predicate(arr[i])){
+        elemIdx = i
+        break
+      }
+    }
+    if (exists(elemIdx)) {
+      const newArr = [...arr]
+      newArr[elemIdx] = mapper(arr[elemIdx])
+      return newArr
+    }
+    return arr
+  }
+  
   
   
   export type ArrayElement<ArrayType extends readonly unknown[]> =

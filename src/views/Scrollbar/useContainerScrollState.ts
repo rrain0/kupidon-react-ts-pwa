@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import {GetDimensions} from "src/utils/common/GetDimensions"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
-import Setter = TypeUtils.Setter
+import Setter = TypeUtils.Callback1
 import Callback = TypeUtils.Callback
 
 

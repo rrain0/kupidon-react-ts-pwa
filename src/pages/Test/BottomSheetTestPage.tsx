@@ -15,7 +15,7 @@ import intOrDefault = Utils.nonNegIntOrDefault;
 import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import rowWrap = EmotionCommon.rowWrap
-import Setter = TypeUtils.Setter
+import Setter = TypeUtils.Callback1
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
 

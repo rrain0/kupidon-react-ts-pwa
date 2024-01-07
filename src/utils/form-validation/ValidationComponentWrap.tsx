@@ -18,7 +18,7 @@ import awaitDelay = ValidationActions.awaitDelay
 import Values = ValidationCore.Values
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import ObjectValuesType = ObjectUtils.ObjectValuesType
-import ValueOrUpdater = TypeUtils.ValueOrUpdater
+import ValueOrUpdater = TypeUtils.ValueOrMapper
 import Mem = ReactUtils.Mem
 import trueOrUndef = TypeUtils.trueOrUndef
 

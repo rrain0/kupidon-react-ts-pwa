@@ -1,5 +1,5 @@
-import { FileUtils } from 'src/utils/common/FileUtils'
-import readToDataUrl = FileUtils.readToDataUrl
+import { FileUtils } from 'src/utils/file/FileUtils'
+import readToDataUrl = FileUtils.blobToDataUrl
 
 
 

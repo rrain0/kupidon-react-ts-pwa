@@ -11,7 +11,7 @@ import React, {
 } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
-import Setter = TypeUtils.Setter
+import Setter = TypeUtils.Callback1
 import fixed = EmotionCommon.fixed
 
 
