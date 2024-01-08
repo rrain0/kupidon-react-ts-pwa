@@ -12,6 +12,7 @@ import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import { AsyncUtils } from 'src/utils/common/AsyncUtils'
 import { FileUtils } from 'src/utils/file/FileUtils'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { DataUrl } from 'src/utils/DataUrl'
@@ -55,7 +56,9 @@ import trimExtension = FileUtils.trimExtension
 import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
 import Callback = TypeUtils.Callback
-import findByAndReplaceTo = ArrayUtils.findByAndReplaceTo
+import ifFindByThenReplaceTo = ArrayUtils.ifFoundByThenReplaceTo
+import findByAndMapTo = ArrayUtils.ifFoundByThenMapTo
+import wait = AsyncUtils.wait
 
 
 
@@ -92,6 +95,13 @@ const springStyle =
 }
 
 
+export type Operation = {
+  id: string,
+  progress: number, // 0..100
+  abort: Callback,
+}
+
+
 export const DefaultProfilePhoto = {
   id: '',
   type: 'remote' as
@@ -101,18 +111,37 @@ export const DefaultProfilePhoto = {
   
   isEmpty: false,
   isReady: false,
-  isProcessing: false,
-  isUploading: false,
-  processed: 0, // 0..100
-  uploaded: 0, // 0..100
-  
-  // TODO
-  abortProcessing: undefined as Callback|undefined, // callback to abort fetching or compressing
   
   name: '',
   mimeType: '',
   remoteUrl: '',
   dataUrl: '',
+  
+  compression: undefined as Operation|undefined,
+  download: undefined as Operation|undefined,
+  
+  
+  
+  isProcessing: false,
+  processingId: undefined as string|undefined,
+  processed: 0, // 0..100
+  abortProcessing: undefined as Callback|undefined, // callback to abort fetching or compressing
+  
+  
+  downloadId: undefined as string|undefined,
+  downloaded: 0, // 0..100
+  abortDownload: undefined as Callback|undefined,
+  
+  
+  compressionId: undefined as string|undefined,
+  compressed: 0, // 0..100
+  abortCompression: undefined as Callback|undefined,
+  
+  uploadId: undefined as string|undefined,
+  uploaded: 0, // 0..100
+  abortUpload: undefined as Callback|undefined,
+  
+  
 }
 export type ProfilePhoto = typeof DefaultProfilePhoto
 export type ProfilePhotoArr = ProfilePhoto[]
@@ -280,37 +309,61 @@ React.memo(
               )
             )
           ){
+            const imgFile = imgFiles[filesI++]
+            
+            // TODO что если с сервера пришла новая фотка и заменила эту, пока происходит обработка
             const originalPhoto = images[lastIdx]
+            originalPhoto.compression?.abort()
+            
+            const abortCtrl = new AbortController()
             const preparingPhoto = {
               ...originalPhoto,
               isReady: false,
-              isProcessing: true,
-              processed: 0,
+              compression: {
+                id: uuid.v4(),
+                progress: 0,
+                abort: ()=>{
+                  //console.log('compression was aborted')
+                  abortCtrl.abort('compression was aborted')
+                },
+              },
             } satisfies ProfilePhoto
-            const file = imgFiles[filesI++]
             
+            setImages(s=>ifFindByThenReplaceTo(s,
+              preparingPhoto,
+              elem=>elem.id===originalPhoto.id
+            ))
+            
+            const updatePhoto = (p: Partial<ProfilePhoto>)=>{
+              setImages(s=>findByAndMapTo(s,
+                elem=>({...elem, ...p}),
+                elem=>elem.compression?.id===preparingPhoto.compression.id
+              ))
+            }
+          
             ;(async()=>{
               try {
-                const progress = new Progress(2,[90,10])
+                const progress = new Progress(2,[95,5])
                 const onProgress = (p: number|null)=>{
                   progress.progress = p??0
                   //console.log('progress',progress.value)
-                  const progressPhoto = {
-                    ...preparingPhoto,
-                    processed: progress.value
-                  } satisfies ProfilePhoto
-                  setImages(s=>findByAndReplaceTo(s,
-                    progressPhoto,
-                    elem=>elem.id===preparingPhoto.id
-                  ))
+                  updatePhoto({ compression: {
+                    ...preparingPhoto.compression,
+                    progress: progress.value,
+                  } })
                 }
                 
-                const compressedFile = await ImageUtils.compress(file, onProgress)
-                //console.log('file',file)
+                //await wait(10000)
+                //throw 'test error'
+                
+                const compressedFile = await ImageUtils.compress(imgFile,
+                  { onProgress, abortCtrl }
+                )
+                //console.log('imgFile',imgFile)
                 progress.stage++
-                const imgDataUrl = await blobToDataUrl(
-                  compressedFile,
-                  { onProgress: onProgress }
+                progress.progress = 0
+                const imgDataUrl = await blobToDataUrl(compressedFile,
+                  { onProgress, abortCtrl }
                 )
                 //console.log('imgDataUrl',imgDataUrl.length)
                 //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
@@ -319,23 +372,22 @@ React.memo(
                   ...DefaultProfilePhoto,
                   id: uuid.v4(),
                   type: 'local',
-                  index: lastIdx,
+                  index: originalPhoto.index,
                   isReady: true,
-                  name: trimExtension(file.name),
+                  name: trimExtension(imgFile.name),
                   mimeType: mimeType,
                   dataUrl: imgDataUrl,
                 } satisfies ProfilePhoto
-                setImages(s=>findByAndReplaceTo(s,
+                setImages(s=>ifFindByThenReplaceTo(s,
                   newPhoto,
-                  elem=>elem.id===preparingPhoto.id
+                  elem=>elem.compression?.id===preparingPhoto.compression.id
                 ))
               }
               catch (ex) {
                 // TODO notify about error
-                setImages(s=>findByAndReplaceTo(s,
-                  originalPhoto,
-                  elem=>elem.id===originalPhoto.id
-                ))
+                //console.log('compression error', ex)
+                //console.log('originalPhoto', originalPhoto)
+                updatePhoto({ compression: undefined })
               }
             })()
             
@@ -439,6 +491,13 @@ React.memo(
                 { !canShowFetchProgress && im.type==='remote' && !im.isReady &&
                   <div css={photoPlaceholderStyle}>
                     <SparkingLoadingLine/>
+                  </div>
+                }
+                { im.compression &&
+                  <div css={photoPlaceholderStyle}>
+                    <PieProgress css={profilePhotoPieProgress}
+                      progress={mapRange(im.compression.progress,[0,100],[5,100])}
+                    />
                   </div>
                 }
                 { im.isProcessing && (

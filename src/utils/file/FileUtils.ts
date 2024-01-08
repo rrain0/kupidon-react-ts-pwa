@@ -1,6 +1,9 @@
+import Axios from 'axios'
+import axiosRetry from 'axios-retry'
+import { CreateAxiosDefaults } from 'axios/index'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import CallbackParam = TypeUtils.Callback1
-import Callback = TypeUtils.Callback
+import exists = TypeUtils.exists
 
 
 
@@ -14,32 +17,38 @@ export namespace FileUtils {
     file: Blob,
     options?: {
       onProgress?: CallbackParam<number|null>
-      abort?: { abort?: Callback|undefined }
+      abortCtrl?: AbortController
     }
   ): Promise<string> => new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onprogress = ev=>{
-      if (!ev.lengthComputable) options?.onProgress?.(null)
-      else options?.onProgress?.(ev.loaded / ev.total)
+      options?.onProgress?.(ev.lengthComputable ? ev.loaded / ev.total : null)
     }
     reader.onload = ev=>resolve(ev.target?.result as string)
     reader.onerror = ev=>reject(ev)
-    reader.onabort = ev=>{} // TODO
+    reader.onabort = ev=>reject(ev)
     
-    if (options?.abort) options.abort.abort = reader.abort
+    const ctrl = options?.abortCtrl
+    if (ctrl) {
+      if (ctrl.signal.aborted){
+        reject(ctrl.signal.reason)
+        return
+      }
+      ctrl.signal.onabort = reader.abort
+    }
     
     //reader.readAsArrayBuffer(file)
     reader.readAsDataURL(file)
   })
   
   
-  
+  /*
   export const dataUrlToBlob = async (dataUrl: string): Promise<Blob> => {
     const response = await fetch(dataUrl)
     const blob = await response.blob()
     return blob
   }
-  
+   */
   
   
   export const fetchToBlob =
@@ -47,54 +56,33 @@ export namespace FileUtils {
     url: string,
     options?: {
       onProgress?: CallbackParam<number|null>
-      abort?: { abort?: Callback|undefined }
-    }
-  ): Promise<Blob> => new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest()
-    
-    request.onprogress = ev=>{
-      if (ev.lengthComputable) options?.onProgress?.(ev.loaded / ev.total * 100)
-      else options?.onProgress?.(null)
-    }
-    if (options?.abort) options.abort.abort = ()=>{
-      try { request.abort() } catch (ex: unknown) {}
-    }
-    
-    request.onload = ev=>{
-      const data = request.response
-      if (data instanceof Blob) resolve(data)
-      else reject(data)
-    }
-    request.onerror = ev=>reject(ev)
-    request.onabort = ev=>{} // TODO
-    
-    request.responseType = 'blob'
-    request.open('GET', url, true)
-    request.send()
-  })
-  
-  
-  
-  export const fetchToBlob2 =
-  async (
-    url: string,
-    options?: {
-      onProgress?: CallbackParam<number|null>
-      abort?: { abort?: Callback|undefined }
+      abortCtrl?: AbortController
     }
   ): Promise<Blob> => {
-    const controller = new AbortController()
-    //controller.abort()
-    const response = await fetch(
-      url,
-      {
-        signal: controller.signal,
-        
-      }
-    )
-    if (!response.ok) throw new Error('failed to fetch')
-    const blob = await response.blob()
-    return blob
+    const config: CreateAxiosDefaults = {
+      responseType: 'blob',
+      onDownloadProgress: progressEvent => {
+        const p = progressEvent.progress
+        options?.onProgress?.( exists(p) ? p*100 : null )
+      },
+    }
+    const ctrl = options?.abortCtrl
+    if (ctrl) config.signal = ctrl.signal
+    
+    const ax = Axios.create(config)
+    axiosRetry(ax,{
+      retries: 2,
+      retryDelay: (retryCount, error)=>500,
+      // A callback to further control if a request should be retried.
+      // By default, it retries if it is a network error
+      // or a 5xx error on an idempotent request (GET, HEAD, OPTIONS, PUT or DELETE).
+      /* retryCondition: error => {
+        return error.response.status === 503;
+      }, */
+    })
+    
+    const response = await ax.get<Blob>(url)
+    return response.data
   }
   
   

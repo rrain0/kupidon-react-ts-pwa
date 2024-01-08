@@ -2,12 +2,10 @@
 import { css } from '@emotion/react'
 import React from 'react'
 import classNames from 'classnames'
-import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { PieProgressStyle } from 'src/views/PieProgress/PieProgressStyle'
 import PartialUndef = TypeUtils.PartialUndef
-import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
 
 
@@ -36,7 +34,7 @@ React.forwardRef<PieProgressRefElement, PieProgressProps>(
   
   const rotation = function(){
     if (type==='percent')
-      return mapRange(progress,[0,100],[0,1])+'turn'
+      return progress/100+'turn'
     if (type==='oneBased')
       return progress+'turn'
   }()

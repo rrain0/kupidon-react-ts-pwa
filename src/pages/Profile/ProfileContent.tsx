@@ -70,7 +70,7 @@ import Callback = TypeUtils.Callback
 import blobToDataUrl = FileUtils.blobToDataUrl
 import exists = TypeUtils.exists
 import notExists = TypeUtils.notExists
-import findByAndMapTo = ArrayUtils.findByAndMapTo
+import findByAndMapTo = ArrayUtils.ifFoundByThenMapTo
 import findBy = ArrayUtils.findBy
 
 
@@ -222,7 +222,6 @@ React.memo(
   )
   
   
-  const [valuesWereUpdated, setValuesWereUpdated] = useState(false)
   const updateValues = useEffectEvent((auth: AuthStateType)=>{
     setFormValues(s=>{
       const u = auth!.user
@@ -257,6 +256,12 @@ React.memo(
           remoteUrl: it.url,
         }
       })
+      /* s.initialValues.photos.forEach(old=>{
+        const found = findBy(newValues.initialValues.photos)
+        if (!old.isEmpty && found.isFound){
+          if (old.isReady)
+        }
+      }) */
       newValues.initialValues.photos.forEach(photo=>{
         if (!photo.isEmpty){
           const prev = findBy(s.initialValues.photos, elem=>elem.id===photo.id).elem
@@ -287,10 +292,14 @@ React.memo(
       })
       newValues.photos = newValues.photos.map((photo,i)=>{
         if (photo.type==='remote'){
-          const replacement = newValues.initialValues.photos[i]
-          if (replacement.id!==photo.id){
+          const replacement = {...newValues.initialValues.photos[i]}
+          photo = {...photo}
+          /* if (replacement.id!==photo.id){
             photo.abortProcessing?.()
-          }
+            photo.abortProcessing = undefined
+            photo.isProcessing = false
+            photo.processed = 0
+          } */
           return replacement
         }
         return photo
@@ -302,7 +311,6 @@ React.memo(
   useEffect(
     ()=>{
       updateValues(auth)
-      setValuesWereUpdated(true)
     },
     [auth]
   )
@@ -355,68 +363,100 @@ React.memo(
   
   useAsyncEffect(
     (lock,unlock)=>{
-      if (valuesWereUpdated){
-        setValuesWereUpdated(false)
-        console.log('updatePhotosEffectEvent')
-        
-        const serverPhotos = formValues.initialValues.photos
-        serverPhotos.forEach(photo=>{
-          if (photo.type==='remote' && !photo.isReady && !photo.isEmpty
-            && lock(photo.remoteUrl)
-          ){
-            
-            const setPhotos = (p: Partial<ProfilePhoto>)=>{
-              setFormValues(s=>({ ...s,
-                initialValues: { ...s.initialValues,
-                  photos: findByAndMapTo(s.initialValues.photos,
-                    elem=>({...elem, ...p}),
-                    elem=>elem.id===photo.id
-                  ),
-                },
-                photos: findByAndMapTo(s.photos,
+      const serverPhotos = formValues.initialValues.photos
+      const photos = formValues.photos
+      ;[...serverPhotos,...photos].forEach(photo=>{
+        if (photo.type==='remote' && !photo.isReady && !photo.isEmpty
+          && !photo.download && !photo.compression
+          && lock(photo.remoteUrl)
+        ){
+          /*
+          const abortCtrl = new AbortController()
+          const preparingPhoto = {
+            ...photo,
+            isReady: false,
+            download: {
+              id: photo.id,
+              progress: 0,
+              abort: ()=>{
+                //console.log('download was aborted')
+                abortCtrl.abort('download was aborted')
+              },
+            },
+          } satisfies ProfilePhoto
+          
+          setFormValues(s=>({ ...s,
+            initialValues: { ...s.initialValues,
+              photos: findByAndMapTo(s.initialValues.photos,
+                elem=>({...elem, ...p}),
+                elem=>elem.id===preparingPhoto.id
+              ),
+            },
+            photos: findByAndMapTo(s.photos,
+              elem=>({...elem, ...p}),
+              elem=>elem.id===preparingPhoto.id
+            ),
+          }))
+          */
+          
+          const setPhotos = (p: Partial<ProfilePhoto>)=>{
+            setFormValues(s=>({ ...s,
+              initialValues: { ...s.initialValues,
+                photos: findByAndMapTo(s.initialValues.photos,
                   elem=>({...elem, ...p}),
                   elem=>elem.id===photo.id
                 ),
-              }))
-            }
-            
-            const progress = new Progress(2,[90,10])
-            const onProgress = (p: number|null)=>{
-              progress.progress = p ?? 0
-              setPhotos({ processed: progress.value })
-              //console.log('progress', photo.id, progress.value)
-            }
-            const abort = { abort: undefined as Callback|undefined }
-            
-            const abortWrapper = ()=>{
-              unlock(photo.remoteUrl)
-              abort.abort?.()
-            }
-            setPhotos({ isProcessing: true, processed: 0, abortProcessing: abortWrapper })
-            
-            ;(async()=>{
-              try {
-                // TODO 3 attempts
-                //console.log('start download id',photo.id)
-                const blob = await fetchToBlob(photo.remoteUrl, { onProgress, abort })
-                progress.stage++
-                const dataUrl = await blobToDataUrl(blob, { onProgress, abort })
-                //console.log('completed',photo.id)
-                setPhotos({ isReady: true, isProcessing: false, dataUrl, abortProcessing: undefined })
-              }
-              catch (ex: unknown){
-                setPhotos({ isProcessing: false, abortProcessing: undefined })
-              }
-              finally {
-                unlock(photo.remoteUrl)
-              }
-            })()
-            
+              },
+              photos: findByAndMapTo(s.photos,
+                elem=>({...elem, ...p}),
+                elem=>elem.id===photo.id
+              ),
+            }))
           }
-        })
-      }
+          
+          const progress = new Progress(2,[90,10])
+          const onProgress = (p: number|null)=>{
+            progress.progress = p ?? 0
+            setPhotos({ processed: progress.value })
+            //console.log('progress', photo.id, progress.value)
+          }
+          const abortCtrl = new AbortController()
+          
+          const abortWrapper = ()=>{
+            unlock(photo.remoteUrl)
+            abortCtrl.abort()
+          }
+          
+          setPhotos({ isProcessing: true, processed: 0, abortProcessing: abortWrapper })
+          
+          ;(async()=>{
+            try {
+              // TODO 3 attempts
+              //console.log('start download id',photo.id)
+              const blob = await fetchToBlob(photo.remoteUrl,
+                { onProgress, abortCtrl: abortCtrl }
+              )
+              abortCtrl.signal.throwIfAborted()
+              progress.stage++
+              const dataUrl = await blobToDataUrl(blob,
+                { onProgress, abortCtrl: abortCtrl }
+              )
+              abortCtrl.signal.throwIfAborted()
+              //console.log('completed',photo.id)
+              setPhotos({ isReady: true, isProcessing: false, dataUrl, abortProcessing: undefined })
+            }
+            catch (ex: unknown){
+              //setPhotos({ isProcessing: false, abortProcessing: undefined })
+            }
+            finally {
+              unlock(photo.remoteUrl)
+            }
+          })()
+          
+        }
+      })
     },
-    [valuesWereUpdated]
+    [formValues.initialValues.photos, formValues.photos]
   )
   
   

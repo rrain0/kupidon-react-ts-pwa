@@ -90,11 +90,20 @@ registerRoute(
   An example runtime caching route for requests that aren't handled by the
   precache, in this case same-origin .png requests like those from in public/
 */
-const imageExtensions = ['heic','jpeg','jpg','png','webp','gif','bmp','svg']
+const imageExtensions = ['webp','svg','heic','heif','jpeg','jpg','png','gif','bmp']
 const imageExtensionsRegexp = new RegExp(`\\.(${imageExtensions.join('|')})$`,'i')
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) => url.origin===self.location.origin && imageExtensionsRegexp.test(url.pathname),
+  ({ url }) => {
+    /* console.log('url.pathname',url.pathname)
+    console.log('url.pathname is image',imageExtensionsRegexp.test(url.pathname))
+    console.log('url.origin',url.origin)
+    console.log('self.location.origin',self.location.origin)
+    console.log('url.origin===self.location.origin',url.origin===self.location.origin) */
+    
+    //return url.origin===self.location.origin && imageExtensionsRegexp.test(url.pathname)
+    return imageExtensionsRegexp.test(url.pathname)
+  },
   // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
     cacheName: 'images',

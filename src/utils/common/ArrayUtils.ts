@@ -68,24 +68,6 @@ export namespace ArrayUtils {
   
   
   
-  export const findAndReplaceTo =
-  <T>(arr: T[], elem: T, comparator: ComparatorEq<T> = defaultComparatorEq): T[] => {
-    let elemIdx = undefined as number|undefined
-    for (let i = 0; i < arr.length; i++) {
-      if (comparator(arr[i],elem)){
-        elemIdx = i
-        break
-      }
-    }
-    if (exists(elemIdx)) {
-      const newArr = [...arr]
-      newArr[elemIdx] = elem
-      return newArr
-    }
-    return arr
-  }
-  
-  
   
   export type FindResult<T> = {
     isFound: true
@@ -117,7 +99,21 @@ export namespace ArrayUtils {
   
   
   
-  export const findByAndReplaceTo =
+  
+  export const ifFoundThenReplaceTo =
+  <T>(arr: T[], elem: T, comparator: ComparatorEq<T> = defaultComparatorEq): T[] => {
+    const findResult = findBy(arr, it=>comparator(it,elem))
+    if (findResult.isFound) {
+      const newArr = [...arr]
+      newArr[findResult.index] = elem
+      return newArr
+    }
+    return arr
+  }
+  
+  
+  
+  export const ifFoundByThenReplaceTo =
   <T>(arr: T[], elem: T, predicate: Predicate<T> = defaultPredicate): T[] => {
     const findResult = findBy(arr, predicate)
     if (findResult.isFound){
@@ -127,7 +123,7 @@ export namespace ArrayUtils {
     }
     return arr
   }
-  export const findByAndMapTo =
+  export const ifFoundByThenMapTo =
   <T>(arr: T[], mapper: Mapper<T>, predicate: Predicate<T> = defaultPredicate): T[] => {
     const findResult = findBy(arr, predicate)
     if (findResult.isFound){

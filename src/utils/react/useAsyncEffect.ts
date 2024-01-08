@@ -35,6 +35,7 @@ export const useAsyncEffect =
   
   useEffect(
     ()=>{
+      // local set allows multiple calls of 'unlock'
       const inUseLocal = new Set<any>()
       const lockLocal = (id: any) => {
         const locked = lockId(id)
