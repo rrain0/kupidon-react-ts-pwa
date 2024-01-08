@@ -15,23 +15,23 @@ export namespace TypeUtils {
   export type Callback = ()=>void
   export type Callback1<T> = (value: T)=>void
   export type Setter<T> = Callback1<T>
+  export type Consumer<T> = Callback1<T>
   export type Generator<T> = ()=>T
   export type Mapper<T> = (prevValue: T)=>T
+  export type Predicate<T> = (obj: T)=>boolean
+  export const defaultPredicate: Predicate<any> = obj=>!!obj
   
   export type ValueOrMapper<T> = T | Mapper<T>
   export type ValueOrGenerator<T> = T | Generator<T>
   export type Updater<T> = (mapper: Mapper<T>)=>void
   export type SetterOrUpdater<T> = (valueOrMapper: T | Mapper<T>)=>void
   
+  export type ComparatorEq<A,B = A> = (a:A,b:B)=>boolean
+  export const defaultComparatorEq: ComparatorEq<any> = (a,b)=>a===b
   
   export type PartialUndef<O extends object> =
     { [Prop in keyof O]+?: O[Prop] | undefined }
   
-  export type ComparatorEq<A,B = A> = (a:A,b:B)=>boolean
-  export const defaultComparatorEq: ComparatorEq<any> = (a,b)=>a===b
-  
-  export type Predicate<T> = (obj: T)=>boolean
-  export const defaultPredicate: Predicate<any> = obj=>!!obj
   
   
   

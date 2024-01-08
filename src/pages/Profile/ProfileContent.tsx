@@ -33,6 +33,7 @@ import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
+import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { useTimeout } from 'src/utils/react/useTimeout'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
@@ -69,8 +70,8 @@ import Callback = TypeUtils.Callback
 import blobToDataUrl = FileUtils.blobToDataUrl
 import exists = TypeUtils.exists
 import notExists = TypeUtils.notExists
-import findByAndReplaceTo = ArrayUtils.findByAndReplaceTo
 import findByAndMapTo = ArrayUtils.findByAndMapTo
+import findBy = ArrayUtils.findBy
 
 
 
@@ -184,13 +185,18 @@ React.memo(
           accessToken: s?.accessToken ?? '',
           user: response.data!.user,
         }))
-        // TODO make photos remote
-        setFormValues(s=>({
-          ...s,
-          photos: s.photos.map((it,i)=>it.type==='local' && it.isReady
-            ? s.initialValues.photos[i]
-            : it
-          )
+        // for empty slots
+        setFormValues(s=>({ ...s,
+          photos: s.photos.map(photo=>{
+            if (photo.isEmpty){
+              const prev =
+                findBy(response.usedValues.photos, elem=>elem.id===photo.id)
+              if (prev.isFound) {
+                return { ...photo, type: 'remote', index: prev.index }
+              }
+            }
+            return photo
+          })
         }))
       }
     },
@@ -235,7 +241,9 @@ React.memo(
       .map(i=>({
         ...DefaultProfilePhoto,
         id: uuid.v4(),
+        type: 'remote',
         isEmpty: true,
+        isReady: true,
         index: i,
       }))
       u.photos.forEach(it=>{
@@ -249,25 +257,43 @@ React.memo(
           remoteUrl: it.url,
         }
       })
-      ArrayUtils.diff(
-        s.initialValues.photos,
-        newValues.initialValues.photos,
-        photosComparator
-      )[0]
-      .forEach((to,from)=>{
-        const fromPhoto = s.initialValues.photos[from]
-        if (exists(to) && fromPhoto.isReady){
-          const toPhoto = newValues.initialValues.photos[to]
-          toPhoto.dataUrl = fromPhoto.dataUrl
-          toPhoto.isReady = true
+      newValues.initialValues.photos.forEach(photo=>{
+        if (!photo.isEmpty){
+          const prev = findBy(s.initialValues.photos, elem=>elem.id===photo.id).elem
+          if (prev && prev.isReady){
+            photo.dataUrl = prev.dataUrl
+            photo.isReady = true
+          }
         }
       })
       
-      // TODO если ячейка была опустошена пользователем
-      // TODO если перемистили фото и заменили одно из них
-      newValues.photos = s.photos.map((it,i)=>{
-        if (it.type==='local') return it
-        else return newValues.initialValues.photos[it.index]
+      newValues.photos = s.photos.map(photo=>{
+        if (!photo.isEmpty){
+          const serverPhotoFound =
+            findBy(newValues.initialValues.photos, elem=>elem.id===photo.id)
+          const serverPhoto = serverPhotoFound.elem
+          if (serverPhoto){
+            //console.log('serverPhoto',serverPhoto)
+            photo = { ...photo,
+              type: 'remote',
+              index: serverPhoto.index,
+              name: serverPhoto.name,
+              remoteUrl: serverPhoto.remoteUrl,
+            }
+            newValues.initialValues.photos[serverPhotoFound.index] = photo
+          }
+        }
+        return photo
+      })
+      newValues.photos = newValues.photos.map((photo,i)=>{
+        if (photo.type==='remote'){
+          const replacement = newValues.initialValues.photos[i]
+          if (replacement.id!==photo.id){
+            photo.abortProcessing?.()
+          }
+          return replacement
+        }
+        return photo
       })
       
       return newValues
@@ -327,61 +353,67 @@ React.memo(
   
   
   
-  const updatePhotosEffectEvent = useEffectEvent(
-    ()=>{
-      const serverPhotos = formValues.initialValues.photos
-      serverPhotos.forEach(photo=>{
-        if (photo.type==='remote' && !photo.isReady){
-          
-          const setPhotos = (p: Partial<ProfilePhoto>)=>{
-            setFormValues(s=>({ ...s,
-              initialValues: { ...s.initialValues,
-                photos: findByAndMapTo(s.initialValues.photos,
+  useAsyncEffect(
+    (lock,unlock)=>{
+      if (valuesWereUpdated){
+        setValuesWereUpdated(false)
+        console.log('updatePhotosEffectEvent')
+        
+        const serverPhotos = formValues.initialValues.photos
+        serverPhotos.forEach(photo=>{
+          if (photo.type==='remote' && !photo.isReady && !photo.isEmpty
+            && lock(photo.remoteUrl)
+          ){
+            
+            const setPhotos = (p: Partial<ProfilePhoto>)=>{
+              setFormValues(s=>({ ...s,
+                initialValues: { ...s.initialValues,
+                  photos: findByAndMapTo(s.initialValues.photos,
+                    elem=>({...elem, ...p}),
+                    elem=>elem.id===photo.id
+                  ),
+                },
+                photos: findByAndMapTo(s.photos,
                   elem=>({...elem, ...p}),
                   elem=>elem.id===photo.id
                 ),
-              },
-              photos: findByAndMapTo(s.photos,
-                elem=>({...elem, ...p}),
-                elem=>elem.id===photo.id
-              ),
-            }))
-          }
-          
-          const progress = new Progress(2,[90,10])
-          const onProgress = (p: number|null)=>{
-            progress.progress = p ?? 0
-            setPhotos({ processed: progress.value })
-            //console.log('progress', photo.id, total)
-          }
-          const abort = { abort: undefined as Callback|undefined }
-          
-          const abortWrapper = ()=>{ try { abort.abort?.() } catch (ex: unknown){} }
-          setPhotos({ isProcessing: true, abort: abortWrapper })
-          
-          ;(async()=>{
-            try {
-              // TODO 3 attempts
-              //onsole.log('start download id',photo.id)
-              const blob = await fetchToBlob(photo.remoteUrl, { onProgress, abort })
-              progress.stage++
-              const dataUrl = await blobToDataUrl(blob, { onProgress, abort })
-              //console.log('completed',photo.id)
-              setPhotos({ isReady: true, isProcessing: false, dataUrl, abort: undefined })
-            } catch (ex: unknown){
-              setPhotos({ isProcessing: false, abort: undefined })
+              }))
             }
-          })()
-        }
-      })
-    }
-  )
-  useEffect(
-    ()=>{
-      if (valuesWereUpdated){
-        console.log('updatePhotosEffectEvent')
-        setValuesWereUpdated(false)
-        updatePhotosEffectEvent()
+            
+            const progress = new Progress(2,[90,10])
+            const onProgress = (p: number|null)=>{
+              progress.progress = p ?? 0
+              setPhotos({ processed: progress.value })
+              //console.log('progress', photo.id, progress.value)
+            }
+            const abort = { abort: undefined as Callback|undefined }
+            
+            const abortWrapper = ()=>{
+              unlock(photo.remoteUrl)
+              abort.abort?.()
+            }
+            setPhotos({ isProcessing: true, processed: 0, abortProcessing: abortWrapper })
+            
+            ;(async()=>{
+              try {
+                // TODO 3 attempts
+                //console.log('start download id',photo.id)
+                const blob = await fetchToBlob(photo.remoteUrl, { onProgress, abort })
+                progress.stage++
+                const dataUrl = await blobToDataUrl(blob, { onProgress, abort })
+                //console.log('completed',photo.id)
+                setPhotos({ isReady: true, isProcessing: false, dataUrl, abortProcessing: undefined })
+              }
+              catch (ex: unknown){
+                setPhotos({ isProcessing: false, abortProcessing: undefined })
+              }
+              finally {
+                unlock(photo.remoteUrl)
+              }
+            })()
+            
+          }
+        })
       }
     },
     [valuesWereUpdated]

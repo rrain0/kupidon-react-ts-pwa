@@ -54,7 +54,6 @@ import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import trimExtension = FileUtils.trimExtension
 import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
-import inRangeExclusive = MathUtils.inRangeExclusive
 import Callback = TypeUtils.Callback
 import findByAndReplaceTo = ArrayUtils.findByAndReplaceTo
 
@@ -108,7 +107,7 @@ export const DefaultProfilePhoto = {
   uploaded: 0, // 0..100
   
   // TODO
-  abort: undefined as Callback|undefined, // callback to abort fetching or compressing
+  abortProcessing: undefined as Callback|undefined, // callback to abort fetching or compressing
   
   name: '',
   mimeType: '',
@@ -295,7 +294,7 @@ React.memo(
                 const progress = new Progress(2,[90,10])
                 const onProgress = (p: number|null)=>{
                   progress.progress = p??0
-                  console.log('progress',progress.value)
+                  //console.log('progress',progress.value)
                   const progressPhoto = {
                     ...preparingPhoto,
                     processed: progress.value
@@ -550,7 +549,7 @@ React.memo(
                 id: uuid.v4(),
                 type: 'local',
                 isEmpty: true,
-                index: lastIdx,
+                index: newImages[lastIdx].index,
               } satisfies ProfilePhoto
               setImages(newImages)
               sheet.setClosing()

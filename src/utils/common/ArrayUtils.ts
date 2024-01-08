@@ -87,34 +87,52 @@ export namespace ArrayUtils {
   
   
   
-  export const findByAndReplaceTo =
-  <T>(arr: T[], elem: T, predicate: Predicate<T> = defaultPredicate): T[] => {
-    let elemIdx = undefined as number|undefined
+  export type FindResult<T> = {
+    isFound: true
+    index: number
+    elem: T
+  } | {
+    isFound: false
+    index: -1
+    elem: undefined
+  }
+  export const findBy =
+  <T>(arr: T[], predicate: Predicate<T> = defaultPredicate): FindResult<T> => {
     for (let i = 0; i < arr.length; i++) {
-      if (predicate(arr[i])){
-        elemIdx = i
-        break
+      const elem = arr[i]
+      if (predicate(elem)){
+        return {
+          isFound: true,
+          index: i,
+          elem: elem,
+        } satisfies FindResult<T>
       }
     }
-    if (exists(elemIdx)) {
+    return {
+      isFound: false,
+      index: -1,
+      elem: undefined,
+    } satisfies FindResult<T>
+  }
+  
+  
+  
+  export const findByAndReplaceTo =
+  <T>(arr: T[], elem: T, predicate: Predicate<T> = defaultPredicate): T[] => {
+    const findResult = findBy(arr, predicate)
+    if (findResult.isFound){
       const newArr = [...arr]
-      newArr[elemIdx] = elem
+      newArr[findResult.index] = elem
       return newArr
     }
     return arr
   }
   export const findByAndMapTo =
   <T>(arr: T[], mapper: Mapper<T>, predicate: Predicate<T> = defaultPredicate): T[] => {
-    let elemIdx = undefined as number|undefined
-    for (let i = 0; i < arr.length; i++) {
-      if (predicate(arr[i])){
-        elemIdx = i
-        break
-      }
-    }
-    if (exists(elemIdx)) {
+    const findResult = findBy(arr, predicate)
+    if (findResult.isFound){
       const newArr = [...arr]
-      newArr[elemIdx] = mapper(arr[elemIdx])
+      newArr[findResult.index] = mapper(findResult.elem)
       return newArr
     }
     return arr

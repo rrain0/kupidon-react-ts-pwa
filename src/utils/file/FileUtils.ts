@@ -56,7 +56,9 @@ export namespace FileUtils {
       if (ev.lengthComputable) options?.onProgress?.(ev.loaded / ev.total * 100)
       else options?.onProgress?.(null)
     }
-    if (options?.abort) options.abort.abort = request.abort
+    if (options?.abort) options.abort.abort = ()=>{
+      try { request.abort() } catch (ex: unknown) {}
+    }
     
     request.onload = ev=>{
       const data = request.response

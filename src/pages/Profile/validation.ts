@@ -98,6 +98,7 @@ export namespace ProfilePageValidation {
       id: uuid.v4(),
       type: 'remote',
       isEmpty: true,
+      isReady: false,
       index: i,
     } satisfies ProfilePhoto))
   }
@@ -113,7 +114,7 @@ export namespace ProfilePageValidation {
   
   
   export const photosComparator = (a: ProfilePhoto, b: ProfilePhoto) =>
-    a.isEmpty && b.isEmpty
+    (a.isEmpty && b.isEmpty)
     || a.id===b.id
   
   const delay = 4000

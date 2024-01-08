@@ -10,6 +10,7 @@ import { useSetRecoilState } from 'recoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { Pages } from 'src/components/Page/Pages'
+import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import Page = Pages.Page
 import SoftRefreshBtn = ButtonBarComponents.SoftRefreshBtn
 
@@ -26,21 +27,26 @@ React.memo(
   
   const [needToFetchUser, setNeedToFetchUser] = useState(true)
   const [isFetchingUser, setFetchingUser] = useState(false)
-  const fetchUser = async() => {
-    const resp = await UserApi.current()
-    if (resp.success)
-      setAuth(curr=>({ ...curr!, user: resp.data.user }))
-    else
-      console.warn('failed to fetch user:', resp)
-  }
-  
-  
-  useEffect(
-    ()=>{
-      if (needToFetchUser && !isFetchingUser){
+  useAsyncEffect(
+    (lock,unlock)=>{
+      if (needToFetchUser && !isFetchingUser
+        && lock(UserApi.current)
+      ){
         setNeedToFetchUser(false)
         setFetchingUser(true)
-        fetchUser().finally(()=>setFetchingUser(false))
+        ;(async()=>{
+          try {
+            const resp = await UserApi.current()
+            if (resp.success)
+              setAuth(curr=>({ ...curr!, user: resp.data.user }))
+            else
+              console.warn('failed to fetch user:', resp)
+          }
+          finally {
+            setFetchingUser(false)
+            unlock(UserApi.current)
+          }
+        })()
       }
     },
     [needToFetchUser, isFetchingUser]

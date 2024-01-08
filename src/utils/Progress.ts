@@ -25,5 +25,4 @@ export class Progress {
     return total
   }
   
-  
 }
