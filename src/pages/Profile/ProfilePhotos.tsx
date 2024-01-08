@@ -56,9 +56,10 @@ import trimExtension = FileUtils.trimExtension
 import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
 import Callback = TypeUtils.Callback
-import ifFindByThenReplaceTo = ArrayUtils.ifFoundByThenReplaceTo
+import ifFoundByThenReplaceTo = ArrayUtils.ifFoundByThenReplaceTo
 import findByAndMapTo = ArrayUtils.ifFoundByThenMapTo
 import wait = AsyncUtils.wait
+import ifFoundByThenMapTo = ArrayUtils.ifFoundByThenMapTo
 
 
 
@@ -108,40 +109,19 @@ export const DefaultProfilePhoto = {
     |'remote' // photo from server
     |'local', // photo from local storage
   index: 0,
-  
   isEmpty: false,
-  isReady: false,
   
   name: '',
   mimeType: '',
   remoteUrl: '',
   dataUrl: '',
   
+  isCompressed: false,
   compression: undefined as Operation|undefined,
+  isDownloaded: false,
   download: undefined as Operation|undefined,
-  
-  
-  
-  isProcessing: false,
-  processingId: undefined as string|undefined,
-  processed: 0, // 0..100
-  abortProcessing: undefined as Callback|undefined, // callback to abort fetching or compressing
-  
-  
-  downloadId: undefined as string|undefined,
-  downloaded: 0, // 0..100
-  abortDownload: undefined as Callback|undefined,
-  
-  
-  compressionId: undefined as string|undefined,
-  compressed: 0, // 0..100
-  abortCompression: undefined as Callback|undefined,
-  
-  uploadId: undefined as string|undefined,
-  uploaded: 0, // 0..100
-  abortUpload: undefined as Callback|undefined,
-  
-  
+  isUploaded: false,
+  upload: undefined as Operation|undefined,
 }
 export type ProfilePhoto = typeof DefaultProfilePhoto
 export type ProfilePhotoArr = ProfilePhoto[]
@@ -312,13 +292,12 @@ React.memo(
             const imgFile = imgFiles[filesI++]
             
             // TODO что если с сервера пришла новая фотка и заменила эту, пока происходит обработка
-            const originalPhoto = images[lastIdx]
-            originalPhoto.compression?.abort()
+            const photo = images[lastIdx]
+            photo.compression?.abort()
             
             const abortCtrl = new AbortController()
-            const preparingPhoto = {
-              ...originalPhoto,
-              isReady: false,
+            const compressionInitialData = {
+              isCompressed: false,
               compression: {
                 id: uuid.v4(),
                 progress: 0,
@@ -327,17 +306,18 @@ React.memo(
                   abortCtrl.abort('compression was aborted')
                 },
               },
-            } satisfies ProfilePhoto
+            } satisfies Partial<ProfilePhoto>
             
-            setImages(s=>ifFindByThenReplaceTo(s,
-              preparingPhoto,
-              elem=>elem.id===originalPhoto.id
-            ))
+            const processingPhoto = { ...photo, ...compressionInitialData }
+            /* setImages(s=>ifFoundByThenMapTo(s,
+              elem=>({ ...elem, ...compressionInitialData }),
+              elem=>elem.id===photo.id
+            )) */
             
             const updatePhoto = (p: Partial<ProfilePhoto>)=>{
               setImages(s=>findByAndMapTo(s,
                 elem=>({...elem, ...p}),
-                elem=>elem.compression?.id===preparingPhoto.compression.id
+                elem=>elem.compression?.id===compressionInitialData.compression.id
               ))
             }
           
@@ -348,7 +328,7 @@ React.memo(
                   progress.progress = p??0
                   //console.log('progress',progress.value)
                   updatePhoto({ compression: {
-                    ...preparingPhoto.compression,
+                    ...compressionInitialData.compression,
                     progress: progress.value,
                   } })
                 }
@@ -359,12 +339,16 @@ React.memo(
                 const compressedFile = await ImageUtils.compress(imgFile,
                   { onProgress, abortCtrl }
                 )
+                abortCtrl.signal.throwIfAborted()
+                
                 //console.log('imgFile',imgFile)
                 progress.stage++
                 progress.progress = 0
                 const imgDataUrl = await blobToDataUrl(compressedFile,
                   { onProgress, abortCtrl }
                 )
+                abortCtrl.signal.throwIfAborted()
+                
                 //console.log('imgDataUrl',imgDataUrl.length)
                 //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
                 const mimeType = new DataUrl(imgDataUrl).mimeType
@@ -372,26 +356,26 @@ React.memo(
                   ...DefaultProfilePhoto,
                   id: uuid.v4(),
                   type: 'local',
-                  index: originalPhoto.index,
-                  isReady: true,
+                  index: photo.index,
                   name: trimExtension(imgFile.name),
                   mimeType: mimeType,
                   dataUrl: imgDataUrl,
+                  isCompressed: true,
                 } satisfies ProfilePhoto
-                setImages(s=>ifFindByThenReplaceTo(s,
+                setImages(s=>ifFoundByThenReplaceTo(s,
                   newPhoto,
-                  elem=>elem.compression?.id===preparingPhoto.compression.id
+                  elem=>elem.compression?.id===compressionInitialData.compression.id
                 ))
               }
               catch (ex) {
                 // TODO notify about error
                 //console.log('compression error', ex)
-                //console.log('originalPhoto', originalPhoto)
+                //console.log('photo', photo)
                 updatePhoto({ compression: undefined })
               }
             })()
             
-            return preparingPhoto
+            return processingPhoto
           }
           
           return it
@@ -476,39 +460,47 @@ React.memo(
                 ref={ref2 as any}
               >
                 
-                { im.isEmpty &&
-                  <div css={photoPlaceholderStyle}>
-                    <PlusIc css={photoPlaceholderIconStyle}/>
-                  </div>
-                }
-                { im.isReady &&
-                  <img css={photoImgStyle}
-                    src={im.dataUrl}
-                    alt={im.name}
-                  />
-                }
+                {function(){
+                  if (false){}
+                  else if (im.compression)
+                    return <div css={photoPlaceholderStyle}>
+                      <PieProgress css={profilePhotoPieProgress}
+                        progress={
+                          mapRange(im.compression.progress,[0,100],[5,100])
+                        }
+                      />
+                    </div>
+                    
+                  else if (!canShowFetchProgress && im.type==='remote' && !im.isDownloaded)
+                    return <div css={photoPlaceholderStyle}>
+                      <SparkingLoadingLine/>
+                    </div>
+                  else if (im.download)
+                    return <div css={photoPlaceholderStyle}>
+                      <PieProgress css={profilePhotoPieProgress}
+                        progress={
+                          mapRange(im.download.progress,[0,100],[5,100])
+                        }
+                      />
+                    </div>
+                    
+                  else if (im.isEmpty)
+                    return <div css={photoPlaceholderStyle}>
+                      <PlusIc css={photoPlaceholderIconStyle}/>
+                    </div>
+                  else if (im.type==='remote' && im.isDownloaded)
+                    return <img css={photoImgStyle}
+                      src={im.dataUrl}
+                      alt={im.name}
+                    />
+                  else if (im.type==='local' && im.isCompressed)
+                    return <img css={photoImgStyle}
+                      src={im.dataUrl}
+                      alt={im.name}
+                    />
+                  
+                }()}
                 
-                { !canShowFetchProgress && im.type==='remote' && !im.isReady &&
-                  <div css={photoPlaceholderStyle}>
-                    <SparkingLoadingLine/>
-                  </div>
-                }
-                { im.compression &&
-                  <div css={photoPlaceholderStyle}>
-                    <PieProgress css={profilePhotoPieProgress}
-                      progress={mapRange(im.compression.progress,[0,100],[5,100])}
-                    />
-                  </div>
-                }
-                { im.isProcessing && (
-                    im.type==='local' || (canShowFetchProgress && im.type==='remote')
-                  ) &&
-                  <div css={photoPlaceholderStyle}>
-                    <PieProgress css={profilePhotoPieProgress}
-                      progress={mapRange(im.processed,[0,100],[5,100])}
-                    />
-                  </div>
-                }
                 
                 { isDraggingFiles &&
                   <div css={t=>[photoPlaceholderStyle(t),css`

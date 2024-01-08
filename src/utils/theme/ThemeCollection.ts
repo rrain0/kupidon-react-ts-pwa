@@ -13,8 +13,8 @@ import { LightSimplePink } from 'src/utils/theme/themes/LightSimplePink'
 
 
 
-export const DefaultLightTheme = LightSimple
-export const DefaultDarkTheme = DarkSimple
+export const DefaultLightTheme = LightSimplePink
+export const DefaultDarkTheme = DarkSimplePink
 export const DefaultTheme = DefaultLightTheme
 
 

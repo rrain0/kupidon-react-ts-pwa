@@ -98,7 +98,6 @@ export namespace ProfilePageValidation {
       id: uuid.v4(),
       type: 'remote',
       isEmpty: true,
-      isReady: false,
       index: i,
     } satisfies ProfilePhoto))
   }
