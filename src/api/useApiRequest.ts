@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { ApiUtils } from 'src/api/ApiUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
+import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import Values = ValidationCore.Values
 import ApiResponse = ApiUtils.ApiResponse
@@ -12,8 +13,12 @@ import ResponseError = ApiUtils.ResponseError
 
 export type ResponseData
 <Vs extends Values, D, E extends ResponseError> = {
-  data?: D
-  error?: E
+  isSuccess: true
+  data: D
+  usedValues: Vs
+} | {
+  isSuccess: false
+  error: E
   usedValues: Vs
 }
 
@@ -75,11 +80,19 @@ export const useApiRequest =
       try {
         const response = await prepareAndRequest(values,failedFields)
         if (response.success){
-          setResponse({ data: response.data, usedValues: values })
+          setResponse({
+            isSuccess: true,
+            data: response.data,
+            usedValues: values
+          })
           setIsSuccess(true)
         }
         else {
-          setResponse({ error: response.error, usedValues: values })
+          setResponse({
+            isSuccess: false,
+            error: response.error,
+            usedValues: values
+          })
           setIsError(true)
         }
       } finally {
@@ -91,12 +104,15 @@ export const useApiRequest =
   )
   
   
-  const tryRequestEffectEvent = useEffectEvent(()=>void tryRequest())
-  useEffect(
-    ()=>{
-      if (doRequest){
+  const tryRequestEffectEvent = useEffectEvent(()=>tryRequest())
+  useAsyncEffect(
+    (lock,unlock)=>{
+      if (doRequest && lock('api-request')){
         setDoRequest(false)
-        tryRequestEffectEvent()
+        ;(async()=>{
+          tryRequestEffectEvent()
+            .finally(()=>unlock('api-request'))
+        })()
       }
     },
     [doRequest]

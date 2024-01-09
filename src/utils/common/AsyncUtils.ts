@@ -22,13 +22,13 @@ export namespace AsyncUtils {
   
   
   export const throttle =
-  <T extends any[]>(delay: number, callback: CallbackN<T>): CallbackN<T> =>{
+  <T extends any[]>(interval: number, callback: CallbackN<T>): CallbackN<T> =>{
     let timerId: NodeJS.Timeout|null = null
     let prev = 0
     
     const throttledCallback = (...args: T)=>{
       const now = +new Date()
-      if (notExists(timerId) && (now - prev > delay)) {
+      if (notExists(timerId) && (now - prev > interval)) {
         prev = +new Date()
         callback(...args)
       }
@@ -40,7 +40,7 @@ export namespace AsyncUtils {
             prev = +new Date()
             callback(...args)
           },
-          delay - (now - prev)
+          interval - (now - prev)
         )
       }
     }

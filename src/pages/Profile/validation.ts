@@ -97,8 +97,9 @@ export namespace ProfilePageValidation {
       ...DefaultProfilePhoto,
       id: uuid.v4(),
       type: 'remote',
-      isEmpty: true,
       index: i,
+      isEmpty: true,
+      isDownloaded: false,
     } satisfies ProfilePhoto))
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {

@@ -308,20 +308,14 @@ React.memo(
             } satisfies Partial<ProfilePhoto>
             
             const processingPhoto = { ...photo, ...compressionInitialData }
-            /* setImages(s=>ifFoundByThenMapTo(s,
-              elem=>({ ...elem, ...compressionInitialData }),
-              elem=>elem.id===photo.id
-            )) */
             
-            const updatePhoto = throttle(
-              2000,
-              (p: Partial<ProfilePhoto>)=>{
-                setImages(s=>findByAndMapTo(s,
-                  elem=>({...elem, ...p}),
-                  elem=>elem.compression?.id===compressionInitialData.compression.id
-                ))
-              }
-            )
+            const updatePhotoNow = (p: Partial<ProfilePhoto>)=>{
+              setImages(s=>findByAndMapTo(s,
+                elem=>({...elem, ...p}),
+                elem=>elem.compression?.id===compressionInitialData.compression.id
+              ))
+            }
+            const updatePhoto = throttle(2000, updatePhotoNow)
           
             ;(async()=>{
               try {

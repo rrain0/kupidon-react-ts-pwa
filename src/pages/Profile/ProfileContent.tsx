@@ -181,29 +181,32 @@ React.memo(
   
   useEffect(
     ()=>{
-      if (isSuccess && response && 'data' in response){
+      if (isSuccess && response?.isSuccess){
         setAuth(s=>({
           accessToken: s?.accessToken ?? '',
-          user: response.data!.user,
+          user: response.data.user,
         }))
-        // for empty slots
-        setFormValues(s=>({ ...s,
-          photos: s.photos.map(photo=>{
-            if (photo.isEmpty){
-              const prev =
-                findBy(response.usedValues.photos, elem=>elem.id===photo.id)
-              if (prev.isFound) {
-                return { ...photo, type: 'remote', index: prev.index }
-              }
-            }
-            return photo
-          })
-        }))
+        const updatePhotosNow = (p: Partial<ProfilePhoto>)=>{
+          setFormValues(s=>({ ...s,
+            photos: ifFoundByThenMapTo(s.photos,
+              elem=>({...elem, ...p}),
+              elem=>elem.id===p.id
+            ),
+          }))
+        }
+        response.usedValues.photos.forEach((photo,i)=>{
+          const update = {
+            id: photo.id,
+            type: 'remote',
+            index: i,
+            isDownloaded: !photo.isEmpty,
+          } satisfies Partial<ProfilePhoto>
+          updatePhotosNow(update)
+        })
       }
     },
-    [isSuccess, response, setAuth, setFormValues]
+    [isSuccess]
   )
-  
   
   
   
@@ -223,116 +226,128 @@ React.memo(
   )
   
   
-  const updateValues = useEffectEvent((auth: AuthStateType)=>{
-    setFormValues(s=>{
-      const u = auth!.user
-      const newValues = {...s, initialValues: {...s.initialValues}}
-      newValues.initialValues.name = u.name
-      newValues.initialValues.birthDate = u.birthDate
-      newValues.initialValues.gender = u.gender
-      newValues.initialValues.aboutMe = u.aboutMe
-      
-      if (fieldIsInitial('name')) newValues.name = u.name
-      if (fieldIsInitial('birthDate')) newValues.birthDate = u.birthDate
-      if (fieldIsInitial('gender')) newValues.gender = u.gender
-      if (fieldIsInitial('aboutMe')) newValues.aboutMe = u.aboutMe
-      
-      newValues.initialValues.photos = ArrayUtils.ofIndices(6)
-      .map(i=>({
-        ...DefaultProfilePhoto,
-        id: uuid.v4(),
-        type: 'remote',
-        isEmpty: true,
-        index: i,
-      }))
-      u.photos.forEach(it=>{
-        newValues.initialValues.photos[it.index] = {
-          ...DefaultProfilePhoto,
-          id: it.id,
-          type: 'remote',
-          index: it.index,
-          name: it.name,
-          mimeType: it.mimeType,
-          remoteUrl: it.url,
-        }
-      })
-      /* s.initialValues.photos.forEach(old=>{
-        const found = findBy(newValues.initialValues.photos)
-        if (!old.isEmpty && found.isFound){
-          if (old.isReady)
-        }
-      }) */
-      newValues.initialValues.photos.forEach(photo=>{
-        if (!photo.isEmpty){
-          const prev = findBy(s.initialValues.photos, elem=>elem.id===photo.id).elem
-          if (prev && prev.isDownloaded){
-            photo.dataUrl = prev.dataUrl
-            photo.isDownloaded = true
-          }
-        }
-      })
-      
-      newValues.photos = s.photos.map(photo=>{
-        if (!photo.isEmpty){
-          const serverPhotoFound =
-            findBy(newValues.initialValues.photos, elem=>elem.id===photo.id)
-          const serverPhoto = serverPhotoFound.elem
-          if (serverPhoto){
-            //console.log('serverPhoto',serverPhoto)
-            photo = { ...photo,
-              type: 'remote',
-              index: serverPhoto.index,
-              name: serverPhoto.name,
-              remoteUrl: serverPhoto.remoteUrl,
-            }
-            newValues.initialValues.photos[serverPhotoFound.index] = photo
-          }
-        }
-        return photo
-      })
-      newValues.photos = newValues.photos.map((photo,i)=>{
-        if (photo.type==='remote'){
-          const replacement = {...newValues.initialValues.photos[i]}
-          //photo = {...photo}
-          /* if (replacement.id!==photo.id){
-            photo.abortProcessing?.()
-            photo.abortProcessing = undefined
-            photo.isProcessing = false
-            photo.processed = 0
-          } */
-          return replacement
-        }
-        return photo
-      })
-      
-      return newValues
-    })
-  })
+  
   useEffect(
     ()=>{
-      updateValues(auth)
+      const u = auth?.user
+      if (u) {
+        setFormValues(s => {
+          const newValues = { ...s, initialValues: { ...s.initialValues } }
+          newValues.initialValues.name = u.name
+          newValues.initialValues.birthDate = u.birthDate
+          newValues.initialValues.gender = u.gender
+          newValues.initialValues.aboutMe = u.aboutMe
+          
+          if (fieldIsInitial('name')) newValues.name = u.name
+          if (fieldIsInitial('birthDate')) newValues.birthDate = u.birthDate
+          if (fieldIsInitial('gender')) newValues.gender = u.gender
+          if (fieldIsInitial('aboutMe')) newValues.aboutMe = u.aboutMe
+          
+          newValues.initialValues.photos = ArrayUtils.ofIndices(6).map(i => ({
+            ...DefaultProfilePhoto,
+            id: uuid.v4(),
+            type: 'remote',
+            index: i,
+            isEmpty: true,
+            isDownloaded: true,
+          } satisfies ProfilePhoto))
+          u.photos.forEach(it => {
+            newValues.initialValues.photos[it.index] = {
+              ...DefaultProfilePhoto,
+              id: it.id,
+              type: 'remote',
+              index: it.index,
+              name: it.name,
+              mimeType: it.mimeType,
+              remoteUrl: it.url,
+              isDownloaded: false,
+            } satisfies ProfilePhoto
+          })
+          
+          ArrayUtils.diff
+          (s.initialValues.photos, newValues.initialValues.photos, photosComparator)[0]
+          .forEach((to, from) => {
+            const old = s.initialValues.photos[from]
+            const now = exists(to) ? newValues.initialValues.photos[to] : undefined
+            if (!old.isEmpty && old.type === 'remote') {
+              if (notExists(now)) {
+                //console.log('name',old.name)
+                old.download?.abort()
+              } else {
+                now.isDownloaded = old.isDownloaded
+                now.download = old.download
+                now.dataUrl = old.dataUrl
+              }
+            }
+          })
+          
+          newValues.photos = [...s.photos]
+          
+          // for photos which have become remote after saving to server
+          newValues.initialValues.photos = newValues.initialValues.photos.map(photo=>{
+            const found = findBy(newValues.photos, elem=>elem.id===photo.id)
+            if (found.isFound && found.elem.type==='remote' && found.elem.isDownloaded){
+              const newPhoto = {
+                ...found.elem,
+                name: photo.name,
+                remoteUrl: photo.remoteUrl,
+              } satisfies ProfilePhoto
+              const newInitialPhoto = {
+                ...photo,
+                isDownloaded: true,
+                dataUrl: newPhoto.dataUrl,
+              } satisfies ProfilePhoto
+              
+              newValues.photos[found.index] = newPhoto
+              return newInitialPhoto
+            }
+            return photo
+          })
+          
+          /* const allPrevPhotos = [...s.initialValues.photos, ...s.photos]
+          ArrayUtils.diff(
+            allPrevPhotos,
+            newValues.initialValues.photos,
+            photosComparator,
+          )[0]
+          .forEach((to, from) => {
+            const old = allPrevPhotos[from]
+            const now = exists(to) ? newValues.initialValues.photos[to] : undefined
+            if (!old.isEmpty && old.type === 'remote') {
+              if (notExists(now)) {
+                //console.log('name',old.name)
+                old.download?.abort()
+              } else {
+                now.isDownloaded = old.isDownloaded
+                now.download = old.download
+                now.dataUrl = old.dataUrl
+              }
+            }
+          }) */
+          
+          newValues.photos = newValues.photos.map(photo => {
+            if (photo.type === 'remote') {
+              //console.log('photo',photo)
+              return {
+                ...newValues.initialValues.photos[photo.index],
+                isCompressed: photo.isCompressed,
+                compression: photo.compression,
+              } satisfies ProfilePhoto
+            }
+            if (photo.type === 'local') return photo
+            return photo
+          })
+          
+          return newValues
+        })
+      }
     },
     [auth]
   )
-  //useTimeout(3000, ()=>updateValues(auth), [auth])
   
-  const resetField = useCallback(
-    (fieldName: keyof FormValues)=>{
-      const vs = formValues, ivs = formValues.initialValues
-      setFormValues({
-        ...vs,
-        [fieldName]: ivs[fieldName],
-      })
-    },
-    [formValues, setFormValues]
-  )
+  
   const resetAllFields = useCallback(
-    ()=>{
-      setFormValues(s=>({
-        ...s,
-        ...s.initialValues,
-      }))
-    },
+    ()=>setFormValues(s=>({ ...s, ...s.initialValues })),
     [setFormValues]
   )
   
@@ -379,7 +394,7 @@ React.memo(
               id: photo.id,
               progress: 0,
               abort: ()=>{
-                //console.log('download was aborted')
+                console.log('download was aborted')
                 unlock(photo.remoteUrl)
                 abortCtrl.abort('download was aborted')
               },
@@ -399,23 +414,21 @@ React.memo(
             ),
           }))
           
-          const updatePhotos = throttle(
-            2000,
-            (p: Partial<ProfilePhoto>)=>{
-              setFormValues(s=>({ ...s,
-                initialValues: { ...s.initialValues,
-                  photos: ifFoundByThenMapTo(s.initialValues.photos,
-                    elem=>({...elem, ...p}),
-                    elem=>elem.download?.id===downloadInitialData.download.id
-                  ),
-                },
-                photos: ifFoundByThenMapTo(s.photos,
+          const updatePhotosNow = (p: Partial<ProfilePhoto>)=>{
+            setFormValues(s=>({ ...s,
+              initialValues: { ...s.initialValues,
+                photos: ifFoundByThenMapTo(s.initialValues.photos,
                   elem=>({...elem, ...p}),
                   elem=>elem.download?.id===downloadInitialData.download.id
                 ),
-              }))
-            }
-          )
+              },
+              photos: ifFoundByThenMapTo(s.photos,
+                elem=>({...elem, ...p}),
+                elem=>elem.download?.id===downloadInitialData.download.id
+              ),
+            }))
+          }
+          const updatePhotos = throttle(2000, updatePhotosNow)
           
           ;(async()=>{
             try {
@@ -428,6 +441,25 @@ React.memo(
                   progress: progress.value,
                 } })
               }
+              
+              /* if (photo.name==='IMG_20230922_094037_882 #top'){
+                await awaitValue(1000)
+                onProgress(10)
+                await awaitValue(1000)
+                onProgress(15)
+                await awaitValue(1000)
+                onProgress(20)
+                await awaitValue(1000)
+                onProgress(30)
+                await awaitValue(1000)
+                onProgress(35)
+                await awaitValue(1000)
+                onProgress(40)
+                await awaitValue(1000)
+                onProgress(45)
+                await awaitValue(1000)
+                onProgress(50)
+              } */
               
               //console.log('start download id',photo.id)
               const blob = await fetchToBlob(photo.remoteUrl,
@@ -443,13 +475,13 @@ React.memo(
               abortCtrl.signal.throwIfAborted()
               
               //console.log('completed',photo.id)
-              updatePhotos({ isDownloaded: true, download: undefined, dataUrl })
+              updatePhotosNow({ isDownloaded: true, download: undefined, dataUrl })
             }
             catch (ex){
               // TODO notify about error
               //console.log('download error', ex)
               //console.log('photo', photo)
-              updatePhotos({ download: undefined })
+              updatePhotosNow({ download: undefined })
             }
             finally {
               unlock(photo.remoteUrl)
@@ -459,7 +491,7 @@ React.memo(
         }
       })
     },
-    [formValues.initialValues.photos, formValues.photos]
+    [formValues.initialValues.photos]
   )
   
   
@@ -482,12 +514,9 @@ React.memo(
   )
   
   
-  
-  
   type PreferredPeopleOption = 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
   const [preferredPeople, setPreferredPeople] =
     useState('notSelected' as PreferredPeopleOption)
-  
   const preferredPeopleOptions = useMemo(
     ()=>[
       {

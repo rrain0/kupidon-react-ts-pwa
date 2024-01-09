@@ -106,7 +106,7 @@ React.memo(
   
   useEffect(
     ()=>{
-      if (isSuccess && response && Object.hasOwn(response,'data')){
+      if (isSuccess && response?.isSuccess){
         setAuth(response.data)
       }
     },
