@@ -23,6 +23,7 @@ import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { AsyncUtils } from 'src/utils/common/AsyncUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { DateTime } from 'src/utils/DateTime'
@@ -35,7 +36,6 @@ import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
 import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import { useTimeout } from 'src/utils/react/useTimeout'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
@@ -66,12 +66,13 @@ import NameCardIc = SvgIcons.NameCardIc
 import GiftBoxIc = SvgIcons.GiftBoxIc
 import photosComparator = ProfilePageValidation.photosComparator
 import fetchToBlob = FileUtils.fetchToBlob
-import Callback = TypeUtils.Callback
 import blobToDataUrl = FileUtils.blobToDataUrl
 import exists = TypeUtils.exists
 import notExists = TypeUtils.notExists
 import ifFoundByThenMapTo = ArrayUtils.ifFoundByThenMapTo
 import findBy = ArrayUtils.findBy
+import throttle = AsyncUtils.throttle
+import awaitValue = AsyncUtils.awaitValue
 
 
 
@@ -398,20 +399,23 @@ React.memo(
             ),
           }))
           
-          const updatePhotos = (p: Partial<ProfilePhoto>)=>{
-            setFormValues(s=>({ ...s,
-              initialValues: { ...s.initialValues,
-                photos: ifFoundByThenMapTo(s.initialValues.photos,
+          const updatePhotos = throttle(
+            2000,
+            (p: Partial<ProfilePhoto>)=>{
+              setFormValues(s=>({ ...s,
+                initialValues: { ...s.initialValues,
+                  photos: ifFoundByThenMapTo(s.initialValues.photos,
+                    elem=>({...elem, ...p}),
+                    elem=>elem.download?.id===downloadInitialData.download.id
+                  ),
+                },
+                photos: ifFoundByThenMapTo(s.photos,
                   elem=>({...elem, ...p}),
                   elem=>elem.download?.id===downloadInitialData.download.id
                 ),
-              },
-              photos: ifFoundByThenMapTo(s.photos,
-                elem=>({...elem, ...p}),
-                elem=>elem.download?.id===downloadInitialData.download.id
-              ),
-            }))
-          }
+              }))
+            }
+          )
           
           ;(async()=>{
             try {
@@ -441,7 +445,7 @@ React.memo(
               //console.log('completed',photo.id)
               updatePhotos({ isDownloaded: true, download: undefined, dataUrl })
             }
-            catch (ex: unknown){
+            catch (ex){
               // TODO notify about error
               //console.log('download error', ex)
               //console.log('photo', photo)

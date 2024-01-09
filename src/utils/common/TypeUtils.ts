@@ -14,6 +14,7 @@ export namespace TypeUtils {
   
   export type Callback = ()=>void
   export type Callback1<T> = (value: T)=>void
+  export type CallbackN<T extends any[]> = (...args: T)=>void
   export type Setter<T> = Callback1<T>
   export type Consumer<T> = Callback1<T>
   export type Generator<T> = ()=>T

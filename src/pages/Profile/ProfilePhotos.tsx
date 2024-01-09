@@ -58,8 +58,7 @@ import Theme = AppTheme.Theme
 import Callback = TypeUtils.Callback
 import ifFoundByThenReplaceTo = ArrayUtils.ifFoundByThenReplaceTo
 import findByAndMapTo = ArrayUtils.ifFoundByThenMapTo
-import wait = AsyncUtils.wait
-import ifFoundByThenMapTo = ArrayUtils.ifFoundByThenMapTo
+import throttle = AsyncUtils.throttle
 
 
 
@@ -314,12 +313,15 @@ React.memo(
               elem=>elem.id===photo.id
             )) */
             
-            const updatePhoto = (p: Partial<ProfilePhoto>)=>{
-              setImages(s=>findByAndMapTo(s,
-                elem=>({...elem, ...p}),
-                elem=>elem.compression?.id===compressionInitialData.compression.id
-              ))
-            }
+            const updatePhoto = throttle(
+              2000,
+              (p: Partial<ProfilePhoto>)=>{
+                setImages(s=>findByAndMapTo(s,
+                  elem=>({...elem, ...p}),
+                  elem=>elem.compression?.id===compressionInitialData.compression.id
+                ))
+              }
+            )
           
             ;(async()=>{
               try {

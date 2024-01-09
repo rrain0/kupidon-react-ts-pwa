@@ -41,8 +41,8 @@ React.forwardRef<PieProgressRefElement, PieProgressProps>(
   
   return <div css={[
     pieProgressStyle,
-    css`--rotation: ${rotation};`,
     PieProgressStyle.defolt,
+    css`--rotation: ${rotation};`,
   ]}
     className={classNames(className, PieProgressStyle.El.clazz.pieProgress)}
     {...restProps}
