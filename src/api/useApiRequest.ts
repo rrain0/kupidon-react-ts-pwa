@@ -79,7 +79,7 @@ export const useApiRequest =
       resetResponse()
       try {
         const response = await prepareAndRequest(values,failedFields)
-        if (response.success){
+        if (response.isSuccess){
           setResponse({
             isSuccess: true,
             data: response.data,
@@ -129,11 +129,7 @@ export const useApiRequest =
   
   return {
     request,
-    isLoading,
-    isSuccess,
-    isError,
-    response,
-    isImmediate,
-    resetResponse,
+    isLoading, isSuccess, isError, isImmediate,
+    response, resetResponse,
   } as const
 }

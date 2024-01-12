@@ -123,16 +123,16 @@ export const useFormSubmit =
   
   useEffect(
     ()=>{
-      if (isError && response && 'error' in response){
+      if (isError && response && !response.isSuccess){
         resetResponse()
         setFormValues(vs=>({
           ...vs,
           fromServer: {
             values: response.usedValues,
             error: {
-              code: response.error?.code,
-              msg: response.error?.msg,
-              extra: response.error?.extra,
+              code: response.error.code,
+              msg: response.error.msg,
+              extra: response.error.extra,
             }
           }
         }))

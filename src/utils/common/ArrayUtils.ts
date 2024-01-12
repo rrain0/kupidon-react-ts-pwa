@@ -1,16 +1,17 @@
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
+import ComparatorEq = TypeUtils.ComparatorEq
+import defaultComparatorEq = TypeUtils.defaultComparatorEq
+import defaultPredicate = TypeUtils.defaultPredicate
+import Mapper = TypeUtils.Mapper
+import Filter = TypeUtils.Filter
+
+
 
 
 export namespace ArrayUtils {
   
   
-  import ComparatorEq = TypeUtils.ComparatorEq
-  import exists = TypeUtils.exists
-  import defaultComparatorEq = TypeUtils.defaultComparatorEq
-  import Predicate = TypeUtils.Predicate
-  import defaultPredicate = TypeUtils.defaultPredicate
-  import Mapper = TypeUtils.Mapper
   export const eq = (arr1: any[] | empty, arr2: any[] | empty): boolean => {
     if (arr1===arr2) return true
     if (!arr1 || !arr2) return false
@@ -79,10 +80,10 @@ export namespace ArrayUtils {
     elem: undefined
   }
   export const findBy =
-  <T>(arr: T[], predicate: Predicate<T> = defaultPredicate): FindResult<T> => {
+  <T>(arr: T[], filter: Filter<T> = defaultPredicate): FindResult<T> => {
     for (let i = 0; i < arr.length; i++) {
       const elem = arr[i]
-      if (predicate(elem)){
+      if (filter(elem)){
         return {
           isFound: true,
           index: i,
@@ -114,8 +115,8 @@ export namespace ArrayUtils {
   
   
   export const ifFoundByThenReplaceTo =
-  <T>(arr: T[], elem: T, predicate: Predicate<T> = defaultPredicate): T[] => {
-    const findResult = findBy(arr, predicate)
+  <T>(arr: T[], elem: T, filter: Filter<T> = defaultPredicate): T[] => {
+    const findResult = findBy(arr, filter)
     if (findResult.isFound){
       const newArr = [...arr]
       newArr[findResult.index] = elem
@@ -124,8 +125,8 @@ export namespace ArrayUtils {
     return arr
   }
   export const ifFoundByThenMapTo =
-  <T>(arr: T[], mapper: Mapper<T>, predicate: Predicate<T> = defaultPredicate): T[] => {
-    const findResult = findBy(arr, predicate)
+  <T>(arr: T[], mapper: Mapper<T>, filter: Filter<T> = defaultPredicate): T[] => {
+    const findResult = findBy(arr, filter)
     if (findResult.isFound){
       const newArr = [...arr]
       newArr[findResult.index] = mapper(findResult.elem)

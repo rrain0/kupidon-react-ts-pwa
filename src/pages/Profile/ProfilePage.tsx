@@ -37,7 +37,7 @@ React.memo(
         ;(async()=>{
           try {
             const resp = await UserApi.current()
-            if (resp.success)
+            if (resp.isSuccess)
               setAuth(curr=>({ ...curr!, user: resp.data.user }))
             else
               console.warn('failed to fetch user:', resp)

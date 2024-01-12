@@ -40,6 +40,7 @@ import { ReactComponent as EyeCrossedOutSvg } from 'src/res/icon/eye-crossed-out
 import { ReactComponent as FloppyDisk1Svg } from 'src/res/icon/floppy-disk-1.svg'
 import { ReactComponent as FloppyDisk2Svg } from 'src/res/icon/floppy-disk-2.svg'
 import { ReactComponent as FloppyDisk3Svg } from 'src/res/icon/floppy-disk-3.svg'
+import { ReactComponent as FullscreenSvg } from 'src/res/icon/fullscreen.svg'
 
 import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
 import { ReactComponent as Gear2Svg } from 'src/res/icon/gear-2.svg'
@@ -201,6 +202,7 @@ export namespace SvgIcons {
   export const FloppyDisk1Ic = generateSimpleSvgIcon(FloppyDisk1Svg)
   export const FloppyDisk2Ic = generateSimpleSvgIcon(FloppyDisk2Svg)
   export const FloppyDisk3Ic = generateSimpleSvgIcon(FloppyDisk3Svg)
+  export const FullscreenIc = generateSimpleSvgIcon(FullscreenSvg)
   
   
   export const GearIc = generateSimpleSvgIcon(GearSvg)

@@ -3,6 +3,8 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { ApiUtils } from 'src/api/ApiUtils'
+import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
@@ -18,12 +20,18 @@ import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import ProfilePhotos, { DefaultProfilePhoto, ProfilePhoto } from 'src/pages/Profile/ProfilePhotos'
+import ProfilePhotos, {
+  DefaultOperation,
+  DefaultProfilePhoto,
+  Operation,
+  ProfilePhoto,
+} from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
-import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
+import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
+import { MathUtils } from 'src/utils/common/MathUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { DateTime } from 'src/utils/DateTime'
@@ -32,10 +40,10 @@ import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
 import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
-import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
 import Button from 'src/views/Buttons/Button'
@@ -73,6 +81,14 @@ import ifFoundByThenMapTo = ArrayUtils.ifFoundByThenMapTo
 import findBy = ArrayUtils.findBy
 import throttle = AsyncUtils.throttle
 import awaitValue = AsyncUtils.awaitValue
+import awaitCallback = AsyncUtils.awaitCallback
+import ApiResponse = ApiUtils.ApiResponse
+import SuccessResponse = ApiUtils.SuccessResponse
+import AddProfilePhoto = UserApi.AddProfilePhoto
+import mapRange = MathUtils.mapRange
+import CurrentUserSuccessData = UserApi.CurrentUserSuccessData
+import UpdateUserErrorData = UserApi.UpdateUserErrorData
+import AddProfilePhotoErrorData = UserApi.AddProfilePhotoErrorData
 
 
 
@@ -88,6 +104,7 @@ React.memo(
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   
   const uiText = useUiTextContainer(ProfileUiText)
+  const actionUiValues = useUiTextContainer(ActionUiText)
   
   
   
@@ -113,6 +130,8 @@ React.memo(
     prepareAndRequest: useCallback(
       (values: FormValues, failedFields: (keyof FormValues)[])=>{
         const userToUpdate: UserToUpdate = {}
+        let addPhotos = [] as AddProfilePhoto[]
+        
         if (!failedFields.includes('name')){
           userToUpdate.name = values.name
         }
@@ -128,6 +147,7 @@ React.memo(
         if (!failedFields.includes('aboutMe')){
           userToUpdate.aboutMe = values.aboutMe
         }
+        
         if (!failedFields.includes('photos')){
           const [fwd] =
             ArrayUtils.diff(values.initialValues.photos, values.photos, photosComparator)
@@ -142,19 +162,152 @@ React.memo(
                 && values.initialValues.photos[it.from].type==='remote'
               )
               .map(it=>({ id: values.initialValues.photos[it.from].id, index: it.to as number })),
-            add: values.photos
-              .map((it,i)=>({ index: i, photo: it }))
-              .filter(it=>it.photo.type==='local' && it.photo.isCompressed)
-              .map(it=>({
-                  id: it.photo.id,
-                  index: it.index,
-                  name: it.photo.name,
-                  dataUrl: it.photo.dataUrl,
-                })
-              ),
           }
+          addPhotos = values.photos
+            .map((it,i)=>({ index: i, photo: it }))
+            .filter(it=>it.photo.type==='local' && it.photo.isCompressed)
+            .map(it=>({
+                id: it.photo.id,
+                index: it.index,
+                name: it.photo.name,
+                dataUrl: it.photo.dataUrl,
+              })
+            )
         }
-        return UserApi.update(userToUpdate)
+        
+        const apiPromise = new Promise<ApiResponse<
+          CurrentUserSuccessData, UpdateUserErrorData | AddProfilePhotoErrorData
+        >>(async (resolve, reject)=>{
+          let updatedUser = null as null|CurrentUser
+          
+          let uploads = addPhotos.map(it=>({
+            ...DefaultOperation,
+            id: it.id,
+            showProgress: false,
+          }))
+          {
+            const setUploadByPhotoId = (upload: Operation)=>{
+              setFormValues(s=>({ ...s,
+                photos: ifFoundByThenMapTo(
+                  s.photos,
+                  elem=>({ ...elem, upload }),
+                  elem=>elem.id===upload.id
+                )
+              }))
+            }
+            uploads.forEach(upload=>setUploadByPhotoId(upload))
+          }
+          
+          const setUpload = (upload: Operation)=>{
+            setFormValues(s=>({ ...s,
+              photos: ifFoundByThenMapTo(
+                s.photos,
+                elem=>({ ...elem, upload }),
+                elem=>elem.upload?.id===upload.id
+              )
+            }))
+          }
+          const delayTimerId = setTimeout(
+            ()=>{
+              uploads = uploads.map(it=>({ ...it, showProgress: true }))
+              uploads.forEach(upload=>setUpload(upload))
+            },
+            2000
+          )
+          
+          const applyUpdatedUser = ()=>{
+            clearTimeout(delayTimerId)
+            uploads.forEach(upload=>{
+              setFormValues(s=>({ ...s,
+                photos: ifFoundByThenMapTo(
+                  s.photos,
+                  elem=>({ ...elem, upload: undefined }),
+                  elem=>elem.id===upload.id
+                )
+              }))
+            })
+            const u = updatedUser
+            if (u){
+              setAuth(s=>({
+                accessToken: s?.accessToken ?? '',
+                user: u,
+              }))
+              const updatePhotosNow = (p: Partial<ProfilePhoto>)=>{
+                setFormValues(s=>({ ...s,
+                  photos: ifFoundByThenMapTo(s.photos,
+                    elem=>({...elem, ...p}),
+                    elem=>elem.id===p.id
+                  ),
+                }))
+              }
+              values.photos.forEach((photo,i)=>{
+                const update = {
+                  id: photo.id,
+                  type: 'remote',
+                  index: i,
+                  isDownloaded: !photo.isEmpty,
+                } satisfies Partial<ProfilePhoto>
+                updatePhotosNow(update)
+              })
+            }
+          }
+          
+          
+          {
+            const userUpdateResponse = await UserApi.update(userToUpdate)
+            if (!userUpdateResponse.isSuccess) {
+              reject(userUpdateResponse)
+              return undefined
+            }
+            updatedUser = userUpdateResponse.data.user
+          }
+          
+        
+          for await (const photo of addPhotos){
+            const getUpload = ()=>findBy(uploads,elem=>elem.id===photo.id).elem
+            
+            const updatePhotoNow = (p: Partial<ProfilePhoto>)=>{
+              const upload = getUpload()
+              if (upload) setFormValues(s=>({ ...s,
+                photos: ifFoundByThenMapTo(s.photos,
+                  elem=>({...elem, ...p}),
+                  elem=>elem.upload?.id===upload.id
+                )
+              }))
+            }
+            const updatePhoto = throttle(
+              mapRange(Math.random(),[0,1],[1500,2000]),
+              updatePhotoNow
+            )
+            
+            try {
+              const onProgress = (p:number|null)=>{
+                //console.log(`progress ${photo.id} ${p}`)
+                const upload = getUpload()
+                if (upload) updatePhoto({ upload:
+                  { ...upload, progress: p??0 }
+                })
+              }
+              const updatedUserResponse =
+                await UserApi.addProfilePhoto(photo, { onProgress })
+              if (!updatedUserResponse.isSuccess){
+                applyUpdatedUser()
+                reject(updatedUserResponse)
+                return undefined
+              }
+              updatedUser = updatedUserResponse.data.user
+            }
+            catch (ex) {}
+            finally {
+              updatePhotoNow({ upload: undefined })
+            }
+          }
+          
+          applyUpdatedUser()
+          resolve({ isSuccess: true, data: { user: updatedUser } })
+        })
+        
+        return apiPromise
       },
       []
     )
@@ -168,7 +321,7 @@ React.memo(
     getCanSubmit: useCallback(
       (failedFields: (keyof FormValues)[]) => {
         return failedFields
-          .filter(ff=>Object.hasOwn(userDefaultValues,ff))
+          .filter(ff=>ff in userDefaultValues)
           .length < ObjectKeys(userDefaultValues).length
       },
       []
@@ -178,35 +331,6 @@ React.memo(
   })
   
   
-  
-  useEffect(
-    ()=>{
-      if (isSuccess && response?.isSuccess){
-        setAuth(s=>({
-          accessToken: s?.accessToken ?? '',
-          user: response.data.user,
-        }))
-        const updatePhotosNow = (p: Partial<ProfilePhoto>)=>{
-          setFormValues(s=>({ ...s,
-            photos: ifFoundByThenMapTo(s.photos,
-              elem=>({...elem, ...p}),
-              elem=>elem.id===p.id
-            ),
-          }))
-        }
-        response.usedValues.photos.forEach((photo,i)=>{
-          const update = {
-            id: photo.id,
-            type: 'remote',
-            index: i,
-            isDownloaded: !photo.isEmpty,
-          } satisfies Partial<ProfilePhoto>
-          updatePhotosNow(update)
-        })
-      }
-    },
-    [isSuccess]
-  )
   
   
   
@@ -304,27 +428,6 @@ React.memo(
             return photo
           })
           
-          /* const allPrevPhotos = [...s.initialValues.photos, ...s.photos]
-          ArrayUtils.diff(
-            allPrevPhotos,
-            newValues.initialValues.photos,
-            photosComparator,
-          )[0]
-          .forEach((to, from) => {
-            const old = allPrevPhotos[from]
-            const now = exists(to) ? newValues.initialValues.photos[to] : undefined
-            if (!old.isEmpty && old.type === 'remote') {
-              if (notExists(now)) {
-                //console.log('name',old.name)
-                old.download?.abort()
-              } else {
-                now.isDownloaded = old.isDownloaded
-                now.download = old.download
-                now.dataUrl = old.dataUrl
-              }
-            }
-          }) */
-          
           newValues.photos = newValues.photos.map(photo => {
             if (photo.type === 'remote') {
               //console.log('photo',photo)
@@ -357,9 +460,9 @@ React.memo(
   
   useFormToasts({
     isLoading,
-    loadingText: ProfileUiText.update,
+    loadingText: ActionUiText.saving,
     isSuccess,
-    successText: ProfileUiText.updated,
+    successText: ActionUiText.saved,
     failures: failures,
     setFailures: setFailures,
     failureCodeToUiText: mapFailureCodeToUiText,
@@ -388,11 +491,10 @@ React.memo(
         ){
           
           const abortCtrl = new AbortController()
-          const downloadInitialData = {
+          const downloadStart = {
             isDownloaded: false,
-            download: {
+            download: { ...DefaultOperation,
               id: photo.id,
-              progress: 0,
               abort: ()=>{
                 console.log('download was aborted')
                 unlock(photo.remoteUrl)
@@ -404,12 +506,12 @@ React.memo(
           setFormValues(s=>({ ...s,
             initialValues: { ...s.initialValues,
               photos: ifFoundByThenMapTo(s.initialValues.photos,
-                elem=>({...elem, ...downloadInitialData}),
+                elem=>({...elem, ...downloadStart}),
                 elem=>elem.id===photo.id
               ),
             },
             photos: ifFoundByThenMapTo(s.photos,
-              elem=>({...elem, ...downloadInitialData}),
+              elem=>({...elem, ...downloadStart}),
               elem=>elem.id===photo.id
             ),
           }))
@@ -419,16 +521,19 @@ React.memo(
               initialValues: { ...s.initialValues,
                 photos: ifFoundByThenMapTo(s.initialValues.photos,
                   elem=>({...elem, ...p}),
-                  elem=>elem.download?.id===downloadInitialData.download.id
+                  elem=>elem.download?.id===downloadStart.download.id
                 ),
               },
               photos: ifFoundByThenMapTo(s.photos,
                 elem=>({...elem, ...p}),
-                elem=>elem.download?.id===downloadInitialData.download.id
+                elem=>elem.download?.id===downloadStart.download.id
               ),
             }))
           }
-          const updatePhotos = throttle(2000, updatePhotosNow)
+          const updatePhotos = throttle(
+            mapRange(Math.random(),[0,1],[1500,2000]),
+            updatePhotosNow
+          )
           
           ;(async()=>{
             try {
@@ -437,7 +542,7 @@ React.memo(
                 progress.progress = p??0
                 //console.log('progress', photo.id, progress.value)
                 updatePhotos({ download: {
-                  ...downloadInitialData.download,
+                  ...downloadStart.download,
                   progress: progress.value,
                 } })
               }
@@ -541,7 +646,17 @@ React.memo(
   return <>
     <Form onSubmit={onFormSubmitCallback}>
       
+      {/* <div css={css`
+        position: fixed;
+        top: 6px; right: 20px;
+      `}>
+        <Button css={ButtonStyle.roundedSmallAccent}>
+          Просмотр
+        </Button>
+      </div> */}
+      
       {/* <FormHeader>{uiText.profile[0].text}</FormHeader> */}
+      
       <FormHeader>{formValues.name}</FormHeader>
       
       
@@ -799,12 +914,12 @@ React.memo(
       { anyFieldChanged &&
         <Button css={ButtonStyle.roundedSmallSecondary}
           onClick={resetAllFields}
-        >Отменить</Button>
+        >{actionUiValues.cancel[0].text}</Button>
       }
       { canSubmit &&
         <Button css={ButtonStyle.roundedSmallAccent}
           onClick={submit}
-        >Сохранить</Button>
+        >{actionUiValues.save[0].text}</Button>
       }
     </TopButtonBarFrame>}
   </>

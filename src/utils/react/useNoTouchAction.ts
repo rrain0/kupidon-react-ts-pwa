@@ -25,7 +25,8 @@ export const useNoTouchAction = (
           window.removeEventListener('touchstart',onTouch)
           window.removeEventListener('touchmove',onTouch)
         }
-      } else {
+      }
+      else {
         window.removeEventListener('touchstart',onTouch)
         window.removeEventListener('touchmove',onTouch)
       }
@@ -33,15 +34,19 @@ export const useNoTouchAction = (
     [lock, ...deps]
   )
   
-  useLayoutEffect(()=> {
-    const root = document.documentElement // get html
-    if (lock) {
-      root.classList.add(commonCss.noTouchAction)
-      return () => {
+  useLayoutEffect(
+    ()=>{
+      const root = document.documentElement // get html
+      if (lock) {
+        root.classList.add(commonCss.noTouchAction)
+        return () => {
+          root.classList.remove(commonCss.noTouchAction)
+        }
+      }
+      else {
         root.classList.remove(commonCss.noTouchAction)
       }
-    } else {
-      root.classList.remove(commonCss.noTouchAction)
-    }
-  },[lock, ...deps])
+    },
+    [lock, ...deps]
+  )
 }

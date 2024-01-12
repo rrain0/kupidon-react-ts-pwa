@@ -21,6 +21,7 @@ export namespace ApiRoutes {
   export const userCurrent = `${api}/user/current`
   export const userCreate = `${api}/user/create`
   export const userUpdate = `${api}/user/update`
+  export const addProfilePhoto = `${api}/user/profile-photo`
   
   
 }

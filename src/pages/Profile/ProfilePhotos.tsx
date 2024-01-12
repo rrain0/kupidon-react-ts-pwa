@@ -59,6 +59,10 @@ import Callback = TypeUtils.Callback
 import ifFoundByThenReplaceTo = ArrayUtils.ifFoundByThenReplaceTo
 import findByAndMapTo = ArrayUtils.ifFoundByThenMapTo
 import throttle = AsyncUtils.throttle
+import Download1Ic = SvgIcons.Download1Ic
+import FullscreenIc = SvgIcons.FullscreenIc
+import extensionFromMimeType = FileUtils.extensionFromMimeType
+import noop = TypeUtils.noop
 
 
 
@@ -95,11 +99,13 @@ const springStyle =
 }
 
 
-export type Operation = {
-  id: string,
-  progress: number, // 0..100
-  abort: Callback,
+export const DefaultOperation = {
+  id: '',
+  progress: 0, // 0..100
+  showProgress: true,
+  abort: noop,
 }
+export type Operation = typeof DefaultOperation
 
 
 export const DefaultProfilePhoto = {
@@ -119,7 +125,6 @@ export const DefaultProfilePhoto = {
   compression: undefined as Operation|undefined,
   isDownloaded: false,
   download: undefined as Operation|undefined,
-  isUploaded: false,
   upload: undefined as Operation|undefined,
 }
 export type ProfilePhoto = typeof DefaultProfilePhoto
@@ -290,16 +295,14 @@ React.memo(
           ){
             const imgFile = imgFiles[filesI++]
             
-            // TODO что если с сервера пришла новая фотка и заменила эту, пока происходит обработка
             const photo = images[lastIdx]
             photo.compression?.abort()
             
             const abortCtrl = new AbortController()
-            const compressionInitialData = {
+            const compressionStart = {
               isCompressed: false,
-              compression: {
+              compression: { ...DefaultOperation,
                 id: uuid.v4(),
-                progress: 0,
                 abort: ()=>{
                   //console.log('compression was aborted')
                   abortCtrl.abort('compression was aborted')
@@ -307,15 +310,18 @@ React.memo(
               },
             } satisfies Partial<ProfilePhoto>
             
-            const processingPhoto = { ...photo, ...compressionInitialData }
+            const processingPhoto = { ...photo, ...compressionStart }
             
             const updatePhotoNow = (p: Partial<ProfilePhoto>)=>{
               setImages(s=>findByAndMapTo(s,
                 elem=>({...elem, ...p}),
-                elem=>elem.compression?.id===compressionInitialData.compression.id
+                elem=>elem.compression?.id===compressionStart.compression.id
               ))
             }
-            const updatePhoto = throttle(2000, updatePhotoNow)
+            const updatePhoto = throttle(
+              mapRange(Math.random(),[0,1],[1500,2000]),
+              updatePhotoNow
+            )
           
             ;(async()=>{
               try {
@@ -324,7 +330,7 @@ React.memo(
                   progress.progress = p??0
                   //console.log('progress',progress.value)
                   updatePhoto({ compression: {
-                    ...compressionInitialData.compression,
+                    ...compressionStart.compression,
                     progress: progress.value,
                   } })
                 }
@@ -360,7 +366,7 @@ React.memo(
                 } satisfies ProfilePhoto
                 setImages(s=>ifFoundByThenReplaceTo(s,
                   newPhoto,
-                  elem=>elem.compression?.id===compressionInitialData.compression.id
+                  elem=>elem.compression?.id===compressionStart.compression.id
                 ))
               }
               catch (ex) {
@@ -384,14 +390,14 @@ React.memo(
   )
   
   
-  
-  /* useEffect(
+  /*
+  useEffect(
     ()=>{
-      console.log('images[0]',images[0])
+      console.log('images[3]',images[3])
     },
-    [images[0]]
-  ) */
-  
+    [images[3]]
+  )
+   */
   
   
   return <>
@@ -458,11 +464,11 @@ React.memo(
                 
                 {function(){
                   if (false){}
-                  else if (im.compression)
+                  else if (im.compression?.showProgress)
                     return <div css={photoPlaceholderStyle}>
                       <PieProgress css={profilePhotoPieProgress}
                         progress={
-                          mapRange(im.compression.progress,[0,100],[5,100])
+                          mapRange(im.compression.progress,[0,100],[5,95])
                         }
                       />
                     </div>
@@ -471,11 +477,11 @@ React.memo(
                     return <div css={photoPlaceholderStyle}>
                       <SparkingLoadingLine/>
                     </div>
-                  else if (im.download)
+                  else if (im.download?.showProgress)
                     return <div css={photoPlaceholderStyle}>
                       <PieProgress css={profilePhotoPieProgress}
                         progress={
-                          mapRange(im.download.progress,[0,100],[5,100])
+                          mapRange(im.download.progress,[0,100],[5,95])
                         }
                       />
                     </div>
@@ -497,21 +503,19 @@ React.memo(
                   
                 }()}
                 
-                
-                { isDraggingFiles &&
-                  <div css={t=>[photoPlaceholderStyle(t),css`
-                    background: none;
-                    ${ isDragAccept && css`background: #00000099;` }
-                    ::after {
-                      ${abs};
-                      content: '';
-                      inset: -4px;
-                      border-radius: calc(14px + 4px);
-                      border: 10px dashed;
-                      border-color: ${t.photos.borderDrag[0]};
-                    }
-                  `]}/>
+                { im.type==='local' && im.upload?.showProgress &&
+                  <div css={photoDimmed}>
+                    <PieProgress css={profilePhotoPieProgressAccent}
+                      progress={
+                        mapRange(im.upload.progress,[0,100],[5,95])
+                      }
+                    />
+                  </div>
                 }
+                { isDraggingFiles && <>
+                  { isDragAccept && <div css={photoDimmed}/> }
+                  <div css={photoOnDragBorder}/>
+                </>}
                 
               </animated.label>
               </div>
@@ -588,8 +592,12 @@ React.memo(
       <BottomSheetBasic {...sheet.sheetProps}>
         <OptionsContent>
           
+          
           <Button css={ButtonStyle.bigRectTransparent}
             onClick={()=>{
+              const im = images[lastIdx]
+              im.download?.abort()
+              im.compression?.abort()
               const newImages = [...images]
               newImages[lastIdx] = {
                 ...DefaultProfilePhoto,
@@ -609,6 +617,7 @@ React.memo(
               </div>
             </OptionContainer>
           </Button>
+          
           
           <Dropzone
             onDrop={(files, rejectedFiles, ev)=>onFilesSelected(files)}
@@ -632,9 +641,46 @@ React.memo(
           </Dropzone>
           
           
-          {/* TODO download button*/}
-          {/* TODO cancel button */}
-          {/* TODO show fullscreen button */}
+          {/* TODO fullscreen */}
+          {/* {function(){
+            const im = images[lastIdx]
+            if (im.type==='remote' && im.isDownloaded || im.type==='local' && im.isCompressed) {
+              return <Button css={ButtonStyle.bigRectTransparent}
+                onClick={()=>{
+                  sheet.setClosing()
+                }}
+              >
+                <OptionContainer>
+                  <OptionTitle>{actionUiValues.fullScreenView[0].text}</OptionTitle>
+                  <div css={optionIconBoxStyle}>
+                    <FullscreenIc css={css`height: 120%;`}/>
+                  </div>
+                </OptionContainer>
+              </Button>
+            }
+          }()} */}
+          
+          
+          
+          {function(){
+            const im = images[lastIdx]
+            if (im.type==='remote' && im.isDownloaded || im.type==='local' && im.isCompressed) {
+              return <a href={im.dataUrl}
+                download={`${im.name} ${im.id}.${extensionFromMimeType(im.mimeType)}`}
+              >
+                <Button css={ButtonStyle.bigRectTransparent}
+                  onClick={sheet.setClosing}
+                >
+                  <OptionContainer>
+                    <OptionTitle>{actionUiValues.download[0].text}</OptionTitle>
+                    <div css={optionIconBoxStyle}>
+                      <Download1Ic/>
+                    </div>
+                  </OptionContainer>
+                </Button>
+              </a>
+            }
+          }()}
           
           
         </OptionsContent>
@@ -718,18 +764,35 @@ const photoPlaceholderStyle = (t:AppTheme.Theme)=>css`
   background: ${t.photos.bgc[0]};
   ${center};
 `
+const photoDimmed = (t:AppTheme.Theme)=>css`
+  ${photoPlaceholderStyle(t)};
+  background: #00000099;
+`
+const photoOnDragBorder = (t:AppTheme.Theme)=>css`
+  ${abs};
+  inset: -4px;
+  border-radius: calc(14px + 4px);
+  border: 10px dashed;
+  border-color: ${t.photos.borderDrag[0]};
+`
 const photoPlaceholderIconStyle = (t:AppTheme.Theme)=>css`
   ${SvgIcStyle.El.thiz.icon}{
     ${SvgIcStyle.Prop.prop.color}: ${t.photos.content[0]};
     ${SvgIcStyle.Prop.prop.size}:  30%;
   }
 `
-const profilePhotoPieProgress = (t:Theme)=>css`
+const profilePhotoPieProgress = (t:AppTheme.Theme)=>css`
   ${PieProgressStyle.El.thiz.pieProgress}{
     ${PieProgressStyle.Prop.prop.progressColor}: transparent;
     ${PieProgressStyle.Prop.prop.restColor}:     ${t.photos.content[0]};
     height: 30%;
     aspect-ratio: 1;
+  }
+`
+const profilePhotoPieProgressAccent = (t:AppTheme.Theme)=>css`
+  ${profilePhotoPieProgress(t)};
+  ${PieProgressStyle.El.thiz.pieProgress}{
+    ${PieProgressStyle.Prop.prop.restColor}:     ${t.photos.bgc[0]};
   }
 `
 

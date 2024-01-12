@@ -4,6 +4,7 @@ import Axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from 'axios'
+import axiosRetry, { IAxiosRetryConfig } from 'axios-retry'
 import { ApiRoutes } from 'src/api/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus"
@@ -17,22 +18,35 @@ import ValOrUpdater = RecoilUtils.ValOrUpdater
 export namespace AxiosConfig {
   
   
-  export const ax = Axios.create({
+  export const commonAxiosRetryConfig: IAxiosRetryConfig = {
+    retries: 2,
+    retryDelay: (retryCount, error)=>500,
+    // A callback to further control if a request should be retried.
+    // By default, it retries if it is a network error
+    // or a 5xx error on an idempotent request (GET, HEAD, OPTIONS, PUT or DELETE).
+    /* retryCondition: error => {
+     return error.response.status === 503;
+     }, */
+  }
+  
+  export const ax =  Axios.create({
     /* `validateStatus` defines whether to resolve or reject the promise for a given
      * HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
      * or `undefined`), the promise will be resolved; otherwise, the promise will be rejected.
      */
     /*validateStatus: function (status) {
-      return status >= 200 && status < 300; // default
-    },*/
+     return status >= 200 && status < 300; // default
+     },*/
     baseURL: ApiRoutes.api,
     withCredentials: true,
   })
+  axiosRetry(ax, commonAxiosRetryConfig)
+  
   export const axAccess = Axios.create({
     baseURL: ApiRoutes.api,
     withCredentials: true,
   })
-  
+  axiosRetry(axAccess, commonAxiosRetryConfig)
   
   
   export type CustomConfigData = {

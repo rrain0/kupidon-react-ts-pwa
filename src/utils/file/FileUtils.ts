@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import axiosRetry from 'axios-retry'
 import { CreateAxiosDefaults } from 'axios/index'
+import { AxiosConfig } from 'src/api/AxiosConfig'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import CallbackParam = TypeUtils.Callback1
 import exists = TypeUtils.exists
@@ -70,16 +71,7 @@ export namespace FileUtils {
     if (ctrl) config.signal = ctrl.signal
     
     const ax = Axios.create(config)
-    axiosRetry(ax,{
-      retries: 2,
-      retryDelay: (retryCount, error)=>500,
-      // A callback to further control if a request should be retried.
-      // By default, it retries if it is a network error
-      // or a 5xx error on an idempotent request (GET, HEAD, OPTIONS, PUT or DELETE).
-      /* retryCondition: error => {
-        return error.response.status === 503;
-      }, */
-    })
+    axiosRetry(ax, AxiosConfig.commonAxiosRetryConfig)
     
     const response = await ax.get<Blob>(url)
     return response.data
@@ -89,6 +81,13 @@ export namespace FileUtils {
   
   export const trimExtension = (fileName: string) =>
     fileName.replace(/\.[^.]*$/,'')
+  
+  
+  
+  export const extensionFromMimeType = (mimeType: string) =>
+    mimeType.match(/^[^/]+\/(?<ext>[^/]+)$/)?.groups?.['ext'] ?? ''
+  
+  
   
   
 }

@@ -7,12 +7,9 @@ export namespace ApiUtils {
   
   
   export interface SuccessResponse<D = unknown> {
-    success: true
+    isSuccess: true
     data: D
   }
-  
-  
-  
   
   
   export interface ResponseError {
@@ -21,7 +18,7 @@ export namespace ApiUtils {
     extra?: any
   }
   export interface ErrorResponse<E extends ResponseError> {
-    success: false
+    isSuccess: false
     error: E
   }
   
@@ -37,7 +34,7 @@ export namespace ApiUtils {
   export interface UnknownErrorResponse extends ErrorResponse<UnknownError>{}
   export function getUnknownError(error?: any): UnknownErrorResponse {
     const unknown: UnknownErrorResponse = {
-      success: false,
+      isSuccess: false,
       error: {
         code: 'unknown-error',
         msg: 'Unknown error',
@@ -57,7 +54,7 @@ export namespace ApiUtils {
   export interface ConnectionErrorResponse extends ErrorResponse<ConnectionError>{}
   export function getConnectionError(): ConnectionErrorResponse {
     return {
-      success: false,
+      isSuccess: false,
       error: {
         code: 'connection-error',
         msg: 'Connection error',
@@ -79,7 +76,7 @@ export namespace ApiUtils {
   export interface AuthenticationErrorResponse extends ErrorResponse<AuthenticationError>{}
   export function getAuthenticationError(error?: any): AuthenticationErrorResponse {
     const auth: AuthenticationErrorResponse = {
-      success: false,
+      isSuccess: false,
       error: {
         code: 'authentication-error',
         msg: 'Authentication error',
@@ -117,7 +114,7 @@ export namespace ApiUtils {
   : ErrorResponse<E> | undefined {
     if (ex instanceof AxiosError && ex.response?.status===400) {
       return {
-        success: false,
+        isSuccess: false,
         error: ex.response.data as E
       } as ErrorResponse<E>
     }
@@ -144,7 +141,7 @@ export namespace ApiUtils {
   (response: AxiosResponse)
   : SuccessResponse<D> | undefined {
     if (response.status===200) return {
-      success: true,
+      isSuccess: true,
       data: response.data as D,
     } as SuccessResponse<D>
   }

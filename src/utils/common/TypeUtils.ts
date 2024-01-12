@@ -20,6 +20,7 @@ export namespace TypeUtils {
   export type Generator<T> = ()=>T
   export type Mapper<T> = (prevValue: T)=>T
   export type Predicate<T> = (obj: T)=>boolean
+  export type Filter<T> = Predicate<T>
   export const defaultPredicate: Predicate<any> = obj=>!!obj
   
   export type ValueOrMapper<T> = T | Mapper<T>
@@ -36,6 +37,7 @@ export namespace TypeUtils {
   
   
   
+  export const noop = ()=>{}
   export const trueOrUndef = (value: any): true|undefined => value ? true : undefined
   export const falsyToUndef = <T>(value: T) => value ? value : undefined
   export function exists<T extends anyval>(value: T): value is T & {} {
