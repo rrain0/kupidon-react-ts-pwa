@@ -285,17 +285,17 @@ React.memo(
         const emptyCnt = images
           .filter((im,i)=>i===lastIdx || (i>=lastIdx && im.isEmpty)).length
         let filesI = 0
-        const newImages = images.map((it,i)=>{
+        const newImages = images.map((photo,i)=>{
           if (filesI < imgFiles.length &&
             (i===lastIdx ||
               (i>=lastIdx &&
-                (imgFiles.length<=emptyCnt ? it.isEmpty : true)
+                (imgFiles.length<=emptyCnt ? photo.isEmpty : true)
               )
             )
           ){
             const imgFile = imgFiles[filesI++]
             
-            const photo = images[lastIdx]
+            photo.download?.abort()
             photo.compression?.abort()
             
             const abortCtrl = new AbortController()
@@ -380,7 +380,7 @@ React.memo(
             return processingPhoto
           }
           
-          return it
+          return photo
         })
         setImages(newImages)
         setMenuOpen(false)
@@ -389,15 +389,21 @@ React.memo(
     [images, lastIdx, setImages]
   )
   
-  
-  /*
-  useEffect(
+  /* {
+    const index = 1
+    useEffect(
+      ()=>{
+        console.log(`images[${index}]`,images[index])
+      },
+      [images[index]]
+    )
+  } */
+  /* useEffect(
     ()=>{
-      console.log('images[3]',images[3])
+      console.log(`images`,images)
     },
-    [images[3]]
-  )
-   */
+    [images]
+  ) */
   
   
   return <>
