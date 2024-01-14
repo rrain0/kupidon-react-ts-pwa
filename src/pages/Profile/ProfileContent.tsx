@@ -80,10 +80,7 @@ import notExists = TypeUtils.notExists
 import ifFoundByThenMapTo = ArrayUtils.ifFoundByThenMapTo
 import findBy = ArrayUtils.findBy
 import throttle = AsyncUtils.throttle
-import awaitValue = AsyncUtils.awaitValue
-import awaitCallback = AsyncUtils.awaitCallback
 import ApiResponse = ApiUtils.ApiResponse
-import SuccessResponse = ApiUtils.SuccessResponse
 import AddProfilePhoto = UserApi.AddProfilePhoto
 import mapRange = MathUtils.mapRange
 import CurrentUserSuccessData = UserApi.CurrentUserSuccessData
@@ -185,18 +182,16 @@ React.memo(
             id: it.id,
             showProgress: false,
           }))
-          {
-            const setUploadByPhotoId = (upload: Operation)=>{
-              setFormValues(s=>({ ...s,
-                photos: ifFoundByThenMapTo(
-                  s.photos,
-                  elem=>({ ...elem, upload }),
-                  elem=>elem.id===upload.id
-                )
-              }))
-            }
-            uploads.forEach(upload=>setUploadByPhotoId(upload))
-          }
+          setFormValues(s=>({ ...s,
+            photos: ArrayUtils.merge(
+              uploads,s.photos,
+              (upload,photo)=>[
+                upload,
+                { ...photo, upload } satisfies ProfilePhoto
+              ],
+              (upload,photo)=>upload.id===photo.id
+            )[1]
+          }))
           
           const setUpload = (upload: Operation)=>{
             setFormValues(s=>({ ...s,
@@ -217,38 +212,39 @@ React.memo(
           
           const applyUpdatedUser = ()=>{
             clearTimeout(delayTimerId)
-            uploads.forEach(upload=>{
-              setFormValues(s=>({ ...s,
-                photos: ifFoundByThenMapTo(
-                  s.photos,
-                  elem=>({ ...elem, upload: undefined }),
-                  elem=>elem.id===upload.id
-                )
-              }))
-            })
+            setFormValues(s=>({ ...s,
+              photos: ArrayUtils.merge(
+                uploads,s.photos,
+                (upload,photo)=>[
+                  upload,
+                  { ...photo, upload: undefined } satisfies ProfilePhoto
+                ],
+                (upload,photo)=>upload.id===photo.id
+              )[1]
+            }))
             const u = updatedUser
             if (u){
+              // TODO bug - поменять местами 2 фото, потом одно заменить на новое,
+              //  запустить сохранение, во время сохранения отменить фотки,
+              //  когда сохранение завершится, фото неправильно обновятся
+              setFormValues(s=>({ ...s,
+                photos: ArrayUtils.merge(
+                  values.photos, s.photos,
+                  (usedPhoto, photo, usedPhotoI)=>[
+                    usedPhoto,
+                    { ...photo,
+                      type: 'remote',
+                      index: usedPhotoI,
+                      isDownloaded: !usedPhoto.isEmpty,
+                    } satisfies ProfilePhoto
+                  ],
+                  (usedPhoto,photo)=>usedPhoto.id===photo.id
+                )[1]
+              }))
               setAuth(s=>({
                 accessToken: s?.accessToken ?? '',
                 user: u,
               }))
-              const updatePhotosNow = (p: Partial<ProfilePhoto>)=>{
-                setFormValues(s=>({ ...s,
-                  photos: ifFoundByThenMapTo(s.photos,
-                    elem=>({...elem, ...p}),
-                    elem=>elem.id===p.id
-                  ),
-                }))
-              }
-              values.photos.forEach((photo,i)=>{
-                const update = {
-                  id: photo.id,
-                  type: 'remote',
-                  index: i,
-                  isDownloaded: !photo.isEmpty,
-                } satisfies Partial<ProfilePhoto>
-                updatePhotosNow(update)
-              })
             }
           }
           
@@ -280,27 +276,22 @@ React.memo(
               updatePhotoNow
             )
             
-            try {
-              const onProgress = (p:number|null)=>{
-                //console.log(`progress ${photo.id} ${p}`)
-                const upload = getUpload()
-                if (upload) updatePhoto({ upload:
-                  { ...upload, progress: p??0 }
-                })
-              }
-              const updatedUserResponse =
-                await UserApi.addProfilePhoto(photo, { onProgress })
-              if (!updatedUserResponse.isSuccess){
-                applyUpdatedUser()
-                reject(updatedUserResponse)
-                return undefined
-              }
-              updatedUser = updatedUserResponse.data.user
+            const onProgress = (p:number|null)=>{
+              //console.log(`progress ${photo.id} ${p}`)
+              const upload = getUpload()
+              if (upload) updatePhoto({ upload:
+                { ...upload, progress: p??0 }
+              })
             }
-            catch (ex) {}
-            finally {
-              updatePhotoNow({ upload: undefined })
+            const updatedUserResponse =
+              await UserApi.addProfilePhoto(photo, { onProgress })
+            updatePhotoNow({ upload: undefined })
+            if (!updatedUserResponse.isSuccess){
+              applyUpdatedUser()
+              reject(updatedUserResponse)
+              return undefined
             }
+            updatedUser = updatedUserResponse.data.user
           }
           
           applyUpdatedUser()
@@ -405,28 +396,31 @@ React.memo(
             }
           })
           
-          newValues.photos = [...s.photos]
           
           // for photos which have become remote after saving to server
-          newValues.initialValues.photos = newValues.initialValues.photos.map(photo=>{
-            const found = findBy(newValues.photos, elem=>elem.id===photo.id)
-            if (found.isFound && found.elem.type==='remote' && found.elem.isDownloaded){
-              const newPhoto = {
-                ...found.elem,
-                name: photo.name,
-                remoteUrl: photo.remoteUrl,
-              } satisfies ProfilePhoto
-              const newInitialPhoto = {
-                ...photo,
-                isDownloaded: true,
-                dataUrl: newPhoto.dataUrl,
-              } satisfies ProfilePhoto
-              
-              newValues.photos[found.index] = newPhoto
-              return newInitialPhoto
-            }
-            return photo
-          })
+          {
+            const [newInitialPhotos, newPhotos] = ArrayUtils.merge(
+              newValues.initialValues.photos, s.photos,
+              (a,b)=>{
+                if (b.type==='remote' && b.isDownloaded)
+                  return [
+                    {
+                      ...a,
+                      isDownloaded: true,
+                      dataUrl: b.dataUrl,
+                    },{
+                      ...b,
+                      name: a.name,
+                      remoteUrl: a.remoteUrl,
+                    }
+                  ]
+                return [a,b]
+              },
+              (a,b)=>a.id===b.id
+            )
+            newValues.initialValues.photos = newInitialPhotos
+            newValues.photos = newPhotos
+          }
           
           newValues.photos = newValues.photos.map(photo => {
             if (photo.type === 'remote') {
@@ -546,25 +540,6 @@ React.memo(
                   progress: progress.value,
                 } })
               }
-              
-              /* if (photo.name==='IMG_20230922_094037_882 #top'){
-                await awaitValue(1000)
-                onProgress(10)
-                await awaitValue(1000)
-                onProgress(15)
-                await awaitValue(1000)
-                onProgress(20)
-                await awaitValue(1000)
-                onProgress(30)
-                await awaitValue(1000)
-                onProgress(35)
-                await awaitValue(1000)
-                onProgress(40)
-                await awaitValue(1000)
-                onProgress(45)
-                await awaitValue(1000)
-                onProgress(50)
-              } */
               
               //console.log('start download id',photo.id)
               const blob = await fetchToBlob(photo.remoteUrl,
@@ -916,7 +891,7 @@ React.memo(
           onClick={resetAllFields}
         >{actionUiValues.cancel[0].text}</Button>
       }
-      { canSubmit &&
+      { canSubmit && !isLoading &&
         <Button css={ButtonStyle.roundedSmallAccent}
           onClick={submit}
         >{actionUiValues.save[0].text}</Button>

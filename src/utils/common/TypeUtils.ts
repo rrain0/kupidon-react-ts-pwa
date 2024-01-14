@@ -19,6 +19,8 @@ export namespace TypeUtils {
   export type Consumer<T> = Callback1<T>
   export type Generator<T> = ()=>T
   export type Mapper<T> = (prevValue: T)=>T
+  export type Merger<T1, T2 = T1> = (a: T1, b: T2)=>[T1,T2]
+  export type MergerIndexed<T1, T2 = T1> = (a: T1, b: T2, aI: number, bI: number)=>[T1,T2]
   export type Predicate<T> = (obj: T)=>boolean
   export type Filter<T> = Predicate<T>
   export const defaultPredicate: Predicate<any> = obj=>!!obj
