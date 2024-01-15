@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { useSpring, animated } from '@react-spring/web'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import {
@@ -9,6 +10,7 @@ import {
   useBottomSheet
 } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
+  useEffect,
   useLayoutEffect,
   useMemo,
   useState,
@@ -98,16 +100,20 @@ React.memo(
   )
   
   
-  const bgcDimHex = useMemo(
-    ()=>{
-      const maxDimHeight = snapPointsPx[openSnapIdx]
-      const dimHeight = Math.min(computedSheetDimens.sheetH, maxDimHeight)
-      return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
-        .toString(16).padStart(2,'0')
-    },
-    [computedSheetDimens.sheetH, snapPointsPx, openSnapIdx]
-  )
   
+  const frameSpring = useSpring({
+    background: function(){
+      const bgcDimHex = function(){
+        const maxDimHeight = snapPointsPx[openSnapIdx]
+        const dimHeight = Math.min(computedSheetDimens.sheetH, maxDimHeight)
+        return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
+          .toString(16).padStart(2,'0')
+      }()
+      if (state!=='close') return `#000000${bgcDimHex}`
+      else return 'none'
+    }(),
+    immediate: true,
+  })
   
   
   useUpNodesScrollLock(bottomSheetFrameRef, state!=='closed')
@@ -119,25 +125,22 @@ React.memo(
   
   
   
-  return <div /* Frame */ css={css`
+  return <animated.div /* Frame */ css={css`
     ${fixed};
     z-index: 30;
     background: none;
     pointer-events: none;
-    ${!['closed'].includes(state) && css`
-      background: #000000${bgcDimHex};
-      will-change: background;
-    `}
-    ${!['closed','closing'].includes(state) && css`
-      pointer-events: auto;
-    `}
     display: grid;
     place-items: end center;
   `}
+    style={{
+      ...frameSpring,
+      pointerEvents: !['closed','closing'].includes(state) ? 'auto' : 'none',
+    }}
     ref={bottomSheetFrameRef as any}
     // todo prevent click if dragged
     onClick={ev=>{
-      console.log("dimmed background click")
+      //console.log("dimmed background click")
       setState('closing')
     }}
   >
@@ -167,6 +170,6 @@ React.memo(
         
       </div>
     </div>
-  </div>
+  </animated.div>
 })
 export default BottomSheet

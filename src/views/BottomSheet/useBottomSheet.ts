@@ -314,13 +314,14 @@ export const useBottomSheet = (
     ()=>{
       const s = state
       const i = snapIdx
+      const ph = snapPointsPx[i]
       const h = computedSheetDimens.sheetH
       
       // open instantly
       if (s==='open'){
-        if (h===0 && snapPointsPx[i]!==0){
+        if (h===0 && ph!==0){
           stopCurrentAction()
-          setNewSheetStyle({ height: snapPointsPx[i] })
+          setNewSheetStyle({ height: ph })
           setState('opened')
         } else {
           setState('closed')
@@ -329,9 +330,9 @@ export const useBottomSheet = (
       
       // open animated
       else if (s==='opening'){
-        if (h===0 && snapPointsPx[i]!==0){
+        if (h===0 && ph!==0){
           stopCurrentAction()
-          runAnimation(h,snapPointsPx[i],s,'opened')
+          runAnimation(h,ph,s,'opened')
         } else {
           setState('closed')
         }
@@ -363,12 +364,12 @@ export const useBottomSheet = (
         if (h===0){
           setState('open')
         }
-        else if (snapPointsPx[i]===0){
+        else if (ph===0){
           setState('close')
         }
         else {
           stopCurrentAction()
-          setNewSheetStyle({ height: snapPointsPx[i] })
+          setNewSheetStyle({ height: ph })
           setState('opened')
         }
       }
@@ -378,12 +379,12 @@ export const useBottomSheet = (
         if (h===0){
           setState('opening')
         }
-        else if (snapPointsPx[i]===0){
+        else if (ph===0){
           setState('closing')
         }
         else {
           stopCurrentAction()
-          runAnimation(h,snapPointsPx[i],s,'opened')
+          runAnimation(h,ph,s,'opened')
         }
       }
       
