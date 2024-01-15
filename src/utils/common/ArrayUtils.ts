@@ -15,6 +15,8 @@ export namespace ArrayUtils {
   import Merger = TypeUtils.Merger
   import exists = TypeUtils.exists
   import MergerIndexed = TypeUtils.MergerIndexed
+  import CombinerIndexed = TypeUtils.CombinerIndexed
+  import Exists = TypeUtils.Exists
   export const eq = (arr1: any[] | empty, arr2: any[] | empty): boolean => {
     if (arr1===arr2) return true
     if (!arr1 || !arr2) return false
@@ -88,6 +90,24 @@ export namespace ArrayUtils {
   
   
   
+  export const combine = <T1, T2 = T1>
+  (arr1: T1[], arr2: T2[],
+   combiner: CombinerIndexed<T1,T2>,
+   comparator: ComparatorEq<T1,T2> = defaultComparatorEq
+  ): T1[] => {
+    const newArr1 = [...arr1]
+    const [fwd] = diff(arr1,arr2,comparator)
+    fwd.forEach((to,from)=>{
+      if (exists(to)){
+        const newElem1 = combiner(arr1[from], arr2[to], from, to)
+        newArr1[from] = newElem1
+      }
+    })
+    return newArr1
+  }
+  
+  
+  
   export type FindResult<T> = {
     isFound: true
     index: number
@@ -119,20 +139,8 @@ export namespace ArrayUtils {
   
   
   
-  export const ifFoundThenReplaceTo =
-  <T>(arr: T[], elem: T, comparator: ComparatorEq<T> = defaultComparatorEq): T[] => {
-    const findResult = findBy(arr, it=>comparator(it,elem))
-    if (findResult.isFound) {
-      const newArr = [...arr]
-      newArr[findResult.index] = elem
-      return newArr
-    }
-    return arr
-  }
   
-  
-  
-  export const ifFoundByThenReplaceTo =
+  export const replaceFirstToIfFoundBy =
   <T>(arr: T[], elem: T, filter: Filter<T> = defaultPredicate): T[] => {
     const findResult = findBy(arr, filter)
     if (findResult.isFound){
@@ -142,7 +150,7 @@ export namespace ArrayUtils {
     }
     return arr
   }
-  export const ifFoundByThenMapTo =
+  export const mapFirstToIfFoundBy =
   <T>(arr: T[], mapper: Mapper<T>, filter: Filter<T> = defaultPredicate): T[] => {
     const findResult = findBy(arr, filter)
     if (findResult.isFound){
@@ -167,8 +175,8 @@ export namespace ArrayUtils {
   
   
   
-  export type ArrWithNonEmptyElements<A extends Array<E>, E = any> = A extends Array<infer E>
-    ? Array<Exclude<E, null|undefined>>
+  export type ArrayOfNonEmpty<A extends Array<any>> = A extends Array<infer E>
+    ? Array<Exists<E>>
     : never
   
   

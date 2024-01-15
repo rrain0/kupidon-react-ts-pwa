@@ -77,7 +77,7 @@ import fetchToBlob = FileUtils.fetchToBlob
 import blobToDataUrl = FileUtils.blobToDataUrl
 import exists = TypeUtils.exists
 import notExists = TypeUtils.notExists
-import ifFoundByThenMapTo = ArrayUtils.ifFoundByThenMapTo
+import mapFirstToIfFoundBy = ArrayUtils.mapFirstToIfFoundBy
 import findBy = ArrayUtils.findBy
 import throttle = AsyncUtils.throttle
 import ApiResponse = ApiUtils.ApiResponse
@@ -183,19 +183,16 @@ React.memo(
             showProgress: false,
           }))
           setFormValues(s=>({ ...s,
-            photos: ArrayUtils.merge(
-              uploads,s.photos,
-              (upload,photo)=>[
-                upload,
-                { ...photo, upload } satisfies ProfilePhoto
-              ],
-              (upload,photo)=>upload.id===photo.id
-            )[1]
+            photos: ArrayUtils.combine(
+              s.photos, uploads,
+              (photo,upload)=>({ ...photo, upload } satisfies ProfilePhoto),
+              (photo,upload)=>photo.id===upload.id
+            )
           }))
           
           const setUpload = (upload: Operation)=>{
             setFormValues(s=>({ ...s,
-              photos: ifFoundByThenMapTo(
+              photos: mapFirstToIfFoundBy(
                 s.photos,
                 elem=>({ ...elem, upload }),
                 elem=>elem.upload?.id===upload.id
@@ -213,33 +210,24 @@ React.memo(
           const applyUpdatedUser = ()=>{
             clearTimeout(delayTimerId)
             setFormValues(s=>({ ...s,
-              photos: ArrayUtils.merge(
-                uploads,s.photos,
-                (upload,photo)=>[
-                  upload,
+              photos: ArrayUtils.combine(
+                s.photos, uploads,
+                (photo,upload)=>(
                   { ...photo, upload: undefined } satisfies ProfilePhoto
-                ],
-                (upload,photo)=>upload.id===photo.id
-              )[1]
+                ),
+                (photo,upload)=>photo.id===upload.id
+              )
             }))
             const u = updatedUser
             if (u){
-              // TODO bug - поменять местами 2 фото, потом одно заменить на новое,
-              //  запустить сохранение, во время сохранения отменить фотки,
-              //  когда сохранение завершится, фото неправильно обновятся
               setFormValues(s=>({ ...s,
-                photos: ArrayUtils.merge(
-                  values.photos, s.photos,
-                  (usedPhoto, photo, usedPhotoI)=>[
-                    usedPhoto,
-                    { ...photo,
-                      type: 'remote',
-                      index: usedPhotoI,
-                      isDownloaded: !usedPhoto.isEmpty,
-                    } satisfies ProfilePhoto
-                  ],
-                  (usedPhoto,photo)=>usedPhoto.id===photo.id
-                )[1]
+                photos: ArrayUtils.combine(
+                  s.photos, values.photos,
+                  (photo,usedPhoto)=>({
+                    ...photo, type: 'remote', isDownloaded: !usedPhoto.isEmpty,
+                  } satisfies ProfilePhoto),
+                  (photo,usedPhoto)=>usedPhoto.type==='local' && usedPhoto.id===photo.id
+                )
               }))
               setAuth(s=>({
                 accessToken: s?.accessToken ?? '',
@@ -265,7 +253,7 @@ React.memo(
             const updatePhotoNow = (p: Partial<ProfilePhoto>)=>{
               const upload = getUpload()
               if (upload) setFormValues(s=>({ ...s,
-                photos: ifFoundByThenMapTo(s.photos,
+                photos: mapFirstToIfFoundBy(s.photos,
                   elem=>({...elem, ...p}),
                   elem=>elem.upload?.id===upload.id
                 )
@@ -431,7 +419,6 @@ React.memo(
                 compression: photo.compression,
               } satisfies ProfilePhoto
             }
-            if (photo.type === 'local') return photo
             return photo
           })
           
@@ -499,12 +486,12 @@ React.memo(
           
           setFormValues(s=>({ ...s,
             initialValues: { ...s.initialValues,
-              photos: ifFoundByThenMapTo(s.initialValues.photos,
+              photos: mapFirstToIfFoundBy(s.initialValues.photos,
                 elem=>({...elem, ...downloadStart}),
                 elem=>elem.id===photo.id
               ),
             },
-            photos: ifFoundByThenMapTo(s.photos,
+            photos: mapFirstToIfFoundBy(s.photos,
               elem=>({...elem, ...downloadStart}),
               elem=>elem.id===photo.id
             ),
@@ -513,12 +500,12 @@ React.memo(
           const updatePhotosNow = (p: Partial<ProfilePhoto>)=>{
             setFormValues(s=>({ ...s,
               initialValues: { ...s.initialValues,
-                photos: ifFoundByThenMapTo(s.initialValues.photos,
+                photos: mapFirstToIfFoundBy(s.initialValues.photos,
                   elem=>({...elem, ...p}),
                   elem=>elem.download?.id===downloadStart.download.id
                 ),
               },
-              photos: ifFoundByThenMapTo(s.photos,
+              photos: mapFirstToIfFoundBy(s.photos,
                 elem=>({...elem, ...p}),
                 elem=>elem.download?.id===downloadStart.download.id
               ),
