@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import BottomSheet, { BottomSheetOptionsProps } from 'src/views/BottomSheet/BottomSheet'
 import { css } from '@emotion/react'
 import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
@@ -7,6 +8,7 @@ import React, { useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import center = EmotionCommon.center
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
@@ -17,9 +19,13 @@ export const BasicSheetOpenIdx = 3
 
 
 
-export type BottomSheetBasicProps = BottomSheetOptionsProps & {
-  header?: React.ReactNode
-}
+export type BottomSheetBasicProps =
+  BottomSheetOptionsProps & PartialUndef<{
+    header: React.ReactNode
+  }>
+
+
+
 const BottomSheetBasic =
 React.memo(
 (props: BottomSheetBasicProps)=>{
@@ -43,7 +49,7 @@ React.memo(
     bottomSheetRef={bottomSheetRef}
     bottomSheetHeaderRef={bottomSheetHeaderRef}
     bottomSheetContentRef={bottomSheetContentRef}
-    draggableElements={[bottomSheetHeaderRef]}
+    draggableElements={[bottomSheetHeaderRef,bottomSheetFrameRef]}
   >
     
     {/*
@@ -63,20 +69,22 @@ React.memo(
     `}
       ref={bottomSheetHeaderRef as any}
     >
-      <div css={t=>css`
+      
+      <div /* Header handle */ css={t=>css`
         width: 44px;
         height: 4px;
         border-radius: 2px;
         background: ${t.bottomSheet.handle[0]};
         ${state==='dragging' && css`background: ${t.page.content[0]};`}
-        will-change: background;
       `}/>
+      
       <div css={css`
         ${center};
         min-height: 20px;
       `}>
         {header}
       </div>
+      
     </div>
     
     {/*

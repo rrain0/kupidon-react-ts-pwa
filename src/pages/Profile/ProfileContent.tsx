@@ -432,7 +432,7 @@ React.memo(
   
   const resetAllFields = useCallback(
     ()=>setFormValues(s=>({ ...s, ...s.initialValues })),
-    [setFormValues]
+    []
   )
   
   

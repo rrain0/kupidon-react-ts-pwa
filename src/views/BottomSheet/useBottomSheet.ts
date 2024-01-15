@@ -1,6 +1,6 @@
 import React, {
   useCallback,
-  useEffect, useLayoutEffect,
+  useEffect,
   useMemo, useRef,
   useState,
 } from 'react'
@@ -8,7 +8,6 @@ import { GetDimensions } from 'src/utils/common/GetDimensions'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import empty = TypeUtils.empty
 import fitRange = MathUtils.fitRange
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { CssUtils } from 'src/utils/common/CssUtils'
@@ -16,6 +15,8 @@ import parseCssValue = CssUtils.parseCssStringValue
 import CssValue = CssUtils.CssValue
 import inRangeExclusive = MathUtils.inRangeExclusive
 import inRange = MathUtils.inRange
+import PartialUndef = TypeUtils.PartialUndef
+import commonCss from 'src/styles/common.module.scss'
 
 
 
@@ -42,7 +43,7 @@ bugs:
  todo Maybe move to callbacks instead of exposing state because of unnecessary rerenders
  */
 
-// only 'open' & 'close' are stable states, others are intermediate
+// only 'opened' & 'closed' are stable states, others are intermediate
 export type SheetState =
   'opened' // sheet is opened
   |'closed' // sheet is closed
@@ -70,10 +71,14 @@ export type UseBottomSheetOptions = {
   snapIdx: number
   setState: ((state: SheetState)=>void)
   setSnapIdx: (snapIdx: number)=>void
-  snapPoints?: SheetSnapPoints | empty
-  //closeable?: boolean | empty
-  animationDuration?: number | empty
-}
+} & PartialUndef<{
+  snapPoints: SheetSnapPoints
+  //closeable?: boolean
+  animationDuration: number
+}>
+
+
+
 export const useBottomSheet = (
   bottomSheetFrameRef: React.RefObject<HTMLElement>,
   bottomSheetRef: React.RefObject<HTMLElement>,
@@ -117,7 +122,8 @@ export const useBottomSheet = (
           headerAndContentH: headerD.height+contentD.height,
         })
       }
-    },[
+    },
+    [
       bottomSheetFrameRef.current,
       bottomSheetRef.current,
       bottomSheetHeaderRef.current,
@@ -141,7 +147,8 @@ export const useBottomSheet = (
         content && resizeObserver.observe(content)
         return ()=>resizeObserver.disconnect()
       }
-    },[
+    },
+    [
       bottomSheetFrameRef.current,
       bottomSheetRef.current,
       bottomSheetHeaderRef.current,
@@ -155,88 +162,94 @@ export const useBottomSheet = (
   const stateRef = useRef(state); stateRef.current = state
   const animationDuration = options.animationDuration ?? defaultAutoAnimationDuration
   
-  const snapPoints = useMemo(function(){
-    if (!options.snapPoints || !options.snapPoints.length)
-      return [0,'fit-content','50%']
-    return options.snapPoints
-  },[...(options.snapPoints??[])])
+  const snapPoints = useMemo(
+    ()=>{
+      if (!options.snapPoints || !options.snapPoints.length)
+        return [0,'fit-content','50%']
+      return options.snapPoints
+    },
+    [...(options.snapPoints??[])]
+  )
   
   
-  const snapPointsPx = useMemo<number[]>(()=>{
-    const allowedUnits = ['px','',undefined,'%']
-    const allowedKeywords = ['fit-content','fit-header','free']
-    const snapPointsCssValues = snapPoints.map(it=>{
-      const cssValue = parseCssValue(it+'')
-      if (
-        !cssValue
-        || (cssValue.type==='keyword' && !allowedKeywords.includes(cssValue.value))
-        || (cssValue.type==='numeric' && !allowedUnits.includes(cssValue.unit))
-      ) cssValueParsingError(it, cssValue)
-      return cssValue
-    })
-    
-    const snapPointsPx: Array<number|undefined> = [...Array(snapPoints.length).keys()].map(it=>undefined)
-    
-    ;[['px','',undefined],['%'],['fit-content','fit-header'],['free']].forEach(units=>{
-      snapPointsCssValues.forEach((cssValue,cssValueI)=>{
-        
+  const snapPointsPx = useMemo<number[]>(
+    ()=>{
+      const allowedUnits = ['px','',undefined,'%']
+      const allowedKeywords = ['fit-content','fit-header','free']
+      const snapPointsCssValues = snapPoints.map(it=>{
+        const cssValue = parseCssValue(it+'')
         if (
-          (cssValue.type==='keyword' && !units.includes(cssValue.value))
-          || (cssValue.type==='numeric' && !units.includes(cssValue.unit))
-        ) return
-        
-        let computed = function(){
-          if (cssValue.type==='keyword') {
-            switch (cssValue.value) {
-              case 'fit-content':
-                return computedSheetDimens.headerAndContentH
-              case 'fit-header':
-                return computedSheetDimens.headerH
-              case 'free':
-                return 0 // will be adjusted
-              default:
-                cssValueParsingError(snapPoints[cssValueI], cssValue)
-            }
-          }
-          if (cssValue.type==='numeric') {
-            switch (cssValue.unit) {
-              case 'px':
-              case undefined:
-                return fitRange(
-                  0,
-                  +cssValue.value,
-                  computedSheetDimens.frameH,
-                )
-              case '%':
-                return fitRange(
-                  0,
-                  Math.round(+cssValue.value / 100 * computedSheetDimens.frameH),
-                  computedSheetDimens.frameH,
-                )
-              default:
-                cssValueParsingError(snapPoints[cssValueI], cssValue)
-            }
-          }
-          cssValueParsingError(snapPoints[cssValueI], cssValue)
-        }()
-        
-        const left = function(){
-          for (let i = cssValueI-1; i>=0; i--) {
-            if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
-          }
-        }() ?? Number.NEGATIVE_INFINITY
-        const right = function(){
-          for (let i = cssValueI+1; i<snapPointsPx.length; i++) {
-            if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
-          }
-        }() ?? Number.POSITIVE_INFINITY
-        computed = fitRange(left,computed,right)
-        
-        snapPointsPx[cssValueI] = computed
+          !cssValue
+          || (cssValue.type==='keyword' && !allowedKeywords.includes(cssValue.value))
+          || (cssValue.type==='numeric' && !allowedUnits.includes(cssValue.unit))
+        ) cssValueParsingError(it, cssValue)
+        return cssValue
       })
-    })
-    return snapPointsPx as number[]
-  },[snapPoints, computedSheetDimens])
+      
+      const snapPointsPx: Array<number|undefined> = [...Array(snapPoints.length).keys()].map(it=>undefined)
+      
+      ;[['px','',undefined],['%'],['fit-content','fit-header'],['free']].forEach(units=>{
+        snapPointsCssValues.forEach((cssValue,cssValueI)=>{
+          
+          if (
+            (cssValue.type==='keyword' && !units.includes(cssValue.value))
+            || (cssValue.type==='numeric' && !units.includes(cssValue.unit))
+          ) return
+          
+          let computed = function(){
+            if (cssValue.type==='keyword') {
+              switch (cssValue.value) {
+                case 'fit-content':
+                  return computedSheetDimens.headerAndContentH
+                case 'fit-header':
+                  return computedSheetDimens.headerH
+                case 'free':
+                  return 0 // will be adjusted
+                default:
+                  cssValueParsingError(snapPoints[cssValueI], cssValue)
+              }
+            }
+            if (cssValue.type==='numeric') {
+              switch (cssValue.unit) {
+                case 'px':
+                case undefined:
+                  return fitRange(
+                    0,
+                    +cssValue.value,
+                    computedSheetDimens.frameH,
+                  )
+                case '%':
+                  return fitRange(
+                    0,
+                    Math.round(+cssValue.value / 100 * computedSheetDimens.frameH),
+                    computedSheetDimens.frameH,
+                  )
+                default:
+                  cssValueParsingError(snapPoints[cssValueI], cssValue)
+              }
+            }
+            cssValueParsingError(snapPoints[cssValueI], cssValue)
+          }()
+          
+          const left = function(){
+            for (let i = cssValueI-1; i>=0; i--) {
+              if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
+            }
+          }() ?? Number.NEGATIVE_INFINITY
+          const right = function(){
+            for (let i = cssValueI+1; i<snapPointsPx.length; i++) {
+              if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
+            }
+          }() ?? Number.POSITIVE_INFINITY
+          computed = fitRange(left,computed,right)
+          
+          snapPointsPx[cssValueI] = computed
+        })
+      })
+      return snapPointsPx as number[]
+    },
+    [snapPoints, computedSheetDimens]
+  )
   
   const snapIdx = fitRange(0,options.snapIdx??0,snapPoints.length-1)
   const setState = options.setState
@@ -286,12 +299,15 @@ export const useBottomSheet = (
   )
   
   
-  const stopCurrentAction = useCallback(()=>{
-    animation?.commitStyles()
-    animation?.cancel()
-    setAnimation(undefined)
-    setDragStart(undefined)
-  },[animation/* ,bottomSheetRef.current */])
+  const stopCurrentAction = useCallback(
+    ()=>{
+      animation?.commitStyles()
+      animation?.cancel()
+      setAnimation(undefined)
+      setDragStart(undefined)
+    },
+    [animation]
+  )
   
   
   const reactOnState = useCallback(
@@ -537,12 +553,14 @@ export const useBottomSheet = (
         .map(it=>it.current)
         .filter(it=>it) as HTMLElement[]
       draggables.forEach(it=>{
+        it.classList.add(commonCss.noTouchAction)
         it.addEventListener('pointerdown',onPointerDown)
         it.addEventListener('pointermove',onPointerMove)
         it.addEventListener('pointerup',onPointerEnd)
         it.addEventListener('pointercancel',onPointerEnd)
       })
       return ()=>draggables.forEach(it=>{
+        it.classList.remove(commonCss.noTouchAction)
         it.removeEventListener('pointerdown',onPointerDown)
         it.removeEventListener('pointermove',onPointerMove)
         it.removeEventListener('pointerup',onPointerEnd)
