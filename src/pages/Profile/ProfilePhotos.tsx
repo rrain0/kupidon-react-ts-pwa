@@ -4,6 +4,7 @@ import styled from '@emotion/styled'
 import { Controller } from '@react-spring/core'
 import { config, useSprings, animated, UseSpringProps } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
+import { ReactDOMAttributes } from '@use-gesture/react/src/types'
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Dropzone from 'react-dropzone'
 import { useRecoilValue } from 'recoil'
@@ -230,24 +231,26 @@ React.memo(
   
   const [springs, springApi] = useSprings(images.length, springStyle(), [images])
   const applyDragRef = useRef<()=>void>()
+  // noinspection JSVoidFunctionReturnValueUsed
   const drag = useDrag(
     gesture=>{
       const [i] = gesture.args as [number]
       const {
         active, last,
-        movement: [dx,dy],
+        movement: [mx,my],
         xy: [vpx,vpy], // viewport x, viewport y
       } = gesture
       /* console.log(
         'idx:', i,
+        'first:', gesture.first,
         'active:', active,
-        //'dragging:', gesture.dragging,
+        'dragging:', gesture.dragging,
         //'hovering:', gesture.hovering,
         'last', gesture.last,
       ) */
       const applyDrag = ()=>{
         const isDragging = dragStateRef.current==='dragging' && active
-        springApi.start(springStyle(i, isDragging, dx, dy))
+        springApi.start(springStyle(i, isDragging, mx, my))
         if (isDragging){
           const hoveredElements = document.elementsFromPoint(vpx,vpy)
           //console.log('hoveredElements',hoveredElements)
@@ -270,7 +273,7 @@ React.memo(
         applyDragRef.current = undefined
       }
     }
-  )
+  ) as (...args: any[]) => ReactDOMAttributes
   useEffect(
     ()=>{ if (dragState==='dragging') applyDragRef.current?.() },
     [dragState]

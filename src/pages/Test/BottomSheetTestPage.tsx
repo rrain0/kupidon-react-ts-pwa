@@ -169,9 +169,10 @@ React.memo(
       setSnapPointsPx={setSnapPointsPx}
       setComputedDimens={setComputedSheetDimens}
     >
-      <div // Header Component
-        // Must be without margins!!!
-        css={t=>css`
+      {({ sheetDrag })=><>
+        <div // Header Component
+          // Must be without margins!!!
+          css={t=>css`
             background: ${t.bottomSheet.bgc[0]};
             border-radius: 16px 16px 0 0;
             color: ${t.page.content[0]};
@@ -180,39 +181,40 @@ React.memo(
             align-items: center;
             gap: 6px;
           `}
-        ref={bottomSheetHeaderRef as any}
-      >
-        <div
-          css={t=>css`
+          ref={bottomSheetHeaderRef as any}
+        >
+          <div
+            css={t=>css`
               width: 60px;
               height: 4px;
               border-radius: 2px;
               background: ${t.bottomSheet.handle[0]};
               ${state==='dragging' && css`background: ${t.page.content[0]};`}
             `}
-        />
-        <div>Header</div>
-      </div>
-      
-      <div // Body Component
-        // Must be without margins & paddings!!!
-        css={t=>css`
+            {...sheetDrag()}
+          />
+          <div>Header</div>
+        </div>
+        
+        <div // Body Component
+          // Must be without margins & paddings!!!
+          css={t=>css`
             display: flex;
             place-items: center;
             overflow: hidden;
             background: ${t.bottomSheet.bgc[0]};
             color: ${t.page.content[0]};
           `}
-      >
-        <OverflowWrapper
-          css={OverflowWrapperStyle.page}
-          showVertical={
-            !['opening','closing','open','close','closed'].includes(state)
-          }
         >
-          <div // scrollable content
-            // Must be without margins!!!
-            css={css`
+          <OverflowWrapper
+            css={OverflowWrapperStyle.page}
+            showVertical={
+              !['opening','closing','open','close','closed'].includes(state)
+            }
+          >
+            <div // scrollable content
+              // Must be without margins!!!
+              css={css`
                 width: 100%;
                 padding: 10px;
                 ${col};
@@ -220,26 +222,28 @@ React.memo(
                 height: fit-content;
                 min-height: fit-content;
               `}
-            ref={bottomSheetContentRef as any}
-          >
-            {
-              [...Array(itemsCnt).keys()]
-                .map(i=><div
-                  css={css`
+              ref={bottomSheetContentRef as any}
+            >
+              {
+                [...Array(itemsCnt).keys()]
+                  .map(i=><div
+                    css={css`
                       cursor: pointer;
                     `}
-                  key={i}
-                  onClick={()=>{
-                    setSelectedItem(`Item ${i+1}`)
-                    setState('closing')
-                  }}
-                >
-                  Item {i+1}
-                </div>)
-            }
-          </div>
-        </OverflowWrapper>
-      </div>
+                    key={i}
+                    onClick={()=>{
+                      setSelectedItem(`Item ${i+1}`)
+                      setState('closing')
+                    }}
+                  >
+                    Item {i+1}
+                  </div>)
+              }
+            </div>
+          </OverflowWrapper>
+        </div>
+      </>}
+      
     </BottomSheet>
     
     

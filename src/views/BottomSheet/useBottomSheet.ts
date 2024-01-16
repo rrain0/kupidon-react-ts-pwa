@@ -1,3 +1,7 @@
+import { useSpring } from '@react-spring/web'
+import { useDrag } from '@use-gesture/react'
+import { ReactDOMAttributes } from '@use-gesture/react/src/types'
+import BezierEasing from 'bezier-easing'
 import React, {
   useCallback,
   useEffect,
@@ -16,7 +20,8 @@ import CssValue = CssUtils.CssValue
 import inRangeExclusive = MathUtils.inRangeExclusive
 import inRange = MathUtils.inRange
 import PartialUndef = TypeUtils.PartialUndef
-import commonCss from 'src/styles/common.module.scss'
+import { useStateAndRef } from 'src/utils/react/useStateAndRef'
+import notExists = TypeUtils.notExists
 
 
 
@@ -27,25 +32,27 @@ import commonCss from 'src/styles/common.module.scss'
 
 
 
-const movementTime = 200
-const speedThreshold = 50 // % высоты viewport в секунду
+// % высоты viewport в секунду
+const speedThreshold = 50
 const defaultAutoAnimationDuration = 400
+// 'cubic-bezier(0.17,0.84,0.44,1)'
+const animationEasing = BezierEasing(0.17,0.84,0.44,1)
 
 
+// px/ms => (percent of viewport height)/s
+const pxPerMsToPercentVpHPerS = (pxPerMs: number)=>pxPerMs*1000 / window.innerHeight * 100
 
 
 /*
 bugs:
- todo It is slow - try use react spring
  todo Adjust sheet if real sheet height does not match state
- todo Animation end rewrites state changes that have happened while animation run
  todo when dragging close, open button is not working for a long time
  todo Maybe move to callbacks instead of exposing state because of unnecessary rerenders
  */
 
 // only 'opened' & 'closed' are stable states, others are intermediate
 export type SheetState =
-  'opened' // sheet is opened
+  |'opened' // sheet is opened
   |'closed' // sheet is closed
   
   |'open' // request to open instantly (if 'closed') (open to snap-index)
@@ -88,13 +95,9 @@ export const useBottomSheet = (
   options: UseBottomSheetOptions,
 ) => {
   
-  const [animation, setAnimation] = useState<Animation|undefined>(undefined)
   const [lastSpeed, setLastSpeed] = useState(undefined as undefined|number)
-  const [dragStart, setDragStart] = useState(undefined as
-    undefined|{ pointerId: number, clientY: number, height: number, timestamp: number }
-  )
-  const [computedSheetDimens, setComputedSheetDimens] =
-    useState<ComputedBottomSheetDimens>({
+  const [computedSheetDimens, setComputedSheetDimens, computedSheetDimensRef] =
+    useStateAndRef<ComputedBottomSheetDimens>({
       frameH: 0,
       sheetH: 0,
       headerH: 0,
@@ -257,71 +260,50 @@ export const useBottomSheet = (
   //const closeable = options.closeable ?? false
   
   
-  const setNewSheetStyle = (style: { height: number })=>{
-    const sheet = bottomSheetRef.current
-    if (sheet){
-      sheet.style.height = style.height+'px'
-    }
-  }
-  useEffect(()=>setNewSheetStyle({ height: 0 }),[])
+  const [sheetSpring, sheetSpringApi] = useSpring(()=>({ height: 0 }))
   
   
   const runAnimation = useCallback(
     (startH: number, endH: number, startState: SheetState, endState: SheetState)=>{
-      const sheet = bottomSheetRef.current
-      if (sheet){
-        const duration = function(){
-          if (!lastSpeed) return animationDuration
-          const path = Math.abs(endH-startH)/window.innerHeight*100
-          return path/Math.abs(lastSpeed*1.2)*1000
-        }()
-        const animation = sheet.animate([
-          { height: startH+'px' },
-          { height: endH+'px' },
-        ], {
-          duration: duration,
-          fill: 'forwards',
-          easing: "cubic-bezier(0.17,0.84,0.44,1)",
-        })
-        setAnimation(animation)
-        animation.onfinish = ev=>{
-          animation.commitStyles()
-          animation.cancel()
-          setAnimation(undefined)
+      const duration = function(){
+        if (!lastSpeed) return animationDuration
+        const pathPercent = Math.abs(endH-startH)/window.innerHeight*100
+        return pathPercent/lastSpeed*1.2*1000
+      }()
+      ;(async()=>{
+        const animation = await sheetSpring.height.start(
+          endH,
+          {
+            config: {
+              duration: duration,
+              easing: animationEasing,
+            },
+          }
+        )
+        //console.log('animation',{...animation})
+        setLastSpeed(undefined)
+        if (animation.finished) {
           if (stateRef.current===startState) setState(endState)
         }
-        animation.oncancel = ev=>{
-          setLastSpeed(undefined)
-        }
-      }
+      })()
     },
-    [bottomSheetRef.current, animationDuration, setState, lastSpeed]
+    [animationDuration, lastSpeed]
   )
   
   
-  const stopCurrentAction = useCallback(
-    ()=>{
-      animation?.commitStyles()
-      animation?.cancel()
-      setAnimation(undefined)
-      setDragStart(undefined)
-    },
-    [animation]
-  )
   
   
   const reactOnState = useCallback(
     ()=>{
       const s = state
-      const i = snapIdx
-      const ph = snapPointsPx[i]
+      const ph = snapPointsPx[snapIdx]
       const h = computedSheetDimens.sheetH
       
       // open instantly
       if (s==='open'){
         if (h===0 && ph!==0){
-          stopCurrentAction()
-          setNewSheetStyle({ height: ph })
+          //stopCurrentAction()
+          sheetSpring.height.set(ph)
           setState('opened')
         } else {
           setState('closed')
@@ -331,7 +313,7 @@ export const useBottomSheet = (
       // open animated
       else if (s==='opening'){
         if (h===0 && ph!==0){
-          stopCurrentAction()
+          //stopCurrentAction()
           runAnimation(h,ph,s,'opened')
         } else {
           setState('closed')
@@ -341,8 +323,8 @@ export const useBottomSheet = (
       // close instantly
       else if (s==='close'){
         if (h!==0){
-          stopCurrentAction()
-          setNewSheetStyle({ height: 0 })
+          //stopCurrentAction()
+          sheetSpring.height.set(0)
           setState('closed')
         } else {
           setState('closed')
@@ -352,7 +334,7 @@ export const useBottomSheet = (
       // close animated
       else if (s==='closing'){
         if (h!==0){
-          stopCurrentAction()
+          //stopCurrentAction()
           runAnimation(h,0,s,'closed')
         } else {
           setState('closed')
@@ -368,8 +350,8 @@ export const useBottomSheet = (
           setState('close')
         }
         else {
-          stopCurrentAction()
-          setNewSheetStyle({ height: ph })
+          //stopCurrentAction()
+          sheetSpring.height.set(ph)
           setState('opened')
         }
       }
@@ -383,15 +365,14 @@ export const useBottomSheet = (
           setState('closing')
         }
         else {
-          stopCurrentAction()
+          //stopCurrentAction()
           runAnimation(h,ph,s,'opened')
         }
       }
       
     },
     [
-      state, setState, setSnapIdx, snapIdx, /* closeable, */
-      stopCurrentAction,
+      state, snapIdx, /* closeable, */
       computedSheetDimens,
       snapPointsPx, runAnimation
     ]
@@ -401,153 +382,9 @@ export const useBottomSheet = (
   
   
   
-  const movementRef = useRef([] as Array<{ clientY: number, timestamp: number }>)
-  const resetAndAddMovement = useCallback(
-    (ev: { clientY: number, timeStamp: number })=>{
-      movementRef.current = [{
-        clientY: ev.clientY,
-        timestamp: ev.timeStamp
-      }]
-    },
-    []
-  )
-  const checkAndAddMovement = useCallback(
-    (ev: { clientY: number, timeStamp: number })=>{
-      movementRef.current = movementRef.current
-        .filter(it=>(it.timestamp+movementTime)>=(document.timeline.currentTime as number|null??0))
-      movementRef.current.push({
-        clientY: ev.clientY,
-        timestamp: ev.timeStamp
-      })
-    },
-    []
-  )
   
   
-  const onPointerDown = useCallback(
-    function(this: HTMLElement, ev: PointerEvent){
-        //console.log('onPointerDown',ev)
-        if (ev.buttons===1){
-          stopCurrentAction()
-          setState('dragging')
-          const sheetH = computedSheetDimens.sheetH
-          setNewSheetStyle({ height: sheetH })
-          setDragStart({
-            pointerId: ev.pointerId,
-            clientY: ev.clientY,
-            height: sheetH,
-            timestamp: ev.timeStamp,
-          })
-          resetAndAddMovement(ev)
-          const currentTarget = this ?? ev.currentTarget
-          currentTarget.setPointerCapture(ev.pointerId)
-        }
-      },
-    [computedSheetDimens, stopCurrentAction]
-  )
-  
-  
-  // You MUST use css 'touch-action: none;' while dragging
-  // to prevent browser gesture handling on mobile devices
-  const onPointerMove = useCallback(
-    function(this: HTMLElement, ev: PointerEvent){
-      if (dragStart?.pointerId===ev.pointerId){
-        //console.log('onPointerMove',ev)
-        const addHeight = -(ev.clientY-dragStart.clientY)
-        const newHeight = dragStart.height + addHeight
-        setNewSheetStyle({ height: newHeight })
-        checkAndAddMovement(ev)
-      }
-    },
-    [dragStart]
-  )
-  
-  
-  const onPointerEnd = useCallback(
-    function(this: HTMLElement, ev: PointerEvent){
-      //console.log('onPointerEnd',ev)
-      if (dragStart?.pointerId===ev.pointerId){
-        const addHeight = -(ev.clientY-dragStart.clientY)
-        const newHeight = dragStart.height + addHeight
-        setNewSheetStyle({ height: newHeight })
-        setDragStart(undefined)
-        checkAndAddMovement(ev)
-        
-        {
-          let speed = 0 // % высоты viewport в секунду
-          const mvs = movementRef.current
-          //console.log('mvs',mvs)
-          if (mvs.length>=2){
-            let i = mvs.length-2
-            let direction = 0
-            for(; i>=0; i--){
-              const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
-              if (!direction && d) direction = d
-              else if (direction && d && d!==direction) break
-            }
-            if (direction){
-              for(; i>=0; i--){
-                const d = Math.sign(mvs[i+1].clientY - mvs[i].clientY)
-                if (d!==0 && d!==direction) break
-              }
-              i++
-              speed = -(mvs[mvs.length-1].clientY - mvs[i].clientY)/window.innerHeight*100/movementTime*1000
-            }
-          }
-          movementRef.current = []
-          //console.log('speed',speed)
-          
-          if (Math.abs(speed)>speedThreshold){
-            setLastSpeed(speed)
-            if (speed>0){
-              setState('snapping')
-              setSnapIdx(snapPointsPx.length)
-            } else {
-              setState('closing')
-            }
-          } else {
-            let snapStart: undefined|number = undefined
-            
-            if (newHeight<snapPointsPx[0])
-              snapStart=-1
-            else if (newHeight>snapPointsPx[snapPointsPx.length-1])
-              snapStart=snapPointsPx.length
-            else for (let i = 0; i < snapPointsPx.length-1; i++) {
-              if (inRangeExclusive(snapPointsPx[i],newHeight,snapPointsPx[i+1])){
-                snapStart = i
-                break
-              }
-            }
-            
-            const notAdjust = snapStart===undefined || (
-              inRange(0,snapStart,snapPointsPx.length-2)
-              && snapPoints[snapStart]==='free'
-            )
-            
-            if (notAdjust){
-              setState('opened')
-            } else {
-              let snap = snapStart!
-              if (snap<=-1) snap=0
-              else if (snap>=snapPoints.length-1) snap=snapPoints.length-1
-              else {
-                const threshold = Math.round((snapPointsPx[snap]+snapPointsPx[snap+1])/2)
-                if (newHeight>threshold) snap++
-              }
-              setState('snapping')
-              setSnapIdx(snap)
-            }
-            
-          }
-        }
-      }
-    },
-    [dragStart, setState, setSnapIdx, snapPoints, snapPointsPx]
-  )
-  
-  
-  
-  
+  /*
   useEffect(
     ()=>{
       const draggables = draggableElements
@@ -573,18 +410,100 @@ export const useBottomSheet = (
       onPointerDown, onPointerMove, onPointerEnd,
     ]
   )
+   */
+  
+  
+  
+  const dragStartStateRef = useRef({ sheetH: 0 })
+  // You MUST use css 'touch-action: none;' before start dragging
+  // to prevent browser gesture handling
+  // noinspection JSVoidFunctionReturnValueUsed
+  const sheetDrag = useDrag(
+    gesture=>{
+      const {
+        first, active, last,
+        movement: [mx,my],
+        velocity: [spdx,spdy], // px/ms (nonnegative)
+        direction: [dirx,diry], // positive for y is from top to bottom
+        xy: [vpx,vpy], // viewport x, viewport y
+      } = gesture
+      
+      /* console.log(
+        'velocityY:', spdy,
+        'directionY:', diry,
+      ) */
+      
+      if (first) {
+        setState('dragging')
+        dragStartStateRef.current.sheetH = computedSheetDimensRef.current.sheetH
+      }
+      const newSheetH = dragStartStateRef.current.sheetH - my
+      if (active) {
+        sheetSpring.height.set(newSheetH)
+      }
+      if (last){
+        //setState('opened')
+        const speed = pxPerMsToPercentVpHPerS(spdy) // % высоты viewport в секунду
+        if (speed>speedThreshold){
+          setLastSpeed(speed)
+          if (diry<0){
+            setState('snapping')
+            setSnapIdx(snapPointsPx.length)
+          } else {
+            setState('closing')
+          }
+        } else {
+          let snapStart: undefined|number = undefined
+          
+          if (newSheetH<snapPointsPx[0])
+            snapStart=-1
+          else if (newSheetH>snapPointsPx[snapPointsPx.length-1])
+            snapStart=snapPointsPx.length
+          else for (let i = 0; i < snapPointsPx.length-1; i++) {
+              if (inRangeExclusive(snapPointsPx[i],newSheetH,snapPointsPx[i+1])){
+                snapStart = i
+                break
+              }
+            }
+          
+          const notAdjust = notExists(snapStart) || (
+            inRange(0,snapStart!,snapPointsPx.length-2)
+            && snapPoints[snapStart!]==='free'
+          )
+          
+          if (notAdjust){
+            setState('opened')
+          } else {
+            let snap = snapStart!
+            if (snap<=-1) snap=0
+            else if (snap>=snapPoints.length-1) snap=snapPoints.length-1
+            else {
+              const threshold = Math.round((snapPointsPx[snap]+snapPointsPx[snap+1])/2)
+              if (newSheetH>threshold) snap++
+            }
+            setState('snapping')
+            setSnapIdx(snap)
+          }
+          
+        }
+      }
+      
+    }
+  ) as (...args: any[]) => ReactDOMAttributes
   
   
   
   
   // forbid content selection for all elements while dragging
-  useNoSelect(!!dragStart)
+  useNoSelect(state==='dragging')
   
   
   
   return {
     computedSheetDimens,
     snapPointsPx,
+    sheetSpring,
+    sheetDrag,
   } as const
 }
 
@@ -603,7 +522,7 @@ function cssValueParsingError(raw: string|number, parsed: CssValue|undefined): n
     Supported keywords:
     ● 'fit-header' - height of element in headerRef
     ● 'fit-content' - height of element in headerRef + height of element in contentRef
-    ●  'free' - indicates that between prev & next snap point
+    ● 'free' - indicates that between prev & next snap point
       bottom sheet won't be automatically snapped to nearest snap point after dragging
     And your input: {
       raw: ${raw},

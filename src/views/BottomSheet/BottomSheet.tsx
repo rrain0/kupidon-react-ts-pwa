@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { useSpring, animated } from '@react-spring/web'
+import { ReactDOMAttributes } from '@use-gesture/react/src/types'
+import { useFakePointerRef } from 'src/components/ActionProviders/UseFakePointerRef'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import {
@@ -10,9 +12,7 @@ import {
   useBottomSheet
 } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
-  useEffect,
   useLayoutEffect,
-  useMemo,
   useState,
 } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -24,6 +24,9 @@ import contents = EmotionCommon.contents
 
 
 
+export type BottomSheetChildrenProps = {
+  sheetDrag: (...args: any[]) => ReactDOMAttributes
+}
 export type BottomSheetRefsProps = {
   bottomSheetFrameRef: React.RefObject<HTMLElement>
   bottomSheetRef: React.RefObject<HTMLElement>
@@ -39,11 +42,14 @@ export type BottomSheetOptionsProps = {
   snapPoints: SheetSnapPoints
 } & PartialUndef<{
   animationDuration: number
-  children: React.ReactNode
   setComputedDimens: Setter<ComputedBottomSheetDimens>
   setSnapPointsPx: Setter<number[]>
 }>
-export type BottomSheetProps = BottomSheetRefsProps & BottomSheetOptionsProps
+export type BottomSheetChildren = PartialUndef<{
+  children: (renderProps: BottomSheetChildrenProps)=>React.ReactNode
+}>
+export type BottomSheetProps =
+  BottomSheetRefsProps & BottomSheetOptionsProps & BottomSheetChildren
 
 
 
@@ -68,7 +74,7 @@ React.memo(
   
   
   
-  const { computedSheetDimens, snapPointsPx } = useBottomSheet(
+  const { computedSheetDimens, snapPointsPx, sheetSpring, sheetDrag } = useBottomSheet(
     bottomSheetFrameRef,
     bottomSheetRef,
     bottomSheetHeaderRef,
@@ -122,7 +128,7 @@ React.memo(
   //useEffect(()=>console.log('state',state),[state])
   
   
-  
+  useFakePointerRef([bottomSheetRef])
   
   
   return <animated.div /* Frame */ css={css`
@@ -130,6 +136,7 @@ React.memo(
     z-index: 30;
     background: none;
     pointer-events: none;
+    //touch-action: none;
     display: grid;
     place-items: end center;
   `}
@@ -153,7 +160,7 @@ React.memo(
       onClick={ev=>ev.stopPropagation()}
       onWheel={ev=>ev.stopPropagation()}
     >
-      <div /* Bottom Sheet */ css={css`
+      <animated.div /* Bottom Sheet */ css={css`
         display: grid;
         grid-template-rows: auto 1fr;
         justify-items: stretch;
@@ -163,12 +170,13 @@ React.memo(
         will-change: height; // Must be
         max-height: 100%; // Must be
       `}
+        style={sheetSpring}
         ref={bottomSheetRef as any} // Must be
       >
         
-        { props.children }
+        { props.children?.({ sheetDrag }) }
         
-      </div>
+      </animated.div>
     </div>
   </animated.div>
 })

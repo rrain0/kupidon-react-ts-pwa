@@ -5,6 +5,29 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
+export const useFakePointerRef = (refs: React.RefObject<Element>[])=>{
+  useEffect(
+    ()=>{
+      const elements = refs.map(it=>it.current).filter(it=>it) as Element[]
+      
+      if (elements.length){
+        const onPointerDown = ()=>{
+          //console.log('onPointerDown check')
+        }
+        elements.forEach(it=>it.addEventListener('pointerdown',onPointerDown))
+        return ()=>{
+          elements.forEach(it=>it.removeEventListener('pointerdown',onPointerDown))
+        }
+      }
+    },
+    refs.map(it=>it.current)
+  )
+}
+
+
+
+
+
 export type UseFakePointerRefRenderProps = {
   ref: React.RefObject<Element>
   ref2: React.RefObject<Element>
@@ -22,24 +45,8 @@ const UseFakePointerRef =
   const elemRef3 = useRef<Element>(null)
   const elemRef4 = useRef<Element>(null)
   
-  useEffect(
-    ()=>{
-      const elements =
-        [elemRef1.current, elemRef2.current, elemRef3.current, elemRef4.current]
-        .filter(it=>it) as Element[]
-      
-      if (elements.length){
-        const onPointerDown = ()=>{
-          //console.log('onPointerDown check')
-        }
-        elements.forEach(it=>it.addEventListener('pointerdown',onPointerDown))
-        return ()=>{
-          elements.forEach(it=>it.removeEventListener('pointerdown',onPointerDown))
-        }
-      }
-    },
-    [elemRef1.current, elemRef2.current, elemRef3.current, elemRef4.current]
-  )
+  useFakePointerRef([elemRef1, elemRef2, elemRef3, elemRef4])
+  
   return props.render?.({
     ref: elemRef1,
     ref2: elemRef2,

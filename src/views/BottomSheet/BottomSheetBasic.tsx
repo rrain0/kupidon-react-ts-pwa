@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { useFakePointerRef } from 'src/components/ActionProviders/UseFakePointerRef'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import BottomSheet, { BottomSheetOptionsProps } from 'src/views/BottomSheet/BottomSheet'
 import { css } from '@emotion/react'
@@ -22,6 +23,7 @@ export const BasicSheetOpenIdx = 3
 export type BottomSheetBasicProps =
   BottomSheetOptionsProps & PartialUndef<{
     header: React.ReactNode
+    children: React.ReactNode
   }>
 
 
@@ -38,6 +40,7 @@ React.memo(
   const bottomSheetHeaderRef = useRef<HTMLDivElement>(null)
   const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
+  useFakePointerRef([bottomSheetHeaderRef])
   
   const state = props.state
   
@@ -49,77 +52,80 @@ React.memo(
     bottomSheetRef={bottomSheetRef}
     bottomSheetHeaderRef={bottomSheetHeaderRef}
     bottomSheetContentRef={bottomSheetContentRef}
-    draggableElements={[bottomSheetHeaderRef,bottomSheetFrameRef]}
+    draggableElements={[bottomSheetHeaderRef/* ,bottomSheetFrameRef */]}
   >
-    
-    {/*
-     // Header Component
-     // Must be without margins!!!
-     */}
-    <div css={t=>css`
-      background: ${t.bottomSheet.bgc[0]};
-      border-radius: 16px 16px 0 0;
-      color: ${t.page.content[0]};
-      padding: 10px;
-      ${col};
-      align-items: center;
-      gap: 6px;
-      cursor: grab;
-      ${state==='dragging' && css`cursor: grabbing;`}
-    `}
-      ref={bottomSheetHeaderRef as any}
-    >
+    {({ sheetDrag })=><>
+      {/*
+       // Header Component
+       // Must be without margins!!!
+       */}
+      <div css={t=>css`
+        background: ${t.bottomSheet.bgc[0]};
+        border-radius: 16px 16px 0 0;
+        color: ${t.page.content[0]};
+        padding: 10px;
+        ${col};
+        align-items: center;
+        gap: 6px;
+        cursor: grab;
+        ${state==='dragging' && css`cursor: grabbing;`}
+      `}
+        ref={bottomSheetHeaderRef as any}
+        {...sheetDrag()}
+      >
+        
+        <div /* Header handle */ css={t=>css`
+          width: 44px;
+          height: 4px;
+          border-radius: 2px;
+          background: ${t.bottomSheet.handle[0]};
+          ${state==='dragging' && css`background: ${t.page.content[0]};`}
+        `}/>
+        
+        <div css={css`
+          ${center};
+          min-height: 20px;
+        `}>
+          {header}
+        </div>
       
-      <div /* Header handle */ css={t=>css`
-        width: 44px;
-        height: 4px;
-        border-radius: 2px;
-        background: ${t.bottomSheet.handle[0]};
-        ${state==='dragging' && css`background: ${t.page.content[0]};`}
-      `}/>
-      
-      <div css={css`
-        ${center};
-        min-height: 20px;
-      `}>
-        {header}
       </div>
       
-    </div>
-    
-    {/*
-     // Body Component
-     // Must be without margins & paddings!!!
-     */}
-    <div css={t=>css`
-      display: flex;
-      place-items: center;
-      overflow: hidden;
-      background: ${t.bottomSheet.bgc[0]};
-      color: ${t.page.content[0]};
-    `}>
-      <OverflowWrapper css={OverflowWrapperStyle.list}
-        showVertical={
-          !['opening','closing','open','close','closed'].includes(state)
-        }
-      >
-        {/*
-         // scrollable content
-         // Must be without margins!!!
-         */}
-        <div css={css`
-          width: 100%;
-          padding: 0 10px 10px;
-          ${col};
-          height: fit-content;
-          min-height: fit-content;
-        `}
-          ref={bottomSheetContentRef as any}
+      {/*
+       // Body Component
+       // Must be without margins & paddings!!!
+       */}
+      <div css={t=>css`
+        display: flex;
+        place-items: center;
+        overflow: hidden;
+        background: ${t.bottomSheet.bgc[0]};
+        color: ${t.page.content[0]};
+      `}>
+        <OverflowWrapper css={OverflowWrapperStyle.list}
+          showVertical={
+            !['opening','closing','open','close','closed'].includes(state)
+          }
         >
-          { children }
-        </div>
-      </OverflowWrapper>
-    </div>
+          {/*
+           // scrollable content
+           // Must be without margins!!!
+           */}
+          <div css={css`
+            width: 100%;
+            padding: 0 10px 10px;
+            ${col};
+            height: fit-content;
+            min-height: fit-content;
+          `}
+            ref={bottomSheetContentRef as any}
+          >
+            { children }
+          </div>
+        </OverflowWrapper>
+      </div>
+    </>}
+    
   </BottomSheet>
 })
 export default BottomSheetBasic
