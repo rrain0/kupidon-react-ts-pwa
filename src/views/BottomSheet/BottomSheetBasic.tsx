@@ -52,7 +52,6 @@ React.memo(
     bottomSheetRef={bottomSheetRef}
     bottomSheetHeaderRef={bottomSheetHeaderRef}
     bottomSheetContentRef={bottomSheetContentRef}
-    draggableElements={[bottomSheetHeaderRef/* ,bottomSheetFrameRef */]}
   >
     {({ sheetDrag })=><>
       {/*
@@ -67,6 +66,7 @@ React.memo(
         ${col};
         align-items: center;
         gap: 6px;
+        touch-action: none;
         cursor: grab;
         ${state==='dragging' && css`cursor: grabbing;`}
       `}

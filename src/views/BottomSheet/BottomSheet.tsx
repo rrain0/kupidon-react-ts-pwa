@@ -7,11 +7,10 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import {
   ComputedBottomSheetDimens,
-  SheetSnapPoints,
-  SheetState,
-  useBottomSheet
+  useBottomSheet, UseBottomSheetOptions,
 } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
+  useCallback,
   useLayoutEffect,
   useState,
 } from 'react'
@@ -20,6 +19,8 @@ import Setter = TypeUtils.Callback1
 import fixed = EmotionCommon.fixed
 import PartialUndef = TypeUtils.PartialUndef
 import contents = EmotionCommon.contents
+import Callback1 = TypeUtils.Callback1
+import exists = TypeUtils.exists
 
 
 
@@ -32,18 +33,11 @@ export type BottomSheetRefsProps = {
   bottomSheetRef: React.RefObject<HTMLElement>
   bottomSheetHeaderRef: React.RefObject<HTMLElement>
   bottomSheetContentRef: React.RefObject<HTMLElement>
-  draggableElements: React.RefObject<HTMLElement>[]
 }
-export type BottomSheetOptionsProps = {
-  state: SheetState
-  snapIdx: number
-  setState: Setter<SheetState>
-  setSnapIdx: Setter<number>
-  snapPoints: SheetSnapPoints
-} & PartialUndef<{
-  animationDuration: number
-  setComputedDimens: Setter<ComputedBottomSheetDimens>
-  setSnapPointsPx: Setter<number[]>
+export type BottomSheetOptionsProps = UseBottomSheetOptions
+& PartialUndef<{
+  onComputedDimens: Callback1<ComputedBottomSheetDimens>
+  onSnapPointsPx: Callback1<number[]>
 }>
 export type BottomSheetChildren = PartialUndef<{
   children: (renderProps: BottomSheetChildrenProps)=>React.ReactNode
@@ -59,18 +53,21 @@ React.memo(
   const {
     state,
     setState,
-    animationDuration,
-    snapPoints,
     snapIdx,
     setSnapIdx,
+    snapPoints,
+    animationDuration,
+    
+    onComputedDimens,
+    onSnapPointsPx,
+    
     bottomSheetFrameRef,
     bottomSheetRef,
     bottomSheetHeaderRef,
     bottomSheetContentRef,
-    draggableElements,
-    setComputedDimens,
-    setSnapPointsPx,
   } = props
+  
+  
   
   
   
@@ -79,32 +76,34 @@ React.memo(
     bottomSheetRef,
     bottomSheetHeaderRef,
     bottomSheetContentRef,
-    draggableElements,
     {
-      state: state,
-      setState: setState,
-      animationDuration: animationDuration,
-      snapPoints: snapPoints,
-      snapIdx: snapIdx,
-      setSnapIdx: setSnapIdx,
+      state,
+      setState,
+      snapIdx,
+      setSnapIdx,
+      snapPoints,
+      animationDuration,
     }
   )
   useLayoutEffect(
-    ()=>setComputedDimens?.(computedSheetDimens),
+    ()=>onComputedDimens?.(computedSheetDimens),
     [computedSheetDimens]
   )
   useLayoutEffect(
-    ()=>setSnapPointsPx?.(snapPointsPx),
+    ()=>onSnapPointsPx?.(snapPointsPx),
     [snapPointsPx]
   )
   
   
-  const [openSnapIdx, setOpenSnapIdx] = useState(0)
+  // TODO sheet
+  const [openSnapIdx, setOpenSnapIdx] = useState((snapPoints??[0]).length-1)
   useLayoutEffect(
-    ()=>{ if (['open','opening'].includes(state)) setOpenSnapIdx(snapIdx) },
+    ()=>{
+      if (['open','opening'].includes(state) && exists(snapIdx))
+        setOpenSnapIdx(snapIdx)
+    },
     [state,snapIdx]
   )
-  
   
   
   const frameSpring = useSpring({
@@ -115,7 +114,7 @@ React.memo(
         return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
           .toString(16).padStart(2,'0')
       }()
-      if (state!=='close') return `#000000${bgcDimHex}`
+      if (state!=='closed') return `#000000${bgcDimHex}`
       else return 'none'
     }(),
     immediate: true,
@@ -125,7 +124,7 @@ React.memo(
   useUpNodesScrollLock(bottomSheetFrameRef, state!=='closed')
   
   
-  //useEffect(()=>console.log('state',state),[state])
+  //useLayoutEffect(()=>console.log('state',state),[state])
   
   
   useFakePointerRef([bottomSheetRef])

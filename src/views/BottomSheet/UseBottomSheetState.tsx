@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { BasicSheetOpenIdx, BasicSheetSnaps } from 'src/views/BottomSheet/BottomSheetBasic'
@@ -10,7 +10,7 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
-export type UseModalSheetRenderProps = {
+export type UseBottomSheetStateRenderProps = {
   setClosing: ()=>void
   sheetProps:{
     state: SheetState,
@@ -20,17 +20,20 @@ export type UseModalSheetRenderProps = {
     setSnapIdx: Setter<number>,
   }
 }
-export type UseModalSheetProps = {
+export type UseBottomSheetStateProps = {
   open: boolean
   onClosed: Callback
-  render: (props: UseModalSheetRenderProps)=>React.ReactNode
+  render: (props: UseBottomSheetStateRenderProps)=>React.ReactNode
 } & PartialUndef<{
   openIdx: number
   snapPoints: SheetSnapPoints
 }>
-const UseModalSheet =
+
+
+
+const UseBottomSheetState =
 React.memo(
-(props: UseModalSheetProps)=>{
+(props: UseBottomSheetStateProps)=>{
   const {
     open,
     onClosed,
@@ -49,6 +52,7 @@ React.memo(
   const openEffectEvent = useEffectEvent(
     (open: boolean)=>{
       if (open){
+        console.log('set opening')
         setSheetState('opening')
         setSnapIdx(openIdx)
       }
@@ -82,10 +86,10 @@ React.memo(
   )
   
   
-  if (!open) return undefined
+  //if (!open) return undefined
   return props.render({
     setClosing,
     sheetProps: bottomSheetProps
   })
 })
-export default UseModalSheet
+export default UseBottomSheetState

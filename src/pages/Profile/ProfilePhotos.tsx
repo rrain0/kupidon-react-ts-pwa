@@ -31,7 +31,7 @@ import { AppTheme } from 'src/utils/theme/AppTheme'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import UseModalSheetState from 'src/views/BottomSheet/UseModalSheetState'
+import UseModalSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'

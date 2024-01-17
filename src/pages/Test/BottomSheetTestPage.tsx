@@ -33,20 +33,21 @@ React.memo(
   const bottomSheetHeaderRef = useRef<HTMLDivElement>(null)
   const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
-  const [state, setState] =
-    useState<SheetState>('closed')
+  const [state, setState] = useState<SheetState>('closed')
+  const [snapIdx, setSnapIdx] = useState(2)
+  
   const [snapPoints, setSnapPoints] = useState<SheetSnapPoints>(
     ['0px','fit-header',200,'fit-content','50%','free','80%','800px']
   )
-  const [snapIdx,setSnapIdx] =
-    useState(2)
-  const [animationDuration, setAnimationDuration] =
-    useState(400)
-  const openSnapIdx = useMemo(()=>{
-    let openIdx = snapPoints.findIndex(it=>it==='fit-content')
-    if (openIdx===-1) openIdx = snapPoints.length-1
-    return openIdx
-  },[snapPoints])
+  const [animationDuration, setAnimationDuration] = useState(400)
+  const openSnapIdx = useMemo(
+    ()=>{
+      let openIdx = snapPoints.findIndex(it=>it==='fit-content')
+      if (openIdx===-1) openIdx = snapPoints.length-1
+      return openIdx
+    },
+    [snapPoints]
+  )
   
   const [computedSheetDimens, setComputedSheetDimens] =
     useState<ComputedBottomSheetDimens>({
@@ -74,11 +75,10 @@ React.memo(
       <SimpleContent>
         <div>Bottom Sheet Test Page</div>
         
-        <div
-          css={css`
-            ${row};
-            gap: 10px;
-          `}
+        <div css={css`
+          ${row};
+          gap: 10px;
+        `}
         >
           <div>Number of items:</div>
           <OverlayInput
@@ -89,38 +89,35 @@ React.memo(
           />
         </div>
         
-        <div
-          css={css`
-            ${row};
-            gap: 10px;
-          `}
+        <div css={css`
+          ${row};
+          gap: 10px;
+        `}
         >
           <div>Snap points:</div>
           <div>{JSON.stringify(snapPoints)}</div>
         </div>
         
-        <div
-          css={css`
-            ${row};
-            gap: 10px;
-          `}
+        <div css={css`
+          ${row};
+          gap: 10px;
+        `}
         >
           <div>Snap points px:</div>
           <div>{JSON.stringify(snapPointsPx)}</div>
         </div>
         
         
-        <div
-          css={t => css`
-            width: 200px;
-            height: 50px;
-            border-radius: 16px;
-            border: 2px solid ${t.page.content[0]};
-            ${row};
-            padding: 0 10px;
-            align-items: center;
-            cursor: pointer;
-          `}
+        <div css={t=>css`
+          width: 200px;
+          height: 50px;
+          border-radius: 16px;
+          border: 2px solid ${t.page.content[0]};
+          ${row};
+          padding: 0 10px;
+          align-items: center;
+          cursor: pointer;
+        `}
           onClick={ev => {
             //console.log('Choose button clicked')
             setState('opening')
@@ -159,15 +156,14 @@ React.memo(
       bottomSheetRef={bottomSheetRef}
       bottomSheetHeaderRef={bottomSheetHeaderRef}
       bottomSheetContentRef={bottomSheetContentRef}
-      draggableElements={[bottomSheetHeaderRef]}
       state={state}
       setState={setState}
       animationDuration={animationDuration}
       snapPoints={snapPoints}
       snapIdx={snapIdx}
       setSnapIdx={setSnapIdx}
-      setSnapPointsPx={setSnapPointsPx}
-      setComputedDimens={setComputedSheetDimens}
+      onSnapPointsPx={setSnapPointsPx}
+      onComputedDimens={setComputedSheetDimens}
     >
       {({ sheetDrag })=><>
         <div // Header Component
@@ -180,8 +176,10 @@ React.memo(
             ${col};
             align-items: center;
             gap: 6px;
+            cursor: pointer;
           `}
           ref={bottomSheetHeaderRef as any}
+          {...sheetDrag()}
         >
           <div
             css={t=>css`
@@ -191,7 +189,6 @@ React.memo(
               background: ${t.bottomSheet.handle[0]};
               ${state==='dragging' && css`background: ${t.page.content[0]};`}
             `}
-            {...sheetDrag()}
           />
           <div>Header</div>
         </div>

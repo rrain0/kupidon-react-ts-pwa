@@ -4,10 +4,11 @@ import { ReactDOMAttributes } from '@use-gesture/react/src/types'
 import BezierEasing from 'bezier-easing'
 import React, {
   useCallback,
-  useEffect,
+  useEffect, useLayoutEffect,
   useMemo, useRef,
   useState,
 } from 'react'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { GetDimensions } from 'src/utils/common/GetDimensions'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -22,6 +23,12 @@ import inRange = MathUtils.inRange
 import PartialUndef = TypeUtils.PartialUndef
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import notExists = TypeUtils.notExists
+import Setter = TypeUtils.Setter
+import findLastBy3 = ArrayUtils.findLastBy3
+import exists = TypeUtils.exists
+import findBy3 = ArrayUtils.findBy3
+import fitRange2 = MathUtils.fitRange2
+import Callback = TypeUtils.Callback
 
 
 
@@ -30,6 +37,8 @@ import notExists = TypeUtils.notExists
  maybe it’s worth adding the ability to go to a specific height, not just to snap point
 */
 
+export const DefaultSheetSnaps = [0,'15%'/*200*/,'free','fit-content','free','50%','free','80%']
+export const DefaultSheetOpenIdx = 3
 
 
 // % высоты viewport в секунду
@@ -45,16 +54,18 @@ const pxPerMsToPercentVpHPerS = (pxPerMs: number)=>pxPerMs*1000 / window.innerHe
 
 /*
 bugs:
+ todo Move to callbacks - new state via props, but actual state will be stored inside sheet
+   with callbacks on state changes
+ todo Maybe move to callbacks instead of exposing state because of unnecessary rerenders
+ 
  todo Adjust sheet if real sheet height does not match state
  todo when dragging close, open button is not working for a long time
- todo Maybe move to callbacks instead of exposing state because of unnecessary rerenders
  */
 
-// only 'opened' & 'closed' are stable states, others are intermediate
-export type SheetState =
+export type SheetStableState =
   |'opened' // sheet is opened
   |'closed' // sheet is closed
-  
+export type SheetIntermediateState =
   |'open' // request to open instantly (if 'closed') (open to snap-index)
   |'close' // request to close instantly (if not 'closed' or not 'closing')
   |'snap' // request to snap to instantly (to snap-index)
@@ -64,6 +75,9 @@ export type SheetState =
   |'snapping' // request to snap animated / playing snapping animation
   
   |'dragging' // user is dragging the sheet
+export type SheetState = SheetStableState | SheetIntermediateState
+
+
 export type SheetSnapPoints = Array<number|string>
 export type ComputedBottomSheetDimens = {
   frameH: number,
@@ -73,15 +87,18 @@ export type ComputedBottomSheetDimens = {
   headerAndContentH: number,
 }
 
+
 export type UseBottomSheetOptions = {
   state: SheetState
+  setState: Setter<SheetState>
   snapIdx: number
-  setState: ((state: SheetState)=>void)
-  setSnapIdx: (snapIdx: number)=>void
+  setSnapIdx: Setter<number>
 } & PartialUndef<{
   snapPoints: SheetSnapPoints
-  //closeable?: boolean
   animationDuration: number
+  //closeable: boolean
+  //initialState: SheetStableState
+  //initialSnapIdx: number
 }>
 
 
@@ -91,11 +108,9 @@ export const useBottomSheet = (
   bottomSheetRef: React.RefObject<HTMLElement>,
   bottomSheetHeaderRef: React.RefObject<HTMLElement>,
   bottomSheetContentRef: React.RefObject<HTMLElement>,
-  draggableElements: React.RefObject<HTMLElement>[],
   options: UseBottomSheetOptions,
 ) => {
   
-  const [lastSpeed, setLastSpeed] = useState(undefined as undefined|number)
   const [computedSheetDimens, setComputedSheetDimens, computedSheetDimensRef] =
     useStateAndRef<ComputedBottomSheetDimens>({
       frameH: 0,
@@ -161,14 +176,14 @@ export const useBottomSheet = (
   )
   
   
-  const state = options.state
-  const stateRef = useRef(state); stateRef.current = state
   const animationDuration = options.animationDuration ?? defaultAutoAnimationDuration
+  //const closeable = options.closeable ?? true
+  
   
   const snapPoints = useMemo(
     ()=>{
       if (!options.snapPoints || !options.snapPoints.length)
-        return [0,'fit-content','50%']
+        return DefaultSheetSnaps
       return options.snapPoints
     },
     [...(options.snapPoints??[])]
@@ -176,95 +191,33 @@ export const useBottomSheet = (
   
   
   const snapPointsPx = useMemo<number[]>(
-    ()=>{
-      const allowedUnits = ['px','',undefined,'%']
-      const allowedKeywords = ['fit-content','fit-header','free']
-      const snapPointsCssValues = snapPoints.map(it=>{
-        const cssValue = parseCssValue(it+'')
-        if (
-          !cssValue
-          || (cssValue.type==='keyword' && !allowedKeywords.includes(cssValue.value))
-          || (cssValue.type==='numeric' && !allowedUnits.includes(cssValue.unit))
-        ) cssValueParsingError(it, cssValue)
-        return cssValue
-      })
-      
-      const snapPointsPx: Array<number|undefined> = [...Array(snapPoints.length).keys()].map(it=>undefined)
-      
-      ;[['px','',undefined],['%'],['fit-content','fit-header'],['free']].forEach(units=>{
-        snapPointsCssValues.forEach((cssValue,cssValueI)=>{
-          
-          if (
-            (cssValue.type==='keyword' && !units.includes(cssValue.value))
-            || (cssValue.type==='numeric' && !units.includes(cssValue.unit))
-          ) return
-          
-          let computed = function(){
-            if (cssValue.type==='keyword') {
-              switch (cssValue.value) {
-                case 'fit-content':
-                  return computedSheetDimens.headerAndContentH
-                case 'fit-header':
-                  return computedSheetDimens.headerH
-                case 'free':
-                  return 0 // will be adjusted
-                default:
-                  cssValueParsingError(snapPoints[cssValueI], cssValue)
-              }
-            }
-            if (cssValue.type==='numeric') {
-              switch (cssValue.unit) {
-                case 'px':
-                case undefined:
-                  return fitRange(
-                    0,
-                    +cssValue.value,
-                    computedSheetDimens.frameH,
-                  )
-                case '%':
-                  return fitRange(
-                    0,
-                    Math.round(+cssValue.value / 100 * computedSheetDimens.frameH),
-                    computedSheetDimens.frameH,
-                  )
-                default:
-                  cssValueParsingError(snapPoints[cssValueI], cssValue)
-              }
-            }
-            cssValueParsingError(snapPoints[cssValueI], cssValue)
-          }()
-          
-          const left = function(){
-            for (let i = cssValueI-1; i>=0; i--) {
-              if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
-            }
-          }() ?? Number.NEGATIVE_INFINITY
-          const right = function(){
-            for (let i = cssValueI+1; i<snapPointsPx.length; i++) {
-              if (snapPointsPx[i]!==undefined) return snapPointsPx[i]
-            }
-          }() ?? Number.POSITIVE_INFINITY
-          computed = fitRange(left,computed,right)
-          
-          snapPointsPx[cssValueI] = computed
-        })
-      })
-      return snapPointsPx as number[]
-    },
+    ()=>calculateSnapPointsPx(snapPoints,computedSheetDimens),
     [snapPoints, computedSheetDimens]
   )
   
-  const snapIdx = fitRange(0,options.snapIdx??0,snapPoints.length-1)
-  const setState = options.setState
-  const setSnapIdx = options.setSnapIdx
+  
+  const [state,setState] = useState<SheetState>('closed')
+  const [snapIdx, setSnapIdx] = useState(snapPoints.length-1)
+  const dragStartStateRef = useRef({ isDragging: false, sheetH: 0 })
+  //const setState = options.setState
+  //const setSnapIdx = options.setSnapIdx
   //const closeable = options.closeable ?? false
   
   
+  const newState = options.state
+  const setNewState = options.setState
+  const newSnapIdx = options.snapIdx
+  const setNewSnapIdx = options.setSnapIdx
+  
+  
+  const [lastSpeed, setLastSpeed] = useState(undefined as undefined|number)
   const [sheetSpring, sheetSpringApi] = useSpring(()=>({ height: 0 }))
   
   
+  
+  
   const runAnimation = useCallback(
-    (startH: number, endH: number, startState: SheetState, endState: SheetState)=>{
+    (startH: number, endH: number, onFinish: Callback)=>{
       const duration = function(){
         if (!lastSpeed) return animationDuration
         const pathPercent = Math.abs(endH-startH)/window.innerHeight*100
@@ -282,9 +235,7 @@ export const useBottomSheet = (
         )
         //console.log('animation',{...animation})
         setLastSpeed(undefined)
-        if (animation.finished) {
-          if (stateRef.current===startState) setState(endState)
-        }
+        if (animation.finished) onFinish()
       })()
     },
     [animationDuration, lastSpeed]
@@ -293,128 +244,154 @@ export const useBottomSheet = (
   
   
   
-  const reactOnState = useCallback(
+  const reactOnState = useEffectEvent(
     ()=>{
-      const s = state
-      const ph = snapPointsPx[snapIdx]
-      const h = computedSheetDimens.sheetH
+      const currH = computedSheetDimens.sheetH
+      const currClosed = state==='closed'
+      
+      const newS = newState
+      // new point index
+      const newPI = fitRange2(
+        newSnapIdx??snapIdx,[0,snapPoints.length-1]
+      )
+      // new point height
+      const newPH = snapPointsPx[newPI]
+      
+      console.log({
+        newS, state, newPI, newPH, snapIdx, currClosed
+      })
+      
+      
+      if (newS===state && newPI===snapIdx) return
       
       // open instantly
-      if (s==='open'){
-        if (h===0 && ph!==0){
-          //stopCurrentAction()
-          sheetSpring.height.set(ph)
+      else if (newS==='open'){
+        if (currClosed && newPH!==0){
+          dragStartStateRef.current.isDragging = false
+          sheetSpring.height.set(newPH)
           setState('opened')
-        } else {
-          setState('closed')
+          setNewState('opened')
+          setSnapIdx(newPI)
+          setNewSnapIdx(newPI)
         }
+        else if (currClosed && newPH===0) setState('closed')
+        else if (!currClosed && newPH!==0) setState('snap')
+        else if (!currClosed && newPH===0) setState('close')
       }
       
       // open animated
-      else if (s==='opening'){
-        if (h===0 && ph!==0){
-          //stopCurrentAction()
-          runAnimation(h,ph,s,'opened')
-        } else {
-          setState('closed')
+      else if (newS==='opening'){
+        if (currClosed && newPH!==0){
+          dragStartStateRef.current.isDragging = false
+          runAnimation(currH,newPH, ()=>{
+            setState('opened')
+            setNewState('opened')
+            setSnapIdx(newPI)
+            setNewSnapIdx(newPI)
+          })
         }
+        else if (currClosed && newPH===0) setState('closed')
+        else if (!currClosed && newPH!==0) setState('snapping')
+        else if (!currClosed && newPH===0) setState('closing')
       }
       
       // close instantly
-      else if (s==='close'){
-        if (h!==0){
-          //stopCurrentAction()
+      else if (newS==='close'){
+        if (!currClosed){
+          dragStartStateRef.current.isDragging = false
           sheetSpring.height.set(0)
           setState('closed')
-        } else {
-          setState('closed')
+          setNewState('closed')
+          setSnapIdx(newPI)
+          setNewSnapIdx(newPI)
         }
+        else if (currClosed) setState('closed')
       }
       
       // close animated
-      else if (s==='closing'){
-        if (h!==0){
-          //stopCurrentAction()
-          runAnimation(h,0,s,'closed')
-        } else {
-          setState('closed')
+      else if (newS==='closing'){
+        if (!currClosed) {
+          dragStartStateRef.current.isDragging = false
+          runAnimation(currH, 0, ()=>{
+            setState('closed')
+            setNewState('closed')
+            setSnapIdx(newPI)
+            setNewSnapIdx(newPI)
+          })
         }
+        else if (currClosed) setState('closed')
       }
       
       // snap instantly
-      else if (s==='snap'){
-        if (h===0){
-          setState('open')
-        }
-        else if (ph===0){
-          setState('close')
-        }
-        else {
-          //stopCurrentAction()
-          sheetSpring.height.set(ph)
+      else if (newS==='snap'){
+        if (!currClosed && newPH!==0) {
+          dragStartStateRef.current.isDragging = false
+          sheetSpring.height.set(newPH)
           setState('opened')
+          setNewState('opened')
+          setSnapIdx(newPI)
+          setNewSnapIdx(newPI)
         }
+        else if (!currClosed && newPH===0) setState('close')
+        else if (currClosed && newPH!==0) setState('open')
+        else if (currClosed && newPH===0) setState('closed')
       }
       
       // snap animated
-      else if (s==='snapping'){
-        if (h===0){
-          setState('opening')
+      else if (newS==='snapping'){
+        if (!currClosed && newPH!==0) {
+          dragStartStateRef.current.isDragging = false
+          runAnimation(currH,newPH,()=>{
+            setState('closed')
+            setNewState('closed')
+            setSnapIdx(newPI)
+            setNewSnapIdx(newPI)
+          })
         }
-        else if (ph===0){
-          setState('closing')
-        }
-        else {
-          //stopCurrentAction()
-          runAnimation(h,ph,s,'opened')
-        }
+        else if (!currClosed && newPH===0) setState('closing')
+        else if (currClosed && newPH!==0) setState('opening')
+        else if (currClosed && newPH===0) setState('closed')
       }
       
-    },
-    [
-      state, snapIdx, /* closeable, */
-      computedSheetDimens,
-      snapPointsPx, runAnimation
-    ]
+      // dragging
+      else if (newS==='dragging') {
+        setState('dragging')
+        setNewState('dragging')
+        setSnapIdx(newPI)
+        setNewSnapIdx(newPI)
+      }
+      
+      // opened
+      else if (newS==='opened') {
+        setState('opened')
+        setNewState('opened')
+        setSnapIdx(newPI)
+        setNewSnapIdx(newPI)
+      }
+      
+      // closed
+      else if (newS==='closed') {
+        setState('closed')
+        setNewState('closed')
+        setSnapIdx(newPI)
+        setNewSnapIdx(newPI)
+      }
+      
+    }
   )
-  const reactOnStateEffectEvent = useEffectEvent(()=>reactOnState())
-  useEffect(reactOnStateEffectEvent,[state,snapIdx])
-  
-  
-  
-  
-  
-  /*
-  useEffect(
+  useLayoutEffect(
     ()=>{
-      const draggables = draggableElements
-        .map(it=>it.current)
-        .filter(it=>it) as HTMLElement[]
-      draggables.forEach(it=>{
-        it.classList.add(commonCss.noTouchAction)
-        it.addEventListener('pointerdown',onPointerDown)
-        it.addEventListener('pointermove',onPointerMove)
-        it.addEventListener('pointerup',onPointerEnd)
-        it.addEventListener('pointercancel',onPointerEnd)
-      })
-      return ()=>draggables.forEach(it=>{
-        it.classList.remove(commonCss.noTouchAction)
-        it.removeEventListener('pointerdown',onPointerDown)
-        it.removeEventListener('pointermove',onPointerMove)
-        it.removeEventListener('pointerup',onPointerEnd)
-        it.removeEventListener('pointercancel',onPointerEnd)
-      })
+      console.log('useLayoutEffect')
+      reactOnState()
     },
-    [
-      ...draggableElements.map(it=>it.current),
-      onPointerDown, onPointerMove, onPointerEnd,
-    ]
+    [newState,newSnapIdx,state,snapIdx]
   )
-   */
+  
+  
+  useLayoutEffect(()=>console.log('new state:',state),[state])
   
   
   
-  const dragStartStateRef = useRef({ sheetH: 0 })
   // You MUST use css 'touch-action: none;' before start dragging
   // to prevent browser gesture handling
   // noinspection JSVoidFunctionReturnValueUsed
@@ -434,23 +411,24 @@ export const useBottomSheet = (
       ) */
       
       if (first) {
-        setState('dragging')
+        setNewState('dragging')
+        dragStartStateRef.current.isDragging = true
         dragStartStateRef.current.sheetH = computedSheetDimensRef.current.sheetH
       }
       const newSheetH = dragStartStateRef.current.sheetH - my
-      if (active) {
+      if (active && dragStartStateRef.current.isDragging) {
         sheetSpring.height.set(newSheetH)
       }
-      if (last){
-        //setState('opened')
+      if (last && dragStartStateRef.current.isDragging){
+        dragStartStateRef.current.isDragging = false
         const speed = pxPerMsToPercentVpHPerS(spdy) // % высоты viewport в секунду
         if (speed>speedThreshold){
           setLastSpeed(speed)
           if (diry<0){
-            setState('snapping')
-            setSnapIdx(snapPointsPx.length)
+            setNewState('snapping')
+            setNewSnapIdx(snapPoints.length-1)
           } else {
-            setState('closing')
+            setNewState('closing')
           }
         } else {
           let snapStart: undefined|number = undefined
@@ -460,11 +438,11 @@ export const useBottomSheet = (
           else if (newSheetH>snapPointsPx[snapPointsPx.length-1])
             snapStart=snapPointsPx.length
           else for (let i = 0; i < snapPointsPx.length-1; i++) {
-              if (inRangeExclusive(snapPointsPx[i],newSheetH,snapPointsPx[i+1])){
-                snapStart = i
-                break
-              }
+            if (inRangeExclusive(snapPointsPx[i],newSheetH,snapPointsPx[i+1])){
+              snapStart = i
+              break
             }
+          }
           
           const notAdjust = notExists(snapStart) || (
             inRange(0,snapStart!,snapPointsPx.length-2)
@@ -481,8 +459,8 @@ export const useBottomSheet = (
               const threshold = Math.round((snapPointsPx[snap]+snapPointsPx[snap+1])/2)
               if (newSheetH>threshold) snap++
             }
-            setState('snapping')
-            setSnapIdx(snap)
+            setNewState('snapping')
+            setNewSnapIdx(snap)
           }
           
         }
@@ -495,7 +473,7 @@ export const useBottomSheet = (
   
   
   // forbid content selection for all elements while dragging
-  useNoSelect(state==='dragging')
+  useNoSelect(newState==='dragging')
   
   
   
@@ -509,6 +487,91 @@ export const useBottomSheet = (
 
 
 
+
+
+
+
+function calculateSnapPointsPx(
+  snapPoints: (number|string)[],
+  computedSheetDimens: ComputedBottomSheetDimens,
+): number[] {
+  const allowedUnits = ['px','',undefined,'%']
+  const allowedKeywords = ['fit-content','fit-header','free']
+  const snapPointsCssValues = snapPoints.map(it=>{
+    const cssValue = parseCssValue(it+'')
+    if (
+      !cssValue
+      || (cssValue.type==='keyword' && !allowedKeywords.includes(cssValue.value))
+      || (cssValue.type==='numeric' && !allowedUnits.includes(cssValue.unit))
+    ) cssValueParsingError(it, cssValue)
+    return cssValue
+  })
+  
+  const snapPointsPx: (number|undefined)[] = Array(snapPoints.length).fill(undefined)
+  
+  ;[['px','',undefined],['%'],['fit-content','fit-header'],['free']].forEach(units=>{
+    snapPointsCssValues.forEach((cssValue,cssValueI)=>{
+      
+      if (
+        (cssValue.type==='keyword' && !units.includes(cssValue.value))
+        || (cssValue.type==='numeric' && !units.includes(cssValue.unit))
+      ) return
+      
+      let computed = function(){
+        if (cssValue.type==='keyword') {
+          switch (cssValue.value) {
+            case 'fit-content':
+              return computedSheetDimens.headerAndContentH
+            case 'fit-header':
+              return computedSheetDimens.headerH
+            case 'free':
+              return 0 // will be adjusted
+            default:
+              cssValueParsingError(snapPoints[cssValueI], cssValue)
+          }
+        }
+        if (cssValue.type==='numeric') {
+          switch (cssValue.unit) {
+            case 'px':
+            case '':
+            case undefined:
+              return fitRange(
+                0,
+                +cssValue.value,
+                computedSheetDimens.frameH,
+              )
+            case '%':
+              return fitRange(
+                0,
+                Math.round(+cssValue.value / 100 * computedSheetDimens.frameH),
+                computedSheetDimens.frameH,
+              )
+            default:
+              cssValueParsingError(snapPoints[cssValueI], cssValue)
+          }
+        }
+        cssValueParsingError(snapPoints[cssValueI], cssValue)
+      }()
+      
+      const left = findLastBy3({
+        arr: snapPointsPx,
+        filter: elem=>exists(elem),
+        startIdx: cssValueI-1,
+        orElse: Number.NEGATIVE_INFINITY,
+      }).elem as number
+      const right = findBy3({
+        arr: snapPointsPx,
+        filter: elem=>exists(elem),
+        startIdx: cssValueI+1,
+        orElse: Number.POSITIVE_INFINITY,
+      }).elem as number
+      computed = fitRange2(computed,[left,right])
+      
+      snapPointsPx[cssValueI] = computed
+    })
+  })
+  return snapPointsPx as number[]
+}
 
 
 

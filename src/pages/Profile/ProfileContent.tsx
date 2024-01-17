@@ -45,7 +45,7 @@ import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
 import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import UseModalSheet from 'src/views/BottomSheet/UseModalSheetState'
+import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import Card2 from 'src/views/Card2'
@@ -816,7 +816,7 @@ React.memo(
                     nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
                     onClick={boolProps.setTrue}
                   />
-                  <UseModalSheet
+                  <UseBottomSheetState
                     open={boolProps.value}
                     onClosed={boolProps.setFalse}
                     render={sheetProps =>

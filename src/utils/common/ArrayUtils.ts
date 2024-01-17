@@ -1,3 +1,4 @@
+import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import ComparatorEq = TypeUtils.ComparatorEq
@@ -5,6 +6,10 @@ import defaultComparatorEq = TypeUtils.defaultComparatorEq
 import defaultPredicate = TypeUtils.defaultPredicate
 import Mapper = TypeUtils.Mapper
 import Filter = TypeUtils.Filter
+import exists = TypeUtils.exists
+import MergerIndexed = TypeUtils.MergerIndexed
+import CombinerIndexed = TypeUtils.CombinerIndexed
+import Exists = TypeUtils.Exists
 
 
 
@@ -12,11 +17,9 @@ import Filter = TypeUtils.Filter
 export namespace ArrayUtils {
   
   
-  import Merger = TypeUtils.Merger
-  import exists = TypeUtils.exists
-  import MergerIndexed = TypeUtils.MergerIndexed
-  import CombinerIndexed = TypeUtils.CombinerIndexed
-  import Exists = TypeUtils.Exists
+  import fitRange = MathUtils.fitRange
+  import fitRange2 = MathUtils.fitRange2
+  import PartialUndef = TypeUtils.PartialUndef
   export const eq = (arr1: any[] | empty, arr2: any[] | empty): boolean => {
     if (arr1===arr2) return true
     if (!arr1 || !arr2) return false
@@ -108,33 +111,102 @@ export namespace ArrayUtils {
   
   
   
-  export type FindResult<T> = {
+  
+  export type FindResult<T,E> = {
     isFound: true
     index: number
     elem: T
   } | {
     isFound: false
     index: -1
-    elem: undefined
+    elem: E
   }
-  export const findBy =
-  <T>(arr: T[], filter: Filter<T> = defaultPredicate): FindResult<T> => {
-    for (let i = 0; i < arr.length; i++) {
+  
+  export type FindByProps<T> = {
+    arr: T[]
+    filter?: Filter<T> | undefined
+    startIdx?: number | undefined
+  }
+  export type FindByElseProps<T,E> = FindByProps<T> & {
+    orElse: E
+  }
+  
+  export const findBy3 =
+  <T,E>
+  ({ arr, filter = defaultPredicate, startIdx = 0, orElse }: FindByElseProps<T,E>)
+  : FindResult<T,E> => {
+    startIdx = fitRange2(
+      startIdx>=0 ? startIdx : (arr.length+startIdx),
+      [0, arr.length]
+    )
+    for (let i = startIdx; i < arr.length; i++) {
       const elem = arr[i]
       if (filter(elem)){
         return {
           isFound: true,
           index: i,
           elem: elem,
-        } satisfies FindResult<T>
+        } satisfies FindResult<T,E>
       }
     }
     return {
       isFound: false,
       index: -1,
-      elem: undefined,
-    } satisfies FindResult<T>
+      elem: orElse,
+    } satisfies FindResult<T,E>
   }
+  
+  export const findBy2 =
+  <T>
+  ({ arr, filter = defaultPredicate, startIdx = 0 }: FindByProps<T>)
+  : FindResult<T,undefined> =>
+    findBy3({ arr, filter, startIdx, orElse: undefined })
+  
+  export const findBy =
+  <T>
+  (arr: T[], filter: Filter<T> = defaultPredicate, startIdx = 0)
+  : FindResult<T,undefined> =>
+    findBy3({ arr, filter, startIdx, orElse: undefined })
+  
+    
+    
+  
+  export const findLastBy3 =
+  <T,E>
+  ({ arr, filter = defaultPredicate, startIdx = -1, orElse }: FindByElseProps<T,E>)
+  : FindResult<T,E> => {
+    startIdx = fitRange2(
+      startIdx>=0 ? startIdx : (arr.length+startIdx),
+      [-1, arr.length-1]
+    )
+    for (let i = startIdx; i > -1; i--) {
+      const elem = arr[i]
+      if (filter(elem)){
+        return {
+          isFound: true,
+          index: i,
+          elem: elem,
+        } satisfies FindResult<T,E>
+      }
+    }
+    return {
+      isFound: false,
+      index: -1,
+      elem: orElse,
+    } satisfies FindResult<T,E>
+  }
+  
+  export const findLastBy2 =
+  <T>
+  ({ arr, filter = defaultPredicate, startIdx = -1 }: FindByProps<T>)
+  : FindResult<T,undefined> =>
+    findLastBy3({ arr, filter, startIdx, orElse: undefined })
+  
+  export const findLastBy =
+  <T>
+  (arr: T[], filter: Filter<T> = defaultPredicate, startIdx = -1)
+  : FindResult<T,undefined> =>
+    findLastBy3({ arr, filter, startIdx, orElse: undefined })
   
   
   

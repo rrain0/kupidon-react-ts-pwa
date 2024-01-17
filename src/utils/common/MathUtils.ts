@@ -72,6 +72,9 @@ export namespace MathUtils {
   export const fitRange = (min: number, curr: number, max: number): number =>
     curr < min ? min : curr > max ? max : curr;
   
+  export const fitRange2 = (curr: number, range: [min: number, max: number]): number =>
+    curr < range[0] ? range[0] : curr > range[1] ? range[1] : curr;
+  
   
   /**
    * Определение, находится ли текущее значение между минимальным и максимальным включительно
