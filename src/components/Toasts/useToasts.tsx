@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { toast, ToastItem } from 'react-toastify'
-import { OnChangeCallback } from 'react-toastify/dist/core/eventManager'
+import { OnChangeCallback } from 'react-toastify/dist/types'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { UiText } from 'src/utils/lang/UiText'

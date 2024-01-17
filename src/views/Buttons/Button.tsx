@@ -37,6 +37,11 @@ React.forwardRef<ButtonRefElement, ButtonProps>(
     ...restProps
   } = props
   
+  
+  const elemRef = useRef<ButtonRefElement>(null)
+  useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
+  
+  
   const buttonProps = {
     [ButtonStyle.Attr.attr.error]: trueOrUndef(hasError),
     className: classNames(className, ButtonStyle.El.clazz.btn),
@@ -51,14 +56,11 @@ React.forwardRef<ButtonRefElement, ButtonProps>(
     rippleDuration,
   }
   
-  const buttonRef = useRef<ButtonRefElement>(null)
-  useImperativeHandle(forwardedRef, ()=>buttonRef.current!,[])
-  
   
   
   return <button css={buttonStyle}
     {...buttonProps}
-    ref={buttonRef}
+    ref={elemRef}
   >
     
     { children }
@@ -67,7 +69,7 @@ React.forwardRef<ButtonRefElement, ButtonProps>(
       {...borderProps}
     >
       <Ripple
-        targetElement={buttonRef}
+        targetElement={elemRef}
         {...rippleProps}
       />
     </div>

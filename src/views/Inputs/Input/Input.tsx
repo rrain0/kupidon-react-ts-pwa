@@ -2,10 +2,7 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
-import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
-import { ReactUtils } from "src/utils/common/ReactUtils"
-import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import row = EmotionCommon.row
@@ -16,65 +13,80 @@ import trueOrUndef = TypeUtils.trueOrUndef
 
 
 
-const Attr = InputStyle.Attr
+
+export type InputCustomProps = PartialUndef<{
+  hasError: boolean
+  startViews: React.ReactNode
+  endViews: React.ReactNode
+  children: React.ReactNode
+  childrenPosition: 'start'|'end'
+  frameProps: Omit<JSX.IntrinsicElements['label'],'ref'>
+}>
+export type InputForwardRefProps = JSX.IntrinsicElements['input']
+export type InputRefElement = HTMLInputElement
+export type InputProps = InputCustomProps & InputForwardRefProps
 
 
-export type InputProps = JSX.IntrinsicElements['input']
-  & PartialUndef<{
-    hasError: boolean
-    startViews: React.ReactNode
-    endViews: React.ReactNode
-    children: React.ReactNode
-    childrenPosition: 'start'|'end'
-    frameProps: Omit<JSX.IntrinsicElements['label'],'ref'>
-  }>
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>((
-  props, forwardedRef
-) => {
+const Input =
+React.memo(
+React.forwardRef<InputRefElement, InputProps>(
+(props, forwardedRef) => {
   let {
     hasError,
     startViews, endViews, children, childrenPosition,
     className, style,
-    frameProps,
+    frameProps: fProps,
     ...restProps
   } = props
   childrenPosition ??= 'end'
   
   
-  const inputRef = useRef<HTMLInputElement>(null)
-  useImperativeHandle(forwardedRef, ()=>inputRef.current!,[])
+  const elemRef = useRef<InputRefElement>(null)
+  useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
-  return <Frame css={frameStyle}
-    className={className}
-    style={style}
+  const frameProps = {
+    className: classNames(className, InputStyle.El.frameClassName),
+    style: style,
+    ...fProps,
+  }
+  const inputProps = {
+    className: InputStyle.El.inputClassName,
+    [InputStyle.Attr.errorName]: trueOrUndef(hasError),
+    ...restProps,
+  }
+  const borderProps = {
+    className: InputStyle.El.borderClassName,
+  }
+  
+  
+  return <label /* Frame */ css={frameStyle}
     {...frameProps}
   >
     
     { startViews }
     { childrenPosition==='start' && children }
     
-    <Input_ css={input_Style}
-      {...{[Attr.errorName]: hasError}}
-      {...restProps}
-      ref={inputRef}
+    <input /* Input */ css={inputStyle}
+      {...inputProps}
+      ref={elemRef}
     />
     
     { childrenPosition==='end' && children }
     { endViews }
     
-    <Border css={borderStyle}/>
+    <div /* Border */ css={borderStyle}
+      {...borderProps}
+    />
     
-  </Frame>
-})
-export default Mem(Input)
+  </label>
+}))
+export default Input
 
 
 
-const Frame = styled.label.attrs(p=>({
-  className: classNames(p.className,InputStyle.El.frameClassName)
-}))``
+
 const frameStyle = css`
   container: input / size;
   ${row};
@@ -87,14 +99,7 @@ const frameStyle = css`
 
 
 
-type Input_Props = PartialUndef<{
-  [Attr.errorName]: boolean
-}>
-const Input_ = styled.input.attrs<Input_Props>(p=>({
-  className: classNames(p.className,InputStyle.El.inputClassName),
-  [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
-}))<Input_Props>``
-const input_Style = css`
+const inputStyle = css`
   ${resetInput};
   flex: 1;
   align-self: stretch;
@@ -103,9 +108,7 @@ const input_Style = css`
 
 
 
-const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,InputStyle.El.borderClassName)
-}))``
+
 const borderStyle = css`
   ${abs};
   pointer-events: none;

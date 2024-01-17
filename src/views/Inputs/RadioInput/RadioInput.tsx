@@ -3,7 +3,6 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import styled from "styled-components"
 import React, {useImperativeHandle, useRef} from "react"
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -14,9 +13,6 @@ import RadioInactiveIc = SvgIcons.RadioInactiveIc
 import resetInput = EmotionCommon.resetInput
 import abs = EmotionCommon.abs
 import row = EmotionCommon.row
-import El = RadioInputStyle.El
-import Attr = RadioInputStyle.Attr
-import Prop = RadioInputStyle.Prop
 import PartialUndef = TypeUtils.PartialUndef
 import trueOrUndef = TypeUtils.trueOrUndef
 
@@ -32,14 +28,15 @@ export type RadioInputCustomProps = PartialUndef<{
   childrenPosition: 'start'|'end'
   rippleMode: RippleProps['mode']
 }>
-export type ForwardRefProps = JSX.IntrinsicElements['input']
-type RefElement = HTMLInputElement
+export type RadioInputForwardRefProps = JSX.IntrinsicElements['input']
+export type RadioInputRefElement = HTMLInputElement
+export type RadioInputProps = RadioInputCustomProps & RadioInputForwardRefProps
 
-export type RadioInputProps = RadioInputCustomProps & ForwardRefProps
+
 
 const RadioInput = 
 React.memo(
-React.forwardRef<RefElement, RadioInputProps>
+React.forwardRef<RadioInputRefElement, RadioInputProps>
 ((props, forwardedRef)=> {
   let {
     hasError,
@@ -51,55 +48,75 @@ React.forwardRef<RefElement, RadioInputProps>
   rippleMode ??= 'cursor'
   
   
-  const inputRef = useRef<RefElement>(null)
-  useImperativeHandle(forwardedRef, ()=>inputRef.current!,[])
+  const elemRef = useRef<RadioInputRefElement>(null)
+  useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
+  const frameProps = {
+    className: classNames(className, RadioInputStyle.El.frameClassName),
+    style: style,
+  }
+  const inputProps = {
+    className: RadioInputStyle.El.inputClassName,
+    type: 'radio',
+    [RadioInputStyle.Attr.errorName]: trueOrUndef(hasError),
+    'aria-checked': restProps.checked,
+    role: 'radio',
+    ...restProps,
+  }
+  const activeIcWrapProps = {
+    className: RadioInputStyle.El.iconWrapClassName
+  }
+  const inactiveIcWrapProps = {
+    className: RadioInputStyle.El.iconWrapClassName
+  }
+  const borderProps = {
+    className: RadioInputStyle.El.borderClassName
+  }
   
-  return <Frame
-    css={frameStyle}
-    className={className}
-    style={style}
+  
+  return <label /* Frame */ css={frameStyle}
+    {...frameProps}
   >
     
-    <Input_ css={input_Style}
-      {...{[Attr.errorName]: hasError}}
-      aria-checked={restProps.checked}
-      role='radio'
-      {...restProps}
-      data-error={hasError}
-      ref={inputRef}
+    <input /* Input */ css={inputStyle}
+      {...inputProps}
+      ref={elemRef}
     />
     
     { startViews }
     { childrenPosition==='start' && children }
     
-    <ActiveIcWrap css={activeIcWrapStyle}>
+    <div /* ActiveIcWrap */ css={activeIcWrapStyle}
+      {...activeIcWrapProps}
+    >
       <RadioActiveIc/>
-    </ActiveIcWrap>
-    <InactiveIcWrap css={inactiveIcWrapStyle}>
+    </div>
+    <div /* InactiveIcWrap */ css={inactiveIcWrapStyle}
+      {...inactiveIcWrapProps}
+    >
       <RadioInactiveIc/>
-    </InactiveIcWrap>
+    </div>
     
     { childrenPosition==='end' && children }
     { endViews }
     
-    <Border css={borderStyle}>
+    <div /* Border */ css={borderStyle}
+      {...borderProps}
+    >
       <Ripple
-        targetElement={inputRef}
+        targetElement={elemRef}
         mode={rippleMode}
       />
-    </Border>
+    </div>
     
-  </Frame>
+  </label>
 }))
 export default RadioInput
 
 
 
-const Frame = styled.label.attrs(p=>({
-  className: classNames(p.className,El.frameClassName)
-}))``
+
 const frameStyle = css`
   position: relative;
   ${row};
@@ -109,15 +126,8 @@ const frameStyle = css`
 `
 
 
-type Input_Props = PartialUndef<{
-  [Attr.errorName]: boolean
-}>
-const Input_ = styled.input.attrs<Input_Props>(p=>({
-  className: classNames(p.className,El.inputClassName),
-  type: 'radio',
-  [Attr.errorName]: trueOrUndef(p['data-error'])
-}))<Input_Props>``
-const input_Style = css`
+
+const inputStyle = css`
   ${resetInput};
   ${abs};
   opacity: 0;
@@ -125,32 +135,26 @@ const input_Style = css`
 `
 
 
-const ActiveIcWrap = styled.div.attrs(p=>({
-  className: classNames(p.className,El.iconWrapClassName)
-}))``
+
 const activeIcWrapStyle = css`
   display: none;
   input:checked ~ & { display: flex; }
   ${SvgIcStyle.El.el.icon} {
-    ${SvgIcStyle.Prop.prop.color}: var(${Prop.activeIconColor})
+    ${SvgIcStyle.Prop.prop.color}: var(${RadioInputStyle.Prop.activeIconColor})
   }
 `
 
-const InactiveIcWrap = styled.div.attrs(p=>({
-  className: classNames(p.className,El.iconWrapClassName)
-}))``
+
 const inactiveIcWrapStyle = css`
   display: flex;
   input:checked ~ & { display: none }
   ${SvgIcStyle.El.el.icon} {
-    ${SvgIcStyle.Prop.prop.color}: var(${Prop.inactiveIconColor})
+    ${SvgIcStyle.Prop.prop.color}: var(${RadioInputStyle.Prop.inactiveIconColor})
   }
 `
 
 
-const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,El.borderClassName)
-}))``
+
 const borderStyle = css`
   ${abs};
   pointer-events: none;

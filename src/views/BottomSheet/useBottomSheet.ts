@@ -234,7 +234,7 @@ export const useBottomSheet = (
             config: {
               mass: 1 * duration / 100,
               tension: 500,
-              friction: 20,
+              friction: 24,
               clamp: true,
             },
           }

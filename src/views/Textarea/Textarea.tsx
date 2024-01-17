@@ -3,10 +3,7 @@ import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ElementProps } from 'src/utils/common/GetDimensions'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
-import styled from "styled-components"
 import React, { useImperativeHandle, useRef } from 'react'
-import { ReactUtils } from "src/utils/common/ReactUtils"
-import Mem = ReactUtils.Mem
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import row = EmotionCommon.row
@@ -19,7 +16,6 @@ import trueOrUndef = TypeUtils.trueOrUndef
 
 
 
-const Attr = TextareaStyle.Attr
 
 
 
@@ -32,7 +28,7 @@ export type InputProps = JSX.IntrinsicElements['textarea'] &
     childrenPosition: 'start'|'end'
   }>
 
-const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
+const Textarea = React.memo(React.forwardRef<HTMLTextAreaElement, InputProps>((
   props, forwardedRef
 ) => {
   let {
@@ -47,21 +43,29 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
   useImperativeHandle(forwardedRef, ()=>textareaRef.current!,[])
   
   
+  const frameProps = {
+    className: classNames(className,TextareaStyle.El.frameClassName),
+    style: style,
+  }
+  const textareaProps = {
+    className: TextareaStyle.El.textareaClassName,
+    [TextareaStyle.Attr.errorName]: trueOrUndef(hasError),
+    ...restProps,
+  }
+  const borderProps = {
+    className: TextareaStyle.El.borderClassName
+  }
   
   
-  return <Frame
-    css={frameStyle}
-    className={className}
-    style={style}
+  return <label /* Frame */ css={frameStyle}
+    {...frameProps}
   >
     
     { startViews }
     { childrenPosition==='start' && children }
     
-    <Textarea_
-      css={textarea_Style}
-      {...restProps}
-      {...{[Attr.errorName]: hasError}}
+    <textarea /* Textarea */ css={textareaStyle}
+      {...textareaProps}
       ref={textareaRef}
       
       onScroll={ev=>{
@@ -73,17 +77,17 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, InputProps>((
     { childrenPosition==='end' && children }
     { endViews }
     
-    <Border css={borderStyle}/>
+    <div /* Border */ css={borderStyle}
+      {...borderProps}
+    />
     
-  </Frame>
-})
-export default Mem(Textarea)
+  </label>
+}))
+export default Textarea
 
 
 
-const Frame = styled.label.attrs(p=>({
-  className: classNames(p.className,TextareaStyle.El.frameClassName)
-}))``
+
 const frameStyle = css`
   ${row};
   align-items: center;
@@ -92,14 +96,8 @@ const frameStyle = css`
 `
 
 
-type Textarea_Props = PartialUndef<{
-  [Attr.errorName]: boolean
-}>
-const Textarea_ = styled.textarea.attrs<Textarea_Props>(p=>({
-  className: classNames(p.className,TextareaStyle.El.textareaClassName),
-  [Attr.errorName]: trueOrUndef(p[Attr.errorName])
-}))<Textarea_Props>``
-const textarea_Style = css`
+
+const textareaStyle = css`
   ${resetTextarea};
 
   flex: 1;
@@ -111,9 +109,7 @@ const textarea_Style = css`
 `
 
 
-const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,TextareaStyle.El.borderClassName)
-}))``
+
 const borderStyle = css`
   ${abs};
   pointer-events: none;

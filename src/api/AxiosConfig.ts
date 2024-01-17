@@ -9,8 +9,8 @@ import { ApiRoutes } from 'src/api/ApiRoutes'
 import * as jose from 'jose'
 import { getRecoil, setRecoil, resetRecoil, getRecoilPromise } from "recoil-nexus"
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
-import { RecoilUtils } from 'src/recoil/RecoilUtils'
-import ValOrUpdater = RecoilUtils.ValOrUpdater
+import { TypeUtils } from 'src/utils/common/TypeUtils'
+import ValueOrMapper = TypeUtils.ValueOrMapper
 
 
 
@@ -150,7 +150,7 @@ export namespace AxiosConfig {
     //reduxStore.dispatch(userActions.setUser(null))
     resetRecoil(AuthRecoil)
   }
-  const setAuthData = (valOrUpdater: ValOrUpdater<AuthStateType>) => {
+  const setAuthData = (valOrUpdater: ValueOrMapper<AuthStateType>) => {
     //localStorage.setItem('token', authData.accessJwt)
     //reduxStore.dispatch(refreshAccessToken({ access_token: accessToken }))
     setRecoil(AuthRecoil, valOrUpdater)

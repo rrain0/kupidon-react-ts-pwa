@@ -2,7 +2,6 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { DataFieldStyle } from 'src/views/DataField/DataFieldStyle'
-import styled from "styled-components"
 import React, { useImperativeHandle, useRef } from 'react'
 import classNames from "classnames"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -13,55 +12,61 @@ import trueOrUndef = TypeUtils.trueOrUndef
 
 
 
-const Attr = DataFieldStyle.Attr
 
 
 export type DataFieldCustomProps = PartialUndef<{
   hasError: boolean
   children: React.ReactNode
 }>
-export type ForwardRefProps = JSX.IntrinsicElements['div']
-type RefElement = HTMLDivElement
+export type DataFieldForwardRefProps = JSX.IntrinsicElements['div']
+export type DataFieldRefElement = HTMLDivElement
+export type DataFieldProps = DataFieldCustomProps & DataFieldForwardRefProps
 
-export type DataFieldProps = DataFieldCustomProps & ForwardRefProps
+
+
 const DataField =
 React.memo(
-React.forwardRef<RefElement, DataFieldProps>(
+React.forwardRef<DataFieldRefElement, DataFieldProps>(
 (props, forwardedRef) => {
-  let {
+  const {
     hasError,
     children,
+    className,
     ...restProps
   } = props
   
   
-  const elemRef = useRef<RefElement>(null)
+  const elemRef = useRef<DataFieldRefElement>(null)
   useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
-  return <Frame css={frameStyle}
-    {...{[Attr.errorName]: hasError}}
-    {...restProps}
+  const frameProps = {
+    className: classNames(className,DataFieldStyle.El.frameClassName),
+    [DataFieldStyle.Attr.errorName]: trueOrUndef(hasError),
+    ...restProps,
+  }
+  const borderProps = {
+    className: DataFieldStyle.El.borderClassName,
+  }
+  
+  
+  return <article /* Frame */ css={frameStyle}
+    {...frameProps}
     ref={elemRef}
   >
     
     { children }
     
-    <Border css={borderStyle}/>
+    <div /* Border */ css={borderStyle}
+      {...borderProps}
+    />
     
-  </Frame>
+  </article>
 }))
 export default DataField
 
 
 
-type FrameProps = PartialUndef<{
-  [Attr.errorName]: boolean
-}>
-const Frame = styled.article.attrs<FrameProps>(p=>({
-  className: classNames(p.className,DataFieldStyle.El.frameClassName),
-  [Attr.errorName]: trueOrUndef(p[Attr.errorName]),
-}))<FrameProps>``
 const frameStyle = css`
   ${row};
   align-items: center;
@@ -71,10 +76,6 @@ const frameStyle = css`
 
 
 
-
-const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,DataFieldStyle.El.borderClassName),
-}))``
 const borderStyle = css`
   ${abs};
   pointer-events: none;

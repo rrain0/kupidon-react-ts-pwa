@@ -28,7 +28,7 @@ import { CommonStyle } from 'src/views/CommonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
-import { RadioInputGroup } from 'src/views/Inputs/RadioInput/RadioInputGroup'
+import RadioInputGroup from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import col = EmotionCommon.col
 import Page = Pages.Page

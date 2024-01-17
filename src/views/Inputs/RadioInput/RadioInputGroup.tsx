@@ -8,58 +8,65 @@ import { AppTheme } from 'src/utils/theme/AppTheme'
 import {
   RadioInputGroupStyle,
 } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
-import styled from 'styled-components'
 import reset = EmotionCommon.reset
 import abs = EmotionCommon.abs
 import PartialUndef = TypeUtils.PartialUndef
-import El = RadioInputGroupStyle.El
-import Attr = RadioInputGroupStyle.Attr
-import Prop = RadioInputGroupStyle.Prop
 import trueOrUndef = TypeUtils.trueOrUndef
 
 
 
 
-export type RadioInputGroupProps = JSX.IntrinsicElements['div'] & PartialUndef<{
+export type RadioInputGroupCustomProps = PartialUndef<{
   hasError: boolean
   children: React.ReactNode
 }>
-export const RadioInputGroup = React.forwardRef<HTMLDivElement, RadioInputGroupProps>((
-  props, forwardedRef
-)=>{
-  let { hasError, children, ...restProps } = props
+export type RadioInputGroupForwardRefProps = JSX.IntrinsicElements['div']
+export type RadioInputGroupRefElement = HTMLDivElement
+export type RadioInputGroupProps = RadioInputGroupCustomProps & RadioInputGroupForwardRefProps
+
+
+
+const RadioInputGroup =
+React.memo(
+React.forwardRef<RadioInputGroupRefElement, RadioInputGroupProps>(
+  (props, forwardedRef)=>{
+  const { hasError, children, className, ...restProps } = props
   
   
-  const ref = useRef<HTMLDivElement>(null)
-  useImperativeHandle(forwardedRef, ()=>ref.current!,[])
+  const elemRef = useRef<RadioInputGroupRefElement>(null)
+  useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
-  return <RadioGroup css={radioGroupStyle}
-    {...{[Attr.errorName]: hasError}}
-    {...restProps}
-    data-error={hasError}
-    ref={ref}
+  const radioGroupProps = {
+    className: classNames(className, RadioInputGroupStyle.El.radioGroupClassName),
+    [RadioInputGroupStyle.Attr.errorName]: trueOrUndef(hasError),
+    // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/radiogroup_role
+    role: 'radiogroup',
+    ...restProps,
+  }
+  const borderProps = {
+    className: RadioInputGroupStyle.El.borderClassName,
+  }
+  
+  
+  return <article /* RadioGroup */ css={radioGroupStyle}
+    {...radioGroupProps}
+    ref={elemRef}
   >
     
-    {children}
+    { children }
     
-    <Border css={borderStyle}/>
+    <div /* Border */ css={borderStyle}
+      {...borderProps}
+    />
     
-  </RadioGroup>
-})
+  </article>
+}))
+export default RadioInputGroup
 
 
 
 
-type RadioGroupProps = PartialUndef<{
-  [Attr.errorName]: boolean
-}>
-const RadioGroup = styled.div.attrs<RadioGroupProps>(p=>({
-  className: classNames(p.className,El.radioGroupClassName),
-  [Attr.errorName]: trueOrUndef(p['data-error']),
-  // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/radiogroup_role
-  role: 'radiogroup',
-}))``
 const radioGroupStyle = (t: AppTheme.Theme) => css`
   ${reset};
   position: relative;
@@ -67,14 +74,6 @@ const radioGroupStyle = (t: AppTheme.Theme) => css`
 
 
 
-
-
-
-
-
-const Border = styled.div.attrs(p=>({
-  className: classNames(p.className,El.borderClassName)
-}))``
 const borderStyle = css`
   ${abs};
   pointer-events: none;
