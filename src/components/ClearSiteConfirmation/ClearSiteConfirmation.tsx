@@ -10,7 +10,7 @@ import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { AppTheme } from 'src/utils/theme/AppTheme'
-import UseModalSheetState from 'src/views/BottomSheet/UseBottomSheetState'
+import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
@@ -65,12 +65,12 @@ React.memo(
   
   return <>
     
-    <UseModalSheetState
+    <UseBottomSheetState
       open={open}
       onClosed={()=>setOpen(false)}
       snapPoints={BasicSheetSnaps}
       openIdx={BasicSheetOpenIdx}
-      render={props => open && <ModalPortal><BottomSheetBasic
+      render={props => <ModalPortal><BottomSheetBasic
         {...props.sheetProps}
         header={uiText.clearAppData[0].text + '?'}
       >

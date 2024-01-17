@@ -673,7 +673,7 @@ React.memo(
           
           <ValidationComponentWrap {...validationProps}
             fieldName="name"
-            render={props => <UseBool render={boolProps =>
+            render={props => <UseBool>{boolProps =>
               <>
                 
                 <OptionItem
@@ -736,14 +736,14 @@ React.memo(
                 }
               
               </>
-          }/>}/>
+          }</UseBool>}/>
           
           
           
           
           <ValidationComponentWrap {...validationProps}
             fieldName="birthDate"
-            render={props => <UseBool render={boolProps =>
+            render={props => <UseBool>{boolProps =>
               <>
                 
                 <OptionItem
@@ -801,13 +801,13 @@ React.memo(
                 </Modal></ModalPortal>}
               
               </>
-            }/>}/>
+            }</UseBool>}/>
           
           
           <ValidationComponentWrap {...validationProps}
             fieldName="gender"
             render={validProps =>
-              <UseBool render={boolProps =>
+              <UseBool>{boolProps =>
                 <>
                   <OptionItem
                     icon={<GenderIc css={css`height: 50%`}/>}
@@ -853,7 +853,7 @@ React.memo(
                     }
                   />
                 </>
-              }/>
+              }</UseBool>
             }
           />
           

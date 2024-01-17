@@ -227,13 +227,19 @@ export const useBottomSheet = (
         const animation = await sheetSpring.height.start(
           endH,
           {
-            config: {
+            /* config: {
               duration: duration,
               easing: animationEasing,
+            }, */
+            config: {
+              mass: 1 * duration / 100,
+              tension: 500,
+              friction: 20,
+              clamp: true,
             },
           }
         )
-        //console.log('animation',{...animation})
+        console.log('animation',animation)
         setLastSpeed(undefined)
         if (animation.finished) onFinish()
       })()
@@ -248,147 +254,141 @@ export const useBottomSheet = (
     ()=>{
       const currH = computedSheetDimens.sheetH
       const currClosed = state==='closed'
+      const currPI = snapIdx
       
-      const newS = newState
+      let newS = newState
       // new point index
       const newPI = fitRange2(
-        newSnapIdx??snapIdx,[0,snapPoints.length-1]
+        newSnapIdx??currPI,[0,snapPoints.length-1]
       )
       // new point height
       const newPH = snapPointsPx[newPI]
       
-      console.log({
-        newS, state, newPI, newPH, snapIdx, currClosed
-      })
+      const setStateAndIndex = (state: SheetState, index: number)=>{
+        if (state!=='dragging') dragStartStateRef.current.isDragging = false
+        setState(state)
+        setNewState(state)
+        setSnapIdx(index)
+        setNewSnapIdx(index)
+        console.log('set states:',state,index)
+      }
+      const setLocalNewState = (state: SheetState)=>{ newS = state }
       
       
-      if (newS===state && newPI===snapIdx) return
-      
-      // open instantly
-      else if (newS==='open'){
-        if (currClosed && newPH!==0){
-          dragStartStateRef.current.isDragging = false
-          sheetSpring.height.set(newPH)
-          setState('opened')
-          setNewState('opened')
-          setSnapIdx(newPI)
-          setNewSnapIdx(newPI)
+      // prevent infinite loops
+      for (let i = 0; i < 10; i++) {
+        console.log('i',i)
+        console.log({
+          newS, state, newPI, newPH, snapIdx, currClosed
+        })
+        /* if (newS===state && newPI===snapIdx) {
+          setStateAndIndex(newS,newPI)
+          return
+        } */
+        
+        if(false){}
+        
+        // open instantly
+        else if (newS==='open'){
+          if (currClosed && newPH!==0){
+            sheetSpring.height.set(newPH)
+            setStateAndIndex('opened',newPI)
+            return
+          }
+          else if (currClosed && newPH===0) setLocalNewState('closed')
+          else if (!currClosed && newPH!==0) setLocalNewState('snap')
+          else if (!currClosed && newPH===0) setLocalNewState('close')
         }
-        else if (currClosed && newPH===0) setState('closed')
-        else if (!currClosed && newPH!==0) setState('snap')
-        else if (!currClosed && newPH===0) setState('close')
-      }
-      
-      // open animated
-      else if (newS==='opening'){
-        if (currClosed && newPH!==0){
-          dragStartStateRef.current.isDragging = false
-          runAnimation(currH,newPH, ()=>{
-            setState('opened')
-            setNewState('opened')
-            setSnapIdx(newPI)
-            setNewSnapIdx(newPI)
-          })
+        
+        // open animated
+        else if (newS==='opening'){
+          if (currClosed && newPH!==0){
+            setStateAndIndex('opening',newPI)
+            runAnimation(currH,newPH, ()=>{
+              setStateAndIndex('opened',newPI)
+            })
+            return
+          }
+          else if (currClosed && newPH===0) setLocalNewState('closed')
+          else if (!currClosed && newPH!==0) setLocalNewState('snapping')
+          else if (!currClosed && newPH===0) setLocalNewState('closing')
         }
-        else if (currClosed && newPH===0) setState('closed')
-        else if (!currClosed && newPH!==0) setState('snapping')
-        else if (!currClosed && newPH===0) setState('closing')
-      }
-      
-      // close instantly
-      else if (newS==='close'){
-        if (!currClosed){
-          dragStartStateRef.current.isDragging = false
-          sheetSpring.height.set(0)
-          setState('closed')
-          setNewState('closed')
-          setSnapIdx(newPI)
-          setNewSnapIdx(newPI)
+        
+        // close instantly
+        else if (newS==='close'){
+          if (!currClosed){
+            sheetSpring.height.set(0)
+            setStateAndIndex('closed',newPI)
+            return
+          }
+          else if (currClosed) setLocalNewState('closed')
         }
-        else if (currClosed) setState('closed')
-      }
-      
-      // close animated
-      else if (newS==='closing'){
-        if (!currClosed) {
-          dragStartStateRef.current.isDragging = false
-          runAnimation(currH, 0, ()=>{
-            setState('closed')
-            setNewState('closed')
-            setSnapIdx(newPI)
-            setNewSnapIdx(newPI)
-          })
+        
+        // close animated
+        else if (newS==='closing'){
+          if (!currClosed) {
+            setStateAndIndex('closing',newPI)
+            runAnimation(currH, 0, ()=>{
+              setStateAndIndex('closed',newPI)
+            })
+            return
+          }
+          else if (currClosed) setLocalNewState('closed')
         }
-        else if (currClosed) setState('closed')
-      }
-      
-      // snap instantly
-      else if (newS==='snap'){
-        if (!currClosed && newPH!==0) {
-          dragStartStateRef.current.isDragging = false
-          sheetSpring.height.set(newPH)
-          setState('opened')
-          setNewState('opened')
-          setSnapIdx(newPI)
-          setNewSnapIdx(newPI)
+        
+        // snap instantly
+        else if (newS==='snap'){
+          if (!currClosed && newPH!==0) {
+            sheetSpring.height.set(newPH)
+            setStateAndIndex('opened',newPI)
+            return
+          }
+          else if (!currClosed && newPH===0) setLocalNewState('close')
+          else if (currClosed && newPH!==0) setLocalNewState('open')
+          else if (currClosed && newPH===0) setLocalNewState('closed')
         }
-        else if (!currClosed && newPH===0) setState('close')
-        else if (currClosed && newPH!==0) setState('open')
-        else if (currClosed && newPH===0) setState('closed')
-      }
-      
-      // snap animated
-      else if (newS==='snapping'){
-        if (!currClosed && newPH!==0) {
-          dragStartStateRef.current.isDragging = false
-          runAnimation(currH,newPH,()=>{
-            setState('closed')
-            setNewState('closed')
-            setSnapIdx(newPI)
-            setNewSnapIdx(newPI)
-          })
+        
+        // snap animated
+        else if (newS==='snapping'){
+          if (!currClosed && newPH!==0) {
+            setStateAndIndex('snapping',newPI)
+            runAnimation(currH,newPH,()=>{
+              setStateAndIndex('opened',newPI)
+            })
+            return
+          }
+          else if (!currClosed && newPH===0) setLocalNewState('closing')
+          else if (currClosed && newPH!==0) setLocalNewState('opening')
+          else if (currClosed && newPH===0) setLocalNewState('closed')
         }
-        else if (!currClosed && newPH===0) setState('closing')
-        else if (currClosed && newPH!==0) setState('opening')
-        else if (currClosed && newPH===0) setState('closed')
+        
+        // dragging
+        else if (newS==='dragging') {
+          setStateAndIndex('dragging',newPI)
+          return
+        }
+        
+        // opened
+        else if (newS==='opened') {
+          setStateAndIndex('opened',newPI)
+          return
+        }
+        
+        // closed
+        else if (newS==='closed') {
+          setStateAndIndex('closed',newPI)
+          return
+        }
       }
       
-      // dragging
-      else if (newS==='dragging') {
-        setState('dragging')
-        setNewState('dragging')
-        setSnapIdx(newPI)
-        setNewSnapIdx(newPI)
-      }
       
-      // opened
-      else if (newS==='opened') {
-        setState('opened')
-        setNewState('opened')
-        setSnapIdx(newPI)
-        setNewSnapIdx(newPI)
-      }
-      
-      // closed
-      else if (newS==='closed') {
-        setState('closed')
-        setNewState('closed')
-        setSnapIdx(newPI)
-        setNewSnapIdx(newPI)
-      }
       
     }
   )
-  useLayoutEffect(
-    ()=>{
-      console.log('useLayoutEffect')
-      reactOnState()
-    },
-    [newState,newSnapIdx,state,snapIdx]
+  useEffect(
+    ()=>reactOnState(),
+    [newState, state, newSnapIdx, snapIdx]
   )
-  
-  
-  useLayoutEffect(()=>console.log('new state:',state),[state])
   
   
   
@@ -450,7 +450,7 @@ export const useBottomSheet = (
           )
           
           if (notAdjust){
-            setState('opened')
+            setNewState('opened')
           } else {
             let snap = snapStart!
             if (snap<=-1) snap=0
@@ -473,7 +473,7 @@ export const useBottomSheet = (
   
   
   // forbid content selection for all elements while dragging
-  useNoSelect(newState==='dragging')
+  useNoSelect(state==='dragging')
   
   
   

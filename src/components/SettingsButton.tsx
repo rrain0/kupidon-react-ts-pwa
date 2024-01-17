@@ -1,25 +1,32 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import React from 'react'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import GearIc = SvgIcons.GearIc
-import Mem = ReactUtils.Mem
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
 
-export type SettingsButtonProps = {
-  onClick?: (()=>void) | undefined
-}
-const SettingsButton = (props: SettingsButtonProps)=>{
+export type SettingsButtonCustomProps = PartialUndef<{}>
+export type SettingsButtonForwardRefProps = JSX.IntrinsicElements['button']
+export type SettingsButtonRefElement = HTMLButtonElement
+export type SettingsButtonProps = SettingsButtonCustomProps & SettingsButtonForwardRefProps
+
+
+
+const SettingsButton =
+React.memo(
+React.forwardRef<SettingsButtonRefElement, SettingsButtonProps>(
+  (props, forwardedRef)=>{
   return <Button css={ButtonStyle.iconBigTransparent}
-    onClick={props.onClick}
-    //disabled
+    {...props}
+    ref={forwardedRef}
   >
     <GearIc/>
   </Button>
-}
-export default Mem(SettingsButton)
+  }))
+export default SettingsButton

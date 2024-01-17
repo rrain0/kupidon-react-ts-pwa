@@ -17,19 +17,19 @@ export type UseBoolRenderProps = {
 }
 export type UseBoolProps = PartialUndef<{
   initial: ValueOrGenerator<boolean>
-  render: ((props: UseBoolRenderProps)=>React.ReactNode)
+  children: ((props: UseBoolRenderProps)=>React.ReactNode)
 }>
 const UseBool =
 React.memo(
 (props: UseBoolProps)=>{
   const {
     initial = false,
-    render
+    children
   } = props
   
   const [value, setTrue, setFalse, setValue] = useBoolState(initial)
   
-  return render?.({
+  return children?.({
     value,
     notValue: !value,
     setValue,

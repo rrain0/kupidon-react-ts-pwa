@@ -31,7 +31,7 @@ import { AppTheme } from 'src/utils/theme/AppTheme'
 import center = EmotionCommon.center
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import UseModalSheetState from 'src/views/BottomSheet/UseBottomSheetState'
+import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
@@ -56,12 +56,10 @@ import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import trimExtension = FileUtils.trimExtension
 import mapRange = MathUtils.mapRange
 import Theme = AppTheme.Theme
-import Callback = TypeUtils.Callback
 import ifFoundByThenReplaceTo = ArrayUtils.replaceFirstToIfFoundBy
 import findByAndMapTo = ArrayUtils.mapFirstToIfFoundBy
 import throttle = AsyncUtils.throttle
 import Download1Ic = SvgIcons.Download1Ic
-import FullscreenIc = SvgIcons.FullscreenIc
 import extensionFromMimeType = FileUtils.extensionFromMimeType
 import noop = TypeUtils.noop
 
@@ -593,7 +591,7 @@ React.memo(
     
     
     
-    <UseModalSheetState
+    <UseBottomSheetState
       open={isMenuOpen}
       onClosed={()=>setMenuOpen(false)}
       render={sheet =>

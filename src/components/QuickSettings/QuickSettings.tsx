@@ -14,7 +14,7 @@ import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
-import UseModalSheetState from 'src/views/BottomSheet/UseBottomSheetState'
+import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
@@ -146,12 +146,12 @@ React.memo(
   
   
   return <>
-    <UseModalSheetState
+    <UseBottomSheetState
       open={open}
       onClosed={()=>setOpen(false)}
       snapPoints={sheetSnaps}
       openIdx={sheetOpenIdx}
-      render={props => open &&
+      render={props =>
       <ModalPortal>
       <BottomSheetBasic {...props.sheetProps}
         header={uiText.settings[0].text}
@@ -255,14 +255,14 @@ React.memo(
               {uiText.installApp[0].text}
             </Button>}
             
-            <UseBool render={props => <>
+            <UseBool>{props => <>
               <Button css={ButtonStyle.roundedDanger}
                 onClick={props.setTrue}
               >
                 {uiText.clearAppData[0].text}
               </Button>
               <ClearSiteConfirmation open={props.value} setOpen={props.setValue}/>
-            </>}/>
+            </>}</UseBool>
           
           
           </RoundButtonsContainer>

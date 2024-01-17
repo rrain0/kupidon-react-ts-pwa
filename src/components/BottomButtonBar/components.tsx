@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import SettingsButton from 'src/components/SettingsButton'
 import UseBool from 'src/components/StateCarriers/UseBool'
@@ -21,6 +22,8 @@ import Arrow5FwdIc = SvgIcons.Arrow5FwdIc
 import ArrowReloadIc = SvgIcons.ArrowReloadIc
 import rotateKfs = EmotionCommon.rotateKfs
 import fixedTop = EmotionCommon.fixedTop
+import PartialUndef = TypeUtils.PartialUndef
+import Callback = TypeUtils.Callback
 
 
 
@@ -29,8 +32,6 @@ export namespace ButtonBarComponents {
   
   
   
-  import PartialUndef = TypeUtils.PartialUndef
-  import Callback = TypeUtils.Callback
   export const TopButtonBarFrame = styled.section`
     pointer-events: none;
     ${fixedTop};
@@ -101,14 +102,23 @@ export namespace ButtonBarComponents {
   export const SettingsBtn =
   React.memo(
   ()=>{
-    return <UseBool render={props=><>
-      <SettingsButton onClick={props.setTrue}/>
-      <QuickSettings open={props.value} setOpen={props.setValue}/>
-    </>}/>
+    return <UseFakePointerRef render={({ ref })=>
+      <UseBool>{props => <>
+        <SettingsButton ref={ref as any} onClick={() => {
+          console.log('setTrue')
+          props.setTrue()
+        }}/>
+        <QuickSettings open={props.value} setOpen={props.setValue}/>
+      </>}</UseBool>}
+    />
+    
+    
   })
   
   
-  export const BackBtn = Mem(()=>{
+  export const BackBtn =
+  React.memo(
+  ()=>{
     const navigate = useNavigate()
     const back = useCallback(
       ()=>navigate(-1),

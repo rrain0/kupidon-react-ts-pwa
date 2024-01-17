@@ -73,7 +73,7 @@ React.memo(
         <div>{uiOptions.advices[0].text}</div>
       </Button>
       
-      <UseBool render={props=><>
+      <UseBool>{props=><>
         <NavLink to={RootRoute.settings[full]()}
           onClick={ev=>ev.preventDefault()} // prevent follow link
         >
@@ -85,7 +85,7 @@ React.memo(
           </Button>
         </NavLink>
         <QuickSettings open={props.value} setOpen={props.setValue}/>
-      </>}/>
+      </>}</UseBool>
         
     
     </Frame>
