@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { LangSettingsUiText } from 'src/components/LangSettings/uiText'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
@@ -22,18 +21,22 @@ import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = AppTheme.Theme
 import BrowserIc = SvgIcons.BrowserIc
-import Mem = ReactUtils.Mem
 
 
 
 
 const sheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
 
-export type SettingsProps = {
+export type LangSettingsProps = {
   open: boolean
   setOpen: Setter<boolean>
 }
-const LangSettings = (props: SettingsProps)=>{
+
+
+
+const LangSettings =
+React.memo(
+(props: LangSettingsProps)=>{
   const { open, setOpen } = props
   
   
@@ -146,8 +149,8 @@ const LangSettings = (props: SettingsProps)=>{
       </div>
     </BottomSheetBasic>}
   </>
-}
-export default Mem(LangSettings)
+})
+export default LangSettings
 
 
 

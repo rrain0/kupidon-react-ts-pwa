@@ -1,12 +1,17 @@
-import { ReactUtils } from 'src/utils/common/ReactUtils'
-import Mem = ReactUtils.Mem
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
+import React from 'react'
 
 
 
-const PushNotifications = ()=>{
+
+const PushNotifications =
+React.memo(
+()=>{
   
   
   
   return <></>
-}
-export default Mem(PushNotifications)
+})
+export default PushNotifications

@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { toast, ToastItem } from 'react-toastify'
 import { OnChangeCallback } from 'react-toastify/dist/types'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { UiText } from 'src/utils/lang/UiText'
 import { useUiTextArr } from 'src/utils/lang/useUiText'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { ToastBody, ToastType } from 'src/components/Toasts/ToastBody'
-import falseable = TypeUtils.falsy
-import ReactMemoTyped = ReactUtils.Mem
+import falsy = TypeUtils.falsy
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
 
-export type UseToastDataType = (ToastMsgData | falseable)[]
-export type UseToastsProps = {
-  toasts?: UseToastDataType | undefined
-}
+export type UseToastDataType = (ToastMsgData | falsy)[]
+export type UseToastsProps = PartialUndef<{
+  toasts: UseToastDataType
+}>
+
+
+
 export const useToasts = (props?: UseToastsProps)=>{
   const data = props?.toasts??[]
   
@@ -149,12 +151,12 @@ export class ToastMsgData {
 
 
 
-export const ToastMsg = ReactMemoTyped(
-  <UO extends UiText<any>[]>(props:{
-    uiOption?: UO | undefined
-    defaultText?: string | undefined
-  })=>{
-    const uiOption = useUiTextArr(props.uiOption)
-    return <>{uiOption[0]?.text ?? props.defaultText}</>
-  }
-)
+export const ToastMsg =
+React.memo(
+<UO extends UiText<any>[]>(props:{
+  uiOption?: UO | undefined
+  defaultText?: string | undefined
+})=>{
+  const uiOption = useUiTextArr(props.uiOption)
+  return <>{uiOption[0]?.text ?? props.defaultText}</>
+})

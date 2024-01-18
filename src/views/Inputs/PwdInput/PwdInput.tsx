@@ -5,8 +5,6 @@ import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Input, {InputProps} from "src/views/Inputs/Input/Input"
 import { useRef, useState } from 'react'
 import React from "react"
-import {ReactUtils} from "src/utils/common/ReactUtils"
-import Mem = ReactUtils.Mem
 import {SvgIcons} from "src/views/icons/SvgIcons"
 import EyeCrossedOutIc = SvgIcons.EyeCrossedOutIc
 import EyeIc = SvgIcons.EyeIc
@@ -15,17 +13,16 @@ import styled from '@emotion/styled'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { RippleStyle } from 'src/views/Ripple/RippleStyle'
 import center = EmotionCommon.center
-import centerAll = EmotionCommon.centerAll
 import resetButton = EmotionCommon.resetButton
 import hoverable = EmotionCommon.hoverable
 
 
 
-const PwdInput = React.forwardRef<
-  HTMLInputElement, Omit<InputProps,'type'|'children'>
->((
-  { ...props}, forwardedRef
-) => {
+
+const PwdInput =
+React.memo(
+React.forwardRef<HTMLInputElement, Omit<InputProps,'type'|'children'>>(
+  (props, forwardedRef) => {
   const { ...restProps } = props
   
   const [pwdHidden, setPwdHidden] = useState(true)
@@ -61,8 +58,8 @@ const PwdInput = React.forwardRef<
       </EyeWrap>
     </EyeFrame>
   </Input>
-})
-export default Mem(PwdInput)
+}))
+export default PwdInput
 
 
 

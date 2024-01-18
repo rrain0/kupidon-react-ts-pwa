@@ -1,5 +1,4 @@
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import React, {
@@ -19,7 +18,6 @@ import Values = ValidationCore.Values
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
 import ObjectValuesType = ObjectUtils.ObjectValuesType
 import ValueOrUpdater = TypeUtils.ValueOrMapper
-import Mem = ReactUtils.Mem
 import trueOrUndef = TypeUtils.trueOrUndef
 
 

@@ -239,7 +239,7 @@ export const useBottomSheet = (
             },
           }
         )
-        console.log('animation',animation)
+        //console.log('animation',animation)
         setLastSpeed(undefined)
         if (animation.finished) onFinish()
       })()
@@ -270,17 +270,15 @@ export const useBottomSheet = (
         setNewState(state)
         setSnapIdx(index)
         setNewSnapIdx(index)
-        console.log('set states:',state,index)
+        //console.log('set states:',state,index)
       }
       const setLocalNewState = (state: SheetState)=>{ newS = state }
       
       
       // prevent infinite loops
       for (let i = 0; i < 10; i++) {
-        console.log('i',i)
-        console.log({
-          newS, state, newPI, newPH, snapIdx, currClosed
-        })
+        //console.log('i',i)
+        //console.log({ newS, state, newPI, newPH, snapIdx, currClosed })
         /* if (newS===state && newPI===snapIdx) {
           setStateAndIndex(newS,newPI)
           return

@@ -1,10 +1,12 @@
 import React, { CSSProperties } from 'react'
 
 
+
+
 export namespace ReactUtils {
   
   // React.memo wrapper
-  export const Mem = <C>(Component: C): C => {
+  export const memo = <C>(Component: C): C => {
     // @ts-ignore
     return React.memo(Component)
   }

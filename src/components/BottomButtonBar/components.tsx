@@ -8,7 +8,6 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import SettingsButton from 'src/components/SettingsButton'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useBoolState } from 'src/utils/react/useBoolState'
 import Button from 'src/views/Buttons/Button'
@@ -17,7 +16,6 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import fixedBottom = EmotionCommon.fixedBottom
 import row = EmotionCommon.row
-import Mem = ReactUtils.Mem
 import Arrow5FwdIc = SvgIcons.Arrow5FwdIc
 import ArrowReloadIc = SvgIcons.ArrowReloadIc
 import rotateKfs = EmotionCommon.rotateKfs
