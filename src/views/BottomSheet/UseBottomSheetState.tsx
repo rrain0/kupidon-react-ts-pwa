@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import { BasicSheetOpenIdx, BasicSheetSnaps } from 'src/views/BottomSheet/BottomSheetBasic'
@@ -6,6 +6,7 @@ import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomShee
 import Setter = TypeUtils.Callback1
 import Callback = TypeUtils.Callback
 import PartialUndef = TypeUtils.PartialUndef
+import ValueOrMapper = TypeUtils.ValueOrMapper
 
 
 
@@ -23,7 +24,7 @@ export type UseBottomSheetStateRenderProps = {
 export type UseBottomSheetStateProps = {
   open: boolean
   onClosed: Callback
-  render: (props: UseBottomSheetStateRenderProps)=>React.ReactNode
+  children: (props: UseBottomSheetStateRenderProps)=>React.ReactNode
 } & PartialUndef<{
   openIdx: number
   snapPoints: SheetSnapPoints
@@ -41,33 +42,38 @@ React.memo(
     snapPoints = BasicSheetSnaps,
   } = props
   
+  
   const [sheetState, setSheetState] = useState<SheetState>('closed')
   const [snapIdx,setSnapIdx] = useState<number>(openIdx)
+  
+  /* const setSheetState = useCallback(
+    (sheetState: ValueOrMapper<SheetState>)=>{
+      console.log('sheetState',sheetState)
+      setSheetState_(sheetState)
+    },
+    []
+  ) */
   
   const setClosing = useCallback(
     ()=>setSheetState('closing'),
     []
   )
   
-  const openEffectEvent = useEffectEvent(
-    (open: boolean)=>{
+  useEffect(
+    ()=>{
       if (open){
         console.log('set opening')
         setSheetState('opening')
         setSnapIdx(openIdx)
       }
-    }
-  )
-  useEffect(
-    ()=>openEffectEvent(open),
+    },
     [open]
   )
   
-  const onClosedEffectEvent = useEffectEvent(onClosed)
   useEffect(
     ()=>{
       if (sheetState==='closed'){
-        onClosedEffectEvent()
+        onClosed()
       }
     },
     [sheetState]
@@ -78,16 +84,16 @@ React.memo(
     ()=>({
       state: sheetState,
       setState: setSheetState,
-      snapPoints: snapPoints,
       snapIdx: snapIdx,
       setSnapIdx: setSnapIdx,
+      snapPoints: snapPoints,
     }),
     [sheetState, snapIdx, snapPoints]
   )
   
   
-  //if (!open) return undefined
-  return props.render({
+  if (!open) return undefined
+  return props.children({
     setClosing,
     sheetProps: bottomSheetProps
   })

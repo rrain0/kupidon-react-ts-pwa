@@ -415,7 +415,7 @@ React.memo(
       {springs.map((springStyle,i) => {
         const im = images[i]
         return <div css={contents} key={im.id}>
-        <UseFakePointerRef render={({ ref, ref2, ref3, ref4 })=>
+        <UseFakePointerRef>{({ ref, ref2, ref3, ref4 })=>
         <div css={css`
           grid-area: im${i+1};
           position: relative;
@@ -581,7 +581,7 @@ React.memo(
           
           
         </div>
-        }/>
+        }</UseFakePointerRef>
         </div>
       })}
     </div>
@@ -594,7 +594,8 @@ React.memo(
     <UseBottomSheetState
       open={isMenuOpen}
       onClosed={()=>setMenuOpen(false)}
-      render={sheet =>
+    >
+      {sheet =>
       <ModalPortal>
       <BottomSheetBasic {...sheet.sheetProps}>
         <OptionsContent>
@@ -693,8 +694,7 @@ React.memo(
         </OptionsContent>
       </BottomSheetBasic>
       </ModalPortal>
-      }
-    />
+    }</UseBottomSheetState>
     
     
   </>

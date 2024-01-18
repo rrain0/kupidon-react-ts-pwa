@@ -9,6 +9,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useBoolState } from 'src/utils/react/useBoolState'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
@@ -47,18 +48,17 @@ React.memo(
   const uiText = useUiTextContainer(ClearSiteConfirmationUiText)
   
   
-  
-  const [doClear, setDoClear] = useState(false)
+  const [needClear, clear] = useBoolState(false)
   useEffect(
     ()=>{
-      if (doClear){
+      if (needClear){
         ;(async()=>{
           await clearSiteData()
           window.location.reload()
         })()
       }
     },
-    [doClear]
+    [needClear]
   )
   
   
@@ -70,7 +70,8 @@ React.memo(
       onClosed={()=>setOpen(false)}
       snapPoints={BasicSheetSnaps}
       openIdx={BasicSheetOpenIdx}
-      render={props => <ModalPortal><BottomSheetBasic
+    >
+      {props => <ModalPortal><BottomSheetBasic
         {...props.sheetProps}
         header={uiText.clearAppData[0].text + '?'}
       >
@@ -95,7 +96,7 @@ React.memo(
             </Button>
             
             <Button css={[ButtonStyle.roundedDanger, button]}
-              onClick={() => setDoClear(true)}
+              onClick={clear}
             >
               <ClearTrashIc css={[icon, iconOnDanger]}/>
               {uiText.yes[0].text}
@@ -103,10 +104,10 @@ React.memo(
           
           </div>
         </div>
-      </BottomSheetBasic></ModalPortal> }
-    />
+      </BottomSheetBasic></ModalPortal>
+    }</UseBottomSheetState>
     
-    { doClear && <div
+    { needClear && <div
       css={t => css`
         ${fixed};
         z-index: 40;
@@ -127,7 +128,7 @@ React.memo(
         {uiText.reloading[0].text}
       </div>
     </div> }
-  
+    
   </>
 })
 export default ClearSiteConfirmation

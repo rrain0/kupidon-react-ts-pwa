@@ -35,8 +35,12 @@ export type UseFakePointerRefRenderProps = {
   ref4: React.RefObject<Element>
 }
 export type UseFakePointerRefProps = PartialUndef<{
-  render: (props: UseFakePointerRefRenderProps)=>React.ReactNode
+  children: (props: UseFakePointerRefRenderProps)=>React.ReactNode
 }>
+
+
+
+// todo hack
 const UseFakePointerRef =
 (props: UseFakePointerRefProps)=>{
   
@@ -47,7 +51,7 @@ const UseFakePointerRef =
   
   useFakePointerRef([elemRef1, elemRef2, elemRef3, elemRef4])
   
-  return props.render?.({
+  return props.children?.({
     ref: elemRef1,
     ref2: elemRef2,
     ref3: elemRef3,

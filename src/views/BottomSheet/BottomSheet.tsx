@@ -2,9 +2,11 @@
 import { css } from '@emotion/react'
 import { useSpring, animated } from '@react-spring/web'
 import { ReactDOMAttributes } from '@use-gesture/react/src/types'
-import { useFakePointerRef } from 'src/components/ActionProviders/UseFakePointerRef'
+import UseFakePointerRef, { useFakePointerRef } from 'src/components/ActionProviders/UseFakePointerRef'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import {
   ComputedBottomSheetDimens,
   useBottomSheet, UseBottomSheetOptions,
@@ -21,6 +23,9 @@ import PartialUndef = TypeUtils.PartialUndef
 import contents = EmotionCommon.contents
 import Callback1 = TypeUtils.Callback1
 import exists = TypeUtils.exists
+import stopPointerAndMouseEvents = ReactUtils.stopPointerAndMouseEvents
+import combineRefs = ReactUtils.combineRefs
+import onPointerClick = ReactUtils.onPointerClick
 
 
 
@@ -127,56 +132,68 @@ React.memo(
   //useLayoutEffect(()=>console.log('state',state),[state])
   
   
-  useFakePointerRef([bottomSheetRef])
+  useFakePointerRef([bottomSheetFrameRef,bottomSheetRef])
   
   
-  return <animated.div /* Frame */ css={css`
-    ${fixed};
-    z-index: 30;
-    background: none;
-    pointer-events: none;
-    //touch-action: none;
-    display: grid;
-    place-items: end center;
-  `}
-    style={{
-      ...frameSpring,
-      pointerEvents: !['closed','closing'].includes(state) ? 'auto' : 'none',
-    }}
-    ref={bottomSheetFrameRef as any}
-    // todo prevent click if dragged
-    onClick={ev=>{
-      console.log("dimmed background click")
-      setState('closing')
-    }}
-  >
+  return <UseFakePointerRef>{({ref, ref2, ref3})=>
     <div // Pointer & Wheel events consumer
       css={contents}
-      onPointerDown={ev=>ev.stopPropagation()}
-      onPointerMove={ev=>ev.stopPropagation()}
-      onPointerUp={ev=>ev.stopPropagation()}
-      onPointerCancel={ev=>ev.stopPropagation()}
-      onClick={ev=>ev.stopPropagation()}
-      onWheel={ev=>ev.stopPropagation()}
+      ref={ref3 as any}
+      {...stopPointerAndMouseEvents()}
     >
-      <animated.div /* Bottom Sheet */ css={css`
-        display: grid;
-        grid-template-rows: auto 1fr;
-        justify-items: stretch;
-        width: 100%;
-        //overflow: hidden;
-
-        will-change: height; // Must be
-        max-height: 100%; // Must be
-      `}
-        style={sheetSpring}
-        ref={bottomSheetRef as any} // Must be
+      
+      <animated.div /* Frame */ css={frameStyle}
+        style={{
+          ...frameSpring,
+          pointerEvents: !['closed', 'closing'].includes(state) ? 'auto' : 'none',
+        }}
+        
+        ref={bottomSheetFrameRef as any}
+        // todo prevent click if dragged if frame is draggable
+        {...onPointerClick(()=>{
+          //console.log('dimmed background click')
+          setState('closing')
+        })}
       >
-        
-        { props.children?.({ sheetDrag }) }
-        
+        <div // Pointer & Wheel events consumer
+          css={contents}
+          ref={ref2 as any}
+          {...stopPointerAndMouseEvents()}
+        >
+          <animated.div /* Bottom Sheet */ css={sheetStyle}
+            style={sheetSpring}
+            ref={bottomSheetRef as any} // Must be
+          >
+            
+            {props.children?.({ sheetDrag })}
+          
+          </animated.div>
+        </div>
       </animated.div>
+      
     </div>
-  </animated.div>
+  }</UseFakePointerRef>
 })
 export default BottomSheet
+
+
+
+const frameStyle = (t: AppTheme.Theme)=>css`
+  ${fixed};
+  z-index: 30;
+  background: none;
+  pointer-events: none;
+  //touch-action: none;
+  display: grid;
+  place-items: end center;
+`
+const sheetStyle = (t: AppTheme.Theme)=>css`
+  display: grid;
+  grid-template-rows: auto 1fr;
+  justify-items: stretch;
+  width: 100%;
+  //overflow: hidden;
+  pointer-events: auto;
+
+  max-height: 100%; // Must be
+`

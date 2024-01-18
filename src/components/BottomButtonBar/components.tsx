@@ -8,6 +8,7 @@ import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import SettingsButton from 'src/components/SettingsButton'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useBoolState } from 'src/utils/react/useBoolState'
 import Button from 'src/views/Buttons/Button'
@@ -30,6 +31,7 @@ export namespace ButtonBarComponents {
   
   
   
+  import onPointerClick = ReactUtils.onPointerClick
   export const TopButtonBarFrame = styled.section`
     pointer-events: none;
     ${fixedTop};
@@ -100,17 +102,19 @@ export namespace ButtonBarComponents {
   export const SettingsBtn =
   React.memo(
   ()=>{
-    return <UseFakePointerRef render={({ ref })=>
-      <UseBool>{props => <>
-        <SettingsButton ref={ref as any} onClick={() => {
-          console.log('setTrue')
-          props.setTrue()
-        }}/>
-        <QuickSettings open={props.value} setOpen={props.setValue}/>
-      </>}</UseBool>}
-    />
-    
-    
+    return <UseBool>{bool => <>
+      
+      <UseFakePointerRef>{({ ref })=>
+        <SettingsButton
+          ref={ref as any}
+          // onClick={bool.setTrue}
+          {...onPointerClick(bool.setTrue)}
+        />
+      }</UseFakePointerRef>
+      
+      <QuickSettings open={bool.value} setOpen={bool.setValue}/>
+      
+    </>}</UseBool>
   })
   
   

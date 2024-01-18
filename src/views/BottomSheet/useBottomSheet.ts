@@ -4,7 +4,7 @@ import { ReactDOMAttributes } from '@use-gesture/react/src/types'
 import BezierEasing from 'bezier-easing'
 import React, {
   useCallback,
-  useEffect, useLayoutEffect,
+  useEffect,
   useMemo, useRef,
   useState,
 } from 'react'
@@ -257,6 +257,8 @@ export const useBottomSheet = (
       const currPI = snapIdx
       
       let newS = newState
+      const setLocalNewState = (state: SheetState)=>{ newS = state }
+      
       // new point index
       const newPI = fitRange2(
         newSnapIdx??currPI,[0,snapPoints.length-1]
@@ -272,10 +274,16 @@ export const useBottomSheet = (
         setNewSnapIdx(index)
         //console.log('set states:',state,index)
       }
-      const setLocalNewState = (state: SheetState)=>{ newS = state }
       
       
-      // prevent infinite loops
+      // prevent unnecessary state changes
+      if (newS===state) {
+        if (['closed','closing'].includes(newS)) return
+        if (newPI===snapIdx) return
+      }
+      
+      
+      // prevent infinite loops if any bugs exist
       for (let i = 0; i < 10; i++) {
         //console.log('i',i)
         //console.log({ newS, state, newPI, newPH, snapIdx, currClosed })
@@ -385,7 +393,7 @@ export const useBottomSheet = (
   )
   useEffect(
     ()=>reactOnState(),
-    [newState, state, newSnapIdx, snapIdx]
+    [newState, newSnapIdx]
   )
   
   

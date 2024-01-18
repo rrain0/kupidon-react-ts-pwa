@@ -5,11 +5,13 @@ import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
+import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import ModalPortal from 'src/components/Modal/ModalPortal'
 import { QuickSettingsUiText } from 'src/components/QuickSettings/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
@@ -43,6 +45,7 @@ import full = RouteBuilder.full
 import MoonIc = SvgIcons.MoonIc
 import ThemeType = AppTheme.Type
 import resetH = EmotionCommon.resetH
+import onPointerClick = ReactUtils.onPointerClick
 
 
 
@@ -151,7 +154,8 @@ React.memo(
       onClosed={()=>setOpen(false)}
       snapPoints={sheetSnaps}
       openIdx={sheetOpenIdx}
-      render={props =>
+    >
+      {props =>
       <ModalPortal>
       <BottomSheetBasic {...props.sheetProps}
         header={uiText.settings[0].text}
@@ -255,13 +259,19 @@ React.memo(
               {uiText.installApp[0].text}
             </Button>}
             
-            <UseBool>{props => <>
-              <Button css={ButtonStyle.roundedDanger}
-                onClick={props.setTrue}
-              >
-                {uiText.clearAppData[0].text}
-              </Button>
-              <ClearSiteConfirmation open={props.value} setOpen={props.setValue}/>
+            <UseBool>{bool => <>
+              
+              <UseFakePointerRef>{({ ref })=>
+                <Button css={ButtonStyle.roundedDanger}
+                  //onClick={bool.setTrue}
+                  ref={ref as any}
+                  {...onPointerClick(bool.setTrue)}
+                >
+                  {uiText.clearAppData[0].text}
+                </Button>
+              }</UseFakePointerRef>
+              
+              <ClearSiteConfirmation open={bool.value} setOpen={bool.setValue}/>
             </>}</UseBool>
           
           
@@ -271,8 +281,7 @@ React.memo(
         </Content>
       </BottomSheetBasic>
       </ModalPortal>
-      }
-    />
+    }</UseBottomSheetState>
     
     
     

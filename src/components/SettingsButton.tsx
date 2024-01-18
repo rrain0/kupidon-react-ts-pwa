@@ -18,6 +18,7 @@ export type SettingsButtonProps = SettingsButtonCustomProps & SettingsButtonForw
 
 
 
+
 const SettingsButton =
 React.memo(
 React.forwardRef<SettingsButtonRefElement, SettingsButtonProps>(
@@ -28,5 +29,5 @@ React.forwardRef<SettingsButtonRefElement, SettingsButtonProps>(
   >
     <GearIc/>
   </Button>
-  }))
+}))
 export default SettingsButton

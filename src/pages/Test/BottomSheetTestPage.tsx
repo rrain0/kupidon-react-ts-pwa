@@ -303,6 +303,7 @@ const BottomSheetControlOverlay = (props:{
         >
           Open
         </OverlayButton>
+        
         {props.snapPoints.map((sp, i) => <OverlayButton
           key={sp}
           onClick={() => {
@@ -312,11 +313,13 @@ const BottomSheetControlOverlay = (props:{
         >
           Snap to {sp}
         </OverlayButton>)}
+        
         <OverlayButton
           onClick={() => props.setState('close')}
         >
           Close
         </OverlayButton>
+        
       </div>
       
       
@@ -334,6 +337,7 @@ const BottomSheetControlOverlay = (props:{
         >
           Anim Open
         </OverlayButton>
+        
         {props.snapPoints.map((sp, i) => <OverlayButton
           key={sp}
           onClick={() => {
@@ -343,11 +347,13 @@ const BottomSheetControlOverlay = (props:{
         >
           Anim Snap to {sp}
         </OverlayButton>)}
+        
         <OverlayButton
           onClick={() => props.setState('closing')}
         >
           Anim Close
         </OverlayButton>
+        
       </div>
       
       

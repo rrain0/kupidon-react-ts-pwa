@@ -8,6 +8,7 @@ import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
+import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import Form from 'src/components/FormElements/Form'
 import FormHeader from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
@@ -33,6 +34,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { FileUtils } from 'src/utils/file/FileUtils'
@@ -86,6 +88,7 @@ import mapRange = MathUtils.mapRange
 import CurrentUserSuccessData = UserApi.CurrentUserSuccessData
 import UpdateUserErrorData = UserApi.UpdateUserErrorData
 import AddProfilePhotoErrorData = UserApi.AddProfilePhotoErrorData
+import onPointerClick = ReactUtils.onPointerClick
 
 
 
@@ -807,19 +810,27 @@ React.memo(
           <ValidationComponentWrap {...validationProps}
             fieldName="gender"
             render={validProps =>
-              <UseBool>{boolProps =>
+              <UseBool>{bool =>
                 <>
-                  <OptionItem
-                    icon={<GenderIc css={css`height: 50%`}/>}
-                    title={uiText.gender[0].text}
-                    value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
-                    nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
-                    onClick={boolProps.setTrue}
-                  />
+                  
+                  <UseFakePointerRef>{({ ref })=>
+                    <OptionItem
+                      icon={<GenderIc css={css`height: 50%`}/>}
+                      title={uiText.gender[0].text}
+                      value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
+                      nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
+                      
+                      //onClick={bool.setTrue}
+                      ref={ref as any}
+                      {...onPointerClick(bool.setTrue)}
+                    />
+                  }</UseFakePointerRef>
+                  
                   <UseBottomSheetState
-                    open={boolProps.value}
-                    onClosed={boolProps.setFalse}
-                    render={sheetProps =>
+                    open={bool.value}
+                    onClosed={bool.setFalse}
+                  >
+                    {sheetProps =>
                     <ModalPortal>
                       <BottomSheetBasic
                         {...sheetProps.sheetProps}
@@ -850,8 +861,7 @@ React.memo(
                         </div>
                       </BottomSheetBasic>
                     </ModalPortal>
-                    }
-                  />
+                  }</UseBottomSheetState>
                 </>
               }</UseBool>
             }

@@ -2,11 +2,13 @@
 import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import classNames from 'classnames'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
+import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import { BottomNavBarUiText } from 'src/components/BottomNavBar/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
@@ -23,6 +25,7 @@ import ChatRoundIc = SvgIcons.ChatRoundIc
 import HelpIc = SvgIcons.HelpIc
 import fixedBottom = EmotionCommon.fixedBottom
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
+import onPointerClick = ReactUtils.onPointerClick
 
 
 
@@ -33,6 +36,7 @@ React.memo(
 ()=>{
   
   const uiOptions = useUiTextContainer(BottomNavBarUiText)
+  
   
   return <>
     
@@ -73,19 +77,25 @@ React.memo(
         <div>{uiOptions.advices[0].text}</div>
       </Button>
       
-      <UseBool>{props=><>
-        <NavLink to={RootRoute.settings[full]()}
-          onClick={ev=>ev.preventDefault()} // prevent follow link
-        >
-          <Button css={ButtonStyle.nav}
-            onClick={props.setTrue}
+      <UseBool>{bool=>
+        <>
+          <NavLink to={RootRoute.settings[full]()}
+            onClick={ev=>ev.preventDefault()} // prevent follow link
           >
-            <Gear2Ic/>
-            <div>{uiOptions.settings[0].text}</div>
-          </Button>
-        </NavLink>
-        <QuickSettings open={props.value} setOpen={props.setValue}/>
-      </>}</UseBool>
+            <UseFakePointerRef>{({ ref })=>
+              <Button css={ButtonStyle.nav}
+                ref={ref as any}
+                // onClick={bool.setTrue}
+                {...onPointerClick(bool.setTrue)}
+              >
+                <Gear2Ic/>
+                <div>{uiOptions.settings[0].text}</div>
+              </Button>
+            }</UseFakePointerRef>
+          </NavLink>
+          <QuickSettings open={bool.value} setOpen={bool.setValue}/>
+        </>
+      }</UseBool>
         
     
     </Frame>
