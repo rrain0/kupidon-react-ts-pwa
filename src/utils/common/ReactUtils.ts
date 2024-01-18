@@ -37,14 +37,25 @@ export namespace ReactUtils {
   
   
   
-  const stopReactEventPropagation = (ev: React.BaseSyntheticEvent)=>ev.stopPropagation()
+  const stopReactEventPropagation = (ev: React.BaseSyntheticEvent)=>{
+    ev.stopPropagation()
+    ev.preventDefault()
+    //console.log('ev.type',ev.type)
+  }
   export const stopPointerAndMouseEvents = ()=>{
     return {
       onPointerDown: stopReactEventPropagation,
       onPointerMove: stopReactEventPropagation,
       onPointerUp: stopReactEventPropagation,
       onPointerCancel: stopReactEventPropagation,
+      
+      onTouchStart: stopReactEventPropagation,
+      onTouchMove: stopReactEventPropagation,
+      onTouchEnd: stopReactEventPropagation,
+      onTouchCancel: stopReactEventPropagation,
+      
       onClick: stopReactEventPropagation,
+      
       onWheel: stopReactEventPropagation,
     } as const
   }

@@ -634,7 +634,7 @@ React.memo(
           >
             {({getRootProps, getInputProps}) =>
             <div css={contents} {...getRootProps()}>
-              <input {...getInputProps()}/>
+              <input {...getInputProps()} />
               <Button css={ButtonStyle.bigRectTransparent}>
                 
                 <OptionContainer>
