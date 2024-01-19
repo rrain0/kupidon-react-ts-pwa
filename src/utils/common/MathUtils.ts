@@ -69,11 +69,11 @@ export namespace MathUtils {
    * @param max Максимальное значение включительно
    * @returns {number} Результирующее значение, находящееся в диапазоне [min,max]
    */
-  export const fitRange = (min: number, curr: number, max: number): number =>
-    curr < min ? min : curr > max ? max : curr;
+  export const fitRange2 = (curr: number, [min, max]: [number, number]): number =>
+    curr < min ? min : curr > max ? max : curr
   
-  export const fitRange2 = (curr: number, range: [min: number, max: number]): number =>
-    curr < range[0] ? range[0] : curr > range[1] ? range[1] : curr;
+  export const fitRange = (min: number, curr: number, max: number): number =>
+    fitRange2(curr, [min,max])
   
   
   /**
@@ -83,12 +83,19 @@ export namespace MathUtils {
    * @param max Максимальное значение
    * @returns {boolean} Результат сравнения
    */
-  export const inRange = (min: number, curr: number, max: number): boolean =>
-    curr >= min && curr <= max;
+  export const inRange2 = (curr: number, [min, max]: [number, number]): boolean =>
+    curr >= min && curr <= max
   
+  export const inRange = (min: number, curr: number, max: number): boolean =>
+    inRange2(curr, [min,max])
+  
+  
+  
+  export const inRangeExclusive2 = (curr: number, [min, max]: [number, number]): boolean =>
+    curr > min && curr < max
   
   export const inRangeExclusive = (min: number, curr: number, max: number): boolean =>
-    curr > min && curr < max;
+    inRangeExclusive2(curr, [min,max])
   
   
   
@@ -98,8 +105,8 @@ export namespace MathUtils {
    toRange: [minInclusive: number, maxInclusive: number]
   )
   : number => {
-    const progress = (value-fromRange[0]) / (fromRange[1]-fromRange[0])
-    return progress * (toRange[1]-toRange[0]) + toRange[0]
+    const oneBasedValue = (value-fromRange[0]) / (fromRange[1]-fromRange[0])
+    return oneBasedValue * (toRange[1]-toRange[0]) + toRange[0]
   }
   
   

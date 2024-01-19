@@ -10,6 +10,7 @@ import exists = TypeUtils.exists
 import MergerIndexed = TypeUtils.MergerIndexed
 import CombinerIndexed = TypeUtils.CombinerIndexed
 import Exists = TypeUtils.Exists
+import fitRange2 = MathUtils.fitRange2
 
 
 
@@ -17,9 +18,13 @@ import Exists = TypeUtils.Exists
 export namespace ArrayUtils {
   
   
-  import fitRange = MathUtils.fitRange
-  import fitRange2 = MathUtils.fitRange2
-  import PartialUndef = TypeUtils.PartialUndef
+  export const last = <T>(arr: T[]): T => {
+    if (!arr.length) throw new Error("Array is empty, can't get last element.")
+    return arr[arr.length-1]
+  }
+  export const lastIndex = (arr: any[]): number => arr.length-1
+  
+  
   export const eq = (arr1: any[] | empty, arr2: any[] | empty): boolean => {
     if (arr1===arr2) return true
     if (!arr1 || !arr2) return false

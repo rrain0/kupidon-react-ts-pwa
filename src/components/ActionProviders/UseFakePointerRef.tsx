@@ -40,7 +40,9 @@ export type UseFakePointerRefProps = PartialUndef<{
 
 
 
-// todo hack
+// todo hack fix
+// JSX onPointer...={} doesn't work on iOS Safari
+// without manually adding at least empty pointer event handler via element.addEventListener
 const UseFakePointerRef =
 (props: UseFakePointerRefProps)=>{
   

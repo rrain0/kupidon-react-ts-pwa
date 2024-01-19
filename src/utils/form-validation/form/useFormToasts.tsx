@@ -125,7 +125,7 @@ export const useFormToasts =
     ()=>new ToastMsgData({
       type: 'ok',
       msg: <ToastMsg uiOption={successText}/>,
-      lifetime: 1500,
+      lifetime: 200,
       dragToClose: true,
     }),
     [successText,isSuccess]

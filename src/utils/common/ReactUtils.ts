@@ -1,4 +1,4 @@
-import React, { BaseSyntheticEvent, CSSProperties } from 'react'
+import React, { CSSProperties } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import PartialUndef = TypeUtils.PartialUndef
 import Callback1 = TypeUtils.Callback1
@@ -9,8 +9,9 @@ import Callback1 = TypeUtils.Callback1
 export namespace ReactUtils {
   
   
-  // todo hack
-  // use it if click does not work properly
+  // todo hack fix
+  // Sometimes 'click' is not fired for a couple seconds
+  // despite 'pointerdown' & 'pointerup' events are fired normally.
   export const onPointerClick =
   <E extends Element>
   (callback: Callback1<React.PointerEvent<E>>)=>{

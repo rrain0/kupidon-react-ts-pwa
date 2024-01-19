@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, keyframes } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Controller } from '@react-spring/core'
 import { config, useSprings, animated, UseSpringProps } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import { ReactDOMAttributes } from '@use-gesture/react/src/types'
@@ -67,7 +66,6 @@ import noop = TypeUtils.noop
 
 
 
-// todo restore ability of download / save photos
 
 
 const progressAnimDuration = 400 // ms
@@ -649,7 +647,7 @@ React.memo(
           </Dropzone>
           
           
-          {/* TODO fullscreen */}
+          {/* Fullscreen */}
           {/* {function(){
             const im = images[lastIdx]
             if (im.type==='remote' && im.isDownloaded || im.type==='local' && im.isCompressed) {
@@ -667,7 +665,6 @@ React.memo(
               </Button>
             }
           }()} */}
-          
           
           
           {function(){
