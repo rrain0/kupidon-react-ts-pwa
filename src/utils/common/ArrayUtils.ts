@@ -18,6 +18,7 @@ import fitRange2 = MathUtils.fitRange2
 export namespace ArrayUtils {
   
   
+  import notExists = TypeUtils.notExists
   export const last = <T>(arr: T[]): T => {
     if (!arr.length) throw new Error("Array is empty, can't get last element.")
     return arr[arr.length-1]
@@ -60,7 +61,8 @@ export namespace ArrayUtils {
   export const diff = <T1, T2 = T1>
   (arr1: T1[], arr2: T2[],
    comparator: ComparatorEq<T1,T2> = defaultComparatorEq
-  )=>{
+  )
+  : [(number|undefined)[], (number|undefined)[]] => {
     const fwd:  (number|undefined)[] = Array(arr1.length).fill(undefined)
     const back: (number|undefined)[] = Array(arr2.length).fill(undefined)
     arr1.forEach((one,i1)=>{
@@ -75,6 +77,63 @@ export namespace ArrayUtils {
     })
     return [fwd,back] as const
   }
+  
+  
+  
+  export type DiffObj<T1, T2 = T1> = {
+    fromIdx: number
+    fromElem: T1
+    toIsFound: true
+    toIdx: number
+    toElem: T2
+  } | {
+    fromIdx: number
+    fromElem: T1
+    toIsFound: false
+    toIdx: -1
+    toElem: undefined
+  }
+  export const diff2 = <T1, T2 = T1>
+  (arr1: T1[], arr2: T2[],
+   comparator: ComparatorEq<T1,T2> = defaultComparatorEq
+  )
+  : [DiffObj<T1,T2>[], DiffObj<T2,T1>[]] => {
+    const [fwd,back] = diff(arr1,arr2,comparator)
+    const fwdObjs: DiffObj<T1,T2>[] = fwd.map((to,from)=>{
+      if (exists(to)) return {
+        fromIdx: from,
+        fromElem: arr1[from],
+        toIsFound: true,
+        toIdx: to,
+        toElem: arr2[to],
+      }
+      return {
+        fromIdx: from,
+        fromElem: arr1[from],
+        toIsFound: false,
+        toIdx: -1,
+        toElem: undefined,
+      }
+    })
+    const backObjs: DiffObj<T2,T1>[] = back.map((to,from)=>{
+      if (exists(to)) return {
+        fromIdx: from,
+        fromElem: arr2[from],
+        toIsFound: true,
+        toIdx: to,
+        toElem: arr1[to],
+      }
+      return {
+        fromIdx: from,
+        fromElem: arr2[from],
+        toIsFound: false,
+        toIdx: -1,
+        toElem: undefined,
+      }
+    })
+    return [fwdObjs,backObjs] as const
+  }
+  
   
   
   

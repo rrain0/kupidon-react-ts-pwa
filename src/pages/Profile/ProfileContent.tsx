@@ -366,7 +366,45 @@ React.memo(
             } satisfies ProfilePhoto
           })
           
-          ArrayUtils.diff
+          // we needn't take compression, because it is local
+          // we needn't take upload, because it is local
+          
+          // get all downloads & downloaded data from same existing photos
+          newValues.initialValues.photos = ArrayUtils.combine(
+            newValues.initialValues.photos, [...s.initialValues.photos, ...s.photos],
+            (initialPhoto, oldPhoto)=>({
+              ...initialPhoto,
+              dataUrl: oldPhoto.dataUrl,
+              isDownloaded: oldPhoto.isDownloaded,
+              download: oldPhoto.download,
+            } satisfies ProfilePhoto),
+            (a,b)=>a.id===b.id && !a.isEmpty && !b.isEmpty
+          )
+          
+          // update existing photos by new data from initial photos
+          newValues.photos = ArrayUtils.combine(
+            s.photos, newValues.initialValues.photos,
+            (photo, initialPhoto)=>({
+              ...photo,
+              type: initialPhoto.type,
+              remoteIndex: initialPhoto.remoteIndex,
+              remoteUrl: initialPhoto.remoteUrl,
+              name: initialPhoto.name,
+              mimeType: initialPhoto.mimeType,
+              dataUrl: initialPhoto.dataUrl,
+              isDownloaded: initialPhoto.isDownloaded,
+              download: initialPhoto.download,
+            } satisfies ProfilePhoto),
+            (a,b)=>a.id===b.id && !a.isEmpty && !b.isEmpty
+          )
+          
+          
+          
+          
+          
+          
+          // todo old
+          /* ArrayUtils.diff
           (s.initialValues.photos, newValues.initialValues.photos, photosComparator)[0]
           .forEach((to, from) => {
             const old = s.initialValues.photos[from]
@@ -381,11 +419,12 @@ React.memo(
                 now.dataUrl = old.dataUrl
               }
             }
-          })
+          }) */
           
           
+          // todo old
           // for photos which have become remote after saving to server
-          ;[newValues.initialValues.photos, newValues.photos] = ArrayUtils.merge(
+          /* ;[newValues.initialValues.photos, newValues.photos] = ArrayUtils.merge(
             newValues.initialValues.photos, s.photos,
             (initialPhoto,photo)=>{
               if (photo.type==='remote' && photo.isDownloaded)
@@ -393,7 +432,8 @@ React.memo(
                   { ...initialPhoto,
                     isDownloaded: true,
                     dataUrl: photo.dataUrl,
-                  },{ ...photo,
+                  },
+                  { ...photo,
                     remoteIndex: initialPhoto.remoteIndex,
                     name: initialPhoto.name,
                     remoteUrl: initialPhoto.remoteUrl,
@@ -402,8 +442,9 @@ React.memo(
               return [initialPhoto,photo]
             },
             (a,b)=>a.id===b.id
-          )
+          ) */
           
+          // todo old
           // replace new remote photos by new initial photos
           newValues.photos = newValues.photos.map(photo => {
             if (photo.type === 'remote') {
@@ -416,6 +457,30 @@ React.memo(
             }
             return photo
           })
+          
+          
+          
+          
+          
+          
+          // stop operations for discarded photos
+          ArrayUtils.diff2
+          (s.initialValues.photos, newValues.photos, (a,b)=>a.id===b.id)[0]
+          .forEach(diff => {
+            if (!diff.toIsFound){
+              diff.fromElem.download?.abort()
+              diff.fromElem.compression?.abort()
+            }
+          })
+          ArrayUtils.diff2
+          (s.photos, newValues.photos, (a,b)=>a.id===b.id)[0]
+          .forEach(diff => {
+            if (!diff.toIsFound){
+              diff.fromElem.download?.abort()
+              diff.fromElem.compression?.abort()
+            }
+          })
+          
           
           return newValues
         })
