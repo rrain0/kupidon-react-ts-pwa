@@ -115,6 +115,8 @@ export const useBottomSheet = (
   options: UseBottomSheetOptions,
 ) => {
   
+  const [initialRender, setInitialRender] = useState(true)
+  
   const [computedSheetDimens, setComputedSheetDimens, computedSheetDimensRef] =
     useStateAndRef<ComputedBottomSheetDimens>({
       frameH: 0,
@@ -202,9 +204,10 @@ export const useBottomSheet = (
       }()
       
       const snapPointsPx = calculateSnapPointsPx(snapPoints,computedSheetDimens)
-      if (snapPointsPx.every(elem=>elem===0)) console.warn(
-        "Every calculated snap point equals 0, bottom sheet cannot be opened."
-      )
+      if (!initialRender && snapPointsPx.every(elem=>elem===0))
+        console.warn(
+          "Every calculated snap point equals 0, bottom sheet cannot be opened."
+        )
       
       const firstOpenIdx = function(){
         const f = findBy(snapPointsPx, elem=>elem>0)
@@ -241,7 +244,6 @@ export const useBottomSheet = (
   const [prevState,setPrevState] = useState<SheetState>(null)
   const [prevSnapIdx, setPrevSnapIdx] = useState<SheetSnapIdx>(null)
   const [prevCloseable, setPrevCloseable] = useState(false)
-  const [initialRender, setInitialRender] = useState(true)
   
   const newState = options.state
   const setNewState = options.setState
@@ -456,7 +458,6 @@ export const useBottomSheet = (
     ()=>reactOnState(),
     [newState, newSnapIdx, newCloseable, initialRender]
   )
-  useEffect(()=>setInitialRender(false),[])
   
   
   
@@ -514,6 +515,8 @@ export const useBottomSheet = (
   // forbid content selection for all elements while dragging
   useNoSelect(prevState==='dragging')
   
+  
+  useEffect(()=>setInitialRender(false),[])
   
   
   return {

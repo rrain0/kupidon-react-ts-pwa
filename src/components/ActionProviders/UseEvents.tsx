@@ -4,7 +4,6 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
-// todo remove
 
 
 export type UseEventsProps = PartialUndef<{
