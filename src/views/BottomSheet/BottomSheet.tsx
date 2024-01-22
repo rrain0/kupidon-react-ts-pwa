@@ -153,9 +153,10 @@ React.memo(
         }}
         
         ref={bottomSheetFrameRef as any}
-        // todo prevent click if dragged if frame is draggable
+        
+        // need to prevent click if dragged if frame is draggable
         onClick={ev=>{
-          console.log('dimmed background click')
+          //console.log('dimmed background click')
           setState('closing')
         }}
       >

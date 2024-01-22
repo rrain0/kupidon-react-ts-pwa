@@ -169,6 +169,8 @@ React.memo(
       
       snapPoints={snapPoints}
       animationDuration={animationDuration}
+      closeable={false}
+      defaultOpenIdx={openSnapIdx}
       
       onSnapPointsPx={setSnapPointsPx}
       onComputedDimens={setComputedSheetDimens}

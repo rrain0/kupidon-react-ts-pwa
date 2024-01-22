@@ -71,7 +71,6 @@ React.memo(
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
   
-  console.log('themeSettings',themeSettings)
   
   const uiText = useUiTextContainer(QuickSettingsUiText)
   

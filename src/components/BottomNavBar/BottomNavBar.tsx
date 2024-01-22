@@ -2,10 +2,9 @@
 import { css, Global } from '@emotion/react'
 import styled from '@emotion/styled'
 import classNames from 'classnames'
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
-import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import { BottomNavBarUiText } from 'src/components/BottomNavBar/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
@@ -82,16 +81,12 @@ React.memo(
           <NavLink to={RootRoute.settings[full]()}
             onClick={ev=>ev.preventDefault()} // prevent follow link
           >
-            <UseFakePointerRef>{({ ref })=>
-              <Button css={ButtonStyle.nav}
-                ref={ref as any}
-                // onClick={bool.setTrue}
-                {...onPointerClick(bool.setTrue)}
-              >
-                <Gear2Ic/>
-                <div>{uiOptions.settings[0].text}</div>
-              </Button>
-            }</UseFakePointerRef>
+            <Button css={ButtonStyle.nav}
+              {...onPointerClick(bool.setTrue)}
+            >
+              <Gear2Ic/>
+              <div>{uiOptions.settings[0].text}</div>
+            </Button>
           </NavLink>
           <QuickSettings open={bool.value} setOpen={bool.setValue}/>
         </>
