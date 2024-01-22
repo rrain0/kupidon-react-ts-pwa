@@ -12,6 +12,9 @@ export namespace ReactUtils {
   // todo hack fix
   // Sometimes 'click' is not fired for a couple seconds
   // despite 'pointerdown' & 'pointerup' events are fired normally.
+  // WARNING!!! It fires before actual click events,
+  // so if you change view after this so it can't capture clicks,
+  // the underlying view captures click along with this view simultaneously.
   export const onPointerClick =
   <E extends Element>
   (callback: Callback1<React.PointerEvent<E>>)=>{

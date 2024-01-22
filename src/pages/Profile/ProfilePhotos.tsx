@@ -163,7 +163,7 @@ React.memo(
   const [swap, setSwap] = useState(undefined as undefined|[number,number])
   
   const [canClick, setCanClick] = useState(true)
-  const [isMenuOpen,setMenuOpen] = useState(false)
+  const [isMenuOpen, setMenuOpen] = useState(false)
   
   
   // forbid content selection

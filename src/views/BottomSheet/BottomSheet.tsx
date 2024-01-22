@@ -154,10 +154,10 @@ React.memo(
         
         ref={bottomSheetFrameRef as any}
         // todo prevent click if dragged if frame is draggable
-        {...onPointerClick(()=>{
+        onClick={ev=>{
           console.log('dimmed background click')
           setState('closing')
-        })}
+        }}
       >
         <div // Pointer & Wheel events consumer
           css={contents}
