@@ -164,15 +164,14 @@ React.memo(
               .map(it=>({ id: values.initialValues.photos[it.from].id, index: it.to as number })),
           }
           addPhotos = values.photos
-            .map((it,i)=>({ index: i, photo: it }))
+            .map((it,i)=>({ remoteIndex: i, photo: it }))
             .filter(it=>it.photo.type==='local' && it.photo.isCompressed)
             .map(it=>({
-                id: it.photo.id,
-                index: it.index,
-                name: it.photo.name,
-                dataUrl: it.photo.dataUrl,
-              })
-            )
+              id: it.photo.id,
+              index: it.remoteIndex,
+              name: it.photo.name,
+              dataUrl: it.photo.dataUrl,
+            }))
         }
         
         const apiPromise = new Promise<ApiResponse<
@@ -351,18 +350,18 @@ React.memo(
           
           newValues.initialValues.photos = ArrayUtils.ofIndices(6).map(i => ({
             ...DefaultProfilePhoto,
-            id: uuid.v4(),
             type: 'remote',
-            index: i,
+            id: uuid.v4(),
+            remoteIndex: i,
             isEmpty: true,
             isDownloaded: true,
           } satisfies ProfilePhoto))
           u.photos.forEach(it => {
             newValues.initialValues.photos[it.index] = {
               ...DefaultProfilePhoto,
-              id: it.id,
               type: 'remote',
-              index: it.index,
+              id: it.id,
+              remoteIndex: it.index,
               name: it.name,
               mimeType: it.mimeType,
               remoteUrl: it.url,
@@ -417,7 +416,7 @@ React.memo(
             if (photo.type === 'remote') {
               //console.log('photo',photo)
               return {
-                ...newValues.initialValues.photos[photo.index],
+                ...newValues.initialValues.photos[photo.remoteIndex],
                 isCompressed: photo.isCompressed,
                 compression: photo.compression,
               } satisfies ProfilePhoto

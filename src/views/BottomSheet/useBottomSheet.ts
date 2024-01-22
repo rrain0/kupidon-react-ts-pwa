@@ -352,6 +352,7 @@ export const useBottomSheet = (
         if (newState==='adjusting') return toHeight===0
         return (['closed','closing'] as SheetState[]).includes(newState)
       }()
+      
       const toDragging = newState==='dragging'
       const toAnimated =
         (['closing','snapping','opening','adjusting'] as SheetState[]).includes(newState)

@@ -95,10 +95,10 @@ export namespace ProfilePageValidation {
     aboutMe: '',
     photos: ArrayUtils.ofIndices(6).map(i=>({
       ...DefaultProfilePhoto,
-      id: uuid.v4(),
       type: 'remote',
-      index: i,
+      id: uuid.v4(),
       isEmpty: true,
+      remoteIndex: i,
       isDownloaded: false,
     } satisfies ProfilePhoto))
   }

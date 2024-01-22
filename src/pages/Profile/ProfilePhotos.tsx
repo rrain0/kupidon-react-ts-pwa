@@ -106,16 +106,17 @@ export type Operation = typeof DefaultOperation
 
 
 export const DefaultProfilePhoto = {
-  id: '',
   type: 'remote' as
     |'remote' // photo from server
     |'local', // photo from local storage
-  index: 0,
   isEmpty: false,
   
+  id: '',
+  remoteIndex: 0,
+  remoteUrl: '',
   name: '',
   mimeType: '',
-  remoteUrl: '',
+  
   dataUrl: '',
   
   isCompressed: false,
@@ -355,9 +356,9 @@ React.memo(
                 const mimeType = new DataUrl(imgDataUrl).mimeType
                 const newPhoto = {
                   ...DefaultProfilePhoto,
-                  id: uuid.v4(),
                   type: 'local',
-                  index: photo.index,
+                  id: uuid.v4(),
+                  remoteIndex: photo.remoteIndex,
                   name: trimExtension(imgFile.name),
                   mimeType: mimeType,
                   dataUrl: imgDataUrl,
@@ -607,10 +608,10 @@ React.memo(
               const newImages = [...images]
               newImages[lastIdx] = {
                 ...DefaultProfilePhoto,
-                id: uuid.v4(),
                 type: 'local',
+                id: uuid.v4(),
                 isEmpty: true,
-                index: newImages[lastIdx].index,
+                remoteIndex: newImages[lastIdx].remoteIndex,
               } satisfies ProfilePhoto
               setImages(newImages)
               sheet.setClosing()
