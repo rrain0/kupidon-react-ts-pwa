@@ -2,7 +2,12 @@
 import React, { useMemo, useRef, useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
-import { ComputedBottomSheetDimens, SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import {
+  ComputedBottomSheetDimens,
+  SheetSnapIdx,
+  SheetSnapPoints,
+  SheetState,
+} from 'src/views/BottomSheet/useBottomSheet'
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -34,7 +39,7 @@ React.memo(
   const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
   const [state, setState] = useState<SheetState>('closed')
-  const [snapIdx, setSnapIdx] = useState(2)
+  const [snapIdx, setSnapIdx] = useState<SheetSnapIdx>(2)
   
   const [snapPoints, setSnapPoints] = useState<SheetSnapPoints>(
     ['0px','fit-header',200,'fit-content','50%','free','80%','800px']
@@ -156,12 +161,15 @@ React.memo(
       bottomSheetRef={bottomSheetRef}
       bottomSheetHeaderRef={bottomSheetHeaderRef}
       bottomSheetContentRef={bottomSheetContentRef}
+      
       state={state}
       setState={setState}
-      animationDuration={animationDuration}
-      snapPoints={snapPoints}
       snapIdx={snapIdx}
       setSnapIdx={setSnapIdx}
+      
+      snapPoints={snapPoints}
+      animationDuration={animationDuration}
+      
       onSnapPointsPx={setSnapPointsPx}
       onComputedDimens={setComputedSheetDimens}
     >
@@ -206,7 +214,7 @@ React.memo(
           <OverflowWrapper
             css={OverflowWrapperStyle.page}
             showVertical={
-              !['opening','closing','open','close','closed'].includes(state)
+              !([null,'closed','close','closing','open','opening'] as SheetState[]).includes(state)
             }
           >
             <div // scrollable content

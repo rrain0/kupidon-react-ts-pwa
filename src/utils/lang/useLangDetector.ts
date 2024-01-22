@@ -71,10 +71,10 @@ export const useLangDetector = (): NonEmptyArr<string> | undefined => {
 }
 
 
-const getBrowserLangs = (): [string, ...string[]] | undefined =>{
+const getBrowserLangs = (): [string, ...string[]] | undefined => {
   let langs: readonly string[] | undefined = navigator.languages
-  if ((!langs || !langs.length) && navigator.language)
+  if (!langs?.length && navigator.language)
     langs = [navigator.language]
-  if (!langs || !langs.length) langs = undefined
+  if (!langs?.length) langs = undefined
   return langs as [string, ...string[]] | undefined
 }

@@ -50,9 +50,6 @@ import onPointerClick = ReactUtils.onPointerClick
 
 
 
-const sheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
-const sheetOpenIdx = 3
-
 
 
 export type SettingsProps = {
@@ -74,7 +71,7 @@ React.memo(
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
   
-  
+  console.log('themeSettings',themeSettings)
   
   const uiText = useUiTextContainer(QuickSettingsUiText)
   
@@ -104,7 +101,7 @@ React.memo(
   const isThemeOptionChecked = useCallback(
     function (value: ThemeType|'system') {
       return themeSettings.setting === 'system' && value === 'system'
-        || themeSettings.setting !== 'system' && value === themeSettings.manualSetting
+        || themeSettings.setting === 'manual' && value === themeSettings.manualSetting
     },
     [themeSettings]
   )
@@ -136,7 +133,7 @@ React.memo(
   const isLanguageOptionChecked = useCallback(
     function (value: Lang|'system') {
       return langSettings.setting === 'system' && value === 'system'
-        || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
+        || langSettings.setting === 'manual' && value === langSettings.manualSetting?.[0]
     },
     [langSettings]
   )
@@ -152,8 +149,6 @@ React.memo(
     <UseBottomSheetState
       open={open}
       onClosed={()=>setOpen(false)}
-      snapPoints={sheetSnaps}
-      openIdx={sheetOpenIdx}
     >
       {props =>
       <ModalPortal>

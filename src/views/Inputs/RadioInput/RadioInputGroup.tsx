@@ -4,7 +4,6 @@ import classNames from 'classnames'
 import React, { useImperativeHandle, useRef } from 'react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { AppTheme } from 'src/utils/theme/AppTheme'
 import {
   RadioInputGroupStyle,
 } from 'src/views/Inputs/RadioInput/RadioInputGroupStyle'
@@ -67,7 +66,7 @@ export default RadioInputGroup
 
 
 
-const radioGroupStyle = (t: AppTheme.Theme) => css`
+const radioGroupStyle = css`
   ${reset};
   position: relative;
 `

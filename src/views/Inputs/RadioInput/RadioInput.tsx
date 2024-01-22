@@ -42,7 +42,8 @@ React.forwardRef<RadioInputRefElement, RadioInputProps>
     hasError,
     startViews, endViews, children, childrenPosition,
     rippleMode,
-    className, style, ...restProps
+    className, style,
+    ...restProps
   } = props
   childrenPosition ??= 'end'
   rippleMode ??= 'cursor'

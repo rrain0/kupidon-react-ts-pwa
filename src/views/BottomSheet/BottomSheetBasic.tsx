@@ -15,9 +15,6 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
-export const BasicSheetSnaps = [0,'15%'/*200*/,'free','fit-content','free','50%','free','80%']
-export const BasicSheetOpenIdx = 3
-
 
 
 export type BottomSheetBasicProps =
@@ -104,7 +101,7 @@ React.memo(
       `}>
         <OverflowWrapper css={OverflowWrapperStyle.list}
           showVertical={
-            !['opening','closing','open','close','closed'].includes(state)
+            ![null,'closed','close','closing','open','opening'].includes(state)
           }
         >
           {/*

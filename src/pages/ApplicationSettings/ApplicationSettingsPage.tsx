@@ -92,7 +92,7 @@ React.memo(
   const themeOptionChecked = useCallback(
     function (value: ThemeType|'system') {
       return themeSettings.setting === 'system' && value === 'system'
-        || themeSettings.setting !== 'system' && value === themeSettings.manualSetting
+        || themeSettings.setting === 'manual' && value === themeSettings.manualSetting
     },
     [themeSettings]
   )
@@ -124,7 +124,7 @@ React.memo(
   const languageOptionChecked = useCallback(
     function (value: Lang|'system') {
       return langSettings.setting === 'system' && value === 'system'
-        || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
+        || langSettings.setting === 'manual' && value === langSettings.manualSetting?.[0]
     },
     [langSettings]
   )
@@ -156,20 +156,6 @@ React.memo(
     },
     [themeNameUiText]
   )
-  
-  
-  const elem = function (){
-    switch (Math.random()) {
-      case 0.5: return <span></span>
-      default: return <div/>
-    }
-  }()
-  const comp = function (){
-    switch (Math.random()) {
-      case 0.5: return styled.span``
-      default: return styled.div``
-    }
-  }()
   
   
   

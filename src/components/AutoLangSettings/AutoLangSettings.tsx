@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import LangSettings from 'src/components/LangSettings/LangSettings'
-import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
+import { LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 
 
 
@@ -14,17 +14,28 @@ React.memo(
   
   
   const [open, setOpen] = useState(false)
+  const [closeable, setCloseable] = useState(true)
   
   useEffect(
     ()=>{
-      if (!open && langSettings.setting==='manual' && !langSettings.manualSetting)
+      if (langSettings.setting==='manual' && !langSettings.manualSetting){
+        setCloseable(false)
+      }
+      else setCloseable(true)
+      
+      if (!open && langSettings.setting==='manual' && !langSettings.manualSetting){
         setOpen(true)
+      }
     },
     [open, langSettings.manualSetting, langSettings.setting]
   )
   
   
-  return <LangSettings open={open} setOpen={setOpen} />
+  return <LangSettings
+    open={open}
+    setOpen={setOpen}
+    closeable={closeable}
+  />
 })
 export default AutoLangSettings
 

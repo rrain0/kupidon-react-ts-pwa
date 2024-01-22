@@ -26,11 +26,13 @@ export namespace ReactUtils {
       onPointerUp: (ev: React.PointerEvent<E>)=>{
         if (pointers.has(ev.pointerId)) {
           callback(ev)
+          //console.log('pointerup')
           pointers.delete(ev.pointerId)
         }
       },
       // 'out' is 'leave' + 'cancel'
       onPointerOut: (ev: React.PointerEvent<E>)=>{
+        //console.log('pointerout')
         pointers.delete(ev.pointerId)
       },
     } as const
@@ -40,7 +42,7 @@ export namespace ReactUtils {
   
   const stopReactEventPropagation = (ev: React.BaseSyntheticEvent)=>{
     ev.stopPropagation()
-    ev.preventDefault()
+    //ev.preventDefault()
     //console.log('ev.type',ev.type)
   }
   export const stopPointerAndMouseEvents = ()=>{

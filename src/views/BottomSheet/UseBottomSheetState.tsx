@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import { BasicSheetOpenIdx, BasicSheetSnaps } from 'src/views/BottomSheet/BottomSheetBasic'
-import { SheetSnapPoints, SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import {
+  DefaultSheetOpenIdx, DefaultSheetSnaps,
+  SheetSnapIdx,
+  SheetSnapPoints,
+  SheetState, UseBottomSheetOptions,
+} from 'src/views/BottomSheet/useBottomSheet'
 import Setter = TypeUtils.Callback1
 import Callback = TypeUtils.Callback
 import PartialUndef = TypeUtils.PartialUndef
@@ -13,13 +16,7 @@ import ValueOrMapper = TypeUtils.ValueOrMapper
 
 export type UseBottomSheetStateRenderProps = {
   setClosing: ()=>void
-  sheetProps:{
-    state: SheetState,
-    setState: Setter<SheetState>,
-    snapPoints: SheetSnapPoints,
-    snapIdx: number,
-    setSnapIdx: Setter<number>,
-  }
+  sheetProps: UseBottomSheetOptions
 }
 export type UseBottomSheetStateProps = {
   open: boolean
@@ -28,6 +25,7 @@ export type UseBottomSheetStateProps = {
 } & PartialUndef<{
   openIdx: number
   snapPoints: SheetSnapPoints
+  closeable: boolean
 }>
 
 
@@ -38,13 +36,14 @@ React.memo(
   const {
     open,
     onClosed,
-    openIdx = BasicSheetOpenIdx,
-    snapPoints = BasicSheetSnaps,
+    openIdx = DefaultSheetOpenIdx,
+    snapPoints = DefaultSheetSnaps,
+    closeable = true,
   } = props
   
   
   const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState<number>(openIdx)
+  const [snapIdx,setSnapIdx] = useState<SheetSnapIdx>(0)
   
   /* const setSheetState = useCallback(
     (sheetState: ValueOrMapper<SheetState>)=>{
@@ -62,7 +61,7 @@ React.memo(
   useEffect(
     ()=>{
       if (open){
-        console.log('set opening')
+        //console.log('set opening')
         setSheetState('opening')
         setSnapIdx(openIdx)
       }
@@ -73,6 +72,7 @@ React.memo(
   useEffect(
     ()=>{
       if (sheetState==='closed'){
+        //console.log('onClosed')
         onClosed()
       }
     },
@@ -80,13 +80,16 @@ React.memo(
   )
   
   
-  const bottomSheetProps = useMemo(
+  const bottomSheetProps = useMemo<UseBottomSheetOptions>(
     ()=>({
       state: sheetState,
       setState: setSheetState,
       snapIdx: snapIdx,
       setSnapIdx: setSnapIdx,
+      
       snapPoints: snapPoints,
+      closeable: closeable,
+      defaultOpenIdx: openIdx,
     }),
     [sheetState, snapIdx, snapPoints]
   )

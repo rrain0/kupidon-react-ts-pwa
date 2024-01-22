@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { LangSettingsUiText } from 'src/components/LangSettings/uiText'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
 import { useUiTextContainer } from 'src/utils/lang/useUiText'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
-import { SheetState } from 'src/views/BottomSheet/useBottomSheet'
+import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
@@ -21,28 +21,25 @@ import col = EmotionCommon.col
 import row = EmotionCommon.row
 import Theme = AppTheme.Theme
 import BrowserIc = SvgIcons.BrowserIc
+import PartialUndef = TypeUtils.PartialUndef
 
 
 
 
-const sheetSnaps = [0,'20%','free','fit-content','free','50%','free','80%']
 
 export type LangSettingsProps = {
   open: boolean
   setOpen: Setter<boolean>
-}
+} & PartialUndef<{
+  closeable: boolean
+}>
 
 
 
 const LangSettings =
 React.memo(
 (props: LangSettingsProps)=>{
-  const { open, setOpen } = props
   
-  
-  const [sheetState, setSheetState] = useState<SheetState>('closed')
-  const [snapIdx,setSnapIdx] = useState(3)
-  const openIdx = 3
   
   const lang = useRecoilValue(LangRecoil)
   
@@ -72,7 +69,7 @@ React.memo(
   const isLanguageOptionChecked = useCallback(
     function (value: Lang|'system') {
       return langSettings.setting === 'system' && value === 'system'
-        || langSettings.setting !== 'system' && value === langSettings.manualSetting?.[0]
+        || langSettings.setting === 'manual' && value === langSettings.manualSetting?.[0]
     },
     [langSettings]
   )
@@ -80,74 +77,54 @@ React.memo(
   
   
   
-  
-  useEffect(()=>{
-    if (open){
-      setSheetState('opening')
-      setSnapIdx(openIdx)
-    }
-  },[open])
-  useEffect(()=>{
-    if (sheetState==='closed'){
-      setOpen(false)
-    }
-  },[setOpen, sheetState])
-  
-  
-  const bottomSheetProps = {
-    state: sheetState,
-    setState: setSheetState,
-    snapPoints: sheetSnaps,
-    snapIdx: snapIdx,
-    setSnapIdx: setSnapIdx,
-  }
-  
-  
   return <>
-    {open && <BottomSheetBasic
-      {...bottomSheetProps}
-      header={<div css={css`height: 1em;`}/>}
-    >
-      <div
-        css={css`
+    <UseBottomSheetState open={props.open} onClosed={()=>props.setOpen(false)}>
+      { ({ sheetProps })=>
+      <BottomSheetBasic
+        {...sheetProps}
+        closeable={props.closeable}
+        header={<div css={css`height: 1em;`}/>}
+      >
+        <div css={css`
           ${col};
           padding-bottom: 20px;
         `}
-      >
-        
-        
-        {
-          languageOptions.map(opt => <RadioInput
-            css={RadioInputStyle.radio}
-            childrenPosition="start"
-            checked={isLanguageOptionChecked(opt.value)}
-            value={opt.value}
-            key={opt.value}
-            onChange={ev => {
-              if (opt.value === 'system') setLangSettings({
-                ...langSettings,
-                setting: 'system',
-              })
-              else {
-                setLangSettings({
-                  setting: 'manual',
-                  manualSetting: [opt.value],
+        >
+          
+          
+          {
+            languageOptions.map(opt => <RadioInput
+              css={RadioInputStyle.radio}
+              childrenPosition="start"
+              checked={isLanguageOptionChecked(opt.value)}
+              value={opt.value}
+              key={opt.value}
+              onChange={ev => {
+                if (opt.value === 'system') setLangSettings({
+                  ...langSettings,
+                  setting: 'system',
                 })
-              }
-            }}
-          >
-            <OptionContainer>
-              {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
-              {opt.value === 'system' && <BrowserIc css={icon}/>}
-              {opt.text}
-            </OptionContainer>
-          </RadioInput>)
-        }
+                else {
+                  setLangSettings({
+                    setting: 'manual',
+                    manualSetting: [opt.value],
+                  })
+                }
+              }}
+            >
+              <OptionContainer>
+                {opt.value !== 'system' && <Flag src={CountryFlag[opt.value]}/>}
+                {opt.value === 'system' && <BrowserIc css={icon}/>}
+                {opt.text}
+              </OptionContainer>
+            </RadioInput>)
+          }
+          
+          
         
-        
-      
-      </div>
-    </BottomSheetBasic>}
+        </div>
+      </BottomSheetBasic>}
+    </UseBottomSheetState>
   </>
 })
 export default LangSettings

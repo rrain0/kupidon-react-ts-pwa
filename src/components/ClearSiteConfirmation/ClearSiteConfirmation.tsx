@@ -22,10 +22,7 @@ import row = EmotionCommon.row
 import Spinner8LinesIc = SvgIcons.Spinner8LinesIc
 import Theme = AppTheme.Theme
 import ClearTrashIc = SvgIcons.ClearTrashIc
-import BottomSheetBasic, {
-  BasicSheetOpenIdx,
-  BasicSheetSnaps,
-} from 'src/views/BottomSheet/BottomSheetBasic'
+import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import Setter = TypeUtils.Callback1
 import Txt = EmotionCommon.Txt
@@ -68,8 +65,6 @@ React.memo(
     <UseBottomSheetState
       open={open}
       onClosed={()=>setOpen(false)}
-      snapPoints={BasicSheetSnaps}
-      openIdx={BasicSheetOpenIdx}
     >
       {props => <ModalPortal><BottomSheetBasic
         {...props.sheetProps}

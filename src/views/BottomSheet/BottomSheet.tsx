@@ -8,7 +8,7 @@ import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import {
-  ComputedBottomSheetDimens,
+  ComputedBottomSheetDimens, SheetState,
   useBottomSheet, UseBottomSheetOptions,
 } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
@@ -62,6 +62,8 @@ React.memo(
     setSnapIdx,
     snapPoints,
     animationDuration,
+    closeable,
+    defaultOpenIdx,
     
     onComputedDimens,
     onSnapPointsPx,
@@ -88,6 +90,8 @@ React.memo(
       setSnapIdx,
       snapPoints,
       animationDuration,
+      closeable,
+      defaultOpenIdx,
     }
   )
   useLayoutEffect(
@@ -104,7 +108,7 @@ React.memo(
   const [openSnapIdx, setOpenSnapIdx] = useState((snapPoints??[0]).length-1)
   useLayoutEffect(
     ()=>{
-      if (['open','opening'].includes(state) && exists(snapIdx))
+      if ((['open','opening'] as SheetState[]).includes(state) && exists(snapIdx))
         setOpenSnapIdx(snapIdx)
     },
     [state,snapIdx]
@@ -119,14 +123,14 @@ React.memo(
         return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
           .toString(16).padStart(2,'0')
       }()
-      if (state!=='closed') return `#000000${bgcDimHex}`
+      if (!['closed',null].includes(state)) return `#000000${bgcDimHex}`
       else return 'none'
     }(),
     immediate: true,
   })
   
   
-  useUpNodesScrollLock(bottomSheetFrameRef, state!=='closed')
+  useUpNodesScrollLock(bottomSheetFrameRef, !['closed',null].includes(state))
   
   
   //useLayoutEffect(()=>console.log('state',state),[state])
@@ -145,7 +149,7 @@ React.memo(
       <animated.div /* Frame */ css={frameStyle}
         style={{
           ...frameSpring,
-          pointerEvents: !['closed', 'closing'].includes(state) ? 'auto' : 'none',
+          pointerEvents: ![null,'closed','closing'].includes(state) ? 'auto' : 'none',
         }}
         
         ref={bottomSheetFrameRef as any}
@@ -178,7 +182,7 @@ export default BottomSheet
 
 
 
-const frameStyle = (t: AppTheme.Theme)=>css`
+const frameStyle = css`
   ${fixed};
   z-index: 30;
   background: none;
@@ -187,7 +191,7 @@ const frameStyle = (t: AppTheme.Theme)=>css`
   display: grid;
   place-items: end center;
 `
-const sheetStyle = (t: AppTheme.Theme)=>css`
+const sheetStyle = css`
   display: grid;
   grid-template-rows: auto 1fr;
   justify-items: stretch;
