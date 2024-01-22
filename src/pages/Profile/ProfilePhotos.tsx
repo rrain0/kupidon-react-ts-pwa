@@ -540,29 +540,7 @@ React.memo(
               }
             }}
             css={t=>css`
-              
-              pointer-events: none;
-              
-              ${abs};
-              inset: -7px;
-              border: 3px solid transparent;
-              border-radius: 20px;
-              @property --rotation {
-                syntax: '<angle>';
-                initial-value: 0turn;
-                inherits: false;
-              }
-              @property --grad-color {
-                syntax: '<color>';
-                initial-value: ${t.photos.highlightFrameBgc[0]};
-                inherits: false;
-              }
-  
-              ${bgcBorderMask};
-              background-image: conic-gradient(
-                var(--grad-color) 0turn var(--rotation),
-                transparent var(--rotation) 1turn
-              );
+              ${photoProgressFrameStyle(t)};
               
               ${lastIdx===i && dragState==='progressAnim' && css`
                 animation: ${progressAnim} ${progressAnimDuration}ms linear forwards;
@@ -799,6 +777,30 @@ const profilePhotoPieProgressAccent = (t:AppTheme.Theme)=>css`
   ${PieProgressStyle.El.thiz.pieProgress}{
     ${PieProgressStyle.Prop.prop.restColor}:     ${t.photos.bgc[0]};
   }
+`
+const photoProgressFrameStyle = (t:AppTheme.Theme)=>css`
+  pointer-events: none;
+
+  ${abs};
+  inset: -7px;
+  border: 3px solid transparent;
+  border-radius: 20px;
+  @property --rotation {
+    syntax: '<angle>';
+    initial-value: 0turn;
+    inherits: false;
+  }
+  @property --grad-color {
+    syntax: '<color>';
+    initial-value: ${t.photos.highlightFrameBgc[0]};
+    inherits: false;
+  }
+
+  ${bgcBorderMask};
+  background-image: conic-gradient(
+          var(--grad-color) 0turn var(--rotation),
+          transparent var(--rotation) 1turn
+  );
 `
 
 

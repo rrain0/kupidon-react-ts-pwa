@@ -175,7 +175,8 @@ React.memo(
         }
         
         const apiPromise = new Promise<ApiResponse<
-          CurrentUserSuccessData, UpdateUserErrorData | AddProfilePhotoErrorData
+          CurrentUserSuccessData,
+          UpdateUserErrorData | AddProfilePhotoErrorData
         >>(async (resolve, reject)=>{
           let updatedUser = null as null|CurrentUser
           
@@ -316,17 +317,13 @@ React.memo(
   
   
   const fieldIsInitial = useCallback(
-    (field: keyof FormValues)=>{
-      return failures
-        .some(f=>f.type==='initial' && f.errorFields.includes(field))
-    },
+    (field: keyof FormValues)=>failures
+        .some(f=>f.type==='initial' && f.errorFields.includes(field)),
     [failures]
   )
   const anyFieldChanged = useMemo(
-    ()=>{
-      return failures.filter(f=>f.type==='initial')
-        .length < ObjectKeys(userDefaultValues).length
-    },
+    ()=>failures.filter(f=>f.type==='initial')
+        .length < ObjectKeys(userDefaultValues).length,
     [failures]
   )
   
@@ -388,30 +385,26 @@ React.memo(
           
           
           // for photos which have become remote after saving to server
-          {
-            const [newInitialPhotos, newPhotos] = ArrayUtils.merge(
-              newValues.initialValues.photos, s.photos,
-              (a,b)=>{
-                if (b.type==='remote' && b.isDownloaded)
-                  return [
-                    {
-                      ...a,
-                      isDownloaded: true,
-                      dataUrl: b.dataUrl,
-                    },{
-                      ...b,
-                      name: a.name,
-                      remoteUrl: a.remoteUrl,
-                    }
-                  ]
-                return [a,b]
-              },
-              (a,b)=>a.id===b.id
-            )
-            newValues.initialValues.photos = newInitialPhotos
-            newValues.photos = newPhotos
-          }
+          ;[newValues.initialValues.photos, newValues.photos] = ArrayUtils.merge(
+            newValues.initialValues.photos, s.photos,
+            (initialPhoto,photo)=>{
+              if (photo.type==='remote' && photo.isDownloaded)
+                return [
+                  { ...initialPhoto,
+                    isDownloaded: true,
+                    dataUrl: photo.dataUrl,
+                  },{ ...photo,
+                    remoteIndex: initialPhoto.remoteIndex,
+                    name: initialPhoto.name,
+                    remoteUrl: initialPhoto.remoteUrl,
+                  }
+                ]
+              return [initialPhoto,photo]
+            },
+            (a,b)=>a.id===b.id
+          )
           
+          // replace new remote photos by new initial photos
           newValues.photos = newValues.photos.map(photo => {
             if (photo.type === 'remote') {
               //console.log('photo',photo)
