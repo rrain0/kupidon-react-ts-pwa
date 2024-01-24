@@ -398,12 +398,7 @@ React.memo(
       [images[index]]
     )
   } */
-  /* useEffect(
-    ()=>{
-      console.log(`images`,images)
-    },
-    [images]
-  ) */
+  useEffect(()=>console.log(`images`,images), [images])
   
   
   return <>

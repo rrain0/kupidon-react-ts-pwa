@@ -25,7 +25,7 @@ import ProfilePhotos, {
   DefaultOperation,
   DefaultProfilePhoto,
   Operation,
-  ProfilePhoto,
+  ProfilePhoto, ProfilePhotoArr,
 } from 'src/pages/Profile/ProfilePhotos'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
@@ -229,7 +229,16 @@ React.memo(
                   (photo,usedPhoto)=>({
                     ...photo, type: 'remote', isDownloaded: !usedPhoto.isEmpty,
                   } satisfies ProfilePhoto),
-                  (photo,usedPhoto)=>usedPhoto.type==='local' && usedPhoto.id===photo.id
+                  (photo,usedPhoto)=>photo.id===usedPhoto.id && usedPhoto.type==='local'
+                )
+              }))
+              setFormValues(s=>({ ...s,
+                photos: ArrayUtils.combine(
+                  s.photos, values.photos,
+                  (photo,usedPhoto,photoI,usedPhotoI)=>({
+                    ...photo, remoteIndex: usedPhotoI
+                  } satisfies ProfilePhoto),
+                  (photo,usedPhoto)=>photo.remoteIndex===usedPhoto.remoteIndex
                 )
               }))
               setAuth(s=>({
@@ -345,26 +354,8 @@ React.memo(
           if (fieldIsInitial('gender')) newValues.gender = u.gender
           if (fieldIsInitial('aboutMe')) newValues.aboutMe = u.aboutMe
           
-          newValues.initialValues.photos = ArrayUtils.ofIndices(6).map(i => ({
-            ...DefaultProfilePhoto,
-            type: 'remote',
-            id: uuid.v4(),
-            remoteIndex: i,
-            isEmpty: true,
-            isDownloaded: true,
-          } satisfies ProfilePhoto))
-          u.photos.forEach(it => {
-            newValues.initialValues.photos[it.index] = {
-              ...DefaultProfilePhoto,
-              type: 'remote',
-              id: it.id,
-              remoteIndex: it.index,
-              name: it.name,
-              mimeType: it.mimeType,
-              remoteUrl: it.url,
-              isDownloaded: false,
-            } satisfies ProfilePhoto
-          })
+          newValues.initialValues.photos = currentUserPhotosToProfilePhotos(u.photos)
+          newValues.photos = [...s.photos]
           
           // we needn't take compression, because it is local
           // we needn't take upload, because it is local
@@ -381,71 +372,7 @@ React.memo(
             (a,b)=>a.id===b.id && !a.isEmpty && !b.isEmpty
           )
           
-          // update existing photos by new data from initial photos
-          newValues.photos = ArrayUtils.combine(
-            s.photos, newValues.initialValues.photos,
-            (photo, initialPhoto)=>({
-              ...photo,
-              type: initialPhoto.type,
-              remoteIndex: initialPhoto.remoteIndex,
-              remoteUrl: initialPhoto.remoteUrl,
-              name: initialPhoto.name,
-              mimeType: initialPhoto.mimeType,
-              dataUrl: initialPhoto.dataUrl,
-              isDownloaded: initialPhoto.isDownloaded,
-              download: initialPhoto.download,
-            } satisfies ProfilePhoto),
-            (a,b)=>a.id===b.id && !a.isEmpty && !b.isEmpty
-          )
-          
-          
-          
-          
-          
-          
-          // todo old
-          /* ArrayUtils.diff
-          (s.initialValues.photos, newValues.initialValues.photos, photosComparator)[0]
-          .forEach((to, from) => {
-            const old = s.initialValues.photos[from]
-            const now = exists(to) ? newValues.initialValues.photos[to] : undefined
-            if (!old.isEmpty && old.type === 'remote') {
-              if (notExists(now)) {
-                //console.log('name',old.name)
-                old.download?.abort()
-              } else {
-                now.isDownloaded = old.isDownloaded
-                now.download = old.download
-                now.dataUrl = old.dataUrl
-              }
-            }
-          }) */
-          
-          
-          // todo old
-          // for photos which have become remote after saving to server
-          /* ;[newValues.initialValues.photos, newValues.photos] = ArrayUtils.merge(
-            newValues.initialValues.photos, s.photos,
-            (initialPhoto,photo)=>{
-              if (photo.type==='remote' && photo.isDownloaded)
-                return [
-                  { ...initialPhoto,
-                    isDownloaded: true,
-                    dataUrl: photo.dataUrl,
-                  },
-                  { ...photo,
-                    remoteIndex: initialPhoto.remoteIndex,
-                    name: initialPhoto.name,
-                    remoteUrl: initialPhoto.remoteUrl,
-                  }
-                ]
-              return [initialPhoto,photo]
-            },
-            (a,b)=>a.id===b.id
-          ) */
-          
-          // todo old
-          // replace new remote photos by new initial photos
+          // replace remote photos by new initial photos
           newValues.photos = newValues.photos.map(photo => {
             if (photo.type === 'remote') {
               //console.log('photo',photo)
@@ -457,11 +384,6 @@ React.memo(
             }
             return photo
           })
-          
-          
-          
-          
-          
           
           // stop operations for discarded photos
           ArrayUtils.diff2
@@ -572,7 +494,7 @@ React.memo(
             }))
           }
           const updatePhotos = throttle(
-            mapRange(Math.random(),[0,1],[1500,2000]),
+            mapRange(Math.random(),[0,1],[1450,2000]),
             updatePhotosNow
           )
           
@@ -962,10 +884,6 @@ export default ProfileContent
 
 
 
-
-
-
-
 const selectItemsContainer = css`
   ${col};
   padding-bottom: 20px;
@@ -991,3 +909,32 @@ export const TopButtonBarFrame = styled.section`
   pointer-events: none;
   &>*{ pointer-events: auto; }
 `
+
+
+
+
+
+function currentUserPhotosToProfilePhotos(photos: CurrentUser['photos']): ProfilePhotoArr {
+  const profilePhotos: ProfilePhotoArr =
+  ArrayUtils.ofIndices(6).map(i => ({
+    ...DefaultProfilePhoto,
+    type: 'remote',
+    id: uuid.v4(),
+    remoteIndex: i,
+    isEmpty: true,
+    isDownloaded: true,
+  } satisfies ProfilePhoto))
+  photos.forEach(it => {
+    profilePhotos[it.index] = {
+      ...DefaultProfilePhoto,
+      type: 'remote',
+      id: it.id,
+      remoteIndex: it.index,
+      name: it.name,
+      mimeType: it.mimeType,
+      remoteUrl: it.url,
+      isDownloaded: false,
+    } satisfies ProfilePhoto
+  })
+  return profilePhotos
+}
