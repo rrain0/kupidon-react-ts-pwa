@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useFakePointerRef } from 'src/components/ActionProviders/UseFakePointerRef'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
+import { AppTheme } from 'src/utils/theme/AppTheme'
 import BottomSheet, { BottomSheetOptionsProps } from 'src/views/BottomSheet/BottomSheet'
 import { css } from '@emotion/react'
 import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
@@ -56,15 +57,7 @@ React.memo(
        // Must be without margins!!!
        */}
       <div css={t=>css`
-        background: ${t.bottomSheet.bgc[0]};
-        border-radius: 16px 16px 0 0;
-        color: ${t.page.content[0]};
-        padding: 10px;
-        ${col};
-        align-items: center;
-        gap: 6px;
-        touch-action: none;
-        cursor: grab;
+        ${headerStyle(t)};
         ${state==='dragging' && css`cursor: grabbing;`}
       `}
         ref={bottomSheetHeaderRef as any}
@@ -72,17 +65,11 @@ React.memo(
       >
         
         <div /* Header handle */ css={t=>css`
-          width: 44px;
-          height: 4px;
-          border-radius: 2px;
-          background: ${t.bottomSheet.handle[0]};
+          ${headerHandleStyle(t)};
           ${state==='dragging' && css`background: ${t.page.content[0]};`}
         `}/>
         
-        <div css={css`
-          ${center};
-          min-height: 20px;
-        `}>
+        <div css={headerTextStyle}>
           {header}
         </div>
       
@@ -92,13 +79,7 @@ React.memo(
        // Body Component
        // Must be without margins & paddings!!!
        */}
-      <div css={t=>css`
-        display: flex;
-        place-items: center;
-        overflow: hidden;
-        background: ${t.bottomSheet.bgc[0]};
-        color: ${t.page.content[0]};
-      `}>
+      <div css={bodyStyle}>
         <OverflowWrapper css={OverflowWrapperStyle.list}
           showVertical={
             ![null,'closed','close','closing','open','opening'].includes(state)
@@ -108,13 +89,7 @@ React.memo(
            // scrollable content
            // Must be without margins!!!
            */}
-          <div css={css`
-            width: 100%;
-            padding: 0 10px 10px;
-            ${col};
-            height: fit-content;
-            min-height: fit-content;
-          `}
+          <div css={scrollableContentStyle}
             ref={bottomSheetContentRef as any}
           >
             { children }
@@ -126,3 +101,48 @@ React.memo(
   </BottomSheet>
 })
 export default BottomSheetBasic
+
+
+
+
+const headerStyle = (t: AppTheme.Theme)=>css`
+  background: ${t.bottomSheet.bgc[0]};
+  border-radius: 16px 16px 0 0;
+  color: ${t.page.content[0]};
+  padding: 10px;
+  ${col};
+  align-items: center;
+  gap: 6px;
+  touch-action: none;
+  cursor: grab;
+`
+const headerHandleStyle = (t: AppTheme.Theme)=>css`
+  width: 44px;
+  height: 4px;
+  border-radius: 2px;
+  background: ${t.bottomSheet.handle[0]};
+`
+const headerTextStyle = (t: AppTheme.Theme)=>css`
+  ${center};
+  min-height: 20px;
+`
+
+
+
+const bodyStyle = (t: AppTheme.Theme)=>css`
+  display: flex;
+  place-items: center;
+  overflow: hidden;
+  background: ${t.bottomSheet.bgc[0]};
+  color: ${t.page.content[0]};
+`
+
+
+
+const scrollableContentStyle = (t: AppTheme.Theme)=>css`
+  width: 100%;
+  padding: 0 10px 10px;
+  ${col};
+  height: fit-content;
+  min-height: fit-content;
+`

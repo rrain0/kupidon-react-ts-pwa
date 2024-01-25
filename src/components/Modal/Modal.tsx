@@ -22,7 +22,7 @@ React.forwardRef<RefElement, ModalProps>(
   const elemRef = useRef<RefElement>(null)
   useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
-  useUpNodesScrollLock(elemRef, true)
+  useUpNodesScrollLock(true, { elementRef: elemRef })
   
   return <div
     {...restProps}

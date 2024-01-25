@@ -130,7 +130,10 @@ React.memo(
   })
   
   
-  useUpNodesScrollLock(bottomSheetFrameRef, !['closed',null].includes(state))
+  useUpNodesScrollLock(
+    !['closed',null].includes(state),
+    { elementRef: bottomSheetFrameRef }
+  )
   
   
   //useLayoutEffect(()=>console.log('state',state),[state])

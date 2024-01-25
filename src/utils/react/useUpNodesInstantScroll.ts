@@ -6,7 +6,7 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
-export const useUpNodesScrollLock = (
+export const useUpNodesInstantScroll = (
   lock: boolean = false,
   options: PartialUndef<{
     element: Element,
@@ -21,9 +21,7 @@ export const useUpNodesScrollLock = (
         return undefined
       }()
       if (lock){
-        // Setting overflow on body passes directly to WINDOW
-        const x: Element[] = [document.body]
-        const y: Element[] = [document.body]
+        const elems: Element[] = [document.documentElement, document.body]
         if (el){
           let up = el.parentElement
           while (up) {
@@ -33,20 +31,15 @@ export const useUpNodesScrollLock = (
               return (prop: string)=>window.getComputedStyle(up!)[prop]
             }()
             if (['auto','scroll'].includes(
-              getComputedStyle('overflow-x') as any
-            )) x.push(up)
-            if (['auto','scroll'].includes(
-              getComputedStyle('overflow-y') as any
-            )) y.push(up)
+              getComputedStyle('overflow') as any
+            )) elems.push(up)
             up = up.parentElement
           }
         }
         
-        x.forEach(el=>el.classList.add(commonCss.noScrollX))
-        y.forEach(el=>el.classList.add(commonCss.noScrollY))
+        elems.forEach(el=>el.classList.add(commonCss.instantScroll))
         return ()=>{
-          x.forEach(el=>el.classList.remove(commonCss.noScrollX))
-          y.forEach(el=>el.classList.remove(commonCss.noScrollY))
+          elems.forEach(el=>el.classList.remove(commonCss.instantScroll))
         }
       }
     },

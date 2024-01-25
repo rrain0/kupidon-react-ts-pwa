@@ -167,12 +167,6 @@ React.memo(
   const [isMenuOpen, setMenuOpen] = useState(false)
   
   
-  // forbid content selection
-  useNoSelect(!!dragState)
-  // forbid gesture interception by browser
-  useNoTouchAction(dragState==='dragging' || progressAnimLockGestures)
-  
-  
   // swaps photos
   const swapPhotosEffectEvent = useEffectEvent(
     (swap: [number,number])=>{
@@ -226,6 +220,12 @@ React.memo(
   const photoFrameRefs = useRef<Array<Element|null>>(arrIndices(6).map(i=>null))
   
   
+  // forbid content selection
+  useNoSelect(!!dragState)
+  // forbid gesture interception by browser
+  useNoTouchAction(dragState==='dragging' || progressAnimLockGestures)
+  
+  
   const [springs, springApi] = useSprings(images.length, springStyle(), [images])
   const applyDragRef = useRef<()=>void>()
   // noinspection JSVoidFunctionReturnValueUsed
@@ -238,12 +238,8 @@ React.memo(
         xy: [vpx,vpy], // viewport x, viewport y
       } = gesture
       /* console.log(
-        'idx:', i,
-        'first:', gesture.first,
-        'active:', active,
-        'dragging:', gesture.dragging,
-        //'hovering:', gesture.hovering,
-        'last', gesture.last,
+        'mx:', mx,
+        'my:', my,
       ) */
       const applyDrag = ()=>{
         const isDragging = dragStateRef.current==='dragging' && active
@@ -398,7 +394,7 @@ React.memo(
       [images[index]]
     )
   } */
-  useEffect(()=>console.log(`images`,images), [images])
+  //useEffect(()=>console.log(`images`,images), [images])
   
   
   return <>
@@ -414,6 +410,8 @@ React.memo(
           grid-area: im${i+1};
           position: relative;
           ${center};
+          // allow intercept only single finger up/down swipe gestures
+          touch-action: pan-y;
         `}
           ref={(value)=>photoFrameRefs.current[i]=value}
         >

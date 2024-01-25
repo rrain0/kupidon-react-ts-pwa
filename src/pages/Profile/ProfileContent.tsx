@@ -223,11 +223,14 @@ React.memo(
             }))
             const u = updatedUser
             if (u){
+              // работает при условии, что во время обновления другой клиент не обновит фотки
               setFormValues(s=>({ ...s,
                 photos: ArrayUtils.combine(
                   s.photos, values.photos,
                   (photo,usedPhoto)=>({
-                    ...photo, type: 'remote', isDownloaded: !usedPhoto.isEmpty,
+                    ...photo,
+                    type: 'remote',
+                    isDownloaded: usedPhoto.isDownloaded || usedPhoto.isCompressed,
                   } satisfies ProfilePhoto),
                   (photo,usedPhoto)=>photo.id===usedPhoto.id && usedPhoto.type==='local'
                 )

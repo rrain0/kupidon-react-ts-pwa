@@ -53,7 +53,12 @@ export namespace ReactUtils {
       onPointerDown: stopReactEventPropagation,
       onPointerMove: stopReactEventPropagation,
       onPointerUp: stopReactEventPropagation,
+      onPointerOut: stopPointerAndMouseEvents,
       onPointerCancel: stopReactEventPropagation,
+      
+      onPointerEnter: stopPointerAndMouseEvents,
+      onPointerOver: stopPointerAndMouseEvents,
+      onPointerLeave: stopPointerAndMouseEvents,
       
       onTouchStart: stopReactEventPropagation,
       onTouchMove: stopReactEventPropagation,
@@ -67,7 +72,7 @@ export namespace ReactUtils {
   }
   
   
-  // React.memo wrapper
+  // React.memo wrapper if component's generics are not consumed properly by ts
   export const memo = <C>(Component: C): C => {
     // @ts-ignore
     return React.memo(Component)
