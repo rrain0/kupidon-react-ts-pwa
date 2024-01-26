@@ -89,7 +89,7 @@ React.memo(
       
       snapPoints: snapPoints,
       closeable: closeable,
-      defaultOpenIdx: openIdx,
+      realDefaultOpenIdx: openIdx,
     }),
     [sheetState, snapIdx, snapPoints]
   )

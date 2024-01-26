@@ -220,7 +220,7 @@ React.memo(
   const photoFrameRefs = useRef<Array<Element|null>>(arrIndices(6).map(i=>null))
   
   
-  // forbid content selection
+  // forbid content selection while dragging
   useNoSelect(!!dragState)
   // forbid gesture interception by browser
   useNoTouchAction(dragState==='dragging' || progressAnimLockGestures)

@@ -49,18 +49,6 @@ const defaultAutoAnimationDuration = 400
 
 
 
-/*
- maybe it’s worth adding the ability to go to a specific height, not just to snap point
- */
-/*
-bugs:
- todo Move to callbacks - new state via props, but actual state will be stored inside sheet
-   with callbacks on state changes
- todo Maybe move to callbacks instead of exposing state because of unnecessary rerenders
- 
- todo Adjust sheet if real sheet height does not match state
- todo when dragging close, open button is not working for a long time
- */
 
 export type SheetStableState =
   |null // like 'closed' but when sheet can't be opened & can't be closed & sheet is not closable
@@ -186,8 +174,8 @@ export const useBottomSheet = (
   const [
     snapPoints, // non-zero len
     snapPointsPx, // non-zero len
-    firstOpenIdx, // if sheet can be opened, then firstOpenIdx!==null
-    openIdx, // if sheet can be opened, then openIdx!==null
+    realFirstOpenIdx, // if sheet can be opened, then realFirstOpenIdx!==null
+    realDefaultOpenIdx, // default open idx, if sheet can be opened, then openIdx!==null
     closeIdx, // if there is snap point evaluated to 0, then closeIdx!==null
   ] =
   useMemo<[
@@ -215,7 +203,7 @@ export const useBottomSheet = (
         return f.index
       }()
       
-      const openIdx = function(){
+      const realDefaultOpenIdx = function(){
         if (firstOpenIdx===null) return null
         
         const idx = options.defaultOpenIdx ?? null
@@ -235,13 +223,13 @@ export const useBottomSheet = (
         return f.index
       }()
       
-      return [snapPoints, snapPointsPx, firstOpenIdx, openIdx, closeIdx] as const
+      return [snapPoints, snapPointsPx, firstOpenIdx, realDefaultOpenIdx, closeIdx] as const
     },
     [computedSheetDimens, options.defaultOpenIdx, ...(options.snapPoints??[])]
   )
   
   
-  const [prevState,setPrevState] = useState<SheetState>(null)
+  const [prevState, setPrevState] = useState<SheetState>(null)
   const [prevSnapIdx, setPrevSnapIdx] = useState<SheetSnapIdx>(null)
   const [prevCloseable, setPrevCloseable] = useState(false)
   
@@ -265,11 +253,13 @@ export const useBottomSheet = (
   const runAnimation = useCallback(
     (endH: number, onFinish: Callback)=>{
       const duration = function(){
-        if (!lastSpeed) return animationDuration
-        const startH = sheetSpring.height.get()
-        const pathPercent = Math.abs(endH-startH)/window.innerHeight*100
+        if (notExists(lastSpeed)) return animationDuration
+        const startH = computedSheetDimensRef.current.sheetH
+        sheetSpring.height.set(startH)
+        const pathPercent = pathProgressPercent(startH, endH)
         return pathPercent/lastSpeed*1.2*1000
       }()
+      setLastSpeed(undefined)
       ;(async()=>{
         const animation = await sheetSpring.height.start(
           endH,
@@ -287,7 +277,6 @@ export const useBottomSheet = (
           }
         )
         //console.log('animation',animation)
-        setLastSpeed(undefined)
         if (animation.finished) onFinish()
       })()
     },
@@ -298,7 +287,7 @@ export const useBottomSheet = (
   
   const reactOnState = useEffectEvent(
     ()=>{
-      const canOpen = exists(openIdx)
+      const canOpen = exists(realDefaultOpenIdx)
       const canClose = newCloseable
       
       const currState = prevState
@@ -319,8 +308,8 @@ export const useBottomSheet = (
       
       const toOpenSnap = function(){
         if (toHeight>0) return toSnap
-        if (newState==='adjusting') return firstOpenIdx
-        return openIdx
+        if (newState==='adjusting') return realFirstOpenIdx
+        return realDefaultOpenIdx
       }()
       const toCloseSnap = closeIdx
       
@@ -523,6 +512,7 @@ export const useBottomSheet = (
   return {
     computedSheetDimens,
     snapPointsPx,
+    realDefaultOpenIdx,
     sheetSpring,
     sheetDrag,
   } as const
@@ -536,6 +526,10 @@ export const useBottomSheet = (
 function pxPerMsToPercentVpHPerS(pxPerMs: number): number {
   return pxPerMs*1000 / window.innerHeight * 100
 }
+function pathProgressPercent(start: number, end: number): number {
+  return Math.abs(end-start)/window.innerHeight*100
+}
+
 
 
 function calculateSnapPointsPx(

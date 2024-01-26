@@ -6,26 +6,21 @@ import UseFakePointerRef, { useFakePointerRef } from 'src/components/ActionProvi
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
-import { AppTheme } from 'src/utils/theme/AppTheme'
 import {
   ComputedBottomSheetDimens, SheetState,
   useBottomSheet, UseBottomSheetOptions,
 } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
-  useCallback,
   useLayoutEffect,
   useState,
 } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import Setter = TypeUtils.Callback1
 import fixed = EmotionCommon.fixed
 import PartialUndef = TypeUtils.PartialUndef
 import contents = EmotionCommon.contents
 import Callback1 = TypeUtils.Callback1
 import exists = TypeUtils.exists
 import stopPointerAndMouseEvents = ReactUtils.stopPointerAndMouseEvents
-import combineRefs = ReactUtils.combineRefs
-import onPointerClick = ReactUtils.onPointerClick
 
 
 
@@ -78,7 +73,13 @@ React.memo(
   
   
   
-  const { computedSheetDimens, snapPointsPx, sheetSpring, sheetDrag } = useBottomSheet(
+  const {
+    computedSheetDimens,
+    snapPointsPx,
+    realDefaultOpenIdx,
+    sheetSpring,
+    sheetDrag
+  } = useBottomSheet(
     bottomSheetFrameRef,
     bottomSheetRef,
     bottomSheetHeaderRef,
@@ -104,27 +105,18 @@ React.memo(
   )
   
   
-  // TODO sheet
-  const [openSnapIdx, setOpenSnapIdx] = useState((snapPoints??[0]).length-1)
-  useLayoutEffect(
-    ()=>{
-      if ((['open','opening'] as SheetState[]).includes(state) && exists(snapIdx))
-        setOpenSnapIdx(snapIdx)
-    },
-    [state,snapIdx]
-  )
   
   
   const frameSpring = useSpring({
     background: function(){
       const bgcDimHex = function(){
-        const maxDimHeight = snapPointsPx[openSnapIdx]
+        const maxDimHeight = snapPointsPx[realDefaultOpenIdx??0]
         const dimHeight = Math.min(computedSheetDimens.sheetH, maxDimHeight)
         return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
           .toString(16).padStart(2,'0')
       }()
       if (!['closed',null].includes(state)) return `#000000${bgcDimHex}`
-      else return 'none'
+      return 'none'
     }(),
     immediate: true,
   })

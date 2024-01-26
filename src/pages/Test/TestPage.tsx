@@ -7,7 +7,6 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
-import { MathUtils } from 'src/utils/common/MathUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -17,7 +16,7 @@ import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
 import center = EmotionCommon.center
-import mapRange = MathUtils.mapRange
+
 
 
 
@@ -109,6 +108,9 @@ React.memo(
         </Link>
         <Link to={RootRoute.test.pointer[fullAnySearchParams](searchParams)}>
           <Button css={ButtonStyle.bigRectMain}>Pointer test</Button>
+        </Link>
+        <Link to={RootRoute.test.tabs[fullAnySearchParams](searchParams)}>
+          <Button css={ButtonStyle.bigRectMain}>Tabs test</Button>
         </Link>
         
         

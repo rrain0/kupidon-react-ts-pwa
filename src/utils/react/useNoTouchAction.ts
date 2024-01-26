@@ -67,6 +67,7 @@ export const useNoTouchAction = (
         window.removeEventListener('touchmove',onTouch)
       } */
     },
+    // todo ref and layout effect are not compatible
     [options.element, options.elementRef?.current]
   )
   

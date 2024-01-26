@@ -2,6 +2,7 @@ import { RouteObject } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { clearUnknownPathEnding } from 'src/app-routes/ReactRouterDomUtils'
 import PointerTest from 'src/pages/Test/PointerTest'
+import TabsTest from 'src/pages/Test/TabsTest'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
@@ -53,6 +54,14 @@ const testPointerRouting: RouteObject[] = [
   },
   clearUnknownPathEnding,
 ]
+// path: 'test / tabs / <check here>'
+const testTabsRouting: RouteObject[] = [
+  {
+    path: '',
+    Component: TabsTest,
+  },
+  clearUnknownPathEnding,
+]
 
 
 
@@ -81,6 +90,10 @@ export const testRouting: RouteObject[] = [
   {
     path: RootRoute.test.pointer[path]+'/*',
     children: testPointerRouting,
+  },
+  {
+    path: RootRoute.test.tabs[path]+'/*',
+    children: testTabsRouting,
   },
   clearUnknownPathEnding,
 ]
