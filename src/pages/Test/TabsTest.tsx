@@ -1,7 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { animated, useSpring } from '@react-spring/web'
-import { useDrag } from '@use-gesture/react'
-import { ReactDOMAttributes } from '@use-gesture/react/src/types'
+import { animated } from '@react-spring/web'
 import React, { useRef, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
@@ -137,5 +135,6 @@ const Tab = styled.div`
   max-height: 800px;
   ${col};
   overflow-y: auto;
+  touch-action: pan-y;
 `
 
