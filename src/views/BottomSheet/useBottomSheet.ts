@@ -49,6 +49,13 @@ const defaultAutoAnimationDuration = 400
 
 
 
+const dragStartInitialValue = {
+  sheetH: 0,
+  isDragging: false,
+  lastSpeed: null as number|null,
+}
+
+
 
 export type SheetStableState =
   |null // like 'closed' but when sheet can't be opened & can't be closed & sheet is not closable
@@ -243,23 +250,22 @@ export const useBottomSheet = (
   
   
   
-  const dragStartStateRef = useRef({ isDragging: false, sheetH: 0 })
-  const [lastSpeed, setLastSpeed] = useState(undefined as undefined|number)
+  const dragStartRef = useRef({...dragStartInitialValue})
   const [sheetSpring, sheetSpringApi] = useSpring(()=>({ height: 0 }))
   
   
   
   
   const runAnimation = useCallback(
-    (endH: number, onFinish: Callback)=>{
+    (endH: number, lastSpeed: number|null, onFinish: Callback)=>{
       const duration = function(){
+        console.log('lastSpeed',lastSpeed)
         if (notExists(lastSpeed)) return animationDuration
         const startH = computedSheetDimensRef.current.sheetH
         sheetSpring.height.set(startH)
         const pathPercent = pathProgressPercent(startH, endH)
         return pathPercent/lastSpeed*1.2*1000
       }()
-      setLastSpeed(undefined)
       ;(async()=>{
         const animation = await sheetSpring.height.start(
           endH,
@@ -280,7 +286,7 @@ export const useBottomSheet = (
         if (animation.finished) onFinish()
       })()
     },
-    [animationDuration, lastSpeed]
+    [animationDuration]
   )
   
   
@@ -345,6 +351,10 @@ export const useBottomSheet = (
       const toDragging = newState==='dragging'
       const toAnimated =
         (['closing','snapping','opening','adjusting'] as SheetState[]).includes(newState)
+      const lastSpeed = function(){
+        if (currState!=='dragging') return null
+        return dragStartRef.current.lastSpeed
+      }()
       const toFreeHeight = function(){
         if (notExists(toOpenSnap)) return false
         if (snapPoints[toOpenSnap]!=='free') return false
@@ -365,7 +375,7 @@ export const useBottomSheet = (
       
       
       const setStateAndIndex = (s: SheetState, index: SheetSnapIdx)=>{
-        if (s!=='dragging') dragStartStateRef.current.isDragging = false
+        if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
         if (!initialRender){
           setNewState(s)
           setNewSnapIdx(index)
@@ -391,7 +401,7 @@ export const useBottomSheet = (
         }
         else {
           setStateAndIndex('opening', null)
-          runAnimation(toOpenHeight, ()=>{
+          runAnimation(toOpenHeight, lastSpeed, ()=>{
             setStateAndIndex('opened', toOpenSnap)
           })
           return
@@ -410,7 +420,7 @@ export const useBottomSheet = (
         }
         else {
           setStateAndIndex('closing', null)
-          runAnimation(toCloseHeight, () => {
+          runAnimation(toCloseHeight, lastSpeed, () => {
             setStateAndIndex('closed', toCloseSnap)
           })
           return
@@ -431,7 +441,7 @@ export const useBottomSheet = (
         }
         else {
           setStateAndIndex('snapping', null)
-          runAnimation(toOpenHeight, ()=>{
+          runAnimation(toOpenHeight, lastSpeed, ()=>{
             setStateAndIndex('opened', toOpenSnap)
           })
           return
@@ -473,18 +483,19 @@ export const useBottomSheet = (
       
       if (first) {
         setNewState('dragging')
-        dragStartStateRef.current.isDragging = true
-        dragStartStateRef.current.sheetH = computedSheetDimensRef.current.sheetH
+        dragStartRef.current = {...dragStartInitialValue}
+        dragStartRef.current.isDragging = true
+        dragStartRef.current.sheetH = computedSheetDimensRef.current.sheetH
       }
-      const newSheetH = dragStartStateRef.current.sheetH - my
-      if (active && dragStartStateRef.current.isDragging) {
+      const newSheetH = dragStartRef.current.sheetH - my
+      if (active && dragStartRef.current.isDragging) {
         sheetSpring.height.set(newSheetH)
       }
-      if (last && dragStartStateRef.current.isDragging){
-        dragStartStateRef.current.isDragging = false
+      if (last && dragStartRef.current.isDragging){
+        dragStartRef.current.isDragging = false
         const speed = pxPerMsToPercentVpHPerS(spdy) // % высоты viewport в секунду
         if (speed>speedThreshold){
-          setLastSpeed(speed)
+          dragStartRef.current.lastSpeed = speed
           if (diry<0){
             setNewState('snapping')
             setNewSnapIdx(lastIndex(snapPoints))

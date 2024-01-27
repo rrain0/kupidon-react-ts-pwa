@@ -7,19 +7,17 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { useUpNodesScrollLock } from 'src/utils/react/useUpNodesScrollLock'
 import {
-  ComputedBottomSheetDimens, SheetState,
+  ComputedBottomSheetDimens,
   useBottomSheet, UseBottomSheetOptions,
 } from 'src/views/BottomSheet/useBottomSheet'
 import React, {
   useLayoutEffect,
-  useState,
 } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import fixed = EmotionCommon.fixed
 import PartialUndef = TypeUtils.PartialUndef
 import contents = EmotionCommon.contents
 import Callback1 = TypeUtils.Callback1
-import exists = TypeUtils.exists
 import stopPointerAndMouseEvents = ReactUtils.stopPointerAndMouseEvents
 
 

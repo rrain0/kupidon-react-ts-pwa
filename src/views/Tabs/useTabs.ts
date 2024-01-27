@@ -7,6 +7,7 @@ import React, {
   useMemo, useRef,
   useState,
 } from 'react'
+import { UserApi } from 'src/api/requests/UserApi'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { GetDimensions } from 'src/utils/common/GetDimensions'
 import { MathUtils } from 'src/utils/common/MathUtils'
@@ -22,6 +23,7 @@ import lastIndex = ArrayUtils.lastIndex
 import findLastBy = ArrayUtils.findLastBy
 import notExists = TypeUtils.notExists
 import last = ArrayUtils.last
+import current = UserApi.current
 
 
 
@@ -39,6 +41,12 @@ const defaultAutoAnimationDuration = 400
 
 
 
+const dragStartInitialValue = {
+  scrollLeft: 0,
+  canStart: true,
+  isDragging: false,
+  lastSpeed: null as number|null,
+}
 
 
 export type TabsStableState =
@@ -162,23 +170,21 @@ export const useTabs = (
   const animationDuration = options.animationDuration ?? defaultAutoAnimationDuration
   
   
-  
-  const dragStartStateRef = useRef({ isDragging: false, scrollLeft: 0 })
-  const [lastSpeed, setLastSpeed] = useState(undefined as undefined|number)
+  const dragStartRef = useRef({...dragStartInitialValue})
   const [tabContainerSpring, tabContainerSpringApi] = useSpring(()=>({ scrollLeft: 0 }))
   
   
   
   
   const runAnimation = useCallback(
-    (endScrollLeft: number, onFinish: Callback)=>{
+    (endScrollLeft: number, lastSpeed: number|null, onFinish: Callback)=>{
       const duration = function(){
+        console.log('lastSpeed',lastSpeed)
         if (notExists(lastSpeed)) return animationDuration
         const startScrollLeft = tabContainerSpring.scrollLeft.get()
         const pathPercent = pathProgressPercent(startScrollLeft, endScrollLeft)
         return pathPercent/lastSpeed*1.2*1000
       }()
-      setLastSpeed(undefined)
       ;(async()=>{
         const animation = await tabContainerSpring.scrollLeft.start(
           endScrollLeft,
@@ -199,7 +205,7 @@ export const useTabs = (
         if (animation.finished) onFinish()
       })()
     },
-    [animationDuration, lastSpeed]
+    [animationDuration]
   )
   
   
@@ -227,11 +233,14 @@ export const useTabs = (
       const toDragging = newState==='dragging'
       const toAnimated =
         (['snapping','adjusting'] as TabsState[]).includes(newState)
-      
+      const lastSpeed = function(){
+        if (currState!=='dragging') return null
+        return dragStartRef.current.lastSpeed
+      }()
       
       
       const setStateAndIndex = (s: TabsState, index: TabIdx)=>{
-        if (s!=='dragging') dragStartStateRef.current.isDragging = false
+        if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
         if (!initialRender){
           setNewState(s)
           setNewTabIdx(index)
@@ -259,7 +268,7 @@ export const useTabs = (
       }
       else {
         setStateAndIndex('snapping', toTab)
-        runAnimation(toScrollLeft, ()=>{
+        runAnimation(toScrollLeft, lastSpeed, ()=>{
           setStateAndIndex('opened', toTab)
         })
         return
@@ -289,27 +298,50 @@ export const useTabs = (
       } = gesture
       
       /* console.log(
-        'velocityY:', spdy,
-        'directionY:', diry,
+        'mx:', mx,
+        'my:', my,
       ) */
       
       if (first) {
-        setNewState('dragging')
-        dragStartStateRef.current.isDragging = true
-        dragStartStateRef.current.scrollLeft = tabContainerSpring.scrollLeft.get()
+        dragStartRef.current = {...dragStartInitialValue}
+        dragStartRef.current.scrollLeft = tabContainerSpring.scrollLeft.get()
       }
+      
+      const isMoreRadius = Math.hypot(mx,my) >= 5
+      const isToSideways = Math.abs(mx) > Math.abs(my)
+      
+      const isCanDrag = isMoreRadius && isToSideways
+      const isCannotStart = isMoreRadius && !isToSideways
+      
+      /* console.log({
+        isMoreRadius, isToSideways,
+        isCanDrag, isCannotStart
+      }) */
+      
+      if (!dragStartRef.current.isDragging){
+        if (isCannotStart) dragStartRef.current.canStart = false
+      }
+      if (dragStartRef.current.canStart){
+        if (isCanDrag){
+          setNewState('dragging')
+          dragStartRef.current.canStart = false
+          dragStartRef.current.isDragging = true
+        }
+      }
+      
       const newScrollLeft = fitRange2(
-        dragStartStateRef.current.scrollLeft - mx,
+        dragStartRef.current.scrollLeft - mx,
         [0, ArrayUtils.last(snapPointsPx)]
       )
-      if (active && dragStartStateRef.current.isDragging) {
+      
+      if (active && dragStartRef.current.isDragging) {
         tabContainerSpring.scrollLeft.set(newScrollLeft)
       }
-      if (last && dragStartStateRef.current.isDragging){
-        dragStartStateRef.current.isDragging = false
+      if (last && dragStartRef.current.isDragging){
         // % ширины viewport в секунду
         const speed = pxPerMsToPercentVpHPerS(spdx)
         if (speed>speedThreshold){
+          dragStartRef.current.lastSpeed = speed
           if (dirx<0){
             setNewState('snapping')
             setNewTabIdx(Math.min(prevTabIdx+1, lastTabIdx))

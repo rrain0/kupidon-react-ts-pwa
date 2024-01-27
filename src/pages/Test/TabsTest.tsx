@@ -9,19 +9,16 @@ import UseFakePointerRef, {
 import { Pages } from 'src/components/Page/Pages'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { MathUtils } from 'src/utils/common/MathUtils'
-import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { TabIdx, TabsState, useTabs } from 'src/views/Tabs/useTabs'
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
 import row = EmotionCommon.row
 import col = EmotionCommon.col
-import fitRange2 = MathUtils.fitRange2
 
 
 
 
-// todo make some drag threshold
+// todo make some drag threshold and 45 degrees
 
 
 
