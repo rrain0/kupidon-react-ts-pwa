@@ -1,10 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { EmotionJSX } from '@emotion/react/types/jsx-namespace'
 import { animated } from '@react-spring/web'
-import React, { useImperativeHandle, useRef } from 'react'
+import React, { useId, useImperativeHandle, useLayoutEffect, useRef } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
+import { useRecoilState } from 'recoil'
 import { useFakePointerRef } from 'src/components/ActionProviders/UseFakePointerRef'
+import { AppRecoil } from 'src/recoil/state/AppRecoil'
+import { useLockAppGestures } from 'src/recoil/utils/useLockAppGestures'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { TabIdx, TabsState, useTabs } from 'src/views/Tabs/useTabs'
@@ -53,6 +56,34 @@ React.forwardRef<TabsRefElement, TabsProps>(
   
   const tabFrameRef = useRef<HTMLDivElement>(null)
   useImperativeHandle(forwardedRef, ()=>tabFrameRef.current!,[])
+  
+  const isGesturesBusy = useLockAppGestures(tabsState==='dragging')
+  useLayoutEffect(
+    ()=>{ if (isGesturesBusy) setTabsState('snap')},
+    [isGesturesBusy, tabsState]
+  )
+  /* const [{ isUsingGestures }, setAppRecoil] = useRecoilState(AppRecoil)
+  const reactId = useId()
+  
+  useLayoutEffect(
+    ()=>{
+      if (isUsingGestures && isUsingGestures!==reactId) {
+        setTabsState('opened')
+      }
+    },
+    [isUsingGestures, tabsState]
+  )
+  useLayoutEffect(
+    ()=>{
+      if (tabsState==='dragging' && isUsingGestures===false){
+        setAppRecoil(s=>({...s, isUsingGestures: reactId}))
+      }
+      if (tabsState!=='dragging' && isUsingGestures===reactId){
+        setAppRecoil(s=>({...s, isUsingGestures: false}))
+      }
+    },
+    [tabsState]
+  ) */
   
   const {
     isReady,

@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import commonCss from 'src/styles/common.module.scss'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import PartialUndef = TypeUtils.PartialUndef
@@ -20,7 +20,7 @@ export const useNoTouchAction = (
     elementRef: React.RefObject<Element>,
   }> = {},
 )=>{
-  
+  const refElem = options.elementRef?.current
   
   
   // Листенеры не должны переприсваиваться при изменении lock, поэтому она в рефе,
@@ -36,6 +36,7 @@ export const useNoTouchAction = (
   
   const onTouch = useCallback(
     (ev: Event)=>{
+      console.log('preventDefault.current',preventDefault.current)
       if (preventDefault.current) {
         ev.preventDefault()
       }
@@ -47,7 +48,7 @@ export const useNoTouchAction = (
     ()=>{
       const target = function(){
         if (options.element) return options.element
-        if (options.elementRef) return options.elementRef.current
+        if (refElem) return null
         return window
       }()
       if (target){
@@ -67,8 +68,35 @@ export const useNoTouchAction = (
         window.removeEventListener('touchmove',onTouch)
       } */
     },
-    // todo ref and layout effect are not compatible
-    [options.element, options.elementRef?.current]
+    [options.element]
+  )
+  
+  useEffect(
+    ()=>{
+      const target = function(){
+        if (options.element) return null
+        if (refElem) return refElem
+        return null
+      }()
+      if (target){
+        console.log('elemRef')
+        target.addEventListener('touchstart',onTouch,{ passive: false })
+        target.addEventListener('touchmove',onTouch,{ passive: false })
+        target.addEventListener('touchend',onTouch,{ passive: false })
+        target.addEventListener('touchcancel',onTouch,{ passive: false })
+        return ()=>{
+          target.removeEventListener('touchstart',onTouch)
+          target.removeEventListener('touchmove',onTouch)
+          target.removeEventListener('touchend',onTouch)
+          target.removeEventListener('touchcancel',onTouch)
+        }
+      }
+      /* else {
+        window.removeEventListener('touchstart',onTouch)
+        window.removeEventListener('touchmove',onTouch)
+      } */
+    },
+    [refElem]
   )
   
   

@@ -18,7 +18,6 @@ import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import Setter = TypeUtils.Setter
 import fitRange2 = MathUtils.fitRange2
 import Callback = TypeUtils.Callback
-import lastIndex = ArrayUtils.lastIndex
 import findLastBy = ArrayUtils.findLastBy
 import notExists = TypeUtils.notExists
 import last = ArrayUtils.last
@@ -31,7 +30,7 @@ export const DefaultTabIdx = 0
 
 
 // % ширины viewport в секунду
-const speedThreshold = 30
+const speedThreshold = 45
 const defaultAutoAnimationDuration = 400
 // 'cubic-bezier(0.17,0.84,0.44,1)'
 //import BezierEasing from 'bezier-easing'
@@ -231,9 +230,11 @@ export const useTabs = (
       const currTab = prevTabIdx
       const currScrollLeft = tabContainerSpring.scrollLeft.get()
       
-      /* console.log({
-        newTabIdx, lastTabIdx
-      }) */
+      //console.log({ newState, prevState, toTab, prevTabIdx })
+      
+      // prevent unnecessary state changes
+      if (newState===currState && newTabIdx===currTab) return
+      
       
       const toTab = function(){
         if (newState==='adjusting')
@@ -244,8 +245,6 @@ export const useTabs = (
       const toScrollLeft = snapPointsPx[toTab]
       
       
-      // prevent unnecessary state changes
-      if (newState===currState && newTabIdx===currTab) return
       
       
       
@@ -258,8 +257,13 @@ export const useTabs = (
       }()
       
       
+      
+      
       const setStateAndIndex = (s: TabsState, index: TabIdx)=>{
-        if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
+        if (s!=='dragging') {
+          dragStartRef.current.canStart = false
+          dragStartRef.current.isDragging = false
+        }
         if (isReady){
           setNewState(s)
           setNewTabIdx(index)
@@ -271,7 +275,6 @@ export const useTabs = (
       
       
       //console.log('i',i)
-      //console.log({ newState, prevState, toTab, prevTabIdx })
       //console.log({ canClose })
       //console.log({ isOpened, isClosed, toOpened, toClosed })
       

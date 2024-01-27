@@ -288,6 +288,12 @@ export const useBottomSheet = (
       const currSnap = prevSnapIdx
       const currHeight = computedSheetDimens.sheetH
       
+      
+      //console.log({ newState, prevState, toSnap, prevSnapIdx })
+      
+      // prevent unnecessary state changes
+      if (newState===currState && newSnapIdx===currSnap && newCloseable===prevCloseable) return
+      
       const toSnap = function(){
         if (newState==='adjusting')
           return getSnapIndexToAdjust(currHeight, snapPoints, snapPointsPx)
@@ -317,8 +323,6 @@ export const useBottomSheet = (
       }()
       
       
-      // prevent unnecessary state changes
-      if (newState===currState && newSnapIdx===currSnap && newCloseable===prevCloseable) return
       
       
       const isOpened = ![null, 'closed'].includes(prevState)
@@ -371,15 +375,13 @@ export const useBottomSheet = (
         setPrevCloseable(newCloseable)
         setPrevState(s)
         setPrevSnapIdx(index)
-        console.log('setStateAndIndex:',s,index)
+        //console.log('setStateAndIndex:',s,index)
       }
       
       
-      //console.log('i',i)
-      console.log({ newState, prevState, toSnap, prevSnapIdx })
       //console.log({ canClose })
       //console.log({ isOpened, isClosed, toOpened, toClosed })
-      console.log({ toOpenHeight, toOpenSnap, isOpenToOpen, isOpenToClose })
+      //console.log({ toOpenHeight, toOpenSnap, isOpenToOpen, isOpenToClose })
       
       
       if (isCloseToOpen){

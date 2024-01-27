@@ -4,12 +4,21 @@ import styled from '@emotion/styled'
 import { config, useSprings, animated, UseSpringProps } from '@react-spring/web'
 import { useDrag } from '@use-gesture/react'
 import { ReactDOMAttributes } from '@use-gesture/react/src/types'
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import Dropzone from 'react-dropzone'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import ModalPortal from 'src/components/Modal/ModalPortal'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
+import { useLockAppGestures } from 'src/recoil/utils/useLockAppGestures'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
@@ -62,7 +71,7 @@ import throttle = AsyncUtils.throttle
 import Download1Ic = SvgIcons.Download1Ic
 import extensionFromMimeType = FileUtils.extensionFromMimeType
 import noop = TypeUtils.noop
-import stopPointerAndMouseEvents = ReactUtils.stopPointerAndMouseEvents
+import Callback = TypeUtils.Callback
 
 
 
@@ -141,8 +150,9 @@ React.memo(
 (props: ProfilePhotosProps)=>{
   const { images, setImages } = props
   const { theme } = useRecoilValue(ThemeRecoil)
-  const { isDraggingFiles } = useRecoilValue(AppRecoil)
+  const [{ isDraggingFiles, isUsingGestures }, setAppRecoil] = useRecoilState(AppRecoil)
   const actionUiValues = useUiTextContainer(ActionUiText)
+  const reactId = useId()
   
   
   const progressAnim = useMemo(
@@ -167,7 +177,6 @@ React.memo(
   
   const [canClick, setCanClick] = useState(true)
   const [isMenuOpen, setMenuOpen] = useState(false)
-  
   
   // swaps photos
   const swapPhotosEffectEvent = useEffectEvent(
@@ -227,10 +236,14 @@ React.memo(
   // forbid gesture interception by browser
   const isLockGestures = dragState==='dragging' || progressAnimLockGestures
   useNoTouchAction(isLockGestures)
-  
+  const isGesturesBusy = useLockAppGestures(isLockGestures)
+  useLayoutEffect(
+    ()=>{ if (isGesturesBusy) setDragState(undefined)},
+    [isGesturesBusy, dragState]
+  )
   
   const [springs, springApi] = useSprings(images.length, springStyle(), [images])
-  const applyDragRef = useRef<()=>void>()
+  const applyDragRef = useRef<Callback>()
   // noinspection JSVoidFunctionReturnValueUsed
   const drag = useDrag(
     gesture=>{
@@ -417,10 +430,7 @@ React.memo(
           ref={(value)=>photoFrameRefs.current[i]=value}
         >
           
-          <div css={contents}
-            ref={ref3 as any}
-            {...stopPointerAndMouseEvents(isLockGestures)}
-          >
+          
           <div css={contents}
             ref={ref as any}
             {...function(){
@@ -525,7 +535,6 @@ React.memo(
                 }}
               </Dropzone>
             
-          </div>
           </div>
           
           
