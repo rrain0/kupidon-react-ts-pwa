@@ -89,8 +89,8 @@ export type ComputedBottomSheetDimens = {
 
 
 export type UseBottomSheetOptions = {
-  state: SheetState
-  setState: Setter<SheetState>
+  sheetState: SheetState
+  setSheetState: Setter<SheetState>
   snapIdx: SheetSnapIdx
   setSnapIdx: Setter<SheetSnapIdx>
 } & PartialUndef<{
@@ -109,8 +109,12 @@ export const useBottomSheet = (
   bottomSheetContentRef: React.RefObject<HTMLElement>,
   options: UseBottomSheetOptions,
 ) => {
+  const frame = bottomSheetFrameRef.current
+  const sheet = bottomSheetRef.current
+  const header = bottomSheetHeaderRef.current
+  const content = bottomSheetContentRef.current
   
-  const [initialRender, setInitialRender] = useState(true)
+  const [isReady, setReady] = useState(false)
   
   const [computedSheetDimens, setComputedSheetDimens, computedSheetDimensRef] =
     useStateAndRef<ComputedBottomSheetDimens>({
@@ -124,10 +128,6 @@ export const useBottomSheet = (
   
   const updateComputedSheetDimens = useCallback(
     ()=>{
-      const frame = bottomSheetFrameRef.current
-      const sheet = bottomSheetRef.current
-      const header = bottomSheetHeaderRef.current
-      const content = bottomSheetContentRef.current
       if (frame && sheet && header && content){
         const frameD = new GetDimensions(frame)
         const sheetD = new GetDimensions(sheet)
@@ -142,22 +142,13 @@ export const useBottomSheet = (
         })
       }
     },
-    [
-      bottomSheetFrameRef.current,
-      bottomSheetRef.current,
-      bottomSheetHeaderRef.current,
-      bottomSheetContentRef.current,
-    ]
+    [frame, sheet, header, content]
   )
   
   
   useEffect(
     ()=>{
       updateComputedSheetDimens()
-      const frame = bottomSheetFrameRef.current
-      const sheet = bottomSheetRef.current
-      const header = bottomSheetHeaderRef.current
-      const content = bottomSheetContentRef.current
       if (frame || sheet || header || content){
         const resizeObserver = new ResizeObserver(()=>updateComputedSheetDimens())
         frame && resizeObserver.observe(frame)
@@ -168,10 +159,7 @@ export const useBottomSheet = (
       }
     },
     [
-      bottomSheetFrameRef.current,
-      bottomSheetRef.current,
-      bottomSheetHeaderRef.current,
-      bottomSheetContentRef.current,
+      frame, sheet, header, content,
       updateComputedSheetDimens,
     ]
   )
@@ -199,7 +187,7 @@ export const useBottomSheet = (
       }()
       
       const snapPointsPx = calculateSnapPointsPx(snapPoints,computedSheetDimens)
-      if (!initialRender && snapPointsPx.every(elem=>elem===0))
+      if (isReady && snapPointsPx.every(elem=>elem===0))
         console.warn(
           "Every calculated snap point equals 0, bottom sheet cannot be opened."
         )
@@ -240,8 +228,8 @@ export const useBottomSheet = (
   const [prevSnapIdx, setPrevSnapIdx] = useState<SheetSnapIdx>(null)
   const [prevCloseable, setPrevCloseable] = useState(false)
   
-  const newState = options.state
-  const setNewState = options.setState
+  const newState = options.sheetState
+  const setNewState = options.setSheetState
   const newSnapIdx = options.snapIdx
   const setNewSnapIdx = options.setSnapIdx
   const newCloseable = options.closeable ?? true
@@ -376,21 +364,22 @@ export const useBottomSheet = (
       
       const setStateAndIndex = (s: SheetState, index: SheetSnapIdx)=>{
         if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
-        if (!initialRender){
+        if (isReady){
           setNewState(s)
           setNewSnapIdx(index)
         }
         setPrevCloseable(newCloseable)
         setPrevState(s)
         setPrevSnapIdx(index)
-        //console.log('setStateAndIndex:',s,index)
+        console.log('setStateAndIndex:',s,index)
       }
       
       
       //console.log('i',i)
-      //console.log({ newState, state: prevState, newSnap: toSnap, snapIdx: prevSnapIdx })
+      console.log({ newState, prevState, toSnap, prevSnapIdx })
       //console.log({ canClose })
       //console.log({ isOpened, isClosed, toOpened, toClosed })
+      console.log({ toOpenHeight, toOpenSnap, isOpenToOpen, isOpenToClose })
       
       
       if (isCloseToOpen){
@@ -400,7 +389,7 @@ export const useBottomSheet = (
           return
         }
         else {
-          setStateAndIndex('opening', null)
+          setStateAndIndex('opening', toOpenSnap)
           runAnimation(toOpenHeight, lastSpeed, ()=>{
             setStateAndIndex('opened', toOpenSnap)
           })
@@ -419,7 +408,7 @@ export const useBottomSheet = (
           return
         }
         else {
-          setStateAndIndex('closing', null)
+          setStateAndIndex('closing', toCloseSnap)
           runAnimation(toCloseHeight, lastSpeed, () => {
             setStateAndIndex('closed', toCloseSnap)
           })
@@ -440,7 +429,7 @@ export const useBottomSheet = (
           return
         }
         else {
-          setStateAndIndex('snapping', null)
+          setStateAndIndex('snapping', toOpenSnap)
           runAnimation(toOpenHeight, lastSpeed, ()=>{
             setStateAndIndex('opened', toOpenSnap)
           })
@@ -456,7 +445,7 @@ export const useBottomSheet = (
   )
   useEffect(
     ()=>reactOnState(),
-    [newState, newSnapIdx, newCloseable, initialRender]
+    [newState, newSnapIdx, newCloseable, isReady]
   )
   
   
@@ -517,10 +506,18 @@ export const useBottomSheet = (
   useNoSelect(prevState==='dragging')
   
   
-  useEffect(()=>setInitialRender(false),[])
+  
+  useEffect(
+    ()=>{
+      if (frame && sheet && header && content) setReady(true)
+      else setReady(false)
+    },
+    [frame, sheet, header, content]
+  )
   
   
   return {
+    isReady,
     computedSheetDimens,
     snapPointsPx,
     realDefaultOpenIdx,

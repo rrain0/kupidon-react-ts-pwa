@@ -444,7 +444,7 @@ React.memo(
    */
   
   
-  
+  // todo it retries endlessly if can't obtain photos
   useAsyncEffect(
     (lock,unlock)=>{
       //return;

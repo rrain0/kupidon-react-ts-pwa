@@ -23,7 +23,7 @@ export type UseBottomSheetStateProps = {
   onClosed: Callback
   children: (props: UseBottomSheetStateRenderProps)=>React.ReactNode
 } & PartialUndef<{
-  openIdx: number
+  defaultOpenIdx: number
   snapPoints: SheetSnapPoints
   closeable: boolean
 }>
@@ -36,7 +36,7 @@ React.memo(
   const {
     open,
     onClosed,
-    openIdx = DefaultSheetOpenIdx,
+    defaultOpenIdx = DefaultSheetOpenIdx,
     snapPoints = DefaultSheetSnaps,
     closeable = true,
   } = props
@@ -63,7 +63,7 @@ React.memo(
       if (open){
         //console.log('set opening')
         setSheetState('opening')
-        setSnapIdx(openIdx)
+        setSnapIdx(defaultOpenIdx)
       }
     },
     [open]
@@ -80,25 +80,25 @@ React.memo(
   )
   
   
-  const bottomSheetProps = useMemo<UseBottomSheetOptions>(
+  const sheetProps = useMemo<UseBottomSheetOptions>(
     ()=>({
-      state: sheetState,
-      setState: setSheetState,
-      snapIdx: snapIdx,
-      setSnapIdx: setSnapIdx,
+      sheetState,
+      setSheetState,
+      snapIdx,
+      setSnapIdx,
       
-      snapPoints: snapPoints,
-      closeable: closeable,
-      realDefaultOpenIdx: openIdx,
+      snapPoints,
+      closeable,
+      defaultOpenIdx,
     }),
-    [sheetState, snapIdx, snapPoints]
+    [sheetState, snapIdx, snapPoints, closeable, defaultOpenIdx]
   )
   
   
-  if (!open) return undefined
+  if (!open && closeable) return undefined
   return props.children({
     setClosing,
-    sheetProps: bottomSheetProps
+    sheetProps,
   })
 })
 export default UseBottomSheetState

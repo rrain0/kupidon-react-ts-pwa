@@ -13,6 +13,7 @@ import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { FileUtils } from 'src/utils/file/FileUtils'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { DataUrl } from 'src/utils/DataUrl'
@@ -61,6 +62,7 @@ import throttle = AsyncUtils.throttle
 import Download1Ic = SvgIcons.Download1Ic
 import extensionFromMimeType = FileUtils.extensionFromMimeType
 import noop = TypeUtils.noop
+import stopPointerAndMouseEvents = ReactUtils.stopPointerAndMouseEvents
 
 
 
@@ -223,7 +225,8 @@ React.memo(
   // forbid content selection while dragging
   useNoSelect(!!dragState)
   // forbid gesture interception by browser
-  useNoTouchAction(dragState==='dragging' || progressAnimLockGestures)
+  const isLockGestures = dragState==='dragging' || progressAnimLockGestures
+  useNoTouchAction(isLockGestures)
   
   
   const [springs, springApi] = useSprings(images.length, springStyle(), [images])
@@ -410,12 +413,14 @@ React.memo(
           grid-area: im${i+1};
           position: relative;
           ${center};
-          // allow intercept only single finger up/down swipe gestures
-          touch-action: pan-y;
         `}
           ref={(value)=>photoFrameRefs.current[i]=value}
         >
           
+          <div css={contents}
+            ref={ref3 as any}
+            {...stopPointerAndMouseEvents(isLockGestures)}
+          >
           <div css={contents}
             ref={ref as any}
             {...function(){
@@ -444,83 +449,83 @@ React.memo(
             }}
           >
             
-            <Dropzone
-              onDrop={(files, rejectedFiles, ev)=>onFilesSelected(files)}
-              onDragOver={()=>setLastIdx(i)}
-              noClick={!im.isEmpty || !canClick}
-              useFsAccessApi={false}
-            >
-            {({getRootProps, getInputProps, isDragAccept}) => {
-              //console.log('getInputProps()',getInputProps())
-              //console.log('isDragAccept',isDragAccept)
-              return <div css={contents} {...getRootProps()}>
-              <input {...getInputProps()} />
-              <animated.label css={photoDraggableBox}
-                style={springStyle}
-                {...drag(i)}
-                ref={ref2 as any}
+              <Dropzone
+                onDrop={(files, rejectedFiles, ev) => onFilesSelected(files)}
+                onDragOver={() => setLastIdx(i)}
+                noClick={!im.isEmpty || !canClick}
+                useFsAccessApi={false}
               >
-                
-                {function(){
-                  if (false){}
-                  else if (im.compression?.showProgress)
-                    return <div css={photoPlaceholderStyle}>
-                      <PieProgress css={profilePhotoPieProgress}
-                        progress={
-                          mapRange(im.compression.progress,[0,100],[5,95])
-                        }
-                      />
-                    </div>
-                    
-                  else if (!canShowFetchProgress && im.type==='remote' && !im.isDownloaded)
-                    return <div css={photoPlaceholderStyle}>
-                      <SparkingLoadingLine/>
-                    </div>
-                  else if (im.download?.showProgress)
-                    return <div css={photoPlaceholderStyle}>
-                      <PieProgress css={profilePhotoPieProgress}
-                        progress={
-                          mapRange(im.download.progress,[0,100],[5,95])
-                        }
-                      />
-                    </div>
-                    
-                  else if (im.isEmpty)
-                    return <div css={photoPlaceholderStyle}>
-                      <PlusIc css={photoPlaceholderIconStyle}/>
-                    </div>
-                  else if (im.type==='remote' && im.isDownloaded)
-                    return <img css={photoImgStyle}
-                      src={im.dataUrl}
-                      alt={im.name}
-                    />
-                  else if (im.type==='local' && im.isCompressed)
-                    return <img css={photoImgStyle}
-                      src={im.dataUrl}
-                      alt={im.name}
-                    />
-                  
-                }()}
-                
-                { im.type==='local' && im.upload?.showProgress &&
-                  <div css={photoDimmed}>
-                    <PieProgress css={profilePhotoPieProgressAccent}
-                      progress={
-                        mapRange(im.upload.progress,[0,100],[5,95])
+                {({ getRootProps, getInputProps, isDragAccept }) => {
+                  //console.log('getInputProps()',getInputProps())
+                  //console.log('isDragAccept',isDragAccept)
+                  return <div css={contents} {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <animated.label css={photoDraggableBox}
+                      style={springStyle}
+                      {...drag(i)}
+                      ref={ref2 as any}
+                    >
+                      
+                      {function () {
+                        if (false) {} else if (im.compression?.showProgress)
+                          return <div css={photoPlaceholderStyle}>
+                            <PieProgress css={profilePhotoPieProgress}
+                              progress={
+                                mapRange(im.compression.progress, [0, 100], [5, 95])
+                              }
+                            />
+                          </div>
+                        
+                        else if (!canShowFetchProgress && im.type === 'remote' && !im.isDownloaded)
+                          return <div css={photoPlaceholderStyle}>
+                            <SparkingLoadingLine/>
+                          </div>
+                        else if (im.download?.showProgress)
+                          return <div css={photoPlaceholderStyle}>
+                            <PieProgress css={profilePhotoPieProgress}
+                              progress={
+                                mapRange(im.download.progress, [0, 100], [5, 95])
+                              }
+                            />
+                          </div>
+                        
+                        else if (im.isEmpty)
+                          return <div css={photoPlaceholderStyle}>
+                            <PlusIc css={photoPlaceholderIconStyle}/>
+                          </div>
+                        else if (im.type === 'remote' && im.isDownloaded)
+                          return <img css={photoImgStyle}
+                            src={im.dataUrl}
+                            alt={im.name}
+                          />
+                        else if (im.type === 'local' && im.isCompressed)
+                          return <img css={photoImgStyle}
+                            src={im.dataUrl}
+                            alt={im.name}
+                          />
+                        
+                      }()}
+                      
+                      {im.type === 'local' && im.upload?.showProgress &&
+                        <div css={photoDimmed}>
+                          <PieProgress css={profilePhotoPieProgressAccent}
+                            progress={
+                              mapRange(im.upload.progress, [0, 100], [5, 95])
+                            }
+                          />
+                        </div>
                       }
-                    />
+                      {isDraggingFiles && <>
+                        {isDragAccept && <div css={photoDimmed}/>}
+                        <div css={photoOnDragBorder}/>
+                      </>}
+                    
+                    </animated.label>
                   </div>
-                }
-                { isDraggingFiles && <>
-                  { isDragAccept && <div css={photoDimmed}/> }
-                  <div css={photoOnDragBorder}/>
-                </>}
-                
-              </animated.label>
-              </div>
-            }}
-          </Dropzone>
-          
+                }}
+              </Dropzone>
+            
+          </div>
           </div>
           
           
@@ -714,12 +719,14 @@ const photoDraggableBox = css`
   overflow: hidden;
   cursor: pointer;
   position: relative;
+  
+  // allow intercept only single finger up/down swipe gestures
+  touch-action: pan-y;
 `
 
 
 
 const photoImgStyle = css`
-  // todo restore ability of save photos
   pointer-events: none;
   //user-select: none;
   //touch-action: none;

@@ -3,7 +3,7 @@ import { useDrag } from '@use-gesture/react'
 import { ReactDOMAttributes } from '@use-gesture/react/src/types'
 import React, {
   useCallback,
-  useEffect,
+  useEffect, useLayoutEffect,
   useMemo, useRef,
   useState,
 } from 'react'
@@ -68,8 +68,8 @@ export type ComputedTabsDimens = {
 
 
 export type UseTabsOptions = {
-  state: TabsState
-  setState: Setter<TabsState>
+  tabsState: TabsState
+  setTabsState: Setter<TabsState>
   tabIdx: TabIdx
   setTabIdx: Setter<TabIdx>
 } & PartialUndef<{
@@ -84,10 +84,10 @@ export const useTabs = (
   options: UseTabsOptions,
 ) => {
   const tabsFrame = tabsFrameRef.current
-  const tabsContainer = tabsFrame?.firstElementChild
+  const tabsContainer = tabsFrame?.firstElementChild?.firstElementChild
   
   
-  const [initialRender, setInitialRender] = useState(true)
+  const [isReady, setReady] = useState(false)
   
   const [computedTabsDimens, setComputedTabsDimens, computedTabsDimensRef] =
     useStateAndRef<ComputedTabsDimens>({
@@ -138,7 +138,7 @@ export const useTabs = (
     },
     [tabsContainer]
   )
-  console.log('tabsCnt',tabsCnt)
+  //console.log('tabsCnt',tabsCnt)
   
   
   const [
@@ -177,8 +177,8 @@ export const useTabs = (
   const [prevState, setPrevState] = useState<TabsState>('opened')
   const [prevTabIdx, setPrevTabIdx] = useState<TabIdx>(0)
   
-  const newState = options.state
-  const setNewState = options.setState
+  const newState = options.tabsState
+  const setNewState = options.setTabsState
   const newTabIdx = options.tabIdx
   const setNewTabIdx = options.setTabIdx
   
@@ -231,10 +231,14 @@ export const useTabs = (
       const currTab = prevTabIdx
       const currScrollLeft = tabContainerSpring.scrollLeft.get()
       
+      /* console.log({
+        newTabIdx, lastTabIdx
+      }) */
+      
       const toTab = function(){
         if (newState==='adjusting')
           return getTabIdxToAdjust(currScrollLeft, snapPointsPx)
-        return fitRange2(newTabIdx, [0,lastIndex(snapPointsPx)])
+        return fitRange2(newTabIdx, [0,lastTabIdx])
       }()
       
       const toScrollLeft = snapPointsPx[toTab]
@@ -256,7 +260,7 @@ export const useTabs = (
       
       const setStateAndIndex = (s: TabsState, index: TabIdx)=>{
         if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
-        if (!initialRender){
+        if (isReady){
           setNewState(s)
           setNewTabIdx(index)
         }
@@ -267,7 +271,7 @@ export const useTabs = (
       
       
       //console.log('i',i)
-      //console.log({ newState, state: prevState, newSnap: toTab, snapIdx: prevTabIdx })
+      //console.log({ newState, prevState, toTab, prevTabIdx })
       //console.log({ canClose })
       //console.log({ isOpened, isClosed, toOpened, toClosed })
       
@@ -292,7 +296,7 @@ export const useTabs = (
   )
   useEffect(
     ()=>reactOnState(),
-    [newState, newTabIdx, initialRender]
+    [newState, newTabIdx, isReady]
   )
   
   
@@ -322,6 +326,7 @@ export const useTabs = (
         dragStartRef.current.scrollLeft = tabContainerSpring.scrollLeft.get()
       }
       
+      // drag threshold, px
       const isMoreRadius = Math.hypot(mx,my) >= 5
       const isToSideways = Math.abs(mx) > Math.abs(my)
       
@@ -379,10 +384,17 @@ export const useTabs = (
   useNoSelect(prevState==='dragging')
   
   
-  useEffect(()=>setInitialRender(false),[])
+  useEffect(
+    ()=>{
+      if (tabsContainer) setReady(true)
+      else setReady(false)
+    },
+    [tabsContainer]
+  )
   
   
   return {
+    isReady,
     computedTabsDimens,
     snapPointsPx,
     realDefaultOpenIdx,

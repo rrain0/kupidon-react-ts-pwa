@@ -49,8 +49,8 @@ const BottomSheet =
 React.memo(
 (props: BottomSheetProps) => {
   const {
-    state,
-    setState,
+    sheetState,
+    setSheetState,
     snapIdx,
     setSnapIdx,
     snapPoints,
@@ -83,8 +83,8 @@ React.memo(
     bottomSheetHeaderRef,
     bottomSheetContentRef,
     {
-      state,
-      setState,
+      sheetState,
+      setSheetState,
       snapIdx,
       setSnapIdx,
       snapPoints,
@@ -113,7 +113,7 @@ React.memo(
         return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
           .toString(16).padStart(2,'0')
       }()
-      if (!['closed',null].includes(state)) return `#000000${bgcDimHex}`
+      if (!['closed',null].includes(sheetState)) return `#000000${bgcDimHex}`
       return 'none'
     }(),
     immediate: true,
@@ -121,7 +121,7 @@ React.memo(
   
   
   useUpNodesScrollLock(
-    !['closed',null].includes(state),
+    !['closed',null].includes(sheetState),
     { elementRef: bottomSheetFrameRef }
   )
   
@@ -142,15 +142,15 @@ React.memo(
       <animated.div /* Frame */ css={frameStyle}
         style={{
           ...frameSpring,
-          pointerEvents: ![null,'closed','closing'].includes(state) ? 'auto' : 'none',
+          pointerEvents: ![null,'closed','closing'].includes(sheetState) ? 'auto' : 'none',
         }}
         
         ref={bottomSheetFrameRef as any}
         
         // need to prevent click if dragged if frame is draggable
         onClick={ev=>{
-          //console.log('dimmed background click')
-          setState('closing')
+          console.log('dimmed background click')
+          setSheetState('closing')
         }}
       >
         <div // Pointer & Wheel events consumer

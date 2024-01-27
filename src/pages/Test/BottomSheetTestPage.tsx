@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React, { useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import {
@@ -23,6 +23,7 @@ import rowWrap = EmotionCommon.rowWrap
 import Setter = TypeUtils.Callback1
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
+import ValueOrMapper = TypeUtils.ValueOrMapper
 
 
 
@@ -40,6 +41,17 @@ React.memo(
   
   const [state, setState] = useState<SheetState>('closed')
   const [snapIdx, setSnapIdx] = useState<SheetSnapIdx>(2)
+  
+  /* const setState = useCallback(
+    (s: ValueOrMapper<SheetState>)=>{
+      if(s==='closing'){
+        console.log('debug closing')
+        debugger
+      }
+      setState_(s)
+    },
+    [setState_]
+  ) */
   
   const [snapPoints, setSnapPoints] = useState<SheetSnapPoints>(
     ['0px','fit-header',200,'fit-content','50%','free','80%','800px']
@@ -139,7 +151,7 @@ React.memo(
                 cursor: pointer;
               `}
               key={i}
-              onClick={() => {
+              onClick={()=>{
                 setSelectedItem(`Item ${i + 1}`)
                 setState('closing')
               }}
@@ -162,8 +174,8 @@ React.memo(
       bottomSheetHeaderRef={bottomSheetHeaderRef}
       bottomSheetContentRef={bottomSheetContentRef}
       
-      state={state}
-      setState={setState}
+      sheetState={state}
+      setSheetState={setState}
       snapIdx={snapIdx}
       setSnapIdx={setSnapIdx}
       

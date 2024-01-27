@@ -31,6 +31,7 @@ React.memo(
 (props: BottomSheetBasicProps)=>{
   
   const { header, children, ...restProps } = props
+  const sheetState = props.sheetState
   
   
   const bottomSheetFrameRef = useRef<HTMLDivElement>(null)
@@ -40,7 +41,6 @@ React.memo(
   
   useFakePointerRef([bottomSheetHeaderRef])
   
-  const state = props.state
   
   
   
@@ -58,7 +58,7 @@ React.memo(
        */}
       <div css={t=>css`
         ${headerStyle(t)};
-        ${state==='dragging' && css`cursor: grabbing;`}
+        ${sheetState==='dragging' && css`cursor: grabbing;`}
       `}
         ref={bottomSheetHeaderRef as any}
         {...sheetDrag()}
@@ -66,7 +66,7 @@ React.memo(
         
         <div /* Header handle */ css={t=>css`
           ${headerHandleStyle(t)};
-          ${state==='dragging' && css`background: ${t.page.content[0]};`}
+          ${sheetState==='dragging' && css`background: ${t.page.content[0]};`}
         `}/>
         
         <div css={headerTextStyle}>
@@ -82,7 +82,7 @@ React.memo(
       <div css={bodyStyle}>
         <OverflowWrapper css={OverflowWrapperStyle.list}
           showVertical={
-            ![null,'closed','close','closing','open','opening'].includes(state)
+            ![null,'closed','close','closing','open','opening'].includes(sheetState)
           }
         >
           {/*
