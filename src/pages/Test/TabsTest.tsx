@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { animated } from '@react-spring/web'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import UseFakePointerRef, {

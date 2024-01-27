@@ -259,7 +259,7 @@ export const useBottomSheet = (
   const runAnimation = useCallback(
     (endH: number, lastSpeed: number|null, onFinish: Callback)=>{
       const duration = function(){
-        console.log('lastSpeed',lastSpeed)
+        //console.log('lastSpeed',lastSpeed)
         if (notExists(lastSpeed)) return animationDuration
         const startH = computedSheetDimensRef.current.sheetH
         sheetSpring.height.set(startH)

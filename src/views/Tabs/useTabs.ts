@@ -7,7 +7,6 @@ import React, {
   useMemo, useRef,
   useState,
 } from 'react'
-import { UserApi } from 'src/api/requests/UserApi'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { GetDimensions } from 'src/utils/common/GetDimensions'
 import { MathUtils } from 'src/utils/common/MathUtils'
@@ -23,7 +22,6 @@ import lastIndex = ArrayUtils.lastIndex
 import findLastBy = ArrayUtils.findLastBy
 import notExists = TypeUtils.notExists
 import last = ArrayUtils.last
-import current = UserApi.current
 
 
 
@@ -85,6 +83,9 @@ export const useTabs = (
   tabsFrameRef: React.RefObject<HTMLElement>,
   options: UseTabsOptions,
 ) => {
+  const tabsFrame = tabsFrameRef.current
+  const tabsContainer = tabsFrame?.firstElementChild
+  
   
   const [initialRender, setInitialRender] = useState(true)
   
@@ -96,49 +97,63 @@ export const useTabs = (
   
   const updateComputedTabsDimens = useCallback(
     ()=>{
-      const frame = tabsFrameRef.current
-      if (frame){
-        const frameD = new GetDimensions(frame)
+      if (tabsFrame){
+        const frameD = new GetDimensions(tabsFrame)
         setComputedTabsDimens({
           frameWidth: frameD.width,
         })
       }
     },
-    [tabsFrameRef.current]
+    [tabsFrame]
   )
   
   
   useEffect(
     ()=>{
       updateComputedTabsDimens()
-      const frame = tabsFrameRef.current
-      if (frame){
+      if (tabsFrame){
         const resizeObserver = new ResizeObserver(()=>updateComputedTabsDimens())
-        frame && resizeObserver.observe(frame)
+        tabsFrame && resizeObserver.observe(tabsFrame)
         return ()=>resizeObserver.disconnect()
       }
     },
-    [tabsFrameRef.current]
+    [tabsFrame]
   )
   
   
+  
+  const [tabsCnt, setTabsCnt] = useState(0) // 0..+inf
+  useEffect(
+    ()=>{
+      if (tabsContainer){
+        setTabsCnt(tabsContainer.childElementCount)
+        const callback: MutationCallback = (mutationList)=>{
+          const hasChildrenMutation = mutationList.some(mutation=>mutation.type==='childList')
+          if (hasChildrenMutation) setTabsCnt(tabsContainer.childElementCount)
+        }
+        const observer = new MutationObserver(callback)
+        observer.observe(tabsContainer, { childList: true })
+        return ()=>observer.disconnect()
+      }
+    },
+    [tabsContainer]
+  )
+  console.log('tabsCnt',tabsCnt)
+  
+  
   const [
-    tabsCnt, // 0..+inf
     snapPointsPx, // non-zero len
     realDefaultOpenIdx, // 0..+inf
     lastTabIdx, // 0..+inf
     maxScrollLeft, // 0..+inf
   ] =
   useMemo<[
-    number,
     number[],
     number,
     number,
     number,
   ]>(
     ()=>{
-      
-      const tabsCnt = tabsFrameRef.current?.firstElementChild?.childElementCount ?? 0
       const lastTabIdx = Math.max(0,tabsCnt-1)
       
       const snapPointsPx = ArrayUtils.ofIndices(Math.max(tabsCnt,1))
@@ -153,9 +168,9 @@ export const useTabs = (
       
       const maxScrollLeft = last(snapPointsPx)
       
-      return [tabsCnt, snapPointsPx, realDefaultOpenIdx, lastTabIdx, maxScrollLeft] as const
+      return [snapPointsPx, realDefaultOpenIdx, lastTabIdx, maxScrollLeft] as const
     },
-    [tabsFrameRef.current, computedTabsDimens, options.defaultOpenIdx]
+    [tabsCnt, computedTabsDimens, options.defaultOpenIdx]
   )
   
   
@@ -179,7 +194,7 @@ export const useTabs = (
   const runAnimation = useCallback(
     (endScrollLeft: number, lastSpeed: number|null, onFinish: Callback)=>{
       const duration = function(){
-        console.log('lastSpeed',lastSpeed)
+        //console.log('lastSpeed',lastSpeed)
         if (notExists(lastSpeed)) return animationDuration
         const startScrollLeft = tabContainerSpring.scrollLeft.get()
         const pathPercent = pathProgressPercent(startScrollLeft, endScrollLeft)
@@ -331,7 +346,7 @@ export const useTabs = (
       
       const newScrollLeft = fitRange2(
         dragStartRef.current.scrollLeft - mx,
-        [0, ArrayUtils.last(snapPointsPx)]
+        [0, maxScrollLeft]
       )
       
       if (active && dragStartRef.current.isDragging) {
