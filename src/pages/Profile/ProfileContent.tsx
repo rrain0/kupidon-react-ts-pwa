@@ -622,6 +622,7 @@ React.memo(
         //position: relative;
         //z-index: 100;
         user-select: none;
+        cursor: pointer;
       `}
         onClick={ev=>{
           props.setTabsState('snapping')

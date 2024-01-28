@@ -97,6 +97,7 @@ React.memo(
               //position: relative;
               //z-index: 100;
               user-select: none;
+              cursor: pointer;
             `}
               onClick={ev=>{
                 setTabsState('snapping')
@@ -167,6 +168,7 @@ React.memo(
               //position: relative;
               //z-index: 100;
               user-select: none;
+              cursor: pointer;
             `}
               onClick={ev=>{
                 setTabsState('snapping')

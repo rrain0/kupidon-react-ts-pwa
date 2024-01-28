@@ -85,7 +85,7 @@ React.forwardRef<TabsRefElement, TabsProps>(
   >
     <GesturesConsumer {...tabDrag()}>
       <animated.div css={tabsContainerStyle}
-        style={{ x: tabContainerSpring.scrollLeft.to(v=>-v) }}
+        style={{ left: tabContainerSpring.scrollLeft.to(v=>-v) }}
       >
         
         { children?.({
@@ -123,6 +123,7 @@ const GesturesConsumer = styled.div`
   touch-action: pan-y;
 `
 const tabsContainerStyle = css`
+  position: relative;
   min-width: fit-content;
   width: fit-content;
   ${row};
