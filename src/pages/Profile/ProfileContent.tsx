@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { animated } from '@react-spring/web'
 import { ApiUtils } from 'src/api/ApiUtils'
 import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { GenderEnum } from 'src/api/entity/GenderEnum'
@@ -10,7 +11,7 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import Form from 'src/components/FormElements/Form'
-import FormHeader from 'src/components/FormElements/FormHeader'
+import { formHeaderStyle } from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
 import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
@@ -56,6 +57,8 @@ import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
+import { TabsRenderProps } from 'src/views/Tabs/Tabs'
+import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
 import Textarea from 'src/views/Textarea/Textarea'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import * as uuid from 'uuid'
@@ -89,16 +92,26 @@ import CurrentUserSuccessData = UserApi.CurrentUserSuccessData
 import UpdateUserErrorData = UserApi.UpdateUserErrorData
 import AddProfilePhotoErrorData = UserApi.AddProfilePhotoErrorData
 import onPointerClick = ReactUtils.onPointerClick
+import fitRange2 = MathUtils.fitRange2
+import Setter = TypeUtils.Setter
 
 
 
 
+
+
+export type ProfileContentProps = {
+  tabContainerSpring: TabsRenderProps['tabContainerSpring']
+  tabWidth: number
+  setTabsState: Setter<TabsState>
+  setTabIdx: Setter<TabIdx>
+}
 
 
 
 const ProfileContent =
 React.memo(
-()=>{
+(props: ProfileContentProps)=>{
   
   const reactId = useId()
   const [auth,setAuth] = useRecoilState(AuthRecoil)
@@ -604,7 +617,47 @@ React.memo(
       
       {/* <FormHeader>{uiText.profile[0].text}</FormHeader> */}
       
-      <FormHeader>{formValues.name}</FormHeader>
+      <animated.h3 css={t=>css`
+        ${formHeaderStyle(t)};
+        //position: relative;
+        //z-index: 100;
+        user-select: none;
+      `}
+        onClick={ev=>{
+          props.setTabsState('snapping')
+          props.setTabIdx(1)
+        }}
+        style={{
+          x: props.tabContainerSpring.scrollLeft.to(v=>{
+            const w = props.tabWidth
+            const i = 1 // indexOfThisTab
+            v = fitRange2(v, [(i-1)*w, (i+1)*w])
+            v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
+            v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
+            return v
+          }),
+          scale: props.tabContainerSpring.scrollLeft.to(v=>{
+            const w = props.tabWidth
+            const i = 1 // indexOfThisTab
+            v = fitRange2(v, [(i-1)*w, (i+1)*w])
+            v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
+            v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
+            v = 1 - 0.35 * Math.abs(v / (w/2))
+            return v
+          }),
+          opacity: props.tabContainerSpring.scrollLeft.to(v=>{
+            const w = props.tabWidth
+            const i = 1 // indexOfThisTab
+            v = fitRange2(v, [(i-1)*w, (i+1)*w])
+            v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
+            v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
+            v = 1 - 0.6 * Math.abs(v / (w/2))
+            return v
+          })
+        }}
+      >
+        {formValues.name}
+      </animated.h3>
       
       
       <div css={css`

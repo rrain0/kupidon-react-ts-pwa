@@ -3,7 +3,7 @@ import { useDrag } from '@use-gesture/react'
 import { ReactDOMAttributes } from '@use-gesture/react/src/types'
 import React, {
   useCallback,
-  useEffect, useLayoutEffect,
+  useEffect,
   useMemo, useRef,
   useState,
 } from 'react'
@@ -30,7 +30,7 @@ export const DefaultTabIdx = 0
 
 
 // % ширины viewport в секунду
-const speedThreshold = 45
+const speedThreshold = 35
 const defaultAutoAnimationDuration = 400
 // 'cubic-bezier(0.17,0.84,0.44,1)'
 //import BezierEasing from 'bezier-easing'
@@ -378,7 +378,7 @@ export const useTabs = (
       }
       
     }
-  ) as (...args: any[]) => ReactDOMAttributes
+  ) as ()=>ReactDOMAttributes
   
   
   

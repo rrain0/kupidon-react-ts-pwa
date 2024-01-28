@@ -149,7 +149,7 @@ React.memo(
         
         // need to prevent click if dragged if frame is draggable
         onClick={ev=>{
-          console.log('dimmed background click')
+          //console.log('dimmed background click')
           setSheetState('closing')
         }}
       >

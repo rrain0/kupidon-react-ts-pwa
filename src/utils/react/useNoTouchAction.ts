@@ -36,7 +36,7 @@ export const useNoTouchAction = (
   
   const onTouch = useCallback(
     (ev: Event)=>{
-      console.log('preventDefault.current',preventDefault.current)
+      //console.log('preventDefault.current',preventDefault.current)
       if (preventDefault.current) {
         ev.preventDefault()
       }

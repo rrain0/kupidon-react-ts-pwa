@@ -539,28 +539,27 @@ React.memo(
           
           
           
-          <div
+          <div css={t=>css`
+            ${photoProgressFrameStyle(t)};
+            
+            ${lastIdx===i && dragState==='progressAnim' && css`
+              animation: ${progressAnim} ${progressAnimDuration}ms linear forwards;
+            `}
+            ${lastIdx===i && !swap && dragState==='dragging' && css`
+              background-image: none;
+              background-color: ${t.photos.highlightFrameAccentBgc[0]};
+            `}
+            ${swap?.[1]===i && css`
+              background-image: none;
+              background-color: ${t.photos.highlightFrameAccentBgc[0]};
+            `}
+          `}
             onAnimationEnd={ev=>{
               if (ev.animationName===progressAnim.name) {
                 setDragState('dragging')
                 setCanClick(false)
               }
             }}
-            css={t=>css`
-              ${photoProgressFrameStyle(t)};
-              
-              ${lastIdx===i && dragState==='progressAnim' && css`
-                animation: ${progressAnim} ${progressAnimDuration}ms linear forwards;
-              `}
-              ${lastIdx===i && !swap && dragState==='dragging' && css`
-                background-image: none;
-                background-color: ${t.photos.highlightFrameAccentBgc[0]};
-              `}
-              ${swap?.[1]===i && css`
-                background-image: none;
-                background-color: ${t.photos.highlightFrameAccentBgc[0]};
-              `}
-            `}
           />
           
           
