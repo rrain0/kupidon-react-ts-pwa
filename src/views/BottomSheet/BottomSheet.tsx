@@ -103,23 +103,6 @@ React.memo(
   )
   
   
-  
-  
-  const frameSpring = useSpring({
-    background: function(){
-      const bgcDimHex = function(){
-        const maxDimHeight = snapPointsPx[realDefaultOpenIdx??0]
-        const dimHeight = Math.min(computedSheetDimens.sheetH, maxDimHeight)
-        return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
-          .toString(16).padStart(2,'0')
-      }()
-      if (!['closed',null].includes(sheetState)) return `#000000${bgcDimHex}`
-      return 'none'
-    }(),
-    immediate: true,
-  })
-  
-  
   useUpNodesScrollLock(
     !['closed',null].includes(sheetState),
     { elementRef: bottomSheetFrameRef }
@@ -141,7 +124,18 @@ React.memo(
       
       <animated.div /* Frame */ css={frameStyle}
         style={{
-          ...frameSpring,
+          background: sheetSpring.height.to(
+            height=>{
+              const bgcDimHex = function(){
+                const maxDimHeight = snapPointsPx[realDefaultOpenIdx??0]
+                const dimHeight = Math.min(height, maxDimHeight)
+                return Math.trunc(dimHeight / maxDimHeight * 256 * 0.6)
+                  .toString(16).padStart(2,'0')
+              }()
+              if (!['closed',null].includes(sheetState)) return `#000000${bgcDimHex}`
+              return 'none'
+            }
+          ),
           pointerEvents: ![null,'closed','closing'].includes(sheetState) ? 'auto' : 'none',
         }}
         

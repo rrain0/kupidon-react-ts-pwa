@@ -218,9 +218,10 @@
     }
     window.addEventListener('beforeinstallprompt', async ev=>{
       // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/getInstalledRelatedApps
-      const relatedApps = await navigator.getInstalledRelatedApps() // => { id, platform, url, version }[]
+      const relatedApps = await navigator.getInstalledRelatedApps?.() // => { id, platform, url, version }[]
       // Search for a specific installed platform-specific app
       ev.preventDefault()
+      //console.log('relatedApps',relatedApps)
       if (!relatedApps?.length) setBeforeInstallPromptEvent(ev)
     })
     window.addEventListener('appinstalled', ev=>{

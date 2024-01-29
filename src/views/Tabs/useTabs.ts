@@ -169,12 +169,13 @@ export const useTabs = (
       
       return [snapPointsPx, realDefaultOpenIdx, lastTabIdx, maxScrollLeft] as const
     },
-    [tabsCnt, computedTabsDimens, options.defaultOpenIdx]
+    [tabsCnt, options.defaultOpenIdx, computedTabsDimens.frameWidth]
   )
   
   
   const [prevState, setPrevState] = useState<TabsState>('opened')
   const [prevTabIdx, setPrevTabIdx] = useState<TabIdx>(0)
+  const [prevSnapPointsPx, setPrevSnapPointsPx] = useState([0])
   
   const newState = options.tabsState
   const setNewState = options.setTabsState
@@ -233,7 +234,10 @@ export const useTabs = (
       //console.log({ newState, prevState, toTab, prevTabIdx })
       
       // prevent unnecessary state changes
-      if (newState===currState && newTabIdx===currTab) return
+      if (newState===currState
+        && newTabIdx===currTab
+        && snapPointsPx===prevSnapPointsPx
+      ) return
       
       
       const toTab = function(){
@@ -270,6 +274,7 @@ export const useTabs = (
         }
         setPrevState(s)
         setPrevTabIdx(index)
+        setPrevSnapPointsPx(prevSnapPointsPx)
         //console.log('setStateAndIndex:',s,index)
       }
       
@@ -299,7 +304,7 @@ export const useTabs = (
   )
   useEffect(
     ()=>reactOnState(),
-    [newState, newTabIdx, isReady]
+    [newState, newTabIdx, isReady, snapPointsPx]
   )
   
   

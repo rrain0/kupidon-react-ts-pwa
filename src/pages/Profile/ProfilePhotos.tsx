@@ -14,15 +14,15 @@ import React, {
   useState,
 } from 'react'
 import Dropzone from 'react-dropzone'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import ModalPortal from 'src/components/Modal/ModalPortal'
+import { LogLayerRecoil } from 'src/pages/App/LogLayer'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { useLockAppGestures } from 'src/recoil/utils/useLockAppGestures'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
-import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { FileUtils } from 'src/utils/file/FileUtils'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { DataUrl } from 'src/utils/DataUrl'
@@ -72,6 +72,7 @@ import Download1Ic = SvgIcons.Download1Ic
 import extensionFromMimeType = FileUtils.extensionFromMimeType
 import noop = TypeUtils.noop
 import Callback = TypeUtils.Callback
+import findBy = ArrayUtils.findBy
 
 
 
@@ -150,9 +151,8 @@ React.memo(
 (props: ProfilePhotosProps)=>{
   const { images, setImages } = props
   const { theme } = useRecoilValue(ThemeRecoil)
-  const [{ isDraggingFiles, isUsingGestures }, setAppRecoil] = useRecoilState(AppRecoil)
+  const { isDraggingFiles } = useRecoilValue(AppRecoil)
   const actionUiValues = useUiTextContainer(ActionUiText)
-  const reactId = useId()
   
   
   const progressAnim = useMemo(
@@ -177,6 +177,24 @@ React.memo(
   
   const [canClick, setCanClick] = useState(true)
   const [isMenuOpen, setMenuOpen] = useState(false)
+  
+  
+  // forbid content selection while dragging
+  useNoSelect(!!dragState)
+  // forbid gesture interception by browser
+  const isLockGestures = dragState==='dragging' || progressAnimLockGestures
+  useNoTouchAction(isLockGestures)
+  const isGesturesBusy = useLockAppGestures(isLockGestures)
+  useLayoutEffect(
+    ()=>{
+      if (isGesturesBusy) {
+        setDragState(undefined)
+        setCanClick(false)
+      }
+    },
+    [isGesturesBusy, dragState, canClick]
+  )
+  
   
   // swaps photos
   const swapPhotosEffectEvent = useEffectEvent(
@@ -231,16 +249,9 @@ React.memo(
   const photoFrameRefs = useRef<Array<Element|null>>(arrIndices(6).map(i=>null))
   
   
-  // forbid content selection while dragging
-  useNoSelect(!!dragState)
-  // forbid gesture interception by browser
-  const isLockGestures = dragState==='dragging' || progressAnimLockGestures
-  useNoTouchAction(isLockGestures)
-  const isGesturesBusy = useLockAppGestures(isLockGestures)
-  useLayoutEffect(
-    ()=>{ if (isGesturesBusy) setDragState(undefined)},
-    [isGesturesBusy, dragState]
-  )
+  
+  
+  //const setLogData = useSetRecoilState(LogLayerRecoil)
   
   const [springs, springApi] = useSprings(images.length, springStyle(), [images])
   const applyDragRef = useRef<Callback>()
@@ -249,7 +260,7 @@ React.memo(
     gesture=>{
       const [i] = gesture.args as [number]
       const {
-        active, last,
+        first, active, last,
         movement: [mx,my],
         xy: [vpx,vpy], // viewport x, viewport y
       } = gesture
@@ -257,20 +268,59 @@ React.memo(
         'mx:', mx,
         'my:', my,
       ) */
+      /* if (first){
+        setLogData([JSON.stringify({
+          vpx: MathUtils.round(vpx, 3),
+          vpy: MathUtils.round(vpy, 3),
+        })])
+      } */
+      
       const applyDrag = ()=>{
         const isDragging = dragStateRef.current==='dragging' && active
         springApi.start(springStyle(i, isDragging, mx, my))
         if (isDragging){
-          const hoveredElements = document.elementsFromPoint(vpx,vpy)
+          /* setLogData(s=>[
+            ...s.slice(0,1),
+            ...[...s, JSON.stringify({
+              vpx: MathUtils.round(vpx, 3),
+              vpy: MathUtils.round(vpy, 3),
+            })].slice(-5)
+          ]) */
           //console.log('hoveredElements',hoveredElements)
-          if (!hoveredElements.includes(photosGrid.current as any)) {
-            setSwap(undefined)
-          } else {
+          /* setLogData(
+            [document.elementFromPoint(vpx,vpy), ...hoveredElements]
+            .map(it=>JSON.stringify({
+              localName: it?.localName,
+              className: it?.className,
+              //tagName: it.tagName,
+              //nodeName: it.nodeName,
+            }))
+          ) */
+          /* let newSwap = undefined as undefined | [number,number]
+          {
+            const hoveredElements = document.elementsFromPoint(vpx,vpy)
             const otherIdx = photoFrameRefs.current.findIndex(el=>{
               return hoveredElements.includes(el as any)
             })
-            if (otherIdx==-1) {/* nothing to do */}
-            else if (i!==otherIdx) setSwap([i,otherIdx])
+            if (otherIdx!==-1 && i!==otherIdx) newSwap = [i,otherIdx]
+          }
+          if (!newSwap){
+            const firstHoveredElement = document.elementFromPoint(vpx,vpy)
+            const otherIdx = photoFrameRefs.current.findIndex(el=>{
+              return el===firstHoveredElement || el?.contains(firstHoveredElement)
+            })
+            if (otherIdx!==-1 && i!==otherIdx) newSwap = [i,otherIdx]
+          }
+          setSwap(newSwap) */
+          const hoveredElements = document.elementsFromPoint(vpx,vpy)
+          if (!hoveredElements.includes(photosGrid.current as any)) {
+            setSwap(undefined)
+          } else {
+            const found = findBy(photoFrameRefs.current,
+                elem=>hoveredElements.includes(elem as any)
+            )
+            if (!found.isFound) {} // nothing to do, remain previous swap
+            else if (i!==found.index) setSwap([i,found.index])
             else setSwap(undefined)
           }
         }
@@ -412,6 +462,8 @@ React.memo(
   } */
   //useEffect(()=>console.log(`images`,images), [images])
   
+  //console.log('canClick',canClick)
+  
   
   return <>
     
@@ -476,8 +528,8 @@ React.memo(
                       ref={ref2 as any}
                     >
                       
-                      {function () {
-                        if (false) {} else if (im.compression?.showProgress)
+                      {function(){
+                        if (im.compression?.showProgress)
                           return <div css={photoPlaceholderStyle}>
                             <PieProgress css={profilePhotoPieProgress}
                               progress={

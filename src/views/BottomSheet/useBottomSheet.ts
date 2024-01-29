@@ -226,6 +226,7 @@ export const useBottomSheet = (
   
   const [prevState, setPrevState] = useState<SheetState>(null)
   const [prevSnapIdx, setPrevSnapIdx] = useState<SheetSnapIdx>(null)
+  const [prevSnapPointsPx, setPrevSnapPointsPx] = useState([0])
   const [prevCloseable, setPrevCloseable] = useState(false)
   
   const newState = options.sheetState
@@ -249,7 +250,7 @@ export const useBottomSheet = (
       const duration = function(){
         //console.log('lastSpeed',lastSpeed)
         if (notExists(lastSpeed)) return animationDuration
-        const startH = computedSheetDimensRef.current.sheetH
+        const startH = sheetSpring.height.get()
         sheetSpring.height.set(startH)
         const pathPercent = pathProgressPercent(startH, endH)
         return pathPercent/lastSpeed*1.2*1000
@@ -286,13 +287,30 @@ export const useBottomSheet = (
       
       const currState = prevState
       const currSnap = prevSnapIdx
-      const currHeight = computedSheetDimens.sheetH
+      const currHeight = sheetSpring.height.get()
       
       
-      //console.log({ newState, prevState, toSnap, prevSnapIdx })
       
       // prevent unnecessary state changes
-      if (newState===currState && newSnapIdx===currSnap && newCloseable===prevCloseable) return
+      if (newState===currState
+        && newSnapIdx===currSnap
+        && newCloseable===prevCloseable
+        && snapPointsPx===prevSnapPointsPx
+      ) return
+      
+      const setStateAndIndex = (s: SheetState, index: SheetSnapIdx)=>{
+        if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
+        if (isReady){
+          setNewState(s)
+          setNewSnapIdx(index)
+        }
+        setPrevState(s)
+        setPrevSnapIdx(index)
+        setPrevCloseable(newCloseable)
+        setPrevSnapPointsPx(prevSnapPointsPx)
+        //console.log('setStateAndIndex:',s,index)
+      }
+      
       
       const toSnap = function(){
         if (newState==='adjusting')
@@ -322,6 +340,9 @@ export const useBottomSheet = (
         return snapPointsPx[toCloseSnap]
       }()
       
+      
+      
+      //console.log({ newState, prevState, toSnap, prevSnapIdx })
       
       
       
@@ -363,20 +384,6 @@ export const useBottomSheet = (
       const isCloseToClose = isClosed && toClosed
       const isOpenToClose = isOpened && toClosed
       const isOpenToOpen = isOpened && toOpened
-      
-      
-      
-      const setStateAndIndex = (s: SheetState, index: SheetSnapIdx)=>{
-        if (s!=='dragging') dragStartRef.current = {...dragStartInitialValue}
-        if (isReady){
-          setNewState(s)
-          setNewSnapIdx(index)
-        }
-        setPrevCloseable(newCloseable)
-        setPrevState(s)
-        setPrevSnapIdx(index)
-        //console.log('setStateAndIndex:',s,index)
-      }
       
       
       //console.log({ canClose })
@@ -447,7 +454,7 @@ export const useBottomSheet = (
   )
   useEffect(
     ()=>reactOnState(),
-    [newState, newSnapIdx, newCloseable, isReady]
+    [newState, newSnapIdx, newCloseable, isReady, snapPointsPx]
   )
   
   
@@ -476,7 +483,7 @@ export const useBottomSheet = (
         setNewState('dragging')
         dragStartRef.current = {...dragStartInitialValue}
         dragStartRef.current.isDragging = true
-        dragStartRef.current.sheetH = computedSheetDimensRef.current.sheetH
+        dragStartRef.current.sheetH = sheetSpring.height.get()
       }
       const newSheetH = dragStartRef.current.sheetH - my
       if (active && dragStartRef.current.isDragging) {

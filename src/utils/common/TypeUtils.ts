@@ -37,7 +37,7 @@ export namespace TypeUtils {
   export type Mapper<T> = (prevValue: T)=>T
   
   export type Predicate<T> = (obj: T)=>boolean
-  export const defaultPredicate: Predicate<any> = obj=>!!obj
+  export const defaultPredicate: Predicate<any> = value=>!!value
   export type Filter<T> = Predicate<T>
   
   export type Combiner<T1, T2 = T1> = (a: T1, b: T2)=>T1

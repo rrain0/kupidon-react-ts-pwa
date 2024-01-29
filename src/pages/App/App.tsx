@@ -6,6 +6,7 @@ import ModalOutlet from 'src/components/Modal/ModalOutlet'
 import AppFrame from 'src/pages/App/AppFrame'
 import ToastifySetup from 'src/components/Toasts/ToastifySetup'
 import DragDetector from 'src/pages/App/DragDetector'
+import LogLayer from 'src/pages/App/LogLayer'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { useAppInstallationSetup } from 'src/utils/app/useAppInstallationSetup'
 import { useLangSetup } from 'src/utils/lang/useLangSetup'
@@ -44,6 +45,8 @@ React.memo(
     <ModalOutlet/>
     
     <ToastifySetup/>
+    
+    <LogLayer/>
     
   </ThemeProvider>
 })
