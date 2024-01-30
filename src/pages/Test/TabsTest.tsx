@@ -39,32 +39,47 @@ const TabsTest = ()=>{
         
         
         <Tabs css={css`
+          width: 100%;
           max-width: 400px;
+          min-height: 800px;
+          height: fit-content;
           background: darkseagreen;
         `}
           {...tabsProps}
-        >{()=><>
+        >{({ tabContainerSpring, computedTabsDimens })=><>
           <Tab css={css`
-                background: #8B8B8B;
-              `}>
+            background: #8B8B8B;
+            max-height: 800px;
+          `}
+            width={computedTabsDimens.frameWidth}
+          >
             {ArrayUtils.ofIndices(100).map((it,i)=><div key={i}>Tab 1 ({i+1})</div>)}
           </Tab>
           
           <Tab css={css`
-                background: bisque;
-              `}>
+            background: bisque;
+            max-height: 800px;
+          `}
+            width={computedTabsDimens.frameWidth}
+          >
             {ArrayUtils.ofIndices(100).map((it,i)=><div key={i}>Tab 2 ({i+1})</div>)}
           </Tab>
           
           <Tab css={css`
-                background: #5ac8fa;
-              `}>
+            background: #5ac8fa;
+            max-height: 800px;
+          `}
+            width={computedTabsDimens.frameWidth}
+          >
             <div>Tab 3</div>
           </Tab>
           
           <Tab css={css`
-                background: darksalmon;
-              `}>
+            background: darksalmon;
+            max-height: 800px;
+          `}
+            width={computedTabsDimens.frameWidth}
+          >
             <div>Tab 4</div>
           </Tab>
         </>}</Tabs>

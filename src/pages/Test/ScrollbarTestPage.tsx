@@ -10,7 +10,7 @@ import empty = TypeUtils.empty
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
 import centerAll = EmotionCommon.centerAll
-import hideScrollbar = EmotionCommon.hideScrollbar
+import hideScrollbar = EmotionCommon.noScrollbars
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
 

@@ -5,13 +5,16 @@ import { ScrollbarsOverlayStyle } from 'src/components/Scrollbars/ScrollbarsOver
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
-import hideScrollbar = EmotionCommon.hideScrollbar
-import React, { HTMLAttributes, useRef } from 'react'
+import hideScrollbar = EmotionCommon.noScrollbars
+import React, { useRef } from 'react'
+import { ReactUtils } from 'src/utils/common/ReactUtils'
 import centerAll = EmotionCommon.centerAll
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import classNames from 'classnames'
 import { isBrowser } from 'react-device-detect'
 import PartialUndef = TypeUtils.PartialUndef
+import ClassStyleProps = ReactUtils.ClassStyleProps
+import fill = EmotionCommon.fill
 
 
 
@@ -20,9 +23,7 @@ export type OverflowWrapperProps = PartialUndef<{
   showVertical: boolean
   showHorizontal: boolean
   children: React.ReactNode
-  className: HTMLAttributes<any>['className']
-  style: HTMLAttributes<any>['style']
-}>
+}> & ClassStyleProps
 
 
 const OverflowWrapper =
@@ -37,9 +38,7 @@ React.memo(
   
   
   return <div css={css`
-    min-width: 100%; min-height: 100%;
-    width: 100%; height: 100%;
-    max-width: 100%; max-height: 100%;
+    ${fill};
     ${centerAll};
     position: relative;
   `}
@@ -56,12 +55,7 @@ React.memo(
       ${col};
       //place-self: stretch;
 
-      min-width: 100%;
-      min-height: 100%;
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      max-height: 100%;
+      ${fill};
 
       overflow: auto;
       ${isBrowser && hideScrollbar};

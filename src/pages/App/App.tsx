@@ -8,9 +8,12 @@ import ToastifySetup from 'src/components/Toasts/ToastifySetup'
 import DragDetector from 'src/pages/App/DragDetector'
 import LogLayer from 'src/pages/App/LogLayer'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useAppInstallationSetup } from 'src/utils/app/useAppInstallationSetup'
 import { useLangSetup } from 'src/utils/lang/useLangSetup'
 import { useThemeSetup } from 'src/utils/theme/useThemeSetup'
+import { isMobile } from 'react-device-detect'
+import noScrollbars = EmotionCommon.noScrollbars
 
 
 
@@ -35,6 +38,10 @@ React.memo(
       body {
         // will be WINDOW background
         background: ${t.page.bgc[0]};
+      }
+      
+      * {
+        ${isMobile && noScrollbars };
       }
     `}/>
     

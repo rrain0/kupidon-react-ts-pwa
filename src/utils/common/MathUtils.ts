@@ -69,10 +69,12 @@ export namespace MathUtils {
    * @param max Максимальное значение включительно
    * @returns {number} Результирующее значение, находящееся в диапазоне [min,max]
    */
-  export const fitRange2 = (curr: number, [min, max]: [number, number]): number =>
+  export const fitRange2 =
+  (curr: number, [min, max]: readonly [number, number]): number =>
     curr < min ? min : curr > max ? max : curr
   
-  export const fitRange = (min: number, curr: number, max: number): number =>
+  export const fitRange =
+  (min: number, curr: number, max: number): number =>
     fitRange2(curr, [min,max])
   
   
@@ -83,26 +85,30 @@ export namespace MathUtils {
    * @param max Максимальное значение
    * @returns {boolean} Результат сравнения
    */
-  export const inRange2 = (curr: number, [min, max]: [number, number]): boolean =>
+  export const inRange2 =
+  (curr: number, [min, max]: readonly [number, number]): boolean =>
     curr >= min && curr <= max
   
-  export const inRange = (min: number, curr: number, max: number): boolean =>
+  export const inRange =
+  (min: number, curr: number, max: number): boolean =>
     inRange2(curr, [min,max])
   
   
   
-  export const inRangeExclusive2 = (curr: number, [min, max]: [number, number]): boolean =>
+  export const inRangeExclusive2 =
+  (curr: number, [min, max]: readonly [number, number]): boolean =>
     curr > min && curr < max
   
-  export const inRangeExclusive = (min: number, curr: number, max: number): boolean =>
+  export const inRangeExclusive =
+  (min: number, curr: number, max: number): boolean =>
     inRangeExclusive2(curr, [min,max])
   
   
   
   export const mapRange =
   (value: number,
-   fromRange: [minInclusive: number, maxInclusive: number],
-   toRange: [minInclusive: number, maxInclusive: number]
+   fromRange: readonly [minInclusive: number, maxInclusive: number],
+   toRange: readonly [minInclusive: number, maxInclusive: number]
   )
   : number => {
     const oneBasedValue = (value-fromRange[0]) / (fromRange[1]-fromRange[0])

@@ -23,11 +23,10 @@ React.memo(
 ()=>{
   const logData = useRecoilValue(LogLayerRecoil)
   
-  return <>
-    {logData.length && <Frame>
-      {logData.map((it,i)=><div key={i}>{it}</div>)}
-    </Frame>}
-  </>
+  if (logData.length) return <Frame>
+    {logData.map((it,i)=><div key={i}>{it}</div>)}
+  </Frame>
+  return undefined
 })
 export default LogLayer
 

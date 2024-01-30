@@ -84,7 +84,7 @@ React.forwardRef<TabsRefElement, TabsProps>(
     ref={tabFrameRef}
   >
     <GesturesConsumer {...tabDrag()}>
-      <animated.div css={tabsContainerStyle}
+      <TabsContainer
         style={{ left: tabContainerSpring.scrollLeft.to(v=>-v) }}
       >
         
@@ -97,7 +97,7 @@ React.forwardRef<TabsRefElement, TabsProps>(
           tabDrag,
         }) }
       
-      </animated.div>
+      </TabsContainer>
     </GesturesConsumer>
   </TabsFrame>
 }))
@@ -109,10 +109,9 @@ export default Tabs
 
 
 const TabsFrame = styled.article`
-  container: tabs-frame / inline-size;
+  //container: tabs-frame / inline-size;
   width: 100%;
-  min-height: 800px;
-  height: fit-content;
+  height: 100%;
   
   ${row};
   align-items: stretch;
@@ -122,14 +121,14 @@ const GesturesConsumer = styled.div`
   ${contents};
   touch-action: pan-y;
 `
-const tabsContainerStyle = css`
+const TabsContainer = styled(animated.div)`
   position: relative;
   min-width: fit-content;
   width: fit-content;
   ${row};
   align-items: stretch;
   overflow: hidden;
-  
+
   //translate: -100cqw 0;
 `
 

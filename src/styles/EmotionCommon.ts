@@ -220,16 +220,14 @@ export namespace EmotionCommon {
   
   
   
-  export const hideScrollbar = css`
+  export const noScrollbars = css`
     scrollbar-width: none;
     &::-webkit-scrollbar {
       display: none;
     }
   `
   export const hideWindowScrollbar = css`
-    html {
-      ${hideScrollbar}
-    }
+    html { ${noScrollbars} }
   `
   
   

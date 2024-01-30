@@ -5,13 +5,25 @@ import col = EmotionCommon.col
 
 
 
-const Tab = styled.div`
-  min-width: 100cqw;
-  width: 100cqw;
-  max-width: 100cqw;
-  max-height: 800px;
+
+export type TabProps = {
+  width: number|string
+}
+const Tab = styled.div<TabProps>`
+  //min-width: 100cqw;
+  //width: 100cqw;
+  //max-width: 100cqw;
+  min-width: ${p=>prepareWidth(p.width)};
+  width: ${p=>prepareWidth(p.width)};
+  max-width: ${p=>prepareWidth(p.width)};
   ${col};
   overflow-y: auto;
   touch-action: pan-y;
 `
 export default Tab
+
+
+function prepareWidth(width: number|string): string {
+  if (typeof width === 'number') return width+'px'
+  return width
+}

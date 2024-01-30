@@ -1,19 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { animated } from '@react-spring/web'
 import React, { useEffect, useRef, useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { ButtonBarComponents } from 'src/components/BottomButtonBar/components'
 import Form from 'src/components/FormElements/Form'
-import { formHeaderStyle } from 'src/components/FormElements/FormHeader'
+import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
+import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import ProfileContent from 'src/pages/Profile/ProfileContent'
 import { useSetRecoilState } from 'recoil'
+import ProfileTabHeader from 'src/pages/Profile/ProfileTabHeader'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { Pages } from 'src/components/Page/Pages'
-import { MathUtils } from 'src/utils/common/MathUtils'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import Tab from 'src/views/Tabs/Tab'
 import Tabs from 'src/views/Tabs/Tabs'
@@ -21,8 +23,13 @@ import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
 import Page = Pages.Page
 import SoftRefreshBtn = ButtonBarComponents.SoftRefreshBtn
 import modalFrameStyle = Pages.modalFrameStyle
-import fitRange2 = MathUtils.fitRange2
-import mapRange = MathUtils.mapRange
+import TabsPage = Pages.TabsPage
+import pageColors = Pages.pageColors
+import pageLayoutStyle = Pages.pageLayoutStyle
+import pageContentPaddings = Pages.pageContentPaddings
+import col = EmotionCommon.col
+import noScrollbars = EmotionCommon.noScrollbars
+import safePageContentPaddings = Pages.safePageContentPaddings
 
 
 
@@ -75,156 +82,87 @@ React.memo(
   
   return <>
     {/* todo */}
-    <Page css={css`
-      padding-left: 0;
-      padding-right: 0;
-    `}>
+    <TabsPage>
       
       <Tabs {...tabsProps}>{({ tabContainerSpring, computedTabsDimens })=><>
-        
-        <Tab css={css`
-          ${modalFrameStyle};
-          overflow: visible;
-          padding-left: 20px;
-          padding-right: 20px;
-        `}>
-          
-          
-          <Form>
+        {ArrayUtils.ofIndices(4).map(tabIdx=>
+          <Tab css={t=>css`
+            height: 100%;
+          `}
+            width={computedTabsDimens.frameWidth}
+          >
             
-            <animated.h3 css={t=>css`
-              ${formHeaderStyle(t)};
-              //position: relative;
-              //z-index: 100;
-              user-select: none;
-              cursor: pointer;
-            `}
-              onClick={ev=>{
-                setTabsState('snapping')
-                setTabIdx(0)
-              }}
-              style={{
-                x: tabContainerSpring.scrollLeft.to(v=>{
-                  const w = computedTabsDimens.frameWidth
-                  const i = 0 // indexOfThisTab
-                  v = fitRange2(v, [(i-1)*w, (i+1)*w])
-                  v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-                  v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-                  return v
-                }),
-                scale: tabContainerSpring.scrollLeft.to(v=>{
-                  const w = computedTabsDimens.frameWidth
-                  const i = 0 // indexOfThisTab
-                  v = fitRange2(v, [(i-1)*w, (i+1)*w])
-                  v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-                  v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-                  v = 1 - 0.35 * Math.abs(v / (w/2))
-                  return v
-                }),
-                opacity: tabContainerSpring.scrollLeft.to(v=>{
-                  const w = computedTabsDimens.frameWidth
-                  const i = 0 // indexOfThisTab
-                  v = fitRange2(v, [(i-1)*w, (i+1)*w])
-                  v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-                  v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-                  v = 1 - 0.6 * Math.abs(v / (w/2))
-                  return v
-                })
-              }}
-            >
-              Предпросмотр
-            </animated.h3>
-          </Form>
-          
-          
-        </Tab>
-        
-        <Tab css={css`
-          ${modalFrameStyle};
-          overflow: visible;
-          padding-left: 20px;
-          padding-right: 20px;
-        `}>
-          <ProfileContent
-            tabContainerSpring={tabContainerSpring}
-            tabWidth={computedTabsDimens.frameWidth}
-            setTabsState={setTabsState}
-            setTabIdx={setTabIdx}
-          />
-        </Tab>
-        
-        <Tab css={css`
-          ${modalFrameStyle};
-          overflow: visible;
-          padding-left: 20px;
-          padding-right: 20px;
-        `}>
-          
-          
-          <Form>
             
-            <animated.h3 css={t=>css`
-              ${formHeaderStyle(t)};
-              //position: relative;
-              //z-index: 100;
-              user-select: none;
-              cursor: pointer;
+            <OverflowWrapper css={css`
+             ${OverflowWrapperStyle.list};
+              &.rrainuiOverflowWrapper {
+                
+                > .rrainuiScrollContainer {
+                  
+                  touch-action: pan-y;
+                  > .rrainuiScrollContentWrap {}
+                }
+                
+                > .rrainuiScrollbarOverflow {
+                  ${safePageContentPaddings};
+                }
+                
+              }
             `}
-              onClick={ev=>{
-                setTabsState('snapping')
-                setTabIdx(2)
-              }}
-              style={{
-                x: tabContainerSpring.scrollLeft.to(v=>{
-                  const w = computedTabsDimens.frameWidth
-                  const i = 2 // indexOfThisTab
-                  v = fitRange2(v, [(i-1)*w, (i+1)*w])
-                  v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-                  v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-                  return v
-                }),
-                scale: tabContainerSpring.scrollLeft.to(v=>{
-                  const w = computedTabsDimens.frameWidth
-                  const i = 2 // indexOfThisTab
-                  v = fitRange2(v, [(i-1)*w, (i+1)*w])
-                  v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-                  v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-                  v = 1 - 0.35 * Math.abs(v / (w/2))
-                  return v
-                }),
-                opacity: tabContainerSpring.scrollLeft.to(v=>{
-                  const w = computedTabsDimens.frameWidth
-                  const i = 2 // indexOfThisTab
-                  v = fitRange2(v, [(i-1)*w, (i+1)*w])
-                  v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-                  v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-                  v = 1 - 0.6 * Math.abs(v / (w/2))
-                  return v
-                })
-              }}
+              showVertical={!(['dragging','snapping'] as TabsState[]).includes(tabsProps.tabsState)}
             >
-              Партнёр
-            </animated.h3>
-          </Form>
+            <div css={t=>css`
+              ${pageContentPaddings};
+              ${col};
+              align-items: center;
+              ${pageColors(t)};
+              width: 100%;
+              height: fit-content;
+              touch-action: pan-y;
+            `}>
+              
+              
+              {function(){
+                const headerProps = {
+                  thisTabIdx: tabIdx,
+                  tabContainerSpring,
+                  tabWidth: computedTabsDimens.frameWidth,
+                  onClick: ()=>{
+                    setTabsState('snapping')
+                    setTabIdx(tabIdx)
+                  },
+                }
+                switch (tabIdx) {
+                  case 0: return <Form><ProfileTabHeader {...headerProps}>
+                    Предпросмотр
+                  </ProfileTabHeader></Form>
+                  case 1: return <ProfileContent
+                    header={header => <ProfileTabHeader {...headerProps}>
+                      {header}
+                    </ProfileTabHeader>}
+                  />
+                  case 2: return <Form><ProfileTabHeader {...headerProps}>
+                    Партнёр
+                  </ProfileTabHeader></Form>
+                  case 3: return <Form><ProfileTabHeader {...headerProps}>
+                    Свидание
+                  </ProfileTabHeader></Form>
+                }
+              }()}
           
           
-        </Tab>
-        
-        <Tab css={css`
-          ${modalFrameStyle};
-          overflow: visible;
-          padding-left: 20px;
-          padding-right: 20px;
-        `}>
-          Tab 4
-        </Tab>
-        
+            </div>
+          </OverflowWrapper>
+          
+          
+          </Tab>
+        )}
       </>}</Tabs>
       
       {/* todo */}
-      <PageScrollbars />
+      {/* <PageScrollbars /> */}
       
-    </Page>
+    </TabsPage>
     
     
     

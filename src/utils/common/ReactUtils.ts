@@ -87,7 +87,7 @@ export namespace ReactUtils {
   }
   
   
-  export type CssProps = PartialUndef<{
+  export type ClassStyleProps = PartialUndef<{
     className: string
     style: CSSProperties
   }>

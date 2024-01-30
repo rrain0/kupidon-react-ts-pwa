@@ -93,7 +93,6 @@ import UpdateUserErrorData = UserApi.UpdateUserErrorData
 import AddProfilePhotoErrorData = UserApi.AddProfilePhotoErrorData
 import onPointerClick = ReactUtils.onPointerClick
 import fitRange2 = MathUtils.fitRange2
-import Setter = TypeUtils.Setter
 
 
 
@@ -101,10 +100,7 @@ import Setter = TypeUtils.Setter
 
 
 export type ProfileContentProps = {
-  tabContainerSpring: TabsRenderProps['tabContainerSpring']
-  tabWidth: number
-  setTabsState: Setter<TabsState>
-  setTabIdx: Setter<TabIdx>
+  header: (header: string)=>React.ReactNode
 }
 
 
@@ -617,48 +613,7 @@ React.memo(
       
       {/* <FormHeader>{uiText.profile[0].text}</FormHeader> */}
       
-      <animated.h3 css={t=>css`
-        ${formHeaderStyle(t)};
-        //position: relative;
-        //z-index: 100;
-        user-select: none;
-        cursor: pointer;
-      `}
-        onClick={ev=>{
-          props.setTabsState('snapping')
-          props.setTabIdx(1)
-        }}
-        style={{
-          x: props.tabContainerSpring.scrollLeft.to(v=>{
-            const w = props.tabWidth
-            const i = 1 // indexOfThisTab
-            v = fitRange2(v, [(i-1)*w, (i+1)*w])
-            v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-            v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-            return v
-          }),
-          scale: props.tabContainerSpring.scrollLeft.to(v=>{
-            const w = props.tabWidth
-            const i = 1 // indexOfThisTab
-            v = fitRange2(v, [(i-1)*w, (i+1)*w])
-            v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-            v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-            v = 1 - 0.35 * Math.abs(v / (w/2))
-            return v
-          }),
-          opacity: props.tabContainerSpring.scrollLeft.to(v=>{
-            const w = props.tabWidth
-            const i = 1 // indexOfThisTab
-            v = fitRange2(v, [(i-1)*w, (i+1)*w])
-            v = mapRange(v, [(i-1)*w, (i+1)*w], [i*w, (i+1)*w])
-            v = mapRange(v, [i*w, (i+1)*w], [-(w/2), w/2])
-            v = 1 - 0.6 * Math.abs(v / (w/2))
-            return v
-          })
-        }}
-      >
-        {formValues.name}
-      </animated.h3>
+      { props.header(formValues.name) }
       
       
       <div css={css`
