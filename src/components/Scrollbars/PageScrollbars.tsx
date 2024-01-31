@@ -6,8 +6,8 @@ import { isBrowser } from 'react-device-detect'
 import {
   PageScrollbarsOverlayFrame
 } from 'src/components/Scrollbars/PageScrollbarsOverlayFrame'
-import ScrollbarsOverlay from 'src/components/Scrollbars/ScrollbarsOverlay'
-import { ScrollbarsOverlayStyle } from 'src/components/Scrollbars/ScrollbarsOverlayStyle'
+import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -51,7 +51,7 @@ React.memo(
           containerIsWindow={true}
           contentRef={ref}
           render={scrollbarProps=>
-          <ScrollbarsOverlay css={ScrollbarsOverlayStyle.page}
+          <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
             {...scrollbarProps}
           />}
         />

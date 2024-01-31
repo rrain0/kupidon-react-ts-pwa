@@ -80,6 +80,7 @@ export namespace ReactUtils {
   }
   
   
+  // todo hack fix
   // React.memo wrapper if component's generics are not consumed properly by ts
   export const memo = <C>(Component: C): C => {
     // @ts-ignore

@@ -22,7 +22,7 @@ export namespace ButtonStyle {
   
   export namespace Attr {
     export const attr = {
-      error: CommonStyle.Attr.attr.error,
+      error: CommonStyle.Attr0.attr.error,
     } as const
     export const select = generateAttrSelector(attr)
     export const selThis = generateAttrThisSelector(select)

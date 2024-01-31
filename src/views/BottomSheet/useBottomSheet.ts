@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { GetDimensions } from 'src/utils/common/GetDimensions'
+import { ElemProps } from 'src/utils/common/ElemProps'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -109,10 +109,10 @@ export const useBottomSheet = (
   bottomSheetContentRef: React.RefObject<HTMLElement>,
   options: UseBottomSheetOptions,
 ) => {
-  const frame = bottomSheetFrameRef.current
-  const sheet = bottomSheetRef.current
-  const header = bottomSheetHeaderRef.current
-  const content = bottomSheetContentRef.current
+  const getFrame = ()=>bottomSheetFrameRef.current
+  const getSheet = ()=>bottomSheetRef.current
+  const getHeader = ()=>bottomSheetHeaderRef.current
+  const getContent = ()=>bottomSheetContentRef.current
   
   const [isReady, setReady] = useState(false)
   
@@ -128,11 +128,15 @@ export const useBottomSheet = (
   
   const updateComputedSheetDimens = useCallback(
     ()=>{
+      const frame = getFrame()
+      const sheet = getSheet()
+      const header = getHeader()
+      const content = getContent()
       if (frame && sheet && header && content){
-        const frameD = new GetDimensions(frame)
-        const sheetD = new GetDimensions(sheet)
-        const headerD = new GetDimensions(header)
-        const contentD = new GetDimensions(content)
+        const frameD = new ElemProps(frame)
+        const sheetD = new ElemProps(sheet)
+        const headerD = new ElemProps(header)
+        const contentD = new ElemProps(content)
         setComputedSheetDimens({
           frameH: frameD.height,
           sheetH: sheetD.height,
@@ -142,12 +146,16 @@ export const useBottomSheet = (
         })
       }
     },
-    [frame, sheet, header, content]
+    [getFrame(), getSheet(), getHeader(), getContent()]
   )
   
   
   useEffect(
     ()=>{
+      const frame = getFrame()
+      const sheet = getSheet()
+      const header = getHeader()
+      const content = getContent()
       updateComputedSheetDimens()
       if (frame || sheet || header || content){
         const resizeObserver = new ResizeObserver(()=>updateComputedSheetDimens())
@@ -159,7 +167,7 @@ export const useBottomSheet = (
       }
     },
     [
-      frame, sheet, header, content,
+      getFrame(), getSheet(), getHeader(), getContent(),
       updateComputedSheetDimens,
     ]
   )
@@ -518,10 +526,14 @@ export const useBottomSheet = (
   
   useEffect(
     ()=>{
+      const frame = getFrame()
+      const sheet = getSheet()
+      const header = getHeader()
+      const content = getContent()
       if (frame && sheet && header && content) setReady(true)
       else setReady(false)
     },
-    [frame, sheet, header, content]
+    [getFrame(), getSheet(), getHeader(), getContent()]
   )
   
   

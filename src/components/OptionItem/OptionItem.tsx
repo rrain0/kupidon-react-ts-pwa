@@ -19,7 +19,7 @@ export type OptionItemCustomProps = PartialUndef<{
   title: React.ReactNode
   value: React.ReactNode
   nextIcon: React.ReactNode
-}> & CommonStyle.Attr.errorJsxProp
+}> & CommonStyle.Attr0.errorJsxProp
 export type OptionItemForwardRefProps = JSX.IntrinsicElements['article']
 export type OptionItemRefElement = HTMLDivElement
 
@@ -86,7 +86,7 @@ const Frame = styled.article`
     background: ${p=>p.theme.buttonTransparent.bgcFocus[0]};
   }
   
-  ${CommonStyle.Attr.selThis.error}{
+  ${CommonStyle.Attr0.selThis.error}{
     background: ${p=>p.theme.input.bgcError[0]};
   }
 `

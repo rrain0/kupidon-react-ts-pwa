@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import ScrollbarsOverlay from 'src/components/Scrollbars/ScrollbarsOverlay'
-import { ScrollbarsOverlayStyle } from 'src/components/Scrollbars/ScrollbarsOverlayStyle'
+import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
+import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import col = EmotionCommon.col
@@ -24,6 +24,7 @@ export type OverflowWrapperProps = PartialUndef<{
   showHorizontal: boolean
   children: React.ReactNode
 }> & ClassStyleProps
+
 
 
 const OverflowWrapper =
@@ -68,10 +69,16 @@ React.memo(
        // must be without margins & paddings - just content wrapper!!!
        */}
       <div css={css`
-        display: flex;
+        //display: block;
         flex-flow: column nowrap;
+        display: flex;
+        
         //min-width: fit-content; min-height: fit-content;
-        width: fit-content; height: fit-content;
+        //width: fit-content; height: fit-content;
+        //max-width: fit-content; max-height: fit-content;
+        
+        //min-width: 100%; min-height: 100%;
+        width: fit-content(100%); height: fit-content(100%);
         //max-width: fit-content; max-height: fit-content;
         //overflow: visible;
       `}
@@ -91,7 +98,7 @@ React.memo(
         contentRef={scrollContentRef}
         render={
           (scrollbarProps)=>
-            <ScrollbarsOverlay css={ScrollbarsOverlayStyle.page}
+            <ScrollbarOverlay css={ScrollbarOverlayStyle.page}
               {...scrollbarProps}
               showVertical={showVertical}
               showHorizontal={showHorizontal}

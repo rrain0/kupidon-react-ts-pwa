@@ -12,8 +12,9 @@ import classNames from "classnames"
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
-import { ElementProps } from 'src/utils/common/GetDimensions'
+import { getElemProps } from 'src/utils/common/ElemProps'
 import { MathUtils } from 'src/utils/common/MathUtils'
+import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import inRange = MathUtils.inRange
 import fitRange = MathUtils.fitRange
 import { ScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
@@ -71,7 +72,7 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
   const updateTrackProps = useCallback(() => {
     const track = trackRef.current
     if (track){
-      const d = ElementProps(track)
+      const d = getElemProps(track)
       setTrackProps({
         width: d.contentWidth,
         height: d.contentHeight,
@@ -138,8 +139,8 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
       const track = trackRef.current
       const thumbBox = thumbBoxRef.current
       if (track && thumbBox && ev.buttons===1){
-        const trackD = ElementProps(track)
-        const thumbBoxD = ElementProps(thumbBox)
+        const trackD = getElemProps(track)
+        const thumbBoxD = getElemProps(thumbBox)
         const drag = function(){
           const p = function(){
             switch (direction) {
@@ -250,68 +251,71 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
   
   
   
+  
+  const scrollbarTrackProps = {
+    className: classNames(className, ScrollbarStyle.ElRaw.track.name),
+    [ScrollbarStyle.Attr.direction.name]: direction,
+    [ScrollbarStyle.Attr.active.name]: trueOrUndef(dragStart),
+  }
+  
   return <ScrollbarTrack
-    // todo Style
-    className={classNames(className,'rrainuiScrollbarTrack')}
+    {...scrollbarTrackProps}
     {...restProps}
-    // todo Style
-    data-direction={direction}
-    // todo Style
-    data-active={trueOrUndef(dragStart)}
     ref={trackRef}
   >
-    <div
-      css={scrollbarThumbBox}
-      // todo Style
-      className={'rrainuiScrollbarThumbBox'}
+    <ScrollbarThumbBox
+      className={ScrollbarStyle.ElRaw.thumbBox.name}
       ref={thumbBoxRef}
       style={thumbBoxProps}
     >
       <ScrollbarThumb
-        // todo Style
-        className={'rrainuiScrollbarThumb'}
+        className={ScrollbarStyle.ElRaw.thumb.name}
       />
-    </div>
+    </ScrollbarThumbBox>
   </ScrollbarTrack>
 }))
 export default Scrollbar
 
 
 
-type ScrollbarTrackProps = {
-  // todo Style
-  'data-direction': ScrollDirection
-  'data-active': true|undefined
-}
-const ScrollbarTrack = styled.div<ScrollbarTrackProps>`
+const ScrollbarTrack = styled.div`
   ${reset};
   position: relative;
   touch-action: none; // To prevent browser gesture handling on mobile devices
 
-  // todo Style
-  &[data-direction=vertical]{ width: 10px; height: 100%; }
-  // todo Style
-  &[data-direction=horizontal]{ width: 100%; height: 10px; }
-  // todo Style
+  
+  ${ScrollbarStyle.El.track.s.vertical.thisSel}{
+    width: 10px; height: 100%;
+  }
+  ${ScrollbarStyle.El.track.s.horizontal.thisSel}{
+    width: 100%; height: 10px;
+  }
+  
+  ${ScrollbarStyle.El.thumbBox.s.vertical.thisSel}{
+    will-change: top, height;
+    left: 0; right: 0; top: 0; height: 0;
+  }
+  ${ScrollbarStyle.El.thumbBox.s.horizontal.thisSel}{
+    will-change: left, width;
+    top: 0; bottom: 0; left: 0; width: 0;
+  }
+  
   background: rgba(248,248,248,0.35);
-  // todo Style
-  border-radius: 50%;
+  border-radius: 999999px;
 `
 
 
 
-const scrollbarThumbBox = css`
+const ScrollbarThumbBox = styled.div`
   position: absolute;
-  // todo Style
-  [data-direction=vertical]>&{
+  /*[data-direction=vertical]>&{
     will-change: top, height;
     left: 0; right: 0; top: 0; height: 0;
   }
-  // todo Style
   [data-direction=horizontal]>&{
     will-change: left, width;
     top: 0; bottom: 0; left: 0; width: 0;
-  }
+  }*/
 `
 
 
@@ -321,8 +325,6 @@ const ScrollbarThumb = styled.div`
   width: 100%; height: 100%;
   //pointer-events: none;
 
-  // todo Style
   background: rgba(248,248,248,0.5);
-  // todo Style
-  border-radius: 27px;
+  border-radius: 999999px;
 `

@@ -52,13 +52,13 @@ const ScrollbarTest = (
     containerRef, contentRef
   })
   
-  return <div
-    css={css`
-      ${col};
-      gap: 10px;
-      width: fit-content; height: fit-content;
-    `}
-  >
+  //console.log('scrollbarProps',scrollbarProps)
+  
+  return <div css={css`
+    ${col};
+    gap: 10px;
+    width: fit-content; height: fit-content;
+  `}>
     
     <div>Scrollbar Test: {
       ['vertical','horizontal'].filter(it=>{
@@ -69,13 +69,11 @@ const ScrollbarTest = (
     }
     </div>
     
-    <div
-      css={t=>css`
-        width: auto; min-width: 200px; max-width: 400px;
-        height: 340px;
-        ${centerAll};
-      `}
-    >
+    <div css={t=>css`
+      width: auto; min-width: 200px; max-width: 400px;
+      height: 340px;
+      ${centerAll};
+    `}>
       <div css={t=>css`
         width: 100%; height: 100%;
         display: flex;
@@ -86,24 +84,23 @@ const ScrollbarTest = (
         ref={containerRef}
         //{...containerProps}
       >
-        <div
-          css={t=>css`
-            width: fit-content; height: fit-content;
-            ${col};
-            ${(()=>{
-              const bgcLight = ['#ffb6c1','#f5f5f5','#d8701a']
-              const bgcDark =  ['#992c46','#282c34','#994500']
-              const bgc = t.type==='dark' ? bgcDark : bgcLight
-              return css`
-                background: linear-gradient(
-                        to bottom right,
-                        ${bgc[0]} 0%,
-                        ${bgc[1]} 50%,
-                        ${bgc[2]} 100%
-                );
-              `
-            })()};
-          `}
+        <div css={t=>css`
+          width: fit-content; height: fit-content;
+          ${col};
+          ${(()=>{
+            const bgcLight = ['#ffb6c1','#f5f5f5','#d8701a']
+            const bgcDark =  ['#992c46','#282c34','#994500']
+            const bgc = t.type==='dark' ? bgcDark : bgcLight
+            return css`
+              background: linear-gradient(
+                      to bottom right,
+                      ${bgc[0]} 0%,
+                      ${bgc[1]} 50%,
+                      ${bgc[2]} 100%
+              );
+            `
+          })()};
+        `}
           ref={contentRef}
         >
           {
@@ -121,15 +118,14 @@ const ScrollbarTest = (
         </div>
       </div>
       
-      <div
-        css={css`
-          place-self: stretch;
-          display: grid;
-          pointer-events: none;
-          grid: '.. vs' 1fr
-                'hs ..' auto
-               / 1fr auto;
-        `}
+      <div css={css`
+        place-self: stretch;
+        display: grid;
+        pointer-events: none;
+        grid: '.. vs' 1fr
+              'hs ..' auto
+             / 1fr auto;
+      `}
       >
         { props.showVertical && canScrollVertically && <Scrollbar
           css={[ScrollbarStyle.scrollbar, css`

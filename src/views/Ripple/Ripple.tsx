@@ -5,7 +5,7 @@ import React, {
   useImperativeHandle,
   useRef,
 } from 'react'
-import { ElementProps } from 'src/utils/common/GetDimensions'
+import { getElemProps } from 'src/utils/common/ElemProps'
 import css from 'src/views/Ripple/Ripple.module.scss'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
@@ -61,7 +61,7 @@ React.forwardRef<RippleRefElement, RippleProps>(
         
         const mode = function(){
           const modes = ['center','cursor']
-          let mode: any = ElementProps(rippleFrame)
+          let mode: any = getElemProps(rippleFrame)
             .cssPropValue(RippleStyle.Prop.mode)
           if (!modes.includes(mode)) mode = props.mode
           if (!ev) mode = 'center'
@@ -69,7 +69,7 @@ React.forwardRef<RippleRefElement, RippleProps>(
           return mode as 'center'|'cursor'
         }()
         
-        const dimens = ElementProps(rippleFrame)
+        const dimens = getElemProps(rippleFrame)
         const el = {
           clientX: dimens.clientXFloat,
           clientY: dimens.clientYFloat,

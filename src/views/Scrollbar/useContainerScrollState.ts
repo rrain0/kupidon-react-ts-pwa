@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
-import {GetDimensions} from "src/utils/common/GetDimensions"
+import {ElemProps} from "src/utils/common/ElemProps"
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import empty = TypeUtils.empty
 import Setter = TypeUtils.Callback1
 import Callback = TypeUtils.Callback
 
@@ -25,9 +24,9 @@ export type SetScrollProps = Setter<ScrollToOptions>
 export type UseContainerScrollStateProps = (
   {
     containerIsWindow: true
-    containerRef?: never | empty
+    containerRef?: never | undefined
   } | {
-    containerIsWindow?: false | empty
+    containerIsWindow?: false | undefined
     containerRef: React.RefObject<HTMLElement>
   }
 ) & {
@@ -35,8 +34,11 @@ export type UseContainerScrollStateProps = (
 }
 
 
+
 export const useContainerScrollState =
 ({ containerIsWindow, containerRef, contentRef }: UseContainerScrollStateProps)=>{
+  const getContainer = ()=>containerRef?.current
+  const getContent = ()=>contentRef.current
   
   const [scrollProps, setScrollProps] = useState<ScrollProps>({
     clientWidth: 0,
@@ -49,31 +51,50 @@ export const useContainerScrollState =
     scrollHeight: 0,
   })
   const updateScrollProps = useCallback(
-      () => {
-      const container = containerRef?.current
+    () => {
+      const container = getContainer()
+      const content = getContent()
       const view = containerIsWindow ? window : container
       if (view){
-        const d = new GetDimensions(view)
-        //console.log('container.scrollWidth',container.scrollWidth)
-        setScrollProps({
-          clientWidth: d.contentWidth,
-          scrollLeft: d.scrollLeft,
-          scrollLeftMax: d.scrollLeftMax,
-          scrollWidth: d.scrollWidth,
-          clientHeight: d.contentHeight,
-          scrollTop: d.scrollTop,
-          scrollTopMax: d.scrollTopMax,
-          scrollHeight: d.scrollHeight,
-        })
+        const containerProps = new ElemProps(view)
+        //console.log('containerView.scrollWidth',view.scrollWidth)
+        let scrollProps = {
+          clientWidth: containerProps.contentWidth,
+          scrollLeft: containerProps.scrollLeft,
+          scrollLeftMax: containerProps.scrollLeftMax,
+          scrollWidth: containerProps.scrollWidth,
+          clientHeight: containerProps.contentHeight,
+          scrollTop: containerProps.scrollTop,
+          scrollTopMax: containerProps.scrollTopMax,
+          scrollHeight: containerProps.scrollHeight,
+        }
+        if (content){
+          const contentProps = new ElemProps(content)
+          // todo hack fix
+          // sometimes these values from container are wrong, so better get them from content
+          scrollProps = {
+            ...scrollProps,
+            scrollLeftMax: Math.max(contentProps.width, containerProps.width) - containerProps.width,
+            scrollWidth: Math.max(contentProps.width, containerProps.width),
+            scrollTopMax: Math.max(contentProps.height, containerProps.height) - containerProps.height,
+            scrollHeight: Math.max(contentProps.height, containerProps.height),
+          }
+          //console.log('scrollProps',scrollProps)
+        }
+        setScrollProps(scrollProps)
       }
     },
-    [containerIsWindow, containerRef?.current]
+    [containerIsWindow, getContainer()]
   )
+  /* useEffect(
+    ()=>console.log('scrollProps', scrollProps),
+    [scrollProps]
+  ) */
   
   
   
-  const [canScrollHorizontally,setCanScrollHorizontally] = useState(false)
-  const [canScrollVertically,setCanScrollVertically] = useState(false)
+  const [canScrollHorizontally, setCanScrollHorizontally] = useState(false)
+  const [canScrollVertically, setCanScrollVertically] = useState(false)
   useLayoutEffect(
     ()=>{
       setCanScrollHorizontally(scrollProps.clientWidth!==scrollProps.scrollWidth)
@@ -85,16 +106,18 @@ export const useContainerScrollState =
   
   useEffect(
     ()=>{
+      const container = getContainer()
+      const content = getContent()
       updateScrollProps()
-      const container = containerRef?.current
-      const content = contentRef.current
-      let clearActions = [] as Callback[]
+      const clearActions = [] as Callback[]
       if (container && (!containerIsWindow || content)){
-        const resizeObserver = new ResizeObserver(()=>{
+        const resizeObserver = new ResizeObserver((entries, observer)=>{
+          //console.log('entries',entries)
+          //console.log('entries[0].target.scrollWidth',entries[0].target.scrollWidth)
           updateScrollProps()
         })
-        container && !containerIsWindow && resizeObserver.observe(container)
-        content && resizeObserver.observe(content)
+        if (container && !containerIsWindow) resizeObserver.observe(container)
+        if (content) resizeObserver.observe(content)
         clearActions.push(()=>resizeObserver.disconnect())
       }
       if (containerIsWindow){
@@ -104,34 +127,35 @@ export const useContainerScrollState =
         window.addEventListener('resize',onResize)
         clearActions.push(()=>window.removeEventListener('resize',onResize))
       }
-      if (clearActions.length) return ()=>clearActions.forEach(it=>it())
+      return ()=>clearActions.forEach(it=>it())
     },
-    [containerIsWindow, containerRef?.current, contentRef.current, updateScrollProps]
+    [containerIsWindow, getContainer(), getContent(), updateScrollProps]
   )
   
   
   const setContainerScroll = useCallback(
     (scroll: ScrollToOptions) => {
-      const container = containerRef?.current
+      const container = getContainer()
       const view = containerIsWindow ? window : container
       view?.scrollTo(scroll)
     },
-    [containerIsWindow, containerRef?.current]
+    [containerIsWindow, getContainer()]
   )
   
   
   // adds onScroll handler to container
   useEffect(
     ()=>{
-      const container = containerRef?.current
+      const container = getContainer()
       const view = containerIsWindow ? window : container
       if (view){
         view.addEventListener('scroll', updateScrollProps)
         return ()=>view.removeEventListener('scroll', updateScrollProps)
       }
     },
-    [containerIsWindow, containerRef?.current, updateScrollProps]
+    [containerIsWindow, getContainer(), updateScrollProps]
   )
+  
   
   
   return {

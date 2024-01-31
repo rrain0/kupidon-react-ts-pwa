@@ -103,7 +103,7 @@ React.memo(
                   > .rrainuiScrollContentWrap {}
                 }
                 
-                > .rrainuiScrollbarOverflow {
+                > .rrainuiScrollbarOverlay {
                   ${safePageContentPaddings};
                 }
                 
@@ -127,6 +127,7 @@ React.memo(
                   thisTabIdx: tabIdx,
                   tabContainerSpring,
                   tabWidth: computedTabsDimens.frameWidth,
+                  headers: ['Предпросмотр','Профиль','Партнёр','Свидание'],
                   onClick: ()=>{
                     setTabsState('snapping')
                     setTabIdx(tabIdx)

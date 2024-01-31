@@ -1,3 +1,7 @@
+import { TypeUtils } from 'src/utils/common/TypeUtils'
+import anyval = TypeUtils.anyval
+
+
 
 
 /*
@@ -64,16 +68,17 @@
 */
 
 
-function isWindow<T extends {}|null|undefined>(view: T): view is T & Window {
+
+function isWindow<T extends anyval>(view: T): view is T & Window {
   return view instanceof Window
 }
 
 
-export const ElementProps = (element: HTMLElement) => new GetDimensions(element)
+export const getElemProps = (element: HTMLElement) => new ElemProps(element)
 
 
 
-export class GetDimensions {
+export class ElemProps {
   constructor(public view: HTMLElement | Window) { }
   get html(): HTMLElement {
     if (isWindow(this.view)) return this.view.document.documentElement

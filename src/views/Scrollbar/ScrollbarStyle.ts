@@ -1,52 +1,78 @@
 import { css } from '@emotion/react'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { AppTheme } from 'src/utils/theme/AppTheme'
+import { CommonStyle } from 'src/views/CommonStyle'
 import hoverable = EmotionCommon.hoverable
+import DataAttr = CommonStyle.DataAttr
+import Elem = CommonStyle.Elem
+import combineStates = CommonStyle.combineStates
+
 
 
 
 export namespace ScrollbarStyle {
   
   
+  
+  export const Attr = {
+    direction: new DataAttr('direction',['vertical','horizontal']),
+    active: new DataAttr('active',[]),
+  }
+  
+  export const ElRaw = function(){
+    const track = new Elem('rrainuiScrollbarTrack',{})
+    const thumbBox = new Elem('rrainuiScrollbarThumbBox', {})
+    const thumb = new Elem('rrainuiScrollbarThumb', {})
+    return { root: track, track, thumbBox, thumb } as const
+  }()
+  
+  export const El = function(){
+    const track = new Elem(ElRaw.track.name,{
+      vertical: Attr.direction.s.vertical,
+      horizontal: Attr.direction.s.horizontal,
+      active: combineStates(CommonStyle.active, Attr.active),
+      hover: CommonStyle.hover,
+    })
+    const thumbBox = track.withNested('>',ElRaw.thumbBox)
+    const thumb = thumbBox.withNested('>',ElRaw.thumb)
+    return { root: track, track, thumbBox, thumb } as const
+  }()
+  
+  
+  
+  
   export const scrollbar = (t: AppTheme.Theme) => css`
-    &.rrainuiScrollbarTrack {
-      border-radius: 15px;
+    ${El.track.thisSel}{
+      border-radius: 999999px;
       background: ${t.scrollbar.track};
-      //background: #F8F8F8;
-      //opacity: 0.35;
-      &[data-direction=vertical]{ width: 16px; height: 100%; }
-      &[data-direction=horizontal]{ width: 100%; height: 16px; }
-      
-      >.rrainuiScrollbarThumbBox {
-        //padding: 1px 2px;
-        
-        >.rrainuiScrollbarThumb {
-          border-radius: 27px;
-          background: ${t.scrollbar.thumb};
-          
-          //opacity: 0.5;
-          //background: #F8F8F8;
-        }
-      }
-      
-      :active>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: ${t.scrollbar.thumbActive};
-      }
-      &[data-active]>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: ${t.scrollbar.thumbActive};
-      }
-      // it has same specifity that selectors above
-      /*
-      &.rrainuiScrollbarTrack:where(:active,&[data-active])>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: red;
-      }
-      */
-      
-      ${hoverable} { :hover>.rrainuiScrollbarThumbBox>.rrainuiScrollbarThumb {
-        background: ${t.scrollbar.thumbActive};
-      }}
+    }
+    ${El.track.s.vertical.thisSel}{
+      width: 16px; height: 100%;
+    }
+    ${El.track.s.horizontal.thisSel}{
+      width: 100%; height: 16px;
+    }
+    ${El.thumbBox.thisSel}{
+      //padding: 1px 2px;
+    }
+    ${El.thumb.thisSel}{
+      border-radius: 999999px;
+      background: ${t.scrollbar.thumb};
+    }
+    
+    // hover
+    ${hoverable} { ${El.thumb.s.hover.thisSel}{
+      background: ${t.scrollbar.thumbActive};
+    }}
+
+    // active
+    ${El.thumb.s.active.thisSel}{
+      background: ${t.scrollbar.thumbActive};
     }
   `
+  
+  
+  
   
   
 }

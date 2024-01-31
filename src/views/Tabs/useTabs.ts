@@ -8,7 +8,7 @@ import React, {
   useState,
 } from 'react'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { GetDimensions } from 'src/utils/common/GetDimensions'
+import { ElemProps } from 'src/utils/common/ElemProps'
 import { MathUtils } from 'src/utils/common/MathUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -82,8 +82,8 @@ export const useTabs = (
   tabsFrameRef: React.RefObject<HTMLElement>,
   options: UseTabsOptions,
 ) => {
-  const tabsFrame = tabsFrameRef.current
-  const tabsContainer = tabsFrame?.firstElementChild?.firstElementChild
+  const getTabsFrame = ()=>tabsFrameRef.current
+  const getTabsContainer = ()=>getTabsFrame()?.firstElementChild?.firstElementChild
   
   
   const [isReady, setReady] = useState(false)
@@ -96,27 +96,29 @@ export const useTabs = (
   
   const updateComputedTabsDimens = useCallback(
     ()=>{
+      const tabsFrame = getTabsFrame()
       if (tabsFrame){
-        const frameD = new GetDimensions(tabsFrame)
+        const frameD = new ElemProps(tabsFrame)
         setComputedTabsDimens({
           frameWidth: frameD.width,
         })
       }
     },
-    [tabsFrame]
+    [getTabsFrame()]
   )
   
   
   useEffect(
     ()=>{
+      const tabsFrame = getTabsFrame()
       updateComputedTabsDimens()
       if (tabsFrame){
         const resizeObserver = new ResizeObserver(()=>updateComputedTabsDimens())
-        tabsFrame && resizeObserver.observe(tabsFrame)
+        resizeObserver.observe(tabsFrame)
         return ()=>resizeObserver.disconnect()
       }
     },
-    [tabsFrame]
+    [getTabsFrame()]
   )
   
   
@@ -124,6 +126,7 @@ export const useTabs = (
   const [tabsCnt, setTabsCnt] = useState(0) // 0..+inf
   useEffect(
     ()=>{
+      const tabsContainer = getTabsContainer()
       if (tabsContainer){
         setTabsCnt(tabsContainer.childElementCount)
         const callback: MutationCallback = (mutationList)=>{
@@ -135,7 +138,7 @@ export const useTabs = (
         return ()=>observer.disconnect()
       }
     },
-    [tabsContainer]
+    [getTabsContainer()]
   )
   //console.log('tabsCnt',tabsCnt)
   
@@ -394,10 +397,11 @@ export const useTabs = (
   
   useEffect(
     ()=>{
+      const tabsContainer = getTabsContainer()
       if (tabsContainer) setReady(true)
       else setReady(false)
     },
-    [tabsContainer]
+    [getTabsContainer()]
   )
   
   
