@@ -1,9 +1,8 @@
 import { css } from '@emotion/react'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { CommonStyle } from 'src/views/CommonStyle'
-import Elem = CommonStyle.Elem0
-import ObjectMap = ObjectUtils.ObjectMap
+import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
+import Elem = CommonStyle.Elem
 
 
 
@@ -12,60 +11,37 @@ export namespace OverflowWrapperStyle {
   
   
   
-  export const ElRaw = function(){
-    const wrapper = new Elem('rrainuiOverflowWrapper',{})
-    const container = new Elem('rrainuiScrollContainer',{})
-    const content = new Elem('rrainuiScrollContentWrap',{})
-    
-    // todo
-    //const overlay = ScrollbarOverlayStyle.ElRaw
-    
-    // todo
-    return { root: wrapper, wrapper, container, content/* , overlay */ } as const
-  }()
   
   export const El = function(){
-    const wrapper = new Elem(ElRaw.wrapper.name,{})
-    const container = wrapper.selectWithParentState('>', ElRaw.container)
-    const content = container.selectWithParentState('>', ElRaw.content)
+    const wrapper = new Elem('rrainuiOverflowWrapper',{})
+    const container = wrapper.upFor('>', new Elem('rrainuiScrollContainer',{}))
+    const content = container.upFor('>', new Elem('rrainuiScrollContentWrap',{}))
     
-    // todo
-    /* const overlay = ObjectMap<typeof ScrollbarOverlayStyle.El, typeof ScrollbarOverlayStyle.El>(
-      ScrollbarOverlayStyle.El,
-      ([key,value])=>[key, wrapper.selectWithChildState('>',value)]
-    ) */
     
-    // todo
-    return { root: wrapper, wrapper, container, content/* , overlay */ } as const
+    const scrollbarOverlay = wrapper.upFor('>',ScrollbarOverlayStyle.El.overlay)
+    
+    const scrollbarTrack = scrollbarOverlay.upFor('>',ScrollbarStyle.El.track)
+    const scrollbarThumbBox = scrollbarTrack.upFor('>',ScrollbarStyle.El.thumbBox)
+    const scrollbarThumb = scrollbarThumbBox.upFor('>',ScrollbarStyle.El.thumb)
+    
+    return { root: wrapper, wrapper, container, content,
+      scrollbarOverlay, scrollbarTrack, scrollbarThumbBox, scrollbarThumb,
+    } as const
   }()
   
-  //console.log('El.overlay',El.overlay)
   
   
   
   
-  /* ${El.overlay.overlay.thisSel}{
-   padding: 3px;
-   }
-   ${El.overlay.scrollbar.track.s.vertical.thisSel}{
-   width: 10px;
-   }
-   ${El.overlay.scrollbar.track.s.horizontal.thisSel}{
-   height: 10px;
-   } */
   export const bigSizeScrollbars = css`
-    &.rrainuiOverflowWrapper {
-      > .rrainuiScrollbarOverlay {
-        padding: 3px;
-        
-        > .rrainuiScrollbarTrack[data-direction=vertical] {
-          width: 10px;
-        }
-
-        > .rrainuiScrollbarTrack[data-direction=horizontal] {
-          height: 10px;
-        }
-      }
+    ${El.scrollbarOverlay.thiz()}{
+      padding: 3px;
+    }
+    ${El.scrollbarTrack.thiz(El.scrollbarTrack.s('vertical'))}{
+      width: 10px;
+    }
+    ${El.scrollbarTrack.thiz(El.scrollbarTrack.s('horizontal'))}{
+      height: 10px;
     }
   `
   
@@ -74,38 +50,27 @@ export namespace OverflowWrapperStyle {
   
   export const page = css`
     ${bigSizeScrollbars};
-    &.rrainuiOverflowWrapper {
+    ${El.content.thiz()}{
+      min-width: fit-content;
+      width: 100%;
 
-      > .rrainuiScrollContainer {
-        //place-content: stretch;
-        //place-items: stretch;
-
-        > .rrainuiScrollContentWrap {
-          min-width: fit-content;
-          width: 100%;
-
-          min-height: fit-content;
-          height: fit-content;
-          flex: 1;
-        }
-      }
+      min-height: fit-content;
+      height: fit-content;
+      flex: 1;
     }
   `
   
   
   
-  
   export const middleSizeScrollbars = css`
-    &.rrainuiOverflowWrapper {
-      > .rrainuiScrollbarOverlay {
-        > .rrainuiScrollbarTrack[data-direction=vertical] {
-          width: 6px;
-        }
-
-        > .rrainuiScrollbarTrack[data-direction=horizontal] {
-          height: 6px;
-        }
-      }
+    ${El.scrollbarOverlay.thiz()}{
+      //padding: 3px;
+    }
+    ${El.scrollbarTrack.thiz(El.scrollbarTrack.s('vertical'))}{
+      width: 6px;
+    }
+    ${El.scrollbarTrack.thiz(El.scrollbarTrack.s('horizontal'))}{
+      height: 6px;
     }
   `
   
@@ -114,18 +79,12 @@ export namespace OverflowWrapperStyle {
   
   export const list = css`
     ${middleSizeScrollbars};
-    &.rrainuiOverflowWrapper {
-
-      > .rrainuiScrollContainer {
-
-        > .rrainuiScrollContentWrap {
-          //min-width: 100%;
-          //min-height: 100%;
-          //width: fit-content;
-          //height: fit-content;
-          //max-width: 100%; max-height: 100%;
-        }
-      }
+    ${El.content.thiz()}{
+      //min-width: 100%;
+      //min-height: 100%;
+      //width: fit-content;
+      //height: fit-content;
+      //max-width: 100%; max-height: 100%;
     }
   `
   

@@ -45,13 +45,13 @@ React.forwardRef<ButtonRefElement, ButtonProps>(
   
   
   const buttonProps = {
-    [ButtonStyle.Attr.attr.error]: trueOrUndef(hasError),
-    className: classNames(className, ButtonStyle.El.clazz.btn),
+    [ButtonStyle.Attr.error.name]: trueOrUndef(hasError),
+    className: classNames(className, ButtonStyle.El.btn.name),
     type: type ?? 'button',
     ...restProps
   }
   const borderProps = {
-    className: ButtonStyle.El.clazz.border
+    className: ButtonStyle.El.border.name
   }
   const rippleProps = {
     mode: rippleMode ?? 'cursor',

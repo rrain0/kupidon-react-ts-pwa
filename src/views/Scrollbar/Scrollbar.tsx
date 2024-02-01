@@ -253,7 +253,7 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
   
   
   const scrollbarTrackProps = {
-    className: classNames(className, ScrollbarStyle.ElRaw.track.name),
+    className: classNames(className, ScrollbarStyle.El.track.name),
     [ScrollbarStyle.Attr.direction.name]: direction,
     [ScrollbarStyle.Attr.active.name]: trueOrUndef(dragStart),
   }
@@ -264,12 +264,12 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
     ref={trackRef}
   >
     <ScrollbarThumbBox
-      className={ScrollbarStyle.ElRaw.thumbBox.name}
+      className={ScrollbarStyle.El.thumbBox.name}
       ref={thumbBoxRef}
       style={thumbBoxProps}
     >
       <ScrollbarThumb
-        className={ScrollbarStyle.ElRaw.thumb.name}
+        className={ScrollbarStyle.El.thumb.name}
       />
     </ScrollbarThumbBox>
   </ScrollbarTrack>
@@ -284,18 +284,18 @@ const ScrollbarTrack = styled.div`
   touch-action: none; // To prevent browser gesture handling on mobile devices
 
   
-  ${ScrollbarStyle.El.track.s.vertical.thisSel}{
+  ${ScrollbarStyle.El.track.thiz('vertical')}{
     width: 10px; height: 100%;
   }
-  ${ScrollbarStyle.El.track.s.horizontal.thisSel}{
+  ${ScrollbarStyle.El.track.thiz('horizontal')}{
     width: 100%; height: 10px;
   }
   
-  ${ScrollbarStyle.El.thumbBox.s.vertical.thisSel}{
+  ${ScrollbarStyle.El.thumbBox.thiz('vertical')}{
     will-change: top, height;
     left: 0; right: 0; top: 0; height: 0;
   }
-  ${ScrollbarStyle.El.thumbBox.s.horizontal.thisSel}{
+  ${ScrollbarStyle.El.thumbBox.thiz('horizontal')}{
     will-change: left, width;
     top: 0; bottom: 0; left: 0; width: 0;
   }

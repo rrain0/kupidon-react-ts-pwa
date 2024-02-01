@@ -39,7 +39,7 @@ React.memo(
   
   
   return <Overlay // Scrollbar Overlay
-    className={classNames(props.className, ScrollbarOverlayStyle.ElRaw.overlay.name)}
+    className={classNames(props.className, ScrollbarOverlayStyle.El.overlay.name)}
     style={props.style}
   >
     
@@ -74,7 +74,7 @@ const Overlay = styled.div`
 
 const VerticalScrollbar = styled(Scrollbar)`
   ${p=>ScrollbarStyle.scrollbar(p.theme)};
-  ${ScrollbarStyle.El.root.s.vertical.thisSel}{
+  ${ScrollbarStyle.El.root.thiz('vertical')}{
     grid-area: vs;
     place-self: stretch end;
     height: auto;
@@ -85,7 +85,7 @@ const VerticalScrollbar = styled(Scrollbar)`
 
 const HorizontalScrollbar = styled(Scrollbar)`
   ${p=>ScrollbarStyle.scrollbar(p.theme)};
-  ${ScrollbarStyle.El.root.s.horizontal.thisSel}{
+  ${ScrollbarStyle.El.root.thiz('horizontal')}{
     grid-area: hs;
     place-self: end stretch;
     height: 20px;

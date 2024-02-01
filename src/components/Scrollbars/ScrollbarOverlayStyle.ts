@@ -1,9 +1,7 @@
 import { css } from '@emotion/react'
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { CommonStyle } from 'src/views/CommonStyle'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
-import Elem0 = CommonStyle.Elem0
-import ObjectMap = ObjectUtils.ObjectMap
+import Elem = CommonStyle.Elem
 
 
 
@@ -12,39 +10,27 @@ export namespace ScrollbarOverlayStyle {
   
   
   
-  export const ElRaw = function(){
-    const overlay = new Elem0('rrainuiScrollbarOverlay',{})
-    
-    // todo
-    const scrollbar = ScrollbarStyle.ElRaw
-    
-    // todo
-    return { root: overlay, overlay, scrollbar } as const
-  }()
-  
   export const El = function(){
-    const overlay = new Elem0(ElRaw.overlay.name,{})
+    const overlay = new Elem('rrainuiScrollbarOverlay',{})
     
-    // todo
-    const scrollbar = ObjectMap<typeof ScrollbarStyle.El, typeof ScrollbarStyle.El>(
-      ScrollbarStyle.El,
-      ([key,value])=>[key, overlay.selectWithChildState('>',value)]
-    )
+    const scrollbarTrack = overlay.upFor('>',ScrollbarStyle.El.track)
+    const scrollbarThumbBox = scrollbarTrack.upFor('>',ScrollbarStyle.El.thumbBox)
+    const scrollbarThumb = scrollbarThumbBox.upFor('>',ScrollbarStyle.El.thumb)
     
-    // todo
-    return { root: overlay, overlay, scrollbar } as const
+    return { root: overlay, overlay, scrollbarTrack, scrollbarThumbBox, scrollbarThumb } as const
   }()
   
+  //console.log('ScrollbarOverlayStyle.El',El)
   
   
   export const page = css`
-    ${El.overlay.thisSel}{
+    ${El.overlay.thiz()}{
       padding: 1px;
     }
-    ${El.scrollbar.track.s.vertical.thisSel}{
+    ${El.scrollbarTrack.thiz(El.scrollbarTrack.s('vertical'))}{
       width: 7px;
     }
-    ${El.scrollbar.track.s.horizontal.thisSel}{
+    ${El.scrollbarTrack.thiz(El.scrollbarTrack.s('horizontal'))}{
       height: 7px;
     }
   `

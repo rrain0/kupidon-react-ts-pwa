@@ -256,7 +256,7 @@ React.memo(
             <UseBool>{bool => <>
               
               <UseFakePointerRef>{({ ref })=>
-                <Button css={ButtonStyle.roundedDanger}
+                <Button css={normalIconRoundButton}
                   //onClick={bool.setTrue}
                   ref={ref as any}
                   {...onPointerClick(bool.setTrue)}
@@ -313,7 +313,7 @@ const icon = (t:Theme)=>css`
   ${SvgIcStyle.El.thiz.icon} {
     height: 1.3em;
     width: 1.333em;
-    ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.varr.color};
+    ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.color.sel()};
   }
 `
 const iconSmall = (t:Theme)=>css`
@@ -329,7 +329,7 @@ const RoundButtonsContainer = styled.div`
 `
 const normalIconRoundButton = (t:Theme)=>css`
   ${ButtonStyle.roundedAccent(t)};
-  ${ButtonStyle.El.thiz.btn} {
+  ${ButtonStyle.El.btn.thiz()} {
     min-width: 90px;
     gap: 0.6em;
   }

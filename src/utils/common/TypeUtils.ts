@@ -40,7 +40,7 @@ export namespace TypeUtils {
   export type Setter<T> = Callback1<T>
   export type Consumer<T> = Callback1<T>
   export type Generator<T> = ()=>T
-  export type Mapper<T> = (prevValue: T)=>T
+  export type Mapper<T1,T2=T1> = (prevValue: T1)=>T2
   
   export type Predicate<T> = (obj: T)=>boolean
   export const defaultPredicate: Predicate<any> = value=>!!value

@@ -2,10 +2,9 @@ import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import PartialUndef = TypeUtils.PartialUndef
-import ObjectEntries = ObjectUtils.ObjectEntries
-import isArray = ArrayUtils.isArray
 import isObject = ObjectUtils.isObject
 import isstring = TypeUtils.isstring
+import SingleOrArr = ArrayUtils.SingleOrArr
 
 
 
@@ -14,8 +13,37 @@ export namespace CommonStyle {
   
   
   
+  import exists = TypeUtils.exists
   
-  import SingleOrArr = ArrayUtils.SingleOrArr
+  export class Pseudo {
+    readonly name: string
+    
+    readonly sel: string
+    readonly thiz: string
+    
+    constructor(name: string) {
+      this.name = name
+      
+      this.sel = `:${this.name}`
+      this.thiz = `&${this.sel}`
+      if (!this.name) {
+        this.sel = ''
+        this.thiz = ''
+      }
+    }
+    
+    
+    static readonly empty = new Pseudo('')
+    static readonly hover = new Pseudo('hover')
+    static readonly active = new Pseudo('active')
+    static readonly focus = new Pseudo('focus')
+    static readonly focusVisible = new Pseudo('focus-visible')
+    static readonly disabled = new Pseudo('disabled')
+  }
+  
+  
+  
+  
   export type DataAttrState<V extends readonly string[]>
     = Record<V[number], DataAttr<any>>
   
@@ -24,7 +52,7 @@ export namespace CommonStyle {
     readonly name: string
     
     readonly sel: string
-    readonly thisSel: string
+    readonly thiz: string
     
     readonly values: V
     
@@ -36,7 +64,7 @@ export namespace CommonStyle {
       this.values = values
       
       this.sel = `[${this.name}]`
-      this.thisSel = `&${this.sel}`
+      this.thiz = `&${this.sel}`
       
       const attrState = {} as DataAttrState<V>
       this.values.forEach(value=>{
@@ -44,6 +72,9 @@ export namespace CommonStyle {
       })
       this.s = attrState
     }
+    
+    
+    static readonly error = new DataAttr('error',[])
   }
   
   /* { // attr test
@@ -59,131 +90,13 @@ export namespace CommonStyle {
   
   
   
-  export class PseudoClass {
-    readonly name: string
-    
-    readonly sel: string
-    readonly thisSel: string
-    
-    constructor(name: string) {
-      this.name = name
-      
-      this.sel = `:${this.name}`
-      this.thisSel = `&${this.sel}`
-      if (!this.name) {
-        this.sel = ''
-        this.thisSel = ''
-      }
-    }
-  }
   
-  export const empty = new PseudoClass('')
-  export const hover = new PseudoClass('hover')
-  export const active = new PseudoClass('active')
-  
-  
-  
-  
-  export function combineStates(...states: (PseudoClass|DataAttr<any>)[]): PseudoClass {
-    if (states.length===0) return empty
+  export function combineStates(...states: (Pseudo|DataAttr<any>)[]): Pseudo {
+    if (states.length===0) return Pseudo.empty
     if (states.length===1) return states[0]
-    return new PseudoClass(`is(${states.map(it=>it.sel).join(',')})`)
+    return new Pseudo(`is(${states.map(it=>it.sel).join(',')})`)
   }
   
-  
-  
-  export type ElemStateDescriptor0<N extends string>
-    = Record<N, PseudoClass|DataAttr<any>>
-  export type ElemState0<N extends string>
-    = Record<N, Elem0<any>>
-  
-  export class Elem0<N extends string> {
-    readonly name: string
-    readonly states: ElemStateDescriptor0<N>
-    
-    readonly sel: string
-    readonly thisSel: string
-    
-    readonly s: ElemState0<N>
-    
-    constructor(name: string, states: ElemStateDescriptor0<N>) {
-      this.name = name
-      this.states = states
-      
-      this.sel = `.${this.name}`
-      this.thisSel = `&${this.sel}`
-      
-      const elemState = {} as ElemState0<N>
-      ObjectEntries(this.states).forEach(([name,state])=>{
-        elemState[name] = new Elem0(`${this.name}${state.sel}`,{})
-      })
-      this.s = elemState
-    }
-    
-    selectWithParentState(selector: string, element: Elem0<any>): Elem0<N> {
-      const nested = new Elem0(
-        this.name+selector+element.sel,
-        this.states
-      )
-      ObjectEntries(this.s).forEach(([key,value])=>{
-        nested.s[key] = new Elem0(
-          value.name+selector+element.sel,
-          value.states
-        )
-      })
-      return nested
-    }
-    selectWithChildState<N extends string>(selector: string, element: Elem0<N>): Elem0<N> {
-      const nested = new Elem0(
-        this.name+selector+element.sel,
-        element.states
-      )
-      ObjectEntries(element.s).forEach(([key,value])=>{
-        nested.s[key] = new Elem0(
-          this.name+selector+value.sel,
-          value.states
-        )
-      })
-      return nested
-    }
-  }
-  
-  /* { // Elem test
-    const hover = new PseudoClass('hover')
-    const active = new PseudoClass('active')
-    const highlight = new DataAttr('highlight',[])
-    const direction = new DataAttr('direction',['vertical','horizontal'])
-    
-    const btnElem = new Elem0('rrainuiButton',{
-      hover: hover,
-      active: combineStates(active, highlight),
-      direction: direction,
-      vertical: direction.s.vertical,
-      horizontal: direction.s.horizontal,
-    })
-    
-    const rawBorderElem = new Elem0('rrainuiBorder',{})
-    const borderElem = btnElem.withNested('>',rawBorderElem)
-    
-    const rawRippleElem = new Elem0('rrainuiRipple',{})
-    const rippleElem = borderElem.withNested('>',rawRippleElem)
-    
-    console.log('btnElem',btnElem)
-    console.log('borderElem',borderElem)
-    console.log('rippleElem',rippleElem)
-    
-    const btnHover = btnElem.s.hover
-    const btnVertical = btnElem.s.vertical
-    //const btnVertical1 = btnElem.s.vertical1 // error - no such state
-  } */
-  
-  
-  
-  
-  
-  /* export function mapViewElements<E>(parent: Elem0<any>, selector: string, elements: E): E {
-    return elements
-  } */
   
   
   
@@ -195,7 +108,8 @@ export namespace CommonStyle {
   
   
   export type ElemStateDescriptor<S extends string>
-    = Record<S, SingleOrArr<PseudoClass | DataAttr<any>>>
+    = Record<S, SingleOrArr<Pseudo | DataAttr<any>>>
+  
   
   export class Elem<S extends string, RootS extends string = S> {
     #up: Elem<any,any> | undefined
@@ -262,7 +176,7 @@ export namespace CommonStyle {
       const upSelector = this.up?.sel(...restState) ?? ''
       return upSelector+this.upSelector+thisSelector
     }
-    thisSel(...state: (RootS | StateForElem<any> | StateForElem<S>)[]): string {
+    thiz(...state: (RootS | StateForElem<any> | StateForElem<S>)[]): string {
       return '&'+this.sel(...state)
     }
     
@@ -274,17 +188,9 @@ export namespace CommonStyle {
       return newDown
     }
     
-    
-    /* setUp<UpS extends string>(up: Elem<UpS>, selector: string): Elem<UpS | S> {
-      const newElem = new Elem(this.name, this.states)
-      newElem.#up = up
-      newElem.upSelector = selector
-      return newElem as Elem<UpS | S>
-    } */
-    
   }
   
-  { // Elem test
+  /* { // Elem test
     const hover = new PseudoClass('hover')
     const active = new PseudoClass('active')
     const dataActive = new DataAttr('active',[])
@@ -335,6 +241,47 @@ export namespace CommonStyle {
       rippleElem.thisSel(btnElem.s('active'), rippleElem.s('fast'))
     )
     
+  } */
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  export type CssPropState<V extends readonly string[]>
+    = Record<V[number], CssProp<any>>
+  
+  export class CssProp<const V extends readonly string[]> {
+    readonly rawName: string
+    readonly name: string
+    
+    readonly values: V
+    
+    //readonly s: PropState<V>
+    
+    constructor(rawName: string, values: V) {
+      this.rawName = rawName
+      this.name = `--${this.rawName}`
+      this.values = values
+      
+      /* const propState = {} as PropState<V>
+      this.values.forEach(value=>{
+        propState[value] = new Prop(`${this.rawName}=${value}`,[])
+      })
+      this.s = propState */
+    }
+    
+    sel(defaultValue?: string): string {
+      const values = [this.name]
+      if (exists(defaultValue)) values.push(defaultValue)
+      return `var(${values.join(',')})`
+    }
+    
+    
+    static readonly color = new CssProp('color',[])
   }
   
   
@@ -348,6 +295,8 @@ export namespace CommonStyle {
   
   
   
+  
+  // todo REMOVE
   
   export namespace Attr0 {
     export const attr = {
@@ -361,19 +310,13 @@ export namespace CommonStyle {
     export type errorHtmlProp =
       PartialUndef<{ [attr.error]: true|undefined }>
   }
-  export namespace Prop {
+  export namespace Prop0 {
     export const prop = {
       color: '--color',
     } as const
     export const varr = generatePropVar(prop)
     export const vard = generatePropVarDefault(prop)
   }
-  
-  
-  
-  
-  
-  
   
   
   

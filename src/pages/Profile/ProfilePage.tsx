@@ -95,18 +95,11 @@ React.memo(
             
             <OverflowWrapper css={css`
               ${OverflowWrapperStyle.list};
-              &.rrainuiOverflowWrapper {
-                
-                > .rrainuiScrollContainer {
-                  
-                  touch-action: pan-y;
-                  > .rrainuiScrollContentWrap {}
-                }
-                
-                > .rrainuiScrollbarOverlay {
-                  ${safePageContentPaddings};
-                }
-                
+              ${OverflowWrapperStyle.El.container.thiz()}{
+                touch-action: pan-y;
+              }
+              ${OverflowWrapperStyle.El.scrollbarOverlay.thiz()}{
+                ${safePageContentPaddings};
               }
             `}
               showVertical={!(['dragging','snapping'] as TabsState[]).includes(tabsProps.tabsState)}

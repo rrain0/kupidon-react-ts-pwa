@@ -8,96 +8,54 @@ import Theme = AppTheme.Theme
 import col = EmotionCommon.col
 import Txt = EmotionCommon.Txt
 import hoverable = EmotionCommon.hoverable
-import generatePropVar = CommonStyle.generatePropVar
-import generatePropVarDefault = CommonStyle.generatePropVarDefault
-import generateElDotClass = CommonStyle.generateElDotClass
-import generateElThis = CommonStyle.generateElThis
-import generateAttrSelector = CommonStyle.generateAttrSelector
-import generateAttrThisSelector = CommonStyle.generateAttrThisSelector
+import Elem = CommonStyle.Elem
+import DataAttr = CommonStyle.DataAttr
+import Pseudo = CommonStyle.Pseudo
 
 
 
 
 export namespace ButtonStyle {
   
-  export namespace Attr {
-    export const attr = {
-      error: CommonStyle.Attr0.attr.error,
-    } as const
-    export const select = generateAttrSelector(attr)
-    export const selThis = generateAttrThisSelector(select)
-  }
-  export namespace El {
-    export const clazz = {
-      btn:    'rrainuiButton',
-      border: 'rrainuiBorder',
-      ripple: RippleStyle.El.frameClassName,
-      icon:   SvgIcStyle.El.clazz.icon,
-    } as const
-    
-    export const dotClazz = generateElDotClass(clazz)
-    
-    // TODO set path to elements separately and generate via path
-    const elMain = {
-      btn: dotClazz.btn,
-    } as const
-    const elBasic = {
-      border: elMain.btn+'>'+dotClazz.border,
-      ripple: elMain.btn+'>*>'+dotClazz.ripple,
-      icon:   elMain.btn+'>'+dotClazz.icon,
-    } as const
-    const elMainStateSimple = {
-      btnHover:        elMain.btn+':hover',
-      btnActive:       elMain.btn+':active',
-      btnFocus:        elMain.btn+':focus',
-      btnFocusVisible: elMain.btn+':focus-visible',
-      btnDisabled:     elMain.btn+':disabled',
-      btnError:        elMain.btn+Attr.select.error,
-    } as const
-    const elMainStateComplex = {
-      btnActiveFocusVisible: elMainStateSimple.btnActive+','+elMainStateSimple.btnFocusVisible,
-    } as const
-    const elBasicStateSimple = {
-      borderDisabled:     elMainStateSimple.btnDisabled+'>'+dotClazz.border,
-      borderError:        elMainStateSimple.btnError+'>'+dotClazz.border,
-      
-      rippleDisabled:     elMainStateSimple.btnDisabled+'>*>'+dotClazz.ripple,
-      
-      iconDisabled:       elMainStateSimple.btnDisabled+'>*>'+dotClazz.icon,
-    } as const
-    export const el = {
-      ...elMain,
-      ...elBasic,
-      ...elMainStateSimple,
-      ...elMainStateComplex,
-      ...elBasicStateSimple,
-    } as const
-    
-    export const thiz = generateElThis(el)
-  }
-  export namespace Prop {
-    export const prop = {
-      color:       CommonStyle.Prop.prop.color,
-      rippleMode:  RippleStyle.Prop.mode,
-      rippleColor: RippleStyle.Prop.color,
-      iconSize:    SvgIcStyle.Prop.prop.size,
-      iconColor:   SvgIcStyle.Prop.prop.color,
-    } as const
-    export const varr = generatePropVar(prop)
-    export const vard = generatePropVarDefault(prop)
-  }
+  import CssProp = CommonStyle.CssProp
+  export const Attr = {
+    error: DataAttr.error
+  } as const
+  
+  export const El = function(){
+    const btn = new Elem('rrainuiButton',{
+      hover: Pseudo.hover,
+      active: Pseudo.active,
+      focus: Pseudo.focus,
+      focusVisible: Pseudo.focusVisible,
+      disabled: Pseudo.disabled,
+      error: Attr.error,
+    })
+    const border = btn.upFor('>', new Elem('rrainuiBorder',{}))
+    const ripple = border.upFor('>', new Elem(RippleStyle.El.frameClassName,{}))
+    const icon = btn.upFor('>', new Elem(SvgIcStyle.El.clazz.icon,{}))
+    return { root: btn, btn, border, ripple, icon } as const
+  }()
+  
+  export const Prop = {
+    color: CssProp.color,
+    rippleMode:  new CssProp(RippleStyle.Prop.mode.substring(2),['center','cursor']),
+    rippleColor: new CssProp(RippleStyle.Prop.color.substring(2),[]),
+    iconSize:    new CssProp(SvgIcStyle.Prop.prop.size.substring(2),[]),
+    iconColor:   new CssProp(SvgIcStyle.Prop.prop.color.substring(2),[]),
+  } as const
   
   
   
   const common = css`
     // normal
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       transition: background linear 300ms;
       overflow-wrap: anywhere;
     }
     
     // disabled
-    ${El.thiz.rippleDisabled} {
+    ${El.ripple.thiz('disabled')} {
       display: none;
     }
   `
@@ -106,7 +64,7 @@ export namespace ButtonStyle {
   namespace Shape {
     
     export const bigRect = css`
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         width: 100%;
         min-height: 50px;
         border-radius: 15px;
@@ -115,7 +73,7 @@ export namespace ButtonStyle {
       }
     `
     export const smallRect = css`
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         width: auto;
         min-height: 30px;
         border-radius: 10px;
@@ -126,7 +84,7 @@ export namespace ButtonStyle {
     `
     
     export const rounded = css`
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         width: fit-content;
         min-height: 40px;
         border-radius: 1000000px;
@@ -136,7 +94,7 @@ export namespace ButtonStyle {
     `
     
     export const roundedSmall = css`
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         width: fit-content;
         min-height: 30px;
         border-radius: 1000000px;
@@ -153,104 +111,104 @@ export namespace ButtonStyle {
     
     export const main = (t:Theme) => css`
       // normal
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         background: ${t.buttonMain.bgc[0]};
         color: ${t.buttonMain.content[0]};
-        ${Prop.prop.color}: ${t.buttonMain.content[0]};
+        ${Prop.color.name}: ${t.buttonMain.content[0]};
       }
-      ${El.thiz.ripple} {
-        ${Prop.prop.rippleColor}: ${t.ripple.content[0]};
+      ${El.ripple.thiz()} {
+        ${Prop.rippleColor.name}: ${t.ripple.content[0]};
       }
       
       // hover
-      ${hoverable}{ ${El.thiz.btnHover} {
+      ${hoverable}{ ${El.btn.thiz('hover')} {
         background: ${t.buttonMain.bgcFocus[0]};
       }}
       
       // active
-      ${El.thiz.btnActive} {}
+      ${El.btn.thiz('active')} {}
       
       // focus
-      ${El.thiz.btnFocus} {}
+      ${El.btn.thiz('focus')} {}
       
       // focus-visible
-      ${El.thiz.btnFocusVisible} {
+      ${El.btn.thiz('focusVisible')} {
         background: ${t.buttonMain.bgcFocus[0]};
       }
       
       // disabled
-      ${El.thiz.btnDisabled} {
+      ${El.btn.thiz('disabled')} {
         background: ${t.elementDisabled.bgc[0]};
         color: ${t.elementDisabled.content[0]};
-        ${Prop.prop.color}: ${t.elementDisabled.content[0]};
+        ${Prop.color.name}: ${t.elementDisabled.content[0]};
       }
       
       // error
-      ${El.thiz.borderError} {}
+      ${El.border.thiz('error')} {}
     `
     
     
     
     export const accent = (t:Theme) => css`
       // normal
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         background: ${t.buttonAccent.bgc[0]};
         color: ${t.buttonAccent.content[0]};
-        ${Prop.prop.color}: ${t.buttonAccent.content[0]};
+        ${Prop.color.name}: ${t.buttonAccent.content[0]};
       }
-      ${El.thiz.ripple} {
-        ${Prop.prop.rippleColor}: ${t.ripple.content[0]};
+      ${El.ripple.thiz()} {
+        ${Prop.rippleColor.name}: ${t.ripple.content[0]};
       }
 
       // hover
-      ${hoverable}{ ${El.thiz.btnHover} {
+      ${hoverable}{ ${El.btn.thiz('hover')} {
         background: ${t.buttonAccent.bgcFocus[0]};
       }}
 
       // focus-visible
-      ${El.thiz.btnFocusVisible} {
+      ${El.btn.thiz('focusVisible')} {
         background: ${t.buttonAccent.bgcFocus[0]};
       }
 
       // disabled
-      ${El.thiz.btnDisabled} {
+      ${El.btn.thiz('disabled')} {
         background: ${t.elementDisabled.bgc[0]};
         color: ${t.elementDisabled.content[0]};
-        ${Prop.prop.color}: ${t.elementDisabled.content[0]};
+        ${Prop.color.name}: ${t.elementDisabled.content[0]};
       }
     `
     
     
     export const secondary = (t:Theme)=>css`
       // normal
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         background: ${t.buttonSecondary.bgc[0]};
         color: ${t.buttonSecondary.content[0]};
-        ${Prop.prop.color}: ${t.buttonSecondary.content[0]};
+        ${Prop.color.name}: ${t.buttonSecondary.content[0]};
       }
-      ${El.thiz.border} {
+      ${El.border.thiz()} {
         border: 1px solid;
         border-color: ${t.buttonSecondary.content[0]};
       }
-      ${El.thiz.ripple} {
-        ${Prop.prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
+      ${El.ripple.thiz()} {
+        ${Prop.rippleColor.name}: ${t.ripple.contentOnTransparent[0]};
       }
 
       // hover
-      ${hoverable}{ ${El.thiz.btnHover} {
+      ${hoverable}{ ${El.btn.thiz('hover')} {
         background: ${t.buttonSecondary.bgcFocus[0]};
       }}
 
       // focus-visible
-      ${El.thiz.btnFocusVisible} {
+      ${El.btn.thiz('focusVisible')} {
         background: ${t.buttonSecondary.bgcFocus[0]};
       }
 
       // disabled
-      ${El.thiz.btnDisabled} {
+      ${El.btn.thiz('disabled')} {
         background: ${t.elementDisabled.bgc[0]};
         color: ${t.elementDisabled.content[0]};
-        ${Prop.prop.color}: ${t.elementDisabled.content[0]};
+        ${Prop.color.name}: ${t.elementDisabled.content[0]};
       }
     `
     
@@ -258,64 +216,64 @@ export namespace ButtonStyle {
     
     export const transparent = (t:Theme)=>css`
       // normal
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         background: transparent;
         color: ${t.page.content[0]};
-        ${Prop.prop.color}: ${t.page.content[0]};
+        ${Prop.color.name}: ${t.page.content[0]};
       }
-      ${El.thiz.border} {
+      ${El.border.thiz()} {
         border: 1px solid;
         border-color: transparent;
       }
-      ${El.thiz.ripple} {
-        ${Prop.prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
+      ${El.ripple.thiz()} {
+        ${Prop.rippleColor.name}: ${t.ripple.contentOnTransparent[0]};
       }
 
       // hover
-      ${hoverable}{ ${El.thiz.btnHover} {
+      ${hoverable}{ ${El.btn.thiz('hover')} {
         background: ${t.buttonTransparent.bgcFocus[0]};
       }}
 
       // focus-visible
-      ${El.thiz.btnFocusVisible} {
+      ${El.btn.thiz('focusVisible')} {
         background: ${t.buttonTransparent.bgcFocus[0]};
       }
 
       // disabled
-      ${El.thiz.btnDisabled} {
+      ${El.btn.thiz('disabled')} {
         background: ${t.elementDisabled.bgc[0]};
         color: ${t.elementDisabled.content[0]};
-        ${Prop.prop.color}: ${t.elementDisabled.content[0]};
+        ${Prop.color.name}: ${t.elementDisabled.content[0]};
       }
     `
     
     
     export const danger = (t:Theme) => css`
       // normal
-      ${El.thiz.btn} {
+      ${El.btn.thiz()} {
         background: ${t.elementDanger.bgc[0]};
         color: ${t.elementDanger.content[0]};
-        ${Prop.prop.color}: ${t.elementDanger.content[0]};
+        ${Prop.color.name}: ${t.elementDanger.content[0]};
       }
-      ${El.thiz.ripple} {
-        ${Prop.prop.rippleColor}: ${t.ripple.content[0]};
+      ${El.ripple.thiz()} {
+        ${Prop.rippleColor.name}: ${t.ripple.content[0]};
       }
       
       // hover
-      ${hoverable}{ ${El.thiz.btnHover} {
+      ${hoverable}{ ${El.btn.thiz('hover')} {
         background: ${t.elementDanger.bgcFocus[0]};
       }}
       
       // focus-visible
-      ${El.thiz.btnFocusVisible} {
+      ${El.btn.thiz('focusVisible')} {
         background: ${t.elementDanger.bgcFocus[0]};
       }
       
       // disabled
-      ${El.thiz.btnDisabled} {
+      ${El.btn.thiz('disabled')} {
         background: ${t.elementDisabled.bgc[0]};
         color: ${t.elementDisabled.content[0]};
-        ${Prop.prop.color}: ${t.elementDisabled.content[0]};
+        ${Prop.color.name}: ${t.elementDisabled.content[0]};
       }
     `
   }
@@ -355,18 +313,18 @@ export namespace ButtonStyle {
     ${common};
     ${Shape.rounded};
     ${Color.accent(t)};
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       color: ${t.buttonAccent.content2[0]};
-      ${Prop.prop.color}: ${t.buttonAccent.content2[0]};
+      ${Prop.color.name}: ${t.buttonAccent.content2[0]};
     }
   `
   export const roundedSmallAccent = (t:Theme) => css`
     ${common};
     ${Shape.roundedSmall};
     ${Color.accent(t)};
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       color: ${t.buttonAccent.content2[0]};
-      ${Prop.prop.color}: ${t.buttonAccent.content2[0]};
+      ${Prop.color.name}: ${t.buttonAccent.content2[0]};
     }
   `
   export const roundedSmallSecondary = (t:Theme) => css`
@@ -395,7 +353,7 @@ export namespace ButtonStyle {
   export const icon = (t:Theme) => css`
     ${common};
     // normal
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       height: 50px;
       width: 50px;
       //border-radius: 26%;
@@ -404,35 +362,35 @@ export namespace ButtonStyle {
       
       background: ${t.buttonMain.bgc[0]};
       color: ${t.buttonMain.content[0]};
-      ${Prop.prop.color}: ${t.buttonMain.content[0]};
+      ${Prop.color.name}: ${t.buttonMain.content[0]};
     }
-    ${El.thiz.ripple} {
-      ${Prop.prop.rippleMode}: center;
-      ${Prop.prop.rippleColor}: ${t.ripple.content[0]};
+    ${El.ripple.thiz()} {
+      ${Prop.rippleMode.name}: center;
+      ${Prop.rippleColor.name}: ${t.ripple.content[0]};
     }
-    ${El.thiz.icon} {
-      ${Prop.prop.iconSize}: 100%;
-      ${Prop.prop.iconColor}: ${t.buttonMain.content[0]};
+    ${El.icon.thiz()} {
+      ${Prop.iconSize.name}: 100%;
+      ${Prop.iconColor.name}: ${t.buttonMain.content[0]};
     }
     
     // hover
-    ${hoverable}{ ${El.thiz.btnHover} {
+    ${hoverable}{ ${El.btn.thiz('hover')} {
       background: ${t.buttonMain.bgcFocus[0]};
     }}
 
     // focus-visible
-    ${El.thiz.btnFocusVisible} {
+    ${El.btn.thiz('focusVisible')} {
       background: ${t.buttonMain.bgcFocus[0]};
     }
     
     // disabled
-    ${El.thiz.btnDisabled} {
+    ${El.btn.thiz('disabled')} {
       background: ${t.elementDisabled.bgc[0]};
       color: ${t.elementDisabled.content[0]};
-      ${Prop.prop.color}: ${t.elementDisabled.content[0]};
+      ${Prop.color.name}: ${t.elementDisabled.content[0]};
     }
-    ${El.thiz.iconDisabled} {
-      ${Prop.prop.iconColor}: ${t.elementDisabled.content[0]};
+    ${El.icon.thiz('disabled')} {
+      ${Prop.iconColor.name}: ${t.elementDisabled.content[0]};
     }
   `
   
@@ -441,26 +399,26 @@ export namespace ButtonStyle {
   export const iconTransparent = (t:Theme) => css`
     ${icon(t)};
     // normal
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       border-radius: 999999px;
       background: none;
       color: ${t.buttonAccent.bgc[0]};
-      ${Prop.prop.color}: ${t.buttonAccent.bgc[0]};
+      ${Prop.color.name}: ${t.buttonAccent.bgc[0]};
     }
-    ${El.thiz.ripple} {
-      ${Prop.prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
+    ${El.ripple.thiz()} {
+      ${Prop.rippleColor.name}: ${t.ripple.contentOnTransparent[0]};
     }
-    ${El.thiz.icon} {
-      ${Prop.prop.iconColor}: ${t.buttonAccent.bgc[0]};
+    ${El.icon.thiz()} {
+      ${Prop.iconColor.name}: ${t.buttonAccent.bgc[0]};
     }
 
     // hover
-    ${hoverable}{ ${El.thiz.btnHover} {
+    ${hoverable}{ ${El.btn.thiz('hover')} {
       background: ${t.buttonTransparent.bgcFocus[0]};
     }}
 
     // focus-visible
-    ${El.thiz.btnFocusVisible} {
+    ${El.btn.thiz('focusVisible')} {
       background: ${t.buttonTransparent.bgcFocus[0]};
     }
   `
@@ -468,7 +426,7 @@ export namespace ButtonStyle {
   
   export const iconBigTransparent = (t:Theme) => css`
     ${iconTransparent(t)};
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       padding: 11px;
     }
   `
@@ -484,7 +442,7 @@ export namespace ButtonStyle {
   export const nav = (t:Theme)=>css`
     ${common};
     // normal
-    ${El.thiz.btn} {
+    ${El.btn.thiz()} {
       height: 100%;
       flex: 1;
       ${col};
@@ -494,32 +452,32 @@ export namespace ButtonStyle {
 
       background: none;
       color: ${t.buttonNav.content[0]};
-      ${Prop.prop.color}: ${t.buttonNav.content[0]};
+      ${Prop.color.name}: ${t.buttonNav.content[0]};
       
       ${Txt.small5};
     }
-    ${El.thiz.ripple} {
-      ${Prop.prop.rippleMode}: center;
-      ${Prop.prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};
+    ${El.ripple.thiz()} {
+      ${Prop.rippleMode.name}: center;
+      ${Prop.rippleColor.name}: ${t.ripple.contentOnTransparent[0]};
     }
-    ${El.thiz.icon} {
-      ${Prop.prop.iconSize}: 100%;
-      ${Prop.prop.iconColor}: ${t.buttonNav.content[0]};
+    ${El.icon.thiz()} {
+      ${Prop.iconSize.name}: 100%;
+      ${Prop.iconColor.name}: ${t.buttonNav.content[0]};
     }
     
     // link active
     // IT IS WORKING !!!: a.active &.btnDotClass > iconDotClass
-    a.active ${El.thiz.icon} {
-      ${Prop.prop.iconColor}: ${t.buttonNav.contentAccent[0]};
+    a.active ${El.icon.thiz()} {
+      ${Prop.iconColor.name}: ${t.buttonNav.contentAccent[0]};
     }
     
     // hover
-    ${hoverable}{ ${El.thiz.btnHover} {
+    ${hoverable}{ ${El.btn.thiz('hover')} {
       background: ${t.buttonNav.bgcFocus[0]};
     }}
 
     // focus-visible
-    ${El.thiz.btnFocusVisible} {
+    ${El.btn.thiz('focusVisible')} {
       background: ${t.buttonNav.bgcFocus[0]};
     }
   `

@@ -34,7 +34,7 @@ export namespace RadioInputGroupStyle {
     export const borderError = radioGroupError+'>'+borderClass
   }
   export namespace Prop {
-    export const color = CommonStyle.Prop.prop.color
+    export const color = CommonStyle.Prop0.prop.color
   }
   
   

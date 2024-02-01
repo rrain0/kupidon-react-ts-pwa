@@ -62,7 +62,7 @@ export namespace RadioInputStyle {
     export const rippleDisabled = inputDisabled+'~*>'+rippleFrameClass
   }
   export namespace Prop {
-    export const color = CommonStyle.Prop.prop.color
+    export const color = CommonStyle.Prop0.prop.color
     export const activeIconColor = '--active-icon-color'
     export const inactiveIconColor = '--inactive-icon-color'
     export const rippleColor = RippleStyle.Prop.color

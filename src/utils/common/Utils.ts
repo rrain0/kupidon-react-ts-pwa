@@ -1,8 +1,13 @@
+import { TypeUtils } from 'src/utils/common/TypeUtils'
+import Mapper = TypeUtils.Mapper
+
 
 
 
 export namespace Utils {
   
+  
+  export const my = <T1,T2>(obj: T1, handler: Mapper<T1,T2>) => handler(obj)
   
   
   export class Lazy<T> {

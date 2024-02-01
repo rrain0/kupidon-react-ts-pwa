@@ -891,6 +891,6 @@ const optionIconBoxStyle = css`
   height: 1.3em;
   width: 1.333em;
   >${SvgIcStyle.El.el.icon}{
-    ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.varr.color};
+    ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.color.sel()};
   }
 `

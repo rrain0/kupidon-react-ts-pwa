@@ -144,7 +144,7 @@ const iconOnDanger = (t:Theme)=>css`
   }
 `
 const button = (t:Theme)=>css`
-  ${ButtonStyle.El.thiz.btn} {
+  ${ButtonStyle.El.btn.thiz()} {
     min-width: 90px;
     gap: 0.3em;
   }

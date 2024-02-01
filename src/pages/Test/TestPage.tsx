@@ -7,6 +7,7 @@ import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
 import { Pages } from 'src/components/Page/Pages'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { MathUtils } from 'src/utils/common/MathUtils'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -16,6 +17,7 @@ import fullAnySearchParams = RouteBuilder.fullAnySearchParams
 import SimplePage = Pages.SimplePage
 import SimpleContent = Pages.SimpleContent
 import center = EmotionCommon.center
+import mapRange = MathUtils.mapRange
 
 
 
@@ -75,7 +77,7 @@ React.memo(
   useEffect(
     ()=>{
       const id = setInterval(
-        ()=>setProgress(s=>s===0 ? 1 : 0),
+        ()=>setProgress(s=>s===0 ? 100 : 0),
         3000
       )
       return ()=>clearInterval(id)
@@ -142,7 +144,7 @@ React.memo(
             height: 30%;
             aspect-ratio: 1;
           `}
-            progress={Math.min(0.95, progress)}
+            progress={mapRange(progress, [0,100],[5,95])}
           />
         </div>
         
