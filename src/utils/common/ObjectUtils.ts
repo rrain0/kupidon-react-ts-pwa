@@ -17,7 +17,7 @@ export namespace ObjectUtils {
   }
   
   
-  export const isObject = <O extends {}|null|undefined>(value: O): value is O & object =>
+  export const isObject = <O>(value: O|object): value is object =>
     typeof value === 'object' && value!==null
   
   
@@ -79,7 +79,8 @@ export namespace ObjectUtils {
   export type ObjectEntriesType<O extends object> =
     { [Prop in string & keyof O]: [Prop,O[Prop]] }[string & keyof O]
   /**
-   * Тип для получения поэлементно типизированного массива записей объекта (для собственных перечисляемых свойств),
+   * Тип для получения поэлементно типизированного массива записей объекта
+   * (для собственных перечисляемых свойств),
    * где элемент - это кортеж [ключ, значение] и тип ключа привязан к типу значения.
    * Беруться только строковые (и числовые) ключи, но не символьные.
    * Порядок перечисления - порядок объявления свойств в коде.
@@ -98,6 +99,24 @@ export namespace ObjectUtils {
     if (typeof object !== 'object' || object===null) return []
     return Object.entries(object) as ObjectEntriesArrType<O & object>
   }
+  
+  
+  
+  
+  export function ObjectMap
+  <O1 extends object, O2 extends object>
+  (object: O1,
+   mapper: (entry: ObjectEntriesType<O1>, object: O1)=>ObjectEntriesType<O2>
+  )
+  : O2 {
+    const object2 = {} as O2
+    ObjectEntries(object).forEach(entry=>{
+      const entry2 = mapper(entry,object)
+      object2[entry2[0]] = entry2[1]
+    })
+    return object2
+  }
+  
   
   
   

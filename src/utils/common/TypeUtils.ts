@@ -15,15 +15,21 @@ export namespace TypeUtils {
   export const falsyToUndef = <T>(value: T) => value ? value : undefined
   
   export type Exists<T> = Exclude<T, null|undefined>
-  export function exists<T extends anyval>(value: T): value is T & {} {
-    return value!==null && value!==undefined
-  }
-  export function notExists<T extends anyval>(value: T): value is T & empty {
-    return value===null || value===undefined
-  }
-  
   export type PartialUndef<O extends object> =
     { [Prop in keyof O]+?: O[Prop] | undefined }
+  
+  
+  
+  
+  export function exists<T extends anyval>(value: T|{}): value is {} {
+    return value!==null && value!==undefined
+  }
+  export function notExists<T>(value: T|empty): value is empty {
+    return value===null || value===undefined
+  }
+  export const isstring = <T>(value: T|string): value is string => typeof value === 'string'
+  export const isnumber = <T>(value: T|number): value is number => typeof value === 'number'
+  
   
   
   

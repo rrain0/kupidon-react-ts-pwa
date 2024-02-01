@@ -18,6 +18,7 @@ import fitRange2 = MathUtils.fitRange2
 export namespace ArrayUtils {
   
   
+  import anyval = TypeUtils.anyval
   export const last = <T>(arr: T[]): T => {
     if (!arr.length) throw new Error("Array is empty, can't get last element.")
     return arr[arr.length-1]
@@ -51,13 +52,35 @@ export namespace ArrayUtils {
    * @param obj any
    * @returns {boolean} true если obj является массивом
    */
-  export const isArray = <T, E>(obj: T | E[]): obj is Array<E> => obj instanceof Array
+  export const isArray = <T,E>(obj: T | E[]): obj is E[] => obj instanceof Array
   
+  
+  export type ArrayElement<ArrayType extends readonly unknown[]> =
+    ArrayType extends readonly (infer ElementType)[] ? ElementType : never
   
   export const ofFirstOrEmpty = <T>(arr?: readonly [T?, ...unknown[]] | empty): [T] | [] => {
     if (arr?.length) return [arr[0] as T]
     return []
   }
+  
+  export const arrIsNonEmpty = <T>(arr?: T[] | [T, ...T[]] | empty): arr is [T, ...T[]]  => {
+    return (arr?.length ?? 0) > 0
+  }
+  
+  export type NonEmptyArr<T> = [T, ...T[]]
+  
+  export type ArrayOfNonEmpty<A extends Array<any>> = A extends Array<infer E>
+    ? Array<Exists<E>>
+    : never
+  
+  export type SingleOrArr<T> = T | T[]
+  
+  export type Arraify<T> = T extends any[] ? T : T[]
+  export const arraify = <T>(value: T|T[]): Arraify<T|T[]> => {
+    if (isArray(value)) return value
+    return [value]
+  }
+  
   
   
   
@@ -300,23 +323,6 @@ export namespace ArrayUtils {
     return arr
   }
   
-  
-  
-  export type ArrayElement<ArrayType extends readonly unknown[]> =
-    ArrayType extends readonly (infer ElementType)[] ? ElementType : never
-  
-  export const arrIsNonEmpty = <T>(arr?: T[] | empty): arr is [T, ...T[]]  => {
-    return (arr?.length ?? 0) > 0
-  }
-  
-  
-  export type NonEmptyArr<T> = [T, ...T[]]
-  
-  
-  
-  export type ArrayOfNonEmpty<A extends Array<any>> = A extends Array<infer E>
-    ? Array<Exists<E>>
-    : never
   
   
   

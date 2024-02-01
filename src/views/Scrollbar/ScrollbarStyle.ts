@@ -4,7 +4,7 @@ import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CommonStyle } from 'src/views/CommonStyle'
 import hoverable = EmotionCommon.hoverable
 import DataAttr = CommonStyle.DataAttr
-import Elem = CommonStyle.Elem
+import Elem0 = CommonStyle.Elem0
 import combineStates = CommonStyle.combineStates
 
 
@@ -20,21 +20,21 @@ export namespace ScrollbarStyle {
   }
   
   export const ElRaw = function(){
-    const track = new Elem('rrainuiScrollbarTrack',{})
-    const thumbBox = new Elem('rrainuiScrollbarThumbBox', {})
-    const thumb = new Elem('rrainuiScrollbarThumb', {})
+    const track = new Elem0('rrainuiScrollbarTrack',{})
+    const thumbBox = new Elem0('rrainuiScrollbarThumbBox', {})
+    const thumb = new Elem0('rrainuiScrollbarThumb', {})
     return { root: track, track, thumbBox, thumb } as const
   }()
   
   export const El = function(){
-    const track = new Elem(ElRaw.track.name,{
+    const track = new Elem0(ElRaw.track.name,{
       vertical: Attr.direction.s.vertical,
       horizontal: Attr.direction.s.horizontal,
       active: combineStates(CommonStyle.active, Attr.active),
       hover: CommonStyle.hover,
     })
-    const thumbBox = track.withNested('>',ElRaw.thumbBox)
-    const thumb = thumbBox.withNested('>',ElRaw.thumb)
+    const thumbBox = track.selectWithParentState('>', ElRaw.thumbBox)
+    const thumb = thumbBox.selectWithParentState('>', ElRaw.thumb)
     return { root: track, track, thumbBox, thumb } as const
   }()
   

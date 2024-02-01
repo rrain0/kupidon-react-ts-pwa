@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import styled from '@emotion/styled'
 import ScrollbarOverlay from 'src/components/Scrollbars/ScrollbarOverlay'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
 import UseScrollbars from 'src/components/Scrollbars/UseScrollbars'
@@ -38,11 +39,7 @@ React.memo(
   const scrollContentRef = useRef<HTMLDivElement>(null)
   
   
-  return <div css={css`
-    ${fill};
-    ${centerAll};
-    position: relative;
-  `}
+  return <Wrapper
     className={classNames(props.className, 'rrainuiOverflowWrapper')}
     style={props.style}
   >
@@ -52,15 +49,7 @@ React.memo(
      // Scrollable Content Container
      // must be without margins & paddings!!!
      */}
-    <div css={css`
-      ${col};
-      //place-self: stretch;
-
-      ${fill};
-
-      overflow: auto;
-      ${isBrowser && hideScrollbar};
-    `}
+    <ScrollContainer
       ref={scrollContainerRef}
       className={'rrainuiScrollContainer'}
     >
@@ -68,28 +57,15 @@ React.memo(
        // Scrollable Content Wrapper
        // must be without margins & paddings - just content wrapper!!!
        */}
-      <div css={css`
-        //display: block;
-        flex-flow: column nowrap;
-        display: flex;
-        
-        //min-width: fit-content; min-height: fit-content;
-        //width: fit-content; height: fit-content;
-        //max-width: fit-content; max-height: fit-content;
-        
-        //min-width: 100%; min-height: 100%;
-        width: fit-content(100%); height: fit-content(100%);
-        //max-width: fit-content; max-height: fit-content;
-        //overflow: visible;
-      `}
+      <ScrollContent
         ref={scrollContentRef}
         className={'rrainuiScrollContentWrap'}
       >
         
         { props.children }
       
-      </div>
-    </div>
+      </ScrollContent>
+    </ScrollContainer>
     
     
     { isBrowser &&
@@ -108,6 +84,38 @@ React.memo(
     }
     
   
-  </div>
+  </Wrapper>
 })
 export default OverflowWrapper
+
+
+
+
+const Wrapper = styled.div`
+  ${fill};
+  ${centerAll};
+  position: relative;
+`
+const ScrollContainer = styled.div`
+  ${col};
+  //place-self: stretch;
+
+  ${fill};
+
+  overflow: auto;
+  ${isBrowser && hideScrollbar};
+`
+const ScrollContent = styled.div`
+  //display: block;
+  flex-flow: column nowrap;
+  display: flex;
+
+  //min-width: fit-content; min-height: fit-content;
+  //width: fit-content; height: fit-content;
+  //max-width: fit-content; max-height: fit-content;
+
+  //min-width: 100%; min-height: 100%;
+  width: fit-content(100%); height: fit-content(100%);
+  //max-width: fit-content; max-height: fit-content;
+  //overflow: visible;
+`
