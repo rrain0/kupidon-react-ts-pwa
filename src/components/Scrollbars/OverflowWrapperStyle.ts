@@ -1,5 +1,6 @@
 import { css } from '@emotion/react'
 import { ScrollbarOverlayStyle } from 'src/components/Scrollbars/ScrollbarOverlayStyle'
+import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CommonStyle } from 'src/views/CommonStyle'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import Elem = CommonStyle.Elem
@@ -12,6 +13,7 @@ export namespace OverflowWrapperStyle {
   
   
   
+  import col = EmotionCommon.col
   export const El = function(){
     const wrapper = new Elem('rrainuiOverflowWrapper',{})
     const container = wrapper.upFor('>', new Elem('rrainuiScrollContainer',{}))
@@ -77,14 +79,14 @@ export namespace OverflowWrapperStyle {
   
   
   
-  export const list = css`
+  export const defolt = css`
     ${middleSizeScrollbars};
     ${El.content.thiz()}{
-      //min-width: 100%;
-      //min-height: 100%;
-      //width: fit-content;
-      //height: fit-content;
-      //max-width: 100%; max-height: 100%;
+      ${col};
+      // overflow doesn't work if min-width/height are set
+      //min-width: 100%; min-height: 100%;
+      width: auto; height: auto;
+      overflow: visible;
     }
   `
   

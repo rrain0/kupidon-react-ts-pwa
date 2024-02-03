@@ -1,8 +1,9 @@
 import { RouteObject } from 'react-router-dom'
 import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { clearUnknownPathEnding } from 'src/app-routes/ReactRouterDomUtils'
-import PointerTest from 'src/pages/Test/PointerTest'
-import TabsTest from 'src/pages/Test/TabsTest'
+import PointerTestPage from 'src/pages/Test/PointerTestPage'
+import StateTestPage from 'src/pages/Test/StateTestPage'
+import TabsTestPage from 'src/pages/Test/TabsTestPage'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import RootRoute = AppRoutes.RootRoute
 import path = RouteBuilder.path
@@ -10,7 +11,7 @@ import TestPage from './TestPage'
 import ScrollbarTestPage from './ScrollbarTestPage'
 import ResizeObserverTestPage from './ResizeObserverTestPage'
 import BottomSheetTestPage from './BottomSheetTestPage'
-import MoveElementToAnotherView from 'src/pages/Test/MoveElementToAnotherView'
+import MoveElementToAnotherViewTestPage from 'src/pages/Test/MoveElementToAnotherViewTestPage'
 
 
 
@@ -42,7 +43,7 @@ const testBottomSheetTestPageRouting: RouteObject[] = [
 const testMoveElementToAnotherViewRouting: RouteObject[] = [
   {
     path: '',
-    Component: MoveElementToAnotherView,
+    Component: MoveElementToAnotherViewTestPage,
   },
   clearUnknownPathEnding,
 ]
@@ -50,7 +51,7 @@ const testMoveElementToAnotherViewRouting: RouteObject[] = [
 const testPointerRouting: RouteObject[] = [
   {
     path: '',
-    Component: PointerTest,
+    Component: PointerTestPage,
   },
   clearUnknownPathEnding,
 ]
@@ -58,7 +59,15 @@ const testPointerRouting: RouteObject[] = [
 const testTabsRouting: RouteObject[] = [
   {
     path: '',
-    Component: TabsTest,
+    Component: TabsTestPage,
+  },
+  clearUnknownPathEnding,
+]
+// path: 'test / state / <check here>'
+const testStateRouting: RouteObject[] = [
+  {
+    path: '',
+    Component: StateTestPage,
   },
   clearUnknownPathEnding,
 ]
@@ -94,6 +103,10 @@ export const testRouting: RouteObject[] = [
   {
     path: RootRoute.test.tabs[path]+'/*',
     children: testTabsRouting,
+  },
+  {
+    path: RootRoute.test.state[path]+'/*',
+    children: testStateRouting,
   },
   clearUnknownPathEnding,
 ]

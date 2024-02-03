@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useId, useMemo, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { atom, useRecoilState } from 'recoil'
 import { animated } from '@react-spring/web'
 import { ApiUtils } from 'src/api/ApiUtils'
 import { CurrentUser } from 'src/api/entity/CurrentUser'
@@ -99,10 +99,34 @@ import fitRange2 = MathUtils.fitRange2
 
 
 
+
+
+
+/*
+export type ProfileContentRecoilType = React.ReactNode
+export const ProfileContentRecoil = atom<ProfileContentRecoilType>({
+  key: 'profilePage',
+  default: '',
+})
+
+
+
+
+
+const ProfileContentHeader =
+React.memo(
+(props: ProfileContentProps)=>{
+  
+  return <>
+  
+  </>
+})
+*/
+
+
 export type ProfileContentProps = {
   header: (header: string)=>React.ReactNode
 }
-
 
 
 const ProfileContent =

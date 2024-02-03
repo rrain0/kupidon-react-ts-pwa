@@ -15,7 +15,7 @@ import SimpleContent = Pages.SimpleContent
 
 
 
-const TabsTest = ()=>{
+const TabsTestPage = ()=>{
   
   const [tabsState, setTabsState] = useState<TabsState>('opened')
   const [tabIdx, setTabIdx] = useState<TabIdx>(0)
@@ -91,7 +91,7 @@ const TabsTest = ()=>{
     </SimpleContent>
   </SimplePage>
 }
-export default TabsTest
+export default TabsTestPage
 
 
 

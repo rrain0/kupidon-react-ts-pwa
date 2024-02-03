@@ -7,23 +7,23 @@ import col = EmotionCommon.col
 
 
 export type TabProps = {
-  width: number|string
+  width: number
 }
 const Tab = styled.div<TabProps>`
   //min-width: 100cqw;
   //width: 100cqw;
   //max-width: 100cqw;
-  min-width: ${p=>prepareWidth(p.width)};
-  width: ${p=>prepareWidth(p.width)};
-  max-width: ${p=>prepareWidth(p.width)};
+  &{
+    min-width: ${p=>p.width}px;
+    width: ${p=>p.width}px;
+    max-width: ${p=>p.width}px;
+    will-change: min-width, width, max-width;
+  }
   ${col};
-  overflow-y: auto;
+  //overflow-y: auto;
+  overflow: visible;
   touch-action: pan-y;
 `
 export default Tab
 
 
-function prepareWidth(width: number|string): string {
-  if (typeof width === 'number') return width+'px'
-  return width
-}

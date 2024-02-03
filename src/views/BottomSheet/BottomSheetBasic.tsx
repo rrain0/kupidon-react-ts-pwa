@@ -80,7 +80,7 @@ React.memo(
        // Must be without margins & paddings!!!
        */}
       <div css={bodyStyle}>
-        <OverflowWrapper css={OverflowWrapperStyle.list}
+        <OverflowWrapper css={OverflowWrapperStyle.defolt}
           showVertical={
             ![null,'closed','close','closing','open','opening'].includes(sheetState)
           }

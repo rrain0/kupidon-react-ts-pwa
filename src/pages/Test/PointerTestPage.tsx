@@ -10,7 +10,7 @@ import SimpleContent = Pages.SimpleContent
 
 
 
-const PointerTest =
+const PointerTestPage =
 React.memo(
 ()=>{
   
@@ -201,5 +201,5 @@ React.memo(
     </SimpleContent>
   </SimplePage>
 })
-export default PointerTest
+export default PointerTestPage
 

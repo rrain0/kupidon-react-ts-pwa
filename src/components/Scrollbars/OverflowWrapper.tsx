@@ -106,16 +106,5 @@ const ScrollContainer = styled.div`
   ${isBrowser && hideScrollbar};
 `
 const ScrollContent = styled.div`
-  //display: block;
-  flex-flow: column nowrap;
-  display: flex;
-
-  //min-width: fit-content; min-height: fit-content;
-  //width: fit-content; height: fit-content;
-  //max-width: fit-content; max-height: fit-content;
-
-  //min-width: 100%; min-height: 100%;
-  width: fit-content(100%); height: fit-content(100%);
-  //max-width: fit-content; max-height: fit-content;
-  //overflow: visible;
+  // customize it via OverflowWrapperStyle
 `

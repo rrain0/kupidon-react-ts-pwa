@@ -17,7 +17,7 @@ import SimpleContent = Pages.SimpleContent
 // React Portal Test
 // But component that is moved is rerendering anyway :(
 // https://react.dev/reference/react-dom/createPortal
-const MoveElementToAnotherView = ()=>{
+const MoveElementToAnotherViewTestPage = ()=>{
   
   
   const [position, setPosition] = useState(0)
@@ -50,7 +50,7 @@ const MoveElementToAnotherView = ()=>{
     </SimpleContent>
   </SimplePage>
 }
-export default MoveElementToAnotherView
+export default MoveElementToAnotherViewTestPage
 
 
 

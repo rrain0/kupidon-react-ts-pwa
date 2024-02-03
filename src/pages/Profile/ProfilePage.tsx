@@ -9,7 +9,7 @@ import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
 import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import ProfileContent from 'src/pages/Profile/ProfileContent'
-import { useSetRecoilState } from 'recoil'
+import { atom, useSetRecoilState } from 'recoil'
 import ProfileTabHeader from 'src/pages/Profile/ProfileTabHeader'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
@@ -30,6 +30,12 @@ import pageContentPaddings = Pages.pageContentPaddings
 import col = EmotionCommon.col
 import noScrollbars = EmotionCommon.noScrollbars
 import safePageContentPaddings = Pages.safePageContentPaddings
+import fill = EmotionCommon.fill
+
+
+
+
+
 
 
 
@@ -80,21 +86,23 @@ React.memo(
   }
   
   
+  
+  const [profileName, setProfileName] = useState('')
+  
+  
+  
   return <>
-    {/* todo */}
     <TabsPage>
       
-      <Tabs {...tabsProps}>{({ tabContainerSpring, computedTabsDimens })=><>
+      <Tabs css={fill} {...tabsProps}>{({ tabContainerSpring, computedTabsDimens })=><>
         {ArrayUtils.ofIndices(4).map(tabIdx=>
-          <Tab css={t=>css`
-            height: 100%;
-          `}
+          <Tab css={fill}
             width={computedTabsDimens.frameWidth}
           >
             
             
             <OverflowWrapper css={css`
-              ${OverflowWrapperStyle.list};
+              ${OverflowWrapperStyle.defolt};
               ${OverflowWrapperStyle.El.container.thiz()}{
                 touch-action: pan-y;
               }
@@ -116,24 +124,26 @@ React.memo(
               
               
               {function(){
+                //const [s] = useState(1)
                 const headerProps = {
                   thisTabIdx: tabIdx,
                   tabContainerSpring,
                   tabWidth: computedTabsDimens.frameWidth,
-                  headers: ['Предпросмотр','Профиль','Партнёр','Свидание'],
-                  onClick: ()=>{
-                    setTabsState('snapping')
-                    setTabIdx(tabIdx)
-                  },
+                  headers: ['Предпросмотр',profileName,'Партнёр','Свидание'],
+                  setTabsState,
+                  setTabIdx,
                 }
                 switch (tabIdx) {
                   case 0: return <Form><ProfileTabHeader {...headerProps}>
                     Предпросмотр
                   </ProfileTabHeader></Form>
                   case 1: return <ProfileContent
-                    header={header => <ProfileTabHeader {...headerProps}>
-                      {header}
-                    </ProfileTabHeader>}
+                    header={header => {
+                      setProfileName(header)
+                      return <ProfileTabHeader {...headerProps}>
+                        {header}
+                      </ProfileTabHeader>
+                    }}
                   />
                   case 2: return <Form><ProfileTabHeader {...headerProps}>
                     Партнёр
@@ -152,9 +162,6 @@ React.memo(
           </Tab>
         )}
       </>}</Tabs>
-      
-      {/* todo */}
-      {/* <PageScrollbars /> */}
       
     </TabsPage>
     

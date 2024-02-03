@@ -19,6 +19,7 @@ export namespace AppRoutes {
     moveElementToAnotherView: buildPath('move-element-to-another-view'),
     pointer: buildPath('pointer'),
     tabs: buildPath('tabs'),
+    state: buildPath('state'),
   })
   
   
