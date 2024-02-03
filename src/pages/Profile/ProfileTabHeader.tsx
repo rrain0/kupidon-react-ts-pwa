@@ -93,10 +93,9 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
       <AnimatedHeader css={css`
         width: ${0.6*w}px;
         mask-image: linear-gradient(to right,
-          rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${0.15*w}px,
-          rgba(0,0,0,1) ${0.45*w}px, rgba(0,0,0,0) 100%
+          rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%,
+          rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%
         );
-        //position: absolute;
       `}
         style={{
           x: forLeft.to(v => mapRange(v, [-1, 1], [-w/2 - w, w/2 - w])),
@@ -119,10 +118,9 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
       <AnimatedHeader css={css`
         width: ${0.6*w}px;
         mask-image: linear-gradient(to right,
-          rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${0.15*w}px,
-          rgba(0,0,0,1) ${0.45*w}px, rgba(0,0,0,0) 100%
+          rgba(0,0,0,0) 0%, rgba(0,0,0,1) 50%,
+          rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%
         );
-        //position: absolute;
       `}
         style={{
           x: forRight.to(v => mapRange(v, [-1, 1], [-w/2 + w, w/2 + w])),
@@ -147,7 +145,7 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
       {...restProps}
       ref={elemRef}
       style={{
-        x: forCenter.to(v => mapRange(v, [-1, 1], [-(w/2), w/2])),
+        x: forCenter.to(v => mapRange(v, [-1,1], [-(w/2), w/2])),
         scale: forCenter.to(v => 1 - 0.35 * Math.abs(v)),
         opacity: forCenter.to(v => 1 - 0.6 * Math.abs(v)),
       }}
@@ -171,16 +169,15 @@ export default ProfileTabHeader
 
 
 
-const headerStyle = (t: AppTheme.Theme)=>css`
-  ${formHeaderStyle(t)};
-`
+
 
 const Wrap = styled.div`
-  ${p=>headerStyle(p.theme)};
+  align-self: center;
   height: fit-content;
   position: relative;
   overflow: hidden;
   ${centerAll};
+  place-items: start center;
 `
 
 const AnimatedHeader = styled(animated.div)`
@@ -188,7 +185,7 @@ const AnimatedHeader = styled(animated.div)`
   overflow: visible;
 `
 const HeaderTextWrap = styled.h3`
-  ${p=>headerStyle(p.theme)};
+  ${p=>formHeaderStyle(p.theme)};
   overflow-wrap: anywhere;
   user-select: none;
   cursor: pointer;
