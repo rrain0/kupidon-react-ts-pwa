@@ -124,7 +124,6 @@ React.memo(
               
               
               {function(){
-                //const [s] = useState(1)
                 const headerProps = {
                   thisTabIdx: tabIdx,
                   tabContainerSpring,

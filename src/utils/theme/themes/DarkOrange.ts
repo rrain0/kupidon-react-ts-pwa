@@ -53,7 +53,7 @@ export const DarkOrange = {
   name: 'Dark Orange' as const,
   icon: styled.div(themeIconCss({
     accentColor: DarkOrangeProps.buttonAccent.bgc[0],
-    bgcColor1:   DarkOrangeProps.page.bgc[0],
+    bgcColor1:   DarkOrangeProps.buttonAccent.bgc[0],
     bgcColor2:   DarkOrangeProps.page.bgc[0],
   })),
 } satisfies Theme

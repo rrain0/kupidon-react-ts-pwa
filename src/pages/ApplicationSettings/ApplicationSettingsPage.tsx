@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import TopButtonBar from 'src/components/BottomButtonBar/TopButtonBar'
@@ -13,12 +13,13 @@ import {
   ApplicationSettingsUiText
 } from 'src/pages/ApplicationSettings/uiText'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
-import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
+import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { Lang } from 'src/utils/lang/Lang'
 import { ThemeNameUiText } from 'src/utils/lang/ui-values/ThemeNameUiText'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { AllThemes } from 'src/utils/theme/ThemeCollection'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import Button from 'src/views/Buttons/Button'
@@ -39,8 +40,8 @@ import DayIc = SvgIcons.DayIc
 import MoonIc = SvgIcons.MoonIc
 import resetH = EmotionCommon.resetH
 import row = EmotionCommon.row
-import Theme = AppTheme.Theme
 import AddModuleIc = SvgIcons.AddModuleIc
+import AppLangType = Lang.AppLangType
 
 
 
@@ -60,8 +61,8 @@ React.memo(
   const [themeSettings, setThemeSettings] = useRecoilState(ThemeSettingsRecoil)
   const [langSettings, setLangSettings] = useRecoilState(LangSettingsRecoil)
   
-  const uiText = useUiTextContainer(ApplicationSettingsUiText)
-  const themeNameUiText = useUiTextContainer(ThemeNameUiText)
+  const uiText = useUiValues(ApplicationSettingsUiText)
+  const themeNameUiText = useUiValues(ThemeNameUiText)
   
   const [clearSite, setClearSite] = useState(false)
   
@@ -72,15 +73,15 @@ React.memo(
       let opts = [
         {
           value: 'system',
-          text: uiText.systemTheme[0].text,
+          text: uiText.systemTheme.text,
           icon: <DayNightIc css={icon}/>,
         },{
           value: 'light',
-          text: uiText.lightTheme[0].text,
+          text: uiText.lightTheme.text,
           icon: <DayIc css={icon}/>,
         },{
           value: 'dark',
-          text: uiText.darkTheme[0].text,
+          text: uiText.darkTheme.text,
           icon: <MoonIc css={iconSmall}/>,
         }
       ] satisfies { value: ThemeType|'system', [prop: string]: any }[]
@@ -104,25 +105,25 @@ React.memo(
       let opts = [
         {
           value: 'system',
-          text: uiText.systemLanguage[0].text,
+          text: uiText.systemLanguage.text,
           icon: <BrowserIc css={icon}/>,
         },{
           value: 'ru-RU',
-          text: uiText.russian[0].text,
+          text: uiText.russian.text,
           icon: <Flag src={CountryFlag['ru-RU']}/>,
         },{
           value: 'en-US',
-          text: uiText.english[0].text,
+          text: uiText.english.text,
           icon: <Flag src={CountryFlag['en-US']}/>,
         }
-      ] satisfies { value: Lang|'system', [prop: string]: any }[]
+      ] satisfies { value: AppLangType|'system', [prop: string]: any }[]
       if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
     [uiText, lang.availableSystemLangs]
   )
   const languageOptionChecked = useCallback(
-    function (value: Lang|'system') {
+    function (value: AppLangType|'system') {
       return langSettings.setting === 'system' && value === 'system'
         || langSettings.setting === 'manual' && value === langSettings.manualSetting?.[0]
     },
@@ -136,7 +137,7 @@ React.memo(
         .filter(t=>t.type==='light')
         .map(t=>({
           value: t.name,
-          text: themeNameUiText[t.name][0].text,
+          text: themeNameUiText[t.name].text,
           icon: <t.icon css={divIcon}/>,
         }))
       return opts
@@ -149,7 +150,7 @@ React.memo(
         .filter(t=>t.type==='dark')
         .map(t=>({
           value: t.name,
-          text: themeNameUiText[t.name][0].text,
+          text: themeNameUiText[t.name].text,
           icon: <t.icon css={divIcon}/>,
         }))
       return opts
@@ -164,13 +165,13 @@ React.memo(
     <Page>
       <Content>
         
-        <FormHeader>{uiText.appSettings[0].text}</FormHeader>
+        <FormHeader>{uiText.appSettings.text}</FormHeader>
         
         
         
         <Card>
           <OptionHeader>
-            {uiText.theme[0].text}
+            {uiText.theme.text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -201,7 +202,7 @@ React.memo(
         
         <Card>
           <OptionHeader>
-            {uiText.preferredLightTheme[0].text}
+            {uiText.preferredLightTheme.text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -229,7 +230,7 @@ React.memo(
         
         <Card>
           <OptionHeader>
-            {uiText.preferredDarkTheme[0].text}
+            {uiText.preferredDarkTheme.text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -258,7 +259,7 @@ React.memo(
         
         <Card>
           <OptionHeader>
-            {uiText.language[0].text}
+            {uiText.language.text}
           </OptionHeader>
           <RadioInputGroup>
             {
@@ -303,13 +304,13 @@ React.memo(
             }}
           >
             <AddModuleIc css={icon}/>
-            {uiText.installApp[0].text}
+            {uiText.installApp.text}
           </Button>}
           
           <Button css={ButtonStyle.roundedDanger}
-            onClick={() => setClearSite(true)}
+            onClick={()=>setClearSite(true)}
           >
-            {uiText.clearAppData[0].text}
+            {uiText.clearAppData.text}
           </Button>
         
         </RoundButtonsContainer>
@@ -356,6 +357,7 @@ const Content = styled.div`
 const OptionHeader = styled.h5`
   ${resetH};
   padding: 8px 6px 0 6px;
+  color: ${p=>p.theme.page.content3[0]};
 `
 const OptionContainer = styled.div`
   flex: 1;
@@ -372,7 +374,7 @@ const Flag = styled.img`
   object-fit: cover;
   vertical-align: middle;
 `
-const icon = (t:Theme)=>css`
+const icon = (t:AppTheme.Theme)=>css`
   ${SvgIcStyle.El.thiz.icon} {
     height: 1.333em;
     width: 1.333em;
@@ -383,7 +385,7 @@ const divIcon = css`
   height: 1.6em;
   width: 1.6em;
 `
-const iconSmall = (t:Theme)=>css`
+const iconSmall = (t:AppTheme.Theme)=>css`
   ${icon(t)};
   ${SvgIcStyle.El.thiz.icon} {
     height: 1.25em;
@@ -394,7 +396,7 @@ const RoundButtonsContainer = styled.div`
   align-items: center;
   gap: 10px;
 `
-const normalIconRoundButton = (t:Theme)=>css`
+const normalIconRoundButton = (t:AppTheme.Theme)=>css`
   ${ButtonStyle.roundedAccent(t)};
   ${ButtonStyle.El.btn.thiz()} {
     min-width: 90px;

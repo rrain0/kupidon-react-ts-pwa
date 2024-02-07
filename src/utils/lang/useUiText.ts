@@ -1,53 +1,19 @@
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
-import { Lang, LangRecoil } from 'src/recoil/state/LangRecoil'
-import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
-import empty = TypeUtils.empty
+import { LangRecoil } from 'src/recoil/state/LangRecoil'
+import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { PickedUiValues, UiValue, UiValues } from 'src/utils/lang/UiText'
+import ObjectMap = ObjectUtils.ObjectMap
+import ArrayElement = ArrayUtils.ArrayElement
 
 
 
-export const useUiTextArr = <T>
-(uiText?: readonly UiText<T>[] | empty)
-: UiText<T>[] => {
-  const langs = useRecoilValue(LangRecoil).lang
-  
-  const preparedUiText = useMemo(
-    ()=>prepareUiText(uiText??[], langs),
-    [langs, uiText]
-  )
-  
-  return preparedUiText
-}
 
-
-
-export const useUiTextContainer = <T extends UiTextContainer>
-(uiText?: T | empty)
-: T => {
-  const langs = useRecoilValue(LangRecoil).lang
-  
-  const selectedUiText = useMemo(
-    ()=>{
-      const preparedUiText = {...uiText}
-      for (const option in preparedUiText) {
-        preparedUiText[option] = prepareUiText(preparedUiText[option], langs)
-      }
-      return preparedUiText
-    },
-    [langs, uiText]
-  )
-  
-  return selectedUiText as T
-}
-
-
-
-function prepareUiText<T>
-(uiText: readonly UiText<T>[], langs: string[])
-: UiText<T>[] {
-  const used = new Set<T>()
-  return uiText
+const pickUiValue = <V extends UiValue<any,any>>
+(uiValues: readonly V[], langs: string[]): V => {
+  const used = new Set<V>()
+  return uiValues
     .toSorted((a,b)=>{
       if (a.value===b.value) {
         let langIdxA = langs.findIndex(it=>it===a.lang)
@@ -63,4 +29,41 @@ function prepareUiText<T>
       used.add(it.value)
       return true
     })
+    [0]
+}
+
+
+
+export const useUiValueArr = <V extends UiValue<any,any>>
+(uiText: readonly V[]): V => {
+  const langs = useRecoilValue(LangRecoil).lang
+  
+  const pickedUiValue = useMemo(
+    ()=>pickUiValue(uiText, langs),
+    [langs, uiText]
+  )
+  
+  return pickedUiValue
+}
+
+
+
+export const useUiValues = <T extends UiValues>(uiValues: T): PickedUiValues<T> => {
+  const langs = useRecoilValue(LangRecoil).lang
+  
+  const pickedUiValues = useMemo(
+    ()=>{
+      const pickedUiValues = ObjectMap<T,PickedUiValues<T>>(
+        uiValues,
+        ([value,uiValueArr])=>[
+          value,
+          pickUiValue(uiValueArr, langs) as ArrayElement<T[string & keyof T]>
+        ]
+      )
+      return pickedUiValues
+    },
+    [langs, uiValues]
+  )
+  
+  return pickedUiValues
 }

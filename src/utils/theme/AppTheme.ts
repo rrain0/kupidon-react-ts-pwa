@@ -118,7 +118,9 @@ export namespace AppTheme {
     page: {
       bgc:         string[]
       bgcGradient: string[]
-      content:     string[]
+      content1:    string[]
+      content2:    string[]
+      content3:    string[]
     }
     
     statusBar: {
@@ -162,9 +164,17 @@ export namespace AppTheme {
     border: 3.5px solid;
     border-color: ${props.accentColor};
     background: linear-gradient(
-            to bottom right,
-            ${props.bgcColor1} 0% 50%,
-            ${props.bgcColor2} 50% 100%
+      to right,
+      ${props.bgcColor1} 0% 50%,
+      ${props.bgcColor2} 50% 100%
+    );
+  `
+  export const themeIconGradientCss = (props: ThemeIconCssProps)=>css`
+    ${themeIconCss(props)};
+    background: linear-gradient(
+      to right,
+      ${props.bgcColor1} 0% 35%,
+      ${props.bgcColor2} 75% 100%
     );
   `
   

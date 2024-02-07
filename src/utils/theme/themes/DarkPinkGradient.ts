@@ -2,7 +2,7 @@ import styled from '@emotion/styled'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { DarkPink } from 'src/utils/theme/themes/DarkPink'
 import Theme = AppTheme.Theme
-import themeIconCss = AppTheme.themeIconCss
+import themeIconGradientCss = AppTheme.themeIconGradientCss
 
 
 
@@ -41,9 +41,9 @@ const DarkPinkGradientProps = { ...DarkPink,
 export const DarkPinkGradient = {
   ...DarkPinkGradientProps,
   name: 'Dark Pink Gradient' as const,
-  icon: styled.div(themeIconCss({
+  icon: styled.div(themeIconGradientCss({
     accentColor: DarkPinkGradientProps.buttonAccent.bgc[0],
-    bgcColor1:   DarkPinkGradientProps.containerAccent.bgc[0],
+    bgcColor1:   DarkPinkGradientProps.buttonAccent.bgc[0],
     bgcColor2:   DarkPinkGradientProps.page.bgc[0],
   })),
 } satisfies Theme

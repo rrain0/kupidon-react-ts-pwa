@@ -1,4 +1,6 @@
-import { UiText } from 'src/utils/lang/UiText'
+import { Lang } from 'src/utils/lang/Lang'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
+import AppLangEnum = Lang.AppLangEnum
 
 
 
@@ -9,11 +11,11 @@ export const ActionUiText = {
   remove: [
     {
       value: 'remove',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Remove',
     }, {
       value: 'remove',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Удалить',
     },
   ] satisfies UiText<'remove'>[],
@@ -22,11 +24,11 @@ export const ActionUiText = {
   replace: [
     {
       value: 'replace',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Replace',
     }, {
       value: 'replace',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Заменить',
     },
   ] satisfies UiText<'replace'>[],
@@ -35,11 +37,11 @@ export const ActionUiText = {
   download: [
     {
       value: 'download',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Download',
     }, {
       value: 'download',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Скачать',
     },
   ] satisfies UiText<'download'>[],
@@ -48,11 +50,11 @@ export const ActionUiText = {
   fullScreenView: [
     {
       value: 'fullScreenView',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Fullscreen view',
     }, {
       value: 'fullScreenView',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'В полный экран',
     },
   ] satisfies UiText<'fullScreenView'>[],
@@ -60,33 +62,33 @@ export const ActionUiText = {
   save: [
     {
       value: 'save',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Save',
     }, {
       value: 'save',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Сохранить',
     },
   ] satisfies UiText<'save'>[],
   saving: [
     {
       value: 'saving',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Saving',
     }, {
       value: 'saving',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Сохранение',
     },
   ] satisfies UiText<'saving'>[],
   saved: [
     {
       value: 'saved',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Saved',
     }, {
       value: 'saved',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Сохранено',
     },
   ] satisfies UiText<'saved'>[],
@@ -94,14 +96,14 @@ export const ActionUiText = {
   cancel: [
     {
       value: 'cancel',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Cancel',
     }, {
       value: 'cancel',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Отменить',
     },
   ] satisfies UiText<'cancel'>[],
   
   
-} satisfies Record<string, UiText[]>
+} satisfies UiValues

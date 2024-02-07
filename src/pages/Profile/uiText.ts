@@ -1,5 +1,8 @@
+import { Lang } from 'src/utils/lang/Lang'
 import { CommonUiText } from 'src/utils/lang/ui-values/CommonUiText'
-import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
+import AppLangEnum = Lang.AppLangEnum
+
 
 
 
@@ -22,11 +25,11 @@ export const ProfileUiText = {
   aboutMe: [
     {
       value: 'aboutMe',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'About me',
     },{
       value: 'aboutMe',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Обо мне',
     },
   ] satisfies UiText<'aboutMe'>[],
@@ -35,11 +38,11 @@ export const ProfileUiText = {
   imLookingFor: [
     {
       value: 'imLookingFor',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: "I'm looking for",
     },{
       value: 'imLookingFor',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Я ищу',
     },
   ] satisfies UiText<'imLookingFor'>[],
@@ -69,4 +72,4 @@ export const ProfileUiText = {
   unknownError: CommonUiText.unknownError,
   
   
-} satisfies UiTextContainer
+} satisfies UiValues

@@ -44,7 +44,7 @@ import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
 import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import BottomSheetBasic from 'src/views/BottomSheet/BottomSheetBasic'
@@ -136,8 +136,8 @@ React.memo(
   const reactId = useId()
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   
-  const uiText = useUiTextContainer(ProfileUiText)
-  const actionUiValues = useUiTextContainer(ActionUiText)
+  const uiText = useUiValues(ProfileUiText)
+  const actionUiValues = useUiValues(ActionUiText)
   
   
   
@@ -589,10 +589,10 @@ React.memo(
     ()=>[
       {
         value: 'MALE',
-        text: uiText.male[0].text,
+        text: uiText.male.text,
       },{
         value: 'FEMALE',
-        text: uiText.female[0].text,
+        text: uiText.female.text,
       }
     ] satisfies { value: GenderEnum, text: string }[],
     [uiText]
@@ -606,16 +606,16 @@ React.memo(
     ()=>[
       {
         value: 'notSelected',
-        text: uiText.notSelected[0].text,
+        text: uiText.notSelected.text,
       },{
         value: 'ofGuys',
-        text: uiText.ofGuys[0].text,
+        text: uiText.ofGuys.text,
       },{
         value: 'ofGirls',
-        text: uiText.ofGirls[0].text,
+        text: uiText.ofGirls.text,
       },{
         value: 'ofGuysAndGirls',
-        text: uiText.ofGuysAndGirls[0].text,
+        text: uiText.ofGuysAndGirls.text,
       }
     ] satisfies { value: PreferredPeopleOption, text: string }[],
     [uiText]
@@ -635,7 +635,7 @@ React.memo(
         </Button>
       </div> */}
       
-      {/* <FormHeader>{uiText.profile[0].text}</FormHeader> */}
+      {/* <FormHeader>{uiText.profile.text}</FormHeader> */}
       
       { props.header(formValues.name) }
       
@@ -666,7 +666,7 @@ React.memo(
               /* onClick={ev=>{
                 setImages([images[0],undefined,images[2],images[3],images[4],images[5]])
               }} */
-            >{uiText.aboutMe[0].text}</ItemLabel>
+            >{uiText.aboutMe.text}</ItemLabel>
           </ItemTitleContainer>
           <ValidationComponentWrap {...validationProps}
             fieldName="aboutMe"
@@ -696,7 +696,7 @@ React.memo(
                 
                 <OptionItem
                   icon={<NameCardIc css={css`height: 50%`}/>}
-                  title={uiText.name[0].text}
+                  title={uiText.name.text}
                   value={props.value}
                   data-error={props.highlight}
                   nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
@@ -727,10 +727,10 @@ React.memo(
                         `}
                           onClick={ev => ev.stopPropagation()}
                         >
-                          <ItemLabel>{uiText.name[0].text}</ItemLabel>
+                          <ItemLabel>{uiText.name.text}</ItemLabel>
                           <Input css={InputStyle.inputSmall}
                             autoFocus
-                            placeholder={uiText.name[0].text.toLowerCase()}
+                            placeholder={uiText.name.text.toLowerCase()}
                             {...props.inputProps}
                             hasError={props.highlight}
                             onBlur={ev => {
@@ -766,7 +766,7 @@ React.memo(
                 
                 <OptionItem
                   icon={<GiftBoxIc css={css`height: 50%`}/>}
-                  title={uiText.birthDate[0].text}
+                  title={uiText.birthDate.text}
                   value={props.value}
                   data-error={props.highlight}
                   nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
@@ -793,11 +793,11 @@ React.memo(
                   `}
                       onClick={ev=>ev.stopPropagation()}
                     >
-                      <ItemLabel>{uiText.birthDate[0].text}</ItemLabel>
+                      <ItemLabel>{uiText.birthDate.text}</ItemLabel>
                       <Input css={InputStyle.inputSmall}
                         autoFocus
                         inputMode="numeric"
-                        placeholder={uiText.birthDatePlaceholder[0].text.toLowerCase()}
+                        placeholder={uiText.birthDatePlaceholder.text.toLowerCase()}
                         {...props.inputProps}
                         hasError={props.highlight}
                         onBlur={ev=>{
@@ -831,7 +831,7 @@ React.memo(
                   <UseFakePointerRef>{({ ref })=>
                     <OptionItem
                       icon={<GenderIc css={css`height: 50%`}/>}
-                      title={uiText.gender[0].text}
+                      title={uiText.gender.text}
                       value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
                       nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
                       
@@ -849,7 +849,7 @@ React.memo(
                     <ModalPortal>
                       <BottomSheetBasic
                         {...sheetProps.sheetProps}
-                        header={uiText.gender[0].text}
+                        header={uiText.gender.text}
                         aria-modal
                       >
                         <div css={selectItemsContainer}
@@ -885,7 +885,7 @@ React.memo(
           
           <OptionItem
             icon={<Search2Ic css={css`height: 50%`}/>}
-            title={uiText.imLookingFor[0].text}
+            title={uiText.imLookingFor.text}
             value={preferredPeopleOptions.find(it => it.value === 'notSelected')!.text}
             nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
           />
@@ -901,12 +901,12 @@ React.memo(
       { anyFieldChanged &&
         <Button css={ButtonStyle.roundedSmallSecondary}
           onClick={resetAllFields}
-        >{actionUiValues.cancel[0].text}</Button>
+        >{actionUiValues.cancel.text}</Button>
       }
       { canSubmit && !isLoading &&
         <Button css={ButtonStyle.roundedSmallAccent}
           onClick={submit}
-        >{actionUiValues.save[0].text}</Button>
+        >{actionUiValues.save.text}</Button>
       }
     </TopButtonBarFrame>}
   </>

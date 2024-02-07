@@ -4,7 +4,7 @@ import { SignupPageUiText } from 'src/pages/Signup/uiText'
 import { DateTime } from 'src/utils/DateTime'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextValues, UiValues } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
 import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
@@ -67,7 +67,7 @@ export namespace SignupPageValidation {
     "DUPLICATE_EMAIL": SignupPageUiText.userWithSuchEmailAlreadyRegistered,
     'connection-error': SignupPageUiText.connectionError,
     'unknown-error': SignupPageUiText.unknownError,
-  } satisfies Record<FailureCode, UiText[]>
+  } satisfies UiTextValues<FailureCode>
   
   
   

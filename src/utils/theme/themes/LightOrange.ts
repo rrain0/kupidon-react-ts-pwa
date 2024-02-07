@@ -52,7 +52,7 @@ export const LightOrange = {
   name: 'Light Orange' as const,
   icon: styled.div(themeIconCss({
     accentColor: LightOrangeProps.buttonAccent.bgc[0],
-    bgcColor1:   LightOrangeProps.page.bgc[0],
-    bgcColor2:   LightOrangeProps.page.bgc[0],
+    bgcColor1:   LightOrangeProps.buttonAccent.bgc[0],
+    bgcColor2:   LightOrangeProps.containerNormal.bgc[0],
   })),
 } satisfies Theme

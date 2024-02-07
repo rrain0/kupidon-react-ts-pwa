@@ -218,8 +218,8 @@ export namespace ButtonStyle {
       // normal
       ${El.btn.thiz()} {
         background: transparent;
-        color: ${t.page.content[0]};
-        ${Prop.color.name}: ${t.page.content[0]};
+        color: ${t.page.content2[0]};
+        ${Prop.color.name}: ${t.page.content2[0]};
       }
       ${El.border.thiz()} {
         border: 1px solid;

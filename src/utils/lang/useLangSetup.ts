@@ -1,19 +1,22 @@
-import { useLayoutEffect, useMemo } from 'react'
+import { useLayoutEffect } from 'react'
 import { useRecoilState } from 'recoil'
 import {
-  fallbackLang,
-  Lang,
   LangRecoil,
   LangSettingsRecoil,
 } from 'src/recoil/state/LangRecoil'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
+import { Lang } from 'src/utils/lang/Lang'
 import { useLangDetector } from 'src/utils/lang/useLangDetector'
 import arrIsNonEmpty = ArrayUtils.arrIsNonEmpty
+import AllAppLangs = Lang.AllAppLangs
+import DefaultAppLang = Lang.DefaultAppLang
+import AppLangType = Lang.AppLangType
 
 
 
-function getAvailableSystemLangs(systemLangs: string[] | undefined): Lang[] {
-  return (systemLangs??[]).filter(sl=>AppLangs.includes(sl as any)) as Lang[]
+
+function getAvailableSystemLangs(systemLangs: string[] | undefined): AppLangType[] {
+  return (systemLangs??[]).filter(sl=>AllAppLangs.includes(sl as any)) as AppLangType[]
 }
 
 
@@ -29,8 +32,7 @@ export const useLangSetup = ()=>{
   
   useLayoutEffect(
     ()=>{
-      setLang(s=>({
-        ...s,
+      setLang(s=>({ ...s,
         availableSystemLangs: getAvailableSystemLangs(systemLangs),
       }))
     },
@@ -46,7 +48,7 @@ export const useLangSetup = ()=>{
         if (!available) return
         if (arrIsNonEmpty(available)) setLang(s=>({
           ...s,
-          lang: [...available,fallbackLang],
+          lang: [...available,DefaultAppLang],
         }))
         else setLangSettings({
           ...langSettings,
@@ -60,7 +62,7 @@ export const useLangSetup = ()=>{
         }))
         else setLang(s=>({
           ...s,
-          lang: [fallbackLang],
+          lang: [DefaultAppLang],
         }))
       }
     },

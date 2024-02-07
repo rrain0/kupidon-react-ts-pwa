@@ -78,8 +78,8 @@ export namespace RadioInputStyle {
       gap: 8px;
       
       ${Txt.large2};
-      color: ${t.page.content[0]};
-      ${Prop.color}: ${t.page.content[0]};
+      color: ${t.page.content2[0]};
+      ${Prop.color}: ${t.page.content2[0]};
     }
     ${El.ripple}{
       ${Prop.rippleColor}: ${t.ripple.contentOnTransparent[0]};

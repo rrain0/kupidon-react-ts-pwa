@@ -2,7 +2,7 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { PwdChangeUiText } from 'src/pages/PwdChange/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextValues, UiValues } from 'src/utils/lang/UiText'
 import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
 import PartialFailureData = ValidationCore.PartialFailureData
@@ -45,7 +45,7 @@ export namespace PwdChangePageValidation {
     "INVALID_PWD": PwdChangeUiText.invalidPwd,
     'connection-error': PwdChangeUiText.connectionError,
     'unknown-error': PwdChangeUiText.unknownError,
-  } satisfies Record<FailureCode, UiText[]>
+  } satisfies UiTextValues<FailureCode>
   
   
   

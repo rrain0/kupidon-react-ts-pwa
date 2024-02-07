@@ -1,5 +1,6 @@
 import { CommonUiText } from 'src/utils/lang/ui-values/CommonUiText'
-import { UiTextContainer } from 'src/utils/lang/UiText'
+import { UiValues } from 'src/utils/lang/UiText'
+
 
 
 
@@ -32,4 +33,4 @@ export const ApplicationSettingsUiText = {
   testPage: CommonUiText.testPage,
   
   
-} satisfies UiTextContainer
+} satisfies UiValues

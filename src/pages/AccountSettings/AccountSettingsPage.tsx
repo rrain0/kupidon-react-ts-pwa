@@ -23,7 +23,7 @@ import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { formSubmitPreventDefault } from 'src/utils/react/formSubmitPreventDefault'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -58,7 +58,7 @@ const AccountSettingsPage =
 React.memo(
 ()=>{
   
-  const uiText = useUiTextContainer(AccountSettingsUiText)
+  const uiText = useUiValues(AccountSettingsUiText)
   
   const [auth,setAuth] = useRecoilState(AuthRecoil)
   const resetAuth = useResetRecoilState(AuthRecoil)
@@ -226,7 +226,7 @@ React.memo(
     <Page>
       <Form onSubmit={formSubmitPreventDefault}>
         
-        <FormHeader>{uiText.account[0].text}</FormHeader>
+        <FormHeader>{uiText.account.text}</FormHeader>
         
         
         
@@ -234,7 +234,7 @@ React.memo(
           
           
           <ItemContainer>
-            <ItemLabel>{uiText.id[0].text}</ItemLabel>
+            <ItemLabel>{uiText.id.text}</ItemLabel>
             <Input
               css={InputStyle.input(
                 { size: 'small', textSize: 'smaller', static: true }
@@ -245,7 +245,7 @@ React.memo(
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiText.email[0].text}</ItemLabel>
+            <ItemLabel>{uiText.email.text}</ItemLabel>
             <Input
               css={InputStyle.input(
                 { size: 'small', static: true }
@@ -256,21 +256,21 @@ React.memo(
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiText.emailVerified[0].text}</ItemLabel>
+            <ItemLabel>{uiText.emailVerified.text}</ItemLabel>
             <Input
               css={InputStyle.input(
                 { size: 'small', static: true }
               )}
               readOnly
               value={ user.emailVerified
-                ? uiText.yes[0].text.toLowerCase()
-                : uiText.no[0].text.toLowerCase()
+                ? uiText.yes.text.toLowerCase()
+                : uiText.no.text.toLowerCase()
               }
             />
           </ItemContainer>
           
           {/* <ItemContainer>
-            <ItemLabel>{uiText.userCreated[0].text}</ItemLabel>
+            <ItemLabel>{uiText.userCreated.text}</ItemLabel>
             <Input
               css={InputStyle.input(
                 { size: 'small', static: true }
@@ -281,7 +281,7 @@ React.memo(
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiText.userUpdated[0].text}</ItemLabel>
+            <ItemLabel>{uiText.userUpdated.text}</ItemLabel>
             <Input
               css={InputStyle.input(
                 { size: 'small', static: true }
@@ -292,14 +292,14 @@ React.memo(
           </ItemContainer> */}
           
           <ItemContainer>
-            <ItemLabel>{uiText.userCreated[0].text}</ItemLabel>
+            <ItemLabel>{uiText.userCreated.text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {new Date(user.created) + ''}
             </DataField>
           </ItemContainer>
           
           <ItemContainer>
-            <ItemLabel>{uiText.userUpdated[0].text}</ItemLabel>
+            <ItemLabel>{uiText.userUpdated.text}</ItemLabel>
             <DataField css={DataFieldStyle.statikSmall}>
               {new Date(user.updated) + ''}
             </DataField>
@@ -316,7 +316,7 @@ React.memo(
         <div css={notInCard}>
           <Link to={RootRoute.settings.pwdChange[full]()}>
             <Button css={ButtonStyle.bigRectAccent}>
-              {uiText.changePwd[0].text}
+              {uiText.changePwd.text}
             </Button>
           </Link>
         </div>
@@ -325,7 +325,7 @@ React.memo(
           <Button css={ButtonStyle.bigRectAccent}
             onClick={resetAuth}
           >
-            {uiText.logOutFromAccount[0].text}
+            {uiText.logOutFromAccount.text}
           </Button>
         </div>
         
@@ -334,7 +334,7 @@ React.memo(
             onClick={undefined}
             disabled
           >
-            {uiText.deleteAccount[0].text}
+            {uiText.deleteAccount.text}
           </Button>
         </div>
       

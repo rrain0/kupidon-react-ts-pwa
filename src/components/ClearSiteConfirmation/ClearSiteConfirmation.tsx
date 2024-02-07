@@ -8,7 +8,7 @@ import ModalPortal from 'src/components/Modal/ModalPortal'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { clearSiteData } from 'src/utils/app/clearSiteData'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { useBoolState } from 'src/utils/react/useBoolState'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
@@ -42,7 +42,7 @@ React.memo(
 (props: ClearSiteConfirmationProps)=>{
   const { open, setOpen } = props
   
-  const uiText = useUiTextContainer(ClearSiteConfirmationUiText)
+  const uiText = useUiValues(ClearSiteConfirmationUiText)
   
   
   const [needClear, clear] = useBoolState(false)
@@ -68,7 +68,7 @@ React.memo(
     >
       {props => <ModalPortal><BottomSheetBasic
         {...props.sheetProps}
-        header={uiText.clearAppData[0].text + '?'}
+        header={uiText.clearAppData.text + '?'}
       >
         <div
           css={css`
@@ -87,14 +87,14 @@ React.memo(
             <Button css={[ButtonStyle.roundedAccent, button]}
               onClick={props.setClosing}
             >
-              {uiText.no[0].text}
+              {uiText.no.text}
             </Button>
             
             <Button css={[ButtonStyle.roundedDanger, button]}
               onClick={clear}
             >
               <ClearTrashIc css={[icon, iconOnDanger]}/>
-              {uiText.yes[0].text}
+              {uiText.yes.text}
             </Button>
           
           </div>
@@ -107,7 +107,7 @@ React.memo(
         ${fixed};
         z-index: 40;
         background: ${t.page.bgc[0]}9a;
-        color: ${t.page.content[0]};
+        color: ${t.page.content2[0]};
         ${Txt.large2};
         ${center};
       `}
@@ -120,7 +120,7 @@ React.memo(
         `}
       >
         {<Spinner8LinesIc css={icon}/>}
-        {uiText.reloading[0].text}
+        {uiText.reloading.text}
       </div>
     </div> }
     
@@ -135,7 +135,7 @@ const icon = (t:Theme)=>css`
   ${SvgIcStyle.El.thiz.icon} {
     height: 1.333em;
     width: 1.333em;
-    ${SvgIcStyle.Prop.prop.color}: ${t.page.content[0]};
+    ${SvgIcStyle.Prop.prop.color}: ${t.page.content2[0]};
   }
 `
 const iconOnDanger = (t:Theme)=>css`

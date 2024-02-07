@@ -132,8 +132,8 @@ export const LightSimplePink = {
   type: 'light',
   name: 'Light Simple Pink' as const,
   icon: styled.div(themeIconCss({
-    accentColor: '#ffbaba',
-    bgcColor1:   LightSimpleProps.page.bgc[0],
+    accentColor: LightSimpleProps.photos.highlightFrameAccentBgc[0],
+    bgcColor1:   LightSimpleProps.photos.highlightFrameAccentBgc[0],
     bgcColor2:   LightSimpleProps.page.bgc[0],
   })),
 } satisfies Theme

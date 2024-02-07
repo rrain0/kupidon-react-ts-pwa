@@ -16,7 +16,7 @@ import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import Input from 'src/views/Inputs/Input/Input'
@@ -53,8 +53,7 @@ React.memo(
   
   const setAuth = useSetRecoilState(AuthRecoil)
   
-  const uiText = useUiTextContainer(LoginPageUiText)
-  
+  const uiText = useUiValues(LoginPageUiText)
   
   const {
     formValues, setFormValues,
@@ -149,7 +148,7 @@ React.memo(
   
       <Form onSubmit={onFormSubmitCallback}>
         
-        <FormHeader>{uiText.login[0].text}</FormHeader>
+        <FormHeader>{uiText.login.text}</FormHeader>
         
         
         
@@ -157,7 +156,7 @@ React.memo(
           fieldName='login'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiText.loginEmailPlaceholder[0].text}
+            placeholder={uiText.loginEmailPlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -167,7 +166,7 @@ React.memo(
           fieldName='pwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
-            placeholder={uiText.pwdPlaceholder[0].text}
+            placeholder={uiText.pwdPlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -179,13 +178,13 @@ React.memo(
           css={ButtonStyle.bigRectMain}
           type="submit"
         >
-          {uiText.doLogin[0].text}
+          {uiText.doLogin.text}
         </Button>
         
         
         <Link to={RootRoute.signup[fullAllowedNameParams]({ returnPath: returnPath })}>
           <Button css={ButtonStyle.bigRectAccent}>
-            {uiText.signup[0].text}
+            {uiText.signup.text}
           </Button>
         </Link>
       

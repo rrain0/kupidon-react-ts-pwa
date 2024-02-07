@@ -26,7 +26,8 @@
   
   <!--
     manifest.json provides metadata used when your web app is installed on a
-    user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    user's mobile device or desktop.
+    See https://developers.google.com/web/fundamentals/web-app-manifest/
   -->
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   
@@ -47,28 +48,28 @@
   
   
   
-  <!--<script>
-    Object.getPrototypeOf(Object).constructor.let = function(callback){
-      return callback()
-    }
-  </script>-->
-  
-  
   
   <script>
     //console.log('setup app script: start setup')
     
     
-    /** @type {readonly ('en-US'|'ru-RU')[]} */
-    const AppLangs = ['en-US','ru-RU']
-    
-    
-    
+    /** @type {readonly ['en-US','ru-RU']} */
+    const AllAppLangs = ['en-US','ru-RU']
     /**
-     * @param {AppLangs | string[]} langs
-     * @returns {void}
-     */
-    function setHtmlTags(langs){
+     * @type {{
+     *   readonly eng: 'en-US',
+     *   readonly us: 'ru-RU',
+     * }}
+     * */
+    const AppLangEnum = /** @type {const} */ ({
+      eng: 'en-US',
+      rus: 'ru-RU',
+    })
+    
+    
+    
+    /** @type {(langs: AllAppLangs | string[])=>void} */
+    const setHtmlTags = (langs)=>{
       /**
        * @type {{
        *  nodeEnv: 'development'|'production'|'test',
@@ -85,7 +86,7 @@
         title: "Kupidon",
         description: "Kupidon date app",
       }
-      if (AppLangs.includes(langs?.[0])) {
+      if (AllAppLangs.includes(langs?.[0])) {
         htmlProps.lang = langs[0]
         
         const textPrefix = htmlProps.nodeEnv==='development' ? 'Dev ' : ''
@@ -115,15 +116,10 @@
           },
         ]
         
-        /**
-         * @template T
-         * @param {readonly UiText<T>[]} uiText
-         * @param {string[]} langs
-         * @returns {UiText<T>[]}
-         */
-        const prepareUiText = function(uiText, langs){
+        /** @type {<T>(uiTextValues: readonly UiText<T>[], langs: string[])=>UiText<T>}*/
+        const prepareUiText = (uiTextValues, langs)=>{
           const used = new Set()
-          return [...uiText]
+          return [...uiTextValues]
             .sort((a,b)=>{
               if (a.value===b.value) {
                 let langIdxA = langs.findIndex(it=>it===a.lang)
@@ -139,13 +135,11 @@
               used.add(it.value)
               return true
             })
+            [0]
         }
         
-        const titles = prepareUiText(AppTitles,langs)
-        const descriptions = prepareUiText(AppDescriptions,langs)
-        
-        htmlProps.title = textPrefix + titles[0].text
-        htmlProps.description = textPrefix + descriptions[0].text
+        htmlProps.title = textPrefix + prepareUiText(AppTitles,langs).text
+        htmlProps.description = textPrefix + prepareUiText(AppDescriptions,langs).text
       }
       
       const html = document.documentElement
@@ -163,23 +157,24 @@
       let manifestUrl = htmlProps.publicUrl + "/manifest.json"
       if (manifestSearchParams) manifestUrl += '?' + manifestSearchParams
       
-      const linkManifest = document.querySelector('html head link[rel=manifest]')
+      const linkManifest = document.querySelector('html>head>link[rel=manifest]')
       linkManifest.href = manifestUrl
     }
     
     
     
     
+    
+    
     const langSettingsName = 'langSettings'
     {
-      
       const langSettings = JSON.parse(localStorage.getItem(langSettingsName))
       if (langSettings?.setting==='manual' && langSettings.manualSetting){
         setHtmlTags(langSettings.manualSetting)
       } else {
         
-        /** @returns {string[]} */
-        const getLangs = function(){
+        /** @type {()=>string[]} */
+        const getLangs = ()=>{
           let browserLangs = navigator.languages
           if ((!browserLangs || !browserLangs.length) && navigator.language)
             browserLangs = [navigator.language]
@@ -192,14 +187,16 @@
           return browserLangs
         }
         
-        let langs = getLangs().filter(it=>AppLangs.includes(it))
+        let langs = getLangs().filter(it=>AllAppLangs.includes(it))
         langs = [...langs,'en-US']
         
         setHtmlTags(langs)
       }
-      
-      
     }
+    
+    
+    
+    
     
     
     
@@ -211,12 +208,39 @@
     Запрос на установку из эвента можно вызвать только 1 раз, дальше нужен новый эвент.
     При отклонении запроса на установку, браузер сразу же отправляет новый эвент.
     */
+    
+    
+    /**
+     * @typedef {
+       * {
+       *   outcome: 'dismissed',
+       *   platform: '',
+       * } | {
+       *   outcome: 'accepted',
+       *   platform: 'web'
+       * }
+     * } InstallationUserChoice
+     */
+    /**
+     * @typedef {{
+     *   readonly platforms: string[],
+     *   readonly userChoice: Promise<InstallationUserChoice>,
+     *   prompt(): Promise<InstallationUserChoice>,
+     * }} BeforeInstallPromptEvent
+     * @extends Event
+     */
+    
+    
+    /** @type {BeforeInstallPromptEvent | undefined} */
     let beforeInstallPromptEvent
+    /** @type {((ev: BeforeInstallPromptEvent|undefined)=>void) | undefined} */
     let onBeforeInstallPromptEvent
+    /** @type {(ev: BeforeInstallPromptEvent|undefined)=>void} */
     const setBeforeInstallPromptEvent = ev=>{
       beforeInstallPromptEvent = ev
       onBeforeInstallPromptEvent?.(beforeInstallPromptEvent)
     }
+    /** @type {()=>Promise<InstallationUserChoice|undefined>} */
     const promptInstall = ()=>{
       const ev = beforeInstallPromptEvent
       setBeforeInstallPromptEvent(undefined)

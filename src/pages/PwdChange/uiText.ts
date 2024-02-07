@@ -1,5 +1,8 @@
+import { Lang } from 'src/utils/lang/Lang'
 import { CommonUiText } from 'src/utils/lang/ui-values/CommonUiText'
-import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
+import AppLangEnum = Lang.AppLangEnum
+
 
 
 
@@ -30,22 +33,22 @@ export const PwdChangeUiText = {
   currentPwdNotEntered: [
     {
       value: 'currentPwdNotEntered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Current password not entered',
     },{
       value: 'currentPwdNotEntered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Текущий пароль не введён',
     },
   ] satisfies UiText<'currentPwdNotEntered'>[],
   currentPwdMaxLenIs200: [
     {
       value: 'currentPwdMaxLenIs200',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Current password max length is 200 chars',
     },{
       value: 'currentPwdMaxLenIs200',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Максимальная длина текущего пароля - 200 символов',
     },
   ] satisfies UiText<'currentPwdMaxLenIs200'>[],
@@ -56,11 +59,11 @@ export const PwdChangeUiText = {
   invalidPwd: [
     {
       value: 'invalidPwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Wrong password',
     },{
       value: 'invalidPwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Неправильный пароль',
     },
   ] satisfies UiText<'invalidPwd'>[],
@@ -69,4 +72,4 @@ export const PwdChangeUiText = {
   
   
   
-} satisfies UiTextContainer
+} satisfies UiValues

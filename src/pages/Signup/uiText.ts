@@ -1,12 +1,12 @@
+import { Lang } from 'src/utils/lang/Lang'
 import { CommonUiText } from 'src/utils/lang/ui-values/CommonUiText'
-import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
+import AppLangEnum = Lang.AppLangEnum
 
 
 
 
 export const SignupPageUiText = {
-  
-  
   emailLoginPlaceholder: CommonUiText.emailLoginPlaceholder,
   pwdPlaceholder: CommonUiText.pwdPlaceholder,
   repeatPwdPlaceholder: CommonUiText.repeatPwdPlaceholder,
@@ -17,11 +17,11 @@ export const SignupPageUiText = {
   iAmGuy: [
     {
       value: 'iAmGuy',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'I am guy',
     },{
       value: 'iAmGuy',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Я парень',
     },
   ] satisfies UiText<'iAmGuy'>[],
@@ -30,11 +30,11 @@ export const SignupPageUiText = {
   iAmGirl: [
     {
       value: 'iAmGirl',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'I am girl',
     },{
       value: 'iAmGirl',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Я девушка',
     },
   ] satisfies UiText<'iAmGirl'>[],
@@ -69,4 +69,4 @@ export const SignupPageUiText = {
   connectionError: CommonUiText.connectionError,
   unknownError: CommonUiText.unknownError,
   
-} satisfies UiTextContainer
+} satisfies UiValues

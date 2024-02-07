@@ -27,8 +27,7 @@ const Any =
 React.memo(
 ()=>{
   return <>
-    {/* Это место, где будут рендериться children */}
-    <Outlet/>
+    <Outlet/> {/* Это место, где будут рендериться children */}
     <BottomNavBarRouting/>
   </>
 })
@@ -51,6 +50,7 @@ React.memo(
 const rootRoutes: RouteObject[] = [
   {
     path: '*',
+    // If you specify 'Component' or 'element', then in it must be <Outlet/> to render children.
     Component: Any,
     children: [
       {

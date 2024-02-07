@@ -94,7 +94,9 @@ const LightSimpleProps = {
   page: {
     bgc:         ['#f5f5f5'],
     bgcGradient: ['#f5f5f5','#f5f5f5','#f5f5f5'],
-    content:     ['#000000'],
+    content1:    ['#000000'],
+    content2:    ['#000000'],
+    content3:    ['#999999'],
   },
   
   statusBar: {

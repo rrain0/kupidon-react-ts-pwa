@@ -1,5 +1,8 @@
+import { Lang } from 'src/utils/lang/Lang'
 import { CommonUiText } from 'src/utils/lang/ui-values/CommonUiText'
-import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
+import AppLangEnum = Lang.AppLangEnum
+
 
 
 
@@ -10,7 +13,7 @@ export const AccountSettingsUiText = {
   id: [
     {
       value: 'id',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'id',
     },
   ] satisfies UiText<'id'>[],
@@ -19,7 +22,7 @@ export const AccountSettingsUiText = {
   email: [
     {
       value: 'email',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Email',
     },
   ] satisfies UiText<'email'>[],
@@ -28,11 +31,11 @@ export const AccountSettingsUiText = {
   emailVerified: [
     {
       value: 'emailVerified',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Email verified',
     },{
       value: 'emailVerified',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Email верифицирован',
     },
   ] satisfies UiText<'emailVerified'>[],
@@ -55,11 +58,11 @@ export const AccountSettingsUiText = {
   userCreated: [
     {
       value: 'userCreated',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'User created',
     },{
       value: 'userCreated',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пользователь создан',
     },
   ] satisfies UiText<'userCreated'>[],
@@ -68,11 +71,11 @@ export const AccountSettingsUiText = {
   userUpdated: [
     {
       value: 'userUpdated',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'User updated',
     },{
       value: 'userUpdated',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пользователь обновлён',
     },
   ] satisfies UiText<'userUpdated'>[],
@@ -90,4 +93,4 @@ export const AccountSettingsUiText = {
   deleteAccount: CommonUiText.deleteAccount,
   
   
-} satisfies UiTextContainer
+} satisfies UiValues

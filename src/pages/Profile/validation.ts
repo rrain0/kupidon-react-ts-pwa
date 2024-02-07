@@ -5,7 +5,7 @@ import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextValues, UiValues } from 'src/utils/lang/UiText'
 import * as uuid from 'uuid'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
@@ -62,7 +62,7 @@ export namespace ProfilePageValidation {
     'NO_USER': ProfileUiText.noUserWithSuchId,
     'connection-error': ProfileUiText.connectionError,
     'unknown-error': ProfileUiText.unknownError,
-  } satisfies Record<FailureCode, UiText[]>
+  } satisfies UiTextValues<FailureCode>
   
   
   

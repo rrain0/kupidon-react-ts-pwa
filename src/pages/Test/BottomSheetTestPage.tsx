@@ -129,7 +129,7 @@ React.memo(
           width: 200px;
           height: 50px;
           border-radius: 16px;
-          border: 2px solid ${t.page.content[0]};
+          border: 2px solid ${t.page.content2[0]};
           ${row};
           padding: 0 10px;
           align-items: center;
@@ -193,7 +193,7 @@ React.memo(
           css={t=>css`
             background: ${t.bottomSheet.bgc[0]};
             border-radius: 16px 16px 0 0;
-            color: ${t.page.content[0]};
+            color: ${t.page.content2[0]};
             padding: 10px;
             ${col};
             align-items: center;
@@ -209,7 +209,7 @@ React.memo(
               height: 4px;
               border-radius: 2px;
               background: ${t.bottomSheet.handle[0]};
-              ${state==='dragging' && css`background: ${t.page.content[0]};`}
+              ${state==='dragging' && css`background: ${t.page.content2[0]};`}
             `}
           />
           <div>Header</div>
@@ -222,7 +222,7 @@ React.memo(
             place-items: center;
             overflow: hidden;
             background: ${t.bottomSheet.bgc[0]};
-            color: ${t.page.content[0]};
+            color: ${t.page.content2[0]};
           `}
         >
           <OverflowWrapper
@@ -307,7 +307,7 @@ const BottomSheetControlOverlay = (props:{
       z-index: 40;
       ${col};
       background: ${t.page.bgc[0]}88;
-      color: ${t.page.content[0]};
+      color: ${t.page.content2[0]};
     `}
     >
       
@@ -445,9 +445,9 @@ const OverlayButton = styled.button`
   min-width: 60px;
   height: 30px;
   font: 500 10px/129% Roboto;
-  color: ${p=>p.theme.page.content[0]};
+  color: ${p=>p.theme.page.content2[0]};
 `
 const OverlayInput = styled.input`
   font: 500 10px/129% Roboto;
-  color: ${p=>p.theme.page.content[0]};
+  color: ${p=>p.theme.page.content2[0]};
 `

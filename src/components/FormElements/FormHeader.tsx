@@ -14,7 +14,7 @@ import Txt = EmotionCommon.Txt
 export const formHeaderStyle = (t: AppTheme.Theme)=>css`
   ${Txt.large4};
   min-height: 1.5em;
-  color: ${t.page.content[1]};
+  color: ${t.page.content1[0]};
   align-self: center;
   text-align: center;
 `

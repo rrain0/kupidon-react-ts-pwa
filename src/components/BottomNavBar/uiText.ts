@@ -1,5 +1,5 @@
 import { CommonUiText } from 'src/utils/lang/ui-values/CommonUiText'
-import { UiText, UiTextContainer } from 'src/utils/lang/UiText'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
 
 
 
@@ -43,4 +43,4 @@ export const BottomNavBarUiText = {
   
   
   
-} satisfies UiTextContainer
+} satisfies UiValues

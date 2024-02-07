@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationActions } from 'src/utils/form-validation/ValidationActions'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextValues } from 'src/utils/lang/UiText'
 import { ToastMsg, ToastMsgData, useToasts } from 'src/components/Toasts/useToasts'
 import Failure = ValidationCore.Failure
 import Values = ValidationCore.Values
@@ -17,12 +17,12 @@ export type UseFormToastsProps
 <Vs extends Values>
 = {
   isLoading?: boolean | undefined, 
-  loadingText?: UiText[] | undefined,
+  loadingText?: UiText<any>[] | undefined,
   isSuccess?: boolean | undefined, 
-  successText?: UiText[] | undefined,
+  successText?: UiText<any>[] | undefined,
   failures: Failures<Vs>,
   setFailures: Updater<Failures<Vs>>
-  failureCodeToUiText?: { [prop: string]: UiText[] } | undefined,
+  failureCodeToUiText?: UiTextValues | undefined,
 }
 export const useFormToasts =
 <Vs extends Values>

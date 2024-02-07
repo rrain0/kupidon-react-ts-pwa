@@ -28,7 +28,7 @@ import { MathUtils } from 'src/utils/common/MathUtils'
 import { DataUrl } from 'src/utils/DataUrl'
 import { ImageUtils } from 'src/utils/file/ImageUtils'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
@@ -152,7 +152,7 @@ React.memo(
   const { images, setImages } = props
   const { theme } = useRecoilValue(ThemeRecoil)
   const { isDraggingFiles } = useRecoilValue(AppRecoil)
-  const actionUiValues = useUiTextContainer(ActionUiText)
+  const actionUiValues = useUiValues(ActionUiText)
   
   
   const progressAnim = useMemo(
@@ -654,7 +654,7 @@ React.memo(
             }}
           >
             <OptionContainer>
-              <OptionTitle>{actionUiValues.remove[0].text}</OptionTitle>
+              <OptionTitle>{actionUiValues.remove.text}</OptionTitle>
               <div css={optionIconBoxStyle}>
                 <CrossInCircleIc css={css`height: 120%;`}/>
               </div>
@@ -673,7 +673,7 @@ React.memo(
               <Button css={ButtonStyle.bigRectTransparent}>
                 
                 <OptionContainer>
-                  <OptionTitle>{actionUiValues.replace[0].text}</OptionTitle>
+                  <OptionTitle>{actionUiValues.replace.text}</OptionTitle>
                   <div css={optionIconBoxStyle}>
                     <ArrowRefreshCwIc/>
                   </div>
@@ -694,7 +694,7 @@ React.memo(
                 }}
               >
                 <OptionContainer>
-                  <OptionTitle>{actionUiValues.fullScreenView[0].text}</OptionTitle>
+                  <OptionTitle>{actionUiValues.fullScreenView.text}</OptionTitle>
                   <div css={optionIconBoxStyle}>
                     <FullscreenIc css={css`height: 120%;`}/>
                   </div>
@@ -714,7 +714,7 @@ React.memo(
                   onClick={sheet.setClosing}
                 >
                   <OptionContainer>
-                    <OptionTitle>{actionUiValues.download[0].text}</OptionTitle>
+                    <OptionTitle>{actionUiValues.download.text}</OptionTitle>
                     <div css={optionIconBoxStyle}>
                       <Download1Ic/>
                     </div>

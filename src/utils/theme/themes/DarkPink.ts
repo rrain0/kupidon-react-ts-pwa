@@ -126,7 +126,7 @@ export const DarkPink = {
   name: 'Dark Pink' as const,
   icon: styled.div(themeIconCss({
     accentColor: DarkPinkProps.buttonAccent.bgc[0],
-    bgcColor1:   DarkPinkProps.page.bgc[0],
+    bgcColor1:   DarkPinkProps.buttonAccent.bgc[0],
     bgcColor2:   DarkPinkProps.page.bgc[0],
   })),
 } satisfies Theme

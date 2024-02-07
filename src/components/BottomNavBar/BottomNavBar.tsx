@@ -8,7 +8,7 @@ import { AppRoutes } from 'src/app-routes/AppRoutes'
 import { BottomNavBarUiText } from 'src/components/BottomNavBar/uiText'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -34,7 +34,7 @@ const BottomNavBar =
 React.memo(
 ()=>{
   
-  const uiOptions = useUiTextContainer(BottomNavBarUiText)
+  const uiOptions = useUiValues(BottomNavBarUiText)
   
   
   return <>
@@ -55,25 +55,25 @@ React.memo(
       <NavLink to={RootRoute.profile[full]()}>
         <Button css={ButtonStyle.nav}>
           <ProfileIc/>
-          <div>{uiOptions.profile[0].text}</div>
+          <div>{uiOptions.profile.text}</div>
         </Button>
       </NavLink>
       
       <Button css={ButtonStyle.nav}>
         <ChatRoundIc/>
-        <div>{uiOptions.chat[0].text}</div>
+        <div>{uiOptions.chat.text}</div>
       </Button>
       
       <NavLink to={RootRoute.findPairs[full]()}>
         <Button css={ButtonStyle.nav}>
           <CardsHeartIc/>
-          <div>{uiOptions.findCouples[0].text}</div>
+          <div>{uiOptions.findCouples.text}</div>
         </Button>
       </NavLink>
       
       <Button css={ButtonStyle.nav}>
         <HelpIc/>
-        <div>{uiOptions.advices[0].text}</div>
+        <div>{uiOptions.advices.text}</div>
       </Button>
       
       <UseBool>{bool=>
@@ -85,7 +85,7 @@ React.memo(
               {...onPointerClick(bool.setTrue)}
             >
               <Gear2Ic/>
-              <div>{uiOptions.settings[0].text}</div>
+              <div>{uiOptions.settings.text}</div>
             </Button>
           </NavLink>
           <QuickSettings open={bool.value} setOpen={bool.setValue}/>

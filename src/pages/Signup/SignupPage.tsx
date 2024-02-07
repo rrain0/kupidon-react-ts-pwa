@@ -25,7 +25,7 @@ import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
 import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import Input from 'src/views/Inputs/Input/Input'
@@ -65,7 +65,7 @@ React.memo(
   const setAuth = useSetRecoilState(AuthRecoil)
   const lang = useRecoilValue(LangRecoil)
   
-  const uiText = useUiTextContainer(SignupPageUiText)
+  const uiText = useUiValues(SignupPageUiText)
   
   
   const {
@@ -167,10 +167,10 @@ React.memo(
     ()=>[
       {
         value: 'MALE',
-        text: uiText.iAmGuy[0].text,
+        text: uiText.iAmGuy.text,
       },{
         value: 'FEMALE',
-        text: uiText.iAmGirl[0].text,
+        text: uiText.iAmGirl.text,
       }
     ] satisfies { value: GenderEnum, text: string }[],
     [uiText]
@@ -198,7 +198,7 @@ React.memo(
       
       <Form onSubmit={onFormSubmitCallback}>
         
-        <FormHeader>{uiText.registration[0].text}</FormHeader>
+        <FormHeader>{uiText.registration.text}</FormHeader>
         
         
         
@@ -206,7 +206,7 @@ React.memo(
           fieldName='email'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiText.emailLoginPlaceholder[0].text}
+            placeholder={uiText.emailLoginPlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -216,7 +216,7 @@ React.memo(
           fieldName='pwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
-            placeholder={uiText.pwdPlaceholder[0].text}
+            placeholder={uiText.pwdPlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -226,7 +226,7 @@ React.memo(
           fieldName='repeatPwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
-            placeholder={uiText.repeatPwdPlaceholder[0].text}
+            placeholder={uiText.repeatPwdPlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -236,7 +236,7 @@ React.memo(
           fieldName='name'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiText.namePlaceholder[0].text}
+            placeholder={uiText.namePlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -246,7 +246,7 @@ React.memo(
           fieldName='birthDate'
           render={props => <Input
             css={InputStyle.inputNormal}
-            placeholder={uiText.birthDatePlaceholder[0].text}
+            placeholder={uiText.birthDatePlaceholder.text}
             {...props.inputProps}
             hasError={props.highlight}
           />}
@@ -278,7 +278,7 @@ React.memo(
           css={ButtonStyle.bigRectMain}
           type='submit'
         >
-          {uiText.signup[0].text}
+          {uiText.signup.text}
         </Button>
         
       </Form>

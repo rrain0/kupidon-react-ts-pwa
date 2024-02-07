@@ -2,7 +2,7 @@ import { LoginPageUiText } from 'src/pages/Login/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { AuthApi } from 'src/api/requests/AuthApi'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextValues, UiValues } from 'src/utils/lang/UiText'
 import isValidEmail = ValidationValidators.isValidEmail
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
@@ -32,7 +32,7 @@ export namespace LoginPageValidation {
     'NO_USER': LoginPageUiText.noUserWithSuchLoginPwd,
     'connection-error': LoginPageUiText.connectionError,
     'unknown-error': LoginPageUiText.unknownError,
-  } satisfies Record<FailureCode, UiText[]>
+  } satisfies UiTextValues<FailureCode>
   
   
   

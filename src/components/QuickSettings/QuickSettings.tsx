@@ -12,10 +12,11 @@ import UseBool from 'src/components/StateCarriers/UseBool'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
+import { Lang } from 'src/utils/lang/Lang'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CountryFlag } from 'src/utils/lang/CountryFlag'
-import { useUiTextContainer } from 'src/utils/lang/useUiText'
+import { useUiValues } from 'src/utils/lang/useUiText'
 import UseBottomSheetState from 'src/views/BottomSheet/UseBottomSheetState'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -24,14 +25,13 @@ import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import RadioInputGroup from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import { Lang, LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
+import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
 import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import Setter = TypeUtils.Callback1
 import col = EmotionCommon.col
 import row = EmotionCommon.row
-import Theme = AppTheme.Theme
 import BrowserIc = SvgIcons.BrowserIc
 import DayIc = SvgIcons.DayIc
 import DayNightIc = SvgIcons.DayNightIc
@@ -46,6 +46,7 @@ import MoonIc = SvgIcons.MoonIc
 import ThemeType = AppTheme.Type
 import resetH = EmotionCommon.resetH
 import onPointerClick = ReactUtils.onPointerClick
+import AppLangType = Lang.AppLangType
 
 
 
@@ -72,7 +73,7 @@ React.memo(
   
   
   
-  const uiText = useUiTextContainer(QuickSettingsUiText)
+  const uiText = useUiValues(QuickSettingsUiText)
   
   
   const themeOptions = useMemo(
@@ -80,15 +81,15 @@ React.memo(
       let opts = [
         {
           value: 'system',
-          text: uiText.systemTheme[0].text,
+          text: uiText.systemTheme.text,
           icon: <DayNightIc css={icon}/>,
         },{
           value: 'light',
-          text: uiText.lightTheme[0].text,
+          text: uiText.lightTheme.text,
           icon: <DayIc css={icon}/>,
         },{
           value: 'dark',
-          text: uiText.darkTheme[0].text,
+          text: uiText.darkTheme.text,
           icon: <MoonIc css={iconSmall}/>,
         }
       ] satisfies { value: ThemeType|'system', [prop: string]: any }[]
@@ -112,25 +113,25 @@ React.memo(
       let opts = [
         {
           value: 'system',
-          text: uiText.systemLanguage[0].text,
+          text: uiText.systemLanguage.text,
           icon: <BrowserIc css={icon}/>,
         },{
           value: 'ru-RU',
-          text: uiText.russian[0].text,
+          text: uiText.russian.text,
           icon: <Flag src={CountryFlag['ru-RU']}/>,
         },{
           value: 'en-US',
-          text: uiText.english[0].text,
+          text: uiText.english.text,
           icon: <Flag src={CountryFlag['en-US']}/>,
         }
-      ] satisfies { value: Lang|'system', [prop: string]: any }[]
+      ] satisfies { value: AppLangType|'system', [prop: string]: any }[]
       if (!lang.availableSystemLangs?.length) opts = opts.filter(it=>it.value!=='system')
       return opts
     },
     [uiText, lang.availableSystemLangs]
   )
   const isLanguageOptionChecked = useCallback(
-    function (value: Lang|'system') {
+    function (value: AppLangType|'system') {
       return langSettings.setting === 'system' && value === 'system'
         || langSettings.setting === 'manual' && value === langSettings.manualSetting?.[0]
     },
@@ -152,12 +153,12 @@ React.memo(
       {props =>
       <ModalPortal>
       <BottomSheetBasic {...props.sheetProps}
-        header={uiText.settings[0].text}
+        header={uiText.settings.text}
       >
         <Content>
           
           <OptionHeader>
-            {uiText.theme[0].text}:
+            {uiText.theme.text}:
           </OptionHeader>
           <RadioInputGroup>
             { themeOptions.map(opt =>
@@ -184,7 +185,7 @@ React.memo(
           
           
           <OptionHeader>
-            {uiText.language[0].text}:
+            {uiText.language.text}:
           </OptionHeader>
           <RadioInputGroup>
             { languageOptions.map(opt =>
@@ -225,7 +226,7 @@ React.memo(
                   icon,
                   css`translate: 0 -0.1em;`,
                 ]}/>
-                {uiText.accountSettings[0].text}
+                {uiText.accountSettings.text}
               </Button>
             </Link>}
             
@@ -234,7 +235,7 @@ React.memo(
                 onClick={props.setClosing}
               >
                 <GearIc css={icon}/>
-                {uiText.appSettings[0].text}
+                {uiText.appSettings.text}
               </Button>
             </Link>
             
@@ -242,7 +243,7 @@ React.memo(
               <Button css={normalIconRoundButton}
                 onClick={props.setClosing}
               >
-                {uiText.testPage[0].text}
+                {uiText.testPage.text}
               </Button>
             </Link>
             
@@ -250,7 +251,7 @@ React.memo(
               onClick={async () => await promptInstall()}
             >
               <AddModuleIc css={icon}/>
-              {uiText.installApp[0].text}
+              {uiText.installApp.text}
             </Button>}
             
             <UseBool>{bool => <>
@@ -261,7 +262,7 @@ React.memo(
                   ref={ref as any}
                   {...onPointerClick(bool.setTrue)}
                 >
-                  {uiText.clearAppData[0].text}
+                  {uiText.clearAppData.text}
                 </Button>
               }</UseFakePointerRef>
               
@@ -309,14 +310,14 @@ const Flag = styled.img`
   object-fit: cover;
   vertical-align: middle;
 `
-const icon = (t:Theme)=>css`
+const icon = (t:AppTheme.Theme)=>css`
   ${SvgIcStyle.El.thiz.icon} {
     height: 1.3em;
     width: 1.333em;
     ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.color.sel()};
   }
 `
-const iconSmall = (t:Theme)=>css`
+const iconSmall = (t:AppTheme.Theme)=>css`
   ${icon(t)};
   ${SvgIcStyle.El.thiz.icon} {
     height: 1.25em;
@@ -327,7 +328,7 @@ const RoundButtonsContainer = styled.div`
   align-items: center;
   gap: 10px;
 `
-const normalIconRoundButton = (t:Theme)=>css`
+const normalIconRoundButton = (t:AppTheme.Theme)=>css`
   ${ButtonStyle.roundedAccent(t)};
   ${ButtonStyle.El.btn.thiz()} {
     min-width: 90px;

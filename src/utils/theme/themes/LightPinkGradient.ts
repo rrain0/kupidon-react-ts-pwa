@@ -3,6 +3,7 @@ import { AppTheme } from 'src/utils/theme/AppTheme'
 import { LightPink } from 'src/utils/theme/themes/LightPink'
 import Theme = AppTheme.Theme
 import themeIconCss = AppTheme.themeIconCss
+import themeIconGradientCss = AppTheme.themeIconGradientCss
 
 
 
@@ -31,9 +32,9 @@ const LightPinkGradientProps = { ...LightPink,
 export const LightPinkGradient = {
   ...LightPinkGradientProps,
   name: 'Light Pink Gradient' as const,
-  icon: styled.div(themeIconCss({
+  icon: styled.div(themeIconGradientCss({
     accentColor: LightPinkGradientProps.buttonAccent.bgc[0],
-    bgcColor1:   LightPinkGradientProps.containerAccent.bgc[0],
+    bgcColor1:   LightPinkGradientProps.buttonAccent.bgc[0],
     bgcColor2:   LightPinkGradientProps.containerNormal.bgc2[0],
   })),
 } satisfies Theme

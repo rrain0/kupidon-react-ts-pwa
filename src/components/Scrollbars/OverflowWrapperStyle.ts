@@ -83,8 +83,8 @@ export namespace OverflowWrapperStyle {
     ${middleSizeScrollbars};
     ${El.content.thiz()}{
       ${col};
-      // overflow doesn't work if min-width/height are set
-      //min-width: 100%; min-height: 100%;
+      // overflow must be set to visible to make container fit-content.
+      // overflow doesn't work if min-width / min-height are set.
       width: auto; height: auto;
       overflow: visible;
     }

@@ -66,7 +66,7 @@ React.memo(
         
         <div /* Header handle */ css={t=>css`
           ${headerHandleStyle(t)};
-          ${sheetState==='dragging' && css`background: ${t.page.content[0]};`}
+          ${sheetState==='dragging' && css`background: ${t.page.content2[0]};`}
         `}/>
         
         <div css={headerTextStyle}>
@@ -108,7 +108,7 @@ export default BottomSheetBasic
 const headerStyle = (t: AppTheme.Theme)=>css`
   background: ${t.bottomSheet.bgc[0]};
   border-radius: 16px 16px 0 0;
-  color: ${t.page.content[0]};
+  color: ${t.page.content2[0]};
   padding: 10px;
   ${col};
   align-items: center;
@@ -134,7 +134,7 @@ const bodyStyle = (t: AppTheme.Theme)=>css`
   place-items: center;
   overflow: hidden;
   background: ${t.bottomSheet.bgc[0]};
-  color: ${t.page.content[0]};
+  color: ${t.page.content2[0]};
 `
 
 

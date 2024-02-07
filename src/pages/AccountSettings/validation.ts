@@ -2,7 +2,7 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { AccountSettingsUiText } from 'src/pages/AccountSettings/uiText'
 import { ValidationValidators } from 'src/utils/form-validation/ValidationValidators'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText } from 'src/utils/lang/UiText'
+import { UiText, UiTextValues, UiValues } from 'src/utils/lang/UiText'
 import Validators = ValidationCore.Validators
 import isValidPwd = ValidationValidators.isValidPwd
 import PartialFailureData = ValidationCore.PartialFailureData
@@ -41,7 +41,7 @@ export namespace AccountSettingsPageValidation {
     'repeated-pwd-not-match': AccountSettingsUiText.passwordsDoNotMatch,
     'connection-error': AccountSettingsUiText.connectionError,
     'unknown-error': AccountSettingsUiText.unknownError,
-  } satisfies Record<FailureCode, UiText[]>
+  } satisfies UiTextValues<FailureCode>
   
   
   

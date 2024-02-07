@@ -1,4 +1,4 @@
-import { useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import NonEmptyArr = ArrayUtils.NonEmptyArr
 
@@ -71,10 +71,10 @@ export const useLangDetector = (): NonEmptyArr<string> | undefined => {
 }
 
 
-const getBrowserLangs = (): [string, ...string[]] | undefined => {
+const getBrowserLangs = (): NonEmptyArr<string> | undefined => {
   let langs: readonly string[] | undefined = navigator.languages
   if (!langs?.length && navigator.language)
     langs = [navigator.language]
   if (!langs?.length) langs = undefined
-  return langs as [string, ...string[]] | undefined
+  return langs as NonEmptyArr<string> | undefined
 }

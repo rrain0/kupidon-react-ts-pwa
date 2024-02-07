@@ -128,8 +128,8 @@ export const LightPink = {
   name: 'Light Pink' as const,
   icon: styled.div(themeIconCss({
     accentColor: LightPinkProps.buttonAccent.bgc[0],
-    bgcColor1:   LightPinkProps.page.bgc[0],
-    bgcColor2:   LightPinkProps.page.bgc[0],
+    bgcColor1:   LightPinkProps.buttonAccent.bgc[0],
+    bgcColor2:   LightPinkProps.containerNormal.bgc2[0],
   })),
 } satisfies Theme
 

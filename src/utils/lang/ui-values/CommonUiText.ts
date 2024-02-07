@@ -1,4 +1,6 @@
-import { UiText } from 'src/utils/lang/UiText'
+import { Lang } from 'src/utils/lang/Lang'
+import { UiText, UiValues } from 'src/utils/lang/UiText'
+import AppLangEnum = Lang.AppLangEnum
 
 
 
@@ -9,11 +11,11 @@ export const CommonUiText = {
   loginEmailPlaceholder: [
     {
       value: 'loginPlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'login (email)',
     },{
       value: 'loginPlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'логин (email)',
     },
   ] satisfies UiText<'loginPlaceholder'>[],
@@ -22,11 +24,11 @@ export const CommonUiText = {
   emailLoginPlaceholder: [
     {
       value: 'emailPlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'email (login)',
     },{
       value: 'emailPlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'email (логин)',
     },
   ] satisfies UiText<'emailPlaceholder'>[],
@@ -35,44 +37,44 @@ export const CommonUiText = {
   currentPwdPlaceholder: [
     {
       value: 'currentPwdPlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'current password',
     },{
       value: 'currentPwdPlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'текущий пароль',
     },
   ] satisfies UiText<'currentPwdPlaceholder'>[],
   pwdPlaceholder: [
     {
       value: 'pwdPlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'password',
     },{
       value: 'pwdPlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'пароль',
     },
   ] satisfies UiText<'pwdPlaceholder'>[],
   newPwdPlaceholder: [
     {
       value: 'newPwdPlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'new password',
     },{
       value: 'newPwdPlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'новый пароль',
     },
   ] satisfies UiText<'newPwdPlaceholder'>[],
   repeatPwdPlaceholder: [
     {
       value: 'repeatPwdPlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'repeat password',
     }, {
       value: 'repeatPwdPlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'повторите пароль',
     },
   ] satisfies UiText<'repeatPwdPlaceholder'>[],
@@ -81,11 +83,11 @@ export const CommonUiText = {
   namePlaceholder: [
     {
       value: 'namePlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'name',
     },{
       value: 'namePlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'имя',
     },
   ] satisfies UiText<'namePlaceholder'>[],
@@ -94,11 +96,11 @@ export const CommonUiText = {
   birthDatePlaceholder: [
     {
       value: 'birthDatePlaceholder',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'birth date (yyyy-MM-dd) (2002-01-01)',
     },{
       value: 'birthDatePlaceholder',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'дата рождения (гггг-ММ-дд) (2002-01-01)',
     },
   ] satisfies UiText<'birthDatePlaceholder'>[],
@@ -107,11 +109,11 @@ export const CommonUiText = {
   login: [
     {
       value: 'login',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Login',
     },{
       value: 'login',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Вход',
     },
   ] satisfies UiText<'login'>[],
@@ -120,11 +122,11 @@ export const CommonUiText = {
   doLogin: [
     {
       value: 'doLogin',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Login',
     },{
       value: 'doLogin',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Войти',
     },
   ] satisfies UiText<'doLogin'>[],
@@ -133,11 +135,11 @@ export const CommonUiText = {
   loggingIn: [
     {
       value: 'loggingIn',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Logging In',
     },{
       value: 'loggingIn',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Вход',
     },
   ] satisfies UiText<'loggingIn'>[],
@@ -146,11 +148,11 @@ export const CommonUiText = {
   loginCompleted: [
     {
       value: 'loginCompleted',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Login is completed',
     },{
       value: 'loginCompleted',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Вход выполнен',
     },
   ] satisfies UiText<'loginCompleted'>[],
@@ -159,11 +161,11 @@ export const CommonUiText = {
   signup: [
     {
       value: 'signup',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Sign up',
     },{
       value: 'signup',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Зарегистрироваться',
     },
   ] satisfies UiText<'signup'>[],
@@ -172,11 +174,11 @@ export const CommonUiText = {
   registration: [
     {
       value: 'signingUp',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Registration',
     },{
       value: 'signingUp',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Регистрация',
     },
   ] satisfies UiText<'signingUp'>[],
@@ -185,11 +187,11 @@ export const CommonUiText = {
   update: [
     {
       value: 'update',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Update',
     },{
       value: 'update',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Обновление',
     },
   ] satisfies UiText<'update'>[],
@@ -198,11 +200,11 @@ export const CommonUiText = {
   updated: [
     {
       value: 'updated',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Updated',
     },{
       value: 'updated',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Обновлено',
     },
   ] satisfies UiText<'updated'>[],
@@ -211,11 +213,11 @@ export const CommonUiText = {
   registrationCompleted: [
     {
       value: 'registrationCompleted',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Registration completed',
     },{
       value: 'registrationCompleted',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Регистрация завершена',
     },
   ] satisfies UiText<'registrationCompleted'>[],
@@ -224,11 +226,11 @@ export const CommonUiText = {
   userSuccessfullyRegistered: [
     {
       value: 'userSuccessfullyRegistered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'User successfully registered',
     },{
       value: 'userSuccessfullyRegistered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пользователь успешно зарегистрирован',
     },
   ] satisfies UiText<'userSuccessfullyRegistered'>[],
@@ -237,11 +239,11 @@ export const CommonUiText = {
   changePwd: [
     {
       value: 'changePwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Change password',
     },{
       value: 'changePwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Смена пароля',
     },
   ] satisfies UiText<'changePwd'>[],
@@ -250,11 +252,11 @@ export const CommonUiText = {
   doChangePwd: [
     {
       value: 'doChangePwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Change password',
     },{
       value: 'doChangePwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Изменить пароль',
     },
   ] satisfies UiText<'doChangePwd'>[],
@@ -263,11 +265,11 @@ export const CommonUiText = {
   pwdRecovery: [
     {
       value: 'pwdRecovery',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Password recovery',
     },{
       value: 'pwdRecovery',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Восстановление пароля',
     },
   ] satisfies UiText<'pwdRecovery'>[],
@@ -276,11 +278,11 @@ export const CommonUiText = {
   logOutFromAccount: [
     {
       value: 'logOutFromAccount',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Log out of your account',
     },{
       value: 'logOutFromAccount',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Выйти из аккаунта',
     },
   ] satisfies UiText<'logOutFromAccount'>[],
@@ -289,11 +291,11 @@ export const CommonUiText = {
   deleteAccount: [
     {
       value: 'deleteAccount',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Delete Account',
     },{
       value: 'deleteAccount',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Удалить Аккаунт',
     },
   ] satisfies UiText<'deleteAccount'>[],
@@ -302,11 +304,11 @@ export const CommonUiText = {
   profile: [
     {
       value: 'profile',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Profile',
     },{
       value: 'profile',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Профиль',
     },
   ] satisfies UiText<'profile'>[],
@@ -315,44 +317,44 @@ export const CommonUiText = {
   currentPwd: [
     {
       value: 'currentPwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Current pwd',
     },{
       value: 'currentPwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Текущий пароль',
     },
   ] satisfies UiText<'currentPwd'>[],
   pwd: [
     {
       value: 'pwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Password',
     },{
       value: 'pwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пароль',
     },
   ] satisfies UiText<'pwd'>[],
   newPwd: [
     {
       value: 'newPwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'New password',
     },{
       value: 'newPwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Новый пароль',
     },
   ] satisfies UiText<'newPwd'>[],
   repeatPwd: [
     {
       value: 'repeatPwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Repeat password',
     },{
       value: 'repeatPwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Повторите пароль',
     },
   ] satisfies UiText<'repeatPwd'>[],
@@ -361,12 +363,12 @@ export const CommonUiText = {
   name: [
     {
       value: 'name',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Name',
     },
     {
       value: 'name',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Имя',
     },
   ] satisfies UiText<'name'>[],
@@ -375,12 +377,12 @@ export const CommonUiText = {
   birthDate: [
     {
       value: 'birthDate',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Birth date',
     },
     {
       value: 'birthDate',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Дата рождения',
     },
   ] satisfies UiText<'birthDate'>[],
@@ -389,12 +391,12 @@ export const CommonUiText = {
   gender: [
     {
       value: 'gender',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Sex',
     },
     {
       value: 'gender',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пол',
     },
   ] satisfies UiText<'gender'>[],
@@ -403,11 +405,11 @@ export const CommonUiText = {
   male: [
     {
       value: 'male',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Male',
     },{
       value: 'male',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Мужской',
     },
   ] satisfies UiText<'male'>[],
@@ -416,11 +418,11 @@ export const CommonUiText = {
   female: [
     {
       value: 'female',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Female',
     },{
       value: 'female',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Женский',
     },
   ] satisfies UiText<'female'>[],
@@ -429,11 +431,11 @@ export const CommonUiText = {
   chat: [
     {
       value: 'chat',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Chat',
     },{
       value: 'chat',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Чат',
     },
   ] satisfies UiText<'chat'>[],
@@ -442,11 +444,11 @@ export const CommonUiText = {
   settings: [
     {
       value: 'settings',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Settings',
     },{
       value: 'settings',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Настройки',
     },
   ] satisfies UiText<'settings'>[],
@@ -455,66 +457,66 @@ export const CommonUiText = {
   theme: [
     {
       value: 'theme',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Theme',
     },{
       value: 'theme',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тема',
     },
   ] satisfies UiText<'theme'>[],
   systemTheme: [
     {
       value: 'systemTheme',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'System theme',
     },{
       value: 'systemTheme',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тема системы',
     },
   ] satisfies UiText<'systemTheme'>[],
   lightTheme: [
     {
       value: 'lightTheme',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Light theme',
     },{
       value: 'lightTheme',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Светлая тема',
     },
   ] satisfies UiText<'lightTheme'>[],
   darkTheme: [
     {
       value: 'darkTheme',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Dark theme',
     },{
       value: 'darkTheme',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тёмная тема',
     },
   ] satisfies UiText<'darkTheme'>[],
   preferredLightTheme: [
     {
       value: 'preferredLightTheme',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Preferred light theme',
     },{
       value: 'preferredLightTheme',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Предпочитаемая светлая тема',
     },
   ] satisfies UiText<'preferredLightTheme'>[],
   preferredDarkTheme: [
     {
       value: 'preferredDarkTheme',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Preferred dark theme',
     },{
       value: 'preferredDarkTheme',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Предпочитаемая тёмная тема',
     },
   ] satisfies UiText<'preferredDarkTheme'>[],
@@ -523,36 +525,36 @@ export const CommonUiText = {
   language: [
     {
       value: 'language',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Language',
     },{
       value: 'language',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Язык',
     },
   ] satisfies UiText<'language'>[],
   systemLanguage: [
     {
       value: 'systemLanguage',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'System language',
     },{
       value: 'systemLanguage',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Язык системы',
     },
   ] satisfies UiText<'systemLanguage'>[],
   russian: [
     {
       value: 'russian',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Русский',
     },
   ] satisfies UiText<'russian'>[],
   english: [
     {
       value: 'english',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'English',
     },
   ] satisfies UiText<'english'>[],
@@ -561,11 +563,11 @@ export const CommonUiText = {
   accountSettings: [
     {
       value: 'accountSettings',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Account Settings',
     },{
       value: 'accountSettings',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Настройки Аккаунта',
     },
   ] satisfies UiText<'accountSettings'>[],
@@ -574,11 +576,11 @@ export const CommonUiText = {
   appSettings: [
     {
       value: 'appSettings',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Application settings',
     },{
       value: 'appSettings',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Настройки приложения',
     },
   ] satisfies UiText<'appSettings'>[],
@@ -587,11 +589,11 @@ export const CommonUiText = {
   account: [
     {
       value: 'account',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Account',
     },{
       value: 'account',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Аккаунт',
     },
   ] satisfies UiText<'account'>[],
@@ -600,11 +602,11 @@ export const CommonUiText = {
   testPage: [
     {
       value: 'testPage',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Test page',
     },{
       value: 'testPage',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тестовая страница',
     },
   ] satisfies UiText<'testPage'>[],
@@ -613,11 +615,11 @@ export const CommonUiText = {
   reloading: [
     {
       value: 'reloading',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Reloading',
     },{
       value: 'reloading',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Перезагрузка',
     },
   ] satisfies UiText<'reloading'>[],
@@ -626,11 +628,11 @@ export const CommonUiText = {
   yes: [
     {
       value: 'yes',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Yes',
     },{
       value: 'yes',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Да',
     },
   ] satisfies UiText<'yes'>[],
@@ -639,11 +641,11 @@ export const CommonUiText = {
   no: [
     {
       value: 'no',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'No',
     },{
       value: 'no',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Нет',
     },
   ] satisfies UiText<'no'>[],
@@ -652,11 +654,11 @@ export const CommonUiText = {
   reset: [
     {
       value: 'reset',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Reset',
     },{
       value: 'reset',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Сброс',
     },
   ] satisfies UiText<'reset'>[],
@@ -671,11 +673,11 @@ export const CommonUiText = {
   clearAppData: [
     {
       value: 'clearAppData',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Clear app data',
     },{
       value: 'clearAppData',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Очистить данные приложения',
     },
   ] satisfies UiText<'clearAppData'>[],
@@ -683,11 +685,11 @@ export const CommonUiText = {
   installApp: [
     {
       value: 'installApp',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Install App',
     },{
       value: 'installApp',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Установить Приложение',
     },
   ] satisfies UiText<'installApp'>[],
@@ -700,11 +702,11 @@ export const CommonUiText = {
   notSelected: [
     {
       value: 'notSelected',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: "Not selected",
     },{
       value: 'notSelected',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Не выбрано',
     },
   ] satisfies UiText<'notSelected'>[],
@@ -713,11 +715,11 @@ export const CommonUiText = {
   ofGuys: [
     {
       value: 'ofGuys',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: "Guys",
     },{
       value: 'ofGuys',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Парней',
     },
   ] satisfies UiText<'ofGuys'>[],
@@ -725,11 +727,11 @@ export const CommonUiText = {
   ofGirls: [
     {
       value: 'ofGirls',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: "Girls",
     },{
       value: 'ofGirls',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Девушек',
     },
   ] satisfies UiText<'ofGirls'>[],
@@ -737,11 +739,11 @@ export const CommonUiText = {
   ofGuysAndGirls: [
     {
       value: 'ofGuysAndGirls',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: "Guys and girls",
     },{
       value: 'ofGuysAndGirls',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Парней и девушек',
     },
   ] satisfies UiText<'ofGuysAndGirls'>[],
@@ -750,12 +752,12 @@ export const CommonUiText = {
   loginNotEntered: [
     {
       value: 'loginNotEntered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Login is not entered',
     },
     {
       value: 'loginNotEntered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Логин не введён',
     },
   ] satisfies UiText<'loginNotEntered'>[],
@@ -764,11 +766,11 @@ export const CommonUiText = {
   loginFormatIsIncorrect: [
     {
       value: 'loginFormatIsIncorrect',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Login format is incorrect',
     },{
       value: 'loginFormatIsIncorrect',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Некорректный формат логина',
     },
   ] satisfies UiText<'loginFormatIsIncorrect'>[],
@@ -777,11 +779,11 @@ export const CommonUiText = {
   emailNotEntered: [
     {
       value: 'emailNotEntered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Email is not entered',
     },{
       value: 'emailNotEntered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Email не введён',
     },
   ] satisfies UiText<'emailNotEntered'>[],
@@ -790,11 +792,11 @@ export const CommonUiText = {
   emailFormatIsIncorrect: [
     {
       value: 'emailFormatIsIncorrect',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Email format is incorrect',
     },{
       value: 'emailFormatIsIncorrect',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Некорректный формат email',
     },
   ] satisfies UiText<'emailFormatIsIncorrect'>[],
@@ -803,11 +805,11 @@ export const CommonUiText = {
   pwdNotEntered: [
     {
       value: 'pwdNotEntered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Password not entered',
     },{
       value: 'pwdNotEntered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пароль не введён',
     },
   ] satisfies UiText<'pwdNotEntered'>[],
@@ -816,11 +818,11 @@ export const CommonUiText = {
   pwdFormatIsIncorrect: [
     {
       value: 'pwdFormatIsIncorrect',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Password must be at least 6 characters long',
     },{
       value: 'pwdFormatIsIncorrect',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пароль должен быть не короче 6 символов',
     },
   ] satisfies UiText<'pwdFormatIsIncorrect'>[],
@@ -829,11 +831,11 @@ export const CommonUiText = {
   passwordsDoNotMatch: [
     {
       value: 'passwordsDoNotMatch',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Passwords do not match',
     },{
       value: 'passwordsDoNotMatch',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пароли не совпадают',
     },
   ] satisfies UiText<'passwordsDoNotMatch'>[],
@@ -842,11 +844,11 @@ export const CommonUiText = {
   nameIsNotEntered: [
     {
       value: 'firstNameIsNotEntered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'First name is not entered',
     },{
       value: 'firstNameIsNotEntered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Имя не введено',
     },
   ] satisfies UiText<'firstNameIsNotEntered'>[],
@@ -855,11 +857,11 @@ export const CommonUiText = {
   noUserWithSuchId: [
     {
       value: 'noUserWithSuchId',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'No user with such id',
     },{
       value: 'noUserWithSuchId',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Нет пользователя с таким id',
     },
   ] satisfies UiText<'noUserWithSuchId'>[],
@@ -868,11 +870,11 @@ export const CommonUiText = {
   genderIsNotChosen: [
     {
       value: 'genderIsNotChosen',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Sex is not chosen',
     },{
       value: 'genderIsNotChosen',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пол не выбран',
     },
   ] satisfies UiText<'genderIsNotChosen'>[],
@@ -881,11 +883,11 @@ export const CommonUiText = {
   birthDateIsNotEntered: [
     {
       value: 'birthDateIsNotEntered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Birth date is not entered',
     },{
       value: 'birthDateIsNotEntered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Дата рождения не введена',
     },
   ] satisfies UiText<'birthDateIsNotEntered'>[],
@@ -894,11 +896,11 @@ export const CommonUiText = {
   birthDateIsIncorrect: [
     {
       value: 'birthDateIsIncorrect',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Birth date is incorrect',
     },{
       value: 'birthDateIsIncorrect',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Дата рождения не корректна',
     },
   ] satisfies UiText<'birthDateIsIncorrect'>[],
@@ -907,11 +909,11 @@ export const CommonUiText = {
   birthDateHasIncorrectFormat: [
     {
       value: 'birthDateHasIncorrectFormat',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Birth date has incorrect format',
     },{
       value: 'birthDateHasIncorrectFormat',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Некорректный формат даты рождения',
     },
   ] satisfies UiText<'birthDateHasIncorrectFormat'>[],
@@ -920,11 +922,11 @@ export const CommonUiText = {
   dateNotExists: [
     {
       value: 'dateNotExists',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Date does not exists',
     },{
       value: 'dateNotExists',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Дата не существует',
     },
   ] satisfies UiText<'dateNotExists'>[],
@@ -933,11 +935,11 @@ export const CommonUiText = {
   youMustBeAtLeast18YearsOld: [
     {
       value: 'youMustBeAtLeast18YearsOld',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'You must be at least 18 years old',
     },{
       value: 'youMustBeAtLeast18YearsOld',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Вам нет 18 лет',
     },
   ] satisfies UiText<'youMustBeAtLeast18YearsOld'>[],
@@ -946,11 +948,11 @@ export const CommonUiText = {
   descriptionMaxLenIs2000: [
     {
       value: 'descriptionMaxLenIs2000',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Description max length is 2000 chars',
     },{
       value: 'descriptionMaxLenIs2000',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Максимальная длина описания - 2000 символов',
     },
   ] satisfies UiText<'descriptionMaxLenIs2000'>[],
@@ -959,11 +961,11 @@ export const CommonUiText = {
   emailMaxLenIs100: [
     {
       value: 'emailMaxLenIs100',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Email max length is 100 chars',
     },{
       value: 'emailMaxLenIs100',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Максимальная длина email - 100 символов',
     },
   ] satisfies UiText<'emailMaxLenIs100'>[],
@@ -972,11 +974,11 @@ export const CommonUiText = {
   pwdMaxLenIs200: [
     {
       value: 'pwdMaxLenIs200',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Password max length is 200 chars',
     },{
       value: 'pwdMaxLenIs200',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Максимальная длина пароля - 200 символов',
     },
   ] satisfies UiText<'pwdMaxLenIs200'>[],
@@ -985,11 +987,11 @@ export const CommonUiText = {
   nameMaxLenIs100: [
     {
       value: 'nameMaxLenIs100',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Name max length is 100 chars',
     },{
       value: 'nameMaxLenIs100',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Максимальная длина имени - 100 символов',
     },
   ] satisfies UiText<'nameMaxLenIs100'>[],
@@ -998,11 +1000,11 @@ export const CommonUiText = {
   noUserWithSuchLoginPwd: [
     {
       value: 'noUserWithSuchLoginPwd',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'There is no user with such login-password',
     },{
       value: 'noUserWithSuchLoginPwd',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Не найдено пользователя с таким логином-паролем',
     },
   ] satisfies UiText<'noUserWithSuchLoginPwd'>[],
@@ -1011,11 +1013,11 @@ export const CommonUiText = {
   userWithSuchEmailAlreadyRegistered: [
     {
       value: 'userWithSuchEmailAlreadyRegistered',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'User with such email is already registered',
     },{
       value: 'userWithSuchEmailAlreadyRegistered',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Пользователь с таким email уже зарегестрирован',
     },
   ] satisfies UiText<'userWithSuchEmailAlreadyRegistered'>[],
@@ -1024,11 +1026,11 @@ export const CommonUiText = {
   connectionError: [
     {
       value: 'connectionError',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Error connecting to the server, perhaps something with the Internet',
     },{
       value: 'connectionError',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Ошибка соединения с сервером, возможно что-то с интернетом',
     },
   ] satisfies UiText<'connectionError'>[],
@@ -1037,14 +1039,14 @@ export const CommonUiText = {
   unknownError: [
     {
       value: 'unknownError',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Unknown error',
     },{
       value: 'unknownError',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Неизвестная ошибка',
     },
   ] satisfies UiText<'unknownError'>[],
   
   
-} satisfies Record<string, UiText[]>
+} satisfies UiValues

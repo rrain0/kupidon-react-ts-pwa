@@ -1,5 +1,7 @@
-import { UiText } from 'src/utils/lang/UiText'
+import { Lang } from 'src/utils/lang/Lang'
+import { UiText, UiTextValues } from 'src/utils/lang/UiText'
 import { AllThemeNamesType } from 'src/utils/theme/ThemeCollection'
+import AppLangEnum = Lang.AppLangEnum
 
 
 
@@ -10,11 +12,11 @@ export const ThemeNameUiText = {
   'Light Simple': [
     {
       value: 'Light Simple',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Light',
     },{
       value: 'Light Simple',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Светлая',
     },
   ] satisfies UiText<'Light Simple'>[],
@@ -23,11 +25,11 @@ export const ThemeNameUiText = {
   'Dark Simple': [
     {
       value: 'Dark Simple',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Dark',
     },{
       value: 'Dark Simple',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тёмная',
     },
   ] satisfies UiText<'Dark Simple'>[],
@@ -36,11 +38,11 @@ export const ThemeNameUiText = {
   'Light Simple Pink': [
     {
       value: 'Light Simple Pink',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Light Simple Pink',
     },{
       value: 'Light Simple Pink',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Светлая с розовым',
     },
   ] satisfies UiText<'Light Simple Pink'>[],
@@ -49,11 +51,11 @@ export const ThemeNameUiText = {
   'Dark Simple Pink': [
     {
       value: 'Dark Simple Pink',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Dark Simple Pink',
     },{
       value: 'Dark Simple Pink',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тёмная с розовым',
     },
   ] satisfies UiText<'Dark Simple Pink'>[],
@@ -62,11 +64,11 @@ export const ThemeNameUiText = {
   'Light Pink': [
     {
       value: 'Light Pink',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Light Pink',
     },{
       value: 'Light Pink',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Светлая Розовая',
     },
   ] satisfies UiText<'Light Pink'>[],
@@ -75,11 +77,11 @@ export const ThemeNameUiText = {
   'Dark Pink': [
     {
       value: 'Dark Pink',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Dark Pink',
     },{
       value: 'Dark Pink',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тёмная Розовая',
     },
   ] satisfies UiText<'Dark Pink'>[],
@@ -88,11 +90,11 @@ export const ThemeNameUiText = {
   'Light Pink Gradient': [
     {
       value: 'Light Pink Gradient',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Light Pink Gradient',
     },{
       value: 'Light Pink Gradient',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Светлая Розовая Градиент',
     },
   ] satisfies UiText<'Light Pink Gradient'>[],
@@ -101,11 +103,11 @@ export const ThemeNameUiText = {
   'Dark Pink Gradient': [
     {
       value: 'Dark Pink Gradient',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Dark Pink Gradient',
     },{
       value: 'Dark Pink Gradient',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тёмная розовая Градиент',
     },
   ] satisfies UiText<'Dark Pink Gradient'>[],
@@ -114,11 +116,11 @@ export const ThemeNameUiText = {
   'Light Orange': [
     {
       value: 'Light Orange',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Light Orange',
     },{
       value: 'Light Orange',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Светлая Оранжевая',
     },
   ] satisfies UiText<'Light Orange'>[],
@@ -127,15 +129,15 @@ export const ThemeNameUiText = {
   'Dark Orange': [
     {
       value: 'Dark Orange',
-      lang: 'en-US',
+      lang: AppLangEnum.eng,
       text: 'Dark Orange',
     },{
       value: 'Dark Orange',
-      lang: 'ru-RU',
+      lang: AppLangEnum.rus,
       text: 'Тёмная Оранжевая',
     },
   ] satisfies UiText<'Dark Orange'>[],
   
   
   
-} satisfies Record<AllThemeNamesType, UiText<AllThemeNamesType>[]>
+} satisfies UiTextValues<AllThemeNamesType>
