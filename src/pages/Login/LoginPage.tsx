@@ -15,7 +15,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import ValidationWrap from 'src/utils/form-validation/ValidationWrap'
 import { useUiValues } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import Button from 'src/views/Buttons/Button'
@@ -152,7 +152,7 @@ React.memo(
         
         
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='login'
           render={props => <Input
             css={InputStyle.inputNormal}
@@ -162,7 +162,7 @@ React.memo(
           />}
         />
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='pwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}

@@ -18,7 +18,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import ValidationWrap from 'src/utils/form-validation/ValidationWrap'
 import { useUiValues } from 'src/utils/lang/useUiText'
 import Button from 'src/views/Buttons/Button'
 import { ButtonStyle } from 'src/views/Buttons/ButtonStyle'
@@ -161,7 +161,7 @@ React.memo(
             <ItemTitleContainer>
               <ItemLabel>{uiText.currentPwd.text}</ItemLabel>
             </ItemTitleContainer>
-            <ValidationComponentWrap {...validationProps}
+            <ValidationWrap {...validationProps}
               fieldName='currentPwd'
               render={props => <PwdInput
                 css={InputStyle.inputSmall}
@@ -179,7 +179,7 @@ React.memo(
             <ItemTitleContainer>
               <ItemLabel>{uiText.newPwd.text}</ItemLabel>
             </ItemTitleContainer>
-            <ValidationComponentWrap {...validationProps}
+            <ValidationWrap {...validationProps}
               fieldName='pwd'
               render={props => <PwdInput
                 css={InputStyle.inputSmall}
@@ -197,7 +197,7 @@ React.memo(
             <ItemTitleContainer>
               <ItemLabel>{uiText.repeatPwd.text}</ItemLabel>
             </ItemTitleContainer>
-            <ValidationComponentWrap {...validationProps}
+            <ValidationWrap {...validationProps}
               fieldName='repeatPwd'
               render={props => <PwdInput
                 css={InputStyle.inputSmall}

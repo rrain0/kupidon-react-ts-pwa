@@ -19,6 +19,11 @@ import { ModalStyle } from 'src/components/Modal/ModalStyle'
 import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
+import ProfileContentBirthDate from 'src/pages/Profile/profile-content/ProfileContentBirthDate'
+import ProfileContentGender from 'src/pages/Profile/profile-content/ProfileContentGender'
+import ProfileContentImLookingFor
+  from 'src/pages/Profile/profile-content/ProfileContentImLookingFor'
+import ProfileContentName from 'src/pages/Profile/profile-content/ProfileContentName'
 import ProfileTabHeader from 'src/pages/Profile/ProfileTabHeader'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import ProfilePhotos, {
@@ -41,7 +46,7 @@ import { FileUtils } from 'src/utils/file/FileUtils'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import ValidationWrap from 'src/utils/form-validation/ValidationWrap'
 import { ActionUiText } from 'src/utils/lang/ui-values/ActionUiText'
 import { useUiValues } from 'src/utils/lang/useUiText'
 import { Progress } from 'src/utils/Progress'
@@ -562,41 +567,10 @@ React.memo(
   
   
   
-  const genderOptions = useMemo(
-    ()=>[
-      {
-        value: 'MALE',
-        text: uiText.male.text,
-      },{
-        value: 'FEMALE',
-        text: uiText.female.text,
-      }
-    ] satisfies { value: GenderEnum, text: string }[],
-    [uiText]
-  )
   
   
-  type PreferredPeopleOption = 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
-  const [preferredPeople, setPreferredPeople] =
-    useState('notSelected' as PreferredPeopleOption)
-  const preferredPeopleOptions = useMemo(
-    ()=>[
-      {
-        value: 'notSelected',
-        text: uiText.notSelected.text,
-      },{
-        value: 'ofGuys',
-        text: uiText.ofGuys.text,
-      },{
-        value: 'ofGirls',
-        text: uiText.ofGirls.text,
-      },{
-        value: 'ofGuysAndGirls',
-        text: uiText.ofGuysAndGirls.text,
-      }
-    ] satisfies { value: PreferredPeopleOption, text: string }[],
-    [uiText]
-  )
+  
+  
   
   
   
@@ -622,7 +596,7 @@ React.memo(
         gap: 0px;
       `}>
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName="photos"
           render={props =>
           <ProfilePhotos
@@ -645,7 +619,7 @@ React.memo(
               }} */
             >{uiText.aboutMe.text}</ItemLabel>
           </ItemTitleContainer>
-          <ValidationComponentWrap {...validationProps}
+          <ValidationWrap {...validationProps}
             fieldName="aboutMe"
             render={props =>
               <Textarea css={TextareaStyle.small}
@@ -665,209 +639,27 @@ React.memo(
         `}>
           
           
-          
-          <ValidationComponentWrap {...validationProps}
+          <ValidationWrap {...validationProps}
             fieldName="name"
-            render={props => <UseBool>{boolProps =>
-              <>
-                
-                <OptionItem
-                  icon={<NameCardIc css={css`height: 50%`}/>}
-                  title={uiText.name.text}
-                  value={props.value}
-                  data-error={props.highlight}
-                  nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
-                  onClick={boolProps.setTrue}
-                />
-                
-                { boolProps.value &&
-                  <UseBrowserBack
-                    onBack={boolProps.setFalse}
-                  >
-                    <ModalPortal><Modal css={ModalStyle.modal}
-                      onClick={boolProps.setFalse}
-                    >
-                      <div css={css`
-                        width: 100%;
-                        height: 100%;
-                        padding: 20px;
-                        padding-bottom: 140px;
-                        display: grid;
-                        place-items: end center;
-                      `}>
-                        
-                        <Card2 css={css`
-                          min-width: 220px;
-                          width: 100%;
-                          max-width: 500px;
-                          gap: 10px;
-                        `}
-                          onClick={ev => ev.stopPropagation()}
-                        >
-                          <ItemLabel>{uiText.name.text}</ItemLabel>
-                          <Input css={InputStyle.inputSmall}
-                            autoFocus
-                            placeholder={uiText.name.text.toLowerCase()}
-                            {...props.inputProps}
-                            hasError={props.highlight}
-                            onBlur={ev => {
-                              ev.currentTarget.focus()
-                              props.inputProps.onBlur()
-                            }}
-                          />
-                          <div css={css`
-                            ${row};
-                            gap: 10px;
-                            justify-content: end;
-                          `}>
-                            <Button css={ButtonStyle.roundedSmallSecondary}
-                              onClick={boolProps.setFalse}
-                            >Ок</Button>
-                          </div>
-                        </Card2>
-                      </div>
-                    </Modal></ModalPortal>
-                  </UseBrowserBack>
-                }
-              
-              </>
-          }</UseBool>}/>
+            render={validProps => <ProfileContentName {...validProps}/>}
+          />
           
           
-          
-          
-          <ValidationComponentWrap {...validationProps}
+          <ValidationWrap {...validationProps}
             fieldName="birthDate"
-            render={props => <UseBool>{boolProps =>
-              <>
-                
-                <OptionItem
-                  icon={<GiftBoxIc css={css`height: 50%`}/>}
-                  title={uiText.birthDate.text}
-                  value={props.value}
-                  data-error={props.highlight}
-                  nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
-                  onClick={boolProps.setTrue}
-                />
-                
-                { boolProps.value && <ModalPortal><Modal css={ModalStyle.modal}
-                  onClick={boolProps.setFalse}
-                >
-                  <div css={css`
-                  width: 100%;
-                  height: 100%;
-                  padding: 20px;
-                  padding-bottom: 140px;
-                  display: grid;
-                  place-items: end center;
-                `}>
-                    
-                    <Card2 css={css`
-                    min-width: 220px;
-                    width: 100%;
-                    max-width: 500px;
-                    gap: 10px;
-                  `}
-                      onClick={ev=>ev.stopPropagation()}
-                    >
-                      <ItemLabel>{uiText.birthDate.text}</ItemLabel>
-                      <Input css={InputStyle.inputSmall}
-                        autoFocus
-                        inputMode="numeric"
-                        placeholder={uiText.birthDatePlaceholder.text.toLowerCase()}
-                        {...props.inputProps}
-                        hasError={props.highlight}
-                        onBlur={ev=>{
-                          ev.currentTarget.focus()
-                          props.inputProps.onBlur()
-                        }}
-                      />
-                      <div css={css`
-                      ${row};
-                      gap: 10px;
-                      justify-content: end;
-                    `}>
-                        <Button css={ButtonStyle.roundedSmallSecondary}
-                          onClick={boolProps.setFalse}
-                        >Ок</Button>
-                      </div>
-                    </Card2>
-                  </div>
-                </Modal></ModalPortal>}
-              
-              </>
-            }</UseBool>}/>
+            render={validProps => <ProfileContentBirthDate {...validProps}/>}
+          />
           
           
-          <ValidationComponentWrap {...validationProps}
+          <ValidationWrap {...validationProps}
             fieldName="gender"
-            render={validProps =>
-              <UseBool>{bool =>
-                <>
-                  
-                  <UseFakePointerRef>{({ ref })=>
-                    <OptionItem
-                      icon={<GenderIc css={css`height: 50%`}/>}
-                      title={uiText.gender.text}
-                      value={genderOptions.find(opt => opt.value === validProps.value)?.text ?? ''}
-                      nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
-                      
-                      //onClick={bool.setTrue}
-                      ref={ref as any}
-                      {...onPointerClick(bool.setTrue)}
-                    />
-                  }</UseFakePointerRef>
-                  
-                  <UseBottomSheetState
-                    open={bool.value}
-                    onClosed={bool.setFalse}
-                  >
-                    {sheetProps =>
-                    <ModalPortal>
-                      <BottomSheetBasic
-                        {...sheetProps.sheetProps}
-                        header={uiText.gender.text}
-                        aria-modal
-                      >
-                        <div css={selectItemsContainer}
-                          role="radiogroup"
-                          tabIndex={0}
-                        >
-                          {genderOptions.map(opt => <RadioInput
-                            css={RadioInputStyle.radio}
-                            id={`gender-option-${opt.value}-${reactId}`}
-                            childrenPosition="start"
-                            role="radio"
-                            aria-checked={validProps.checked(opt.value)}
-                            checked={validProps.checked(opt.value)}
-                            value={opt.value}
-                            key={opt.value}
-                            onChange={validProps.inputProps.onChange}
-                            onClick={sheetProps.setClosing}
-                          >
-                            <div css={selectItemText}>
-                              {opt.text}
-                            </div>
-                          </RadioInput>)}
-                        
-                        </div>
-                      </BottomSheetBasic>
-                    </ModalPortal>
-                  }</UseBottomSheetState>
-                </>
-              }</UseBool>
-            }
+            render={validProps => <ProfileContentGender {...validProps}/> }
           />
           
           
-          <OptionItem
-            icon={<Search2Ic css={css`height: 50%`}/>}
-            title={uiText.imLookingFor.text}
-            value={preferredPeopleOptions.find(it => it.value === 'notSelected')!.text}
-            nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
-          />
-        
-        
+          <ProfileContentImLookingFor/>
+          
+          
         </Card2>
       
       </div>
@@ -896,16 +688,6 @@ export default ProfileContent
 
 
 
-
-const selectItemsContainer = css`
-  ${col};
-  padding-bottom: 20px;
-`
-const selectItemText = css`
-  flex: 1;
-  padding-top: 4px;
-  padding-bottom: 4px;
-`
 
 
 

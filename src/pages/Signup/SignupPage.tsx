@@ -24,7 +24,7 @@ import { DateTime } from 'src/utils/DateTime'
 import { useFormFailures } from 'src/utils/form-validation/form/useFormFailures'
 import { useFormSubmit } from 'src/utils/form-validation/form/useFormSubmit'
 import { useFormToasts } from 'src/utils/form-validation/form/useFormToasts'
-import ValidationComponentWrap from 'src/utils/form-validation/ValidationComponentWrap'
+import ValidationWrap from 'src/utils/form-validation/ValidationWrap'
 import { useUiValues } from 'src/utils/lang/useUiText'
 import { RouteBuilder } from 'src/utils/react/route-builder/RouteBuilder'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
@@ -202,7 +202,7 @@ React.memo(
         
         
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='email'
           render={props => <Input
             css={InputStyle.inputNormal}
@@ -212,7 +212,7 @@ React.memo(
           />}
         />
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='pwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
@@ -222,7 +222,7 @@ React.memo(
           />}
         />
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='repeatPwd'
           render={props => <PwdInput
             css={InputStyle.inputNormal}
@@ -232,7 +232,7 @@ React.memo(
           />}
         />
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='name'
           render={props => <Input
             css={InputStyle.inputNormal}
@@ -242,7 +242,7 @@ React.memo(
           />}
         />
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='birthDate'
           render={props => <Input
             css={InputStyle.inputNormal}
@@ -253,7 +253,7 @@ React.memo(
         />
         
         
-        <ValidationComponentWrap {...validationProps}
+        <ValidationWrap {...validationProps}
           fieldName='gender'
           render={props =>
             <RadioInputGroup css={RadioInputGroupStyle.rowGroup}

@@ -8,6 +8,19 @@ import AppLangEnum = Lang.AppLangEnum
 export const ActionUiText = {
   
   
+  ok: [
+    {
+      value: 'ok',
+      lang: AppLangEnum.eng,
+      text: 'Ok',
+    }, {
+      value: 'ok',
+      lang: AppLangEnum.rus,
+      text: 'Ок',
+    },
+  ] satisfies UiText<'ok'>[],
+  
+  
   remove: [
     {
       value: 'remove',

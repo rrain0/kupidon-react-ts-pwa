@@ -41,6 +41,7 @@ React.forwardRef<RadioInputGroupRefElement, RadioInputGroupProps>(
     [RadioInputGroupStyle.Attr.errorName]: trueOrUndef(hasError),
     // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/radiogroup_role
     role: 'radiogroup',
+    tabIndex: 0,
     ...restProps,
   }
   const borderProps = {

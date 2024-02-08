@@ -4,13 +4,14 @@ import { AppTheme } from 'src/utils/theme/AppTheme'
 import { CommonStyle } from 'src/views/CommonStyle'
 import rowWrap = EmotionCommon.rowWrap
 import col = EmotionCommon.col
+import bgcInBorder = EmotionCommon.bgcInBorder
+import hoverable = EmotionCommon.hoverable
+
 
 
 
 export namespace RadioInputGroupStyle {
   
-  import bgcInBorder = EmotionCommon.bgcInBorder
-  import hoverable = EmotionCommon.hoverable
   export namespace Attr {
     export const errorName = 'data-error'
     

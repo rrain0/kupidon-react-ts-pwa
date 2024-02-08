@@ -1,11 +1,10 @@
-import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
 import React, {
   JSX,
   ReactElement,
   useCallback,
-  useEffect,
+  useEffect, useMemo,
   useState,
 } from 'react'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
@@ -16,48 +15,47 @@ import updateFailures = ValidationActions.updateFailures
 import awaitDelay = ValidationActions.awaitDelay
 import Values = ValidationCore.Values
 import SetterOrUpdater = TypeUtils.SetterOrUpdater
-import ObjectValuesType = ObjectUtils.ObjectValuesType
 import ValueOrUpdater = TypeUtils.ValueOrMapper
 import trueOrUndef = TypeUtils.trueOrUndef
+import Callback = TypeUtils.Callback
+import Callback1 = TypeUtils.Callback1
+import Mapper = TypeUtils.Mapper
 
 
 
 
-export type ValidationComponentWrapRenderProps
-<
-  Vs extends Values,
-  F extends keyof Vs,
-> = {
-  value: Vs[F]
+export type ValidationWrapRenderProps<V> = {
+  value: V
   highlight: true | undefined
-  setValue: SetterOrUpdater<Vs[F]>
-  onBlur: ()=>void
-  checked: (value: ObjectValuesType<Vs>)=>boolean
+  setValue: SetterOrUpdater<V>
+  onBlur: Callback
+  getChecked: Mapper<V, boolean>
   inputProps: {
-    value: Vs[F]
-    onChange: (ev: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>void
-    onBlur: ()=>void
+    value: V
+    onChange: Callback1<React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>>
+    onBlur: Callback
   }
+  radioInputProps: (value:V)=>({
+    checked: boolean,
+    onChange: Callback1<React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>>,
+  })
 }
   
-export type ValidationComponentWrapProps
-<
-  Vs extends Values,
-  F extends keyof Vs,
-> = {
+export type ValidationWrapProps
+<Vs extends Values, F extends keyof Vs> = {
   values: Vs
   fieldName: F
   failures: Failures<Vs>
   setFailures: SetterOrUpdater<Failures<Vs>>
   setValues: SetterOrUpdater<Vs>
-  render: (props: ValidationComponentWrapRenderProps<Vs,F>)=>React.ReactNode
+  render: (props: ValidationWrapRenderProps<Vs[F]>)=>React.ReactNode
 }
 
 
 
-const ValidationComponentWrap =
+const ValidationWrap =
 <Vs extends Values, F extends keyof Vs>
-(props: ValidationComponentWrapProps<Vs,F>) => {
+(props: ValidationWrapProps<Vs,F>) => {
   const {
     fieldName,
     values,
@@ -128,6 +126,13 @@ const ValidationComponentWrap =
   )
   
   
+  
+  const onChange = useCallback(
+    (ev: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
+      setValue(ev.currentTarget.value as any)
+    },
+    []
+  )
   const onBlurEffectEvent = useEffectEvent(()=>{
     const failsToUpdate = failures.filter(f=>
       f.errorFields.includes(fieldName)
@@ -140,27 +145,26 @@ const ValidationComponentWrap =
       { delay: 0 },
     ))
   })
-  const onBlur = useCallback(
-    ()=>onBlurEffectEvent(),
-    []
-  )
-  const checked = useCallback(
-    (v: ObjectValuesType<Vs>)=>v===value,
+  const onBlur = useCallback(()=>onBlurEffectEvent(), [])
+  const getChecked = useCallback((v: Vs[F])=>v===value, [value])
+  
+  
+  
+  const inputProps = useMemo(
+    ()=>({
+      value,
+      onChange,
+      onBlur,
+    }),
     [value]
   )
-  
-  
-  
-  const inputProps = {
-    value,
-    onChange: useCallback(
-      (ev: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>)=>{
-        setValue(ev.currentTarget.value as any)
-      },
-      []
-    ),
-    onBlur,
-  }
+  const radioInputProps = useCallback(
+    (value: Vs[F])=>({
+      checked: getChecked(value),
+      onChange,
+    }),
+    [value, getChecked]
+  )
   
   
   return render({
@@ -168,11 +172,13 @@ const ValidationComponentWrap =
     highlight: trueOrUndef(highlight),
     setValue,
     onBlur,
-    checked,
+    getChecked,
+    
     inputProps,
+    radioInputProps,
   })
 }
-export default React.memo(ValidationComponentWrap) as typeof ValidationComponentWrap
+export default React.memo(ValidationWrap) as typeof ValidationWrap
 
 
 
