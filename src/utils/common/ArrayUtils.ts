@@ -1,4 +1,4 @@
-import { MathUtils } from 'src/utils/common/MathUtils'
+import { MathUtils } from 'src/utils/common/NumberUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import empty = TypeUtils.empty
 import ComparatorEq = TypeUtils.ComparatorEq

@@ -1,16 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { ButtonBarComponents } from 'src/components/BottomButtonBar/components'
 import Form from 'src/components/FormElements/Form'
 import OverflowWrapper from 'src/components/Scrollbars/OverflowWrapper'
 import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperStyle'
-import PageScrollbars from 'src/components/Scrollbars/PageScrollbars'
 import ProfileContent from 'src/pages/Profile/ProfileContent'
-import { atom, useSetRecoilState } from 'recoil'
-import ProfileTabHeader from 'src/pages/Profile/ProfileTabHeader'
+import { useSetRecoilState } from 'recoil'
+import ProfileTabHeader, { ProfileTabHeaderContext } from 'src/pages/Profile/ProfileTabHeader'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
 import { Pages } from 'src/components/Page/Pages'
@@ -20,17 +19,14 @@ import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import Tab from 'src/views/Tabs/Tab'
 import Tabs from 'src/views/Tabs/Tabs'
 import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
-import Page = Pages.Page
 import SoftRefreshBtn = ButtonBarComponents.SoftRefreshBtn
-import modalFrameStyle = Pages.modalFrameStyle
 import TabsPage = Pages.TabsPage
 import pageColors = Pages.pageColors
-import pageLayoutStyle = Pages.pageLayoutStyle
 import pageContentPaddings = Pages.pageContentPaddings
 import col = EmotionCommon.col
-import noScrollbars = EmotionCommon.noScrollbars
 import safePageContentPaddings = Pages.safePageContentPaddings
 import fill = EmotionCommon.fill
+
 
 
 
@@ -87,7 +83,7 @@ React.memo(
   
   
   
-  const [profileName, setProfileName] = useState('')
+  const [profileHeader, setProfileHeader] = useState('')
   
   
   
@@ -96,7 +92,7 @@ React.memo(
       
       <Tabs css={fill} {...tabsProps}>{({ tabContainerSpring, computedTabsDimens })=><>
         {ArrayUtils.ofIndices(4).map(tabIdx=>
-          <Tab css={fill}
+          <Tab css={fill} key={tabIdx}
             width={computedTabsDimens.frameWidth}
           >
             
@@ -122,37 +118,22 @@ React.memo(
               touch-action: pan-y;
             `}>
               
-              
+              <ProfileTabHeaderContext.Provider value={{
+                tabContainerSpring,
+                tabWidth: computedTabsDimens.frameWidth,
+                headers: ['Предпросмотр',profileHeader,'Партнёр','Свидание'],
+                setTabsState,
+                setTabIdx,
+              }}>
               {function(){
-                const headerProps = {
-                  thisTabIdx: tabIdx,
-                  tabContainerSpring,
-                  tabWidth: computedTabsDimens.frameWidth,
-                  headers: ['Предпросмотр',profileName,'Партнёр','Свидание'],
-                  setTabsState,
-                  setTabIdx,
-                }
                 switch (tabIdx) {
-                  case 0: return <Form><ProfileTabHeader {...headerProps}>
-                    Предпросмотр
-                  </ProfileTabHeader></Form>
-                  case 1: return <ProfileContent
-                    header={header => {
-                      setProfileName(header)
-                      return <ProfileTabHeader {...headerProps}>
-                        {header}
-                      </ProfileTabHeader>
-                    }}
-                  />
-                  case 2: return <Form><ProfileTabHeader {...headerProps}>
-                    Партнёр
-                  </ProfileTabHeader></Form>
-                  case 3: return <Form><ProfileTabHeader {...headerProps}>
-                    Свидание
-                  </ProfileTabHeader></Form>
+                  case 0: return <Form><ProfileTabHeader thisTabIdx={0}/></Form>
+                  case 1: return <ProfileContent setProfileHeader={setProfileHeader}/>
+                  case 2: return <Form><ProfileTabHeader thisTabIdx={2}/></Form>
+                  case 3: return <Form><ProfileTabHeader thisTabIdx={3}/></Form>
                 }
               }()}
-          
+            </ProfileTabHeaderContext.Provider>
           
             </div>
           </OverflowWrapper>

@@ -9,7 +9,7 @@ import React, {
 } from 'react'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { ElemProps } from 'src/utils/common/ElemProps'
-import { MathUtils } from 'src/utils/common/MathUtils'
+import { MathUtils } from 'src/utils/common/NumberUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
 import fitRange = MathUtils.fitRange

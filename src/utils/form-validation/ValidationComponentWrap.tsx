@@ -56,10 +56,7 @@ export type ValidationComponentWrapProps
 
 
 const ValidationComponentWrap =
-<
-  Vs extends Values,
-  F extends keyof Vs,
->
+<Vs extends Values, F extends keyof Vs>
 (props: ValidationComponentWrapProps<Vs,F>) => {
   const {
     fieldName,

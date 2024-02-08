@@ -2,13 +2,12 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import { animated } from '@react-spring/web'
-import React, { useImperativeHandle, useRef } from 'react'
+import React, { useContext, useImperativeHandle, useRef } from 'react'
 import { formHeaderStyle } from 'src/components/FormElements/FormHeader'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
-import { MathUtils } from 'src/utils/common/MathUtils'
+import { MathUtils } from 'src/utils/common/NumberUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
-import { AppTheme } from 'src/utils/theme/AppTheme'
 import { TabsRenderProps } from 'src/views/Tabs/Tabs'
 import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
 import fitRange2 = MathUtils.fitRange2
@@ -22,16 +21,20 @@ import col = EmotionCommon.col
 
 
 
-
-export type ProfileTabHeaderCustomProps = {
-  thisTabIdx: TabIdx
+export type ProfileTabHeaderContextProps = {
   tabContainerSpring: TabsRenderProps['tabContainerSpring']
   tabWidth: number
   headers: string[]
   setTabsState: Setter<TabsState>
   setTabIdx: Setter<TabIdx>
 }
-export type ProfileTabHeaderForwardRefProps = JSX.IntrinsicElements['div']
+export const ProfileTabHeaderContext = React.createContext({} as ProfileTabHeaderContextProps)
+
+
+export type ProfileTabHeaderCustomProps = {
+  thisTabIdx: TabIdx
+}
+export type ProfileTabHeaderForwardRefProps = Omit<JSX.IntrinsicElements['div'], 'children'>
 export type ProfileTabHeaderRefElement = HTMLDivElement
 export type ProfileTabHeaderProps = ProfileTabHeaderCustomProps & ProfileTabHeaderForwardRefProps
 
@@ -43,19 +46,22 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
 (props, forwardedRef)=>{
   const {
     thisTabIdx: i,
-    tabContainerSpring,
-    tabWidth: w,
-    headers,
-    setTabsState,
-    setTabIdx,
-    
-    children,
-    ...restProps 
+    ...restProps
   } = props
   
   
   const elemRef = useRef<ProfileTabHeaderRefElement>(null)
   useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
+  
+  
+  const {
+    tabContainerSpring,
+    tabWidth: w,
+    headers,
+    setTabsState,
+    setTabIdx,
+  } = useContext(ProfileTabHeaderContext)
+  
   
   
   // -1 - заголовок уехал влево
@@ -157,7 +163,7 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
           setTabIdx(i)
         }}
       >
-        {children}
+        {headers[i]}
       </HeaderTextWrap>
     
     </AnimatedHeader>

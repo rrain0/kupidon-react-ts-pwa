@@ -13,7 +13,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { getElemProps } from 'src/utils/common/ElemProps'
-import { MathUtils } from 'src/utils/common/MathUtils'
+import { MathUtils } from 'src/utils/common/NumberUtils'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import inRange = MathUtils.inRange
 import fitRange = MathUtils.fitRange

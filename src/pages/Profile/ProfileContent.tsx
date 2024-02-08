@@ -2,8 +2,7 @@
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import React, { useCallback, useEffect, useId, useMemo, useState } from 'react'
-import { atom, useRecoilState } from 'recoil'
-import { animated } from '@react-spring/web'
+import { useRecoilState } from 'recoil'
 import { ApiUtils } from 'src/api/ApiUtils'
 import { CurrentUser } from 'src/api/entity/CurrentUser'
 import { GenderEnum } from 'src/api/entity/GenderEnum'
@@ -11,7 +10,6 @@ import { UserApi } from 'src/api/requests/UserApi'
 import { useApiRequest } from 'src/api/useApiRequest'
 import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import Form from 'src/components/FormElements/Form'
-import { formHeaderStyle } from 'src/components/FormElements/FormHeader'
 import ItemContainer from 'src/components/FormElements/ItemContainer'
 import ItemLabel from 'src/components/FormElements/ItemLabel'
 import ItemTitleContainer from 'src/components/FormElements/ItemTitleContainer'
@@ -21,6 +19,7 @@ import { ModalStyle } from 'src/components/Modal/ModalStyle'
 import OptionItem from 'src/components/OptionItem/OptionItem'
 import UseBool from 'src/components/StateCarriers/UseBool'
 import UseBrowserBack from 'src/components/ActionProviders/UseBrowserBack'
+import ProfileTabHeader from 'src/pages/Profile/ProfileTabHeader'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import ProfilePhotos, {
   DefaultOperation,
@@ -33,7 +32,7 @@ import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil } from 'src/recoil/state/AuthRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { AsyncUtils } from 'src/utils/common/AsyncUtils'
-import { MathUtils } from 'src/utils/common/MathUtils'
+import { MathUtils } from 'src/utils/common/NumberUtils'
 import { ObjectUtils } from 'src/utils/common/ObjectUtils'
 import { ReactUtils } from 'src/utils/common/ReactUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
@@ -57,8 +56,6 @@ import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import { TabsRenderProps } from 'src/views/Tabs/Tabs'
-import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
 import Textarea from 'src/views/Textarea/Textarea'
 import { TextareaStyle } from 'src/views/Textarea/TextareaStyle'
 import * as uuid from 'uuid'
@@ -92,40 +89,17 @@ import CurrentUserSuccessData = UserApi.CurrentUserSuccessData
 import UpdateUserErrorData = UserApi.UpdateUserErrorData
 import AddProfilePhotoErrorData = UserApi.AddProfilePhotoErrorData
 import onPointerClick = ReactUtils.onPointerClick
-import fitRange2 = MathUtils.fitRange2
+import Setter = TypeUtils.Setter
 
 
 
 
 
 
-
-
-
-/*
-export type ProfileContentRecoilType = React.ReactNode
-export const ProfileContentRecoil = atom<ProfileContentRecoilType>({
-  key: 'profilePage',
-  default: '',
-})
-
-
-
-
-
-const ProfileContentHeader =
-React.memo(
-(props: ProfileContentProps)=>{
-  
-  return <>
-  
-  </>
-})
-*/
 
 
 export type ProfileContentProps = {
-  header: (header: string)=>React.ReactNode
+  setProfileHeader: Setter<string>
 }
 
 
@@ -455,6 +429,9 @@ React.memo(
   
   
   
+  useEffect(()=>props.setProfileHeader(formValues.name), [formValues.name])
+  
+  
   
   
   useFormToasts({
@@ -637,7 +614,7 @@ React.memo(
       
       {/* <FormHeader>{uiText.profile.text}</FormHeader> */}
       
-      { props.header(formValues.name) }
+      <ProfileTabHeader thisTabIdx={1}/>
       
       
       <div css={css`

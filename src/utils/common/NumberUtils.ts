@@ -5,6 +5,10 @@ export namespace MathUtils {
   
   
   
+  export const ifNaN = (n: number, replacement: number)=>isNaN(n) ? replacement : n
+  
+  
+  
   /**
    * Функция округления
    * @param n Значение
@@ -111,7 +115,7 @@ export namespace MathUtils {
    toRange: readonly [minInclusive: number, maxInclusive: number]
   )
   : number => {
-    const oneBasedValue = (value-fromRange[0]) / (fromRange[1]-fromRange[0])
+    const oneBasedValue = ifNaN((value-fromRange[0]) / (fromRange[1]-fromRange[0]), 0)
     return oneBasedValue * (toRange[1]-toRange[0]) + toRange[0]
   }
   
