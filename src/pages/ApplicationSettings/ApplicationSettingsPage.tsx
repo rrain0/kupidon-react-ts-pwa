@@ -13,8 +13,10 @@ import {
   ApplicationSettingsUiText
 } from 'src/pages/ApplicationSettings/uiText'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
-import { LangRecoil, LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
-import { ThemeRecoil, ThemeSettingsRecoil } from 'src/recoil/state/ThemeRecoil'
+import { LangRecoil } from 'src/recoil/state/LangRecoil'
+import { LangSettingsRecoil } from 'src/recoil/state/LangSettingsRecoil'
+import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
+import { ThemeSettingsRecoil } from 'src/recoil/state/ThemeSettingsRecoil'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { Lang } from 'src/utils/lang/Lang'
 import { ThemeNameUiText } from 'src/utils/lang/ui-values/ThemeNameUiText'

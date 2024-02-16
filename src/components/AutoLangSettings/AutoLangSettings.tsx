@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import LangSettings from 'src/components/LangSettings/LangSettings'
-import { LangSettingsRecoil } from 'src/recoil/state/LangRecoil'
+import { LangSettingsRecoil } from 'src/recoil/state/LangSettingsRecoil'
 
 
 

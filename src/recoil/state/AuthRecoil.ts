@@ -1,6 +1,7 @@
 import { atom } from 'recoil'
 import { CurrentUser } from 'src/api/entity/CurrentUser'
-import { emptyValOrObj, localStorageEffect2 } from '../RecoilPersist'
+import { resettableLocalStorageEffect } from '../RecoilPersist'
+
 
 
 
@@ -17,10 +18,11 @@ export type AuthStateType = undefined|{
   accessToken: string,
   user: CurrentUser,
 }
+const defolt: AuthStateType = undefined
 export const AuthRecoil = atom<AuthStateType>({
   key: 'auth',
-  default: undefined,
-  effects: [localStorageEffect2({ removeWhen: ['reset',emptyValOrObj] })],
+  default: defolt,
+  effects: [resettableLocalStorageEffect(defolt)],
 })
 
 

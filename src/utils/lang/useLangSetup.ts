@@ -1,9 +1,7 @@
 import { useLayoutEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import {
-  LangRecoil,
-  LangSettingsRecoil,
-} from 'src/recoil/state/LangRecoil'
+import { LangRecoil } from 'src/recoil/state/LangRecoil'
+import { LangSettingsRecoil, } from 'src/recoil/state/LangSettingsRecoil'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { Lang } from 'src/utils/lang/Lang'
 import { useLangDetector } from 'src/utils/lang/useLangDetector'

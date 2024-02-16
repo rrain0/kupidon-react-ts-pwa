@@ -68,7 +68,7 @@ export namespace ObjectUtils {
     (object: O)
     : ObjectValuesArrType<O & object>
   {
-    if (typeof object !== 'object' || object===null) return []
+    if (!isObject(object)) return []
     return Object.values(object) as ObjectValuesArrType<O & object>
   }
   
@@ -96,7 +96,7 @@ export namespace ObjectUtils {
     (object: O)
     : ObjectEntriesArrType<O & object>
   {
-    if (typeof object !== 'object' || object===null) return []
+    if (!isObject(object)) return []
     return Object.entries(object) as ObjectEntriesArrType<O & object>
   }
   
@@ -116,6 +116,21 @@ export namespace ObjectUtils {
     })
     return object2
   }
+  
+  
+  
+  
+  export const shallowEq = (obj1: any, obj2: any): boolean => {
+    if (!isObject(obj1)) return false
+    if (!isObject(obj2)) return false
+    const entries1 = ObjectEntries(obj1) as unknown as [any,any]
+    const entries2 = ObjectEntries(obj2) as unknown as [any,any]
+    if (entries1.some(([k,v])=>obj2[k]!==v)) return false
+    if (entries2.some(([k,v])=>obj1[k]!==v)) return false
+    return true
+  }
+  
+  
   
   
   

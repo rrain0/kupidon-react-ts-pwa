@@ -1,56 +1,80 @@
 import { AtomEffect } from 'recoil'
+import { ObjectUtils } from 'src/utils/common/ObjectUtils'
+import { TypeUtils } from 'src/utils/common/TypeUtils'
+import Mapper = TypeUtils.Mapper
+import shallowEq = ObjectUtils.shallowEq
 
 
 
-export const localStorageEffect: AtomEffect<any> = ({node, setSelf, onSet})=>{
+
+export type RemoveWhen<State> = Mapper<State,boolean> | 'reset'
+export type LocalStorageEffect<State, Saved = State> = (props?: {
+  removeWhen?: RemoveWhen<State>[]
+  map?: Mapper<State,Saved>
+  mapBack?: Mapper<Saved,State>
+})=>AtomEffect<State>
+
+
+
+
+export const localStorageEffect: LocalStorageEffect<any> =
+({ removeWhen, map, mapBack } = {}) =>
+({node, setSelf, onSet}) => {
   // local storage stores only strings
   // if no stored, then returns null
-  const savedValue = localStorage.getItem(node.key)
-  if (savedValue !== null) {
-    setSelf(JSON.parse(savedValue))
+  const savedValue: string | null = localStorage.getItem(node.key)
+  if (savedValue) {
+    const parsed = JSON.parse(savedValue)
+    if (mapBack) setSelf(mapBack(parsed))
+    else setSelf(parsed)
   }
   
   onSet((newValue, oldValue, isReset) => {
-    isReset
-      ? localStorage.removeItem(node.key)
-      : localStorage.setItem(node.key, JSON.stringify(newValue))
-  })
-}
-
-
-
-export const localStorageEffect2: LocalStorageEffect<any> = (props)=>({node, setSelf, onSet})=>{
-  const savedValue = localStorage.getItem(node.key)
-  if (savedValue !== null) {
-    setSelf(JSON.parse(savedValue))
-  }
-  
-  onSet((newValue, oldValue, isReset) => {
+    const doReset = removeWhen?.some(filterNot=>{
+      // we will clear local storage if there is 'reset' event && isReset
+      if (filterNot==='reset') return isReset
+      // we will clear local storage if current state matches state to be cleared
+      return filterNot(newValue)
+    })
     
-    if (props?.removeWhen?.some(filterNot=>{
-      switch (filterNot){
-        case 'reset': return isReset
-        default: return filterNot(newValue)
-      }
-    })) {
-      localStorage.removeItem(node.key)
-      return
+    if (doReset) localStorage.removeItem(node.key)
+    else {
+      const valueToSave = function(){
+        if (map) return JSON.stringify(map(newValue))
+        return JSON.stringify(newValue)
+      }()
+      localStorage.setItem(node.key, valueToSave)
     }
-    
-    localStorage.setItem(node.key, JSON.stringify(newValue))
-    
   })
 }
 
 
 
 
-export type RemoveWhen<T> = ((data: T)=>boolean) | 'reset'
-export type LocalStorageEffect<T> = (props?: {
-  // todo 'map' state before filter&write and 'mapBack' after read
-  removeWhen?: RemoveWhen<T>[]
-})=>AtomEffect<T>
+export const resettableLocalStorageEffect = (...valuesWhenReset: any[]) =>
+  localStorageEffect({
+    removeWhen: ['reset', ...valuesWhenReset.map(it=>(v:any)=>shallowEq(v,it))]
+  })
 
+
+
+
+
+
+/*
+
+export const isObjectOf = (...values: any[]) => (obj:any): boolean => {
+  if (isObject(obj)){
+    const objectValues = ObjectValues(obj)
+    if (!objectValues.length) return false
+    return objectValues.every(it=>values.includes(it))
+  }
+  return false
+}
+
+export const isEmptyObject = (obj:any): boolean => isObject(obj) && !ObjectValues(obj).length
+
+export const isValueOf = (...values: any[]) => (value:any): boolean => values.includes(value)
 
 
 export const objOfEmptyStrOrNullOrUndef: RemoveWhen<object> = (data) => {
@@ -66,10 +90,14 @@ export const emptyValOrObj: RemoveWhen<unknown> = (data) => {
   if (data!==null && typeof data === 'object') return objOfEmptyStrOrNullOrUndef(data)
   return false
 }
+*/
+
+
 
 
 
 /*
+// when using 'recoil-persist' library
  import { recoilPersist } from 'recoil-persist'
  
  export const { persistAtom } = recoilPersist({
