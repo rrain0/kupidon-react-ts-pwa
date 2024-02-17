@@ -6,16 +6,14 @@ import {
   SheetSnapPoints,
   SheetState, UseBottomSheetOptions,
 } from 'src/views/BottomSheet/useBottomSheet'
-import Setter = TypeUtils.Callback1
 import Callback = TypeUtils.Callback
 import PartialUndef = TypeUtils.PartialUndef
-import ValueOrMapper = TypeUtils.ValueOrMapper
 
 
 
 
 export type UseBottomSheetStateRenderProps = {
-  setClosing: ()=>void
+  setClosing: Callback
   sheetProps: UseBottomSheetOptions
 }
 export type UseBottomSheetStateProps = {

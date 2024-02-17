@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import BottomButtonBar from 'src/components/BottomButtonBar/BottomButtonBar'
 import { ButtonBarComponents } from 'src/components/BottomButtonBar/components'
 import Form from 'src/components/FormElements/Form'
@@ -18,7 +18,8 @@ import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { useAsyncEffect } from 'src/utils/react/useAsyncEffect'
 import Tab from 'src/views/Tabs/Tab'
 import Tabs from 'src/views/Tabs/Tabs'
-import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
+import { TabsState } from 'src/views/Tabs/useTabs'
+import UseTabsState from 'src/views/Tabs/UseTabsState'
 import SoftRefreshBtn = ButtonBarComponents.SoftRefreshBtn
 import TabsPage = Pages.TabsPage
 import pageColors = Pages.pageColors
@@ -72,15 +73,6 @@ React.memo(
   )
   
   
-  const [tabsState, setTabsState] = useState<TabsState>('opened')
-  const [tabIdx, setTabIdx] = useState<TabIdx>(1)
-  const tabFrameRef = useRef<HTMLDivElement>(null)
-  const tabsProps = {
-    tabsState, setTabsState,
-    tabIdx, setTabIdx,
-    tabFrameRef,
-  }
-  
   
   
   const [profileHeader, setProfileHeader] = useState('')
@@ -90,14 +82,15 @@ React.memo(
   return <>
     <TabsPage>
       
-      <Tabs css={fill} {...tabsProps}>{({ tabContainerSpring, computedTabsDimens })=><>
-        {ArrayUtils.ofIndices(4).map(tabIdx=>
-          <Tab css={fill} key={tabIdx}
-            width={computedTabsDimens.frameWidth}
-          >
-            
-            
-            <OverflowWrapper css={css`
+      <UseTabsState initialIdx={1}>{tabsProps=>
+        <Tabs css={fill} {...tabsProps}>{({ tabContainerSpring, computedTabsDimens }) => <>
+          {ArrayUtils.ofIndices(4).map(tabIdx =>
+            <Tab css={fill} key={tabIdx}
+              width={computedTabsDimens.frameWidth}
+            >
+              
+              
+              <OverflowWrapper css={css`
               ${OverflowWrapperStyle.defolt};
               ${OverflowWrapperStyle.El.container.thiz()}{
                 touch-action: pan-y;
@@ -106,9 +99,9 @@ React.memo(
                 ${safePageContentPaddings};
               }
             `}
-              showVertical={!(['dragging','snapping'] as TabsState[]).includes(tabsProps.tabsState)}
-            >
-            <div css={t=>css`
+                showVertical={!(['dragging', 'snapping'] as TabsState[]).includes(tabsProps.tabsState)}
+              >
+                <div css={t => css`
               ${pageContentPaddings};
               ${col};
               align-items: center;
@@ -117,31 +110,36 @@ React.memo(
               height: fit-content;
               touch-action: pan-y;
             `}>
-              
-              <ProfileTabHeaderContext.Provider value={{
-                tabContainerSpring,
-                tabWidth: computedTabsDimens.frameWidth,
-                headers: ['Предпросмотр',profileHeader,'Партнёр','Свидание'],
-                setTabsState,
-                setTabIdx,
-              }}>
-              {function(){
-                switch (tabIdx) {
-                  case 0: return <Form><ProfileTabHeader thisTabIdx={0}/></Form>
-                  case 1: return <ProfileContent setProfileHeader={setProfileHeader}/>
-                  case 2: return <Form><ProfileTabHeader thisTabIdx={2}/></Form>
-                  case 3: return <Form><ProfileTabHeader thisTabIdx={3}/></Form>
-                }
-              }()}
-            </ProfileTabHeaderContext.Provider>
-          
-            </div>
-          </OverflowWrapper>
-          
-          
-          </Tab>
-        )}
-      </>}</Tabs>
+                  
+                  <ProfileTabHeaderContext.Provider value={{
+                    tabContainerSpring,
+                    tabWidth: computedTabsDimens.frameWidth,
+                    headers: ['Предпросмотр', profileHeader, 'Партнёр', 'Свидание'],
+                    setTabsState: tabsProps.setTabsState,
+                    setTabIdx: tabsProps.setTabIdx,
+                  }}>
+                    {function () {
+                      switch (tabIdx) {
+                        case 0:
+                          return <Form><ProfileTabHeader thisTabIdx={0}/></Form>
+                        case 1:
+                          return <ProfileContent setProfileHeader={setProfileHeader}/>
+                        case 2:
+                          return <Form><ProfileTabHeader thisTabIdx={2}/></Form>
+                        case 3:
+                          return <Form><ProfileTabHeader thisTabIdx={3}/></Form>
+                      }
+                    }()}
+                  </ProfileTabHeaderContext.Provider>
+                
+                </div>
+              </OverflowWrapper>
+            
+            
+            </Tab>,
+          )}
+        </>}</Tabs>
+      }</UseTabsState>
       
     </TabsPage>
     
