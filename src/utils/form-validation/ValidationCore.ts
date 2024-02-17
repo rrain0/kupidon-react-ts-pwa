@@ -48,18 +48,18 @@ export namespace ValidationCore {
       this.usedValues = data.usedValues
       this.type = data.type ?? 'normal'
       this.errorFields = data.errorFields ?? this.usedFields
-      this.highlight = data.highlight ?? (()=>{switch(this.type){
-        case 'normal': case 'server': return true
-        default: return false
-      }})()
-      this.notify = data.notify ?? (()=>{switch(this.type){
-        case 'normal': case 'server': return true
-        default: return false
-      }})()
-      this.canSubmit = data.canSubmit ?? (()=>{switch(this.type){
-        case 'server': return true
-        default: return false
-      }})()
+      this.highlight = data.highlight ?? (()=>{
+        if (['normal','server'].includes(this.type)) return true
+        return false
+      })()
+      this.notify = data.notify ?? (()=>{
+        if (['normal','server'].includes(this.type)) return true
+        return false
+      })()
+      this.canSubmit = data.canSubmit ?? (()=>{
+        if (this.type==='server') return true
+        return false
+      })()
       this.created = data.created ?? new Date()
       this.delay = data.delay ?? 0
       this.awaitDelay = Failure.getAwaitDelay(this.created, this.delay)

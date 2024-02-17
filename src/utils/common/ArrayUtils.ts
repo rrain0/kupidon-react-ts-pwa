@@ -112,12 +112,20 @@ export namespace ArrayUtils {
     toIsFound: true
     toIdx: number
     toElem: T2
+    isSame: boolean
+    isReplaced: boolean
+    isRetained: true
+    isRemoved: false
   } | {
     fromIdx: number
     fromElem: T1
     toIsFound: false
     toIdx: -1
     toElem: undefined
+    isSame: false
+    isReplaced: false
+    isRetained: false
+    isRemoved: true
   }
   export const diff2 = <T1, T2 = T1>
   (arr1: T1[], arr2: T2[],
@@ -132,6 +140,10 @@ export namespace ArrayUtils {
         toIsFound: true,
         toIdx: to,
         toElem: arr2[to],
+        isSame: to===from,
+        isReplaced: to!==from,
+        isRetained: true,
+        isRemoved: false,
       }
       return {
         fromIdx: from,
@@ -139,6 +151,10 @@ export namespace ArrayUtils {
         toIsFound: false,
         toIdx: -1,
         toElem: undefined,
+        isSame: false,
+        isReplaced: false,
+        isRetained: false,
+        isRemoved: true,
       }
     })
     const backObjs: DiffObj<T2,T1>[] = back.map((to,from)=>{
@@ -148,6 +164,10 @@ export namespace ArrayUtils {
         toIsFound: true,
         toIdx: to,
         toElem: arr1[to],
+        isSame: to===from,
+        isReplaced: to!==from,
+        isRetained: true,
+        isRemoved: false,
       }
       return {
         fromIdx: from,
@@ -155,6 +175,10 @@ export namespace ArrayUtils {
         toIsFound: false,
         toIdx: -1,
         toElem: undefined,
+        isSame: false,
+        isReplaced: false,
+        isRetained: false,
+        isRemoved: true,
       }
     })
     return [fwdObjs,backObjs] as const

@@ -17,6 +17,9 @@ export type UseFormFailuresProps
   defaultValues: Vs
   validators: Validators<Vs>
 }
+
+
+
 export const useFormFailures =
 <Vs extends Values>
 (props: UseFormFailuresProps<Vs>)=>{
@@ -49,6 +52,11 @@ export const useFormFailures =
       //console.log('IV newFailures',newFailures)
       setFailures(newFailures)
       setPrevValues(values)
+      // todo calculate some error props:
+      //  changed fields
+      //  if any value changed
+      //  method to reset field
+      //  method to resst whole form
     }
   )
   // Layout Effect is necessary because of Chrome's autofill on Android:
