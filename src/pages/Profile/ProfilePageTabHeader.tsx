@@ -21,28 +21,28 @@ import col = EmotionCommon.col
 
 
 
-export type ProfileTabHeaderContextProps = {
+export type ProfilePageTabHeaderContextProps = {
   tabContainerSpring: TabsRenderProps['tabContainerSpring']
   tabWidth: number
   headers: string[]
   setTabsState: Setter<TabsState>
   setTabIdx: Setter<TabIdx>
 }
-export const ProfileTabHeaderContext = React.createContext({} as ProfileTabHeaderContextProps)
+export const ProfilePageTabHeaderContext = React.createContext({} as ProfilePageTabHeaderContextProps)
 
 
-export type ProfileTabHeaderCustomProps = {
+export type ProfilePageTabHeaderCustomProps = {
   thisTabIdx: TabIdx
 }
-export type ProfileTabHeaderForwardRefProps = Omit<JSX.IntrinsicElements['div'], 'children'>
-export type ProfileTabHeaderRefElement = HTMLDivElement
-export type ProfileTabHeaderProps = ProfileTabHeaderCustomProps & ProfileTabHeaderForwardRefProps
+export type ProfilePageTabHeaderForwardRefProps = Omit<JSX.IntrinsicElements['div'], 'children'>
+export type ProfilePageTabHeaderRefElement = HTMLDivElement
+export type ProfilePageTabHeaderProps = ProfilePageTabHeaderCustomProps & ProfilePageTabHeaderForwardRefProps
 
 
 
-const ProfileTabHeader = 
+const ProfilePageTabHeader =
 React.memo(
-React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
+React.forwardRef<ProfilePageTabHeaderRefElement, ProfilePageTabHeaderProps>(
 (props, forwardedRef)=>{
   const {
     thisTabIdx: i,
@@ -50,7 +50,7 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
   } = props
   
   
-  const elemRef = useRef<ProfileTabHeaderRefElement>(null)
+  const elemRef = useRef<ProfilePageTabHeaderRefElement>(null)
   useImperativeHandle(forwardedRef, ()=>elemRef.current!,[])
   
   
@@ -60,7 +60,7 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
     headers,
     setTabsState,
     setTabIdx,
-  } = useContext(ProfileTabHeaderContext)
+  } = useContext(ProfilePageTabHeaderContext)
   
   
   
@@ -170,7 +170,7 @@ React.forwardRef<ProfileTabHeaderRefElement, ProfileTabHeaderProps>(
     
   </Wrap>
 }))
-export default ProfileTabHeader
+export default ProfilePageTabHeader
 
 
 

@@ -4,6 +4,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  gap: 0;
   background: none;
   /* disable highlight on mobile devices when tapping on screen */
   -webkit-tap-highlight-color: transparent;
@@ -12,6 +13,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  gap: 0;
   background: none;
   /* disable highlight on mobile devices when tapping on screen */
   -webkit-tap-highlight-color: transparent;
@@ -20,6 +22,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  gap: 0;
   background: none;
   /* disable highlight on mobile devices when tapping on screen */
   -webkit-tap-highlight-color: transparent;

@@ -7,16 +7,14 @@ import { ReactDOMAttributes } from '@use-gesture/react/src/types'
 import React, {
   useCallback,
   useEffect,
-  useId,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react'
 import Dropzone from 'react-dropzone'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import ModalPortal from 'src/components/Modal/ModalPortal'
-import { LogLayerRecoil } from 'src/pages/App/LogLayer'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { useLockAppGestures } from 'src/utils/app/useLockAppGestures'

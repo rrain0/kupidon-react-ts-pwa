@@ -31,7 +31,7 @@ import GiftBoxIc = SvgIcons.GiftBoxIc
 
 
 
-const ProfileContentBirthDate =
+const ProfileBirthDate =
 React.memo(
 (props: ValidationWrapRenderProps<string>)=>{
   const uiText = useUiValues(ProfileUiText)
@@ -101,6 +101,6 @@ React.memo(
     </>
   }</UseBool>
 })
-export default ProfileContentBirthDate
+export default ProfileBirthDate
 
 

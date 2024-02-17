@@ -30,16 +30,27 @@ export namespace Pages {
   
   
   
+  // safe means where there is no overlapping elements
   export const safePageContentPaddings = css`
     padding-bottom: var(--bottom-bars-inset);
   `
-  export const pageContentPaddings = css`
+  
+  
+  
+  export const pageContentVerticalPaddings = css`
     //padding-top: var(--top-page-inset);
     padding-top: 70px;
     padding-bottom: var(--bottom-page-inset);
+  `
+  export const pageContentHorizontalPaddings = css`
     padding-left: 20px;
     padding-right: 20px;
   `
+  export const pageContentPaddings = css`
+    ${pageContentVerticalPaddings};
+    ${pageContentHorizontalPaddings};
+  `
+  
   
   
   export const pageLayoutStyle = css`
@@ -84,6 +95,23 @@ export namespace Pages {
     ${fill};
     ${col};
     gap: 10px;
+  `
+  
+  const PageContent = styled.section`
+    ${col};
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    min-height: 100%;
+  `
+  export const PageContentSafe = styled(PageContent)`
+    ${safePageContentPaddings};
+  `
+  export const PageContentVerticalPaddings = styled(PageContent)`
+    ${pageContentVerticalPaddings};
+  `
+  export const PageContentPaddings = styled(PageContent)`
+    ${pageContentPaddings};
   `
   
   

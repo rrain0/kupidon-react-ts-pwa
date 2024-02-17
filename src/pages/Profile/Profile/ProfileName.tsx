@@ -32,7 +32,7 @@ import row = EmotionCommon.row
 
 
 
-const ProfileContentName =
+const ProfileName =
 React.memo(
 (props: ValidationWrapRenderProps<string>)=>{
   const uiText = useUiValues(ProfileUiText)
@@ -106,6 +106,6 @@ React.memo(
     </>
   }</UseBool>
 })
-export default ProfileContentName
+export default ProfileName
 
 

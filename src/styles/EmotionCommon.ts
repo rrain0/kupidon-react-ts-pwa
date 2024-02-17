@@ -140,6 +140,7 @@ export namespace EmotionCommon {
     box-shadow: none;
     margin: 0;
     padding: 0;
+    gap: 0;
     -webkit-tap-highlight-color: transparent;
   `
   export const reset = css`

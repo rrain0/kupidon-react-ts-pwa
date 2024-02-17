@@ -94,7 +94,6 @@ const DarkSimpleProps = { ...DarkSimple,
   page: { ...DarkSimple.page,
     bgc:         ['#18191b'],
     bgcGradient: ['#282c34','#282c34','#282c34'],
-    content:     ['#bdbdbd','#ffffff'],
   },
   
   statusBar: { ...DarkSimple.statusBar,

@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
+import { GenderEnum } from 'src/api/entity/GenderEnum'
 import UseFakePointerRef from 'src/components/ActionProviders/UseFakePointerRef'
 import ModalPortal from 'src/components/Modal/ModalPortal'
 import OptionItem from 'src/components/OptionItem/OptionItem'
@@ -20,9 +21,9 @@ import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import RadioInputGroup from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
 import Arrow6NextIc = SvgIcons.Arrow6NextIc
+import GenderIc = SvgIcons.GenderIc
 import onPointerClick = ReactUtils.onPointerClick
 import col = EmotionCommon.col
-import Search2Ic = SvgIcons.Search2Ic
 
 
 
@@ -30,34 +31,25 @@ import Search2Ic = SvgIcons.Search2Ic
 
 
 
-type PreferredPeopleOption = 'notSelected'|'ofGuys'|'ofGirls'|'ofGuysAndGirls'
 
 
-const ProfileContentImLookingFor =
+const ProfileGender =
 React.memo(
-(/* props: ValidationWrapRenderProps<PreferredPeopleOption> */)=>{
+(props: ValidationWrapRenderProps<GenderEnum|''>)=>{
   const uiText = useUiValues(ProfileUiText)
   
   
   
-  /* const [preferredPeople, setPreferredPeople] =
-    useState('notSelected' as PreferredPeopleOption) */
-  const preferredPeopleOptions = useMemo(
+  const genderOptions = useMemo(
     ()=>[
       {
-        value: 'notSelected',
-        text: uiText.notSelected.text,
+        value: 'MALE',
+        text: uiText.male.text,
       },{
-        value: 'ofGuys',
-        text: uiText.ofGuys.text,
-      },{
-        value: 'ofGirls',
-        text: uiText.ofGirls.text,
-      },{
-        value: 'ofGuysAndGirls',
-        text: uiText.ofGuysAndGirls.text,
+        value: 'FEMALE',
+        text: uiText.female.text,
       }
-    ] satisfies { value: PreferredPeopleOption, text: string }[],
+    ] satisfies { value: GenderEnum, text: string }[],
     [uiText]
   )
   
@@ -68,9 +60,9 @@ React.memo(
       
       <UseFakePointerRef>{({ ref })=>
         <OptionItem
-          icon={<Search2Ic css={css`height: 50%`}/>}
-          title={uiText.imLookingFor.text}
-          value={preferredPeopleOptions.find(it => it.value === 'notSelected')!.text}
+          icon={<GenderIc css={css`height: 50%`}/>}
+          title={uiText.gender.text}
+          value={genderOptions.find(opt => opt.value === props.value)?.text ?? ''}
           nextIcon={<Arrow6NextIc css={css`height: 44%`}/>}
           
           //onClick={bool.setTrue}
@@ -79,7 +71,7 @@ React.memo(
         />
       }</UseFakePointerRef>
       
-      {/* <UseBottomSheetState
+      <UseBottomSheetState
         open={bool.value}
         onClosed={bool.setFalse}
       >
@@ -106,11 +98,11 @@ React.memo(
               </RadioInputGroup>
             </BottomSheetBasic>
           </ModalPortal>
-        }</UseBottomSheetState> */}
+        }</UseBottomSheetState>
     </>
   }</UseBool>
 })
-export default ProfileContentImLookingFor
+export default ProfileGender
 
 
 
