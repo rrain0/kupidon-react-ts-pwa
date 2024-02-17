@@ -21,10 +21,11 @@ import Gear2Ic = SvgIcons.Gear2Ic
 import RootRoute = AppRoutes.RootRoute
 import full = RouteBuilder.full
 import ChatRoundIc = SvgIcons.ChatRoundIc
-import HelpIc = SvgIcons.HelpIc
 import fixedBottom = EmotionCommon.fixedBottom
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import onPointerClick = ReactUtils.onPointerClick
+import BowArrow2Ic = SvgIcons.BowArrow2Ic
+import BowArrowIc = SvgIcons.BowArrowIc
 
 
 
@@ -72,8 +73,8 @@ React.memo(
       </NavLink>
       
       <Button css={ButtonStyle.nav}>
-        <HelpIc/>
-        <div>{uiOptions.advices.text}</div>
+        <BowArrowIc/>
+        <div>{uiOptions.bowAndArrows.text}</div>
       </Button>
       
       <UseBool>{bool=>

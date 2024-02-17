@@ -20,7 +20,7 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import RadioInput from 'src/views/Inputs/RadioInput/RadioInput'
 import RadioInputGroup from 'src/views/Inputs/RadioInput/RadioInputGroup'
 import { RadioInputStyle } from 'src/views/Inputs/RadioInput/RadioInputStyle'
-import Arrow6NextIc = SvgIcons.Arrow6NextIc
+import Arrow6NextIc = SvgIcons.ArrowAngledRoundedIc
 import GenderIc = SvgIcons.GenderIc
 import onPointerClick = ReactUtils.onPointerClick
 import col = EmotionCommon.col

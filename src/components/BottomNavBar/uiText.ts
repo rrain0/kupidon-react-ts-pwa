@@ -38,6 +38,19 @@ export const BottomNavBarUiText = {
   ] as UiText<'advices'>[],
   
   
+  bowAndArrows: [
+    {
+      value: 'bowAndArrows',
+      lang: 'en-US',
+      text: 'Bow and arrows',
+    },{
+      value: 'bowAndArrows',
+      lang: 'ru-RU',
+      text: 'Лук и стрелы',
+    },
+  ] as UiText<'bowAndArrows'>[],
+  
+  
   settings: CommonUiText.settings,
   
   

@@ -5,16 +5,14 @@ import classNames from 'classnames'
 import React from 'react'
 
 import { ReactComponent as AddModuleSvg } from 'src/res/icon/add-module.svg'
-import { ReactComponent as Arrow1DownSvg } from 'src/res/icon/arrow-1-down.svg'
-import { ReactComponent as Arrow2ForwardSvg } from 'src/res/icon/arrow-2-forward.svg'
-import { ReactComponent as Arrow3UpRightSvg } from 'src/res/icon/arrow-3-up-right.svg'
-import { ReactComponent as Arrow4DownSvg } from 'src/res/icon/arrow-4-down.svg'
-import { ReactComponent as Arrow5FwdSvg } from 'src/res/icon/arrow-5-fwd.svg'
-import { ReactComponent as Arrow6NextSvg } from 'src/res/icon/arrow-6-next.svg'
+import { ReactComponent as ArrowLinesSharp1Svg } from 'src/res/icon/arrow-lines-sharp-1.svg'
+import { ReactComponent as ArrowAngledRoundedSvg } from 'src/res/icon/arrow-angled-rounded.svg'
 import { ReactComponent as ArrowRefreshCwSvg } from 'src/res/icon/arrow-refresh-cw.svg'
 import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
 
 import { ReactComponent as BrowserSvg } from 'src/res/icon/browser.svg'
+import { ReactComponent as BowArrowSvg } from 'src/res/icon/bow-arrow.svg'
+import { ReactComponent as BowArrow2Svg } from 'src/res/icon/bow-arrow-2.svg'
 
 import { ReactComponent as CardsHeartSvg } from 'src/res/icon/cards-heart.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
@@ -162,17 +160,15 @@ export namespace SvgIcons {
   // Icons
   
   export const AddModuleIc = generateSimpleSvgIcon(AddModuleSvg)
-  export const Arrow1DownIc = generateSimpleSvgIcon(Arrow1DownSvg)
-  export const Arrow2ForwardIc = generateSimpleSvgIcon(Arrow2ForwardSvg)
-  export const Arrow3UpRightIc = generateSimpleSvgIcon(Arrow3UpRightSvg)
-  export const Arrow4DownIc = generateSimpleSvgIcon(Arrow4DownSvg)
-  export const Arrow5FwdIc = generateSimpleSvgIcon(Arrow5FwdSvg)
-  export const Arrow6NextIc = generateSimpleSvgIcon(Arrow6NextSvg)
+  export const ArrowLinesSharp1Ic = generateSimpleSvgIcon(ArrowLinesSharp1Svg)
+  export const ArrowAngledRoundedIc = generateSimpleSvgIcon(ArrowAngledRoundedSvg)
   export const ArrowRefreshCwIc = generateSimpleSvgIcon(ArrowRefreshCwSvg)
   export const ArrowReloadIc = generateSimpleSvgIcon(ArrowReloadSvg)
   
   
   export const BrowserIc = generateSimpleSvgIcon(BrowserSvg)
+  export const BowArrowIc = generateSimpleSvgIcon(BowArrowSvg)
+  export const BowArrow2Ic = generateSimpleSvgIcon(BowArrow2Svg)
   
   
   export const CardsHeartIc = generateSimpleSvgIcon(CardsHeartSvg)

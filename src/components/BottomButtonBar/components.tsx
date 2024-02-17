@@ -17,7 +17,7 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import { SvgIcStyle } from 'src/views/icons/SvgIcStyle'
 import fixedBottom = EmotionCommon.fixedBottom
 import row = EmotionCommon.row
-import Arrow5FwdIc = SvgIcons.Arrow5FwdIc
+import Arrow5FwdIc = SvgIcons.ArrowLinesSharp1Ic
 import ArrowReloadIc = SvgIcons.ArrowReloadIc
 import rotateKfs = EmotionCommon.rotateKfs
 import fixedTop = EmotionCommon.fixedTop

@@ -21,7 +21,7 @@ import Card2 from 'src/views/Card2'
 import { SvgIcons } from 'src/views/icons/SvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
-import Arrow6NextIc = SvgIcons.Arrow6NextIc
+import Arrow6NextIc = SvgIcons.ArrowAngledRoundedIc
 import row = EmotionCommon.row
 import GiftBoxIc = SvgIcons.GiftBoxIc
 

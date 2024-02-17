@@ -70,7 +70,9 @@ const FadeButtonBar = styled.div`
   position: absolute;
   left: 0; right: 0; bottom: 0;
   height: 200px;
-  background: linear-gradient(to top, #ffffffff 0%, #ffffffaa 70%, #ffffff00 100%);
+  background: linear-gradient(to top,
+    #ffffffff 0%, #ffffff88 10%, #ffffff88 70%, #ffffff00 100%
+  );
   
   ${col};
   gap: 4px;

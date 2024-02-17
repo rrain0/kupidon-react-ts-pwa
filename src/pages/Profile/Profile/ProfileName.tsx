@@ -23,7 +23,7 @@ import { SvgIcons } from 'src/views/icons/SvgIcons'
 import Input from 'src/views/Inputs/Input/Input'
 import { InputStyle } from 'src/views/Inputs/Input/InputStyle'
 import NameCardIc = SvgIcons.NameCardIc
-import Arrow6NextIc = SvgIcons.Arrow6NextIc
+import Arrow6NextIc = SvgIcons.ArrowAngledRoundedIc
 import row = EmotionCommon.row
 
 
