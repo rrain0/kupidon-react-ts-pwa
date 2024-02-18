@@ -174,7 +174,7 @@ React.memo(
             (initialPhoto, oldPhoto)=>({
               ...initialPhoto,
               dataUrl: oldPhoto.dataUrl,
-              isDownloaded: oldPhoto.isDownloaded,
+              isReady: oldPhoto.isReady,
               download: oldPhoto.download,
             } satisfies ProfilePhoto),
             (a,b)=>a.id===b.id && !a.isEmpty && !b.isEmpty
@@ -186,7 +186,7 @@ React.memo(
               //console.log('photo',photo)
               return {
                 ...newValues.initialValues.photos[photo.remoteIndex],
-                isCompressed: photo.isCompressed,
+                isReady: photo.isReady,
                 compression: photo.compression,
               } satisfies ProfilePhoto
             }
@@ -250,14 +250,14 @@ React.memo(
       const serverPhotos = formValues.initialValues.photos
       const photos = formValues.photos
       ;[...serverPhotos,...photos].forEach(photo=>{
-        if (!photo.isEmpty && photo.type==='remote' && !photo.isDownloaded
+        if (!photo.isEmpty && photo.type==='remote' && !photo.isReady
           && !photo.download && !photo.compression
           && lock(photo.remoteUrl)
         ){
           
           const abortCtrl = new AbortController()
           const downloadStart = {
-            isDownloaded: false,
+            isReady: false,
             download: { ...DefaultOperation,
               id: photo.id,
               abort: ()=>{
@@ -326,7 +326,7 @@ React.memo(
               abortCtrl.signal.throwIfAborted()
               
               //console.log('completed',photo.id)
-              updatePhotosNow({ isDownloaded: true, download: undefined, dataUrl })
+              updatePhotosNow({ isReady: true, download: undefined, dataUrl })
             }
             catch (ex){
               // TODO notify about error
@@ -486,7 +486,7 @@ const currentUserPhotosToProfilePhotos =
       id: uuid.v4(),
       remoteIndex: i,
       isEmpty: true,
-      isDownloaded: true,
+      isReady: true,
     } satisfies ProfilePhoto))
   photos.forEach(it => {
     profilePhotos[it.index] = {
@@ -497,7 +497,7 @@ const currentUserPhotosToProfilePhotos =
       name: it.name,
       mimeType: it.mimeType,
       remoteUrl: it.url,
-      isDownloaded: false,
+      isReady: false,
     } satisfies ProfilePhoto
   })
   return profilePhotos
@@ -546,7 +546,7 @@ const profileUpdateApiRequest = (
     }
     addPhotos = values.photos
       .map((it,i)=>({ remoteIndex: i, photo: it }))
-      .filter(it=>it.photo.type==='local' && it.photo.isCompressed)
+      .filter(it=>it.photo.type==='local' && it.photo.isReady)
       .map(it=>({
         id: it.photo.id,
         index: it.remoteIndex,
@@ -611,7 +611,7 @@ const profileUpdateApiRequest = (
             (photo,usedPhoto)=>({
               ...photo,
               type: 'remote',
-              isDownloaded: usedPhoto.isDownloaded || usedPhoto.isCompressed,
+              isReady: usedPhoto.isReady,
             } satisfies ProfilePhoto),
             (photo,usedPhoto)=>photo.id===usedPhoto.id && usedPhoto.type==='local'
           )

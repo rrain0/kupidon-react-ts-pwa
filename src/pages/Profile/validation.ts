@@ -99,7 +99,7 @@ export namespace ProfilePageValidation {
       id: uuid.v4(),
       isEmpty: true,
       remoteIndex: i,
-      isDownloaded: false,
+      isReady: false,
     } satisfies ProfilePhoto))
   }
   export const auxiliaryDefaultValues: AuxiliaryValues = {

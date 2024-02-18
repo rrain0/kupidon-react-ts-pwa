@@ -369,7 +369,7 @@ React.memo(
                             />
                           </div>
                         
-                        else if (!canShowFetchProgress && im.type === 'remote' && !im.isDownloaded)
+                        else if (!canShowFetchProgress && im.type === 'remote' && !im.isReady)
                           return <div css={photoPlaceholderStyle}>
                             <SparkingLoadingLine/>
                           </div>
@@ -386,12 +386,7 @@ React.memo(
                           return <div css={photoPlaceholderStyle}>
                             <PlusIc css={photoPlaceholderIconStyle}/>
                           </div>
-                        else if (im.type === 'remote' && im.isDownloaded)
-                          return <img css={photoImgStyle}
-                            src={im.dataUrl}
-                            alt={im.name}
-                          />
-                        else if (im.type === 'local' && im.isCompressed)
+                        else if (im.isReady)
                           return <img css={photoImgStyle}
                             src={im.dataUrl}
                             alt={im.name}
@@ -537,7 +532,7 @@ React.memo(
           
           {function(){
             const im = images[lastIdx]
-            if (im.type==='remote' && im.isDownloaded || im.type==='local' && im.isCompressed) {
+            if (im.isReady) {
               return <a href={im.dataUrl}
                 download={`${im.name} ${im.id}.${extensionFromMimeType(im.mimeType)}`}
               >
@@ -767,7 +762,7 @@ const onFilesSelectedBuilder =
         
         const abortCtrl = new AbortController()
         const compressionStart = {
-          isCompressed: false,
+          isReady: false,
           compression: { ...DefaultOperation,
             id: uuid.v4(),
             abort: ()=>{
@@ -829,7 +824,7 @@ const onFilesSelectedBuilder =
               name: trimExtension(imgFile.name),
               mimeType: mimeType,
               dataUrl: imgDataUrl,
-              isCompressed: true,
+              isReady: true,
             } satisfies ProfilePhoto
             setImages(s=>ifFoundByThenReplaceTo(s,
               newPhoto,

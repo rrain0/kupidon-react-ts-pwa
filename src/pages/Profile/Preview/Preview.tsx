@@ -27,7 +27,7 @@ React.memo(
   
   const photos = props.formValues.photos
   const firstImage = useMemo(
-    ()=>photos.filter(it=>it.isDownloaded || it.isCompressed)[0],
+    ()=>photos.filter(it=>it.isReady)[0],
     [photos]
   )
   

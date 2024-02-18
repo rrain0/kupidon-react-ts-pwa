@@ -28,9 +28,9 @@ export const DefaultProfilePhoto = {
   
   dataUrl: '',
   
-  isCompressed: false,
+  isReady: false,
+  
   compression: undefined as Operation|undefined,
-  isDownloaded: false,
   download: undefined as Operation|undefined,
   upload: undefined as Operation|undefined,
 }
