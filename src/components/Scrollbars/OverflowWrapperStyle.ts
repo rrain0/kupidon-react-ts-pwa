@@ -4,6 +4,7 @@ import { EmotionCommon } from 'src/styles/EmotionCommon'
 import { CommonStyle } from 'src/views/CommonStyle'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
 import Elem = CommonStyle.Elem
+import col = EmotionCommon.col
 
 
 
@@ -13,7 +14,6 @@ export namespace OverflowWrapperStyle {
   
   
   
-  import col = EmotionCommon.col
   export const El = function(){
     const wrapper = new Elem('rrainuiOverflowWrapper',{})
     const container = wrapper.upFor('>', new Elem('rrainuiScrollContainer',{}))

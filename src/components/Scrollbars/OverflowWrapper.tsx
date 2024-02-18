@@ -39,6 +39,9 @@ React.memo(
   const scrollContentRef = useRef<HTMLDivElement>(null)
   
   
+  /*
+    Wrapper contains Scroll Container & ScrollbarOverlay
+  */
   return <Wrapper
     className={classNames(props.className, 'rrainuiOverflowWrapper')}
     style={props.style}
@@ -46,15 +49,18 @@ React.memo(
     
     
     {/*
-     // Scrollable Content Container
+     // Container of Scrollable Content.
+     // Element that is scrollable.
      // must be without margins & paddings!!!
      */}
     <ScrollContainer
       ref={scrollContainerRef}
       className={'rrainuiScrollContainer'}
     >
+      
       {/*
-       // Scrollable Content Wrapper
+       // Scrollable Content Wrapper.
+       // Wraps all scrollable content to represent its dimensions.
        // must be without margins & paddings - just content wrapper!!!
        */}
       <ScrollContent
@@ -65,6 +71,7 @@ React.memo(
         { props.children }
       
       </ScrollContent>
+      
     </ScrollContainer>
     
     

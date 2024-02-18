@@ -12,7 +12,6 @@ import { ReactComponent as ArrowReloadSvg } from 'src/res/icon/arrow-reload.svg'
 
 import { ReactComponent as BrowserSvg } from 'src/res/icon/browser.svg'
 import { ReactComponent as BowArrowSvg } from 'src/res/icon/bow-arrow.svg'
-import { ReactComponent as BowArrow2Svg } from 'src/res/icon/bow-arrow-2.svg'
 
 import { ReactComponent as CardsHeartSvg } from 'src/res/icon/cards-heart.svg'
 import { ReactComponent as CautionSvg } from 'src/res/icon/caution.svg'
@@ -42,7 +41,6 @@ import { ReactComponent as FullscreenSvg } from 'src/res/icon/fullscreen.svg'
 
 import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
 import { ReactComponent as Gear2Svg } from 'src/res/icon/gear-2.svg'
-import { ReactComponent as GearInSquareSvg } from 'src/res/icon/gear-in-square.svg'
 import { ReactComponent as GenderSvg } from 'src/res/icon/gender.svg'
 import { ReactComponent as GiftBoxSvg } from 'src/res/icon/gift-box.svg'
 
@@ -168,7 +166,6 @@ export namespace SvgIcons {
   
   export const BrowserIc = generateSimpleSvgIcon(BrowserSvg)
   export const BowArrowIc = generateSimpleSvgIcon(BowArrowSvg)
-  export const BowArrow2Ic = generateSimpleSvgIcon(BowArrow2Svg)
   
   
   export const CardsHeartIc = generateSimpleSvgIcon(CardsHeartSvg)
@@ -203,7 +200,6 @@ export namespace SvgIcons {
   
   export const GearIc = generateSimpleSvgIcon(GearSvg)
   export const Gear2Ic = generateSimpleSvgIcon(Gear2Svg)
-  export const GearInSquareIc = generateSimpleSvgIcon(GearInSquareSvg)
   export const GenderIc = generateSimpleSvgIcon(GenderSvg)
   export const GiftBoxIc = generateSimpleSvgIcon(GiftBoxSvg)
   

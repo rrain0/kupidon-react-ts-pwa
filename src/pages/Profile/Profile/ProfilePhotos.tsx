@@ -15,6 +15,11 @@ import React, {
 import Dropzone from 'react-dropzone'
 import { useRecoilValue } from 'recoil'
 import ModalPortal from 'src/components/Modal/ModalPortal'
+import {
+  DefaultOperation,
+  DefaultProfilePhoto,
+  ProfilePhoto,
+} from 'src/pages/Profile/ProfilePhotoModels'
 import { AppRecoil } from 'src/recoil/state/AppRecoil'
 import { ThemeRecoil } from 'src/recoil/state/ThemeRecoil'
 import { useLockAppGestures } from 'src/utils/app/useLockAppGestures'
@@ -68,9 +73,9 @@ import findByAndMapTo = ArrayUtils.mapFirstToIfFoundBy
 import throttle = AsyncUtils.throttle
 import Download1Ic = SvgIcons.Download1Ic
 import extensionFromMimeType = FileUtils.extensionFromMimeType
-import noop = TypeUtils.noop
 import Callback = TypeUtils.Callback
 import findBy = ArrayUtils.findBy
+import Setter = TypeUtils.Setter
 
 
 
@@ -106,43 +111,10 @@ const springStyle =
 }
 
 
-export const DefaultOperation = {
-  id: '',
-  progress: 0, // 0..100
-  showProgress: true,
-  abort: noop,
-}
-export type Operation = typeof DefaultOperation
-
-
-export const DefaultProfilePhoto = {
-  type: 'remote' as
-    |'remote' // photo from server
-    |'local', // photo from local storage
-  isEmpty: false,
-  
-  id: '',
-  remoteIndex: 0,
-  remoteUrl: '',
-  name: '',
-  mimeType: '',
-  
-  dataUrl: '',
-  
-  isCompressed: false,
-  compression: undefined as Operation|undefined,
-  isDownloaded: false,
-  download: undefined as Operation|undefined,
-  upload: undefined as Operation|undefined,
-}
-export type ProfilePhoto = typeof DefaultProfilePhoto
-export type ProfilePhotoArr = ProfilePhoto[]
-
-
 
 export type ProfilePhotosProps = {
-  images:ProfilePhotoArr
-  setImages: SetterOrUpdater<ProfilePhotoArr>
+  images: ProfilePhoto[]
+  setImages: SetterOrUpdater<ProfilePhoto[]>
 }
 const ProfilePhotos =
 React.memo(
@@ -277,39 +249,6 @@ React.memo(
         const isDragging = dragStateRef.current==='dragging' && active
         springApi.start(springStyle(i, isDragging, mx, my))
         if (isDragging){
-          /* setLogData(s=>[
-            ...s.slice(0,1),
-            ...[...s, JSON.stringify({
-              vpx: MathUtils.round(vpx, 3),
-              vpy: MathUtils.round(vpy, 3),
-            })].slice(-5)
-          ]) */
-          //console.log('hoveredElements',hoveredElements)
-          /* setLogData(
-            [document.elementFromPoint(vpx,vpy), ...hoveredElements]
-            .map(it=>JSON.stringify({
-              localName: it?.localName,
-              className: it?.className,
-              //tagName: it.tagName,
-              //nodeName: it.nodeName,
-            }))
-          ) */
-          /* let newSwap = undefined as undefined | [number,number]
-          {
-            const hoveredElements = document.elementsFromPoint(vpx,vpy)
-            const otherIdx = photoFrameRefs.current.findIndex(el=>{
-              return hoveredElements.includes(el as any)
-            })
-            if (otherIdx!==-1 && i!==otherIdx) newSwap = [i,otherIdx]
-          }
-          if (!newSwap){
-            const firstHoveredElement = document.elementFromPoint(vpx,vpy)
-            const otherIdx = photoFrameRefs.current.findIndex(el=>{
-              return el===firstHoveredElement || el?.contains(firstHoveredElement)
-            })
-            if (otherIdx!==-1 && i!==otherIdx) newSwap = [i,otherIdx]
-          }
-          setSwap(newSwap) */
           const hoveredElements = document.elementsFromPoint(vpx,vpy)
           if (!hoveredElements.includes(photosGrid.current as any)) {
             setSwap(undefined)
@@ -339,113 +278,7 @@ React.memo(
   
   
   const onFilesSelected = useCallback(
-    (files: File[])=>{
-      const imgFiles = files.filter(it=>it.type.startsWith('image/'))
-      if (imgFiles.length){
-        const emptyCnt = images
-          .filter((im,i)=>i===lastIdx || (i>=lastIdx && im.isEmpty)).length
-        let filesI = 0
-        const newImages = images.map((photo,i)=>{
-          if (filesI < imgFiles.length &&
-            (i===lastIdx ||
-              (i>=lastIdx &&
-                (imgFiles.length<=emptyCnt ? photo.isEmpty : true)
-              )
-            )
-          ){
-            const imgFile = imgFiles[filesI++]
-            
-            photo.download?.abort()
-            photo.compression?.abort()
-            
-            const abortCtrl = new AbortController()
-            const compressionStart = {
-              isCompressed: false,
-              compression: { ...DefaultOperation,
-                id: uuid.v4(),
-                abort: ()=>{
-                  //console.log('compression was aborted')
-                  abortCtrl.abort('compression was aborted')
-                },
-              },
-            } satisfies Partial<ProfilePhoto>
-            
-            const processingPhoto = { ...photo, ...compressionStart }
-            
-            const updatePhotoNow = (p: Partial<ProfilePhoto>)=>{
-              setImages(s=>findByAndMapTo(s,
-                elem=>({...elem, ...p}),
-                elem=>elem.compression?.id===compressionStart.compression.id
-              ))
-            }
-            const updatePhoto = throttle(
-              mapRange(Math.random(),[0,1],[1500,2000]),
-              updatePhotoNow
-            )
-          
-            ;(async()=>{
-              try {
-                const progress = new Progress(2,[95,5])
-                const onProgress = (p: number|null)=>{
-                  progress.progress = p??0
-                  //console.log('progress',progress.value)
-                  updatePhoto({ compression: {
-                    ...compressionStart.compression,
-                    progress: progress.value,
-                  } })
-                }
-                
-                //await wait(10000)
-                //throw 'test error'
-                
-                const compressedFile = await ImageUtils.compress(imgFile,
-                  { onProgress, abortCtrl }
-                )
-                abortCtrl.signal.throwIfAborted()
-                
-                //console.log('imgFile',imgFile)
-                progress.stage++
-                progress.progress = 0
-                const imgDataUrl = await blobToDataUrl(compressedFile,
-                  { onProgress, abortCtrl }
-                )
-                abortCtrl.signal.throwIfAborted()
-                
-                //console.log('imgDataUrl',imgDataUrl.length)
-                //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
-                const mimeType = new DataUrl(imgDataUrl).mimeType
-                const newPhoto = {
-                  ...DefaultProfilePhoto,
-                  type: 'local',
-                  id: uuid.v4(),
-                  remoteIndex: photo.remoteIndex,
-                  name: trimExtension(imgFile.name),
-                  mimeType: mimeType,
-                  dataUrl: imgDataUrl,
-                  isCompressed: true,
-                } satisfies ProfilePhoto
-                setImages(s=>ifFoundByThenReplaceTo(s,
-                  newPhoto,
-                  elem=>elem.compression?.id===compressionStart.compression.id
-                ))
-              }
-              catch (ex) {
-                // TODO notify about error
-                //console.log('compression error', ex)
-                //console.log('photo', photo)
-                updatePhoto({ compression: undefined })
-              }
-            })()
-            
-            return processingPhoto
-          }
-          
-          return photo
-        })
-        setImages(newImages)
-        setMenuOpen(false)
-      }
-    },
+    onFilesSelectedBuilder(images, lastIdx, setImages, setMenuOpen),
     [images, lastIdx, setImages]
   )
   
@@ -892,3 +725,148 @@ const optionIconBoxStyle = css`
     ${SvgIcStyle.Prop.prop.color}: ${ButtonStyle.Prop.color.sel()};
   }
 `
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const onFilesSelectedBuilder =
+(
+  images: ProfilePhoto[],
+  lastIdx: number,
+  setImages: SetterOrUpdater<ProfilePhoto[]>,
+  setMenuOpen: Setter<boolean>,
+)=>
+(files: File[])=>{
+  const imgFiles = files.filter(it=>it.type.startsWith('image/'))
+  if (imgFiles.length){
+    const emptyCnt = images
+      .filter((im,i)=>i===lastIdx || (i>=lastIdx && im.isEmpty)).length
+    let filesI = 0
+    const newImages = images.map((photo,i)=>{
+      if (filesI < imgFiles.length &&
+        (i===lastIdx ||
+          (i>=lastIdx &&
+            (imgFiles.length<=emptyCnt ? photo.isEmpty : true)
+          )
+        )
+      ){
+        const imgFile = imgFiles[filesI++]
+        
+        photo.download?.abort()
+        photo.compression?.abort()
+        
+        const abortCtrl = new AbortController()
+        const compressionStart = {
+          isCompressed: false,
+          compression: { ...DefaultOperation,
+            id: uuid.v4(),
+            abort: ()=>{
+              //console.log('compression was aborted')
+              abortCtrl.abort('compression was aborted')
+            },
+          },
+        } satisfies Partial<ProfilePhoto>
+        
+        const processingPhoto = { ...photo, ...compressionStart }
+        
+        const updatePhotoNow = (p: Partial<ProfilePhoto>)=>{
+          setImages(s=>findByAndMapTo(s,
+            elem=>({...elem, ...p}),
+            elem=>elem.compression?.id===compressionStart.compression.id
+          ))
+        }
+        const updatePhoto = throttle(
+            mapRange(Math.random(),[0,1],[1500,2000]),
+            updatePhotoNow
+          )
+        
+        ;(async()=>{
+          try {
+            const progress = new Progress(2,[95,5])
+            const onProgress = (p: number|null)=>{
+              progress.progress = p??0
+              //console.log('progress',progress.value)
+              updatePhoto({ compression: {
+                  ...compressionStart.compression,
+                  progress: progress.value,
+                } })
+            }
+            
+            //await wait(10000)
+            //throw 'test error'
+            
+            const compressedFile = await ImageUtils.compress(imgFile,
+              { onProgress, abortCtrl }
+            )
+            abortCtrl.signal.throwIfAborted()
+            
+            //console.log('imgFile',imgFile)
+            progress.stage++
+            progress.progress = 0
+            const imgDataUrl = await blobToDataUrl(compressedFile,
+              { onProgress, abortCtrl }
+            )
+            abortCtrl.signal.throwIfAborted()
+            
+            //console.log('imgDataUrl',imgDataUrl.length)
+            //console.log('imgDataUrl',imgDataUrl.substring(0, 1000))
+            const mimeType = new DataUrl(imgDataUrl).mimeType
+            const newPhoto = {
+              ...DefaultProfilePhoto,
+              type: 'local',
+              id: uuid.v4(),
+              remoteIndex: photo.remoteIndex,
+              name: trimExtension(imgFile.name),
+              mimeType: mimeType,
+              dataUrl: imgDataUrl,
+              isCompressed: true,
+            } satisfies ProfilePhoto
+            setImages(s=>ifFoundByThenReplaceTo(s,
+              newPhoto,
+              elem=>elem.compression?.id===compressionStart.compression.id
+            ))
+          }
+          catch (ex) {
+            // TODO notify about error
+            //console.log('compression error', ex)
+            //console.log('photo', photo)
+            updatePhoto({ compression: undefined })
+          }
+        })()
+        
+        return processingPhoto
+      }
+      
+      return photo
+    })
+    setImages(newImages)
+    setMenuOpen(false)
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

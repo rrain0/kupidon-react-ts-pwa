@@ -1,11 +1,11 @@
 import { GenderEnum } from 'src/api/entity/GenderEnum'
 import { UserApi } from 'src/api/requests/UserApi'
-import { DefaultProfilePhoto, ProfilePhoto, ProfilePhotoArr } from 'src/pages/Profile/Profile/ProfilePhotos'
+import { DefaultProfilePhoto, ProfilePhoto } from 'src/pages/Profile/ProfilePhotoModels'
 import { ProfileUiText } from 'src/pages/Profile/uiText'
 import { ArrayUtils } from 'src/utils/common/ArrayUtils'
 import { DateTime } from 'src/utils/DateTime'
 import { ValidationCore } from 'src/utils/form-validation/ValidationCore'
-import { UiText, UiTextValues, UiValues } from 'src/utils/lang/UiText'
+import { UiTextValues } from 'src/utils/lang/UiText'
 import * as uuid from 'uuid'
 import Validators = ValidationCore.Validators
 import PartialFailureData = ValidationCore.PartialFailureData
@@ -71,7 +71,7 @@ export namespace ProfilePageValidation {
     birthDate: string
     gender: GenderEnum|''
     aboutMe: string
-    photos: ProfilePhotoArr
+    photos: ProfilePhoto[]
   }
   export type FromServerValue = {
     values: UserValues // значения, отправленные на сервердля проверки

@@ -14,12 +14,13 @@ import { OverflowWrapperStyle } from 'src/components/Scrollbars/OverflowWrapperS
 import Preview from 'src/pages/Profile/Preview/Preview'
 import Profile from 'src/pages/Profile/Profile/Profile'
 import { useRecoilState } from 'recoil'
-import {
-  DefaultOperation, DefaultProfilePhoto, Operation,
-  ProfilePhoto,
-  ProfilePhotoArr,
-} from 'src/pages/Profile/Profile/ProfilePhotos'
 import ProfilePageTabHeader, { ProfilePageTabHeaderContext } from 'src/pages/Profile/ProfilePageTabHeader'
+import {
+  DefaultOperation,
+  DefaultProfilePhoto,
+  Operation,
+  ProfilePhoto,
+} from 'src/pages/Profile/ProfilePhotoModels'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { AuthRecoil, AuthStateType } from 'src/recoil/state/AuthRecoil'
 import { UserApi } from 'src/api/requests/UserApi'
@@ -46,9 +47,6 @@ import UseTabsState from 'src/views/Tabs/UseTabsState'
 import * as uuid from 'uuid'
 import SoftRefreshBtn = ButtonBarComponents.SoftRefreshBtn
 import TabsPage = Pages.TabsPage
-import pageColors = Pages.pageColors
-import pageContentPaddings = Pages.pageContentPaddings
-import col = EmotionCommon.col
 import safePageContentPaddings = Pages.safePageContentPaddings
 import fill = EmotionCommon.fill
 import blobToDataUrl = FileUtils.blobToDataUrl
@@ -409,48 +407,39 @@ React.memo(
             `}
               showVertical={!(['dragging', 'snapping'] as TabsState[]).includes(tabsProps.tabsState)}
             >
-              <div css={t=>css`
-                ${col};
-                align-items: center;
-                ${pageColors(t)};
-                width: 100%;
-                height: fit-content;
-                touch-action: pan-y;
-              `}>
                   
-                <ProfilePageTabHeaderContext.Provider value={{
-                  tabContainerSpring,
-                  tabWidth: computedTabsDimens.frameWidth,
-                  headers: ['Предпросмотр', formValues.name, 'Партнёр', 'Свидание'],
-                  setTabsState: tabsProps.setTabsState,
-                  setTabIdx: tabsProps.setTabIdx,
-                }}>
-                  {function(){
-                    switch (tabIdx) {
-                      case 0:
-                        return <Preview formValues={formValues}/>
-                      case 1:
-                        return <Profile
-                          validationProps={validationProps}
-                          onFormSubmitCallback={onFormSubmitCallback}
-                          submit={submit}
-                          canSubmit={canSubmit}
-                          formProps={formProps}
-                          isLoading={isLoading}
-                        />
-                      case 2:
-                        return <PageContentPaddings>
-                          <Form><ProfilePageTabHeader thisTabIdx={2}/></Form>
-                        </PageContentPaddings>
-                      case 3:
-                        return <PageContentPaddings>
-                          <Form><ProfilePageTabHeader thisTabIdx={3}/></Form>
-                        </PageContentPaddings>
-                    }
-                  }()}
-                </ProfilePageTabHeaderContext.Provider>
+              <ProfilePageTabHeaderContext.Provider value={{
+                tabContainerSpring,
+                tabWidth: computedTabsDimens.frameWidth,
+                headers: ['Предпросмотр', formValues.name, 'Партнёр', 'Свидание'],
+                setTabsState: tabsProps.setTabsState,
+                setTabIdx: tabsProps.setTabIdx,
+              }}>
+              {function(){
+                switch (tabIdx) {
+                  case 0:
+                    return <Preview formValues={formValues}/>
+                  case 1:
+                    return <Profile
+                      validationProps={validationProps}
+                      onFormSubmitCallback={onFormSubmitCallback}
+                      submit={submit}
+                      canSubmit={canSubmit}
+                      formProps={formProps}
+                      isLoading={isLoading}
+                    />
+                  case 2:
+                    return <PageContentPaddings>
+                      <Form><ProfilePageTabHeader thisTabIdx={2}/></Form>
+                    </PageContentPaddings>
+                  case 3:
+                    return <PageContentPaddings>
+                      <Form><ProfilePageTabHeader thisTabIdx={3}/></Form>
+                    </PageContentPaddings>
+                }
+              }()}
+              </ProfilePageTabHeaderContext.Provider>
               
-              </div>
             </OverflowWrapper>
             
             
@@ -489,8 +478,8 @@ export default ProfilePage
 
 
 const currentUserPhotosToProfilePhotos =
-(photos: CurrentUser['photos']): ProfilePhotoArr => {
-  const profilePhotos: ProfilePhotoArr =
+(photos: CurrentUser['photos']): ProfilePhoto[] => {
+  const profilePhotos: ProfilePhoto[] =
     ArrayUtils.ofIndices(6).map(i => ({
       ...DefaultProfilePhoto,
       type: 'remote',

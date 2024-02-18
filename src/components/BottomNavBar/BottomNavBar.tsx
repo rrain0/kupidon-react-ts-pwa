@@ -24,7 +24,6 @@ import ChatRoundIc = SvgIcons.ChatRoundIc
 import fixedBottom = EmotionCommon.fixedBottom
 import QuickSettings from 'src/components/QuickSettings/QuickSettings'
 import onPointerClick = ReactUtils.onPointerClick
-import BowArrow2Ic = SvgIcons.BowArrow2Ic
 import BowArrowIc = SvgIcons.BowArrowIc
 
 
