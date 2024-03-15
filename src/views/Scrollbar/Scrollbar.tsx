@@ -15,8 +15,8 @@ import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { getElemProps } from 'src/utils/common/ElemProps'
 import { MathUtils } from 'src/utils/common/NumberUtils'
 import { ScrollbarStyle } from 'src/views/Scrollbar/ScrollbarStyle'
-import inRange = MathUtils.inRange
-import fitRange = MathUtils.fitRange
+import inRange = MathUtils.inRange0
+import fitRange = MathUtils.fitRange0
 import { ScrollProps } from 'src/views/Scrollbar/useContainerScrollState'
 import reset = EmotionCommon.reset
 import PartialUndef = TypeUtils.PartialUndef
@@ -226,7 +226,7 @@ React.forwardRef<ScrollbarRefElement, ScrollbarProps>(
   
   
   // forbid content selection for all elements while dragging scrollbar
-  useNoSelect(!!dragStart,[dragStart])
+  useNoSelect(!!dragStart)
   
   
   useEffect(

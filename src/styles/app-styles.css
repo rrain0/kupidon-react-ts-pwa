@@ -5,7 +5,9 @@
   --page-vertical-padding: 50px;
   
   --bottom-button-bar-height: 0px;
+  
   --bottom-nav-height: 0px;
+  --bottom-second-bar-height: 0px;
   
   --top-button-bar-height: 0px;
   --top-nav-height: 0px;
@@ -13,10 +15,12 @@
   
   
   --bottom-bars-inset: calc(
-    var(--bottom-nav-height)
+    var(--bottom-nav-height) +
+    var(--bottom-second-bar-height)
   );
   --bottom-page-inset: calc(
     var(--bottom-nav-height) +
+    var(--bottom-second-bar-height) +
     max(
       var(--bottom-button-bar-height),
       var(--page-vertical-padding)

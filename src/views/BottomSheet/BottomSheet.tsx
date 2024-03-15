@@ -112,7 +112,7 @@ React.memo(
   //useLayoutEffect(()=>console.log('state',state),[state])
   
   
-  useFakePointerRef([bottomSheetFrameRef,bottomSheetRef])
+  useFakePointerRef(bottomSheetFrameRef,bottomSheetRef)
   
   
   return <UseFakePointerRef>{({ref, ref2, ref3})=>

@@ -27,7 +27,7 @@ React.memo(
     children
   } = props
   
-  const [value, setTrue, setFalse, setValue] = useBoolState(initial)
+  const [value, setTrue, setFalse, , setValue] = useBoolState(initial)
   
   return children?.({
     value,

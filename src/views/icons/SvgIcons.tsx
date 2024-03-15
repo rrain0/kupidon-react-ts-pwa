@@ -21,7 +21,6 @@ import { ReactComponent as CheckmarkCircleToastifySvg } from 'src/res/icon/check
 import { ReactComponent as ClearTrashSvg } from 'src/res/icon/clear-trash.svg'
 import { ReactComponent as ClipSvg } from 'src/res/icon/clip.svg'
 import { ReactComponent as CrossSvg } from 'src/res/icon/cross.svg'
-import { ReactComponent as Cross2Svg } from 'src/res/icon/cross-2.svg'
 import { ReactComponent as CrossInCircleSvg } from 'src/res/icon/cross-in-circle.svg'
 
 import { ReactComponent as DangerRoundToastifySvg } from 'src/res/icon/danger-round-toastify.svg'
@@ -35,8 +34,6 @@ import { ReactComponent as EyeSvg } from 'src/res/icon/eye.svg'
 import { ReactComponent as EyeCrossedOutSvg } from 'src/res/icon/eye-crossed-out.svg'
 
 import { ReactComponent as FloppyDisk1Svg } from 'src/res/icon/floppy-disk-1.svg'
-import { ReactComponent as FloppyDisk2Svg } from 'src/res/icon/floppy-disk-2.svg'
-import { ReactComponent as FloppyDisk3Svg } from 'src/res/icon/floppy-disk-3.svg'
 import { ReactComponent as FullscreenSvg } from 'src/res/icon/fullscreen.svg'
 
 import { ReactComponent as GearSvg } from 'src/res/icon/gear.svg'
@@ -52,22 +49,18 @@ import { ReactComponent as InfoToastifySvg } from 'src/res/icon/info-toastify.sv
 
 import { ReactComponent as LockSvg } from 'src/res/icon/lock.svg'
 
-import { ReactComponent as MailSvg } from 'src/res/icon/mail.svg'
 import { ReactComponent as MoonSvg } from 'src/res/icon/moon.svg'
 
 import { ReactComponent as NameCardSvg } from 'src/res/icon/name-card.svg'
 import { ReactComponent as NightSvg } from 'src/res/icon/night.svg'
 
-import { ReactComponent as PencilWriteSvg } from 'src/res/icon/pencil-write.svg'
 import { ReactComponent as PlusSvg } from 'src/res/icon/plus.svg'
-import { ReactComponent as Plane1Svg } from 'src/res/icon/plane-1.svg'
 import { ReactComponent as ProfileSvg } from 'src/res/icon/profile.svg'
 
 import { ReactComponent as RadioActiveSvg } from 'src/res/icon/radio-active.svg'
 import { ReactComponent as RadioInactiveSvg } from 'src/res/icon/radio-inactive.svg'
 import { ReactComponent as RingingBellSvg } from 'src/res/icon/ringing-bell.svg'
 
-import { ReactComponent as SearchSvg } from 'src/res/icon/search.svg'
 import { ReactComponent as Search2Svg } from 'src/res/icon/search-2.svg'
 import { ReactComponent as Spinner8LinesSvg } from 'src/res/icon/spinner-8-lines.svg'
 import { ReactComponent as SpinnerCircleQuarterSvg } from 'src/res/icon/spinner-circle-quarter.svg'
@@ -176,7 +169,6 @@ export namespace SvgIcons {
   export const ClearTrashIc = generateSimpleSvgIcon(ClearTrashSvg)
   export const ClipIc = generateSimpleSvgIcon(ClipSvg)
   export const CrossIc = generateSimpleSvgIcon(CrossSvg)
-  export const Cross2Ic = generateSimpleSvgIcon(Cross2Svg)
   export const CrossInCircleIc = generateSimpleSvgIcon(CrossInCircleSvg)
   
   
@@ -193,8 +185,6 @@ export namespace SvgIcons {
   
   
   export const FloppyDisk1Ic = generateSimpleSvgIcon(FloppyDisk1Svg)
-  export const FloppyDisk2Ic = generateSimpleSvgIcon(FloppyDisk2Svg)
-  export const FloppyDisk3Ic = generateSimpleSvgIcon(FloppyDisk3Svg)
   export const FullscreenIc = generateSimpleSvgIcon(FullscreenSvg)
   
   
@@ -215,7 +205,6 @@ export namespace SvgIcons {
   export const LockIc = generateSimpleSvgIcon(LockSvg)
   
   
-  export const MailIc = generateSimpleSvgIcon(MailSvg)
   export const MoonIc = generateSimpleSvgIcon(MoonSvg)
   
   
@@ -223,8 +212,6 @@ export namespace SvgIcons {
   export const NightIc = generateSimpleSvgIcon(NightSvg)
   
   
-  export const PencilWriteIc = generateSimpleSvgIcon(PencilWriteSvg)
-  export const Plane1Ic = generateSimpleSvgIcon(Plane1Svg)
   export const PlusIc = generateSimpleSvgIcon(PlusSvg)
   export const ProfileIc = generateSimpleSvgIcon(ProfileSvg)
   
@@ -234,7 +221,6 @@ export namespace SvgIcons {
   export const RingingBellIc = generateSimpleSvgIcon(RingingBellSvg)
   
   
-  export const SearchIc = generateSimpleSvgIcon(SearchSvg)
   export const Search2Ic = generateSimpleSvgIcon(Search2Svg)
   export const Spinner8LinesIc =
   React.memo(

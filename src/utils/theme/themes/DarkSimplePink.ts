@@ -45,7 +45,7 @@ const DarkSimpleProps = { ...DarkSimple,
   buttonNav: { ...DarkSimple.buttonNav,
     bgcFocus:      ['#2e3440'],
     content:       ['#7b7b7b'],
-    contentAccent: ['#bdbdbd'],
+    contentAccent: ['#b7405c'], // ['#984559']
   },
   
   input: { ...DarkSimple.input,

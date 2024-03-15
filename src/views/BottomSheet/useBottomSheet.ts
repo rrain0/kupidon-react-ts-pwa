@@ -12,7 +12,7 @@ import { ElemProps } from 'src/utils/common/ElemProps'
 import { MathUtils } from 'src/utils/common/NumberUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { useEffectEvent } from 'src/utils/react/useEffectEvent'
-import fitRange = MathUtils.fitRange
+import fitRange = MathUtils.fitRange0
 import { useNoSelect } from 'src/utils/react/useNoSelect'
 import { CssUtils } from 'src/utils/common/CssUtils'
 import parseCssValue = CssUtils.parseCssStringValue
@@ -23,12 +23,12 @@ import Setter = TypeUtils.Setter
 import findLastBy3 = ArrayUtils.findLastBy3
 import exists = TypeUtils.exists
 import findBy3 = ArrayUtils.findBy3
-import fitRange2 = MathUtils.fitRange2
+import fitRange2 = MathUtils.fitRange
 import Callback = TypeUtils.Callback
 import lastIndex = ArrayUtils.lastIndex
 import findLastBy = ArrayUtils.findLastBy
 import findBy = ArrayUtils.findBy
-import inRange2 = MathUtils.inRange2
+import inRange2 = MathUtils.inRange
 import notExists = TypeUtils.notExists
 
 

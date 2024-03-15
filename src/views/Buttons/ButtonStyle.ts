@@ -470,6 +470,10 @@ export namespace ButtonStyle {
     a.active ${El.icon.thiz()} {
       ${Prop.iconColor.name}: ${t.buttonNav.contentAccent[0]};
     }
+    a.active ${El.btn.thiz()} {
+      color: ${t.buttonNav.contentAccent[0]};
+      ${Prop.color.name}: ${t.buttonNav.contentAccent[0]};
+    }
     
     // hover
     ${hoverable}{ ${El.btn.thiz('hover')} {

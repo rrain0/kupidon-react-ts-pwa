@@ -4,10 +4,7 @@ import commonCss from 'src/styles/common.module.scss'
 
 
 
-export const useNoSelect = (
-  lock: boolean|undefined = false,
-  deps: any[]|undefined = []
-)=>{
+export const useNoSelect = (lock: boolean|undefined = false)=>{
   useLayoutEffect(()=>{
     const root = document.documentElement // get html
     if (lock){
@@ -15,8 +12,6 @@ export const useNoSelect = (
       return ()=>{
         root.classList.remove(commonCss.noSelect)
       }
-    } else {
-      root.classList.remove(commonCss.noSelect)
     }
-  },[lock, ...deps])
+  },[lock])
 }

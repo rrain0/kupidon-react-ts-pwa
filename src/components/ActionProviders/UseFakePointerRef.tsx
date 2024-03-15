@@ -5,7 +5,7 @@ import PartialUndef = TypeUtils.PartialUndef
 
 
 
-export const useFakePointerRef = (refs: React.RefObject<Element>[])=>{
+export const useFakePointerRef = (...refs: React.RefObject<Element>[])=>{
   useEffect(
     ()=>{
       const elements = refs.map(it=>it.current).filter(it=>it) as Element[]
@@ -51,7 +51,7 @@ const UseFakePointerRef =
   const elemRef3 = useRef<Element>(null)
   const elemRef4 = useRef<Element>(null)
   
-  useFakePointerRef([elemRef1, elemRef2, elemRef3, elemRef4])
+  useFakePointerRef(elemRef1, elemRef2, elemRef3, elemRef4)
   
   return props.children?.({
     ref: elemRef1,

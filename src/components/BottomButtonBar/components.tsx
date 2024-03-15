@@ -23,6 +23,7 @@ import rotateKfs = EmotionCommon.rotateKfs
 import fixedTop = EmotionCommon.fixedTop
 import PartialUndef = TypeUtils.PartialUndef
 import Callback = TypeUtils.Callback
+import onPointerClick = ReactUtils.onPointerClick
 
 
 
@@ -31,11 +32,11 @@ export namespace ButtonBarComponents {
   
   
   
-  import onPointerClick = ReactUtils.onPointerClick
   export const TopButtonBarFrame = styled.section`
     pointer-events: none;
     ${fixedTop};
     //padding-bottom: var(--bottom-nav-height);
+    height: var(--top-button-bar-height);
     display: grid;
     place-items: start stretch;
   `

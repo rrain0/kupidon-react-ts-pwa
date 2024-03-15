@@ -73,13 +73,13 @@ export namespace MathUtils {
    * @param max Максимальное значение включительно
    * @returns {number} Результирующее значение, находящееся в диапазоне [min,max]
    */
-  export const fitRange2 =
+  export const fitRange =
   (curr: number, [min, max]: readonly [number, number]): number =>
     curr < min ? min : curr > max ? max : curr
   
-  export const fitRange =
+  export const fitRange0 =
   (min: number, curr: number, max: number): number =>
-    fitRange2(curr, [min,max])
+    fitRange(curr, [min,max])
   
   
   /**
@@ -89,23 +89,23 @@ export namespace MathUtils {
    * @param max Максимальное значение
    * @returns {boolean} Результат сравнения
    */
-  export const inRange2 =
+  export const inRange =
   (curr: number, [min, max]: readonly [number, number]): boolean =>
     curr >= min && curr <= max
   
-  export const inRange =
+  export const inRange0 =
   (min: number, curr: number, max: number): boolean =>
-    inRange2(curr, [min,max])
+    inRange(curr, [min,max])
   
   
   
-  export const inRangeExclusive2 =
+  export const inRangeExclusive =
   (curr: number, [min, max]: readonly [number, number]): boolean =>
     curr > min && curr < max
   
-  export const inRangeExclusive =
+  export const inRangeExclusive0 =
   (min: number, curr: number, max: number): boolean =>
-    inRangeExclusive2(curr, [min,max])
+    inRangeExclusive(curr, [min,max])
   
   
   
@@ -122,14 +122,21 @@ export namespace MathUtils {
   
   
   // current+1 in range inclusive
-  export const nextLooped = (min: number, curr: number, max: number) =>
-    curr<=min ? min+1 : curr>=max ? min : curr+1
+  export const nextLooped = (curr: number, range: [min: number, max: number]) =>
+    curr<=range[0] ? range[0]+1 : curr>=range[1] ? range[0] : curr+1
   
   // current-1 in range inclusive
-  export const prevLooped = (min: number, curr: number, max: number) =>
-    curr<=min ? max : curr>=max ? max-1 : curr-1
+  export const prevLooped = (curr: number, range: [min: number, max: number]) =>
+    curr<=range[0] ? range[1] : curr>=range[1] ? range[1]-1 : curr-1
   
   
+  
+  // useful when you try to pick next or prev value and want it to loops in range when exceeded
+  export const loopRange = (curr: number, range: [min: number, max: number]) => {
+    if (curr<range[0]) return range[1]
+    if (curr>range[1]) return range[0]
+    return curr
+  }
   
   
   

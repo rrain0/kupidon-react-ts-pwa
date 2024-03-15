@@ -39,7 +39,7 @@ React.memo(
   const bottomSheetHeaderRef = useRef<HTMLDivElement>(null)
   const bottomSheetContentRef = useRef<HTMLDivElement>(null)
   
-  useFakePointerRef([bottomSheetHeaderRef])
+  useFakePointerRef(bottomSheetHeaderRef)
   
   
   

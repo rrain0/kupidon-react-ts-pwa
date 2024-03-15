@@ -16,7 +16,7 @@ import { useNoSelect } from 'src/utils/react/useNoSelect'
 import PartialUndef = TypeUtils.PartialUndef
 import { useStateAndRef } from 'src/utils/react/useStateAndRef'
 import Setter = TypeUtils.Setter
-import fitRange2 = MathUtils.fitRange2
+import fitRange2 = MathUtils.fitRange
 import Callback = TypeUtils.Callback
 import findLastBy = ArrayUtils.findLastBy
 import notExists = TypeUtils.notExists

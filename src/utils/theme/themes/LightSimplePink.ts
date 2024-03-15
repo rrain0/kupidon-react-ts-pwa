@@ -46,7 +46,7 @@ const LightSimpleProps = { ...LightSimple,
   buttonNav: { ...LightSimple.buttonNav,
     bgcFocus:      ['#f0f0f0'],
     content:       ['#7b7b7b'],
-    contentAccent: ['#333333'],
+    contentAccent: ['#BB2649'],
   },
   
   input: { ...LightSimple.input,

@@ -73,7 +73,7 @@ React.forwardRef<TabsRefElement, TabsProps>(
   })
   
   
-  useFakePointerRef([tabFrameRef])
+  useFakePointerRef(tabFrameRef)
   
   
   

@@ -122,6 +122,8 @@ export class ElemProps {
     // (has the same value as 'y', or 'y' + 'height' if 'height' is negative).
     return this.rect.left
   }
+  get vpXFloat(){ return this.clientXFloat }
+  get vpLeftFloat(){ return this.clientXFloat }
   
   // верхний край viewport <---> внешняя граница верхнего бордера элемента
   // расстояние между верхним краем viewport и внешней границей верхнего бордера
@@ -131,18 +133,22 @@ export class ElemProps {
     // (has the same value as 'x', or 'x' + 'width' if 'width' is negative).
     return this.rect.top
   }
+  get vpYFloat(){ return this.clientYFloat }
+  get vpTopFloat(){ return this.clientYFloat }
   
   // расстояние между правым краем viewport и внешней границей правого бордера
   get clientRightFloat(){
     if (isWindow(this.view)) return 0
     return this.rect.right
   }
+  get vpRightFloat(){ return this.clientRightFloat }
   
   // расстояние между нижним краем viewport и внешней границей нижнего бордера
   get clientBottomFloat(){
     if (isWindow(this.view)) return 0
     return this.rect.bottom
   }
+  get vpBottomFloat(){ return this.clientBottomFloat }
   
   // расстояние между внешними границами левого и правого бордеров
   get widthFloat(){

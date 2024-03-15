@@ -10,9 +10,9 @@ import { MathUtils } from 'src/utils/common/NumberUtils'
 import { TypeUtils } from 'src/utils/common/TypeUtils'
 import { TabsRenderProps } from 'src/views/Tabs/Tabs'
 import { TabIdx, TabsState } from 'src/views/Tabs/useTabs'
-import fitRange2 = MathUtils.fitRange2
+import fitRange2 = MathUtils.fitRange
 import mapRange = MathUtils.mapRange
-import inRange2 = MathUtils.inRange2
+import inRange2 = MathUtils.inRange
 import lastIndex = ArrayUtils.lastIndex
 import centerAll = EmotionCommon.centerAll
 import Setter = TypeUtils.Setter

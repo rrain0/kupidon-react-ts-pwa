@@ -1,15 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Pages } from 'src/components/Page/Pages'
 import { ProfilePageValidation } from 'src/pages/Profile/validation'
 import { EmotionCommon } from 'src/styles/EmotionCommon'
+import { MathUtils } from 'src/utils/common/NumberUtils'
+import { AppTheme } from 'src/utils/theme/AppTheme'
+import ScrollbarVertical from 'src/views/Scrollbar/ScrollbarVertical'
+import { ScrollbarVerticalStyle } from 'src/views/Scrollbar/ScrollbarVerticalStyle'
 import FormValues = ProfilePageValidation.FormValues
 import PageContentSafe = Pages.PageContentSafe
 import abs = EmotionCommon.abs
 import col = EmotionCommon.col
 import Txt = EmotionCommon.Txt
+import loopRange = MathUtils.loopRange
 
 
 
@@ -31,6 +36,21 @@ React.memo(
     [photos]
   )
   
+  const [scroll,setScroll] = useState(0)
+  
+  /* useEffect(
+    ()=>{
+      const id = setInterval(
+        ()=>setScroll(s=>loopRange(s+3,[0,100])),
+        1000
+      )
+      return ()=>clearInterval(id)
+    },
+    []
+  ) */
+  
+  
+  
   return <PageContentSafe>
     
     { firstImage && <div css={photoContainer}>
@@ -39,6 +59,12 @@ React.memo(
         src={firstImage.dataUrl}
         alt={firstImage.name}
       />
+      
+      <ScrollbarVertical css={scrollbarVerticalStyle}
+        visiblePartPercent={20}
+        scroll={scroll} setScroll={setScroll}
+      />
+      
       <FadeButtonBar>
        <Name>{props.formValues.name}, 26</Name>
        <AboutMe>{props.formValues.aboutMe}</AboutMe>
@@ -64,6 +90,17 @@ const photoImgStyle = css`
   height: 100%;
   object-position: center;
   object-fit: cover;
+`
+
+const scrollbarVerticalStyle = (t: AppTheme.Theme)=>css`
+  ${ScrollbarVerticalStyle.scrollbar(t)};
+  ${ScrollbarVerticalStyle.El.track.thiz()}{
+    width: 4px;
+    height: 150px;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+  }
 `
 
 const FadeButtonBar = styled.div`
